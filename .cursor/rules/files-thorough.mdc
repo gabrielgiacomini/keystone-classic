@@ -1,0 +1,179 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Keystone 4 Thorough File Structure
+```
+├── index.js                 # Main package entry point
+├── package.json            # Package configuration and dependencies
+├── lib/                    # Core library files
+│   ├── core/                           # Core functionality
+│   │   ├── init.js                     # Initialization
+│   │   ├── initDatabaseConfig.js       # Database configuration
+│   │   ├── initExpressApp.js          # Express app setup
+│   │   ├── initExpressSession.js      # Session handling
+│   │   ├── initNav.js                 # Navigation setup
+│   │   ├── openDatabaseConnection.js  # Database connection
+│   │   ├── closeDatabaseConnection.js # Database disconnection
+│   │   ├── createItems.js             # Item creation
+│   │   ├── createKeystoneHash.js      # Hash generation
+│   │   ├── createRouter.js            # Router creation
+│   │   ├── getOrphanedLists.js       # List management
+│   │   ├── importer.js                # Module importing
+│   │   ├── list.js                    # List core functionality
+│   │   ├── options.js                 # Options management
+│   │   ├── populateRelated.js         # Relationship population
+│   │   ├── redirect.js                # URL redirection
+│   │   ├── start.js                   # Application startup
+│   │   └── wrapHTMLError.js           # Error handling
+│   │
+│   ├── list/                          # List functionality
+│   │   ├── add.js                     # Adding fields to lists
+│   │   ├── addFiltersToQuery.js       # Query filtering
+│   │   ├── addSearchToQuery.js        # Search functionality
+│   │   ├── apiForGet.js               # GET API handling
+│   │   ├── automap.js                 # Automatic mapping
+│   │   ├── buildSearchTextIndex.js    # Search index building
+│   │   ├── declaresTextIndex.js       # Text index declaration
+│   │   ├── ensureTextIndex.js         # Text index management
+│   │   ├── expandColumns.js           # Column expansion
+│   │   ├── expandPaths.js             # Path expansion
+│   │   ├── expandSort.js              # Sort expansion
+│   │   ├── field.js                   # Field handling
+│   │   ├── getAdminURL.js             # Admin URL generation
+│   │   ├── getCSVData.js              # CSV data export
+│   │   ├── getData.js                 # Data retrieval
+│   │   ├── getDocumentName.js         # Document naming
+│   │   ├── getOptions.js              # Options retrieval
+│   │   ├── getPages.js                # Pagination
+│   │   ├── getSearchFilters.js        # Search filter handling
+│   │   ├── getUniqueValue.js          # Unique value handling
+│   │   ├── isReserved.js              # Reserved word checking
+│   │   ├── map.js                     # Data mapping
+│   │   ├── paginate.js                # Pagination handling
+│   │   ├── processFilters.js          # Filter processing
+│   │   ├── register.js                # List registration
+│   │   ├── relationship.js            # Relationship handling
+│   │   ├── selectColumns.js           # Column selection
+│   │   ├── set.js                     # Value setting
+│   │   ├── underscoreMethod.js        # Underscore methods
+│   │   └── updateItem.js              # Item updates
+│   │
+│   ├── fields/                # Field implementations
+│   ├── schemaPlugins/         # Mongoose schema plugins
+│   ├── security/              # Authentication and authorization
+│   ├── storage/                       # Storage functionality
+│   │   ├── adapters/                  # Storage adapters
+│   │   │   └── fs/                    # Filesystem adapter
+│   │   ├── index.js                   # Storage main module
+│   │   └── README.md                  # Storage documentation
+│   │
+│   ├── middleware/                    # Express middleware
+│   │   ├── api.js                     # API middleware
+│   │   ├── cors.js                    # CORS handling
+│   │   └── language.js                # Language handling
+│   │
+│   ├── content/                       # Content management
+│   ├── list.js                       # List class definition
+│   ├── view.js                        # View rendering
+│   ├── updateHandler.js               # Update processing
+│   ├── session.js                     # Session management
+│   ├── email.js                       # Email functionality
+│   ├── updates.js                     # Database updates
+│   ├── uploads.js                     # File uploads
+│   ├── path.js                        # Path utilities
+│   ├── safeRequire.js                # Safe module requiring
+│   ├── schemaPlugins.js              # Schema plugin management
+│   └── fieldTypes.js                 # Field type definitions
+├── server/                 # Server initialization and middleware
+│   ├── createApp.js          # Express application creation
+│   ├── initLetsEncrypt.js    # SSL certificate initialization
+│   ├── initSslRedirect.js    # HTTPS redirect setup
+│   ├── initTrustProxy.js     # Proxy trust configuration
+│   ├── initViewEngine.js     # View engine setup
+│   ├── initViewLocals.js     # View local variables setup
+│   ├── startHTTPServer.js    # HTTP server initialization
+│   ├── startSecureServer.js  # HTTPS server setup
+│   ├── startSocketServer.js  # WebSocket server setup
+│   ├── bindBodyParser.js     # Request body parsing
+│   ├── bindErrorHandlers.js  # Error handling middleware
+│   ├── bindIPRestrictions.js # IP-based access control
+│   ├── bindLessMiddleware.js # LESS CSS processing
+│   ├── bindRedirectsHandler.js # URL redirection handling
+│   ├── bindSassMiddleware.js # SASS CSS processing
+│   ├── bindSessionMiddleware.js # Session handling
+│   ├── bindStaticMiddleware.js # Static file serving
+│   └── bindStylusMiddleware.js # Stylus CSS processing
+└── fields/                 # Field type system
+    ├── README.md                         # Field system documentation
+    ├── types/                           # Field type definitions
+    │   ├── Type.js                      # Base type class
+    │   ├── Field.js                     # Field base class
+    │   ├── azurefile/                   # Azure storage field type
+    │   ├── boolean/                     # Boolean field type
+    │   ├── cloudinaryimage/             # Single Cloudinary image field
+    │   ├── cloudinaryimages/            # Multiple Cloudinary images field
+    │   ├── code/                        # Code editor field
+    │   ├── color/                       # Color picker field
+    │   ├── date/                        # Date field
+    │   ├── datearray/                   # Array of dates field
+    │   ├── datetime/                    # Date and time field
+    │   ├── email/                       # Email field
+    │   ├── embedly/                     # Embedly embed field
+    │   ├── file/                        # File upload field
+    │   ├── geopoint/                    # Geographic point field
+    │   ├── html/                        # HTML content field
+    │   ├── key/                         # Key/ID field
+    │   ├── localfile/                   # Local file storage field
+    │   ├── localfiles/                  # Multiple local files field
+    │   ├── location/                    # Location field
+    │   ├── markdown/                    # Markdown content field
+    │   ├── money/                       # Currency field
+    │   ├── name/                        # Name field (first, last)
+    │   ├── number/                      # Number field
+    │   ├── numberarray/                 # Array of numbers field
+    │   ├── password/                    # Password field
+    │   ├── relationship/                # Relationship field
+    │   ├── s3file/                      # Amazon S3 file field
+    │   ├── select/                      # Select/dropdown field
+    │   ├── text/                        # Text field
+    │   ├── textarea/                    # Text area field
+    │   ├── textarray/                   # Array of text field
+    │   └── url/                         # URL field
+    │
+    ├── utils/                           # Field utilities
+    │   ├── test/                        # Utility tests
+    │   ├── addPresenceToQuery.js        # Query presence helper
+    │   ├── bindFunctions.js            # Function binding utility
+    │   ├── definePrototypeGetters.js   # Prototype getter definitions
+    │   └── evalDependsOn.js            # Dependency evaluation
+    │
+    ├── mixins/                          # Field mixins
+    │   └── ArrayField.js               # Array field functionality mixin
+    │
+    ├── components/                      # React components for fields
+    │   ├── columns/                     # Table column components
+    │   ├── test/                        # Component tests
+    │   ├── Checkbox.js                  # Checkbox input component
+    │   ├── CollapsedFieldLabel.js      # Collapsed field label
+    │   ├── DateInput.js                # Date input component
+    │   ├── FileChangeMessage.js        # File change notification
+    │   ├── HiddenFileInput.js          # Hidden file input
+    │   ├── ImageThumbnail.js           # Image thumbnail display
+    │   ├── ItemsTableCell.js           # Table cell component
+    │   ├── ItemsTableValue.js          # Table value component
+    │   └── NestedFormField.js          # Nested form field component
+    │
+    └── explorer/                        # Field exploration utilities
+
+
+
+
+
+
+```
+
+
+
+
