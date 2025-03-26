@@ -1,0 +1,147 @@
+# KeystoneJS v4 Fields Directory Structure
+
+```
+fields/
+├── README.md                         # Field system documentation
+├── types/                           # Field type definitions
+│   ├── Type.js                      # Base type class
+│   ├── Field.js                     # Field base class
+│   ├── azurefile/                   # Azure storage field type
+│   ├── boolean/                     # Boolean field type
+│   ├── cloudinaryimage/             # Single Cloudinary image field
+│   ├── cloudinaryimages/            # Multiple Cloudinary images field
+│   ├── code/                        # Code editor field
+│   ├── color/                       # Color picker field
+│   ├── date/                        # Date field
+│   ├── datearray/                   # Array of dates field
+│   ├── datetime/                    # Date and time field
+│   ├── email/                       # Email field
+│   ├── embedly/                     # Embedly embed field
+│   ├── file/                        # File upload field
+│   ├── geopoint/                    # Geographic point field
+│   ├── html/                        # HTML content field
+│   ├── key/                         # Key/ID field
+│   ├── localfile/                   # Local file storage field
+│   ├── localfiles/                  # Multiple local files field
+│   ├── location/                    # Location field
+│   ├── markdown/                    # Markdown content field
+│   ├── money/                       # Currency field
+│   ├── name/                        # Name field (first, last)
+│   ├── number/                      # Number field
+│   ├── numberarray/                 # Array of numbers field
+│   ├── password/                    # Password field
+│   ├── relationship/                # Relationship field
+│   ├── s3file/                      # Amazon S3 file field
+│   ├── select/                      # Select/dropdown field
+│   ├── text/                        # Text field
+│   ├── textarea/                    # Text area field
+│   ├── textarray/                   # Array of text field
+│   └── url/                         # URL field
+│
+├── utils/                           # Field utilities
+│   ├── test/                        # Utility tests
+│   ├── addPresenceToQuery.js        # Query presence helper
+│   ├── bindFunctions.js            # Function binding utility
+│   ├── definePrototypeGetters.js   # Prototype getter definitions
+│   └── evalDependsOn.js            # Dependency evaluation
+│
+├── mixins/                          # Field mixins
+│   └── ArrayField.js               # Array field functionality mixin
+│
+├── components/                      # React components for fields
+│   ├── columns/                     # Table column components
+│   ├── test/                        # Component tests
+│   ├── Checkbox.js                  # Checkbox input component
+│   ├── CollapsedFieldLabel.js      # Collapsed field label
+│   ├── DateInput.js                # Date input component
+│   ├── FileChangeMessage.js        # File change notification
+│   ├── HiddenFileInput.js          # Hidden file input
+│   ├── ImageThumbnail.js           # Image thumbnail display
+│   ├── ItemsTableCell.js           # Table cell component
+│   ├── ItemsTableValue.js          # Table value component
+│   └── NestedFormField.js          # Nested form field component
+│
+└── explorer/                        # Field exploration utilities
+
+```
+
+## Field Type Categories
+
+### Basic Types
+- Text
+- Number
+- Boolean
+- Date
+- DateTime
+- Key
+
+### Content Types
+- HTML
+- Markdown
+- Code
+- Textarea
+- TextArray
+
+### Media Types
+- File
+- CloudinaryImage
+- CloudinaryImages
+- LocalFile
+- LocalFiles
+- S3File
+- AzureFile
+
+### Special Types
+- Email
+- URL
+- Password
+- Money
+- Color
+- Select
+- Relationship
+
+### Location Types
+- Location
+- GeoPoint
+
+### Array Types
+- DateArray
+- NumberArray
+- TextArray
+
+## Component Categories
+
+### Input Components
+- DateInput
+- Checkbox
+- HiddenFileInput
+- NestedFormField
+
+### Display Components
+- ImageThumbnail
+- FileChangeMessage
+- CollapsedFieldLabel
+- ItemsTableCell
+- ItemsTableValue
+
+## Utility Categories
+
+### Core Utilities
+- addPresenceToQuery
+- bindFunctions
+- definePrototypeGetters
+- evalDependsOn
+
+### Mixins
+- ArrayField (for array-based field types)
+
+## Notes
+- Each field type directory typically contains:
+  - Field type definition
+  - Field-specific components
+  - Field-specific utilities
+  - Tests
+  - Documentation
+- Components are React-based
+- Utilities are shared across field types
+- Mixins provide reusable functionality 
