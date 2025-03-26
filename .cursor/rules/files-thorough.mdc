@@ -65,7 +65,6 @@ alwaysApply: false
 │   │   ├── underscoreMethod.js        # Underscore methods
 │   │   └── updateItem.js              # Item updates
 │   │
-│   ├── fields/                # Field implementations
 │   ├── schemaPlugins/         # Mongoose schema plugins
 │   ├── security/              # Authentication and authorization
 │   ├── storage/                       # Storage functionality
