@@ -3,11 +3,7 @@ description:
 globs: 
 alwaysApply: false
 ---
----
-description: 
-globs: 
-alwaysApply: false
----
+
 # Keystone 4 Thorough File Structure
 ```
 ├── index.js                 # Main package entry point
@@ -85,6 +81,8 @@ alwaysApply: false
 │   ├── storage/                       # Storage functionality
 │   │   ├── adapters/                  # Storage adapters
 │   │   │   └── fs/                    # Filesystem adapter
+│   │   │       ├── index.js           # Filesystem storage implementation
+│   │   │       └── README.md          # Filesystem adapter documentation
 │   │   ├── index.js                   # Storage main module
 │   │   └── README.md                  # Storage documentation
 │   │
@@ -284,12 +282,4 @@ alwaysApply: false
     └── explorer/                        # Field exploration utilities
 
 
-
-
-
-
 ```
-
-
-
-
