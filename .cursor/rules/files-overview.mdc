@@ -1,0 +1,58 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Keystone 4 Package Important Files and Folders
+
+```
+├── index.js                 # Main package entry point
+├── package.json            # Package configuration and dependencies
+├── lib/                    # Core library files
+│   ├── core/                  # Core system functionality
+│   ├── list/                  # List management
+│   ├── fields/                # Field implementations
+│   ├── schemaPlugins/         # Mongoose schema plugins
+│   ├── security/              # Authentication and authorization
+│   ├── storage/               # File storage operations
+│   ├── middleware/            # Express middleware
+│   ├── list.js               # List class implementation
+│   ├── view.js               # View system
+│   ├── updateHandler.js      # Data update processing
+│   ├── session.js            # Session management
+│   ├── email.js              # Email functionality
+│   ├── path.js               # Path utilities
+│   ├── safeRequire.js        # Safe module requiring
+│   └── schemaPlugins.js      # Schema plugin management
+├── server/                 # Server initialization and middleware
+│   ├── createApp.js          # Express application creation
+│   ├── initLetsEncrypt.js    # SSL certificate initialization
+│   ├── initSslRedirect.js    # HTTPS redirect setup
+│   ├── initTrustProxy.js     # Proxy trust configuration
+│   ├── initViewEngine.js     # View engine setup
+│   ├── initViewLocals.js     # View local variables setup
+│   ├── startHTTPServer.js    # HTTP server initialization
+│   ├── startSecureServer.js  # HTTPS server setup
+│   ├── startSocketServer.js  # WebSocket server setup
+│   ├── bindBodyParser.js     # Request body parsing
+│   ├── bindErrorHandlers.js  # Error handling middleware
+│   ├── bindIPRestrictions.js # IP-based access control
+│   ├── bindLessMiddleware.js # LESS CSS processing
+│   ├── bindRedirectsHandler.js # URL redirection handling
+│   ├── bindSassMiddleware.js # SASS CSS processing
+│   ├── bindSessionMiddleware.js # Session handling
+│   ├── bindStaticMiddleware.js # Static file serving
+│   └── bindStylusMiddleware.js # Stylus CSS processing
+└── fields/                 # Field type system
+    ├── types/                # Field type definitions
+    ├── utils/                # Field utilities
+    ├── mixins/               # Field type mixins
+    ├── explorer/             # Field exploration utilities
+    ├── components/           # Field-specific components
+    └── README.md            # Field system documentation
+
+```
+
+
+
+
