@@ -1,1 +1,164 @@
- 
+---
+description: 
+globs: 
+alwaysApply: false
+---
+ # KeystoneJS v4 Lib Directory Structure
+
+```
+lib/
+├── core/                           # Core functionality
+│   ├── init.js                     # Initialization
+│   ├── initDatabaseConfig.js       # Database configuration
+│   ├── initExpressApp.js          # Express app setup
+│   ├── initExpressSession.js      # Session handling
+│   ├── initNav.js                 # Navigation setup
+│   ├── openDatabaseConnection.js  # Database connection
+│   ├── closeDatabaseConnection.js # Database disconnection
+│   ├── createItems.js             # Item creation
+│   ├── createKeystoneHash.js      # Hash generation
+│   ├── createRouter.js            # Router creation
+│   ├── getOrphanedLists.js       # List management
+│   ├── importer.js                # Module importing
+│   ├── list.js                    # List core functionality
+│   ├── options.js                 # Options management
+│   ├── populateRelated.js         # Relationship population
+│   ├── redirect.js                # URL redirection
+│   ├── start.js                   # Application startup
+│   └── wrapHTMLError.js           # Error handling
+│
+├── list/                          # List functionality
+│   ├── add.js                     # Adding fields to lists
+│   ├── addFiltersToQuery.js       # Query filtering
+│   ├── addSearchToQuery.js        # Search functionality
+│   ├── apiForGet.js               # GET API handling
+│   ├── automap.js                 # Automatic mapping
+│   ├── buildSearchTextIndex.js    # Search index building
+│   ├── declaresTextIndex.js       # Text index declaration
+│   ├── ensureTextIndex.js         # Text index management
+│   ├── expandColumns.js           # Column expansion
+│   ├── expandPaths.js             # Path expansion
+│   ├── expandSort.js              # Sort expansion
+│   ├── field.js                   # Field handling
+│   ├── getAdminURL.js             # Admin URL generation
+│   ├── getCSVData.js              # CSV data export
+│   ├── getData.js                 # Data retrieval
+│   ├── getDocumentName.js         # Document naming
+│   ├── getOptions.js              # Options retrieval
+│   ├── getPages.js                # Pagination
+│   ├── getSearchFilters.js        # Search filter handling
+│   ├── getUniqueValue.js          # Unique value handling
+│   ├── isReserved.js              # Reserved word checking
+│   ├── map.js                     # Data mapping
+│   ├── paginate.js                # Pagination handling
+│   ├── processFilters.js          # Filter processing
+│   ├── register.js                # List registration
+│   ├── relationship.js            # Relationship handling
+│   ├── selectColumns.js           # Column selection
+│   ├── set.js                     # Value setting
+│   ├── underscoreMethod.js        # Underscore methods
+│   └── updateItem.js              # Item updates
+│
+├── storage/                       # Storage functionality
+│   ├── adapters/                  # Storage adapters
+│   │   └── fs/                    # Filesystem adapter
+│   ├── index.js                   # Storage main module
+│   └── README.md                  # Storage documentation
+│
+├── middleware/                    # Express middleware
+│   ├── api.js                     # API middleware
+│   ├── cors.js                    # CORS handling
+│   └── language.js                # Language handling
+│
+├── schemaPlugins/                 # Mongoose schema plugins
+├── security/                      # Security features
+├── content/                       # Content management
+│
+├── view.js                        # View rendering
+├── session.js                     # Session management
+├── updateHandler.js               # Update processing
+├── updates.js                     # Database updates
+├── uploads.js                     # File uploads
+├── path.js                        # Path utilities
+├── safeRequire.js                # Safe module requiring
+├── schemaPlugins.js              # Schema plugin management
+├── email.js                       # Email functionality
+├── fieldTypes.js                 # Field type definitions
+└── list.js                       # List class definition
+
+```
+
+## Component Categories
+
+### Core Components
+- Initialization and Configuration
+- Database Management
+- Router and Navigation
+- Error Handling
+- Module Import/Export
+
+### List Management
+- Field Management
+- Search and Filtering
+- Pagination
+- Data Export
+- Relationships
+- Updates and Validation
+
+### Storage System
+- File System Adapter
+- Storage Configuration
+- Upload Management
+
+### Middleware Components
+- API Handling
+- CORS Support
+- Language Support
+
+### Schema and Security
+- Schema Plugins
+- Security Features
+- Authentication
+- Authorization
+
+### Content and Views
+- View Rendering
+- Content Management
+- Email Templates
+- File Uploads
+
+## Key Features
+
+### Database Operations
+- Connection Management
+- Schema Handling
+- Query Building
+- Index Management
+- Data Validation
+
+### List Features
+- Field Type System
+- Search Capabilities
+- Pagination
+- CSV Export
+- Relationship Management
+
+### Security Features
+- Authentication
+- Session Management
+- CORS Handling
+- Safe Module Loading
+
+### Content Management
+- View Rendering
+- Email System
+- File Upload Handling
+- Content Organization
+
+## Notes
+- Core functionality is modular and well-organized
+- Each component has clear responsibilities
+- Extensive support for database operations
+- Strong focus on security and data validation
+- Flexible storage system with adapters
+- Comprehensive middleware support
