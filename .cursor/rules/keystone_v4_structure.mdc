@@ -1,0 +1,187 @@
+# KeystoneJS v4 File Structure Documentation
+
+
+## Core Package Structure
+
+### Root Directory
+```
+keystone-classic/
+├── index.js                 # Main package entry point
+├── package.json            # Package configuration and dependencies
+├── lib/                    # Core library files
+├── server/                 # Server initialization and middleware
+├── fields/                 # Field type system
+└── website/               # Documentation website (not part of package)
+```
+
+### Core Library (`/lib`)
+```
+lib/
+├── core/                  # Core system functionality
+├── list/                  # List management
+├── fields/                # Field implementations
+├── schemaPlugins/         # Mongoose schema plugins
+├── security/              # Authentication and authorization
+├── storage/               # File storage operations
+├── middleware/            # Express middleware
+├── list.js               # List class implementation
+├── view.js               # View system
+├── updateHandler.js      # Data update processing
+├── session.js            # Session management
+├── email.js              # Email functionality
+├── path.js               # Path utilities
+├── safeRequire.js        # Safe module requiring
+└── schemaPlugins.js      # Schema plugin management
+```
+
+### Server Components (`/server`)
+```
+server/
+├── createApp.js          # Express application creation
+├── initLetsEncrypt.js    # SSL certificate initialization
+├── initSslRedirect.js    # HTTPS redirect setup
+├── initTrustProxy.js     # Proxy trust configuration
+├── initViewEngine.js     # View engine setup
+├── initViewLocals.js     # View local variables setup
+├── startHTTPServer.js    # HTTP server initialization
+├── startSecureServer.js  # HTTPS server setup
+├── startSocketServer.js  # WebSocket server setup
+├── bindBodyParser.js     # Request body parsing
+├── bindErrorHandlers.js  # Error handling middleware
+├── bindIPRestrictions.js # IP-based access control
+├── bindLessMiddleware.js # LESS CSS processing
+├── bindRedirectsHandler.js # URL redirection handling
+├── bindSassMiddleware.js # SASS CSS processing
+├── bindSessionMiddleware.js # Session handling
+├── bindStaticMiddleware.js # Static file serving
+└── bindStylusMiddleware.js # Stylus CSS processing
+```
+
+### Field System (`/fields`)
+```
+fields/
+├── types/                # Field type definitions
+├── utils/                # Field utilities
+├── mixins/               # Field type mixins
+├── explorer/             # Field exploration utilities
+├── components/           # Field-specific components
+└── README.md            # Field system documentation
+```
+
+
+## Key Files and Their Purposes
+
+### Core Files
+- `index.js`: Main package entry point, exports Keystone class
+- `lib/list.js`: List class implementation for data models
+- `lib/view.js`: View system for template rendering
+- `lib/updateHandler.js`: Data update processing and validation
+- `lib/session.js`: Session management and authentication
+- `lib/email.js`: Email functionality and templates
+
+### Server Files
+- `server/createApp.js`: Express application setup
+- `server/startHTTPServer.js`: HTTP server initialization
+- `server/startSecureServer.js`: HTTPS server setup
+- `server/bindSessionMiddleware.js`: Session handling
+- `server/bindErrorHandlers.js`: Error handling
+
+### Field System Files
+- `fields/types/`: Field type definitions
+- `fields/utils/`: Field utility functions
+- `fields/mixins/`: Field type mixins
+- `fields/components/`: Field-specific components
+
+## Component Relationships
+
+### Core Dependencies
+- Lists depend on Fields
+- UpdateHandler depends on Lists and Fields
+- View system depends on Lists and UpdateHandler
+- Session system depends on Security
+- Email system depends on Templates
+
+### Server Dependencies
+- Server initialization depends on Core
+- Middleware depends on Express
+- Security middleware depends on Session
+- File handling depends on Storage
+
+### Field System Dependencies
+- Field types depend on Mongoose
+- Admin UI components depend on React
+- Field validation depends on Utils
+- Field processing depends on UpdateHandler
+
+
+## Development Components (Not in Package)
+
+### Website (`/website`)
+```
+website/
+├── templates/            # Website page templates
+├── theme.js             # Website theme configuration
+├── utils/               # Website utilities
+├── static/              # Static assets
+├── src/                 # Source code
+├── images/              # Website images
+├── components/          # React components
+├── css/                 # Website styles
+├── data/                # Website content
+├── gatsby-config.js     # Gatsby configuration
+├── gatsby-node.js       # Gatsby build configuration
+├── .babelrc            # Babel configuration
+└── .eslintrc.js        # ESLint configuration
+```
+
+### Development Tools
+```
+keystone-classic/
+├── admin/               # Admin UI development
+├── build/               # Build output
+├── scripts/             # Build scripts
+├── test/                # Test files
+├── tools/               # Development tools
+├── docs/                # Documentation
+├── examples/            # Example applications
+├── examples-react/      # React examples
+├── .babelrc            # Babel configuration
+├── .eslintrc           # ESLint configuration
+├── .gitignore          # Git ignore rules
+├── browserify.config.js # Browserify configuration
+└── webpack.config.js    # Webpack configuration
+```
+
+## Package Dependencies
+
+### Runtime Dependencies
+- express
+- mongoose
+- body-parser
+- cookie-parser
+- compression
+- connect-flash
+- ejs
+- bcrypt-nodejs
+- cloudinary
+- compression
+- serve-favicon
+- method-override
+- morgan
+- less/sass/stylus
+- react (for admin UI)
+
+### Development Dependencies
+- @babel/* packages
+- browserify
+- jest
+- webpack
+- gatsby
+- typography
+- Various Gatsby plugins
+
+## Notes
+- The website directory is not included in the NPM package
+- Development tools and configurations are excluded
+- Test files and examples are not part of the package
+- Documentation is maintained separately 
