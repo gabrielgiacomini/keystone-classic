@@ -66,7 +66,22 @@ alwaysApply: false
 │   │   └── updateItem.js              # Item updates
 │   │
 │   ├── schemaPlugins/         # Mongoose schema plugins
+│   │   ├── methods/          # Schema method plugins
+│   │   │   ├── getRelated.js      # Get related items method
+│   │   │   └── populateRelated.js # Populate related items method
+│   │   ├── options/          # Schema option plugins
+│   │   │   └── transform.js       # Transform option handler
+│   │   ├── sortable.js       # Sortable functionality plugin
+│   │   ├── track.js          # Change tracking plugin
+│   │   ├── autokey.js        # Automatic key generation plugin
+│   │   └── history.js        # History tracking plugin
+│   │
 │   ├── security/              # Authentication and authorization
+│   │   ├── csrf.js                  # CSRF protection
+│   │   ├── escapeValueForExcel.js   # Excel value escaping
+│   │   ├── frameGuard.js            # Clickjacking protection
+│   │   └── ipRangeRestrict.js       # IP range restrictions
+│   │
 │   ├── storage/                       # Storage functionality
 │   │   ├── adapters/                  # Storage adapters
 │   │   │   └── fs/                    # Filesystem adapter
