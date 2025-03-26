@@ -1,67 +1,172 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
 # KeystoneJS v4 Fields Directory Structure
 
 ```
-fields/
-├── README.md                         # Field system documentation
-├── types/                           # Field type definitions
-│   ├── Type.js                      # Base type class
-│   ├── Field.js                     # Field base class
-│   ├── azurefile/                   # Azure storage field type
-│   ├── boolean/                     # Boolean field type
-│   ├── cloudinaryimage/             # Single Cloudinary image field
-│   ├── cloudinaryimages/            # Multiple Cloudinary images field
-│   ├── code/                        # Code editor field
-│   ├── color/                       # Color picker field
-│   ├── date/                        # Date field
-│   ├── datearray/                   # Array of dates field
-│   ├── datetime/                    # Date and time field
-│   ├── email/                       # Email field
-│   ├── embedly/                     # Embedly embed field
-│   ├── file/                        # File upload field
-│   ├── geopoint/                    # Geographic point field
-│   ├── html/                        # HTML content field
-│   ├── key/                         # Key/ID field
-│   ├── localfile/                   # Local file storage field
-│   ├── localfiles/                  # Multiple local files field
-│   ├── location/                    # Location field
-│   ├── markdown/                    # Markdown content field
-│   ├── money/                       # Currency field
-│   ├── name/                        # Name field (first, last)
-│   ├── number/                      # Number field
-│   ├── numberarray/                 # Array of numbers field
-│   ├── password/                    # Password field
-│   ├── relationship/                # Relationship field
-│   ├── s3file/                      # Amazon S3 file field
-│   ├── select/                      # Select/dropdown field
-│   ├── text/                        # Text field
-│   ├── textarea/                    # Text area field
-│   ├── textarray/                   # Array of text field
-│   └── url/                         # URL field
-│
-├── utils/                           # Field utilities
-│   ├── test/                        # Utility tests
-│   ├── addPresenceToQuery.js        # Query presence helper
-│   ├── bindFunctions.js            # Function binding utility
-│   ├── definePrototypeGetters.js   # Prototype getter definitions
-│   └── evalDependsOn.js            # Dependency evaluation
-│
-├── mixins/                          # Field mixins
-│   └── ArrayField.js               # Array field functionality mixin
-│
-├── components/                      # React components for fields
-│   ├── columns/                     # Table column components
-│   ├── test/                        # Component tests
-│   ├── Checkbox.js                  # Checkbox input component
-│   ├── CollapsedFieldLabel.js      # Collapsed field label
-│   ├── DateInput.js                # Date input component
-│   ├── FileChangeMessage.js        # File change notification
-│   ├── HiddenFileInput.js          # Hidden file input
-│   ├── ImageThumbnail.js           # Image thumbnail display
-│   ├── ItemsTableCell.js           # Table cell component
-│   ├── ItemsTableValue.js          # Table value component
-│   └── NestedFormField.js          # Nested form field component
-│
-└── explorer/                        # Field exploration utilities
+/                            # Root
+└── fields/                 # Field type system
+    ├── README.md                         # Field system documentation
+    ├── types/                           # Field type definitions
+    │   ├── Type.js                      # Base type class
+    │   ├── Field.js                     # Field base class
+    │   ├── azurefile/                   # Azure storage field type
+    │   │   ├── AzureFileType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── boolean/                     # Boolean field type
+    │   │   ├── BooleanType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── cloudinaryimage/             # Single Cloudinary image field
+    │   │   ├── CloudinaryImageType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── cloudinaryimages/            # Multiple Cloudinary images field
+    │   │   ├── CloudinaryImagesType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── code/                        # Code editor field
+    │   │   ├── CodeType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── color/                       # Color picker field
+    │   │   ├── ColorType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── date/                        # Date field
+    │   │   ├── DateType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── datearray/                   # Array of dates field
+    │   │   ├── DateArrayType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── datetime/                    # Date and time field
+    │   │   ├── DateTimeType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── email/                       # Email field
+    │   │   ├── EmailType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── embedly/                     # Embedly embed field
+    │   │   ├── EmbedlyType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── file/                        # File upload field
+    │   │   ├── FileType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── geopoint/                    # Geographic point field
+    │   │   ├── GeoPointType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── html/                        # HTML content field
+    │   │   ├── HtmlType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── key/                         # Key/ID field
+    │   │   ├── KeyType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── localfile/                   # Local file storage field
+    │   │   ├── LocalFileType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── localfiles/                  # Multiple local files field
+    │   │   ├── LocalFilesType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── location/                    # Location field
+    │   │   ├── LocationType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── markdown/                    # Markdown content field
+    │   │   ├── MarkdownType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── money/                       # Currency field
+    │   │   ├── MoneyType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── name/                        # Name field (first, last)
+    │   │   ├── NameType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── number/                      # Number field
+    │   │   ├── NumberType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── numberarray/                 # Array of numbers field
+    │   │   ├── NumberArrayType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── password/                    # Password field
+    │   │   ├── PasswordType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── relationship/                # Relationship field
+    │   │   ├── RelationshipType.js
+    │   │   ├── RelationshipField.js
+    │   │   ├── RelationshipColumn.js
+    │   │   ├── RelationshipFilter.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── s3file/                      # Amazon S3 file field
+    │   │   ├── S3FileType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── select/                      # Select/dropdown field
+    │   │   ├── SelectType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── text/                        # Text field
+    │   │   ├── TextType.js
+    │   │   ├── TextField.js
+    │   │   ├── TextColumn.js
+    │   │   ├── TextFilter.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── textarea/                    # Text area field
+    │   │   ├── TextareaType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   ├── textarray/                   # Array of text field
+    │   │   ├── TextArrayType.js
+    │   │   ├── Readme.md
+    │   │   └── test/
+    │   └── url/                         # URL field
+    │       ├── UrlType.js
+    │       ├── Readme.md
+    │       └── test/
+    ├── utils/                           # Field utilities
+    │   ├── addPresenceToQuery.js        # Query presence helper
+    │   ├── bindFunctions.js            # Function binding utility
+    │   ├── definePrototypeGetters.js   # Prototype getter definitions
+    │   ├── evalDependsOn.js            # Dependency evaluation
+    │   └── test/                       # Utility tests
+    ├── mixins/                          # Field mixins
+    │   └── ArrayField.js               # Array field functionality mixin
+    │
+    ├── components/                      # React components for fields
+    │   ├── columns/                     # Table column components
+    │   ├── test/                        # Component tests
+    │   ├── Checkbox.js                  # Checkbox input component
+    │   ├── CollapsedFieldLabel.js      # Collapsed field label
+    │   ├── DateInput.js                # Date input component
+    │   ├── FileChangeMessage.js        # File change notification
+    │   ├── HiddenFileInput.js          # Hidden file input
+    │   ├── ImageThumbnail.js           # Image thumbnail display
+    │   ├── ItemsTableCell.js           # Table cell component
+    │   ├── ItemsTableValue.js          # Table value component
+    │   └── NestedFormField.js          # Nested form field component
+    │
+    └── explorer/                        # Field exploration utilities
+
+
 
 ```
 
