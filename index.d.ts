@@ -3129,3 +3129,1330 @@ interface KeystoneEmailTypeConstructor extends KeystoneFieldTypeConstructor {
 		options?: KeystoneEmailFieldOptions
 	): KeystoneEmailField;
 }
+
+// --- Middleware Types ---
+
+/**
+ * CORS middleware for Keystone
+ * @see lib/middleware/cors.js
+ */
+declare module "lib/middleware/cors.js" {
+	function cors(keystone: Keystone): express.RequestHandler;
+	export = cors;
+}
+
+/**
+ * API middleware for Keystone
+ * @see lib/middleware/api.js
+ */
+declare module "lib/middleware/api.js" {
+	function api(keystone: Keystone): express.RequestHandler;
+	export = api;
+}
+
+/**
+ * Language middleware for Keystone
+ * @see lib/middleware/language.js
+ */
+declare module "lib/middleware/language.js" {
+	function language(keystone: Keystone): express.RequestHandler;
+	export = language;
+}
+
+// --- Core Types ---
+
+/**
+ * Safe require utility
+ * @see lib/safeRequire.js
+ */
+declare module "lib/safeRequire.js" {
+	function safeRequire(path: string): any;
+	export = safeRequire;
+}
+
+/**
+ * Updates system for Keystone
+ * @see lib/updates.js
+ */
+declare module "lib/updates.js" {
+	interface Update {
+		id: string;
+		name: string;
+		when: Date;
+		applied: boolean;
+	}
+
+	interface UpdateOptions {
+		autoUpdate?: boolean;
+		updates?: Update[];
+	}
+
+	function applyUpdates(
+		keystone: Keystone,
+		options: UpdateOptions,
+		callback: (err?: Error) => void
+	): void;
+	export = applyUpdates;
+}
+
+/**
+ * Database connection management
+ * @see lib/core/closeDatabaseConnection.js
+ */
+declare module "lib/core/closeDatabaseConnection.js" {
+	function closeDatabaseConnection(
+		keystone: Keystone,
+		callback?: (err?: Error) => void
+	): void;
+	export = closeDatabaseConnection;
+}
+
+/**
+ * URL redirection system
+ * @see lib/core/redirect.js
+ */
+declare module "lib/core/redirect.js" {
+	interface RedirectOptions {
+		from: string;
+		to: string;
+		status?: number;
+	}
+
+	function redirect(keystone: Keystone, options: RedirectOptions): void;
+	export = redirect;
+}
+
+/**
+ * Server startup
+ * @see lib/core/start.js
+ */
+declare module "lib/core/start.js" {
+	interface StartOptions {
+		port?: number;
+		host?: string;
+		ssl?: boolean;
+		sslPort?: number;
+		sslHost?: string;
+		sslKey?: string;
+		sslCert?: string;
+	}
+
+	function start(
+		keystone: Keystone,
+		options: StartOptions,
+		callback?: (err?: Error) => void
+	): void;
+	export = start;
+}
+
+/**
+ * Database configuration
+ * @see lib/core/initDatabaseConfig.js
+ */
+declare module "lib/core/initDatabaseConfig.js" {
+	interface DatabaseConfig {
+		uri?: string;
+		options?: mongoose.ConnectOptions;
+	}
+
+	function initDatabaseConfig(keystone: Keystone, config: DatabaseConfig): void;
+	export = initDatabaseConfig;
+}
+
+/**
+ * Express app initialization
+ * @see lib/core/initExpressApp.js
+ */
+declare module "lib/core/initExpressApp.js" {
+	function initExpressApp(keystone: Keystone): void;
+	export = initExpressApp;
+}
+
+/**
+ * Item creation system
+ * @see lib/core/createItems.js
+ */
+declare module "lib/core/createItems.js" {
+	interface CreateItemOptions {
+		list: string;
+		data: Record<string, any>;
+	}
+
+	function createItems(
+		keystone: Keystone,
+		items: CreateItemOptions[],
+		callback: (err?: Error) => void
+	): void;
+	export = createItems;
+}
+
+/**
+ * Database connection opening
+ * @see lib/core/openDatabaseConnection.js
+ */
+declare module "lib/core/openDatabaseConnection.js" {
+	interface OpenDatabaseOptions {
+		uri?: string;
+		options?: mongoose.ConnectOptions;
+	}
+
+	function openDatabaseConnection(
+		keystone: Keystone,
+		options: OpenDatabaseOptions,
+		callback?: (err?: Error) => void
+	): void;
+	export = openDatabaseConnection;
+}
+
+/**
+ * Options management
+ * @see lib/core/options.js
+ */
+declare module "lib/core/options.js" {
+	interface OptionsManager {
+		get(key: string): any;
+		set(key: string, value: any): void;
+		options(options?: Record<string, any>): Record<string, any>;
+	}
+
+	function createOptionsManager(keystone: Keystone): OptionsManager;
+	export = createOptionsManager;
+}
+
+/**
+ * Navigation initialization
+ * @see lib/core/initNav.js
+ */
+declare module "lib/core/initNav.js" {
+	interface NavSection {
+		label: string;
+		lists: string[];
+	}
+
+	interface NavConfig {
+		sections: Record<string, NavSection>;
+	}
+
+	function initNav(keystone: Keystone, config: NavConfig): void;
+	export = initNav;
+}
+
+/**
+ * Module importer
+ * @see lib/core/importer.js
+ */
+declare module "lib/core/importer.js" {
+	function createImporter(
+		keystone: Keystone
+	): (dirname: string) => Record<string, any>;
+	export = createImporter;
+}
+
+/**
+ * List management
+ * @see lib/core/list.js
+ */
+declare module "lib/core/list.js" {
+	interface ListOptions extends KeystoneListOptions {
+		// Add any additional list options here
+	}
+
+	function createList(key: string, options?: ListOptions): KeystoneList;
+	export = createList;
+}
+
+/**
+ * Core initialization
+ * @see lib/core/init.js
+ */
+declare module "lib/core/init.js" {
+	interface InitOptions {
+		database?: {
+			uri?: string;
+			options?: mongoose.ConnectOptions;
+		};
+		express?: express.Express;
+		session?: boolean | Record<string, any>;
+		auth?: boolean | string;
+		"user model"?: string;
+		"cookie secret"?: string;
+		"admin path"?: string;
+		"admin nav"?: Record<string, any>;
+	}
+
+	function init(
+		keystone: Keystone,
+		options: InitOptions,
+		callback: (err?: Error) => void
+	): void;
+	export = init;
+}
+
+/**
+ * Related item population
+ * @see lib/core/populateRelated.js
+ */
+declare module "lib/core/populateRelated.js" {
+	interface PopulateOptions {
+		path: string;
+		select?: string;
+		options?: Record<string, any>;
+	}
+
+	function populateRelated(
+		item: any,
+		options: PopulateOptions,
+		callback: (err?: Error) => void
+	): void;
+	export = populateRelated;
+}
+
+/**
+ * Router creation
+ * @see lib/core/createRouter.js
+ */
+declare module "lib/core/createRouter.js" {
+	function createRouter(keystone: Keystone): express.Router;
+	export = createRouter;
+}
+
+/**
+ * HTML error wrapper
+ * @see lib/core/wrapHTMLError.js
+ */
+declare module "lib/core/wrapHTMLError.js" {
+	function wrapHTMLError(err: Error): string;
+	export = wrapHTMLError;
+}
+
+/**
+ * Hash creation
+ * @see lib/core/createKeystoneHash.js
+ */
+declare module "lib/core/createKeystoneHash.js" {
+	function createKeystoneHash(value: string): string;
+	export = createKeystoneHash;
+}
+
+/**
+ * Express session initialization
+ * @see lib/core/initExpressSession.js
+ */
+declare module "lib/core/initExpressSession.js" {
+	interface SessionOptions {
+		secret: string;
+		store?: any;
+		cookie?: {
+			secure?: boolean;
+			maxAge?: number;
+		};
+	}
+
+	function initExpressSession(
+		keystone: Keystone,
+		options: SessionOptions
+	): void;
+	export = initExpressSession;
+}
+
+/**
+ * Orphaned list detection
+ * @see lib/core/getOrphanedLists.js
+ */
+declare module "lib/core/getOrphanedLists.js" {
+	function getOrphanedLists(keystone: Keystone): KeystoneList[];
+	export = getOrphanedLists;
+}
+
+// --- Security Types ---
+
+/**
+ * Frame guard middleware
+ * @see lib/security/frameGuard.js
+ */
+declare module "lib/security/frameGuard.js" {
+	interface FrameGuardOptions {
+		action?: "deny" | "sameorigin";
+	}
+
+	function frameGuard(options?: FrameGuardOptions): express.RequestHandler;
+	export = frameGuard;
+}
+
+/**
+ * IP range restriction
+ * @see lib/security/ipRangeRestrict.js
+ */
+declare module "lib/security/ipRangeRestrict.js" {
+	interface IPRangeOptions {
+		ranges: string[];
+		allow?: boolean;
+	}
+
+	function ipRangeRestrict(options: IPRangeOptions): express.RequestHandler;
+	export = ipRangeRestrict;
+}
+
+/**
+ * CSRF protection
+ * @see lib/security/csrf.js
+ */
+declare module "lib/security/csrf.js" {
+	interface CSRFOptions {
+		secret: string;
+		cookie?: {
+			key?: string;
+			secure?: boolean;
+			httpOnly?: boolean;
+		};
+	}
+
+	function csrf(options: CSRFOptions): express.RequestHandler;
+	export = csrf;
+}
+
+/**
+ * Excel value escaping
+ * @see lib/security/escapeValueForExcel.js
+ */
+declare module "lib/security/escapeValueForExcel.js" {
+	function escapeValueForExcel(value: any): string;
+	export = escapeValueForExcel;
+}
+
+// --- Schema Plugin Types ---
+
+/**
+ * Sortable plugin
+ * @see lib/schemaPlugins/sortable.js
+ */
+declare module "lib/schemaPlugins/sortable.js" {
+	interface SortableOptions {
+		path?: string;
+		ref?: string;
+	}
+
+	function sortable(schema: mongoose.Schema, options?: SortableOptions): void;
+	export = sortable;
+}
+
+/**
+ * Transform plugin
+ * @see lib/schemaPlugins/options/transform.js
+ */
+declare module "lib/schemaPlugins/options/transform.js" {
+	interface TransformOptions {
+		transform?: (doc: any, ret: any, options: any) => any;
+	}
+
+	function transform(schema: mongoose.Schema, options?: TransformOptions): void;
+	export = transform;
+}
+
+/**
+ * Tracking plugin
+ * @see lib/schemaPlugins/track.js
+ */
+declare module "lib/schemaPlugins/track.js" {
+	interface TrackOptions {
+		createdAt?: boolean | string;
+		createdBy?: boolean | string;
+		updatedAt?: boolean | string;
+		updatedBy?: boolean | string;
+	}
+
+	function track(schema: mongoose.Schema, options?: TrackOptions): void;
+	export = track;
+}
+
+/**
+ * Related item methods
+ * @see lib/schemaPlugins/methods/getRelated.js
+ */
+declare module "lib/schemaPlugins/methods/getRelated.js" {
+	function getRelated(schema: mongoose.Schema): void;
+	export = getRelated;
+}
+
+/**
+ * Related item population methods
+ * @see lib/schemaPlugins/methods/populateRelated.js
+ */
+declare module "lib/schemaPlugins/methods/populateRelated.js" {
+	function populateRelated(schema: mongoose.Schema): void;
+	export = populateRelated;
+}
+
+/**
+ * Autokey plugin
+ * @see lib/schemaPlugins/autokey.js
+ */
+declare module "lib/schemaPlugins/autokey.js" {
+	interface AutokeyOptions {
+		path: string;
+		from: string;
+		unique?: boolean;
+		separator?: string;
+	}
+
+	function autokey(schema: mongoose.Schema, options: AutokeyOptions): void;
+	export = autokey;
+}
+
+/**
+ * History plugin
+ * @see lib/schemaPlugins/history.js
+ */
+declare module "lib/schemaPlugins/history.js" {
+	interface HistoryOptions {
+		path?: string;
+		ref?: string;
+		userRef?: string;
+	}
+
+	function history(schema: mongoose.Schema, options?: HistoryOptions): void;
+	export = history;
+}
+
+// --- Content Types ---
+
+/**
+ * HTML content type
+ * @see lib/content/types/html.js
+ */
+declare module "lib/content/types/html.js" {
+	interface HTMLContent {
+		html: string;
+	}
+
+	function renderHTML(content: HTMLContent): string;
+	export = renderHTML;
+}
+
+/**
+ * Content type index
+ * @see lib/content/types/index.js
+ */
+declare module "lib/content/types/index.js" {
+	interface ContentType {
+		name: string;
+		render: (content: any) => string;
+	}
+
+	const types: Record<string, ContentType>;
+	export = types;
+}
+
+/**
+ * Text content type
+ * @see lib/content/types/text.js
+ */
+declare module "lib/content/types/text.js" {
+	interface TextContent {
+		text: string;
+	}
+
+	function renderText(content: TextContent): string;
+	export = renderText;
+}
+
+/**
+ * Base content type
+ * @see lib/content/type.js
+ */
+declare module "lib/content/type.js" {
+	interface ContentTypeOptions {
+		name: string;
+		render: (content: any) => string;
+	}
+
+	class ContentType {
+		constructor(options: ContentTypeOptions);
+		name: string;
+		render(content: any): string;
+	}
+
+	export = ContentType;
+}
+
+/**
+ * Content page
+ * @see lib/content/page.js
+ */
+declare module "lib/content/page.js" {
+	interface PageOptions {
+		title: string;
+		content: any;
+		type: string;
+	}
+
+	class Page {
+		constructor(options: PageOptions);
+		title: string;
+		content: any;
+		type: string;
+		render(): string;
+	}
+
+	export = Page;
+}
+
+/**
+ * Content index
+ * @see lib/content/index.js
+ */
+declare module "lib/content/index.js" {
+	interface ContentOptions {
+		types?: Record<string, any>;
+	}
+
+	class Content {
+		constructor(options?: ContentOptions);
+		types: Record<string, any>;
+		registerType(name: string, type: any): void;
+		render(content: any, type: string): string;
+	}
+
+	export = Content;
+}
+
+// --- Field Types ---
+
+/**
+ * Field types index
+ * @see lib/fieldTypes.js
+ */
+declare module "lib/fieldTypes.js" {
+	interface FieldType {
+		name: string;
+		properName: string;
+		new (list: KeystoneList, path: string, options: any): KeystoneField;
+	}
+
+	const types: Record<string, FieldType>;
+	export = types;
+}
+
+// --- List Types ---
+
+/**
+ * List implementation
+ * @see lib/list.js
+ */
+declare module "lib/list.js" {
+	interface ListOptions extends KeystoneListOptions {
+		// Add any additional list options here
+	}
+
+	class List {
+		constructor(key: string, options?: ListOptions);
+		// Add list methods here
+	}
+
+	export = List;
+}
+
+// --- Storage Types ---
+
+/**
+ * Storage system
+ * @see lib/storage/index.js
+ */
+declare module "lib/storage/index.js" {
+	interface StorageAdapter {
+		uploadFile(file: any, callback: (err?: Error, result?: any) => void): void;
+		removeFile(file: any, callback: (err?: Error) => void): void;
+	}
+
+	interface StorageOptions {
+		adapter: string;
+		options?: Record<string, any>;
+	}
+
+	class Storage {
+		constructor(options: StorageOptions);
+		adapter: StorageAdapter;
+		uploadFile(file: any, callback: (err?: Error, result?: any) => void): void;
+		removeFile(file: any, callback: (err?: Error) => void): void;
+	}
+
+	export = Storage;
+}
+
+/**
+ * File system storage adapter
+ * @see lib/storage/adapters/fs/index.js
+ */
+declare module "lib/storage/adapters/fs/index.js" {
+	interface FSOptions {
+		path: string;
+		generateFilename?: (file: any) => string;
+	}
+
+	class FSAdapter {
+		constructor(options: FSOptions);
+		uploadFile(file: any, callback: (err?: Error, result?: any) => void): void;
+		removeFile(file: any, callback: (err?: Error) => void): void;
+	}
+
+	export = FSAdapter;
+}
+
+// --- Upload Types ---
+
+/**
+ * Upload handling
+ * @see lib/uploads.js
+ */
+declare module "lib/uploads.js" {
+	interface UploadOptions {
+		path?: string;
+		allowedTypes?: string[];
+		maxSize?: number;
+	}
+
+	function handleUpload(options: UploadOptions): express.RequestHandler;
+	export = handleUpload;
+}
+
+// --- List Method Types ---
+
+/**
+ * Document name getter
+ * @see lib/list/getDocumentName.js
+ */
+declare module "lib/list/getDocumentName.js" {
+	function getDocumentName(
+		list: KeystoneList,
+		doc: any,
+		escapeHtml?: boolean
+	): string;
+	export = getDocumentName;
+}
+
+/**
+ * Column expansion
+ * @see lib/list/expandColumns.js
+ */
+declare module "lib/list/expandColumns.js" {
+	interface Column {
+		path: string;
+		field?: KeystoneField;
+		type?: string;
+		label?: string;
+		options?: any;
+	}
+
+	function expandColumns(
+		list: KeystoneList,
+		columns: string | string[]
+	): Column[];
+	export = expandColumns;
+}
+
+/**
+ * Query filter addition
+ * @see lib/list/addFiltersToQuery.js
+ */
+declare module "lib/list/addFiltersToQuery.js" {
+	function addFiltersToQuery(
+		list: KeystoneList,
+		query: any,
+		filters: Record<string, any>
+	): any;
+	export = addFiltersToQuery;
+}
+
+/**
+ * Data retrieval
+ * @see lib/list/getData.js
+ */
+declare module "lib/list/getData.js" {
+	function getData(
+		list: KeystoneList,
+		item: any,
+		fields?: string | string[],
+		expandRelationshipFields?: boolean
+	): any;
+	export = getData;
+}
+
+/**
+ * Filter processing
+ * @see lib/list/processFilters.js
+ */
+declare module "lib/list/processFilters.js" {
+	function processFilters(
+		list: KeystoneList,
+		filters: string | Record<string, any>
+	): Record<string, any>;
+	export = processFilters;
+}
+
+/**
+ * Search query addition
+ * @see lib/list/addSearchToQuery.js
+ */
+declare module "lib/list/addSearchToQuery.js" {
+	function addSearchToQuery(
+		list: KeystoneList,
+		query: any,
+		search: string
+	): any;
+	export = addSearchToQuery;
+}
+
+/**
+ * Field management
+ * @see lib/list/field.js
+ */
+declare module "lib/list/field.js" {
+	function field(
+		list: KeystoneList,
+		path: string,
+		options?: any
+	): KeystoneField;
+	export = field;
+}
+
+/**
+ * Options retrieval
+ * @see lib/list/getOptions.js
+ */
+declare module "lib/list/getOptions.js" {
+	function getOptions(list: KeystoneList, optionsSet: string, rest?: any): any;
+	export = getOptions;
+}
+
+/**
+ * Pagination
+ * @see lib/list/paginate.js
+ */
+declare module "lib/list/paginate.js" {
+	interface PaginateOptions {
+		query?: any;
+		page?: number | string;
+		perPage?: number;
+		maxPages?: number;
+		filters?: Record<string, any>;
+	}
+
+	interface PaginateResult {
+		total: number;
+		results: any[];
+		currentPage: number;
+		totalPages: number;
+		pages: number[];
+		previous: number | false;
+		next: number | false;
+		first: number;
+		last: number;
+	}
+
+	function paginate(
+		list: KeystoneList,
+		options: PaginateOptions,
+		callback: (err?: Error, result?: PaginateResult) => void
+	): void;
+	export = paginate;
+}
+
+/**
+ * API response generation
+ * @see lib/list/apiForGet.js
+ */
+declare module "lib/list/apiForGet.js" {
+	function apiForGet(
+		list: KeystoneList,
+		item: any,
+		select?: string,
+		expandRelationshipFields?: boolean
+	): any;
+	export = apiForGet;
+}
+
+/**
+ * Relationship management
+ * @see lib/list/relationship.js
+ */
+declare module "lib/list/relationship.js" {
+	interface RelationshipDefinition {
+		ref: string;
+		refPath: string;
+		path: string;
+		config?: any;
+	}
+
+	function relationship(list: KeystoneList, def: RelationshipDefinition): void;
+	export = relationship;
+}
+
+/**
+ * List registration
+ * @see lib/list/register.js
+ */
+declare module "lib/list/register.js" {
+	function register(list: KeystoneList): KeystoneList;
+	export = register;
+}
+
+/**
+ * Admin URL generation
+ * @see lib/list/getAdminURL.js
+ */
+declare module "lib/list/getAdminURL.js" {
+	function getAdminURL(list: KeystoneList, doc?: any | string): string;
+	export = getAdminURL;
+}
+
+/**
+ * Underscore method addition
+ * @see lib/list/underscoreMethod.js
+ */
+declare module "lib/list/underscoreMethod.js" {
+	function underscoreMethod(
+		list: KeystoneList,
+		path: string,
+		fn: Function
+	): KeystoneList;
+	export = underscoreMethod;
+}
+
+/**
+ * Field addition
+ * @see lib/list/add.js
+ */
+declare module "lib/list/add.js" {
+	function add(
+		list: KeystoneList,
+		...defs: Array<string | KeystoneFieldDefinition | KeystoneHeadingDefinition>
+	): KeystoneList;
+	export = add;
+}
+
+/**
+ * Text index management
+ * @see lib/list/ensureTextIndex.js
+ */
+declare module "lib/list/ensureTextIndex.js" {
+	function ensureTextIndex(
+		list: KeystoneList,
+		callback?: (err?: Error) => void
+	): void;
+	export = ensureTextIndex;
+}
+
+/**
+ * Sort expansion
+ * @see lib/list/expandSort.js
+ */
+declare module "lib/list/expandSort.js" {
+	function expandSort(list: KeystoneList, sort: string): Record<string, 1 | -1>;
+	export = expandSort;
+}
+
+/**
+ * Option setting
+ * @see lib/list/set.js
+ */
+declare module "lib/list/set.js" {
+	function set(list: KeystoneList, key: string, value: any): any;
+	export = set;
+}
+
+/**
+ * CSV data generation
+ * @see lib/list/getCSVData.js
+ */
+declare module "lib/list/getCSVData.js" {
+	function getCSVData(
+		list: KeystoneList,
+		options: any,
+		user: any,
+		callback: (err?: Error, csvData?: string) => void
+	): void;
+	export = getCSVData;
+}
+
+/**
+ * Automatic field mapping
+ * @see lib/list/automap.js
+ */
+declare module "lib/list/automap.js" {
+	function automap(
+		list: KeystoneList,
+		options?: Record<string, boolean>
+	): KeystoneList;
+	export = automap;
+}
+
+/**
+ * Search filter generation
+ * @see lib/list/getSearchFilters.js
+ */
+declare module "lib/list/getSearchFilters.js" {
+	function getSearchFilters(
+		list: KeystoneList,
+		search: string
+	): Record<string, any>;
+	export = getSearchFilters;
+}
+
+/**
+ * Text index declaration check
+ * @see lib/list/declaresTextIndex.js
+ */
+declare module "lib/list/declaresTextIndex.js" {
+	function declaresTextIndex(list: KeystoneList): boolean;
+	export = declaresTextIndex;
+}
+
+/**
+ * Column selection
+ * @see lib/list/selectColumns.js
+ */
+declare module "lib/list/selectColumns.js" {
+	function selectColumns(
+		list: KeystoneList,
+		query: any,
+		columns: Array<{ path: string; field?: KeystoneField }>
+	): void;
+	export = selectColumns;
+}
+
+/**
+ * Reserved path check
+ * @see lib/list/isReserved.js
+ */
+declare module "lib/list/isReserved.js" {
+	function isReserved(list: KeystoneList, path: string): boolean;
+	export = isReserved;
+}
+
+/**
+ * Page calculation
+ * @see lib/list/getPages.js
+ */
+declare module "lib/list/getPages.js" {
+	interface PageOptions {
+		page?: number | string;
+		perPage?: number;
+		maxPages?: number;
+	}
+
+	interface PageResult {
+		total: number;
+		currentPage: number;
+		totalPages: number;
+		pages: number[];
+		previous: number | false;
+		next: number | false;
+		first: number;
+		last: number;
+	}
+
+	function getPages(
+		list: KeystoneList,
+		query: any,
+		options: PageOptions,
+		callback: (err?: Error, pages?: PageResult) => void
+	): void;
+	export = getPages;
+}
+
+/**
+ * Path expansion
+ * @see lib/list/expandPaths.js
+ */
+declare module "lib/list/expandPaths.js" {
+	function expandPaths(
+		list: KeystoneList,
+		paths: string | string[]
+	): KeystoneField[];
+	export = expandPaths;
+}
+
+/**
+ * Item updating
+ * @see lib/list/updateItem.js
+ */
+declare module "lib/list/updateItem.js" {
+	interface UpdateOptions {
+		files?: any;
+		user?: any;
+	}
+
+	function updateItem(
+		list: KeystoneList,
+		item: any,
+		data: any,
+		options: UpdateOptions,
+		callback: (err?: Error, item?: any) => void
+	): void;
+	export = updateItem;
+}
+
+/**
+ * Field mapping
+ * @see lib/list/map.js
+ */
+declare module "lib/list/map.js" {
+	function map(list: KeystoneList, path: string, mappedPath: string): void;
+	export = map;
+}
+
+/**
+ * Text index building
+ * @see lib/list/buildSearchTextIndex.js
+ */
+declare module "lib/list/buildSearchTextIndex.js" {
+	function buildSearchTextIndex(
+		list: KeystoneList,
+		callback?: (err?: Error) => void
+	): void;
+	export = buildSearchTextIndex;
+}
+
+/**
+ * Unique value generation
+ * @see lib/list/getUniqueValue.js
+ */
+declare module "lib/list/getUniqueValue.js" {
+	function getUniqueValue(
+		list: KeystoneList,
+		path: string,
+		value: string | number,
+		filters?: any,
+		callback?: (err?: Error, uniqueValue?: string | number) => void
+	): Promise<string | number>;
+	export = getUniqueValue;
+}
+
+// --- Utility Types ---
+
+/**
+ * Path handling
+ * @see lib/path.js
+ */
+declare module "lib/path.js" {
+	class Path {
+		constructor(path: string);
+		get(obj: any, subpath?: string): any;
+		set(obj: any, value: any): void;
+		del(obj: any): void;
+	}
+
+	export = Path;
+}
+
+/**
+ * View rendering
+ * @see lib/view.js
+ */
+declare module "lib/view.js" {
+	interface ViewOptions {
+		template?: string;
+		engine?: string;
+		data?: Record<string, any>;
+	}
+
+	class View {
+		constructor(options: ViewOptions);
+		render(callback: (err?: Error, html?: string) => void): void;
+	}
+
+	export = View;
+}
+
+/**
+ * Schema plugins
+ * @see lib/schemaPlugins.js
+ */
+declare module "lib/schemaPlugins.js" {
+	interface Plugin {
+		name: string;
+		apply(schema: mongoose.Schema, options?: any): void;
+	}
+
+	const plugins: Record<string, Plugin>;
+	export = plugins;
+}
+
+/**
+ * Email handling
+ * @see lib/email.js
+ */
+declare module "lib/email.js" {
+	interface EmailOptions {
+		template?: string;
+		engine?: string;
+		subject?: string;
+		to?: string | string[];
+		from?: string;
+		data?: Record<string, any>;
+	}
+
+	class Email {
+		constructor(options: EmailOptions);
+		send(callback: (err?: Error) => void): void;
+	}
+
+	export = Email;
+}
+
+// --- Field Type Implementations ---
+
+// S3File Type
+declare module "fields/types/s3file/S3FileType.js" {
+	interface S3FileOptions extends KeystoneFieldOptions {
+		s3config?: Record<string, any>;
+		allowedTypes?: string[];
+		maxSize?: number;
+	}
+
+	class S3FileType extends KeystoneFieldTypeConstructor {
+		new(
+			list: KeystoneList,
+			path: string,
+			options: S3FileOptions
+		): KeystoneField;
+	}
+
+	export = S3FileType;
+}
+
+// Password Type
+declare module "fields/types/password/PasswordType.js" {
+	interface PasswordOptions extends KeystoneFieldOptions {
+		minLength?: number;
+		workFactor?: number;
+	}
+
+	class PasswordType extends KeystoneFieldTypeConstructor {
+		new(
+			list: KeystoneList,
+			path: string,
+			options: PasswordOptions
+		): KeystoneField;
+	}
+
+	export = PasswordType;
+}
+
+// TextArray Type
+declare module "fields/types/textarray/TextArrayType.js" {
+	interface TextArrayOptions extends KeystoneFieldOptions {
+		min?: number;
+		max?: number;
+	}
+
+	class TextArrayType extends KeystoneFieldTypeConstructor {
+		new(
+			list: KeystoneList,
+			path: string,
+			options: TextArrayOptions
+		): KeystoneField;
+	}
+
+	export = TextArrayType;
+}
+
+// File Type
+declare module "fields/types/file/FileType.js" {
+	interface FileOptions extends KeystoneFieldOptions {
+		storage?: string;
+		allowedTypes?: string[];
+		maxSize?: number;
+	}
+
+	class FileType extends KeystoneFieldTypeConstructor {
+		new(list: KeystoneList, path: string, options: FileOptions): KeystoneField;
+	}
+
+	export = FileType;
+}
+
+// ... Add more field type declarations as needed ...
+
+// --- Field Mixins ---
+
+/**
+ * Array field mixin
+ * @see fields/mixins/ArrayField.js
+ */
+declare module "fields/mixins/ArrayField.js" {
+	interface ArrayFieldOptions {
+		min?: number;
+		max?: number;
+	}
+
+	function ArrayFieldMixin(
+		field: KeystoneField,
+		options?: ArrayFieldOptions
+	): void;
+	export = ArrayFieldMixin;
+}
+
+// --- Field Explorer ---
+
+/**
+ * Field explorer server
+ * @see fields/explorer/server.js
+ */
+declare module "fields/explorer/server.js" {
+	interface ExplorerServerOptions {
+		port?: number;
+		host?: string;
+	}
+
+	function createExplorerServer(
+		keystone: Keystone,
+		options?: ExplorerServerOptions
+	): any;
+	export = createExplorerServer;
+}
+
+// --- Field Utilities ---
+
+/**
+ * Query presence addition
+ * @see fields/utils/addPresenceToQuery.js
+ */
+declare module "fields/utils/addPresenceToQuery.js" {
+	function addPresenceToQuery(
+		query: any,
+		field: KeystoneField,
+		value: any
+	): void;
+	export = addPresenceToQuery;
+}
+
+/**
+ * Prototype getter definition
+ * @see fields/utils/definePrototypeGetters.js
+ */
+declare module "fields/utils/definePrototypeGetters.js" {
+	function definePrototypeGetters(
+		obj: any,
+		getters: Record<string, () => any>
+	): void;
+	export = definePrototypeGetters;
+}
+
+/**
+ * Function binding
+ * @see fields/utils/bindFunctions.js
+ */
+declare module "fields/utils/bindFunctions.js" {
+	function bindFunctions(obj: any, functions: string[]): void;
+	export = bindFunctions;
+}
+
+/**
+ * Dependency evaluation
+ * @see fields/utils/evalDependsOn.js
+ */
+declare module "fields/utils/evalDependsOn.js" {
+	function evalDependsOn(dependsOn: any, data: any): boolean;
+	export = evalDependsOn;
+}
