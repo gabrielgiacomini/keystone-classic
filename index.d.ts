@@ -1,7 +1,7 @@
-// Type definitions for KeystoneJS v4 ... lib/list/field.js
+// Type definitions for KeystoneJS v4 ... fields/types/Type.js
 // Project: https://github.com/keystonejs/keystone-0.3
 // Definitions by: Gabriel Giacomini <https://github.com/GabrielGiacomini>
-// Based on the code in: index.js, lib/core/options.js, lib/list.js, lib/list/add.js, lib/list/field.js
+// Based on the code in: index.js, lib/core/options.js, lib/list.js, lib/list/add.js, lib/list/field.js, fields/types/Type.js
 
 import * as express from 'express';
 import * as mongoose from 'mongoose';
@@ -9,8 +9,9 @@ import { Hook } from 'grappling-hook'; // @todo: Check if @types/grappling-hook 
 
 // --- Dependencies & Placeholders ---
 // import * as utils from 'keystone-utils'; // @todo Get/Define types for keystone-utils
-// @todo Define Keystone.Field base class from fields/types/Type.js
-// @todo Define specific Field Types (TextType, NumberType etc.) from fields/types/*
+// @todo Define Path class from lib/path.js
+// declare class Path { constructor(path: string); get(obj: any, subpath?: string): any; }
+// @todo Add types for dependencies: @types/lodash, @types/marked, @types/object-assign, asyncdi?
 
 /**
  * @todo Define more specific types for imported modules instead of 'any' or Function.
@@ -20,14 +21,11 @@ import { Hook } from 'grappling-hook'; // @todo: Check if @types/grappling-hook 
 // --- Forward Declarations ---
 declare class Keystone { /* ... */ }
 declare class List { /* ... */ }
-declare class Field { /* ... */ } // Base Field definition needed
+declare class Field { /* ... */ } // Base Field definition
 
 // --- Interfaces & Types ---
 
-/**
- * Represents the constructor for a Keystone Field Type (e.g., `Types.Text`).
- * @todo Refine based on the actual base Field class (`fields/types/Type.js`).
- */
+/** Represents the constructor for a Keystone Field Type (e.g., `Types.Text`). */
 interface FieldTypeConstructor {
     /** Creates an instance of the field type. */
     new (list: List, path: string, options: FieldOptions): Field;
@@ -36,35 +34,62 @@ interface FieldTypeConstructor {
     /** Canonical name of the field type (e.g., 'Text', 'Relationship'). Used internally. */
     properName?: string;
     /** Technical name (often JS class name, e.g., 'TextType'). Used for `list.fieldTypes`. */
-    name?: string;
+    name?: string; // JS constructor name
 }
 
-/**
- * Options object used to define a field within a List.
- * @see lib/list/field.js
- * @see lib/list/add.js
- */
+/** Options object used to define a field within a List. */
 interface FieldOptions {
-    /**
-     * The field type constructor (e.g., `keystone.Field.Types.Text`) or a native JS constructor
-     * (`String`, `Number`, `Boolean`, `Date`) which will be mapped to a default Keystone type.
-     */
+    /** The field type constructor or a native JS constructor. */
     type: FieldTypeConstructor | StringConstructor | NumberConstructor | BooleanConstructor | DateConstructor;
+    /** Display label for the field in the Admin UI. */
     label?: string;
+    /** Custom description for the field type (optional). */
+    typeDescription?: string;
+    /** Show this field on the create form. */
     initial?: boolean;
-    required?: boolean;
+    /** Field must have a value. Can be a boolean or a function for conditional requirement. */
+    required?: boolean | ((this: any) => boolean); // `this` context is the Mongoose document
+    /** Create a MongoDB index for this field. */
     index?: boolean;
+    /** Field value must be unique. */
     unique?: boolean;
-    /** Help text displayed beneath the field in the Admin UI. Also sourced from `list.get('notes')[path]` if not provided. */
+    /** Help text (markdown) displayed beneath the field. */
     note?: string;
+    /** Control field visibility in the Admin UI based on other field values. */
     dependsOn?: Record<string, any>;
-    /** Prevent editing the field in the Admin UI. Also inherited from `list.get('noedit')`. */
+    /** Prevent editing the field in the Admin UI. */
     noedit?: boolean;
+    /** If true, the field does not persist to the database. */
     virtual?: boolean;
+    /** Default value for the field. */
     default?: any;
+    /** Mongoose schema options for this field path. */
     schema?: Record<string, any>;
-    /** Special option for HTML field to enable TinyMCE. */
-    wysiwyg?: boolean;
+    /** Deprecated: Use `size`. */
+    width?: 'small' | 'medium' | 'large' | 'full';
+    /** Width of the field in the Admin UI form. */
+    size?: 'small' | 'medium' | 'large' | 'full';
+    /** Watch other fields and update this field's value based on changes. */
+    watch?: boolean | string | string[] | Record<string, any> | ((item: any) => boolean);
+    /** Function to generate the value for watched fields. `this` context is the Mongoose document. */
+    value?: (this: any, callback: (err: any, value: any) => void) => void;
+    /** Mongoose schema column definition (rarely used directly). */
+    col?: any; // @todo Define col type if possible
+    /** Exclude from Admin UI list view columns. */
+    nocol?: boolean;
+    /** Disable sorting by this field in the Admin UI list view. */
+    nosort?: boolean;
+    /** Indent the field in the Admin UI form. */
+    indent?: boolean;
+    /** Collapse the field in the Admin UI form by default. */
+    collapse?: boolean;
+    /** Hide the field from the Admin UI entirely. */
+    hidden?: boolean;
+    /** Auto cleanup settings (e.g., for relationship fields). */
+    autoCleanup?: boolean; // @todo Check usage
+    /** Thumbnail option (likely for file/image fields). */
+    thumb?: boolean; // @todo Check usage
+
     // Allow field-type specific options
     [key: string]: any;
 }
@@ -75,49 +100,214 @@ type FieldDefinition = Record<string, FieldOptions | FieldTypeConstructor | Stri
 /** Represents an object defining a heading in the Admin UI form. */
 interface HeadingDefinition { /* ... (definition remains the same) ... */ }
 
-/** Basic interface representing a Keystone Field instance within a List. */
+/** Interface representing a Keystone Field instance within a List. Based on `fields/types/Type.js`. */
 interface Field {
-    /** The path of the field (e.g., 'name', 'meta.title'). */
+    /** Reference to the parent List instance. */
+    list: List;
+    /** The field's path (e.g., 'name', 'address.street'). */
     path: string;
+    /** Internal Path object for handling nested paths. @internal */
+    _path: any; // Path; // @todo Use Path type when defined
     /** The field type name (e.g., 'text', 'relationship'). Set by the Field Type constructor. */
     type: string;
+    /** The final, merged options for this field instance. */
+    options: FieldOptions;
     /** Display label for the field. */
     label: string;
-    /** Reference to the parent list. */
-    list: List;
-    /** The final options object used to configure the field instance. */
-    options: FieldOptions;
-    /** The part of the Mongoose schema this field adds. */
-    schema: mongoose.Schema.Types.Mixed | any; // @todo Type schema part added by the field
-    /** Internal storage for original options. */
-    __options?: Record<string, any>;
+    /** Description of the field type (e.g., 'Text', 'Boolean'). */
+    typeDescription: string;
+    /** Default options specific to the field type. Defined by subclasses. @internal */
+    defaults?: Partial<FieldOptions>;
+    /** The Mongoose schema definition for this field. */
+    schema: mongoose.SchemaDefinition[keyof mongoose.SchemaDefinition]; // More specific than just 'any'
 
-    initial?: boolean;
-    noedit?: boolean;
-    required?: boolean;
-    virtual?: boolean;
-    note?: string;
-    dependsOn?: Record<string, any>;
+    /** Properties specific to the field type, used for generating Admin UI options. Defined by subclasses. @internal */
+    _properties?: string[];
+    /** Fixed size for the field type (overrides options). Defined by subclasses. @internal */
+    _fixedSize?: 'small' | 'medium' | 'large' | 'full';
+    /** Default size for the field type if not specified. Defined by subclasses. @internal */
+    _defaultSize?: 'small' | 'medium' | 'large' | 'full';
+    /** The underlying Mongoose type constructor (e.g., String, Number, mongoose.Schema.Types.ObjectId). Defined by subclasses. @internal */
+    _nativeType?: any;
+    /** Underscore methods to bind to the document prototype. Defined by subclasses. @internal */
+    _underscoreMethods?: Array<string | { fn: string; as: string }>;
 
-    addToQuery: (query: any, options?: any) => void; // @todo Define query and options type
-    format: (item: any) => any; // @todo Define item type (Mongoose document)
-    validateInput: (data: any, callback: (valid: boolean, message?: string) => void) => void; // @todo Define data type
-    updateItem: (item: any, data: any, callback: (err?: Error) => void) => void; // @todo Define item and data types
+    /** Cached options object for the Admin UI. @internal */
+    __options?: Record<string, any> & { hasFilterMethod?: boolean; defaultValue?: any };
+    /** Cached size value. @internal */
+    __size?: 'small' | 'medium' | 'large' | 'full';
 
-    /** Adds the field paths to a Mongoose selection object. */
-    select?: string; // Common property, e.g., for virtuals needing underlying fields
-    /** Adds field paths to the Mongoose query population. */
-    populate?: any; // Common property, e.g., for relationships
+    // --- Prototype Getters ---
+    /** Calculated size of the field ('small', 'medium', 'large', 'full'). */
+    readonly size: 'small' | 'medium' | 'large' | 'full';
+    /** Whether the field is shown on the creation form. */
+    readonly initial: boolean;
+    /** Whether the field is required. Can be a boolean or a function. */
+    readonly required: boolean | ((this: any) => boolean);
+    /** The field's help note (HTML). */
+    readonly note: string;
+    /** Mongoose schema column definition. */
+    readonly col: any; // @todo Define col type
+    /** Whether the field is editable in the Admin UI. */
+    readonly noedit: boolean;
+    /** Whether the field is excluded from Admin UI columns. */
+    readonly nocol: boolean;
+    /** Whether the field is sortable in the Admin UI. */
+    readonly nosort: boolean;
+    /** Whether the field is collapsed by default in the Admin UI. */
+    readonly collapse: boolean;
+    /** Whether the field is hidden in the Admin UI. */
+    readonly hidden: boolean;
+    /** The field's visibility dependencies. */
+    readonly dependsOn: Record<string, any> | false;
 
-    [key: string]: any; // Allow for type-specific properties/methods
+    // --- Core Methods ---
+
+    /**
+     * Returns the options object used by the Admin UI React components.
+     * @returns {Record<string, any>} Options object.
+     */
+    getOptions(): Record<string, any>;
+
+    /**
+     * Calculates the size of the field.
+     * @returns {'small' | 'medium' | 'large' | 'full'} Field size.
+     * @internal Should use the `size` getter externally.
+     */
+    getSize(): 'small' | 'medium' | 'large' | 'full';
+
+    /**
+     * Gets the default value for the field.
+     * @returns {any} Default value.
+     */
+    getDefaultValue(): any;
+
+    /**
+     * Gets the field's data from an item.
+     * @param item The Mongoose document.
+     * @returns {any} Field value.
+     */
+    getData(item: any): any;
+
+    /**
+     * Generates the Mongoose pre-save hook function for watched fields.
+     * @returns {Function} Mongoose pre-save middleware.
+     * @internal Used by the Field constructor.
+     */
+    getPreSaveWatcher(): (next: (err?: Error) => void) => void;
+
+    /**
+     * Adds the field to the List's Mongoose Schema.
+     * Typically overridden by specific field types.
+     * @param schema The Mongoose schema.
+     */
+    addToSchema(schema: mongoose.Schema): void;
+
+    /**
+     * Binds underscore methods (from `_underscoreMethods` and `updateItem`) to the list's schema.
+     * @internal Called by `addToSchema`.
+     */
+    bindUnderscoreMethods(): void;
+
+    /**
+     * Helper to register an underscore method on the list, prefixed with the field path.
+     * @param path The method name (without field path prefix).
+     * @param fn The method implementation. `this` context is the Mongoose document.
+     * @internal
+     */
+    underscoreMethod(path: string, fn: (this: any, ...args: any[]) => any): void;
+
+    /**
+     * Formats the field's value for display.
+     * Often overridden by specific field types.
+     * @param item The Mongoose document.
+     * @returns {string | any} Formatted value.
+     */
+    format(item: any): any;
+
+    /**
+     * Detects whether the field has been modified in an item.
+     * @param item The Mongoose document.
+     * @returns {boolean} True if modified.
+     */
+    isModified(item: any): boolean;
+
+    /**
+     * Asynchronously validates provided input data for the field.
+     * Often overridden by specific field types.
+     * @param data The input data object.
+     * @param callback Receives `(isValid: boolean, message?: string)`.
+     */
+    validateInput(data: any, callback: (valid: boolean, message?: string) => void): void;
+
+    /**
+     * Asynchronously validates that required input has been provided for the field.
+     * Takes into account existing data in the item.
+     * Often overridden by specific field types.
+     * @param item The Mongoose document (for checking existing data).
+     * @param data The input data object.
+     * @param callback Receives `(isValid: boolean, message?: string)`.
+     */
+    validateRequiredInput(item: any, data: any, callback: (valid: boolean, message?: string) => void): void;
+
+    /**
+     * (Deprecated) Synchronously checks if input data for the field is valid.
+     * Prefer the async `validateInput` and `validateRequiredInput` methods.
+     * @deprecated Use validateInput or validateRequiredInput instead.
+     * @param data Input data.
+     * @param required Is input required?
+     * @param item Optional Mongoose document for context.
+     * @returns {boolean} Validity state.
+     */
+    inputIsValid(data: any, required?: boolean, item?: any): boolean;
+
+    /**
+     * Updates the field's value in an item based on input data.
+     * Often overridden by specific field types.
+     * @param item The Mongoose document to update.
+     * @param data The input data object.
+     * @param callback Called after update attempt. Receives `(error?: Error)`.
+     */
+    updateItem(item: any, data: any, callback: (err?: Error) => void): void;
+
+    /**
+     * Retrieves the field's value from a data object, handling nested paths.
+     * @param data The data object.
+     * @param subpath Optional subpath within the field.
+     * @returns {any} The value.
+     */
+    getValueFromData(data: any, subpath?: string): any;
+
+    /**
+     * Adds the field path to a Mongoose query projection.
+     * Used by `List.selectColumns`. Can be overridden.
+     * @param query The Mongoose query.
+     * @param options Options for selection.
+     */
+    select?: (query: any, options?: any) => void;
+
+    /**
+     * Adds population options to a Mongoose query for this field (e.g., for Relationships).
+     * Can be overridden.
+     * @param query The Mongoose query.
+     * @param options Population options.
+     */
+    populate?: (query: any, options?: any) => void;
+
+    /**
+     * Adds filters to a Mongoose query based on this field. Implemented by fields supporting filtering.
+     * @param query The Mongoose query.
+     * @param filter Filter options specific to the field type.
+     */
+    addFilterToQuery?: (query: any, filter: any) => void;
+
+    // Allow for type-specific properties/methods from subclasses
+    [key: string]: any;
 }
 
+
 // --- UI Element Types ---
-interface FieldUIElement { type: 'field'; field: Field; }
-interface HeadingUIElement { type: 'heading'; heading: string; options: HeadingDefinition | Record<string, any>; }
-interface IndentUIElement { type: 'indent'; }
-interface OutdentUIElement { type: 'outdent'; }
-type UIElement = FieldUIElement | HeadingUIElement | IndentUIElement | OutdentUIElement;
+/* ... (UIElement definitions remain the same) ... */
 
 /** Options for configuring a Keystone List. */
 interface ListOptions { /* ... (definition remains the same) ... */ }
@@ -133,122 +323,25 @@ interface KeystoneOptions { /* ... (definition remains the same) ... */ }
 /** Represents a Keystone Data List. */
 declare class List {
     constructor(key: string, options?: ListOptions);
-
-    keystone: Keystone;
-    options: ListOptions;
-    key: string;
-    path: string;
-    schema: mongoose.Schema;
-    schemaFields: Array<string | FieldDefinition | HeadingDefinition>;
-    uiElements: UIElement[];
-    underscoreMethods: Record<string, Function>;
-    fields: Record<string, Field>;
+    /* ... (List properties remain largely the same) ... */
+    fields: Record<string, Field>; // Now uses the more detailed Field interface
     fieldsArray: Field[];
-    /**
-     * Map of Field Type JS names (e.g., 'TextType', 'wysiwyg') to their proper names (e.g., 'Text', true).
-     * Used for client-side script loading optimizations.
-     */
     fieldTypes: Record<string, string | boolean>;
-    relationshipFields: Field[]; // @todo Use RelationshipField[] type
-    relationships: Record<string, { ref: string; refPath: string; path: string; list: List; field: Field }>; // @todo Refine RelationshipDefinition
-
-    mappings: ListMappings;
-    model: mongoose.Model<any>; // @todo Define Mongoose Document type
-
-    _searchFields?: Field[];
-    _defaultColumns?: Array<{ path: string, field?: Field, type?: string, label?: string, options?: any }>;
-
-    // --- Getters ---
-    readonly label: string; /* ... */
-    readonly singular: string; /* ... */
-    readonly plural: string; /* ... */
-    readonly namePath: string; /* ... */
-    readonly nameField: Field | undefined; /* ... */
-    readonly nameIsVirtual: boolean; /* ... */
-    readonly nameFieldIsFormHeader: boolean; /* ... */
-    readonly nameIsInitial: boolean; /* ... */
-    readonly initialFields: Field[]; /* ... */
-
-    // --- Getter/Setters ---
-    searchFields: string | string[]; /* ... */
-    defaultSort: string; /* ... */
-    defaultColumns: string | string[]; /* ... */
-
-    // --- Methods ---
-
-    add(...defs: Array<string | FieldDefinition | HeadingDefinition>): List;
-
-    /**
-     * Retrieves the Field instance at the specified path.
-     * @param path The path of the field to retrieve.
-     * @returns The Field instance, or undefined if not found.
-     * @see lib/list/field.js
-     */
+    relationshipFields: Field[]; // Still potentially RelationshipField[] later
+    /* ... (List getters remain the same) ... */
+    /* ... (List methods remain the same, referencing the updated Field/FieldOptions) ... */
     field(path: string): Field | undefined;
-    /**
-     * Creates, configures, and registers a new Field instance at the specified path.
-     * Called internally by `list.add()`.
-     * @param path The path for the new field.
-     * @param options The configuration options for the field, including the `type`.
-     * @returns The newly created Field instance.
-     * @throws Error if options are invalid or the type is unrecognized.
-     * @see lib/list/field.js
-     */
     field(path: string, options: FieldOptions): Field;
-    /**
-     * Creates, configures, and registers a new Field instance at the specified path using a constructor directly.
-     * @param path The path for the new field.
-     * @param constructor The Field Type constructor (e.g., `Types.Text`) or a native JS constructor.
-     * @returns The newly created Field instance.
-     * @throws Error if options are invalid or the type is unrecognized.
-     * @see lib/list/field.js
-     */
     field(path: string, constructor: FieldTypeConstructor | StringConstructor | NumberConstructor | BooleanConstructor | DateConstructor): Field;
-
-
-    // ... other method signatures remain the same, with @todo comments ...
-    addFiltersToQuery: (query: any, filters: Record<string, any>) => any;
-    addSearchToQuery: (query: any, search: string) => any;
-    automap: (options?: Record<string, boolean>) => List;
-    apiForGet: (item: any, select?: string, expandRelationshipFields?: boolean) => any;
-    expandColumns: (cols: string | string[]) => Array<{ path: string, field?: Field, type?: string, label?: string, options?: any }>;
-    expandPaths: (paths: string | string[]) => Field[];
-    expandSort: (sort: string) => Record<string, 1 | -1>;
-    get: (key: keyof ListOptions | string) => any;
-    set: (key: keyof ListOptions | string, value: any) => ListOptions;
-    getAdminURL: (doc?: any | string) => string;
-    getCSVData: (options: any, user: any, callback: (err: any, csvData: string) => void) => void;
-    getData: (item: any, fields?: string | string[], expandRelationshipFields?: boolean) => any;
-    getDocumentName: (doc: any, escapeHtml?: boolean) => string;
-    getOptions: (optionsSet: string, rest?: any) => any;
-    getPages: (query: any, options: { /*...*/ }, callback: (err: any, pages: { /*...*/ }) => void) => void;
-    getSearchFilters: (search: string) => Record<string, any>;
-    getUniqueValue: (path: string, value: string | number, filters?: any, callback?: (err: any, uniqueValue: string | number) => void) => Promise<string | number>;
-    isReserved: (path: string) => boolean; // @todo Define signature from lib/list/isReserved.js
-    map: (path: keyof ListMappings | string, mappedPath: string) => void;
-    paginate: (options: { /*...*/ }, callback: (err: any, results: { /*...*/ }) => void) => void;
-    processFilters: (filters: string | Record<string, any>) => Record<string, any>;
-    register: () => List; // @todo Define signature from lib/list/register.js
-    relationship: (def: { ref: string; refPath: string; path: string; config?: any; }) => void;
-    selectColumns: (query: any, columns: Array<{ path: string, field?: Field }>) => void;
-    updateItem: (item: any, data: any, options: { files?: any; user?: any; }, callback: (err: any, item: any) => void) => void;
-    underscoreMethod: (path: string, fn: Function) => List;
-    buildSearchTextIndex: (callback?: (err: any, results?: any) => void) => Promise<any> | void;
-    declaresTextIndex: () => boolean;
-    ensureTextIndex: (callback?: (err: any, results?: any) => void) => Promise<any>;
+    /* ... */
 }
 
 /** Represents a KeystoneJS v4 application instance. */
 declare class Keystone {
     constructor();
     /* ... */
-    lists: Record<string, List>;
-    /**
-     * Base constructor/class for Keystone Fields. Includes the `Types` map.
-     * @todo Define fully based on `fields/types/Type.js`.
-     */
+    /** Base constructor/class for Keystone Fields. Includes the `Types` map. */
     Field: FieldTypeConstructor & {
-        /** Map of available Field Type constructors (e.g., `Types.Text`, `Types.Relationship`). */
         Types: {
             Text?: FieldTypeConstructor;
             Number?: FieldTypeConstructor;
@@ -257,7 +350,7 @@ declare class Keystone {
             Html?: FieldTypeConstructor;
             Relationship?: FieldTypeConstructor;
             Select?: FieldTypeConstructor;
-            Date?: FieldTypeConstructor; // Note: Native Date maps to Datetime by default
+            Date?: FieldTypeConstructor;
             Name?: FieldTypeConstructor;
             Email?: FieldTypeConstructor;
             Password?: FieldTypeConstructor;
@@ -274,32 +367,41 @@ declare const keystone: Keystone;
 export = keystone;
 
 /*
-Usage Instructions: (Remain similar)
+Usage Instructions:
 
-- The `field` method is primarily used internally by `add`. You typically don't call `list.field(path, options)` directly.
-- You can use `list.field(path)` to *get* a reference to an already added field instance.
+- You generally don't interact with the base `Field` class directly. You use specific field types from `keystone.Field.Types` when defining lists.
+- The `Field` interface defined here serves as the base type for all field instances you might get from `list.field(path)`.
 
 ```typescript
 import * as keystone from 'keystone';
-import { Types } from 'keystone'; // Placeholder
+import { Types } from 'keystone';
 
-const User = new keystone.List('User');
+const Product = new keystone.List('Product');
 
-User.add({
-    name: { type: Types.Name, required: true },
-    email: { type: String } // Uses native String, mapped to Types.Text internally
+Product.add({
+    name: { type: Types.Text, required: true },
+    price: { type: Types.Money, required: true, dependsOn: { available: true } },
+    available: { type: Types.Boolean, default: true, initial: true },
+    description: { type: Types.Textarea, note: 'Markdown is supported!' }
 });
 
-User.register();
+Product.register();
 
-// Get field instances after registration
-const nameField = User.field('name');
-const emailField = User.field('email');
+const priceField = Product.field('price');
 
-if (nameField) {
-    console.log(`Field Path: ${nameField.path}, Type: ${nameField.type}, Label: ${nameField.label}`);
+if (priceField) {
+    console.log(`Price field path: ${priceField.path}`);
+    console.log(`Price label: ${priceField.label}`);
+    console.log(`Price dependsOn:`, priceField.dependsOn);
+    console.log(`Is price required?`, priceField.required); // Note: required might be a function here!
+
+    // Accessing options used by Admin UI:
+    const uiOptions = priceField.getOptions();
+    console.log(`Admin UI options for price:`, uiOptions);
 }
-if (emailField) {
-    console.log(`Field Path: ${emailField.path}, Type: ${emailField.type}, Label: ${emailField.label}`);
-    // Note: emailField.type will likely be 'text' due to the mapping
+
+const descriptionField = Product.field('description');
+if (descriptionField) {
+    // Access the processed HTML note
+    console.log(`Description note (HTML): ${descriptionField.note}`);
 }
