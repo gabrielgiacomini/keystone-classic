@@ -1,1 +1,143 @@
- 
+---
+description: 
+globs: 
+alwaysApply: true
+---
+ # Keystone Type Naming Conventions
+
+## Overview
+
+When creating TypeScript types and interfaces for Keystone components, always prefix them with `Keystone` to clearly indicate they belong to the Keystone ecosystem and avoid naming conflicts.
+
+## Rules
+
+### 1. Interface Names
+
+Always prefix interfaces with `Keystone`:
+
+```typescript
+// ✅ CORRECT
+interface KeystoneList {
+  // ...
+}
+interface KeystoneField {
+  // ...
+}
+interface KeystoneFieldOptions {
+  // ...
+}
+
+// ❌ INCORRECT
+interface List {
+  // ...
+}
+interface Field {
+  // ...
+}
+interface FieldOptions {
+  // ...
+}
+```
+
+### 2. Type Aliases
+
+Always prefix type aliases with `Keystone`:
+
+```typescript
+// ✅ CORRECT
+type KeystoneFieldDefinition = {
+  // ...
+};
+type KeystoneUIElement = 
+  | KeystoneFieldUIElement 
+  | KeystoneHeadingUIElement;
+
+// ❌ INCORRECT
+type FieldDefinition = {
+  // ...
+};
+type UIElement = 
+  | FieldUIElement 
+  | HeadingUIElement;
+```
+
+### 3. Field Type Interfaces
+
+For field-specific interfaces, use the pattern `Keystone{FieldType}Field`:
+
+```typescript
+// ✅ CORRECT
+interface KeystoneTextField extends KeystoneField {
+  // ...
+}
+interface KeystoneNumberField extends KeystoneField {
+  // ...
+}
+
+// ❌ INCORRECT
+interface TextField extends Field {
+  // ...
+}
+interface NumberField extends Field {
+  // ...
+}
+```
+
+### 4. Field Options Interfaces
+
+For field options interfaces, use the pattern `Keystone{FieldType}FieldOptions`:
+
+```typescript
+// ✅ CORRECT
+interface KeystoneTextFieldOptions extends KeystoneFieldOptions {
+  // ...
+}
+interface KeystoneNumberFieldOptions extends KeystoneFieldOptions {
+  // ...
+}
+
+// ❌ INCORRECT
+interface TextFieldOptions extends FieldOptions {
+  // ...
+}
+interface NumberFieldOptions extends FieldOptions {
+  // ...
+}
+```
+
+### 5. Constructor Types
+
+For field type constructors, use the pattern `Keystone{FieldType}TypeConstructor`:
+
+```typescript
+// ✅ CORRECT
+interface KeystoneTextTypeConstructor extends KeystoneFieldTypeConstructor {
+  // ...
+}
+interface KeystoneNumberTypeConstructor extends KeystoneFieldTypeConstructor {
+  // ...
+}
+
+// ❌ INCORRECT
+interface TextTypeConstructor extends FieldTypeConstructor {
+  // ...
+}
+interface NumberConstructor extends FieldTypeConstructor {
+  // ...
+}
+```
+
+## Benefits
+
+- Prevents naming collisions with other libraries
+- Makes it clear which types belong to Keystone
+- Maintains consistency across the codebase
+- Makes it easier to search for Keystone-specific types
+- Helps with code organization and maintainability
+
+## Exceptions
+
+The only exceptions to these rules are:
+1. When extending types from external libraries (e.g., `mongoose.Document`)
+2. When using generic TypeScript types (e.g., `Record`, `Partial`)
+3. When referencing native JavaScript types (e.g., `StringConstructor`, `NumberConstructor`)
