@@ -12,28 +12,9 @@ import * as moment from "moment"; // Requires @types/moment
 import { Hook } from "grappling-hook"; // @todo: Check if @types/grappling-hook exists or define basic type
 import * as numeral from "numeral"; // @todo: Needs @types/numeral
 
-// --- Dependencies & Placeholders ---
-// import * as utils from 'keystone-utils'; // @todo Get/Define types for keystone-utils
-// declare class Path { constructor(path: string); get(obj: any, subpath?: string): any; } // @todo Define Path class from lib/path.js
-// @todo Add types for external dependencies: @types/lodash, @types/marked, @types/object-assign, asyncdi?
-
-/**
- * @todo Define more specific types for imported modules instead of 'any' or Function.
- */
-// declare module './lib/core/importer' { const importer: any; export default importer; }
-// declare module './lib/middleware/api' { function api(keystone: Keystone): any; export = api; }
-// declare module './lib/middleware/cors' { function cors(keystone: Keystone): any; export = cors; }
-// declare module './lib/core/createItems' { const createItems: any; export = createItems; }
-// declare module './lib/core/createRouter' { const createRouter: any; export = createRouter; }
-// ... etc for core and list methods ...
-
-// --- Forward Declarations ---
-
-// --- Base Field & List Interfaces ---
-
 /**
  * Represents the constructor for a Keystone Field Type (e.g., `Types.Text`).
- * @see fields/types/Type.js
+ * @see ./fields/types/Type.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -57,7 +38,7 @@ export interface KeystoneFieldTypeConstructor {
 
 /**
  * Options object used to define a field within a List.
- * @see fields/types/Type.js
+ * @see ./fields/types/Type.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -208,7 +189,7 @@ export interface KeystoneFieldOptions {
 
 /**
  * Represents an object defining one or more fields, potentially nested.
- * @see fields/types/Type.js
+ * @see ./fields/types/Type.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -228,7 +209,7 @@ export type KeystoneFieldDefinition = {
 
 /**
  * Represents an object defining a heading in the Admin UI form.
- * @see fields/types/Type.js
+ * @see ./fields/types/Type.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -245,7 +226,7 @@ export interface KeystoneHeadingDefinition {
 
 /**
  * Base interface representing a Keystone Field instance within a List.
- * @see fields/types/Type.js
+ * @see ./fields/types/Type.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -478,7 +459,7 @@ export interface KeystoneField {
 	/**
 	 * Adds filters to a Mongoose query based on this field. Implemented by fields supporting filtering.
 	 * @param query The Mongoose query.
-	 * @param filter Filter options specific to the field type.
+	 * @param filter Filter oAdminUiFieldReactptions specific to the field type.
 	 */
 	addFilterToQuery?: (query: any, filter: any) => void; // Optional base, implemented by some types
 
@@ -488,13 +469,14 @@ export interface KeystoneField {
 
 /**
  * Represents an element in the Admin UI form structure.
- * @see fields/types/Field.js
+ * @see ./fields/types/Field.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Field.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Field.js}
  */
+
 export interface KeystoneFieldUIElement {
 	type: "field";
 	field: KeystoneField;
@@ -518,7 +500,7 @@ export type KeystoneUIElement =
 
 /**
  * Options for configuring a Keystone List.
- * @see lib/list.js
+ * @see ./lib/list.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -650,7 +632,7 @@ export interface KeystoneListOptions {
 
 /**
  * Defines the mapping between special list properties and field paths.
- * @see lib/list.js
+ * @see ./lib/list.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -674,17 +656,17 @@ export interface KeystoneListMappings {
 
 // Text
 /**
- * Filter options for Text field queries.
- * @see fields/types/text/TextType.js
+ * Filter oAdminUiFieldReactptions for Text field queries.
+ * @see ./fields/types/text/TextType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/text/TextType.js}
  */
-export interface KeystoneTextFilter {
+export interface KeystoneAdminUiTextFieldReactFilter {
 	/**
-	 * Filter mode. Defaults to 'contains' if omitted.
+	 * Filter mAdminUFieldReactiode. Defaults to 'contains' if omitted.
 	 * - 'exactly': Exact string match
 	 * - 'beginsWith': String starts with value
 	 * - 'endsWith': String ends with value
@@ -707,7 +689,7 @@ export interface KeystoneTextFilter {
 
 /**
  * Options specific to Text fields.
- * @see fields/types/text/TextType.js
+ * @see ./fields/types/text/TextType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -727,7 +709,7 @@ export interface KeystoneTextFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Text field instances.
- * @see fields/types/text/TextType.js
+ * @see ./fields/types/text/TextType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -770,7 +752,9 @@ export interface KeystoneTextField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneTextFilter): Record<string, any>;
+	addFilterToQuery(
+		filter: KeystoneAdminUiTextFieldReactFilter
+	): Record<string, any>;
 
 	/**
 	 * Crops the field's string value from an item to the specified length.
@@ -791,7 +775,7 @@ export interface KeystoneTextField extends KeystoneField {
 
 /**
  * Constructor for Text field type.
- * @see fields/types/text/TextType.js
+ * @see ./fields/types/text/TextType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -811,17 +795,17 @@ export interface KeystoneTextTypeConstructor
 
 // Number
 /**
- * Filter options for Number field queries.
- * @see fields/types/number/NumberType.js
+ * Filter oAdminUiFieldReactptions for Number field queries.
+ * @see ./fields/types/number/NumberType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/number/NumberType.js}
  */
-export interface KeystoneNumberFilter {
+export interface KeystoneAdminUiNumberFieldReactFilter {
 	/**
-	 * Filter mode.
+	 * Filter mAdminUFieldReactiode.
 	 * - 'equals': Matches exact value or empty/null if value is empty.
 	 * - 'between': Matches values within the range specified in `value.min` and `value.max`.
 	 * - 'gt': Matches values greater than `value`.
@@ -845,7 +829,7 @@ export interface KeystoneNumberFilter {
 
 /**
  * Options specific to Number fields.
- * @see fields/types/number/NumberType.js
+ * @see ./fields/types/number/NumberType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -865,7 +849,7 @@ export interface KeystoneNumberFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Number field instances.
- * @see fields/types/number/NumberType.js
+ * @see ./fields/types/number/NumberType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -927,7 +911,9 @@ export interface KeystoneNumberField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneNumberFilter): Record<string, any>;
+	addFilterToQuery(
+		filter: KeystoneAdminUiNumberFieldReactFilter
+	): Record<string, any>;
 
 	/**
 	 * Formats the field's numeric value using numeral.js.
@@ -941,7 +927,7 @@ export interface KeystoneNumberField extends KeystoneField {
 
 /**
  * Constructor for Number field type.
- * @see fields/types/number/NumberType.js
+ * @see ./fields/types/number/NumberType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -962,7 +948,7 @@ export interface KeystoneNumberTypeConstructor
 // Textarea
 /**
  * Options specific to Textarea fields.
- * @see fields/types/textarea/TextareaType.js
+ * @see ./fields/types/textarea/TextareaType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -985,7 +971,7 @@ export interface KeystoneTextareaFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Textarea field instances.
- * @see fields/types/textarea/TextareaType.js
+ * @see ./fields/types/textarea/TextareaType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -1033,7 +1019,9 @@ export interface KeystoneTextareaField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneTextFilter): Record<string, any>;
+	addFilterToQuery(
+		filter: KeystoneAdminUiTextFieldReactFilter
+	): Record<string, any>;
 
 	/**
 	 * Crops the field's string value from an item to the specified length.
@@ -1063,7 +1051,7 @@ export interface KeystoneTextareaField extends KeystoneField {
 
 /**
  * Constructor for Textarea field type.
- * @see fields/types/textarea/TextareaType.js
+ * @see ./fields/types/textarea/TextareaType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -1083,9 +1071,9 @@ export interface KeystoneTextareaTypeConstructor
 
 // Boolean
 /**
- * Filter options for Boolean field queries.
+ * Filter oAdminUiFieldReactptions for Boolean field queries.
  */
-export interface KeystoneBooleanFilter {
+export interface KeystoneAdminUiBooleanFieldReactFilter {
 	/**
 	 * If truthy or 'true', filters for `true` values.
 	 * Otherwise filters for `false` or `null`/`undefined` values.
@@ -1095,7 +1083,7 @@ export interface KeystoneBooleanFilter {
 
 /**
  * Options specific to Boolean fields.
- * @see fields/types/boolean/BooleanType.js
+ * @see ./fields/types/boolean/BooleanType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -1119,7 +1107,7 @@ export interface KeystoneBooleanFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Boolean field instances.
- * @see fields/types/boolean/BooleanType.js
+ * @see ./fields/types/boolean/BooleanType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -1182,12 +1170,14 @@ export interface KeystoneBooleanField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneBooleanFilter): Record<string, any>;
+	addFilterToQuery(
+		filter: KeystoneAdminUiBooleanFieldReactFilter
+	): Record<string, any>;
 }
 
 /**
  * Constructor for Boolean field type.
- * @see fields/types/boolean/BooleanType.js
+ * @see ./fields/types/boolean/BooleanType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -1208,6 +1198,7 @@ export interface KeystoneBooleanTypeConstructor
 // Select
 /**
  * Represents a selectable option for Select fields.
+ * @see ./fields/types/select/SelectType.js
  */
 export interface KeystoneSelectOption {
 	/** The raw value stored in the database. */
@@ -1220,14 +1211,12 @@ export interface KeystoneSelectOption {
 
 /**
  * Options specific to Select fields.
- * @see fields/types/select/SelectType.js
- *
- * Sources:
- * - File path: lib/content/types/text.js
- * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/select/SelectType.js}
- * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/select/SelectType.js}
+ * @see ./fields/types/select/SelectType.js
  */
-export interface KeystoneSelectFieldOptions extends KeystoneFieldOptions {
+export interface KeystoneSelectFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically Select */
+	type: KeystoneSelectTypeConstructor;
 	/**
 	 * Defines the available choices. Can be:
 	 * - A comma-separated string (e.g., 'draft,published,archived').
@@ -1270,14 +1259,13 @@ export interface KeystoneSelectFieldOptions extends KeystoneFieldOptions {
 	 * Default: path + 'OptionsMap'
 	 */
 	optionsMapPath?: string;
-	/** Ensure type is specifically Select. */
-	type: KeystoneSelectTypeConstructor;
 }
 
 /**
- * Filter options for Select field queries.
+ * Filter oAdminUiFieldReactptions for Select field queries.
+ * @see ./fields/types/select/SelectType.js
  */
-export interface KeystoneSelectFilter {
+export interface KeystoneAdminUiSelectFieldReactFilter {
 	/**
 	 * The value(s) to filter by.
 	 * - Single value: Matches documents with exactly this value.
@@ -1293,14 +1281,9 @@ export interface KeystoneSelectFilter {
 
 /**
  * Interface for Select field instances.
- * @see fields/types/select/SelectType.js
- *
- * Sources:
- * - File path: lib/content/types/text.js
- * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/select/SelectType.js}
- * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/select/SelectType.js}
+ * @see ./fields/types/select/SelectType.js
  */
-export interface KeystoneSelectField extends KeystoneField {
+export interface KeystoneSelectField extends Omit<KeystoneField, "options"> {
 	/** Admin UI rendering style ('select' or 'radio'). */
 	ui: string;
 	/** Whether the value is stored as a Number. */
@@ -1308,9 +1291,9 @@ export interface KeystoneSelectField extends KeystoneField {
 	/** The native JavaScript type constructor (String or Number). */
 	_nativeType: StringConstructor | NumberConstructor;
 	/** Underscore methods added to documents (includes 'format', 'pluck'). */
-	_underscoreMethods: string[];
+	_underscoreMethods: ["format", "pluck"];
 	/** Properties exposed to Admin UI (includes 'ops', 'numeric'). */
-	_properties: string[];
+	_properties: ["ops", "numeric"];
 	/** Array of processed option objects with value and label properties. */
 	ops: KeystoneSelectOption[];
 	/** Whether an empty option is included in the UI. */
@@ -1356,32 +1339,39 @@ export interface KeystoneSelectField extends KeystoneField {
 		_default?: any
 	): any;
 
-	/** Returns a shallow clone of the processed `ops` array. */
+	/**
+	 * Returns a shallow clone of the options array.
+	 * @returns Array of cloned option objects.
+	 */
 	cloneOps(): KeystoneSelectOption[];
 
-	/** Returns a shallow clone of the value-to-option `map` object. */
+	/**
+	 * Returns a shallow clone of the options map.
+	 * @returns Map of value to cloned option object.
+	 */
 	cloneMap(): Record<string | number, KeystoneSelectOption>;
 
 	/**
-	 * Adds select-specific filtering logic to a Mongoose query.
-	 * Handles single/multiple values, inversion, and empty value matching.
-	 * @param filter The filter definition.
-	 * @returns A Mongoose query condition object.
+	 * Adds filtering conditions to a Mongoose query.
+	 * @param filter Filter oAdminUiFieldReactptions with value(s) and inversion flag.
+	 * @returns MongoDB query conditions object.
 	 */
-	addFilterToQuery(filter: KeystoneSelectFilter): Record<string, any>;
+	addFilterToQuery(
+		filter: KeystoneAdminUiSelectFieldReactFilter
+	): Record<string, any>;
 
 	/**
 	 * Validates that the input value is one of the predefined options or empty/null/undefined.
-	 * @param data Input data.
-	 * @param callback Receives `(isValid: boolean)`.
+	 * @param data Input data object.
+	 * @param callback Receives whether input is valid.
 	 */
 	validateInput(data: any, callback: (valid: boolean) => void): void;
 
 	/**
 	 * Validates that a non-empty, valid option is selected if required.
-	 * @param item Existing item data.
-	 * @param data Input data.
-	 * @param callback Receives `(isValid: boolean)`.
+	 * @param item The Mongoose document.
+	 * @param data Input data object.
+	 * @param callback Receives whether input is valid.
 	 */
 	validateRequiredInput(
 		item: any,
@@ -1390,35 +1380,19 @@ export interface KeystoneSelectField extends KeystoneField {
 	): void;
 
 	/**
-	 * (Deprecated) Synchronously checks if the input value is a valid option.
-	 * @param data Input data.
-	 * @param required Whether the field is required.
-	 * @param item Optional Mongoose document for context.
-	 * @returns Whether the input is valid.
-	 * @deprecated Use validateInput or validateRequiredInput instead.
-	 */
-	inputIsValid(data: any, required?: boolean, item?: any): boolean;
-
-	/**
-	 * Returns the label of the selected option for an item.
-	 * Exposed as `item._.fieldPath.format()`.
+	 * Formats the field value.
 	 * @param item The Mongoose document.
-	 * @returns The label string, or an empty string if no value or not found.
+	 * @returns The label of the selected option or empty string.
 	 */
 	format(item: any): string;
 }
 
 /**
  * Constructor for Select field type.
- * @see fields/types/select/SelectType.js
- *
- * Sources:
- * - File path: lib/content/types/text.js
- * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/select/SelectType.js}
- * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/select/SelectType.js}
+ * @see ./fields/types/select/SelectType.js
  */
 export interface KeystoneSelectTypeConstructor
-	extends KeystoneFieldTypeConstructor {
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -1430,11 +1404,11 @@ export interface KeystoneSelectTypeConstructor
 
 // Date & DateTime
 /**
- * Filter options for Date and DateTime field queries.
+ * Filter oAdminUiFieldReactptions for Date and DateTime field queries.
  */
-export interface KeystoneDateFilter {
+export interface KeystoneAdminUiDateFieldReactFilter {
 	/**
-	 * Filter mode.
+	 * Filter mAdminUFieldReactiode.
 	 * - 'between': Matches dates within the range specified by `after` and `before`.
 	 * - 'after': Matches dates after `value`.
 	 * - 'before': Matches dates before `value`.
@@ -1456,7 +1430,7 @@ export interface KeystoneDateFilter {
 
 /**
  * Options specific to Date fields.
- * @see fields/types/date/DateType.js
+ * @see ./fields/types/date/DateType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -1467,7 +1441,7 @@ export interface KeystoneDateFieldOptions extends KeystoneFieldOptions {
 	/**
 	 * Moment.js format string used for output formatting, or `false` to disable formatting.
 	 * Default: 'Do MMM YYYY'
-	 * @see https://momentjs.com/docs/#/displaying/format/
+	 * @see ./https://momentjs.com/docs/#/displaying/format/
 	 */
 	format?: string | false;
 	/**
@@ -1501,14 +1475,17 @@ export interface KeystoneDateFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Options specific to DateTime fields.
- * @see fields/types/datetime/DateTimeType.js
+ * @see ./fields/types/datetime/DateTimeType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
  */
-export interface KeystoneDateTimeFieldOptions extends KeystoneFieldOptions {
+export interface KeystoneDateTimeFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically DateTime */
+	type: KeystoneDateTimeTypeConstructor | DateConstructor;
 	/**
 	 * Moment.js format string for output, or `false` to disable formatting.
 	 * Default: 'YYYY-MM-DD h:mm:ss a'
@@ -1524,13 +1501,11 @@ export interface KeystoneDateTimeFieldOptions extends KeystoneFieldOptions {
 	 * Default: false
 	 */
 	utc?: boolean;
-	/** Ensure type is Datetime or Date. */
-	type: KeystoneDateTimeTypeConstructor | DateConstructor;
 }
 
 /**
  * Interface for Date field instances.
- * @see fields/types/date/DateType.js
+ * @see ./fields/types/date/DateType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -1580,7 +1555,9 @@ export interface KeystoneDateField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneDateFilter): Record<string, any>;
+	addFilterToQuery(
+		filter: KeystoneAdminUiDateFieldReactFilter
+	): Record<string, any>;
 
 	/**
 	 * Formats the field's date value using moment.js.
@@ -1649,22 +1626,22 @@ export interface KeystoneDateField extends KeystoneField {
 
 /**
  * Interface for DateTime field instances.
- * @see fields/types/datetime/DateTimeType.js
+ * @see ./fields/types/datetime/DateTimeType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
  */
-export interface KeystoneDateTimeField extends KeystoneField {
+export interface KeystoneDateTimeField extends Omit<KeystoneField, "options"> {
 	/** The native JavaScript type constructor (Date). */
 	_nativeType: DateConstructor;
-	/** Underscore methods added to documents (borrowed from DateType). */
-	_underscoreMethods: string[];
+	/** Underscore methods added to documents (includes 'format', 'moment', 'parse'). */
+	_underscoreMethods: ["format", "moment", "parse"];
 	/** Fixed size for the field in the Admin UI. */
 	_fixedSize: "full";
-	/** Properties exposed to Admin UI. */
-	_properties: string[];
+	/** Properties exposed to Admin UI (includes 'formatString', 'isUTC'). */
+	_properties: ["formatString", "isUTC"];
 	/** Custom type description for the Admin UI. */
 	typeDescription: string;
 	/** Moment.js format string(s) for parsing input. */
@@ -1686,13 +1663,57 @@ export interface KeystoneDateTimeField extends KeystoneField {
 	};
 
 	/**
+	 * Gets the value from a data object; may be simple or a pair of fields.
+	 * @param data The input data object.
+	 * @returns The combined date/time value.
+	 */
+	getInputFromData(data: any): string | any;
+
+	/**
+	 * Validates that required input has been provided.
+	 * @param item The Mongoose document.
+	 * @param data Input data object.
+	 * @param callback Receives whether input is valid.
+	 */
+	validateRequiredInput(
+		item: any,
+		data: any,
+		callback: (valid: boolean) => void
+	): void;
+
+	/**
+	 * Validates that the input is a valid date/time.
+	 * @param data Input data object.
+	 * @param callback Receives whether input is valid.
+	 */
+	validateInput(data: any, callback: (valid: boolean) => void): void;
+
+	/**
+	 * (Deprecated) Checks that a valid date/time has been provided.
+	 * @param data Input data.
+	 * @param required Whether the field is required.
+	 * @param item Optional Mongoose document for context.
+	 * @returns Whether the input is valid.
+	 * @deprecated Use validateInput or validateRequiredInput instead.
+	 */
+	inputIsValid(data: any, required?: boolean, item?: any): boolean;
+
+	/**
+	 * Updates the field's value in the item from a data object.
+	 * @param item The Mongoose document to update.
+	 * @param data The input data object.
+	 * @param callback Called after update attempt.
+	 */
+	updateItem(item: any, data: any, callback: () => void): void;
+
+	/**
 	 * Formats the field's date/time value using moment.js.
 	 * Inherited from DateType.
 	 * @param item The Mongoose document.
 	 * @param format Optional moment.js format string.
 	 * @returns Formatted date/time string.
 	 */
-	format: (item: any, format?: string) => string;
+	format(item: any, format?: string): string;
 
 	/**
 	 * Returns the field's value as a moment.js object.
@@ -1700,7 +1721,7 @@ export interface KeystoneDateTimeField extends KeystoneField {
 	 * @param item The Mongoose document.
 	 * @returns A moment object or null.
 	 */
-	moment: (item: any) => moment.Moment | null;
+	moment(item: any): moment.Moment | null;
 
 	/**
 	 * Parses input using moment.js.
@@ -1710,69 +1731,26 @@ export interface KeystoneDateTimeField extends KeystoneField {
 	 * @param strict Whether to use strict parsing.
 	 * @returns A moment object.
 	 */
-	parse: (
+	parse(
 		value: any,
 		format?: string | string[],
 		strict?: boolean
-	) => moment.Moment;
+	): moment.Moment;
 
 	/**
 	 * Adds date-based filtering logic to a Mongoose query.
 	 * Inherited from DateType.
 	 * @param filter The filter definition.
-	 * @returns A Mongoose query condition object.
+	 * @returns MongoDB query conditions object.
 	 */
-	addFilterToQuery: (filter: KeystoneDateFilter) => Record<string, any>;
-
-	/**
-	 * Gets the combined input value from date, time, and tzOffset fields in the data object,
-	 * or falls back to the main path value.
-	 * @param data The input data object.
-	 * @returns The combined date/time string or the original value.
-	 */
-	getInputFromData(data: any): string | any;
-
-	/**
-	 * Validates that the input can be parsed into a valid date/time by moment.js.
-	 * @param data Input data.
-	 * @param callback Receives `(isValid: boolean)`.
-	 */
-	validateInput(data: any, callback: (valid: boolean) => void): void;
-
-	/**
-	 * Validates that a date/time value is present if required.
-	 * @param item Existing item data.
-	 * @param data Input data.
-	 * @param callback Receives `(isValid: boolean)`.
-	 */
-	validateRequiredInput(
-		item: any,
-		data: any,
-		callback: (valid: boolean) => void
-	): void;
-
-	/**
-	 * Updates the item's value with a parsed Date object, or null if input is empty/invalid.
-	 * @param item The Mongoose document to update.
-	 * @param data The input data object.
-	 * @param callback Called after update attempt. Receives `(error?: Error)`.
-	 */
-	updateItem(item: any, data: any, callback: (err?: Error) => void): void;
-
-	/**
-	 * (Deprecated) Synchronously checks if the input is a valid date/time.
-	 * @param data Input data.
-	 * @param required Whether the field is required.
-	 * @param item Optional Mongoose document for context.
-	 * @returns Whether the input is valid.
-	 * @deprecated Use validateInput or validateRequiredInput instead.
-	 */
-	inputIsValid(data: any, required?: boolean, item?: any): boolean;
+	addFilterToQuery(
+		filter: KeystoneAdminUiDateFieldReactFilter
+	): Record<string, any>;
 }
 
 /**
  * Constructor for Date field type.
- * @see fields/types/date/DateType.js
+ * @see ./fields/types/date/DateType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -1792,7 +1770,7 @@ export interface KeystoneDateTypeConstructor
 
 /**
  * Constructor for DateTime field type.
- * @see fields/types/datetime/DateTimeType.js
+ * @see ./fields/types/datetime/DateTimeType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -1800,7 +1778,7 @@ export interface KeystoneDateTypeConstructor
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
  */
 export interface KeystoneDateTimeTypeConstructor
-	extends KeystoneFieldTypeConstructor {
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -1813,35 +1791,30 @@ export interface KeystoneDateTimeTypeConstructor
 // Html
 /**
  * Options specific to Html fields.
- * @see fields/types/html/HtmlType.js
+ * @see ./fields/types/html/HtmlType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/html/HtmlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/html/HtmlType.js}
  */
-export interface KeystoneHtmlFieldOptions extends KeystoneFieldOptions {
-	/**
-	 * Enable TinyMCE WYSIWYG editor instead of simple textarea.
-	 * Default: false
-	 */
-	wysiwyg?: boolean;
-	/**
-	 * Height of the editor in pixels.
-	 * Default: 180
-	 */
-	height?: number;
-	/** Minimum length allowed. Validates on save. */
-	min?: number;
-	/** Maximum length allowed. Validates on save. */
-	max?: number;
-	/** Ensure type is Html. */
+export interface KeystoneHtmlFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically Html */
 	type: KeystoneHtmlTypeConstructor;
+	/** Whether to use WYSIWYG editor. */
+	wysiwyg?: boolean;
+	/** Height of the editor in pixels. */
+	height?: number;
+	/** Minimum length of HTML content. */
+	min?: number;
+	/** Maximum length of HTML content. */
+	max?: number;
 }
 
 /**
  * Interface for Html field instances.
- * @see fields/types/html/HtmlType.js
+ * @see ./fields/types/html/HtmlType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -1853,48 +1826,15 @@ export interface KeystoneHtmlField extends KeystoneField {
 	_nativeType: StringConstructor;
 	/** Default size for the field in the Admin UI. */
 	_defaultSize: "full";
-	/** Whether to use the TinyMCE WYSIWYG editor. */
-	wysiwyg: boolean;
-	/** Height of the editor in pixels. */
-	height: number;
 	/** Properties exposed to Admin UI. */
 	_properties: string[];
 	/** Field-specific options. */
 	options: KeystoneHtmlFieldOptions;
-
-	/**
-	 * Validates input HTML length based on min/max options.
-	 * Similar to TextType validation.
-	 * @param data Input data.
-	 * @param callback Receives `(isValid: boolean)`.
-	 */
-	validateInput(data: any, callback: (valid: boolean) => void): void;
-
-	/**
-	 * Validates required HTML input. Checks for non-empty strings.
-	 * Similar to TextType validation.
-	 * @param item Existing item data.
-	 * @param data Input data.
-	 * @param callback Receives `(isValid: boolean)`.
-	 */
-	validateRequiredInput(
-		item: any,
-		data: any,
-		callback: (valid: boolean) => void
-	): void;
-
-	/**
-	 * Adds text-specific filtering logic to a Mongoose query.
-	 * Similar to TextType filtering.
-	 * @param filter The filter definition.
-	 * @returns A Mongoose query condition object.
-	 */
-	addFilterToQuery(filter: KeystoneTextFilter): Record<string, any>;
 }
 
 /**
  * Constructor for Html field type.
- * @see fields/types/html/HtmlType.js
+ * @see ./fields/types/html/HtmlType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -1912,11 +1852,102 @@ export interface KeystoneHtmlTypeConstructor
 	properName: "Html";
 }
 
+/**
+ * Options specific to HTML fields.
+ * @see ./fields/types/html/HtmlType.js
+ */
+export interface KeystoneHtmlFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically HTML */
+	type: KeystoneHtmlTypeConstructor;
+	/**
+	 * Enable TinyMCE WYSIWYG editor instead of simple textarea.
+	 * Default: false
+	 */
+	wysiwyg?: boolean;
+	/**
+	 * Height of the editor in pixels.
+	 * Default: 180
+	 */
+	height?: number;
+	/** Minimum length allowed. Validates on save. */
+	min?: number;
+	/** Maximum length allowed. Validates on save. */
+	max?: number;
+}
+
+/**
+ * Interface for HTML field instances.
+ * @see ./fields/types/html/HtmlType.js
+ */
+export interface KeystoneHtmlField extends Omit<KeystoneField, "options"> {
+	/** The native JavaScript type constructor (String). */
+	_nativeType: StringConstructor;
+	/** Default size for the field in the Admin UI. */
+	_defaultSize: "full";
+	/** Whether to use the TinyMCE WYSIWYG editor. */
+	wysiwyg: boolean;
+	/** Height of the editor in pixels. */
+	height: number;
+	/** Properties exposed to Admin UI (includes 'wysiwyg', 'height'). */
+	_properties: ["wysiwyg", "height"];
+	/** Field-specific options. */
+	options: KeystoneHtmlFieldOptions;
+
+	/**
+	 * Validates input HTML length based on min/max options.
+	 * Similar to TextType validation.
+	 * @param data Input data.
+	 * @param callback Receives whether input is valid.
+	 */
+	validateInput(data: any, callback: (valid: boolean) => void): void;
+
+	/**
+	 * Validates required HTML input. Checks for non-empty strings.
+	 * Similar to TextType validation.
+	 * @param item Existing item data.
+	 * @param data Input data.
+	 * @param callback Receives whether input is valid.
+	 */
+	validateRequiredInput(
+		item: any,
+		data: any,
+		callback: (valid: boolean) => void
+	): void;
+
+	/**
+	 * Adds text-specific filtering logic to a Mongoose query.
+	 * Similar to TextType filtering.
+	 * @param filter The filter definition.
+	 * @returns A Mongoose query condition object.
+	 */
+	addFilterToQuery(
+		filter: KeystoneAdminUiTextFieldReactFilter
+	): Record<string, any>;
+}
+
+/**
+ * Constructor for HTML field type.
+ * @see ./fields/types/html/HtmlType.js
+ */
+export interface KeystoneHtmlTypeConstructor
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneHtmlFieldOptions
+	): KeystoneHtmlField;
+	prototype: KeystoneHtmlField;
+	properName: "Html";
+}
+
+// ... existing code ...
+
 // --- Keystone & List Classes ---
 
 /**
  * Represents a Keystone Data List.
- * @see lib/list.js
+ * @see ./lib/list.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -2072,7 +2103,7 @@ declare class KeystoneList {
 	/**
 	 * Adds filters to a Mongoose query based on filter conditions.
 	 * @param query The Mongoose query object to modify.
-	 * @param filters Filter conditions to apply.
+	 * @param filters Filter cAdminUiondFieldReactitions to apply.
 	 * @returns The modified query object.
 	 */
 	addFiltersToQuery: (query: any, filters: Record<string, any>) => any;
@@ -2292,7 +2323,7 @@ declare class KeystoneList {
 
 	/**
 	 * Processes filter strings or objects into MongoDB query conditions.
-	 * @param filters Filter specification string or object.
+	 * @param filters Filter sAdminUipecifiFieldReactcation string or object.
 	 * @returns MongoDB query conditions.
 	 */
 	processFilters: (
@@ -2377,7 +2408,7 @@ declare class KeystoneList {
 
 /**
  * Interface defining common KeystoneJS configuration options.
- * @see lib/core/options.js
+ * @see ./lib/core/options.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -2673,7 +2704,7 @@ export interface KeystoneOptions {
 
 /**
  * Represents a KeystoneJS v4 application instance.
- * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/index.js
+ * @see ./https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/index.js
  */
 declare class Keystone {
 	/** Initializes a new Keystone instance. */
@@ -2985,125 +3016,9 @@ declare class Keystone {
 	routes: () => never;
 }
 
-/*
-Usage Instructions:
-
-1.  **Installation:**
-    ```bash
-    npm install --save-dev @types/express @types/mongoose @types/node @types/moment @types/numeral @types/lodash @types/marked
-    # or
-    yarn add --dev @types/express @types/mongoose @types/node @types/moment @types/numeral @types/lodash @types/marked
-    ```
-    *Note:* You might need other types like `@types/grappling-hook` depending on your usage.
-
-2.  **Basic Usage:**
-    ```typescript
-    import * as keystone from 'keystone';
-    
-    // Configure Keystone
-    keystone.set('name', 'My Project');
-    keystone.set('user model', 'User');
-    keystone.set('mongo', 'mongodb://localhost/my-project');
-    keystone.set('admin path', 'admin');
-    
-    // Define Lists
-    const User = new keystone.List('User', {
-      track: true, // Adds createdAt, createdBy, updatedAt, updatedBy
-      autokey: { path: 'slug', from: 'name', unique: true } // Requires keystone-list-plugins
-    });
-    
-    User.add({
-      name: { type: keystone.Field.Types.Text, required: true, index: true },
-      email: { type: keystone.Field.Types.Email, initial: true, required: true, unique: true },
-      password: { type: keystone.Field.Types.Password, initial: true },
-      isAdmin: { type: keystone.Field.Types.Boolean, default: false }
-    });
-    
-    User.defaultColumns = 'name, email, isAdmin';
-    User.register();
-    
-    // Start the application
-    keystone.start();
-    ```
-
-3.  **Accessing List Methods:**
-    ```typescript
-    const Post = keystone.list('Post');
-    
-    // Using the updateItem method
-    Post.updateItem(existingPost, { title: 'New Title' }, { user: req.user }, function(err, post) {
-      if (err) return handleError(err);
-      console.log(`Updated post: ${post.title}`);
-    });
-    
-    // Using the expandColumns method
-    const columns = Post.expandColumns('title,status,author');
-    console.log(columns); // Array of column objects
-    ```
-
-4.  **Accessing Field Methods:**
-    ```typescript
-    const titleField = Post.field('title');
-    if (titleField) {
-      // Get Admin UI options
-      const uiOptions = titleField.getOptions();
-      
-      // Format a value
-      const formattedTitle = titleField.format(post);
-      console.log(`Formatted title: ${formattedTitle}`);
-    }
-    ```
-
-5.  **Creating a Custom Field Type:**
-    ```typescript
-    // Extending an existing field type
-    keystone.Field.Types.MyText = keystone.Field.Types.Text.extend({
-      getOptions: function() {
-        const options = keystone.Field.Types.Text.prototype.getOptions.call(this);
-        options.myCustomOption = this.options.myCustomOption || false;
-        return options;
-      }
-    });
-    ```
-
-6. **Using TypeScript Types for Existing Documents:**
-   ```typescript
-   // Define a custom interface for your User model
-   interface UserDocument extends mongoose.Document {
-     name: string;
-     email: string;
-     password: { hash: string };
-     isAdmin: boolean;
-     createdAt: Date;
-     createdBy?: UserDocument;
-   }
-   
-   // Use the type with the model
-   const User = keystone.list('User');
-   const userModel = User.model as mongoose.Model<UserDocument>;
-   
-   // Now you have type safety
-   userModel.findOne({ email: 'example@example.com' }, (err, user) => {
-     if (user) {
-       console.log(user.name); // Properly typed as string
-       console.log(user.isAdmin); // Properly typed as boolean
-     }
-   });
-   ```
-
-Type Definition Notes:
-- This type definition focuses on core Keystone v4 functionality, but might not cover all plugins/extensions.
-- Some field types like Relationship, Name, Email, Password, Money, File types, etc. still need proper type definitions.
-- List method signatures (paginate, register, updateItem, etc.) may need refinement based on actual implementation.
-- Many core Keystone methods (init, start, populateRelated) still have placeholder signatures.
-- Consider creating your own custom typings for specific models in your application for better type safety.
-- The Mongoose Document typing for List.model currently uses 'any' - ideally it would be a specific interface based on the fields.
-*/
-
-// URL
 /**
  * Options specific to URL fields.
- * @see fields/types/url/UrlType.js
+ * @see ./fields/types/url/UrlType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3117,7 +3032,7 @@ export interface KeystoneUrlFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for URL field instances.
- * @see fields/types/url/UrlType.js
+ * @see ./fields/types/url/UrlType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3133,7 +3048,7 @@ export interface KeystoneUrlField extends KeystoneField {
 
 /**
  * Constructor for URL field type.
- * @see fields/types/url/UrlType.js
+ * @see ./fields/types/url/UrlType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3153,7 +3068,7 @@ export interface KeystoneUrlTypeConstructor
 // Key
 /**
  * Options specific to Key fields.
- * @see fields/types/key/KeyType.js
+ * @see ./fields/types/key/KeyType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3169,7 +3084,7 @@ export interface KeystoneKeyFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Key field instances.
- * @see fields/types/key/KeyType.js
+ * @see ./fields/types/key/KeyType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3185,7 +3100,7 @@ export interface KeystoneKeyField extends KeystoneField {
 
 /**
  * Constructor for Key field type.
- * @see fields/types/key/KeyType.js
+ * @see ./fields/types/key/KeyType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3205,7 +3120,7 @@ export interface KeystoneKeyTypeConstructor
 // Color
 /**
  * Options specific to Color fields.
- * @see fields/types/color/ColorType.js
+ * @see ./fields/types/color/ColorType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3219,7 +3134,7 @@ export interface KeystoneColorFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Color field instances.
- * @see fields/types/color/ColorType.js
+ * @see ./fields/types/color/ColorType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3235,7 +3150,7 @@ export interface KeystoneColorField extends KeystoneField {
 
 /**
  * Constructor for Color field type.
- * @see fields/types/color/ColorType.js
+ * @see ./fields/types/color/ColorType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3255,7 +3170,7 @@ export interface KeystoneColorTypeConstructor
 // Name
 /**
  * Options specific to Name fields.
- * @see fields/types/name/NameType.js
+ * @see ./fields/types/name/NameType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3271,7 +3186,7 @@ export interface KeystoneNameFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Name field instances.
- * @see fields/types/name/NameType.js
+ * @see ./fields/types/name/NameType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3287,7 +3202,7 @@ export interface KeystoneNameField extends KeystoneField {
 
 /**
  * Constructor for Name field type.
- * @see fields/types/name/NameType.js
+ * @see ./fields/types/name/NameType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3307,7 +3222,7 @@ export interface KeystoneNameTypeConstructor
 // Money
 /**
  * Options specific to Money fields.
- * @see fields/types/money/MoneyType.js
+ * @see ./fields/types/money/MoneyType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3323,7 +3238,7 @@ export interface KeystoneMoneyFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Money field instances.
- * @see fields/types/money/MoneyType.js
+ * @see ./fields/types/money/MoneyType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3341,7 +3256,7 @@ export interface KeystoneMoneyField extends KeystoneField {
 
 /**
  * Constructor for Money field type.
- * @see fields/types/money/MoneyType.js
+ * @see ./fields/types/money/MoneyType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3361,7 +3276,7 @@ export interface KeystoneMoneyTypeConstructor
 // Email
 /**
  * Options specific to Email fields.
- * @see fields/types/email/EmailType.js
+ * @see ./fields/types/email/EmailType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3375,7 +3290,7 @@ export interface KeystoneEmailFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Email field instances.
- * @see fields/types/email/EmailType.js
+ * @see ./fields/types/email/EmailType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3393,7 +3308,7 @@ export interface KeystoneEmailField extends KeystoneField {
 
 /**
  * Constructor for Email field type.
- * @see fields/types/email/EmailType.js
+ * @see ./fields/types/email/EmailType.js
  *
  * Sources:
  * - File path: lib/content/types/text.js
@@ -3414,7 +3329,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * CORS middleware for Keystone
- * @see lib/middleware/cors.js
+ * @see ./lib/middleware/cors.js
  * @todo Define signature from lib/middleware/cors.js
  *
  * Sources:
@@ -3426,7 +3341,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * API middleware for Keystone
- * @see lib/middleware/api.js
+ * @see ./lib/middleware/api.js
  * @todo Define signature from lib/middleware/api.js
  *
  * Sources:
@@ -3438,7 +3353,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Language middleware for Keystone
- * @see lib/middleware/language.js
+ * @see ./lib/middleware/language.js
  * @todo Define signature from lib/middleware/language.js
  *
  * Sources:
@@ -3452,7 +3367,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Safe require utility
- * @see lib/safeRequire.js
+ * @see ./lib/safeRequire.js
  * @todo Define signature from lib/safeRequire.js
  *
  * Sources:
@@ -3464,7 +3379,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Updates system for Keystone
- * @see lib/updates.js
+ * @see ./lib/updates.js
  * @todo Define signature from lib/updates.js
  *
  * Sources:
@@ -3476,7 +3391,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Database connection management
- * @see lib/core/closeDatabaseConnection.js
+ * @see ./lib/core/closeDatabaseConnection.js
  * @todo Define signature from lib/core/closeDatabaseConnection.js
  *
  * Sources:
@@ -3488,7 +3403,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * URL redirection system
- * @see lib/core/redirect.js
+ * @see ./lib/core/redirect.js
  * @todo Define signature from lib/core/redirect.js
  *
  * Sources:
@@ -3500,7 +3415,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Server startup
- * @see lib/core/start.js
+ * @see ./lib/core/start.js
  * @todo Define signature from lib/core/start.js
  *
  * Sources:
@@ -3512,7 +3427,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Database configuration
- * @see lib/core/initDatabaseConfig.js
+ * @see ./lib/core/initDatabaseConfig.js
  * @todo Define signature from lib/core/initDatabaseConfig.js
  *
  * Sources:
@@ -3524,7 +3439,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Express app initialization
- * @see lib/core/initExpressApp.js
+ * @see ./lib/core/initExpressApp.js
  * @todo Define signature from lib/core/initExpressApp.js
  *
  * Sources:
@@ -3536,7 +3451,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Item creation system
- * @see lib/core/createItems.js
+ * @see ./lib/core/createItems.js
  * @todo Define signature from lib/core/createItems.js
  *
  * Sources:
@@ -3548,7 +3463,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Database connection opening
- * @see lib/core/openDatabaseConnection.js
+ * @see ./lib/core/openDatabaseConnection.js
  * @todo Define signature from lib/core/openDatabaseConnection.js
  *
  * Sources:
@@ -3560,7 +3475,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Options management
- * @see lib/core/options.js
+ * @see ./lib/core/options.js
  * @todo Define signature from lib/core/options.js
  *
  * Sources:
@@ -3572,7 +3487,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Navigation initialization
- * @see lib/core/initNav.js
+ * @see ./lib/core/initNav.js
  * @todo Define signature from lib/core/initNav.js
  *
  * Sources:
@@ -3584,7 +3499,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Module importer
- * @see lib/core/importer.js
+ * @see ./lib/core/importer.js
  * @todo Define signature from lib/core/importer.js
  *
  * Sources:
@@ -3596,7 +3511,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * List management
- * @see lib/core/list.js
+ * @see ./lib/core/list.js
  * @todo Define signature from lib/core/list.js
  *
  * Sources:
@@ -3608,7 +3523,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Core initialization
- * @see lib/core/init.js
+ * @see ./lib/core/init.js
  * @todo Define signature from lib/core/init.js
  *
  * Sources:
@@ -3620,7 +3535,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Related item population
- * @see lib/core/populateRelated.js
+ * @see ./lib/core/populateRelated.js
  * @todo Define signature from lib/core/populateRelated.js
  *
  * Sources:
@@ -3632,7 +3547,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Router creation
- * @see lib/core/createRouter.js
+ * @see ./lib/core/createRouter.js
  * @todo Define signature from lib/core/createRouter.js
  *
  * Sources:
@@ -3644,7 +3559,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * HTML error wrapper
- * @see lib/core/wrapHTMLError.js
+ * @see ./lib/core/wrapHTMLError.js
  * @todo Define signature from lib/core/wrapHTMLError.js
  *
  * Sources:
@@ -3656,7 +3571,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Hash creation
- * @see lib/core/createKeystoneHash.js
+ * @see ./lib/core/createKeystoneHash.js
  * @todo Define signature from lib/core/createKeystoneHash.js
  *
  * Sources:
@@ -3668,7 +3583,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Express session initialization
- * @see lib/core/initExpressSession.js
+ * @see ./lib/core/initExpressSession.js
  * @todo Define signature from lib/core/initExpressSession.js
  *
  * Sources:
@@ -3680,7 +3595,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Orphaned list detection
- * @see lib/core/getOrphanedLists.js
+ * @see ./lib/core/getOrphanedLists.js
  * @todo Define signature from lib/core/getOrphanedLists.js
  *
  * Sources:
@@ -3694,7 +3609,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Frame guard middleware
- * @see lib/security/frameGuard.js
+ * @see ./lib/security/frameGuard.js
  * @todo Define signature from lib/security/frameGuard.js
  *
  * Sources:
@@ -3706,7 +3621,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * IP range restriction
- * @see lib/security/ipRangeRestrict.js
+ * @see ./lib/security/ipRangeRestrict.js
  * @todo Define signature from lib/security/ipRangeRestrict.js
  *
  * Sources:
@@ -3718,7 +3633,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * CSRF protection
- * @see lib/security/csrf.js
+ * @see ./lib/security/csrf.js
  * @todo Define signature from lib/security/csrf.js
  *
  * Sources:
@@ -3730,7 +3645,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Excel value escaping
- * @see lib/security/escapeValueForExcel.js
+ * @see ./lib/security/escapeValueForExcel.js
  * @todo Define signature from lib/security/escapeValueForExcel.js
  *
  * Sources:
@@ -3744,7 +3659,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Sortable plugin
- * @see lib/schemaPlugins/sortable.js
+ * @see ./lib/schemaPlugins/sortable.js
  * @todo Define signature from lib/schemaPlugins/sortable.js
  *
  * Sources:
@@ -3756,7 +3671,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Transform plugin
- * @see lib/schemaPlugins/options/transform.js
+ * @see ./lib/schemaPlugins/options/transform.js
  * @todo Define signature from lib/schemaPlugins/options/transform.js
  *
  * Sources:
@@ -3768,7 +3683,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Tracking plugin
- * @see lib/schemaPlugins/track.js
+ * @see ./lib/schemaPlugins/track.js
  * @todo Define signature from lib/schemaPlugins/track.js
  *
  * Sources:
@@ -3780,7 +3695,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Related item methods
- * @see lib/schemaPlugins/methods/getRelated.js
+ * @see ./lib/schemaPlugins/methods/getRelated.js
  * @todo Define signature from lib/schemaPlugins/methods/getRelated.js
  *
  * Sources:
@@ -3792,7 +3707,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Related item population methods
- * @see lib/schemaPlugins/methods/populateRelated.js
+ * @see ./lib/schemaPlugins/methods/populateRelated.js
  * @todo Define signature from lib/schemaPlugins/methods/populateRelated.js
  *
  * Sources:
@@ -3804,7 +3719,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Autokey plugin
- * @see lib/schemaPlugins/autokey.js
+ * @see ./lib/schemaPlugins/autokey.js
  * @todo Define signature from lib/schemaPlugins/autokey.js
  *
  * Sources:
@@ -3816,7 +3731,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * History plugin
- * @see lib/schemaPlugins/history.js
+ * @see ./lib/schemaPlugins/history.js
  * @todo Define signature from lib/schemaPlugins/history.js
  *
  * Sources:
@@ -3830,7 +3745,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * HTML content type
- * @see lib/content/types/html.js
+ * @see ./lib/content/types/html.js
  * @todo Define signature from lib/content/types/html.js
  *
  * Sources:
@@ -3842,7 +3757,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Content type index
- * @see lib/content/types/index.js
+ * @see ./lib/content/types/index.js
  * @todo Define signature from lib/content/types/index.js
  *
  * Sources:
@@ -3854,7 +3769,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Text content type
- * @see lib/content/types/text.js
+ * @see ./lib/content/types/text.js
  * @todo Define signature from lib/content/types/text.js
  *
  * Sources:
@@ -3866,7 +3781,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Base content type
- * @see lib/content/type.js
+ * @see ./lib/content/type.js
  * @todo Define signature from lib/content/type.js
  *
  * Sources:
@@ -3878,7 +3793,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Content page
- * @see lib/content/page.js
+ * @see ./lib/content/page.js
  * @todo Define signature from lib/content/page.js
  *
  * Sources:
@@ -3890,7 +3805,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Content index
- * @see lib/content/index.js
+ * @see ./lib/content/index.js
  * @todo Define signature from lib/content/index.js
  *
  * Sources:
@@ -3904,7 +3819,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Field types index
- * @see lib/fieldTypes.js
+ * @see ./lib/fieldTypes.js
  * @todo Define signature from lib/fieldTypes.js
  *
  * Sources:
@@ -3918,7 +3833,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * List implementation
- * @see lib/list.js
+ * @see ./lib/list.js
  * @todo Define signature from lib/list.js
  *
  * Sources:
@@ -3932,7 +3847,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Storage system
- * @see lib/storage/index.js
+ * @see ./lib/storage/index.js
  * @todo Define signature from lib/storage/index.js
  *
  * Sources:
@@ -3944,7 +3859,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * File system storage adapter
- * @see lib/storage/adapters/fs/index.js
+ * @see ./lib/storage/adapters/fs/index.js
  * @todo Define signature from lib/storage/adapters/fs/index.js
  *
  * Sources:
@@ -3958,7 +3873,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Upload handling
- * @see lib/uploads.js
+ * @see ./lib/uploads.js
  * @todo Define signature from lib/uploads.js
  *
  * Sources:
@@ -3972,7 +3887,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Document name getter
- * @see lib/list/getDocumentName.js
+ * @see ./lib/list/getDocumentName.js
  * @todo Define signature from lib/list/getDocumentName.js
  *
  * Sources:
@@ -3984,7 +3899,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Column expansion
- * @see lib/list/expandColumns.js
+ * @see ./lib/list/expandColumns.js
  * @todo Define signature from lib/list/expandColumns.js
  *
  * Sources:
@@ -3996,7 +3911,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Query filter addition
- * @see lib/list/addFiltersToQuery.js
+ * @see ./lib/list/addFiltersToQuery.js
  * @todo Define signature from lib/list/addFiltersToQuery.js
  *
  * Sources:
@@ -4008,7 +3923,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Data retrieval
- * @see lib/list/getData.js
+ * @see ./lib/list/getData.js
  * @todo Define signature from lib/list/getData.js
  *
  * Sources:
@@ -4019,8 +3934,8 @@ export interface KeystoneEmailTypeConstructor
  */
 
 /**
- * Filter processing
- * @see lib/list/processFilters.js
+ * Filter pAdminUirocFieldReactessing
+ * @see ./lib/list/processFilters.js
  * @todo Define signature from lib/list/processFilters.js
  *
  * Sources:
@@ -4032,7 +3947,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Search query addition
- * @see lib/list/addSearchToQuery.js
+ * @see ./lib/list/addSearchToQuery.js
  * @todo Define signature from lib/list/addSearchToQuery.js
  *
  * Sources:
@@ -4044,7 +3959,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Field management
- * @see lib/list/field.js
+ * @see ./lib/list/field.js
  * @todo Define signature from lib/list/field.js
  *
  * Sources:
@@ -4056,7 +3971,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Options retrieval
- * @see lib/list/getOptions.js
+ * @see ./lib/list/getOptions.js
  * @todo Define signature from lib/list/getOptions.js
  *
  * Sources:
@@ -4068,7 +3983,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Pagination
- * @see lib/list/paginate.js
+ * @see ./lib/list/paginate.js
  * @todo Define signature from lib/list/paginate.js
  *
  * Sources:
@@ -4080,7 +3995,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * API response generation
- * @see lib/list/apiForGet.js
+ * @see ./lib/list/apiForGet.js
  * @todo Define signature from lib/list/apiForGet.js
  *
  * Sources:
@@ -4092,7 +4007,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Relationship management
- * @see lib/list/relationship.js
+ * @see ./lib/list/relationship.js
  * @todo Define signature from lib/list/relationship.js
  *
  * Sources:
@@ -4104,7 +4019,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * List registration
- * @see lib/list/register.js
+ * @see ./lib/list/register.js
  * @todo Define signature from lib/list/register.js
  *
  * Sources:
@@ -4116,7 +4031,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Admin URL generation
- * @see lib/list/getAdminURL.js
+ * @see ./lib/list/getAdminURL.js
  * @todo Define signature from lib/list/getAdminURL.js
  *
  * Sources:
@@ -4128,7 +4043,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Underscore method addition
- * @see lib/list/underscoreMethod.js
+ * @see ./lib/list/underscoreMethod.js
  * @todo Define signature from lib/list/underscoreMethod.js
  *
  * Sources:
@@ -4140,7 +4055,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Field addition
- * @see lib/list/add.js
+ * @see ./lib/list/add.js
  * @todo Define signature from lib/list/add.js
  *
  * Sources:
@@ -4152,7 +4067,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Text index management
- * @see lib/list/ensureTextIndex.js
+ * @see ./lib/list/ensureTextIndex.js
  * @todo Define signature from lib/list/ensureTextIndex.js
  *
  * Sources:
@@ -4164,7 +4079,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Sort expansion
- * @see lib/list/expandSort.js
+ * @see ./lib/list/expandSort.js
  * @todo Define signature from lib/list/expandSort.js
  *
  * Sources:
@@ -4176,7 +4091,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Option setting
- * @see lib/list/set.js
+ * @see ./lib/list/set.js
  * @todo Define signature from lib/list/set.js
  *
  * Sources:
@@ -4188,7 +4103,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * CSV data generation
- * @see lib/list/getCSVData.js
+ * @see ./lib/list/getCSVData.js
  * @todo Define signature from lib/list/getCSVData.js
  *
  * Sources:
@@ -4200,7 +4115,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Automatic field mapping
- * @see lib/list/automap.js
+ * @see ./lib/list/automap.js
  * @todo Define signature from lib/list/automap.js
  *
  * Sources:
@@ -4212,7 +4127,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Search filter generation
- * @see lib/list/getSearchFilters.js
+ * @see ./lib/list/getSearchFilters.js
  * @todo Define signature from lib/list/getSearchFilters.js
  *
  * Sources:
@@ -4224,7 +4139,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Text index declaration check
- * @see lib/list/declaresTextIndex.js
+ * @see ./lib/list/declaresTextIndex.js
  * @todo Define signature from lib/list/declaresTextIndex.js
  *
  * Sources:
@@ -4236,7 +4151,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Column selection
- * @see lib/list/selectColumns.js
+ * @see ./lib/list/selectColumns.js
  * @todo Define signature from lib/list/selectColumns.js
  *
  * Sources:
@@ -4248,7 +4163,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Reserved path check
- * @see lib/list/isReserved.js
+ * @see ./lib/list/isReserved.js
  * @todo Define signature from lib/list/isReserved.js
  *
  * Sources:
@@ -4260,7 +4175,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Page calculation
- * @see lib/list/getPages.js
+ * @see ./lib/list/getPages.js
  * @todo Define signature from lib/list/getPages.js
  *
  * Sources:
@@ -4272,7 +4187,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Path expansion
- * @see lib/list/expandPaths.js
+ * @see ./lib/list/expandPaths.js
  * @todo Define signature from lib/list/expandPaths.js
  *
  * Sources:
@@ -4284,7 +4199,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Item updating
- * @see lib/list/updateItem.js
+ * @see ./lib/list/updateItem.js
  * @todo Define signature from lib/list/updateItem.js
  *
  * Sources:
@@ -4296,7 +4211,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Field mapping
- * @see lib/list/map.js
+ * @see ./lib/list/map.js
  * @todo Define signature from lib/list/map.js
  *
  * Sources:
@@ -4308,7 +4223,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Text index building
- * @see lib/list/buildSearchTextIndex.js
+ * @see ./lib/list/buildSearchTextIndex.js
  * @todo Define signature from lib/list/buildSearchTextIndex.js
  *
  * Sources:
@@ -4320,7 +4235,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Unique value generation
- * @see lib/list/getUniqueValue.js
+ * @see ./lib/list/getUniqueValue.js
  * @todo Define signature from lib/list/getUniqueValue.js
  *
  * Sources:
@@ -4334,7 +4249,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Path handling
- * @see lib/path.js
+ * @see ./lib/path.js
  * @todo Define signature from lib/path.js
  *
  * Sources:
@@ -4346,7 +4261,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * View rendering
- * @see lib/view.js
+ * @see ./lib/view.js
  * @todo Define signature from lib/view.js
  *
  * Sources:
@@ -4358,7 +4273,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Schema plugins
- * @see lib/schemaPlugins.js
+ * @see ./lib/schemaPlugins.js
  * @todo Define signature from lib/schemaPlugins.js
  *
  * Sources:
@@ -4370,7 +4285,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Email handling
- * @see lib/email.js
+ * @see ./lib/email.js
  * @todo Define signature from lib/email.js
  *
  * Sources:
@@ -4382,7 +4297,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Password Type
- * @see fields/types/password/PasswordType.js
+ * @see ./fields/types/password/PasswordType.js
  * @todo Define signature from fields/types/password/PasswordType.js
  *
  * @todo Define signature from fields/types/password/PasswordType.js
@@ -4396,7 +4311,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * TextArray Type
- * @see fields/types/textarray/TextArrayType.js
+ * @see ./fields/types/textarray/TextArrayType.js
  * @todo Define signature from fields/types/textarray/TextArrayType.js
  *
  * Sources:
@@ -4408,7 +4323,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * File Type
- * @see fields/types/file/FileType.js
+ * @see ./fields/types/file/FileType.js
  * @todo Define signature from fields/types/file/FileType.js
  *
  * Sources:
@@ -4424,7 +4339,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Array field mixin
- * @see fields/mixins/ArrayField.js
+ * @see ./fields/mixins/ArrayField.js
  * @todo Define signature from fields/mixins/ArrayField.js
  *
  * Sources:
@@ -4438,7 +4353,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Field explorer server
- * @see fields/explorer/server.js
+ * @see ./fields/explorer/server.js
  * @todo Define signature from fields/explorer/server.js
  *
  * Sources:
@@ -4452,7 +4367,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Query presence addition
- * @see fields/utils/addPresenceToQuery.js
+ * @see ./fields/utils/addPresenceToQuery.js
  * @todo Define signature from fields/utils/addPresenceToQuery.js
  *
  * Sources:
@@ -4464,7 +4379,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Prototype getter definition
- * @see fields/utils/definePrototypeGetters.js
+ * @see ./fields/utils/definePrototypeGetters.js
  * @todo Define signature from fields/utils/definePrototypeGetters.js
  *
  * Sources:
@@ -4476,7 +4391,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Function binding
- * @see fields/utils/bindFunctions.js
+ * @see ./fields/utils/bindFunctions.js
  * @todo Define signature from fields/utils/bindFunctions.js
  *
  * Sources:
@@ -4488,7 +4403,7 @@ export interface KeystoneEmailTypeConstructor
 
 /**
  * Dependency evaluation
- * @see fields/utils/evalDependsOn.js
+ * @see ./fields/utils/evalDependsOn.js
  * @todo Define signature from fields/utils/evalDependsOn.js
  *
  * Sources:
@@ -4498,7 +4413,1459 @@ export interface KeystoneEmailTypeConstructor
  *
  */
 
-/** The singleton Keystone instance. */
-// declare const keystone: Keystone;
-// export { keystone as KeystoneInstance };
-// export default keystone;
+/**
+ * Options specific to Password fields.
+ * @see ./fields/types/password/PasswordType.js
+ */
+export interface KeystonePasswordFieldOptions extends KeystoneFieldOptions {
+	/** Ensure type is specifically Password */
+	type: KeystonePasswordTypeConstructor;
+	/** Minimum password length. Default: 8 */
+	min?: number;
+	/** Maximum password length. Default: 72 */
+	max?: number;
+	/** BCrypt work factor. Default: 10 */
+	workFactor?: number;
+	/** Whether to reject common passwords. Default: true */
+	rejectCommon?: boolean;
+	/** Path for the confirm field. Default: path + '_confirm' */
+	confirmPath?: string;
+	/** Path for the hash field. Default: path + '_hash' */
+	hashPath?: string;
+	/** Password complexity requirements */
+	complexity?: {
+		/** Require at least one digit */
+		digitChar?: boolean;
+		/** Require at least one special character */
+		spChar?: boolean;
+		/** Only allow ASCII characters */
+		asciiChar?: boolean;
+		/** Require at least one lowercase character */
+		lowChar?: boolean;
+		/** Require at least one uppercase character */
+		upperChar?: boolean;
+	};
+}
+
+/**
+ * Interface for Password field instances.
+ * @see ./fields/types/password/PasswordType.js
+ */
+export interface KeystonePasswordField extends KeystoneField {
+	/** The native JavaScript type constructor (String). */
+	_nativeType: StringConstructor;
+	/** Underscore methods added to documents (includes 'format', 'compare'). */
+	_underscoreMethods: string[];
+	/** Fixed size for the field in the Admin UI. */
+	_fixedSize: "full";
+	/** Field-specific options. */
+	options: KeystonePasswordFieldOptions;
+	/** Paths for virtual fields */
+	paths: {
+		/** Path for password confirmation field */
+		confirm: string;
+		/** Path for password hash field */
+		hash: string;
+	};
+
+	/**
+	 * Compares a candidate password with the stored hash.
+	 * @param item The Mongoose document.
+	 * @param candidate The password to check.
+	 * @param callback Receives (err: Error | null, isMatch: boolean).
+	 */
+	compare(
+		item: any,
+		candidate: string,
+		callback: (err: Error | null, isMatch: boolean) => void
+	): void;
+
+	/**
+	 * Formats the password as a random number of asterisks.
+	 * @param item The Mongoose document.
+	 * @returns A string of random-length asterisks.
+	 */
+	format(item: any): string;
+
+	/**
+	 * Validates the password against complexity requirements.
+	 * @param data Input data.
+	 * @param callback Receives (isValid: boolean, message: string).
+	 */
+	validateInput(
+		data: any,
+		callback: (isValid: boolean, message: string) => void
+	): void;
+
+	/**
+	 * Validation method for password requirements.
+	 */
+	validate(
+		pass: string,
+		confirm: string | undefined,
+		min: number,
+		max: number,
+		complexity: KeystonePasswordFieldOptions["complexity"],
+		rejectCommon: boolean
+	): { result: boolean; detail: string };
+}
+
+/**
+ * Constructor for Password field type.
+ * @see ./fields/types/password/PasswordType.js
+ */
+export interface KeystonePasswordTypeConstructor
+	extends KeystoneFieldTypeConstructor {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystonePasswordFieldOptions
+	): KeystonePasswordField;
+	prototype: KeystonePasswordField;
+	properName: "Password";
+	/** Static validation method */
+	validate(
+		pass: string,
+		confirm: string | undefined,
+		min: number,
+		max: number,
+		complexity: KeystonePasswordFieldOptions["complexity"],
+		rejectCommon: boolean
+	): { result: boolean; detail: string };
+}
+
+/**
+ * Options specific to Relationship fields.
+ * @see ./fields/types/relationship/RelationshipType.js
+ */
+export interface KeystoneRelationshipFieldOptions extends KeystoneFieldOptions {
+	/** Ensure type is specifically Relationship */
+	type: KeystoneRelationshipTypeConstructor;
+	/** The List key to relate to (required) */
+	ref: string;
+	/** Whether this is a many-to-many relationship */
+	many?: boolean;
+	/** Filters to apply to the reference list */
+	filters?: Record<string, any>;
+	/** Whether to allow creating related items inline */
+	createInline?: boolean;
+	/** Path for the refList virtual. Default: path + 'RefList' */
+	refListPath?: string;
+}
+
+/**
+ * Interface for Relationship field instances.
+ * @see ./fields/types/relationship/RelationshipType.js
+ */
+export interface KeystoneRelationshipField extends KeystoneField {
+	/** Whether this is a many-to-many relationship */
+	many: boolean;
+	/** Filters to apply to the reference list */
+	filters: Record<string, any>;
+	/** Whether to allow creating related items inline */
+	createInline: boolean;
+	/** Default size for the field in the Admin UI */
+	_defaultSize: "full";
+	/** The native Mongoose type (ObjectId) */
+	_nativeType: typeof mongoose.Schema.Types.ObjectId;
+	/** Underscore methods added to documents */
+	_underscoreMethods: string[];
+	/** Properties exposed to Admin UI */
+	_properties: string[];
+	/** Field-specific options */
+	options: KeystoneRelationshipFieldOptions;
+	/** Paths for virtual fields */
+	paths: {
+		/** Path for the refList virtual */
+		refList: string;
+	};
+
+	/**
+	 * Gets properties to pass to the React field component.
+	 * @returns Properties object with refList info.
+	 */
+	getProperties(): {
+		refList: {
+			singular: string;
+			plural: string;
+			path: string;
+			key: string;
+		};
+	};
+
+	/**
+	 * Gets expanded data for related items.
+	 * @param item The Mongoose document.
+	 * @returns Array of objects with id and name for many relationships, or single object for one-to-one.
+	 */
+	getExpandedData(
+		item: any
+	):
+		| Array<{ id: string; name: string }>
+		| { id: string; name: string }
+		| undefined;
+
+	/**
+	 * Formats the field value as a string.
+	 * @param item The Mongoose document.
+	 * @returns Comma-separated IDs for many relationships, or single ID for one-to-one.
+	 */
+	format(item: any): string;
+}
+
+/**
+ * Constructor for Relationship field type.
+ * @see ./fields/types/relationship/RelationshipType.js
+ */
+export interface KeystoneRelationshipTypeConstructor
+	extends KeystoneFieldTypeConstructor {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneRelationshipFieldOptions
+	): KeystoneRelationshipField;
+	prototype: KeystoneRelationshipField;
+	properName: "Relationship";
+}
+
+/**
+ * Storage adapter interface for File fields.
+ */
+export interface KeystoneFileStorage {
+	/** Schema for storing file data */
+	schema: Record<string, any>;
+	/** Uploads a file and returns file data */
+	uploadFile(
+		file: { path: string },
+		callback: (err: Error | null, result?: any) => void
+	): void;
+	/** Removes a stored file */
+	removeFile(file: any): void;
+}
+
+/**
+ * Options specific to File fields.
+ * @see ./fields/types/file/FileType.js
+ */
+export interface KeystoneFileFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically File */
+	type: KeystoneFileTypeConstructor;
+	/** Storage adapter for handling file uploads (required) */
+	storage: KeystoneFileStorage;
+}
+
+/**
+ * Interface for File field instances.
+ * @see ./fields/types/file/FileType.js
+ */
+export interface KeystoneFileField extends Omit<KeystoneField, "options"> {
+	/** Underscore methods added to documents */
+	_underscoreMethods: ["format", "upload", "remove", "reset"];
+	/** Fixed size for the field in the Admin UI */
+	_fixedSize: "full";
+	/** Storage adapter instance */
+	storage: KeystoneFileStorage;
+	/** Field-specific options */
+	options: KeystoneFileFieldOptions;
+	/** Paths for file data fields from storage schema */
+	paths: Record<string, string>;
+
+	/**
+	 * Uploads a new file.
+	 * @param item The Mongoose document.
+	 * @param file The uploaded file object.
+	 * @param callback Receives (err: Error | null, result?: any).
+	 */
+	upload(
+		item: any,
+		file: { path: string },
+		callback: (err: Error | null, result?: any) => void
+	): void;
+
+	/**
+	 * Resets the field value.
+	 * @param item The Mongoose document.
+	 */
+	reset(item: any): void;
+
+	/**
+	 * Deletes the stored file and resets the field value.
+	 * @param item The Mongoose document.
+	 */
+	remove(item: any): void;
+
+	/**
+	 * Formats the field value.
+	 * @param item The Mongoose document.
+	 * @returns The filename or empty string.
+	 */
+	format(item: any): string;
+
+	/**
+	 * Detects whether the field has been modified.
+	 * @param item The Mongoose document.
+	 * @returns Whether any file data paths have been modified.
+	 */
+	isModified(item: any): boolean;
+}
+
+/**
+ * Constructor for File field type.
+ * @see ./fields/types/file/FileType.js
+ */
+export interface KeystoneFileTypeConstructor
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneFileFieldOptions
+	): KeystoneFileField;
+	prototype: KeystoneFileField;
+	properName: "File";
+}
+
+/**
+ * Options specific to TextArray fields.
+ * @see ./fields/types/textarray/TextArrayType.js
+ */
+export interface KeystoneTextArrayFieldOptions extends KeystoneFieldOptions {
+	/** Ensure type is specifically TextArray */
+	type: KeystoneTextArrayTypeConstructor;
+	/** Separator used when formatting array values. Default: ' | ' */
+	separator?: string;
+}
+
+/**
+ * Interface for TextArray field instances.
+ * @see ./fields/types/textarray/TextArrayType.js
+ */
+export interface KeystoneTextArrayField extends KeystoneField {
+	/** The native JavaScript type constructor (Array of String) */
+	_nativeType: [StringConstructor];
+	/** Underscore methods added to documents */
+	_underscoreMethods: string[];
+	/** Separator used when formatting array values */
+	separator: string;
+	/** Field-specific options */
+	options: KeystoneTextArrayFieldOptions;
+
+	/**
+	 * Formats the array value as a string.
+	 * @param item The Mongoose document.
+	 * @param separator Optional separator to override the default.
+	 * @returns The joined string.
+	 */
+	format(item: any, separator?: string): string;
+}
+
+/**
+ * Constructor for TextArray field type.
+ * @see ./fields/types/textarray/TextArrayType.js
+ */
+export interface KeystoneTextArrayTypeConstructor
+	extends KeystoneFieldTypeConstructor {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneTextArrayFieldOptions
+	): KeystoneTextArrayField;
+	prototype: KeystoneTextArrayField;
+	properName: "TextArray";
+}
+
+/**
+ * Options specific to NumberArray fields.
+ * @see ./fields/types/numberarray/NumberArrayType.js
+ */
+export interface KeystoneNumberArrayFieldOptions extends KeystoneFieldOptions {
+	/** Ensure type is specifically NumberArray */
+	type: KeystoneNumberArrayTypeConstructor;
+	/** Numeral.js format string or false to disable formatting. Default: '0,0[.][000000000000]' */
+	format?: string | false;
+	/** Separator used when formatting array values. Default: ' | ' */
+	separator?: string;
+}
+
+/**
+ * Interface for NumberArray field instances.
+ * @see ./fields/types/numberarray/NumberArrayType.js
+ */
+export interface KeystoneNumberArrayField extends KeystoneField {
+	/** The native JavaScript type constructor (Array of Number) */
+	_nativeType: [NumberConstructor];
+	/** Underscore methods added to documents */
+	_underscoreMethods: string[];
+	/** Numeral.js format string or false if formatting disabled */
+	_formatString: string | false;
+	/** Default size for the field in the Admin UI */
+	_defaultSize: "small";
+	/** Separator used when formatting array values */
+	separator: string;
+	/** Field-specific options */
+	options: KeystoneNumberArrayFieldOptions;
+
+	/**
+	 * Formats the array value as a string.
+	 * @param item The Mongoose document.
+	 * @param format Optional format string to override the default.
+	 * @param separator Optional separator to override the default.
+	 * @returns The formatted string.
+	 */
+	format(item: any, format?: string, separator?: string): string;
+}
+
+/**
+ * Constructor for NumberArray field type.
+ * @see ./fields/types/numberarray/NumberArrayType.js
+ */
+export interface KeystoneNumberArrayTypeConstructor
+	extends KeystoneFieldTypeConstructor {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneNumberArrayFieldOptions
+	): KeystoneNumberArrayField;
+	prototype: KeystoneNumberArrayField;
+	properName: "NumberArray";
+}
+
+/**
+ * Options specific to Location fields.
+ * @see ./fields/types/location/LocationType.js
+ */
+export interface KeystoneLocationFieldOptions
+	extends Omit<KeystoneFieldOptions, "type" | "required"> {
+	/** Ensure type is specifically Location */
+	type: KeystoneLocationTypeConstructor;
+	/** Enable Google Maps API integration for geocoding */
+	enableImprove?: boolean;
+	/** Default values for location fields */
+	defaults?: {
+		number?: string;
+		name?: string;
+		street1?: string;
+		street2?: string;
+		suburb?: string;
+		state?: string;
+		postcode?: string;
+		country?: string;
+	};
+	/** Required location fields (defaults to ['street1', 'suburb']) */
+	required?: string[] | string;
+}
+
+/**
+ * Interface for Location field instances.
+ * @see ./fields/types/location/LocationType.js
+ */
+export interface KeystoneLocationField extends Omit<KeystoneField, "options"> {
+	/** Underscore methods added to documents */
+	_underscoreMethods: string[];
+	/** Fixed size for the field in the Admin UI */
+	_fixedSize: "full";
+	/** Properties exposed to Admin UI */
+	_properties: string[];
+	/** Whether Google Maps API integration is enabled */
+	enableMapsAPI: boolean;
+	/** Required location fields */
+	requiredPaths: string[];
+	/** Field-specific options */
+	options: KeystoneLocationFieldOptions;
+	/** Paths for location fields and virtuals */
+	paths: {
+		number: string;
+		name: string;
+		street1: string;
+		street2: string;
+		suburb: string;
+		state: string;
+		postcode: string;
+		country: string;
+		geo: string;
+		geo_lat: string;
+		geo_lng: string;
+		serialised: string;
+		improve: string;
+		overwrite: string;
+	};
+
+	/**
+	 * Formats selected location fields as a string.
+	 * @param item The Mongoose document.
+	 * @param values Optional space-separated list of fields to include.
+	 * @param delimiter Optional delimiter (default: ', ').
+	 * @returns The formatted location string.
+	 */
+	format(item: any, values?: string, delimiter?: string): string;
+
+	/**
+	 * Performs a Google Maps geocoding lookup.
+	 * @param item The Mongoose document.
+	 * @param region Optional region bias.
+	 * @param callback Receives (err: Error | null, location?: any, result?: any).
+	 */
+	googleLookup(
+		item: any,
+		region: string,
+		callback: (err: Error | null, location?: any, result?: any) => void
+	): void;
+
+	/**
+	 * Calculates the distance in kilometers from this location to another point.
+	 * @param item The Mongoose document.
+	 * @param point The other point [latitude, longitude].
+	 * @returns The distance in kilometers.
+	 */
+	kmFrom(item: any, point: [number, number]): number;
+
+	/**
+	 * Calculates the distance in miles from this location to another point.
+	 * @param item The Mongoose document.
+	 * @param point The other point [latitude, longitude].
+	 * @returns The distance in miles.
+	 */
+	milesFrom(item: any, point: [number, number]): number;
+
+	/**
+	 * Detects whether the field has been modified.
+	 * @param item The Mongoose document.
+	 * @returns Whether any location fields have been modified.
+	 */
+	isModified(item: any): boolean;
+}
+
+/**
+ * Constructor for Location field type.
+ * @see ./fields/types/location/LocationType.js
+ */
+export interface KeystoneLocationTypeConstructor
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneLocationFieldOptions
+	): KeystoneLocationField;
+	prototype: KeystoneLocationField;
+	properName: "Location";
+}
+
+/**
+ * Options specific to GeoPoint fields.
+ * @see ./fields/types/geopoint/GeoPointType.js
+ */
+export interface KeystoneGeoPointFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically GeoPoint */
+	type: KeystoneGeoPointTypeConstructor;
+}
+
+/**
+ * Interface for GeoPoint field instances.
+ * @see ./fields/types/geopoint/GeoPointType.js
+ */
+export interface KeystoneGeoPointField extends Omit<KeystoneField, "options"> {
+	/** Fixed size for the field in the Admin UI */
+	_fixedSize: "medium";
+	/** Field-specific options */
+	options: KeystoneGeoPointFieldOptions;
+
+	/**
+	 * Gets the field's data from an Item.
+	 * @param item The Mongoose document.
+	 * @returns Array of [longitude, latitude] or empty array.
+	 */
+	getData(item: any): number[];
+
+	/**
+	 * Formats the field value as "latitude, longitude".
+	 * @param item The Mongoose document.
+	 * @returns Formatted coordinates or null.
+	 */
+	format(item: any): string | null;
+
+	/**
+	 * Adds geospatial query filters.
+	 * @param filter Filter oAdminUiFieldReactptions with center point and distance.
+	 * @returns MongoDB query conditions.
+	 */
+	addFilterToQuery(filter: {
+		lat?: number;
+		lon?: number;
+		distance?: {
+			mode: "max" | "min";
+			value: number;
+		};
+	}): Record<string, any>;
+}
+
+/**
+ * Constructor for GeoPoint field type.
+ * @see ./fields/types/geopoint/GeoPointType.js
+ */
+export interface KeystoneGeoPointTypeConstructor
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneGeoPointFieldOptions
+	): KeystoneGeoPointField;
+	prototype: KeystoneGeoPointField;
+	properName: "GeoPoint";
+}
+
+/**
+ * Options specific to Code fields.
+ * @see ./fields/types/code/CodeType.js
+ */
+export interface KeystoneCodeFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically Code */
+	type: KeystoneCodeTypeConstructor;
+	/** Height of the code editor in pixels. Default: 180 */
+	height?: number;
+	/** Programming language for syntax highlighting */
+	lang?: string;
+	/** Alternative to lang */
+	language?: string;
+	/** CodeMirror editor options */
+	codemirror?: Record<string, any>;
+}
+
+/**
+ * Interface for Code field instances.
+ * @see ./fields/types/code/CodeType.js
+ */
+export interface KeystoneCodeField extends Omit<KeystoneField, "options"> {
+	/** The native JavaScript type constructor (String) */
+	_nativeType: StringConstructor;
+	/** Default size for the field in the Admin UI */
+	_defaultSize: "full";
+	/** Height of the code editor in pixels */
+	height: number;
+	/** Programming language for syntax highlighting */
+	lang: string;
+	/** Properties exposed to Admin UI */
+	_properties: string[];
+	/** CodeMirror editor options */
+	codemirror: Record<string, any>;
+	/** Combined editor options */
+	editor: Record<string, any>;
+	/** Field-specific options */
+	options: KeystoneCodeFieldOptions;
+}
+
+/**
+ * Constructor for Code field type.
+ * @see ./fields/types/code/CodeType.js
+ */
+export interface KeystoneCodeTypeConstructor
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneCodeFieldOptions
+	): KeystoneCodeField;
+	prototype: KeystoneCodeField;
+	properName: "Code";
+}
+
+/**
+ * Options specific to Embedly fields.
+ * @see ./fields/types/embedly/EmbedlyType.js
+ */
+export interface KeystoneEmbedlyFieldOptions
+	extends Omit<KeystoneFieldOptions, "type" | "initial"> {
+	/** Ensure type is specifically Embedly */
+	type: KeystoneEmbedlyTypeConstructor;
+	/** Path to the field containing the URL to expand (required) */
+	from: string;
+	/** Additional options to pass to the Embedly API */
+	options?: Record<string, any>;
+}
+
+/**
+ * Interface for Embedly field instances.
+ * @see ./fields/types/embedly/EmbedlyType.js
+ */
+export interface KeystoneEmbedlyField extends Omit<KeystoneField, "options"> {
+	/** Underscore methods added to documents */
+	_underscoreMethods: string[];
+	/** Fixed size for the field in the Admin UI */
+	_fixedSize: "full";
+	/** Path to the field containing the URL to expand */
+	fromPath: string;
+	/** Additional options to pass to the Embedly API */
+	embedlyOptions: Record<string, any>;
+	/** Field-specific options */
+	options: KeystoneEmbedlyFieldOptions;
+	/** Paths for embedly data fields */
+	paths: {
+		exists: string;
+		type: string;
+		title: string;
+		url: string;
+		width: string;
+		height: string;
+		version: string;
+		description: string;
+		html: string;
+		authorName: string;
+		authorUrl: string;
+		providerName: string;
+		providerUrl: string;
+		thumbnailUrl: string;
+		thumbnailWidth: string;
+		thumbnailHeight: string;
+	};
+
+	/**
+	 * Resets the field value to default state.
+	 * @param item The Mongoose document.
+	 */
+	reset(item: any): void;
+
+	/**
+	 * Formats the field value (returns HTML).
+	 * @param item The Mongoose document.
+	 * @returns The embedded HTML.
+	 */
+	format(item: any): string;
+
+	/**
+	 * Gets the field's data from an Item.
+	 * @param item The Mongoose document.
+	 * @returns The embedly data object.
+	 */
+	getData(item: any): Record<string, any>;
+
+	/**
+	 * Detects whether the field has been modified.
+	 * @param item The Mongoose document.
+	 * @returns Whether the URL has changed.
+	 */
+	isModified(item: any): boolean;
+}
+
+/**
+ * Constructor for Embedly field type.
+ * @see ./fields/types/embedly/EmbedlyType.js
+ */
+export interface KeystoneEmbedlyTypeConstructor
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneEmbedlyFieldOptions
+	): KeystoneEmbedlyField;
+	prototype: KeystoneEmbedlyField;
+	properName: "Embedly";
+}
+
+/**
+ * Options specific to CloudinaryImage fields.
+ * @see ./fields/types/cloudinaryimage/CloudinaryImageType.js
+ */
+export interface KeystoneCloudinaryImageFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically CloudinaryImage */
+	type: KeystoneCloudinaryImageTypeConstructor;
+	/** Custom folder for storing images */
+	folder?: string;
+	/** Use original filename as public_id */
+	filenameAsPublicID?: boolean;
+	/** Function to generate custom filenames */
+	generateFilename?: (file: { originalname: string }) => string | undefined;
+	/** Behavior when file exists: 'overwrite' or 'retry'. Default: 'overwrite' */
+	whenExists?: "overwrite" | "retry";
+	/** Number of retry attempts. Default: 3 */
+	retryAttempts?: number;
+	/** Whether to automatically cleanup old images */
+	autoCleanup?: boolean;
+	/** Prefix for select field */
+	selectPrefix?: string;
+}
+
+/**
+ * Interface for CloudinaryImage field instances.
+ * @see ./fields/types/cloudinaryimage/CloudinaryImageType.js
+ */
+export interface KeystoneCloudinaryImageField
+	extends Omit<KeystoneField, "options"> {
+	/** Underscore methods added to documents */
+	_underscoreMethods: string[];
+	/** Fixed size for the field in the Admin UI */
+	_fixedSize: "full";
+	/** Properties exposed to Admin UI */
+	_properties: string[];
+	/** Field-specific options */
+	options: KeystoneCloudinaryImageFieldOptions;
+	/** Paths for cloudinary data fields */
+	paths: {
+		public_id: string;
+		version: string;
+		signature: string;
+		format: string;
+		resource_type: string;
+		url: string;
+		width: string;
+		height: string;
+		secure_url: string;
+		exists: string;
+		folder: string;
+		select: string;
+	};
+
+	/**
+	 * Gets the folder for images in this field.
+	 * @returns The cloudinary folder path.
+	 */
+	getFolder(): string | null;
+}
+
+/**
+ * Constructor for CloudinaryImage field type.
+ * @see ./fields/types/cloudinaryimage/CloudinaryImageType.js
+ */
+export interface KeystoneCloudinaryImageTypeConstructor
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneCloudinaryImageFieldOptions
+	): KeystoneCloudinaryImageField;
+	prototype: KeystoneCloudinaryImageField;
+	properName: "CloudinaryImage";
+}
+
+/**
+ * Options specific to CloudinaryImages fields.
+ * @see ./fields/types/cloudinaryimages/CloudinaryImagesType.js
+ */
+export interface KeystoneCloudinaryImagesFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically CloudinaryImages */
+	type: KeystoneCloudinaryImagesTypeConstructor;
+	/** Custom folder for storing images */
+	folder?: string;
+	/** Use original filename as public_id */
+	filenameAsPublicID?: boolean;
+	/** Function to generate custom filenames */
+	generateFilename?: (file: { originalname: string }) => string | undefined;
+	/** Whether to automatically cleanup old images */
+	autoCleanup?: boolean;
+	/** Prefix for select field */
+	selectPrefix?: string;
+}
+
+/**
+ * Interface for CloudinaryImages field instances.
+ * @see ./fields/types/cloudinaryimages/CloudinaryImagesType.js
+ */
+export interface KeystoneCloudinaryImagesField
+	extends Omit<KeystoneField, "options"> {
+	/** Underscore methods added to documents */
+	_underscoreMethods: ["format"];
+	/** Fixed size for the field in the Admin UI */
+	_fixedSize: "full";
+	/** Properties exposed to Admin UI */
+	_properties: [
+		"select",
+		"selectPrefix",
+		"autoCleanup",
+		"publicID",
+		"folder",
+		"filenameAsPublicID"
+	];
+	/** Field-specific options */
+	options: KeystoneCloudinaryImagesFieldOptions;
+
+	/**
+	 * Formats the field value
+	 * @param item The Mongoose document
+	 * @returns Comma-separated string of image URLs
+	 */
+	format(item: any): string;
+
+	/**
+	 * Gets the field's data from an Item
+	 * @param item The Mongoose document
+	 * @returns Array of image objects
+	 */
+	getData(item: any): Array<{
+		public_id: string;
+		version: number;
+		signature: string;
+		format: string;
+		resource_type: string;
+		url: string;
+		width: number;
+		height: number;
+		secure_url: string;
+	}>;
+
+	/**
+	 * Gets the folder for images in this field
+	 * @returns The cloudinary folder path
+	 */
+	getFolder(): string | null;
+
+	/**
+	 * Removes an image from the array
+	 * @param item The Mongoose document
+	 * @param id The index or public_id of the image to remove
+	 * @param method 'remove' or 'delete' - delete will also remove from Cloudinary
+	 * @param callback Optional callback function
+	 */
+	removeImage(
+		item: any,
+		id: number | string,
+		method: "remove" | "delete",
+		callback?: (err?: Error) => void
+	): void;
+}
+
+/**
+ * Constructor for CloudinaryImages field type.
+ * @see ./fields/types/cloudinaryimages/CloudinaryImagesType.js
+ */
+export interface KeystoneCloudinaryImagesTypeConstructor
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneCloudinaryImagesFieldOptions
+	): KeystoneCloudinaryImagesField;
+	prototype: KeystoneCloudinaryImagesField;
+	properName: "CloudinaryImages";
+}
+
+/**
+ * Options specific to DateArray fields.
+ * @see ./fields/types/datearray/DateArrayType.js
+ */
+export interface KeystoneDateArrayFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically DateArray */
+	type: KeystoneDateArrayTypeConstructor;
+	/** Format string for parsing input dates. Default: 'YYYY-MM-DD' */
+	parseFormat?: string;
+	/** Format string for displaying dates, or false to disable formatting. Default: 'Do MMM YYYY' */
+	format?: string | false;
+	/** Separator for joining multiple dates in display. Default: ' | ' */
+	separator?: string;
+}
+
+/**
+ * Interface for DateArray field instances.
+ * @see ./fields/types/datearray/DateArrayType.js
+ */
+export interface KeystoneDateArrayField extends Omit<KeystoneField, "options"> {
+	/** The native JavaScript type constructor (Array of Dates). */
+	_nativeType: [DateConstructor];
+	/** Default size for the field in the Admin UI */
+	_defaultSize: "medium";
+	/** Underscore methods added to documents */
+	_underscoreMethods: string[];
+	/** Properties exposed to Admin UI */
+	_properties: string[];
+	/** Format string for parsing input dates */
+	parseFormatString: string;
+	/** Format string for displaying dates */
+	formatString: string | false;
+	/** Separator for joining multiple dates in display */
+	separator: string;
+	/** Field-specific options */
+	options: KeystoneDateArrayFieldOptions;
+
+	/**
+	 * Formats the field value
+	 * @param item The Mongoose document
+	 * @param format Optional format string to override field option
+	 * @param separator Optional separator to override field option
+	 * @returns Formatted date string
+	 */
+	format(item: any, format?: string, separator?: string): string;
+
+	/**
+	 * Validates that the input can be parsed into valid dates
+	 * @param data Input data
+	 * @param callback Receives whether input is valid
+	 */
+	validateInput(data: any, callback: (valid: boolean) => void): void;
+
+	/**
+	 * Validates that required input has been provided
+	 * @param item The Mongoose document
+	 * @param data Input data
+	 * @param callback Receives whether input is valid
+	 */
+	validateRequiredInput(
+		item: any,
+		data: any,
+		callback: (valid: boolean) => void
+	): void;
+
+	/**
+	 * Adds date-based filtering logic to a Mongoose query
+	 * @param filter Filter oAdminUiFieldReactptions with mode and presence
+	 * @returns MongoDB query conditions
+	 */
+	addFilterToQuery(filter: {
+		mode?: "on" | "after" | "before" | "between";
+		presence?: "none" | "some";
+		value?: string | Date;
+		after?: string | Date;
+		before?: string | Date;
+	}): Record<string, any>;
+}
+
+/**
+ * Constructor for DateArray field type.
+ * @see ./fields/types/datearray/DateArrayType.js
+ */
+export interface KeystoneDateArrayTypeConstructor
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneDateArrayFieldOptions
+	): KeystoneDateArrayField;
+	prototype: KeystoneDateArrayField;
+	properName: "DateArray";
+}
+
+/**
+ * Filter oAdminUiFieldReactptions for Date field queries.
+ * @see ./fields/types/date/DateType.js
+ */
+export interface KeystoneAdminUiDateFieldReactFilter {
+	/**
+	 * Filter mAdminUFieldReactiode.
+	 * - 'between': Matches dates between 'after' and 'before'.
+	 * - 'after': Matches dates after the value.
+	 * - 'before': Matches dates before the value.
+	 * Default: exact match for the day
+	 */
+	mode?: "between" | "after" | "before" | string;
+	/** The date value(s) to filter by. */
+	value?: string | Date;
+	/** Start date for 'between' mode. */
+	after?: string | Date;
+	/** End date for 'between' mode. */
+	before?: string | Date;
+	/**
+	 * Invert the filter logic.
+	 * Default: false
+	 */
+	inverted?: boolean;
+}
+
+/**
+ * Options specific to Date fields.
+ * @see ./fields/types/date/DateType.js
+ */
+export interface KeystoneDateFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically Date */
+	type: KeystoneDateTypeConstructor | DateConstructor;
+	/**
+	 * Moment.js format string for output, or `false` to disable formatting.
+	 * Default: 'Do MMM YYYY'
+	 */
+	format?: string | false;
+	/**
+	 * Moment.js format string for parsing input.
+	 * Default: 'YYYY-MM-DD'
+	 */
+	inputFormat?: string;
+	/**
+	 * Range of years for date picker (e.g., [2000, 2030] or 10 for +/- 10 years).
+	 * Default: 10 (+/- 10 years)
+	 */
+	yearRange?: number | number[];
+	/**
+	 * Treat date as UTC.
+	 * Default: false
+	 */
+	utc?: boolean;
+	/**
+	 * Show 'Today' button in date picker.
+	 * Default: true
+	 */
+	todayButton?: boolean;
+	/**
+	 * UTC offset (minutes) for correcting potentially corrupted UTC dates on retrieval.
+	 * Default: Server's timezone offset
+	 */
+	timezoneUtcOffsetMinutes?: number;
+}
+
+/**
+ * Interface for Date field instances.
+ * @see ./fields/types/date/DateType.js
+ */
+export interface KeystoneDateField extends Omit<KeystoneField, "options"> {
+	/** The native JavaScript type constructor (Date). */
+	_nativeType: DateConstructor;
+	/** Underscore methods added to documents (includes 'format', 'moment', 'parse'). */
+	_underscoreMethods: ["format", "moment", "parse"];
+	/** Fixed size for the field in the Admin UI. */
+	_fixedSize: "medium";
+	/** Properties exposed to Admin UI (includes 'formatString', 'yearRange', 'isUTC', 'inputFormat', 'todayButton'). */
+	_properties: [
+		"formatString",
+		"yearRange",
+		"isUTC",
+		"inputFormat",
+		"todayButton"
+	];
+	/** Moment.js format string for parsing input. */
+	parseFormatString: string;
+	/** Moment.js format string for output, or false to disable. */
+	formatString?: string | false;
+	/** Year range option for date picker. */
+	yearRange?: number | number[];
+	/** Whether to treat the date as UTC. */
+	isUTC: boolean;
+	/** Whether the date picker shows the 'Today' button. */
+	todayButton: boolean;
+	/** UTC offset used for potential date correction. */
+	timezoneUtcOffsetMinutes: number;
+	/** Field-specific options. */
+	options: KeystoneDateFieldOptions;
+
+	/**
+	 * Validates that required input has been provided.
+	 * Inherited from TextType.
+	 * @param item The Mongoose document.
+	 * @param data Input data object.
+	 * @param callback Receives whether input is valid.
+	 */
+	validateRequiredInput(
+		item: any,
+		data: any,
+		callback: (valid: boolean) => void
+	): void;
+
+	/**
+	 * Adds date-specific filtering logic to a Mongoose query.
+	 * Supports date range filtering with 'between', 'after', 'before' modes.
+	 * @param filter The filter definition.
+	 * @returns MongoDB query conditions object.
+	 */
+	addFilterToQuery(
+		filter: KeystoneAdminUiDateFieldReactFilter
+	): Record<string, any>;
+
+	/**
+	 * Validates that required input has been provided.
+	 * @param item The Mongoose document.
+	 * @param data Input data.
+	 * @param callback Receives whether input is valid.
+	 */
+	validateRequiredInput(
+		item: any,
+		data: any,
+		callback: (valid: boolean) => void
+	): void;
+
+	/**
+	 * Adds date-based filtering logic to a Mongoose query.
+	 * @param filter Filter oAdminUiFieldReactptions with mode and presence.
+	 * @returns MongoDB query conditions.
+	 */
+	addFilterToQuery(
+		filter: KeystoneAdminUiDateFieldReactFilter
+	): Record<string, any>;
+
+	/**
+	 * (Deprecated) Checks that a valid array of dates has been provided.
+	 * @param data Input data.
+	 * @param required Whether the field is required.
+	 * @param item Optional Mongoose document for context.
+	 * @returns Whether the input is valid.
+	 * @deprecated Use validateInput or validateRequiredInput instead.
+	 */
+	inputIsValid(data: any, required?: boolean, item?: any): boolean;
+
+	/**
+	 * Updates the field's value in the item from a data object.
+	 * @param item The Mongoose document to update.
+	 * @param data The input data object.
+	 * @param callback Called after update attempt.
+	 */
+	updateItem(item: any, data: any, callback: () => void): void;
+}
+
+/**
+ * Interface for DateTime field instances.
+ * @see ./fields/types/datetime/DateTimeType.js
+ *
+ * Sources:
+ * - File path: lib/content/types/text.js
+ * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js}
+ * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
+ */
+export interface KeystoneDateTimeField extends Omit<KeystoneField, "options"> {
+	/** The native JavaScript type constructor (Date). */
+	_nativeType: DateConstructor;
+	/** Underscore methods added to documents (includes 'format', 'moment', 'parse'). */
+	_underscoreMethods: ["format", "moment", "parse"];
+	/** Fixed size for the field in the Admin UI. */
+	_fixedSize: "full";
+	/** Properties exposed to Admin UI (includes 'formatString', 'isUTC'). */
+	_properties: ["formatString", "isUTC"];
+	/** Custom type description for the Admin UI. */
+	typeDescription: string;
+	/** Moment.js format string(s) for parsing input. */
+	parseFormatString: string | string[];
+	/** Moment.js format string for output, or false to disable. */
+	formatString?: string | false;
+	/** Whether to treat the date/time as UTC. */
+	isUTC: boolean;
+	/** Field-specific options. */
+	options: KeystoneDateTimeFieldOptions;
+	/** Paths for the sub-fields used in the Admin UI. */
+	paths: {
+		/** Path for the date part input. */
+		date: string;
+		/** Path for the time part input. */
+		time: string;
+		/** Path for the timezone offset input. */
+		tzOffset: string;
+	};
+
+	/**
+	 * Gets the value from a data object; may be simple or a pair of fields.
+	 * @param data The input data object.
+	 * @returns The combined date/time value.
+	 */
+	getInputFromData(data: any): string | any;
+
+	/**
+	 * Validates that required input has been provided.
+	 * @param item The Mongoose document.
+	 * @param data Input data object.
+	 * @param callback Receives whether input is valid.
+	 */
+	validateRequiredInput(
+		item: any,
+		data: any,
+		callback: (valid: boolean) => void
+	): void;
+
+	/**
+	 * Validates that the input is a valid date/time.
+	 * @param data Input data object.
+	 * @param callback Receives whether input is valid.
+	 */
+	validateInput(data: any, callback: (valid: boolean) => void): void;
+
+	/**
+	 * (Deprecated) Checks that a valid date/time has been provided.
+	 * @param data Input data.
+	 * @param required Whether the field is required.
+	 * @param item Optional Mongoose document for context.
+	 * @returns Whether the input is valid.
+	 * @deprecated Use validateInput or validateRequiredInput instead.
+	 */
+	inputIsValid(data: any, required?: boolean, item?: any): boolean;
+
+	/**
+	 * Updates the field's value in the item from a data object.
+	 * @param item The Mongoose document to update.
+	 * @param data The input data object.
+	 * @param callback Called after update attempt.
+	 */
+	updateItem(item: any, data: any, callback: () => void): void;
+
+	/**
+	 * Formats the field's date/time value using moment.js.
+	 * Inherited from DateType.
+	 * @param item The Mongoose document.
+	 * @param format Optional moment.js format string.
+	 * @returns Formatted date/time string.
+	 */
+	format(item: any, format?: string): string;
+
+	/**
+	 * Returns the field's value as a moment.js object.
+	 * Inherited from DateType.
+	 * @param item The Mongoose document.
+	 * @returns A moment object or null.
+	 */
+	moment(item: any): moment.Moment | null;
+
+	/**
+	 * Parses input using moment.js.
+	 * Inherited from DateType.
+	 * @param value The value to parse.
+	 * @param format Optional format string(s).
+	 * @param strict Whether to use strict parsing.
+	 * @returns A moment object.
+	 */
+	parse(
+		value: any,
+		format?: string | string[],
+		strict?: boolean
+	): moment.Moment;
+
+	/**
+	 * Adds date-based filtering logic to a Mongoose query.
+	 * Inherited from DateType.
+	 * @param filter The filter definition.
+	 * @returns MongoDB query conditions object.
+	 */
+	addFilterToQuery(
+		filter: KeystoneAdminUiDateFieldReactFilter
+	): Record<string, any>;
+}
+
+/**
+ * Filter oAdminUiFieldReactptions for DateArray field queries.
+ * @see ./fields/types/datearray/DateArrayType.js
+ */
+export interface KeystoneAdminUiDateArrayFieldReactFilter {
+	/**
+	 * Filter mAdminUFieldReactiode.
+	 * - 'between': Matches dates between 'after' and 'before'.
+	 * - 'after': Matches dates after the value.
+	 * - 'before': Matches dates before the value.
+	 * Default: exact match for the day
+	 */
+	mode?: "between" | "after" | "before" | string;
+	/**
+	 * Presence mode.
+	 * - 'none': No dates match the filter.
+	 * - 'some': At least one date matches the filter.
+	 * Default: 'some'
+	 */
+	presence?: "none" | "some";
+	/** The date value(s) to filter by. */
+	value?: string | Date | moment.Moment;
+	/** Start date for 'between' mode. */
+	after?: string | Date | moment.Moment;
+	/** End date for 'between' mode. */
+	before?: string | Date | moment.Moment;
+}
+
+/**
+ * Options specific to DateArray fields.
+ * @see ./fields/types/datearray/DateArrayType.js
+ */
+export interface KeystoneDateArrayFieldOptions
+	extends Omit<KeystoneFieldOptions, "type"> {
+	/** Ensure type is specifically DateArray */
+	type: KeystoneDateArrayTypeConstructor;
+	/**
+	 * Moment.js format string for parsing input dates.
+	 * Default: 'YYYY-MM-DD'
+	 */
+	parseFormat?: string;
+	/**
+	 * Moment.js format string for displaying dates, or false to disable formatting.
+	 * Default: 'Do MMM YYYY'
+	 */
+	format?: string | false;
+	/**
+	 * Separator for joining multiple dates in display.
+	 * Default: ' | '
+	 */
+	separator?: string;
+}
+
+/**
+ * Interface for DateArray field instances.
+ * @see ./fields/types/datearray/DateArrayType.js
+ */
+export interface KeystoneDateArrayField extends Omit<KeystoneField, "options"> {
+	/** The native JavaScript type constructor (Array of Dates). */
+	_nativeType: [DateConstructor];
+	/** Default size for the field in the Admin UI. */
+	_defaultSize: "medium";
+	/** Underscore methods added to documents (includes 'format'). */
+	_underscoreMethods: string[];
+	/** Properties exposed to Admin UI (includes 'formatString'). */
+	_properties: string[];
+	/** Format string for parsing input dates. */
+	parseFormatString: string;
+	/** Format string for displaying dates, or false to disable. */
+	formatString: string | false;
+	/** Separator for joining multiple dates in display. */
+	separator: string;
+	/** Field-specific options. */
+	options: KeystoneDateArrayFieldOptions;
+
+	/**
+	 * Formats the field value.
+	 * @param item The Mongoose document.
+	 * @param format Optional format string to override field option.
+	 * @param separator Optional separator to override field option.
+	 * @returns Formatted date string.
+	 */
+	format(item: any, format?: string, separator?: string): string;
+
+	/**
+	 * Validates that the input can be parsed into valid dates.
+	 * @param data Input data.
+	 * @param callback Receives whether input is valid.
+	 */
+	validateInput(data: any, callback: (valid: boolean) => void): void;
+
+	/**
+	 * Validates that required input has been provided.
+	 * @param item The Mongoose document.
+	 * @param data Input data.
+	 * @param callback Receives whether input is valid.
+	 */
+	validateRequiredInput(
+		item: any,
+		data: any,
+		callback: (valid: boolean) => void
+	): void;
+
+	/**
+	 * Adds date-based filtering logic to a Mongoose query.
+	 * @param filter Filter oAdminUiFieldReactptions with mode and presence.
+	 * @returns MongoDB query conditions.
+	 */
+	addFilterToQuery(
+		filter: KeystoneAdminUiDateArrayFieldReactFilter
+	): Record<string, any>;
+
+	/**
+	 * (Deprecated) Checks that a valid array of dates has been provided.
+	 * @param data Input data.
+	 * @param required Whether the field is required.
+	 * @param item Optional Mongoose document for context.
+	 * @returns Whether the input is valid.
+	 * @deprecated Use validateInput or validateRequiredInput instead.
+	 */
+	inputIsValid(data: any, required?: boolean, item?: any): boolean;
+
+	/**
+	 * Updates the field's value in the item from a data object.
+	 * @param item The Mongoose document to update.
+	 * @param data The input data object.
+	 * @param callback Called after update attempt.
+	 */
+	updateItem(item: any, data: any, callback: () => void): void;
+}
+
+/**
+ * Constructor for DateArray field type.
+ * @see ./fields/types/datearray/DateArrayType.js
+ */
+export interface KeystoneDateArrayTypeConstructor
+	extends Omit<KeystoneFieldTypeConstructor, "prototype"> {
+	new (
+		list: KeystoneList,
+		path: string,
+		options: KeystoneDateArrayFieldOptions
+	): KeystoneDateArrayField;
+	prototype: KeystoneDateArrayField;
+	properName: "DateArray";
+}
+
+// ... existing code ...
