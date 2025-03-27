@@ -1,19 +1,23 @@
-// Type definitions for KeystoneJS v4 index.js
+// Type definitions for KeystoneJS v4 index.js & lib/core/options.js
 // Project: https://github.com/keystonejs/keystone-0.3
 // Definitions by: Gabriel Giacomini <https://github.com/GabrielGiacomini>
-// Based on the code in: index.js
+// Based on the code in: index.js, lib/core/options.js
 
 import * as express from "express";
 import * as mongoose from "mongoose";
 import { Hook } from "grappling-hook"; // @todo: Check if @types/grappling-hook exists or define basic type
 
+// --- Dependencies ---
+// @todo: Add types for cloudinary if needed: npm install --save-dev @types/cloudinary
+// import * as cloudinary from 'cloudinary';
+
 /**
  * @todo Define more specific types for imported modules instead of 'any' or Function.
  */
+// ... (previous module declarations remain relevant) ...
 // declare module './lib/core/importer' { const importer: any; export default importer; }
 // declare module './lib/middleware/api' { function api(keystone: Keystone): any; export = api; }
 // declare module './lib/middleware/cors' { function cors(keystone: Keystone): any; export = cors; }
-// declare module './lib/core/options' { const options: any; export = options; }
 // declare module './lib/core/createItems' { const createItems: any; export = createItems; }
 // declare module './lib/core/createRouter' { const createRouter: any; export = createRouter; }
 // declare module './lib/core/getOrphanedLists' { const getOrphanedLists: any; export = getOrphanedLists; }
@@ -44,6 +48,137 @@ import { Hook } from "grappling-hook"; // @todo: Check if @types/grappling-hook 
 // declare module 'keystone-utils' { const utils: any; export = utils; }
 
 /**
+ * Interface defining common KeystoneJS configuration options.
+ * Allows arbitrary keys for custom options.
+ * @see lib/core/options.js
+ */
+interface KeystoneOptions {
+	name?: string;
+	brand?: string;
+	"admin path"?: string;
+	compress?: boolean;
+	headless?: boolean;
+	logger?: string | boolean | ((...args: any[]) => void);
+	"auto update"?: boolean;
+	"model prefix"?: string | null;
+	/** Path to the root of the consuming module/project. Defaults based on module location. */
+	"module root"?: string;
+	"frame guard"?: "deny" | "sameorigin" | boolean;
+	"cache admin bundles"?: boolean;
+	"handle uploads"?: boolean;
+
+	env?: string; // 'development', 'production', etc.
+	port?: string | number;
+	host?: string;
+	/** Specific IP/Host to listen on (overrides host/port). */
+	listen?: string;
+
+	ssl?: boolean | "only";
+	"ssl port"?: string | number;
+	"ssl host"?: string;
+	/** Path to SSL key file or the key itself. */
+	"ssl key"?: string;
+	/** Path to SSL cert file or the cert itself. */
+	"ssl cert"?: string;
+
+	/** Secret for signing cookies. */
+	"cookie secret"?: string;
+	/** Determines if signin cookies are used (defaults to true in dev). */
+	"cookie signin"?: boolean;
+
+	"embedly api key"?: string;
+	"mandrill api key"?: string;
+	"mandrill username"?: string;
+	"google api key"?: string; // Browser key
+	"google server api key"?: string; // Server key
+	"ga property"?: string; // Google Analytics property ID
+	"ga domain"?: string; // Google Analytics domain
+	"chartbeat property"?: string;
+	"chartbeat domain"?: string;
+	/** Whitelisted IP ranges for Admin UI access. @todo Verify actual type (string | string[]?) */
+	"allowed ip ranges"?: string | string[];
+
+	/** Amazon S3 configuration. @todo Define S3 config type. */
+	"s3 config"?: Record<string, any> | boolean;
+	/** Azure Storage configuration. @todo Define Azure config type. */
+	"azurefile config"?: Record<string, any> | boolean;
+	/**
+	 * Cloudinary configuration. Can be a config object, a cloudinary URL string, or `true` to use env vars.
+	 * @todo Define Cloudinary config type from `@types/cloudinary`.
+	 */
+	"cloudinary config"?: Record<string, any> | string | boolean;
+
+	/** Mongoose instance to use. Defaults to internal instance. */
+	mongoose?: typeof mongoose;
+	/** MongoDB connection URI. */
+	mongo?: string;
+
+	/** Session configuration. `true` enables default mongo store. Can be session options object. */
+	session?: boolean | Record<string, any>;
+	/** Enables auth features. `true` requires 'user model' and 'cookie secret'. Can be a user list instance. */
+	auth?: boolean | any; // @todo Use List type when defined
+
+	/** Key of the list to use for authentication. */
+	"user model"?: string;
+	/** Custom Express app instance. */
+	app?: express.Express;
+	/** Express session store instance. */
+	"session store"?: any; // @todo Define session store type
+	/** Navigation structure for Admin UI. */
+	nav?: Record<string, string | string[]>; // e.g. { posts: ['posts', 'post-categories'], users: 'users' }
+
+	/** Callback fired before static assets middleware. */
+	"pre:static"?: express.RequestHandler | express.RequestHandler[];
+	/** Callback fired before body parser middleware. */
+	"pre:bodyparser"?: express.RequestHandler | express.RequestHandler[];
+	/** Callback fired before session middleware. */
+	"pre:session"?: express.RequestHandler | express.RequestHandler[];
+	/** Callback fired before logger middleware. */
+	"pre:logger"?: express.RequestHandler | express.RequestHandler[];
+	/** Callback fired before admin UI middleware. */
+	"pre:admin"?: express.RequestHandler | express.RequestHandler[];
+	/** Callback fired before admin UI routes. */
+	"pre:adminroutes"?: express.RequestHandler | express.RequestHandler[];
+	/** Callback fired before application routes. */
+	"pre:routes"?: express.RequestHandler | express.RequestHandler[];
+	/** Callback fired before rendering views. */
+	"pre:render"?: express.RequestHandler | express.RequestHandler[];
+
+	/** Custom route handler function `(app: express.Application) => void`. */
+	routes?: (app: express.Application) => void;
+
+	/** Default: true */
+	"trust proxy"?: boolean;
+	/** Default: false */
+	letsencrypt?:
+		| boolean
+		| {
+				email: string;
+				domains: string[];
+				approveDomains?:
+					| boolean
+					| ((
+							options: any,
+							certs: any,
+							cb: (
+								err: Error | null,
+								{ options, certs }: { options: any; certs: any }
+							) => void
+					  ) => void);
+				server?: string;
+		  }; // @todo Refine letsencrypt options type
+	/** Default: false */
+	"signin logo"?: string | [string, number]; // URL or [URL, height]
+	/** Default: false */
+	"signin url"?: string;
+	/** Default: false */
+	"signout url"?: string;
+
+	// Allow any other keys
+	[key: string]: any;
+}
+
+/**
  * Represents a KeystoneJS v4 application instance.
  * @see index.js
  */
@@ -54,42 +189,18 @@ declare class Keystone {
 	 */
 	constructor();
 
-	/**
-	 * Provides hook points for Keystone's initialization and request lifecycles.
-	 * @see https://github.com/JedWatson/grappling-hook
-	 * @todo Define specific types for hook arguments and return values.
-	 * @example
-	 * keystone.callHook('pre:routes', myMiddleware);
-	 */
 	callHook: Hook["callHook"];
 	addHook: Hook["addHook"];
 
-	/**
-	 * A collection of registered Keystone Lists.
-	 * Keys are the list keys, values are the List instances.
-	 * @todo Define the List type/interface.
-	 */
-	lists: Record<string, any>; // Record<string, List>;
-
-	/**
-	 * A collection of registered Keystone Field Types.
-	 * Keys are the field type names, values are the Field Type constructors.
-	 * @todo Define the FieldType type/interface.
-	 */
-	fieldTypes: Record<string, any>; // Record<string, FieldType>;
-
-	/**
-	 * Storage for internal path references.
-	 * @todo Define the structure of the paths object.
-	 */
-	paths: Record<string, any>;
+	lists: Record<string, any>; // @todo Replace 'any' with defined List type
+	fieldTypes: Record<string, any>; // @todo Replace 'any' with defined FieldType type
+	paths: Record<string, any>; // @todo Define structure
 
 	/**
 	 * Internal storage for Keystone configuration options. Use `get()` and `set()` to access.
 	 * @internal
-	 * @todo Define a strong type for KeystoneOptions.
 	 */
-	_options: Record<string, any>;
+	_options: KeystoneOptions;
 
 	/**
 	 * Internal storage for redirect rules.
@@ -101,336 +212,170 @@ declare class Keystone {
 		string | { from: string; to: string; status?: number }
 	>;
 
-	/**
-	 * The Express instance used by Keystone.
-	 */
 	express: typeof express;
-
-	/**
-	 * The Mongoose instance used by Keystone.
-	 */
 	mongoose: typeof mongoose;
 
-	/**
-	 * Collection of Keystone middleware functions bound to the instance.
-	 * @todo Define specific types for middleware functions.
-	 */
 	middleware: {
-		api: any; // ReturnType<typeof import('./lib/middleware/api')>;
-		cors: any; // ReturnType<typeof import('./lib/middleware/cors')>;
+		api: any; // @todo Define specific type
+		cors: any; // @todo Define specific type
 	};
 
-	// --- Options Management (from lib/core/options.js) ---
-	/**
-	 * Sets keystone options
-	 *
-	 * Example:
-	 * keystone.set('user model', 'User') // sets the 'user model' option to `User`
-	 *
-	 * @param {string} key - The option key.
-	 * @param {any} value - The value.
-	 * @see lib/core/options.js
-	 */
-	set(key: string, value: any): this;
-	set(options: Record<string, any>): this;
+	/** The configured Express application instance. Initialized during `keystone.init()` or can be set via `keystone.set('app', myApp)`. */
+	app?: express.Express;
+
+	/** The configured navigation structure for the Admin UI. */
+	nav?: {
+		// @todo Define NavItem type properly
+		sections: Array<{
+			label: string;
+			key: string;
+			lists: Array<{ key: string; path: string; label: string; options: any }>;
+		}>;
+		by: {
+			list: Record<
+				string,
+				{ key: string; path: string; label: string; options: any }
+			>;
+		};
+	};
+
+	// --- Options Management ---
 
 	/**
-	 * Gets keystone options
+	 * Sets a Keystone configuration option.
+	 * Handles special cases for 'cloudinary config', 'auth', 'nav', 'mongo', 'module root', 'app', 'mongoose', 'frame guard'.
 	 *
-	 * Example:
-	 * keystone.get('user model') // returns the 'user model' option
+	 * @example
+	 * keystone.set('user model', 'User');
+	 * keystone.set('cloudinary config', 'cloudinary://api_key:api_secret@cloud_name');
 	 *
-	 * @param {string} key - The option key.
+	 * @param key The configuration option key.
+	 * @param value The value to set.
+	 * @returns The Keystone instance, for chaining.
 	 * @see lib/core/options.js
 	 */
+	set<K extends keyof KeystoneOptions>(key: K, value: KeystoneOptions[K]): this;
+	set(key: string, value: any): this;
+	// The implementation also allows getting via set(key), but get(key) is preferred.
+	// set<K extends keyof KeystoneOptions>(key: K): KeystoneOptions[K];
+	// set(key: string): any;
+
+	/**
+	 * Sets multiple Keystone configuration options.
+	 *
+	 * @example
+	 * keystone.options({
+	 * 'name': 'My Site',
+	 * 'auto update': true,
+	 * });
+	 *
+	 * @param options An object containing option keys and values.
+	 * @returns The full options object after updates.
+	 * @see lib/core/options.js
+	 */
+	options(options: Partial<KeystoneOptions>): KeystoneOptions;
+	/**
+	 * Gets the full Keystone configuration options object.
+	 * @returns The full options object.
+	 */
+	options(): KeystoneOptions;
+
+	/**
+	 * Gets a Keystone configuration option.
+	 *
+	 * @example
+	 * const userModel = keystone.get('user model');
+	 *
+	 * @param key The configuration option key.
+	 * @returns The value of the option, or undefined if not set.
+	 * @see lib/core/options.js
+	 */
+	get<K extends keyof KeystoneOptions>(key: K): KeystoneOptions[K];
 	get(key: string): any;
 
 	/**
-	 * Gets an expanded path option, resolving '~' to the module root
+	 * Gets an expanded path option, resolving it relative to the `module root` if it's not absolute.
 	 *
-	 * Example:
-	 * keystone.get('path option', 'default value')
+	 * @example
+	 * const updatesPath = keystone.getPath('updates', './updates');
 	 *
-	 * @param {string} key - The option key.
-	 * @param {string} [defaultValue] - The default value.
+	 * @param key The path option key.
+	 * @param defaultValue A default value to use if the option is not set.
+	 * @returns The resolved path string, or undefined if not set and no default is provided.
 	 * @see lib/core/options.js
 	 */
-	getPath(key: string, defaultValue?: string): string | undefined;
+	getPath(
+		key: keyof KeystoneOptions | string,
+		defaultValue?: string
+	): string | undefined;
 
 	/**
-	 * Sets multiple path options, resolving '~' to the module root
+	 * Expands a potentially relative path to be absolute based on the `module root` option.
+	 * If the path is already absolute, it's returned unchanged.
 	 *
-	 * Example:
-	 * keystone.paths({ updates: './updates' })
-	 *
-	 * @param {Record<string, string>} paths - An object mapping path keys to string values.
+	 * @param pathValue The path string to expand.
+	 * @returns The expanded, absolute path string.
 	 * @see lib/core/options.js
 	 */
-	paths(paths: Record<string, string>): this;
+	expandPath(pathValue: string): string;
 
 	// --- Core Methods ---
 
-	/**
-	 * Prefixes a model key with the value of the 'model prefix' option, if set.
-	 * Uses mongoose's internal `utils.toCollectionName` for formatting.
-	 * @param {string} key - The base model key.
-	 * @returns {string} The prefixed and formatted model key/collection name.
-	 * @see index.js
-	 */
-	prefixModel(key: string): string;
-
-	/**
-	 * Programmatically create items in a Keystone list.
-	 * @see lib/core/createItems.js
-	 * @todo Define arguments and return type based on lib/core/createItems.js.
-	 */
-	createItems: any; // typeof import('./lib/core/createItems');
-
-	/**
-	 * Creates an Express Router instance.
-	 * @see lib/core/createRouter.js
-	 */
-	createRouter: typeof express.Router; //typeof import('./lib/core/createRouter');
-
-	/**
-	 * Retrieves lists that haven't been associated with a navigation section.
-	 * @see lib/core/getOrphanedLists.js
-	 * @todo Define arguments and return type based on lib/core/getOrphanedLists.js.
-	 * @todo Define the List type/interface.
-	 */
-	getOrphanedLists: () => any[]; //() => List[]; // typeof import('./lib/core/getOrphanedLists');
-
-	/**
-	 * Imports modules from a specified directory relative to the project root.
-	 * @param {string} dirname - The directory path relative to the 'module root'.
-	 * @returns {Record<string, any>} An object mapping filenames (without extension) to the imported modules.
-	 * @see lib/core/importer.js
-	 * @example
-	 * const models = keystone.import('models');
-	 */
-	importer: (moduleRoot: string) => (dirname: string) => Record<string, any>; // typeof import('./lib/core/importer');
-
-	/**
-	 * Initializes Keystone, setting up database connections, middleware, and Express app.
-	 * @see lib/core/init.js
-	 * @todo Define arguments and return type based on lib/core/init.js.
-	 */
-	init: any; // typeof import('./lib/core/init');
-
-	/**
-	 * Initializes database configuration options.
-	 * @see lib/core/initDatabaseConfig.js
-	 * @todo Define arguments and return type based on lib/core/initDatabaseConfig.js.
-	 */
-	initDatabaseConfig: any; // typeof import('./lib/core/initDatabaseConfig');
-
-	/**
-	 * Initializes the main Express application.
-	 * @see lib/core/initExpressApp.js
-	 * @todo Define arguments and return type based on lib/core/initExpressApp.js.
-	 */
-	initExpressApp: any; // typeof import('./lib/core/initExpressApp');
-
-	/**
-	 * Initializes Express session middleware.
-	 * @see lib/core/initExpressSession.js
-	 * @todo Define arguments and return type based on lib/core/initExpressSession.js.
-	 */
-	initExpressSession: any; // typeof import('./lib/core/initExpressSession');
-
-	/**
-	 * Initializes the navigation structure for the Admin UI.
-	 * @see lib/core/initNav.js
-	 * @todo Define arguments and return type based on lib/core/initNav.js.
-	 */
-	initNav: any; // typeof import('./lib/core/initNav');
-
-	/**
-	 * Retrieves a registered List by its key.
-	 * @param {string} key - The key of the List to retrieve.
-	 * @returns {any | undefined} The List instance, or undefined if not found.
-	 * @see lib/core/list.js
-	 * @todo Define the List type/interface.
-	 */
-	list: (key: string) => any | undefined; // (key: string) => List | undefined; // typeof import('./lib/core/list');
-
-	/**
-	 * Opens the database connection.
-	 * @param {mongoose.ConnectOptions & { uri?: string }} [options] - Connection options.
-	 * @param {(err?: any) => void} [callback] - Callback function executed after connection attempt.
-	 * @returns {this} The Keystone instance.
-	 * @see lib/core/openDatabaseConnection.js
-	 * @todo Refine argument types based on lib/core/openDatabaseConnection.js.
-	 */
+	prefixModel: (key: string) => string;
+	createItems: any; // @todo Define signature from lib/core/createItems.js
+	createRouter: typeof express.Router;
+	getOrphanedLists: () => any[]; // @todo Use List[] type when defined
+	importer: (moduleRoot: string) => (dirname: string) => Record<string, any>;
+	init: any; // @todo Define signature from lib/core/init.js
+	initDatabaseConfig: any; // @todo Define signature from lib/core/initDatabaseConfig.js
+	initExpressApp: any; // @todo Define signature from lib/core/initExpressApp.js
+	initExpressSession: any; // @todo Define signature from lib/core/initExpressSession.js
+	initNav: any; // @todo Define signature from lib/core/initNav.js
+	list: (key: string) => any | undefined; // @todo Use List type when defined
 	openDatabaseConnection: (
 		options?: mongoose.ConnectOptions & { uri?: string },
 		callback?: (err?: any) => void
-	) => this; // typeof import('./lib/core/openDatabaseConnection');
-
-	/**
-	 * Closes the database connection.
-	 * @param {(err?: any) => void} [callback] - Callback function executed after disconnection attempt.
-	 * @see lib/core/closeDatabaseConnection.js
-	 * @todo Refine argument types based on lib/core/closeDatabaseConnection.js.
-	 */
-	closeDatabaseConnection: (callback?: (err?: any) => void) => void; // typeof import('./lib/core/closeDatabaseConnection');
-
-	/**
-	 * Populates relationship fields on a document or array of documents.
-	 * @see lib/core/populateRelated.js
-	 * @todo Define arguments and return type based on lib/core/populateRelated.js.
-	 */
-	populateRelated: any; // typeof import('./lib/core/populateRelated');
-
-	/**
-	 * Adds a redirect rule.
-	 * @param {string | Record<string, string | number>} from - The path to redirect from, or an object mapping paths to destinations.
-	 * @param {string} [to] - The path or URL to redirect to.
-	 * @param {number} [status=301] - The HTTP status code for the redirect.
-	 * @see lib/core/redirect.js
-	 * @todo Refine argument types based on lib/core/redirect.js.
-	 */
+	) => this;
+	closeDatabaseConnection: (callback?: (err?: any) => void) => void;
+	populateRelated: any; // @todo Define signature from lib/core/populateRelated.js
 	redirect: (
 		from: string | Record<string, string | number>,
 		to?: string,
 		status?: number
-	) => void; // typeof import('./lib/core/redirect');
-
-	/**
-	 * Starts the Keystone application, listening for HTTP(S) connections.
-	 * @param {Record<string, any> | ((err?: any) => void)} [options] - Startup options or a callback function.
-	 * @param {(err?: any) => void} [callback] - Callback function executed after the server starts.
-	 * @see lib/core/start.js
-	 * @todo Refine argument types based on lib/core/start.js.
-	 */
+	) => void;
 	start: (
 		options?: Record<string, any> | ((err?: any) => void),
 		callback?: (err?: any) => void
-	) => void; // typeof import('./lib/core/start');
+	) => void; // @todo Refine signature
+	wrapHTMLError: any; // @todo Define signature from lib/core/wrapHTMLError.js
+	createKeystoneHash: any; // @todo Define signature from lib/core/createKeystoneHash.js
 
-	/**
-	 * Wraps an HTML error page.
-	 * @see lib/core/wrapHTMLError.js
-	 * @todo Define arguments and return type based on lib/core/wrapHTMLError.js.
-	 */
-	wrapHTMLError: any; // typeof import('./lib/core/wrapHTMLError');
-
-	/**
-	 * Creates a hash (likely for cache busting or similar).
-	 * @see lib/core/createKeystoneHash.js
-	 * @todo Define arguments and return type based on lib/core/createKeystoneHash.js.
-	 */
-	createKeystoneHash: any; // typeof import('./lib/core/createKeystoneHash');
-
-	/**
-	 * Applies application updates. Runs update scripts.
-	 * @param {(err?: any) => void} callback - Function called after updates are applied or if an error occurs.
-	 * @see index.js
-	 * @see lib/updates.js
-	 */
 	applyUpdates(callback: (err?: any) => void): void;
-
-	/**
-	 * Imports modules from a specified directory relative to the project root ('module root').
-	 * @param {string} dirname - The directory path relative to the 'module root'.
-	 * @returns {Record<string, any>} An object mapping filenames (without extension) to the imported modules.
-	 * @see index.js
-	 * @example
-	 * const models = keystone.import('models');
-	 */
 	import(dirname: string): Record<string, any>;
 
-	/**
-	 * Namespace for console logging functions.
-	 */
 	console: {
-		/**
-		 * Logs a configuration error message to the console if a logger is configured.
-		 * @param {string} type - The type of error (e.g., 'Configuration Error').
-		 * @param {string} msg - The error message.
-		 */
 		err(type: string, msg: string): void;
 	};
 
 	// --- Exposed Modules/Classes ---
 
-	/**
-	 * Admin UI server functionality.
-	 * @todo Define the Admin.Server type.
-	 */
 	Admin: {
-		Server: any; // typeof import('./admin/server');
+		Server: any; // @todo Define Admin.Server type
 	};
-
-	/**
-	 * Keystone Email class for sending emails.
-	 * @todo Define the Email class type.
-	 */
-	Email: any; // typeof import('./lib/email');
-
-	/**
-	 * Base class for Keystone Fields.
-	 * @todo Define the Field class type.
-	 */
+	Email: any; // @todo Define Email class type
 	Field: {
-		Types: Record<string, any>; // FieldTypesMap; // typeof import('./lib/fieldTypes');
-	} & any; // typeof import('./fields/types/Type');
-
-	/**
-	 * Constructor for the Keystone class itself. Allows creating multiple instances if needed.
-	 */
+		Types: Record<string, any>; // @todo Define FieldTypes map type
+	} & any; // @todo Define Field base class type
 	Keystone: typeof Keystone;
-
-	/**
-	 * The Keystone List class constructor/factory. Used to define data models.
-	 * @todo Define the List class type properly.
-	 */
-	List: any; // ReturnType<typeof import('./lib/list')>;
-
-	/**
-	 * Keystone Storage class for handling file uploads.
-	 * @todo Define the Storage class type.
-	 */
-	Storage: any; // typeof import('./lib/storage');
-
-	/**
-	 * Keystone View class for rendering templates.
-	 * @todo Define the View class type.
-	 */
-	View: any; // typeof import('./lib/view');
-
-	/**
-	 * Content management helper functions.
-	 * @todo Define the structure of the content module.
-	 */
-	content: any; // typeof import('./lib/content');
-
-	/**
-	 * Security related utilities.
-	 */
+	List: any; // @todo Define List class type
+	Storage: any; // @todo Define Storage class type
+	View: any; // @todo Define View class type
+	content: any; // @todo Define content module type
 	security: {
-		/**
-		 * CSRF protection middleware and utilities.
-		 * @todo Define the csrf module type.
-		 */
-		csrf: any; // typeof import('./lib/security/csrf');
+		csrf: any; // @todo Define csrf module type
 	};
-
-	/**
-	 * General utility functions. Re-exported from 'keystone-utils'.
-	 * @todo Define the utils type based on 'keystone-utils'.
-	 */
-	utils: any; // typeof import('keystone-utils');
-
-	/**
-	 * Session management functions (signin, signout).
-	 * @todo Define the session module type.
-	 */
-	session: any; // typeof import('./lib/session');
-
-	/**
-	 * The current version of the KeystoneJS package.
-	 */
+	utils: any; // @todo Define keystone-utils type
+	session: any; // @todo Define session module type
 	version: string;
 
 	// Deprecated
@@ -438,52 +383,59 @@ declare class Keystone {
 	routes: () => never;
 }
 
-/**
- * The main export is a singleton instance of the Keystone class.
- * @see index.js
- */
 declare const keystone: Keystone;
-
 export = keystone;
 
 /*
 Usage Instructions:
 
 1.  **Installation:**
-    If you haven't already, install the necessary base types:
     ```bash
-    npm install --save-dev @types/express @types/mongoose @types/node
+    npm install --save-dev @types/express @types/mongoose @types/node @types/cloudinary
     # or
-    yarn add --dev @types/express @types/mongoose @types/node
+    yarn add --dev @types/express @types/mongoose @types/node @types/cloudinary
     ```
-    *Note:* You might need `@types/grappling-hook` if available, otherwise define a basic interface for it or use `any`.
+    *Note:* You might need `@types/grappling-hook` if available.
 
 2.  **Import Keystone:**
-    In your TypeScript files (e.g., `keystone.ts` or your main application file), you can import the Keystone instance:
     ```typescript
     import * as keystone from 'keystone'; // Adjust path if placing definitions elsewhere
 
-    // Configure Keystone using the typed instance
-    keystone.set('name', 'My Awesome Project');
-    keystone.set('mongoose', require('mongoose')); // Mongoose instance might still be required like this
+    // Configure Keystone using typed methods and options
+    keystone.set('name', 'My Project');
     keystone.set('mongo', 'mongodb://localhost/my-db');
     keystone.set('user model', 'User');
-    keystone.set('auto update', true);
-    keystone.set('session', true);
-    keystone.set('auth', true);
+    keystone.set('cookie secret', '---- YOUR SECRET ----');
+    keystone.set('module root', __dirname); // Often useful
 
-    // Define a List (assuming List type is defined elsewhere)
-    // const User = new keystone.List('User');
-    // User.add({...});
-    // User.register();
+    const cloudinaryUrl = process.env.CLOUDINARY_URL;
+    if (cloudinaryUrl) {
+        keystone.set('cloudinary config', cloudinaryUrl);
+    }
 
-    // Start Keystone
+    // Get options
+    const moduleRoot = keystone.get('module root');
+    const isDev = keystone.get('env') === 'development';
+
+    // Set multiple options
+    keystone.options({
+        'port': 3000,
+        'auto update': true,
+        'session': true,
+        'auth': true,
+    });
+
+    // Use path methods
+    const publicPath = keystone.getPath('static', 'public');
+    console.log('Serving static files from:', publicPath);
+
+    // ... rest of your Keystone setup ...
+
     keystone.start();
     ```
 
 3.  **Typing Issues & TODOs:**
-    - This definition file uses `any` extensively as placeholders for types defined in other files (`List`, `Field`, core methods, etc.).
-    - As you provide the code for the referenced files (e.g., `lib/list.js`, `fields/types/Type.js`), these `any` types should be replaced with more specific interfaces or classes defined in separate `.d.ts` files or within this file if simple enough.
-    - The `@todo` comments highlight areas needing further definition or clarification. For example, the exact function signatures for core methods like `init`, `start`, `applyUpdates`, etc., need to be derived from their respective source files.
-    - Module declarations (`declare module '...'`) are commented out but show how you might structure types for internal modules if needed, though directly typing the methods/properties on the `Keystone` class is often sufficient.
+    - Continue replacing `any` with specific types as we define them (e.g., `List`, `Field`, core methods).
+    - Refine the `KeystoneOptions` interface further if specific options have more complex types (e.g., `letsencrypt`, storage configs).
+    - Verify the exact types for options like `allowed ip ranges`.
 */
