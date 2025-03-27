@@ -6,8 +6,7 @@
 // fields/types/textarea/TextareaType.js, fields/types/boolean/BooleanType.js, fields/types/select/SelectType.js,
 // fields/types/datetime/DateTimeType.js, fields/types/date/DateType.js, fields/types/html/HtmlType.js
 
-import express from "express";
-import { Application, RequestHandler } from "express";
+import * as express from "express";
 import * as mongoose from "mongoose";
 import * as moment from "moment"; // Requires @types/moment
 import { Hook } from "grappling-hook"; // @todo: Check if @types/grappling-hook exists or define basic type
@@ -33,15 +32,11 @@ import * as numeral from "numeral"; // @todo: Needs @types/numeral
 // --- Base Field & List Interfaces ---
 
 /** Represents the constructor for a Keystone Field Type (e.g., `Types.Text`). */
-interface KeystoneFieldTypeConstructor {
+interface FieldTypeConstructor {
 	/** Creates an instance of the field type. */
-	new (
-		list: KeystoneList,
-		path: string,
-		options: KeystoneFieldOptions
-	): KeystoneField;
+	new (list: List, path: string, options: FieldOptions): Field;
 	/** The prototype holds methods shared by field instances of this type. */
-	prototype: KeystoneField;
+	prototype: Field;
 	/** Canonical name of the field type (e.g., 'Text', 'Relationship'). Used internally. */
 	properName?: string;
 	/** Technical name (often JS class name, e.g., 'TextType'). Used for `list.fieldTypes`. */
@@ -49,14 +44,14 @@ interface KeystoneFieldTypeConstructor {
 }
 
 /** Options object used to define a field within a List. */
-interface KeystoneFieldOptions {
+interface FieldOptions {
 	/**
 	 * The field type constructor (e.g., `keystone.Field.Types.Text`)
 	 * or a native JS constructor (`String`, `Number`, `Boolean`, `Date`)
 	 * which will be mapped to a default Keystone type.
 	 */
 	type:
-		| KeystoneFieldTypeConstructor
+		| FieldTypeConstructor
 		| StringConstructor
 		| NumberConstructor
 		| BooleanConstructor
@@ -192,19 +187,19 @@ interface KeystoneFieldOptions {
 }
 
 /** Represents an object defining one or more fields, potentially nested. */
-type KeystoneFieldDefinition = {
+type FieldDefinition = {
 	[key: string]:
-		| KeystoneFieldOptions
-		| KeystoneFieldTypeConstructor
+		| FieldOptions
+		| FieldTypeConstructor
 		| StringConstructor
 		| NumberConstructor
 		| BooleanConstructor
 		| DateConstructor
-		| KeystoneFieldDefinition;
+		| FieldDefinition;
 };
 
 /** Represents an object defining a heading in the Admin UI form. */
-interface KeystoneHeadingDefinition {
+interface HeadingDefinition {
 	/** The text of the heading. */
 	heading: string;
 	/** Control heading visibility in the Admin UI based on other field values. */
@@ -213,9 +208,9 @@ interface KeystoneHeadingDefinition {
 }
 
 /** Base interface representing a Keystone Field instance within a List. */
-interface KeystoneField {
+interface Field {
 	/** Reference to the parent List instance. */
-	list: KeystoneList;
+	list: List;
 	/** The field's path (e.g., 'name', 'address.street'). */
 	path: string;
 	/** Internal Path object for handling nested paths. @internal @todo Define Path */
@@ -223,13 +218,13 @@ interface KeystoneField {
 	/** The field type name (e.g., 'text', 'relationship'). Set by the Field Type constructor. */
 	type: string;
 	/** The final, merged options for this field instance. */
-	options: KeystoneFieldOptions; // Should be overridden by specific field option types
+	options: FieldOptions; // Should be overridden by specific field option types
 	/** Display label for the field. */
 	label: string;
 	/** Description of the field type (e.g., 'Text', 'Boolean'). */
 	typeDescription: string;
 	/** Default options specific to the field type. @internal */
-	defaults?: Partial<KeystoneFieldOptions>;
+	defaults?: Partial<FieldOptions>;
 	/** The Mongoose schema definition for this field. */
 	schema: mongoose.SchemaDefinition[keyof mongoose.SchemaDefinition];
 
@@ -448,29 +443,29 @@ interface KeystoneField {
 }
 
 /** Represents an element in the Admin UI form structure. */
-interface KeystoneFieldUIElement {
+interface FieldUIElement {
 	type: "field";
-	field: KeystoneField;
+	field: Field;
 }
-interface KeystoneHeadingUIElement {
+interface HeadingUIElement {
 	type: "heading";
 	heading: string;
-	options: KeystoneHeadingDefinition | Record<string, any>;
+	options: HeadingDefinition | Record<string, any>;
 }
-interface KeystoneIndentUIElement {
+interface IndentUIElement {
 	type: "indent";
 }
-interface KeystoneOutdentUIElement {
+interface OutdentUIElement {
 	type: "outdent";
 }
-type KeystoneUIElement =
-	| KeystoneFieldUIElement
-	| KeystoneHeadingUIElement
-	| KeystoneIndentUIElement
-	| KeystoneOutdentUIElement;
+type UIElement =
+	| FieldUIElement
+	| HeadingUIElement
+	| IndentUIElement
+	| OutdentUIElement;
 
 /** Options for configuring a Keystone List. */
-interface KeystoneListOptions {
+interface ListOptions {
 	/**
 	 * Mongoose schema options applied to the underlying schema.
 	 * Pass options directly to the Mongoose schema.
@@ -526,7 +521,7 @@ interface KeystoneListOptions {
 	 * Inherit schema and options from another List instance.
 	 * The parent list's fields will be included in this list.
 	 */
-	inherits?: KeystoneList;
+	inherits?: List;
 	/**
 	 * Default number of items per page in the Admin UI list view.
 	 * Controls pagination in the list view.
@@ -556,7 +551,7 @@ interface KeystoneListOptions {
 	 * Map special list properties (name, createdBy, etc.) to field paths.
 	 * Used to customize which fields represent key functionality.
 	 */
-	map?: Partial<KeystoneListMappings>;
+	map?: Partial<ListMappings>;
 	/**
 	 * Plural label for the list (e.g., "Users").
 	 * Defaults based on the list key.
@@ -594,7 +589,7 @@ interface KeystoneListOptions {
 }
 
 /** Defines the mapping between special list properties and field paths. */
-interface KeystoneListMappings {
+interface ListMappings {
 	name: string | null;
 	createdBy: string | null;
 	createdOn: string | null;
@@ -608,7 +603,7 @@ interface KeystoneListMappings {
 /**
  * Filter options for Text field queries.
  */
-interface KeystoneTextFilter {
+interface TextFilter {
 	/**
 	 * Filter mode. Defaults to 'contains' if omitted.
 	 * - 'exactly': Exact string match
@@ -634,7 +629,7 @@ interface KeystoneTextFilter {
 /**
  * Options specific to Text fields.
  */
-interface KeystoneTextFieldOptions extends KeystoneFieldOptions {
+interface TextFieldOptions extends FieldOptions {
 	/** Minimum length allowed. Validates on save. */
 	min?: number;
 	/** Maximum length allowed. Validates on save. */
@@ -642,13 +637,13 @@ interface KeystoneTextFieldOptions extends KeystoneFieldOptions {
 	/** Render input using a monospace font in Admin UI. */
 	monospace?: boolean;
 	/** Ensure type is specifically Text or String. */
-	type: KeystoneTextTypeConstructor | StringConstructor;
+	type: TextTypeConstructor | StringConstructor;
 }
 
 /**
  * Interface for Text field instances.
  */
-interface KeystoneTextField extends KeystoneField {
+interface TextField extends Field {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Properties exposed to Admin UI (includes 'monospace'). */
@@ -656,7 +651,7 @@ interface KeystoneTextField extends KeystoneField {
 	/** Underscore methods added to documents (includes 'crop'). */
 	_underscoreMethods: string[];
 	/** Field-specific options. */
-	options: KeystoneTextFieldOptions;
+	options: TextFieldOptions;
 
 	/**
 	 * Validates input string length based on min/max options.
@@ -684,7 +679,7 @@ interface KeystoneTextField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneTextFilter): Record<string, any>;
+	addFilterToQuery(filter: TextFilter): Record<string, any>;
 
 	/**
 	 * Crops the field's string value from an item to the specified length.
@@ -706,13 +701,9 @@ interface KeystoneTextField extends KeystoneField {
 /**
  * Constructor for Text field type.
  */
-interface KeystoneTextTypeConstructor extends KeystoneFieldTypeConstructor {
-	new (
-		list: KeystoneList,
-		path: string,
-		options: KeystoneTextFieldOptions
-	): KeystoneTextField;
-	prototype: KeystoneTextField;
+interface TextTypeConstructor extends FieldTypeConstructor {
+	new (list: List, path: string, options: TextFieldOptions): TextField;
+	prototype: TextField;
 	properName: "Text";
 }
 
@@ -720,7 +711,7 @@ interface KeystoneTextTypeConstructor extends KeystoneFieldTypeConstructor {
 /**
  * Filter options for Number field queries.
  */
-interface KeystoneNumberFilter {
+interface NumberFilter {
 	/**
 	 * Filter mode.
 	 * - 'equals': Matches exact value or empty/null if value is empty.
@@ -747,7 +738,7 @@ interface KeystoneNumberFilter {
 /**
  * Options specific to Number fields.
  */
-interface KeystoneNumberFieldOptions extends KeystoneFieldOptions {
+interface NumberFieldOptions extends FieldOptions {
 	/**
 	 * Numeral.js format string (e.g., '0,0.00', '$0,0.00') or `false` to disable formatting.
 	 * See http://numeraljs.com/ for format options.
@@ -755,13 +746,13 @@ interface KeystoneNumberFieldOptions extends KeystoneFieldOptions {
 	 */
 	format?: string | false;
 	/** Ensure type is specifically Number. */
-	type: KeystoneNumberTypeConstructor | NumberConstructor;
+	type: NumberTypeConstructor | NumberConstructor;
 }
 
 /**
  * Interface for Number field instances.
  */
-interface KeystoneNumberField extends KeystoneField {
+interface NumberField extends Field {
 	/** The native JavaScript type constructor (Number). */
 	_nativeType: NumberConstructor;
 	/** Fixed size for the field in the Admin UI. */
@@ -769,7 +760,7 @@ interface KeystoneNumberField extends KeystoneField {
 	/** Underscore methods added to documents (includes 'format'). */
 	_underscoreMethods: string[];
 	/** Field-specific options. */
-	options: KeystoneNumberFieldOptions;
+	options: NumberFieldOptions;
 	/** The numeral.js format string to use, or false if formatting is disabled. */
 	formatString?: string | false;
 
@@ -816,7 +807,7 @@ interface KeystoneNumberField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneNumberFilter): Record<string, any>;
+	addFilterToQuery(filter: NumberFilter): Record<string, any>;
 
 	/**
 	 * Formats the field's numeric value using numeral.js.
@@ -831,13 +822,9 @@ interface KeystoneNumberField extends KeystoneField {
 /**
  * Constructor for Number field type.
  */
-interface KeystoneNumberTypeConstructor extends KeystoneFieldTypeConstructor {
-	new (
-		list: KeystoneList,
-		path: string,
-		options: KeystoneNumberFieldOptions
-	): KeystoneNumberField;
-	prototype: KeystoneNumberField;
+interface NumberTypeConstructor extends FieldTypeConstructor {
+	new (list: List, path: string, options: NumberFieldOptions): NumberField;
+	prototype: NumberField;
 	properName: "Number";
 }
 
@@ -845,7 +832,7 @@ interface KeystoneNumberTypeConstructor extends KeystoneFieldTypeConstructor {
 /**
  * Options specific to Textarea fields.
  */
-interface KeystoneTextareaFieldOptions extends KeystoneFieldOptions {
+interface TextareaFieldOptions extends FieldOptions {
 	/**
 	 * Height of the textarea in pixels.
 	 * Default: 90
@@ -856,13 +843,13 @@ interface KeystoneTextareaFieldOptions extends KeystoneFieldOptions {
 	/** Maximum length allowed. Validates on save. */
 	max?: number;
 	/** Ensure type is specifically Textarea. */
-	type: KeystoneTextareaTypeConstructor;
+	type: TextareaTypeConstructor;
 }
 
 /**
  * Interface for Textarea field instances.
  */
-interface KeystoneTextareaField extends KeystoneField {
+interface TextareaField extends Field {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Underscore methods added to documents (includes 'format', 'crop'). */
@@ -874,7 +861,7 @@ interface KeystoneTextareaField extends KeystoneField {
 	/** Properties exposed to Admin UI (includes 'height', 'multiline'). */
 	_properties: string[];
 	/** Field-specific options. */
-	options: KeystoneTextareaFieldOptions;
+	options: TextareaFieldOptions;
 
 	/**
 	 * Validates input string length based on min/max options.
@@ -903,7 +890,7 @@ interface KeystoneTextareaField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneTextFilter): Record<string, any>;
+	addFilterToQuery(filter: TextFilter): Record<string, any>;
 
 	/**
 	 * Crops the field's string value from an item to the specified length.
@@ -934,13 +921,9 @@ interface KeystoneTextareaField extends KeystoneField {
 /**
  * Constructor for Textarea field type.
  */
-interface KeystoneTextareaTypeConstructor extends KeystoneFieldTypeConstructor {
-	new (
-		list: KeystoneList,
-		path: string,
-		options: KeystoneTextareaFieldOptions
-	): KeystoneTextareaField;
-	prototype: KeystoneTextareaField;
+interface TextareaTypeConstructor extends FieldTypeConstructor {
+	new (list: List, path: string, options: TextareaFieldOptions): TextareaField;
+	prototype: TextareaField;
 	properName: "Textarea";
 }
 
@@ -948,7 +931,7 @@ interface KeystoneTextareaTypeConstructor extends KeystoneFieldTypeConstructor {
 /**
  * Filter options for Boolean field queries.
  */
-interface KeystoneBooleanFilter {
+interface BooleanFilter {
 	/**
 	 * If truthy or 'true', filters for `true` values.
 	 * Otherwise filters for `false` or `null`/`undefined` values.
@@ -959,7 +942,7 @@ interface KeystoneBooleanFilter {
 /**
  * Options specific to Boolean fields.
  */
-interface KeystoneBooleanFieldOptions extends KeystoneFieldOptions {
+interface BooleanFieldOptions extends FieldOptions {
 	/**
 	 * Indent the checkbox in the Admin UI form.
 	 * Default: false
@@ -971,13 +954,13 @@ interface KeystoneBooleanFieldOptions extends KeystoneFieldOptions {
 	 */
 	default?: boolean;
 	/** Ensure type is specifically Boolean. */
-	type: KeystoneBooleanTypeConstructor | BooleanConstructor;
+	type: BooleanTypeConstructor | BooleanConstructor;
 }
 
 /**
  * Interface for Boolean field instances.
  */
-interface KeystoneBooleanField extends KeystoneField {
+interface BooleanField extends Field {
 	/** The native JavaScript type constructor (Boolean). */
 	_nativeType: BooleanConstructor;
 	/** Properties exposed to Admin UI (includes 'indent'). */
@@ -987,7 +970,7 @@ interface KeystoneBooleanField extends KeystoneField {
 	/** Whether the field is indented in the Admin UI. */
 	indent: boolean;
 	/** Field-specific options. */
-	options: KeystoneBooleanFieldOptions;
+	options: BooleanFieldOptions;
 	/** Default values for the Boolean type. */
 	defaults: { default: boolean };
 
@@ -1033,19 +1016,15 @@ interface KeystoneBooleanField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneBooleanFilter): Record<string, any>;
+	addFilterToQuery(filter: BooleanFilter): Record<string, any>;
 }
 
 /**
  * Constructor for Boolean field type.
  */
-interface KeystoneBooleanTypeConstructor extends KeystoneFieldTypeConstructor {
-	new (
-		list: KeystoneList,
-		path: string,
-		options: KeystoneBooleanFieldOptions
-	): KeystoneBooleanField;
-	prototype: KeystoneBooleanField;
+interface BooleanTypeConstructor extends FieldTypeConstructor {
+	new (list: List, path: string, options: BooleanFieldOptions): BooleanField;
+	prototype: BooleanField;
 	properName: "Boolean";
 }
 
@@ -1053,7 +1032,7 @@ interface KeystoneBooleanTypeConstructor extends KeystoneFieldTypeConstructor {
 /**
  * Represents a selectable option for Select fields.
  */
-interface KeystoneSelectOption {
+interface SelectOption {
 	/** The raw value stored in the database. */
 	value: string | number;
 	/** The human-readable label displayed in the UI. */
@@ -1065,14 +1044,14 @@ interface KeystoneSelectOption {
 /**
  * Options specific to Select fields.
  */
-interface KeystoneSelectFieldOptions extends KeystoneFieldOptions {
+interface SelectFieldOptions extends FieldOptions {
 	/**
 	 * Defines the available choices. Can be:
 	 * - A comma-separated string (e.g., 'draft,published,archived').
 	 * - An array of strings or numbers (e.g., ['draft', 'published'], [1, 2, 3]).
 	 * - An array of objects `{ value: string | number, label: string }`.
 	 */
-	options: string | Array<string | number | KeystoneSelectOption>;
+	options: string | Array<string | number | SelectOption>;
 	/**
 	 * Store the selected value as a Number instead of a String.
 	 * Default: false
@@ -1109,13 +1088,13 @@ interface KeystoneSelectFieldOptions extends KeystoneFieldOptions {
 	 */
 	optionsMapPath?: string;
 	/** Ensure type is specifically Select. */
-	type: KeystoneSelectTypeConstructor;
+	type: SelectTypeConstructor;
 }
 
 /**
  * Filter options for Select field queries.
  */
-interface KeystoneSelectFilter {
+interface SelectFilter {
 	/**
 	 * The value(s) to filter by.
 	 * - Single value: Matches documents with exactly this value.
@@ -1132,7 +1111,7 @@ interface KeystoneSelectFilter {
 /**
  * Interface for Select field instances.
  */
-interface KeystoneSelectField extends KeystoneField {
+interface SelectField extends Field {
 	/** Admin UI rendering style ('select' or 'radio'). */
 	ui: string;
 	/** Whether the value is stored as a Number. */
@@ -1144,17 +1123,17 @@ interface KeystoneSelectField extends KeystoneField {
 	/** Properties exposed to Admin UI (includes 'ops', 'numeric'). */
 	_properties: string[];
 	/** Array of processed option objects with value and label properties. */
-	ops: KeystoneSelectOption[];
+	ops: SelectOption[];
 	/** Whether an empty option is included in the UI. */
 	emptyOption: boolean;
 	/** Map of value to option object. */
-	map: Record<string | number, KeystoneSelectOption>;
+	map: Record<string | number, SelectOption>;
 	/** Map of value to option label string. */
 	labels: Record<string | number, string>;
 	/** Array of valid enum values for the schema path. */
 	values: Array<string | number>;
 	/** Field-specific options. */
-	options: KeystoneSelectFieldOptions;
+	options: SelectFieldOptions;
 	/** Paths for virtual properties added to the schema. */
 	paths: {
 		/** Path to the virtual property returning the full selected option object. */
@@ -1182,17 +1161,13 @@ interface KeystoneSelectField extends KeystoneField {
 	 * @param _default Default value if the option is not found or doesn't have the property.
 	 * @returns The value of the property from the selected option object, or the default value.
 	 */
-	pluck(
-		item: any,
-		property: keyof KeystoneSelectOption | string,
-		_default?: any
-	): any;
+	pluck(item: any, property: keyof SelectOption | string, _default?: any): any;
 
 	/** Returns a shallow clone of the processed `ops` array. */
-	cloneOps(): KeystoneSelectOption[];
+	cloneOps(): SelectOption[];
 
 	/** Returns a shallow clone of the value-to-option `map` object. */
-	cloneMap(): Record<string | number, KeystoneSelectOption>;
+	cloneMap(): Record<string | number, SelectOption>;
 
 	/**
 	 * Adds select-specific filtering logic to a Mongoose query.
@@ -1200,7 +1175,7 @@ interface KeystoneSelectField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneSelectFilter): Record<string, any>;
+	addFilterToQuery(filter: SelectFilter): Record<string, any>;
 
 	/**
 	 * Validates that the input value is one of the predefined options or empty/null/undefined.
@@ -1243,13 +1218,9 @@ interface KeystoneSelectField extends KeystoneField {
 /**
  * Constructor for Select field type.
  */
-interface KeystoneSelectTypeConstructor extends KeystoneFieldTypeConstructor {
-	new (
-		list: KeystoneList,
-		path: string,
-		options: KeystoneSelectFieldOptions
-	): KeystoneSelectField;
-	prototype: KeystoneSelectField;
+interface SelectTypeConstructor extends FieldTypeConstructor {
+	new (list: List, path: string, options: SelectFieldOptions): SelectField;
+	prototype: SelectField;
 	properName: "Select";
 }
 
@@ -1257,7 +1228,7 @@ interface KeystoneSelectTypeConstructor extends KeystoneFieldTypeConstructor {
 /**
  * Filter options for Date and DateTime field queries.
  */
-interface KeystoneDateFilter {
+interface DateFilter {
 	/**
 	 * Filter mode.
 	 * - 'between': Matches dates within the range specified by `after` and `before`.
@@ -1282,7 +1253,7 @@ interface KeystoneDateFilter {
 /**
  * Options specific to Date fields.
  */
-interface KeystoneDateFieldOptions extends KeystoneFieldOptions {
+interface DateFieldOptions extends FieldOptions {
 	/**
 	 * Moment.js format string used for output formatting, or `false` to disable formatting.
 	 * Default: 'Do MMM YYYY'
@@ -1315,13 +1286,13 @@ interface KeystoneDateFieldOptions extends KeystoneFieldOptions {
 	 */
 	timezoneUtcOffsetMinutes?: number;
 	/** Ensure type is Date. */
-	type: KeystoneDateTypeConstructor | DateConstructor;
+	type: DateTypeConstructor | DateConstructor;
 }
 
 /**
  * Options specific to DateTime fields.
  */
-interface KeystoneDateTimeFieldOptions extends KeystoneFieldOptions {
+interface DateTimeFieldOptions extends FieldOptions {
 	/**
 	 * Moment.js format string for output, or `false` to disable formatting.
 	 * Default: 'YYYY-MM-DD h:mm:ss a'
@@ -1338,13 +1309,13 @@ interface KeystoneDateTimeFieldOptions extends KeystoneFieldOptions {
 	 */
 	utc?: boolean;
 	/** Ensure type is Datetime or Date. */
-	type: KeystoneDateTimeTypeConstructor | DateConstructor;
+	type: DateTimeTypeConstructor | DateConstructor;
 }
 
 /**
  * Interface for Date field instances.
  */
-interface KeystoneDateField extends KeystoneField {
+interface DateField extends Field {
 	/** The native JavaScript type constructor (Date). */
 	_nativeType: DateConstructor;
 	/** Underscore methods added to documents (includes 'format', 'moment', 'parse'). */
@@ -1366,7 +1337,7 @@ interface KeystoneDateField extends KeystoneField {
 	/** UTC offset used for potential date correction. */
 	timezoneUtcOffsetMinutes: number;
 	/** Field-specific options. */
-	options: KeystoneDateFieldOptions;
+	options: DateFieldOptions;
 
 	/**
 	 * Validates that required input has been provided (presence of a date value).
@@ -1387,7 +1358,7 @@ interface KeystoneDateField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneDateFilter): Record<string, any>;
+	addFilterToQuery(filter: DateFilter): Record<string, any>;
 
 	/**
 	 * Formats the field's date value using moment.js.
@@ -1457,7 +1428,7 @@ interface KeystoneDateField extends KeystoneField {
 /**
  * Interface for DateTime field instances.
  */
-interface KeystoneDateTimeField extends KeystoneField {
+interface DateTimeField extends Field {
 	/** The native JavaScript type constructor (Date). */
 	_nativeType: DateConstructor;
 	/** Underscore methods added to documents (borrowed from DateType). */
@@ -1475,7 +1446,7 @@ interface KeystoneDateTimeField extends KeystoneField {
 	/** Whether to treat the date/time as UTC. */
 	isUTC: boolean;
 	/** Field-specific options. */
-	options: KeystoneDateTimeFieldOptions;
+	options: DateTimeFieldOptions;
 	/** Paths for the sub-fields used in the Admin UI. */
 	paths: {
 		/** Path for the date part input. */
@@ -1523,7 +1494,7 @@ interface KeystoneDateTimeField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery: (filter: KeystoneDateFilter) => Record<string, any>;
+	addFilterToQuery: (filter: DateFilter) => Record<string, any>;
 
 	/**
 	 * Gets the combined input value from date, time, and tzOffset fields in the data object,
@@ -1574,26 +1545,18 @@ interface KeystoneDateTimeField extends KeystoneField {
 /**
  * Constructor for Date field type.
  */
-interface KeystoneDateTypeConstructor extends KeystoneFieldTypeConstructor {
-	new (
-		list: KeystoneList,
-		path: string,
-		options: KeystoneDateFieldOptions
-	): KeystoneDateField;
-	prototype: KeystoneDateField;
+interface DateTypeConstructor extends FieldTypeConstructor {
+	new (list: List, path: string, options: DateFieldOptions): DateField;
+	prototype: DateField;
 	properName: "Date";
 }
 
 /**
  * Constructor for DateTime field type.
  */
-interface KeystoneDateTimeTypeConstructor extends KeystoneFieldTypeConstructor {
-	new (
-		list: KeystoneList,
-		path: string,
-		options: KeystoneDateTimeFieldOptions
-	): KeystoneDateTimeField;
-	prototype: KeystoneDateTimeField;
+interface DateTimeTypeConstructor extends FieldTypeConstructor {
+	new (list: List, path: string, options: DateTimeFieldOptions): DateTimeField;
+	prototype: DateTimeField;
 	properName: "Datetime";
 }
 
@@ -1601,7 +1564,7 @@ interface KeystoneDateTimeTypeConstructor extends KeystoneFieldTypeConstructor {
 /**
  * Options specific to Html fields.
  */
-interface KeystoneHtmlFieldOptions extends KeystoneFieldOptions {
+interface HtmlFieldOptions extends FieldOptions {
 	/**
 	 * Enable TinyMCE WYSIWYG editor instead of simple textarea.
 	 * Default: false
@@ -1617,13 +1580,13 @@ interface KeystoneHtmlFieldOptions extends KeystoneFieldOptions {
 	/** Maximum length allowed. Validates on save. */
 	max?: number;
 	/** Ensure type is Html. */
-	type: KeystoneHtmlTypeConstructor;
+	type: HtmlTypeConstructor;
 }
 
 /**
  * Interface for Html field instances.
  */
-interface KeystoneHtmlField extends KeystoneField {
+interface HtmlField extends Field {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Default size for the field in the Admin UI. */
@@ -1635,7 +1598,7 @@ interface KeystoneHtmlField extends KeystoneField {
 	/** Properties exposed to Admin UI. */
 	_properties: string[];
 	/** Field-specific options. */
-	options: KeystoneHtmlFieldOptions;
+	options: HtmlFieldOptions;
 
 	/**
 	 * Validates input HTML length based on min/max options.
@@ -1664,37 +1627,33 @@ interface KeystoneHtmlField extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KeystoneTextFilter): Record<string, any>;
+	addFilterToQuery(filter: TextFilter): Record<string, any>;
 }
 
 /**
  * Constructor for Html field type.
  */
-interface KeystoneHtmlTypeConstructor extends KeystoneFieldTypeConstructor {
-	new (
-		list: KeystoneList,
-		path: string,
-		options: KeystoneHtmlFieldOptions
-	): KeystoneHtmlField;
-	prototype: KeystoneHtmlField;
+interface HtmlTypeConstructor extends FieldTypeConstructor {
+	new (list: List, path: string, options: HtmlFieldOptions): HtmlField;
+	prototype: HtmlField;
 	properName: "Html";
 }
 
 // --- Keystone & List Classes ---
 
 /** Represents a Keystone Data List. */
-declare class KeystoneList {
+declare class List {
 	/**
 	 * Creates a new List instance.
 	 * @param key The unique key for the list (e.g., 'User', 'PostCategory'). Used to generate paths and labels.
 	 * @param options Configuration options for the list.
 	 */
-	constructor(key: string, options?: KeystoneListOptions);
+	constructor(key: string, options?: ListOptions);
 
 	/** Reference to the Keystone instance. */
 	keystone: Keystone;
 	/** Merged configuration options for the list. */
-	options: KeystoneListOptions;
+	options: ListOptions;
 	/** The unique key for the list. Used as identifier and to generate labels. */
 	key: string;
 	/** URL path for the list in the Admin UI (e.g., 'users'). */
@@ -1702,45 +1661,37 @@ declare class KeystoneList {
 	/** The Mongoose schema associated with this list. */
 	schema: mongoose.Schema;
 	/** Array of raw field/heading definitions added to the schema. */
-	schemaFields: Array<
-		string | KeystoneFieldDefinition | KeystoneHeadingDefinition
-	>;
+	schemaFields: Array<string | FieldDefinition | HeadingDefinition>;
 	/** Ordered array of UI elements (fields, headings, indents) for Admin UI forms. */
-	uiElements: KeystoneUIElement[];
+	uiElements: UIElement[];
 	/** Map of custom methods added to the Mongoose documents via `list.underscoreMethod()`. */
 	underscoreMethods: Record<string, Function>;
 	/** Map of Field instances associated with the list, keyed by path. */
-	fields: Record<string, KeystoneField>; // Holds instances of Field or its subclasses
+	fields: Record<string, Field>; // Holds instances of Field or its subclasses
 	/** Array of all Field instances associated with the list. */
-	fieldsArray: KeystoneField[];
+	fieldsArray: Field[];
 	/** Map of field type constructors used in this list. */
 	fieldTypes: Record<string, string | boolean>; // Map of Type JS name -> properName or true
 	/** Array of all relationship Field instances in this list. */
-	relationshipFields: KeystoneField[]; // @todo Use RelationshipField[] type when defined
+	relationshipFields: Field[]; // @todo Use RelationshipField[] type when defined
 	/** Map of relationship definitions defined on this list. */
 	relationships: Record<
 		string,
-		{
-			ref: string;
-			refPath: string;
-			path: string;
-			list: KeystoneList;
-			field: KeystoneField;
-		}
+		{ ref: string; refPath: string; path: string; list: List; field: Field }
 	>; // @todo Refine RelationshipDefinition
 
 	/** Field path mapping for special list properties (name, timestamps, etc.). */
-	mappings: KeystoneListMappings;
+	mappings: ListMappings;
 	/** The compiled Mongoose Model for this list. Available after `list.register()`. */
 	model: mongoose.Model<any>; // @todo Define Mongoose Document type
 
 	// Internal caches
 	/** @internal Cache for expanded search fields. */
-	_searchFields?: KeystoneField[];
+	_searchFields?: Field[];
 	/** @internal Cache for expanded default columns. */
 	_defaultColumns?: Array<{
 		path: string;
-		field?: KeystoneField;
+		field?: Field;
 		type?: string;
 		label?: string;
 		options?: any;
@@ -1756,7 +1707,7 @@ declare class KeystoneList {
 	/** The path of the field used as the item name/title. */
 	readonly namePath: string;
 	/** The Field instance used as the item name/title. */
-	readonly nameField: KeystoneField | undefined;
+	readonly nameField: Field | undefined;
 	/** Whether the name field is a virtual field. */
 	readonly nameIsVirtual: boolean;
 	/** Whether the name field type is compatible as an Admin UI form header. */
@@ -1764,7 +1715,7 @@ declare class KeystoneList {
 	/** Whether the name field is available on the create form. */
 	readonly nameIsInitial: boolean;
 	/** Array of fields marked as initial (shown on the create form). */
-	readonly initialFields: KeystoneField[];
+	readonly initialFields: Field[];
 
 	// --- Getter/Setters ---
 	/** Gets or sets the fields used for Admin UI searching. Updates internal cache. */
@@ -1794,16 +1745,14 @@ declare class KeystoneList {
 	 *   { email: { type: Types.Email }, phone: { type: Types.Text } }
 	 * );
 	 */
-	add(
-		...defs: Array<string | KeystoneFieldDefinition | KeystoneHeadingDefinition>
-	): KeystoneList;
+	add(...defs: Array<string | FieldDefinition | HeadingDefinition>): List;
 
 	/**
 	 * Retrieves a Field instance by its path, or creates a new field if options are provided.
 	 * @param path The field path.
 	 * @returns The Field instance or undefined if not found.
 	 */
-	field(path: string): KeystoneField | undefined;
+	field(path: string): Field | undefined;
 
 	/**
 	 * Creates a new field with the specified options.
@@ -1811,7 +1760,7 @@ declare class KeystoneList {
 	 * @param options Configuration options for the field.
 	 * @returns The newly created Field instance.
 	 */
-	field(path: string, options: KeystoneFieldOptions): KeystoneField;
+	field(path: string, options: FieldOptions): Field;
 
 	/**
 	 * Creates a new field with the specified type constructor.
@@ -1822,12 +1771,12 @@ declare class KeystoneList {
 	field(
 		path: string,
 		constructor:
-			| KeystoneFieldTypeConstructor
+			| FieldTypeConstructor
 			| StringConstructor
 			| NumberConstructor
 			| BooleanConstructor
 			| DateConstructor
-	): KeystoneField;
+	): Field;
 
 	/**
 	 * Adds filters to a Mongoose query based on filter conditions.
@@ -1852,7 +1801,7 @@ declare class KeystoneList {
 	 * @param options Optionally specify which fields to map or exclude.
 	 * @returns The List instance for chaining.
 	 */
-	automap: (options?: Record<string, boolean>) => KeystoneList;
+	automap: (options?: Record<string, boolean>) => List;
 
 	/**
 	 * Generates API response data for an item, optionally expanding relationship fields.
@@ -1874,7 +1823,7 @@ declare class KeystoneList {
 	 */
 	expandColumns: (cols: string | string[]) => Array<{
 		path: string;
-		field?: KeystoneField;
+		field?: Field;
 		type?: string;
 		label?: string;
 		options?: any;
@@ -1885,7 +1834,7 @@ declare class KeystoneList {
 	 * @param paths Field paths as string (comma-separated) or array.
 	 * @returns Array of Field instances.
 	 */
-	expandPaths: (paths: string | string[]) => KeystoneField[];
+	expandPaths: (paths: string | string[]) => Field[];
 
 	/**
 	 * Expands a sort string into a MongoDB sort object.
@@ -1899,7 +1848,7 @@ declare class KeystoneList {
 	 * @param key Option key to retrieve.
 	 * @returns Option value or undefined.
 	 */
-	get: (key: keyof KeystoneListOptions | string) => any;
+	get: (key: keyof ListOptions | string) => any;
 
 	/**
 	 * Sets a list option value.
@@ -1907,10 +1856,7 @@ declare class KeystoneList {
 	 * @param value Value to set.
 	 * @returns The updated options object.
 	 */
-	set: (
-		key: keyof KeystoneListOptions | string,
-		value: any
-	) => KeystoneListOptions;
+	set: (key: keyof ListOptions | string, value: any) => ListOptions;
 
 	/**
 	 * Generates the Admin UI URL for the list or a specific item.
@@ -2019,7 +1965,7 @@ declare class KeystoneList {
 	 * @param path Special property name (e.g., 'name', 'createdAt').
 	 * @param mappedPath Field path to map to.
 	 */
-	map: (path: keyof KeystoneListMappings | string, mappedPath: string) => void;
+	map: (path: keyof ListMappings | string, mappedPath: string) => void;
 
 	/**
 	 * Paginates a query with filters.
@@ -2064,7 +2010,7 @@ declare class KeystoneList {
 	 * Must be called after adding all fields and before using the list's model.
 	 * @returns The List instance for chaining.
 	 */
-	register: () => KeystoneList;
+	register: () => List;
 
 	/**
 	 * Defines a relationship to another list.
@@ -2085,7 +2031,7 @@ declare class KeystoneList {
 	 */
 	selectColumns: (
 		query: any,
-		columns: Array<{ path: string; field?: KeystoneField }>
+		columns: Array<{ path: string; field?: Field }>
 	) => void;
 
 	/**
@@ -2108,7 +2054,7 @@ declare class KeystoneList {
 	 * @param fn Method implementation.
 	 * @returns The List instance for chaining.
 	 */
-	underscoreMethod: (path: string, fn: Function) => KeystoneList;
+	underscoreMethod: (path: string, fn: Function) => List;
 
 	/**
 	 * Builds MongoDB text index for this list if configured.
@@ -2320,7 +2266,7 @@ interface KeystoneOptions {
 	 * Enable authentication.
 	 * true requires 'user model' and 'cookie secret'.
 	 */
-	auth?: boolean | KeystoneList | string;
+	auth?: boolean | List | string;
 	/**
 	 * Key of the list to use for authentication.
 	 * Default: 'User'
@@ -2330,7 +2276,7 @@ interface KeystoneOptions {
 	 * Custom Express app instance.
 	 * Use if you need to customize Express before Keystone initialization.
 	 */
-	app?: Application;
+	app?: express.Express;
 	/**
 	 * Express session store instance.
 	 * Default: Connects-Mongo based on MongoDB connection.
@@ -2344,40 +2290,40 @@ interface KeystoneOptions {
 	/**
 	 * Middleware executed before static assets handling.
 	 */
-	"pre:static"?: RequestHandler | RequestHandler[];
+	"pre:static"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before body parser.
 	 */
-	"pre:bodyparser"?: RequestHandler | RequestHandler[];
+	"pre:bodyparser"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before session handling.
 	 */
-	"pre:session"?: RequestHandler | RequestHandler[];
+	"pre:session"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before logger.
 	 */
-	"pre:logger"?: RequestHandler | RequestHandler[];
+	"pre:logger"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before Admin UI.
 	 */
-	"pre:admin"?: RequestHandler | RequestHandler[];
+	"pre:admin"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before Admin UI routes.
 	 */
-	"pre:adminroutes"?: RequestHandler | RequestHandler[];
+	"pre:adminroutes"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before application routes.
 	 */
-	"pre:routes"?: RequestHandler | RequestHandler[];
+	"pre:routes"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before rendering views.
 	 */
-	"pre:render"?: RequestHandler | RequestHandler[];
+	"pre:render"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Custom route handler function.
 	 * @param app The Express application instance.
 	 */
-	routes?: (app: Application) => void;
+	routes?: (app: express.Application) => void;
 	/**
 	 * Trust proxy headers (X-Forwarded-For, etc).
 	 * Default: true
@@ -2434,7 +2380,7 @@ declare class Keystone {
 	addHook: Hook["addHook"];
 
 	/** Map of all registered List instances, keyed by list key. */
-	lists: Record<string, KeystoneList>;
+	lists: Record<string, List>;
 	/** Map of registered field types. @todo Replace 'any' with defined FieldType constructor. */
 	fieldTypes: Record<string, any>;
 	/** Map of paths for custom view templates. @todo Define structure. */
@@ -2461,7 +2407,7 @@ declare class Keystone {
 	};
 
 	/** The Express application instance (available after init). */
-	app?: Application;
+	app?: express.Express;
 	/** Navigation structure for the Admin UI (available after initNav). */
 	nav?: {
 		sections: Array<{
@@ -2550,7 +2496,7 @@ declare class Keystone {
 	 * Retrieves lists that aren't part of the Admin UI navigation.
 	 * @returns Array of orphaned List instances.
 	 */
-	getOrphanedLists: () => KeystoneList[];
+	getOrphanedLists: () => List[];
 
 	/**
 	 * Creates an importer function for a specific module root.
@@ -2594,7 +2540,7 @@ declare class Keystone {
 	 * @param key List key.
 	 * @returns The List instance or undefined if not found.
 	 */
-	list: (key: string) => KeystoneList | undefined;
+	list: (key: string) => List | undefined;
 
 	/**
 	 * Opens a connection to the MongoDB database.
@@ -2675,42 +2621,42 @@ declare class Keystone {
 	/** Email sending utilities. */
 	Email: any;
 	/** Field type base constructor and type collection. */
-	Field: KeystoneFieldTypeConstructor & {
+	Field: FieldTypeConstructor & {
 		Types: {
 			/** Standard text field. */
-			Text?: KeystoneTextTypeConstructor;
+			Text?: TextTypeConstructor;
 			/** Numeric field with formatting options. */
-			Number?: KeystoneNumberTypeConstructor;
+			Number?: NumberTypeConstructor;
 			/** Multi-line text field. */
-			Textarea?: KeystoneTextareaTypeConstructor;
+			Textarea?: TextareaTypeConstructor;
 			/** Boolean/checkbox field. */
-			Boolean?: KeystoneBooleanTypeConstructor;
+			Boolean?: BooleanTypeConstructor;
 			/** Single-select dropdown/radio field. */
-			Select?: KeystoneSelectTypeConstructor;
+			Select?: SelectTypeConstructor;
 			/** Combined date and time field. */
-			Datetime?: KeystoneDateTimeTypeConstructor;
+			Datetime?: DateTimeTypeConstructor;
 			/** Date-only field. */
-			Date?: KeystoneDateTypeConstructor;
+			Date?: DateTypeConstructor;
 			/** Rich text WYSIWYG editor field. */
-			Html?: KeystoneHtmlTypeConstructor;
+			Html?: HtmlTypeConstructor;
 			/** Relationship to other list items. */
-			Relationship?: KeystoneFieldTypeConstructor;
+			Relationship?: FieldTypeConstructor;
 			/** Name field (first/last name). */
-			Name?: KeystoneFieldTypeConstructor;
+			Name?: FieldTypeConstructor;
 			/** Email field with validation. */
-			Email?: KeystoneFieldTypeConstructor;
+			Email?: FieldTypeConstructor;
 			/** Password field with encryption. */
-			Password?: KeystoneFieldTypeConstructor;
+			Password?: FieldTypeConstructor;
 			/** Currency field with formatting. */
-			Money?: KeystoneFieldTypeConstructor;
+			Money?: FieldTypeConstructor;
 			// ... other core types ...
-			[key: string]: KeystoneFieldTypeConstructor | undefined;
+			[key: string]: FieldTypeConstructor | undefined;
 		};
 	};
 	/** Reference to the Keystone constructor. */
 	Keystone: typeof Keystone;
 	/** Reference to the List constructor. */
-	List: typeof KeystoneList;
+	List: typeof List;
 	/** Storage adapters for file uploads. */
 	Storage: any;
 	/** Template rendering utilities. */
