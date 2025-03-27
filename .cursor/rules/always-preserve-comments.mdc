@@ -83,77 +83,32 @@ interface KeystoneField {
 
 ### 4. TODO Comments
 
-The only exception to the preservation rule is for `@todo` comments that have been completed:
-
+The only exception to the preservation rule is for `@todo` comments that have been completed, that must be replaced by a corresponding `@done`:
 ```typescript
 // ✅ CORRECT
 // Before: @todo Implement password hashing
-// After: Password hashing implemented using bcrypt
+// After: @done Password hashing implemented using bcrypt
 
 // ❌ INCORRECT
 // Keeping outdated @todo comments
 // @todo Implement password hashing (when it's already done)
 ```
 
-When a TODO has known revisions or improvements needed, replace the completed TODO with a new TODO that describes the next iteration:
+When a TODO has known revisions or improvements needed:
+1. Replace the original TODO with @done to maintain history
+2. Include specific details about what needs to be improved
+3. Reference any relevant issues or discussions that led to the new TODO
 
 ```typescript
 // ✅ CORRECT
 // Before: @todo Implement basic password hashing
-// After: Basic password hashing implemented using bcrypt
+// After: @done Basic password hashing implemented using bcrypt
 // @todo Enhance password hashing with salt rounds and pepper for additional security
 
 // ❌ INCORRECT
 // Removing completed TODO without documenting next steps
 // Before: @todo Implement basic password hashing
 // After: Basic password hashing implemented using bcrypt
-```
-
-When replacing TODOs with new ones:
-1. Keep the original TODO in a comment above the new one to maintain history
-2. Use a clear prefix like "Next iteration:" or "Future improvement:" to distinguish new TODOs
-3. Include specific details about what needs to be improved
-4. Reference any relevant issues or discussions that led to the new TODO
-
-```typescript
-// ✅ CORRECT
-// Original: @todo Implement basic password hashing
-// Next iteration: @todo Add salt rounds (minimum 12) and pepper for additional security
-// See: Security team review #1234
-
-// ❌ INCORRECT
-// Removing history and not providing context
-// @todo Improve password security
-```
-When a TODO has known revisions or improvements needed, replace the completed TODO with a new TODO that describes the next iteration:
-
-```typescript
-// ✅ CORRECT
-// Before: @todo Implement basic password hashing
-// After: Basic password hashing implemented using bcrypt
-// @todo Enhance password hashing with salt rounds and pepper for additional security
-
-// ❌ INCORRECT
-// Removing completed TODO without documenting next steps
-// Before: @todo Implement basic password hashing
-// After: Basic password hashing implemented using bcrypt
-```
-
-When replacing TODOs with new ones:
-1. Keep the original TODO in a comment above the new one to maintain history
-2. Use a clear prefix like "Next iteration:" or "Future improvement:" to distinguish new TODOs
-3. Include specific details about what needs to be improved
-4. Reference any relevant issues or discussions that led to the new TODO
-
-```typescript
-// ✅ CORRECT
-// Original: @todo Implement basic password hashing
-// Next iteration: @todo Add salt rounds (minimum 12) and pepper for additional security
-// See: Security team review #1234
-
-// ❌ INCORRECT
-// Removing history and not providing context
-// @todo Improve password security
 ```
 
 ### 5. Documentation Comments
