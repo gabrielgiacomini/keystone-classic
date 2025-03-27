@@ -1890,7 +1890,8 @@ export interface KeystoneHtmlField extends Omit<KeystoneField, "options"> {
 	/** Height of the editor in pixels. */
 	height: number;
 	/** Properties exposed to Admin UI (includes 'wysiwyg', 'height'). */
-	_properties: ["wysiwyg", "height"];
+	//CHECK LATER _properties: Array<"wysiwyg" | "height">;
+	_properties: string[];
 	/** Field-specific options. */
 	options: KeystoneHtmlFieldOptions;
 
@@ -3934,7 +3935,7 @@ export interface KeystoneEmailTypeConstructor
  */
 
 /**
- * Filter pAdminUirocFieldReactessing
+ * Filter pAdminUiFieldReactessing
  * @see ./lib/list/processFilters.js
  * @todo Define signature from lib/list/processFilters.js
  *
@@ -5509,19 +5510,17 @@ export interface KeystoneDateField extends Omit<KeystoneField, "options"> {
 	/** The native JavaScript type constructor (Date). */
 	_nativeType: DateConstructor;
 	/** Underscore methods added to documents (includes 'format', 'moment', 'parse'). */
-	_underscoreMethods: ["format", "moment", "parse"];
+	// _underscoreMethods: Array<"format" | "moment" | "parse">;
+	_underscoreMethods: string[];
 	/** Fixed size for the field in the Admin UI. */
 	_fixedSize: "medium";
 	/** Properties exposed to Admin UI (includes 'formatString', 'yearRange', 'isUTC', 'inputFormat', 'todayButton'). */
-	_properties: [
-		"formatString",
-		"yearRange",
-		"isUTC",
-		"inputFormat",
-		"todayButton"
-	];
+	//CHECK LATER _properties: Array<
+	//CHECK LATER 	"formatString" | "yearRange" | "isUTC" | "inputFormat" | "todayButton"
+	//CHECK LATER >;
+	_properties: string[];
 	/** Moment.js format string for parsing input. */
-	parseFormatString: string;
+	parseFormatString: string | string[];
 	/** Moment.js format string for output, or false to disable. */
 	formatString?: string | false;
 	/** Year range option for date picker. */
