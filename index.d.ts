@@ -6,12 +6,20 @@
 // fields/types/textarea/TextareaType.js, fields/types/boolean/BooleanType.js, fields/types/select/SelectType.js,
 // fields/types/datetime/DateTimeType.js, fields/types/date/DateType.js, fields/types/html/HtmlType.js
 
-import express from "express";
-import { Application, RequestHandler } from "express";
+import {
+	Express,
+	Request,
+	Response,
+	NextFunction,
+	Application,
+	RequestHandler,
+} from "express";
 import * as mongoose from "mongoose";
 import * as moment from "moment"; // Requires @types/moment
 import { Hook } from "grappling-hook"; // @todo: Check if @types/grappling-hook exists or define basic type
 import * as numeral from "numeral"; // @todo: Needs @types/numeral
+import type RequestHandler from "express-serve-static-core";
+import type Application from "express-serve-static-core";
 
 // --- Dependencies & Placeholders ---
 // import * as utils from 'keystone-utils'; // @todo Get/Define types for keystone-utils
@@ -2330,7 +2338,7 @@ interface KeystoneOptions {
 	 * Custom Express app instance.
 	 * Use if you need to customize Express before Keystone initialization.
 	 */
-	app?: Application;
+	app?: Express;
 	/**
 	 * Express session store instance.
 	 * Default: Connects-Mongo based on MongoDB connection.
@@ -2448,7 +2456,7 @@ declare class Keystone {
 	>;
 
 	/** Express.js library instance. */
-	express: typeof express;
+	express: Express;
 	/** Mongoose library instance. */
 	mongoose: typeof mongoose;
 
@@ -2461,7 +2469,7 @@ declare class Keystone {
 	};
 
 	/** The Express application instance (available after init). */
-	app?: Application;
+	app?: Express;
 	/** Navigation structure for the Admin UI (available after initNav). */
 	nav?: {
 		sections: Array<{
