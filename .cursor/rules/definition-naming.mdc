@@ -1,0 +1,36 @@
+# TypeScript Type Naming Convention
+
+## Rules for Type Naming
+
+1. All type names MUST start with the prefix `KS`
+2. After the prefix, the type name should be constructed by:
+   - Taking the full path from the root directory
+   - Converting all directory separators to PascalCase
+   - Removing any file extensions
+   - Converting the entire path to PascalCase
+
+## Examples
+
+For a file at `src/fields/types/boolean/BooleanType.ts`:
+```typescript
+type KSFieldsTypesBooleanBooleanType = {
+  // ... type definition
+};
+// Suggested name: KeystoneBooleanField (simpler and more maintainable)
+```
+
+For a file at `src/fields/types/relationship/RelationshipType.ts`:
+```typescript
+type KSFieldsTypesRelationshipRelationshipType = {
+  // ... type definition
+};
+// Suggested name: KeystoneRelationshipType (simpler and more maintainable)
+```
+
+## Important Notes
+
+- The naming convention is strict and must be followed exactly
+- While the full path-based naming is possible, it's recommended to use simpler, more maintainable names
+- Always add a comment with the suggested simpler name below the type definition
+- The prefix `KS` is mandatory and must be capitalized
+- All parts of the name should be in PascalCase 
