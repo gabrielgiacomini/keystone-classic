@@ -39,7 +39,6 @@ import * as numeral from "numeral"; // @todo: Needs @types/numeral
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js}
-
  */
 interface KeystoneFieldTypeConstructor {
 	/** Creates an instance of the field type. */
@@ -64,7 +63,6 @@ interface KeystoneFieldTypeConstructor {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js}
-
  */
 interface KeystoneFieldOptions {
 	/**
@@ -216,7 +214,6 @@ interface KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js}
-
  */
 type KeystoneFieldDefinition = {
 	[key: string]:
@@ -237,7 +234,6 @@ type KeystoneFieldDefinition = {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js}
-
  */
 interface KeystoneHeadingDefinition {
 	/** The text of the heading. */
@@ -255,7 +251,6 @@ interface KeystoneHeadingDefinition {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js}
-
  */
 interface KeystoneField {
 	/** Reference to the parent List instance. */
@@ -499,7 +494,6 @@ interface KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Field.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Field.js}
-
  */
 interface KeystoneFieldUIElement {
 	type: "field";
@@ -530,7 +524,6 @@ type KeystoneUIElement =
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/list.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/lib/list.js}
-
  */
 interface KeystoneListOptions {
 	/**
@@ -663,7 +656,6 @@ interface KeystoneListOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/list.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/lib/list.js}
-
  */
 interface KeystoneListMappings {
 	/** Field path for the item's name/title */
@@ -689,7 +681,6 @@ interface KeystoneListMappings {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/text/TextType.js}
-
  */
 interface KeystoneTextFilter {
 	/**
@@ -722,7 +713,6 @@ interface KeystoneTextFilter {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/text/TextType.js}
-
  */
 interface KeystoneTextFieldOptions extends KeystoneFieldOptions {
 	/** Minimum length allowed. Validates on save. */
@@ -743,7 +733,6 @@ interface KeystoneTextFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/text/TextType.js}
-
  */
 interface KeystoneTextField extends KeystoneField {
 	/** The native JavaScript type constructor (String). */
@@ -808,7 +797,6 @@ interface KeystoneTextField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/text/TextType.js}
-
  */
 interface KeystoneTextTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -829,7 +817,6 @@ interface KeystoneTextTypeConstructor extends KeystoneFieldTypeConstructor {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/number/NumberType.js}
-
  */
 interface KeystoneNumberFilter {
 	/**
@@ -863,7 +850,6 @@ interface KeystoneNumberFilter {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/number/NumberType.js}
-
  */
 interface KeystoneNumberFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -884,7 +870,6 @@ interface KeystoneNumberFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/number/NumberType.js}
-
  */
 interface KeystoneNumberField extends KeystoneField {
 	/** The native JavaScript type constructor (Number). */
@@ -961,7 +946,6 @@ interface KeystoneNumberField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/number/NumberType.js}
-
  */
 interface KeystoneNumberTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -982,7 +966,6 @@ interface KeystoneNumberTypeConstructor extends KeystoneFieldTypeConstructor {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/textarea/TextareaType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/textarea/TextareaType.js}
-
  */
 interface KeystoneTextareaFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -1006,7 +989,6 @@ interface KeystoneTextareaFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/textarea/TextareaType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/textarea/TextareaType.js}
-
  */
 interface KeystoneTextareaField extends KeystoneField {
 	/** The native JavaScript type constructor (String). */
@@ -1085,7 +1067,6 @@ interface KeystoneTextareaField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/textarea/TextareaType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/textarea/TextareaType.js}
-
  */
 interface KeystoneTextareaTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -1117,7 +1098,6 @@ interface KeystoneBooleanFilter {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/boolean/BooleanType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/boolean/BooleanType.js}
-
  */
 interface KeystoneBooleanFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -1142,7 +1122,6 @@ interface KeystoneBooleanFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/boolean/BooleanType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/boolean/BooleanType.js}
-
  */
 interface KeystoneBooleanField extends KeystoneField {
 	/** The native JavaScript type constructor (Boolean). */
@@ -1211,7 +1190,6 @@ interface KeystoneBooleanField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/boolean/BooleanType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/boolean/BooleanType.js}
-
  */
 interface KeystoneBooleanTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -1244,7 +1222,6 @@ interface KeystoneSelectOption {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/select/SelectType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/select/SelectType.js}
-
  */
 interface KeystoneSelectFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -1318,7 +1295,6 @@ interface KeystoneSelectFilter {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/select/SelectType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/select/SelectType.js}
-
  */
 interface KeystoneSelectField extends KeystoneField {
 	/** Admin UI rendering style ('select' or 'radio'). */
@@ -1436,7 +1412,6 @@ interface KeystoneSelectField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/select/SelectType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/select/SelectType.js}
-
  */
 interface KeystoneSelectTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -1482,7 +1457,6 @@ interface KeystoneDateFilter {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/date/DateType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/date/DateType.js}
-
  */
 interface KeystoneDateFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -1528,7 +1502,6 @@ interface KeystoneDateFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
-
  */
 interface KeystoneDateTimeFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -1558,7 +1531,6 @@ interface KeystoneDateTimeFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/date/DateType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/date/DateType.js}
-
  */
 interface KeystoneDateField extends KeystoneField {
 	/** The native JavaScript type constructor (Date). */
@@ -1678,7 +1650,6 @@ interface KeystoneDateField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
-
  */
 interface KeystoneDateTimeField extends KeystoneField {
 	/** The native JavaScript type constructor (Date). */
@@ -1802,7 +1773,6 @@ interface KeystoneDateTimeField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/date/DateType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/date/DateType.js}
-
  */
 interface KeystoneDateTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -1822,7 +1792,6 @@ interface KeystoneDateTypeConstructor extends KeystoneFieldTypeConstructor {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
-
  */
 interface KeystoneDateTimeTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -1843,7 +1812,6 @@ interface KeystoneDateTimeTypeConstructor extends KeystoneFieldTypeConstructor {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/html/HtmlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/html/HtmlType.js}
-
  */
 interface KeystoneHtmlFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -1872,7 +1840,6 @@ interface KeystoneHtmlFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/html/HtmlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/html/HtmlType.js}
-
  */
 interface KeystoneHtmlField extends KeystoneField {
 	/** The native JavaScript type constructor (String). */
@@ -1926,7 +1893,6 @@ interface KeystoneHtmlField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/html/HtmlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/html/HtmlType.js}
-
  */
 interface KeystoneHtmlTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -1948,7 +1914,6 @@ interface KeystoneHtmlTypeConstructor extends KeystoneFieldTypeConstructor {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/list.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/lib/list.js}
-
  */
 declare class KeystoneList {
 	/**
@@ -2410,7 +2375,6 @@ declare class KeystoneList {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/core/options.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/lib/core/options.js}
-
  */
 interface KeystoneOptions {
 	/** Name of the project/application. Displayed in the Admin UI. */
@@ -3141,7 +3105,6 @@ Type Definition Notes:
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/url/UrlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/url/UrlType.js}
-
  */
 interface KeystoneUrlFieldOptions extends KeystoneFieldOptions {
 	/** Ensure type is specifically URL */
@@ -3156,7 +3119,6 @@ interface KeystoneUrlFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/url/UrlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/url/UrlType.js}
-
  */
 interface KeystoneUrlField extends KeystoneField {
 	/** The native JavaScript type constructor (String). */
@@ -3173,7 +3135,6 @@ interface KeystoneUrlField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/url/UrlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/url/UrlType.js}
-
  */
 interface KeystoneUrlTypeConstructor extends KeystoneFieldTypeConstructor {
 	/** Creates a new URL field instance. */
@@ -3193,7 +3154,6 @@ interface KeystoneUrlTypeConstructor extends KeystoneFieldTypeConstructor {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/key/KeyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/key/KeyType.js}
-
  */
 interface KeystoneKeyFieldOptions extends KeystoneFieldOptions {
 	/** Ensure type is specifically Key */
@@ -3210,7 +3170,6 @@ interface KeystoneKeyFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/key/KeyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/key/KeyType.js}
-
  */
 interface KeystoneKeyField extends KeystoneField {
 	/** The native JavaScript type constructor (String). */
@@ -3227,7 +3186,6 @@ interface KeystoneKeyField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/key/KeyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/key/KeyType.js}
-
  */
 interface KeystoneKeyTypeConstructor extends KeystoneFieldTypeConstructor {
 	/** Creates a new Key field instance. */
@@ -3247,7 +3205,6 @@ interface KeystoneKeyTypeConstructor extends KeystoneFieldTypeConstructor {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/color/ColorType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/color/ColorType.js}
-
  */
 interface KeystoneColorFieldOptions extends KeystoneFieldOptions {
 	/** Ensure type is specifically Color */
@@ -3262,7 +3219,6 @@ interface KeystoneColorFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/color/ColorType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/color/ColorType.js}
-
  */
 interface KeystoneColorField extends KeystoneField {
 	/** The native JavaScript type constructor (String). */
@@ -3279,7 +3235,6 @@ interface KeystoneColorField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/color/ColorType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/color/ColorType.js}
-
  */
 interface KeystoneColorTypeConstructor extends KeystoneFieldTypeConstructor {
 	/** Creates a new Color field instance. */
@@ -3299,7 +3254,6 @@ interface KeystoneColorTypeConstructor extends KeystoneFieldTypeConstructor {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/name/NameType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/name/NameType.js}
-
  */
 interface KeystoneNameFieldOptions extends KeystoneFieldOptions {
 	/** Ensure type is specifically Name */
@@ -3316,7 +3270,6 @@ interface KeystoneNameFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/name/NameType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/name/NameType.js}
-
  */
 interface KeystoneNameField extends KeystoneField {
 	/** The native JavaScript type constructor (Object). */
@@ -3333,7 +3286,6 @@ interface KeystoneNameField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/name/NameType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/name/NameType.js}
-
  */
 interface KeystoneNameTypeConstructor extends KeystoneFieldTypeConstructor {
 	/** Creates a new Name field instance. */
@@ -3353,7 +3305,6 @@ interface KeystoneNameTypeConstructor extends KeystoneFieldTypeConstructor {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/money/MoneyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/money/MoneyType.js}
-
  */
 interface KeystoneMoneyFieldOptions extends KeystoneFieldOptions {
 	/** Ensure type is specifically Money */
@@ -3370,7 +3321,6 @@ interface KeystoneMoneyFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/money/MoneyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/money/MoneyType.js}
-
  */
 interface KeystoneMoneyField extends KeystoneField {
 	/** The native JavaScript type constructor (Number). */
@@ -3389,7 +3339,6 @@ interface KeystoneMoneyField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/money/MoneyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/money/MoneyType.js}
-
  */
 interface KeystoneMoneyTypeConstructor extends KeystoneFieldTypeConstructor {
 	/** Creates a new Money field instance. */
@@ -3409,7 +3358,6 @@ interface KeystoneMoneyTypeConstructor extends KeystoneFieldTypeConstructor {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/email/EmailType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/email/EmailType.js}
-
  */
 interface KeystoneEmailFieldOptions extends KeystoneFieldOptions {
 	/** Ensure type is specifically Email */
@@ -3424,7 +3372,6 @@ interface KeystoneEmailFieldOptions extends KeystoneFieldOptions {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/email/EmailType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/email/EmailType.js}
-
  */
 interface KeystoneEmailField extends KeystoneField {
 	/** The native JavaScript type constructor (String). */
@@ -3443,7 +3390,6 @@ interface KeystoneEmailField extends KeystoneField {
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/email/EmailType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/email/EmailType.js}
-
  */
 interface KeystoneEmailTypeConstructor extends KeystoneFieldTypeConstructor {
 	/** Creates a new Email field instance. */
