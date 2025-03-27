@@ -1,0 +1,404 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Initial definition files list, before removing uneeded ones
+
+```
+keystonejs-v4/
+├── index.js
+├── index.d.ts               # <<< Main type definition entry point >>>
+├── package.json             # *** Add "types": "index.d.ts" & configure "files" array ***
+├── lib/
+│   ├── core/
+│   │   ├── init.js
+│   │   ├── init.d.ts
+│   │   ├── initDatabaseConfig.js
+│   │   ├── initDatabaseConfig.d.ts
+│   │   ├── initExpressApp.js
+│   │   ├── initExpressApp.d.ts
+│   │   ├── initExpressSession.js
+│   │   ├── initExpressSession.d.ts
+│   │   ├── initNav.js
+│   │   ├── initNav.d.ts
+│   │   ├── openDatabaseConnection.js
+│   │   ├── openDatabaseConnection.d.ts
+│   │   ├── closeDatabaseConnection.js
+│   │   ├── closeDatabaseConnection.d.ts
+│   │   ├── createItems.js
+│   │   ├── createItems.d.ts
+│   │   ├── createKeystoneHash.js
+│   │   ├── createKeystoneHash.d.ts
+│   │   ├── createRouter.js
+│   │   ├── createRouter.d.ts
+│   │   ├── getOrphanedLists.js
+│   │   ├── getOrphanedLists.d.ts
+│   │   ├── importer.js
+│   │   ├── importer.d.ts
+│   │   ├── list.js          # <<< Likely internal list logic, distinct from lib/list.js ??? >>>
+│   │   ├── list.d.ts        # <<< Typing for lib/core/list.js >>>
+│   │   ├── options.js
+│   │   ├── options.d.ts
+│   │   ├── populateRelated.js
+│   │   ├── populateRelated.d.ts
+│   │   ├── redirect.js
+│   │   ├── redirect.d.ts
+│   │   ├── start.js
+│   │   ├── start.d.ts
+│   │   └── wrapHTMLError.js
+│   │   └── wrapHTMLError.d.ts
+│   │
+│   ├── list/                # <<< Contains methods for the List instances >>>
+│   │   ├── add.js
+│   │   ├── add.d.ts
+│   │   ├── addFiltersToQuery.js
+│   │   ├── addFiltersToQuery.d.ts
+│   │   ├── addSearchToQuery.js
+│   │   ├── addSearchToQuery.d.ts
+│   │   ├── apiForGet.js
+│   │   ├── apiForGet.d.ts
+│   │   ├── automap.js
+│   │   ├── automap.d.ts
+│   │   ├── buildSearchTextIndex.js
+│   │   ├── buildSearchTextIndex.d.ts
+│   │   ├── declaresTextIndex.js
+│   │   ├── declaresTextIndex.d.ts
+│   │   ├── ensureTextIndex.js
+│   │   ├── ensureTextIndex.d.ts
+│   │   ├── expandColumns.js
+│   │   ├── expandColumns.d.ts
+│   │   ├── expandPaths.js
+│   │   ├── expandPaths.d.ts
+│   │   ├── expandSort.js
+│   │   ├── expandSort.d.ts
+│   │   ├── field.js
+│   │   ├── field.d.ts
+│   │   ├── getAdminURL.js
+│   │   ├── getAdminURL.d.ts
+│   │   ├── getCSVData.js
+│   │   ├── getCSVData.d.ts
+│   │   ├── getData.js
+│   │   ├── getData.d.ts
+│   │   ├── getDocumentName.js
+│   │   ├── getDocumentName.d.ts
+│   │   ├── getOptions.js
+│   │   ├── getOptions.d.ts
+│   │   ├── getPages.js
+│   │   ├── getPages.d.ts
+│   │   ├── getSearchFilters.js
+│   │   ├── getSearchFilters.d.ts
+│   │   ├── getUniqueValue.js
+│   │   ├── getUniqueValue.d.ts
+│   │   ├── isReserved.js
+│   │   ├── isReserved.d.ts
+│   │   ├── map.js
+│   │   ├── map.d.ts
+│   │   ├── paginate.js
+│   │   ├── paginate.d.ts
+│   │   ├── processFilters.js
+│   │   ├── processFilters.d.ts
+│   │   ├── register.js
+│   │   ├── register.d.ts
+│   │   ├── relationship.js
+│   │   ├── relationship.d.ts
+│   │   ├── selectColumns.js
+│   │   ├── selectColumns.d.ts
+│   │   ├── set.js
+│   │   ├── set.d.ts
+│   │   ├── underscoreMethod.js
+│   │   ├── underscoreMethod.d.ts
+│   │   └── updateItem.js
+│   │   └── updateItem.d.ts
+│   │
+│   ├── schemaPlugins/
+│   │   ├── methods/
+│   │   │   ├── getRelated.js
+│   │   │   ├── getRelated.d.ts
+│   │   │   └── populateRelated.js
+│   │   │   └── populateRelated.d.ts
+│   │   ├── options/
+│   │   │   └── transform.js
+│   │   │   └── transform.d.ts
+│   │   ├── sortable.js
+│   │   ├── sortable.d.ts
+│   │   ├── track.js
+│   │   ├── track.d.ts
+│   │   ├── autokey.js
+│   │   ├── autokey.d.ts
+│   │   └── history.js
+│   │   └── history.d.ts
+│   │
+│   ├── security/
+│   │   ├── csrf.js
+│   │   ├── csrf.d.ts
+│   │   ├── escapeValueForExcel.js
+│   │   ├── escapeValueForExcel.d.ts
+│   │   ├── frameGuard.js
+│   │   ├── frameGuard.d.ts
+│   │   └── ipRangeRestrict.js
+│   │   └── ipRangeRestrict.d.ts
+│   │
+│   ├── storage/
+│   │   ├── adapters/
+│   │   │   └── fs/
+│   │   │       ├── index.js
+│   │   │       ├── index.d.ts
+│   │   │       └── README.md
+│   │   ├── index.js
+│   │   ├── index.d.ts
+│   │   └── README.md
+│   │
+│   ├── middleware/
+│   │   ├── api.js
+│   │   ├── api.d.ts
+│   │   ├── cors.js
+│   │   ├── cors.d.ts
+│   │   └── language.js
+│   │   └── language.d.ts
+│   │
+│   ├── content/             # <<< Assuming .js files exist here if it's code >>>
+│   │   └── ...              # <<< Add .d.ts for each .js >>>
+│   ├── list.js              # <<< The main List class definition? >>>
+│   ├── list.d.ts            # <<< Typing for lib/list.js >>>
+│   ├── view.js
+│   ├── view.d.ts
+│   ├── updateHandler.js
+│   ├── updateHandler.d.ts
+│   ├── session.js
+│   ├── session.d.ts
+│   ├── email.js
+│   ├── email.d.ts
+│   ├── updates.js
+│   ├── updates.d.ts
+│   ├── uploads.js
+│   ├── uploads.d.ts
+│   ├── path.js
+│   ├── path.d.ts
+│   ├── safeRequire.js
+│   ├── safeRequire.d.ts
+│   ├── schemaPlugins.js     # <<< Aggregator for schema plugins? >>>
+│   ├── schemaPlugins.d.ts
+│   └── fieldTypes.js        # <<< Aggregator for field types? >>>
+│   └── fieldTypes.d.ts
+│
+├── server/
+│   ├── createApp.js
+│   ├── createApp.d.ts
+│   ├── initLetsEncrypt.js
+│   ├── initLetsEncrypt.d.ts
+│   ├── initSslRedirect.js
+│   ├── initSslRedirect.d.ts
+│   ├── initTrustProxy.js
+│   ├── initTrustProxy.d.ts
+│   ├── initViewEngine.js
+│   ├── initViewEngine.d.ts
+│   ├── initViewLocals.js
+│   ├── initViewLocals.d.ts
+│   ├── startHTTPServer.js
+│   ├── startHTTPServer.d.ts
+│   ├── startSecureServer.js
+│   ├── startSecureServer.d.ts
+│   ├── startSocketServer.js
+│   ├── startSocketServer.d.ts
+│   ├── bindBodyParser.js
+│   ├── bindBodyParser.d.ts
+│   ├── bindErrorHandlers.js
+│   ├── bindErrorHandlers.d.ts
+│   ├── bindIPRestrictions.js
+│   ├── bindIPRestrictions.d.ts
+│   ├── bindLessMiddleware.js
+│   ├── bindLessMiddleware.d.ts
+│   ├── bindRedirectsHandler.js
+│   ├── bindRedirectsHandler.d.ts
+│   ├── bindSassMiddleware.js
+│   ├── bindSassMiddleware.d.ts
+│   ├── bindSessionMiddleware.js
+│   ├── bindSessionMiddleware.d.ts
+│   ├── bindStaticMiddleware.js
+│   ├── bindStaticMiddleware.d.ts
+│   └── bindStylusMiddleware.js
+│   └── bindStylusMiddleware.d.ts
+│
+└── fields/
+    ├── README.md
+    ├── types/
+    │   ├── Type.js          # <<< Base class for Field Types >>>
+    │   ├── Type.d.ts        # <<< Typing for Type.js >>>
+    │   ├── Field.js         # <<< Base class for Fields >>>
+    │   ├── Field.d.ts       # <<< Typing for Field.js >>>
+    │   │
+    │   ├── azurefile/
+    │   │   ├── AzureFileType.js
+    │   │   ├── AzureFileType.d.ts
+    │   │   ├── Readme.md
+    │   │   └── test/        # <<< .d.ts generally not needed for tests >>>
+    │   ├── boolean/
+    │   │   ├── BooleanType.js
+    │   │   ├── BooleanType.d.ts
+    │   │   └── ...
+    │   ├── cloudinaryimage/
+    │   │   ├── CloudinaryImageType.js
+    │   │   ├── CloudinaryImageType.d.ts
+    │   │   └── ...
+    │   ├── cloudinaryimages/
+    │   │   ├── CloudinaryImagesType.js
+    │   │   ├── CloudinaryImagesType.d.ts
+    │   │   └── ...
+    │   ├── code/
+    │   │   ├── CodeType.js
+    │   │   ├── CodeType.d.ts
+    │   │   └── ...
+    │   ├── color/
+    │   │   ├── ColorType.js
+    │   │   ├── ColorType.d.ts
+    │   │   └── ...
+    │   ├── date/
+    │   │   ├── DateType.js
+    │   │   ├── DateType.d.ts
+    │   │   └── ...
+    │   ├── datearray/
+    │   │   ├── DateArrayType.js
+    │   │   ├── DateArrayType.d.ts
+    │   │   └── ...
+    │   ├── datetime/
+    │   │   ├── DateTimeType.js
+    │   │   ├── DateTimeType.d.ts
+    │   │   └── ...
+    │   ├── email/
+    │   │   ├── EmailType.js
+    │   │   ├── EmailType.d.ts
+    │   │   └── ...
+    │   ├── embedly/
+    │   │   ├── EmbedlyType.js
+    │   │   ├── EmbedlyType.d.ts
+    │   │   └── ...
+    │   ├── file/
+    │   │   ├── FileType.js
+    │   │   ├── FileType.d.ts
+    │   │   └── ...
+    │   ├── geopoint/
+    │   │   ├── GeoPointType.js
+    │   │   ├── GeoPointType.d.ts
+    │   │   └── ...
+    │   ├── html/
+    │   │   ├── HtmlType.js
+    │   │   ├── HtmlType.d.ts
+    │   │   └── ...
+    │   ├── key/
+    │   │   ├── KeyType.js
+    │   │   ├── KeyType.d.ts
+    │   │   └── ...
+    │   ├── localfile/
+    │   │   ├── LocalFileType.js
+    │   │   ├── LocalFileType.d.ts
+    │   │   └── ...
+    │   ├── localfiles/
+    │   │   ├── LocalFilesType.js
+    │   │   ├── LocalFilesType.d.ts
+    │   │   └── ...
+    │   ├── location/
+    │   │   ├── LocationType.js
+    │   │   ├── LocationType.d.ts
+    │   │   └── ...
+    │   ├── markdown/
+    │   │   ├── MarkdownType.js
+    │   │   ├── MarkdownType.d.ts
+    │   │   └── ...
+    │   ├── money/
+    │   │   ├── MoneyType.js
+    │   │   ├── MoneyType.d.ts
+    │   │   └── ...
+    │   ├── name/
+    │   │   ├── NameType.js
+    │   │   ├── NameType.d.ts
+    │   │   └── ...
+    │   ├── number/
+    │   │   ├── NumberType.js
+    │   │   ├── NumberType.d.ts
+    │   │   └── ...
+    │   ├── numberarray/
+    │   │   ├── NumberArrayType.js
+    │   │   ├── NumberArrayType.d.ts
+    │   │   └── ...
+    │   ├── password/
+    │   │   ├── PasswordType.js
+    │   │   ├── PasswordType.d.ts
+    │   │   └── ...
+    │   ├── relationship/
+    │   │   ├── RelationshipType.js
+    │   │   ├── RelationshipType.d.ts
+    │   │   ├── RelationshipField.js
+    │   │   ├── RelationshipField.d.ts
+    │   │   ├── RelationshipColumn.js
+    │   │   ├── RelationshipColumn.d.ts
+    │   │   ├── RelationshipFilter.js
+    │   │   ├── RelationshipFilter.d.ts
+    │   │   └── ...
+    │   ├── s3file/
+    │   │   ├── S3FileType.js
+    │   │   ├── S3FileType.d.ts
+    │   │   └── ...
+    │   ├── select/
+    │   │   ├── SelectType.js
+    │   │   ├── SelectType.d.ts
+    │   │   └── ...
+    │   ├── text/
+    │   │   ├── TextType.js
+    │   │   ├── TextType.d.ts
+    │   │   ├── TextField.js
+    │   │   ├── TextField.d.ts
+    │   │   ├── TextColumn.js
+    │   │   ├── TextColumn.d.ts
+    │   │   ├── TextFilter.js
+    │   │   ├── TextFilter.d.ts
+    │   │   └── ...
+    │   ├── textarea/
+    │   │   ├── TextareaType.js
+    │   │   ├── TextareaType.d.ts
+    │   │   └── ...
+    │   ├── textarray/
+    │   │   ├── TextArrayType.js
+    │   │   ├── TextArrayType.d.ts
+    │   │   └── ...
+    │   └── url/
+    │       ├── UrlType.js
+    │       ├── UrlType.d.ts
+    │       └── ...
+    │
+    ├── utils/
+    │   ├── addPresenceToQuery.js
+    │   ├── addPresenceToQuery.d.ts
+    │   ├── bindFunctions.js
+    │   ├── bindFunctions.d.ts
+    │   ├── definePrototypeGetters.js
+    │   ├── definePrototypeGetters.d.ts
+    │   ├── evalDependsOn.js
+    │   └── evalDependsOn.d.ts
+    │   └── test/            # <<< .d.ts generally not needed for tests >>>
+    │
+    ├── mixins/
+    │   └── ArrayField.js
+    │   └── ArrayField.d.ts
+    │
+    ├── components/          # <<< React components, may not need .d.ts if not directly imported/used by consumers? >>>
+    │   ├── columns/
+    │   ├── test/
+    │   ├── Checkbox.js
+    │   ├── CollapsedFieldLabel.js
+    │   ├── DateInput.js
+    │   ├── FileChangeMessage.js
+    │   ├── HiddenFileInput.js
+    │   ├── ImageThumbnail.js
+    │   ├── ItemsTableCell.js
+    │   ├── ItemsTableValue.js
+    │   └── NestedFormField.js
+    │
+    └── explorer/            # <<< Utility, may not need extensive typing for consumers? >>>
+        └── ...
+
+├── global.d.ts              # <<< Optional: For global augmentations (e.g., Express Request/Response) >>>
+└── ... (Other files like .gitignore, README.md etc.)
+
+
+```

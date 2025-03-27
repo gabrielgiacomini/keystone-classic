@@ -3,7 +3,6 @@ description:
 globs: 
 alwaysApply: false
 ---
-
 # Keystone 4 Thorough File Structure
 ```
 ├── index.js                 # Main package entry point

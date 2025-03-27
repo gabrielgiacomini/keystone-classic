@@ -3,7 +3,7 @@ description:
 globs: 
 alwaysApply: false
 ---
-# Keystone 4 Package Important Files and Folders
+# Keystone 4 File Structure Overview
 
 ```
 ├── index.js                 # Main package entry point
