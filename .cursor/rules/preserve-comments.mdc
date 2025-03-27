@@ -1,1 +1,113 @@
- 
+# Comment Preservation Rules
+
+## Overview
+
+Comments in the codebase are valuable documentation that should be preserved and enriched, not removed or replaced unless specifically marked as completed TODOs.
+
+## Rules
+
+### 1. Never Delete Existing Comments
+
+```typescript
+// ✅ CORRECT
+/** Existing comment remains untouched */
+function someFunction() {
+  // Original implementation comment stays
+  doSomething();
+}
+
+// ❌ INCORRECT
+// Removing or replacing existing comments
+function someFunction() {
+  doSomething();
+}
+```
+
+### 2. Only Enrich Existing Comments
+
+Add information to existing comments by appending new details, not by replacing:
+
+```typescript
+// ✅ CORRECT
+/**
+ * Handles user authentication
+ * Additional info: Also manages session tokens
+ */
+function authenticate() {}
+
+// ❌ INCORRECT
+/**
+ * Manages session tokens
+ */
+function authenticate() {}
+```
+
+### 3. TODO Comments
+
+The only exception to the preservation rule is for `@todo` comments that have been completed:
+
+```typescript
+// ✅ CORRECT
+// Before: @todo Implement password hashing
+// After: Password hashing implemented using bcrypt
+
+// ❌ INCORRECT
+// Keeping outdated @todo comments
+// @todo Implement password hashing (when it's already done)
+```
+
+### 4. Documentation Comments
+
+When adding new code, maintain the same documentation style as surrounding code:
+
+```typescript
+// ✅ CORRECT
+/** Existing function with JSDoc */
+function existingFunction() {}
+
+/** New function follows same JSDoc style */
+function newFunction() {}
+
+// ❌ INCORRECT
+/** Existing function with JSDoc */
+function existingFunction() {}
+
+// New function with different style
+function newFunction() {}
+```
+
+### 5. Comment Context
+
+Keep comments in their original context when moving or refactoring code:
+
+```typescript
+// ✅ CORRECT
+// Original:
+/** User validation rules */
+const userRules = {};
+
+// After refactor (comment moves with the code):
+/** User validation rules */
+class UserValidator {
+  rules = {};
+}
+
+// ❌ INCORRECT
+// Leaving comments behind or separating them from their context
+```
+
+## Benefits
+
+- Preserves institutional knowledge
+- Maintains code documentation history
+- Ensures consistent documentation style
+- Prevents loss of important context
+- Makes codebase more maintainable
+
+## Exceptions
+
+The only valid exceptions to these rules are:
+1. Removing completed `@todo` comments
+2. Correcting factually incorrect comments
+3. Updating comments that reference renamed/moved code elements
+4. Removing comments marked as deprecated or obsolete 
