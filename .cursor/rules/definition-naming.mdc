@@ -1,3 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
 # TypeScript Type Naming Convention
 
 ## Rules for Type Naming
