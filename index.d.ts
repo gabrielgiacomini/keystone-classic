@@ -1,6 +1,6 @@
 // Type definitions for KeystoneJS v4
 // Project: https://github.com/keystonejs/keystone-0.3
-// Definitions by: Gabriel Giacomini <https://github.com/GabrielGiacomini>
+// Definitions by: Gabriel Giacomini <https://github.com/gabrielgiacomini>
 // Based on the code in: index.js, lib/core/options.js, lib/list.js, lib/list/add.js, lib/list/field.js,
 // fields/types/Type.js, fields/types/text/TextType.js, fields/types/number/NumberType.js,
 // fields/types/textarea/TextareaType.js, fields/types/boolean/BooleanType.js, fields/types/select/SelectType.js,
