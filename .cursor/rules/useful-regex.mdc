@@ -1,0 +1,102 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+
+
+
+
+
+## Declaration placeholder to source 2 depth
+
+ \*\/[\s\n]*?declare module "([^\\\n\s]+?)\/([^.]+?)\.js" \{[\s\S\n]+?\n\}
+
+ * @todo Define signature from $1/$2.js
+ * 
+ * Sources:
+ * - File path: lib/content/types/text.js
+ * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/$1/$2.js}
+ * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/$1/$2.js}
+ * 
+ */
+
+
+
+
+## Declaration placeholder to source 3 depth
+
+```js
+/\*\/[\s\n]*?declare module "([^\\\n\s]+?)\/([^\\\n\s]+?)\/([^.]+?)\.js" \{[\s\S\n]+?\n\}/
+```
+
+```js
+ * @todo Define signature from $1/$2/$3.js
+ * 
+ * Sources:
+ * - File path: lib/content/types/text.js
+ * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/$1/$2/$3.js}
+ * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/$1/$2/$3.js}
+ * 
+ */
+ ```
+
+
+
+## Declaration placeholder to source 4 depth
+
+```js
+/\*\/[\s\n]*?declare module "([^\\\n\s]+?)\/([^\\\n\s]+?)\/([^\\\n\s]+?)\/([^.]+?)\.js" \{[\s\S\n]+?\n\}/
+```
+
+```js
+ * @todo Define signature from $1/$2/$3/$4.js
+ * 
+ * Sources:
+ * - File path: lib/content/types/text.js
+ * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/$1/$2/$3/$4.js}
+ * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/$1/$2/$3/$4.js}
+ * 
+ */
+ ```
+
+
+
+## Thorough sees 4 depth
+
+@see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/([^\\\n\s]+?)\/([^\\\n\s]+?)\/([^\\\n\s]+?)\/([^.]+?)\.js
+
+
+@see $1/$2/$3/$4.js
+ *
+ * Sources:
+ * - File path: lib/content/types/text.js
+ * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/$1/$2/$3/$4.js}
+ * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/$1/$2/$3/$4.js}
+
+
+## Thorough sees 3 depth
+
+@see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master\/([^\\\n\s]+?)\/([^\\\n\s]+?)\/([^.]+?)\.js
+
+
+@see $1/$2/$3.js
+ *
+ * Sources:
+ * - File path: lib/content/types/text.js
+ * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/$1/$2/$3.js}
+ * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/$1/$2/$3.js}
+
+
+## Thorough sees 2 depth
+
+@see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master\/([^\\\n\s]+?)\/([^.]+?)\.js
+
+@see $1/$2.js
+ *
+ * Sources:
+ * - File path: lib/content/types/text.js
+ * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/$1/$2.js}
+ * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/$1/$2.js}
+
+
