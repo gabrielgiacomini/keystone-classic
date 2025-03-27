@@ -29,12 +29,7 @@ import * as numeral from "numeral"; // @todo: Needs @types/numeral
 // ... etc for core and list methods ...
 
 // --- Forward Declarations ---
-declare class Keystone {
-	/* ... */
-}
-declare class List {
-	/* ... */
-}
+
 declare class Field {
 	/* ... */
 } // Base Field definition
