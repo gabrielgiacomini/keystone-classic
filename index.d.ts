@@ -6,20 +6,11 @@
 // fields/types/textarea/TextareaType.js, fields/types/boolean/BooleanType.js, fields/types/select/SelectType.js,
 // fields/types/datetime/DateTimeType.js, fields/types/date/DateType.js, fields/types/html/HtmlType.js
 
-import {
-	Express,
-	Request,
-	Response,
-	NextFunction,
-	Application,
-	RequestHandler,
-} from "express";
+import * as express from "express";
 import * as mongoose from "mongoose";
 import * as moment from "moment"; // Requires @types/moment
 import { Hook } from "grappling-hook"; // @todo: Check if @types/grappling-hook exists or define basic type
 import * as numeral from "numeral"; // @todo: Needs @types/numeral
-import type RequestHandler from "express-serve-static-core";
-import type Application from "express-serve-static-core";
 
 // --- Dependencies & Placeholders ---
 // import * as utils from 'keystone-utils'; // @todo Get/Define types for keystone-utils
@@ -2338,7 +2329,7 @@ interface KeystoneOptions {
 	 * Custom Express app instance.
 	 * Use if you need to customize Express before Keystone initialization.
 	 */
-	app?: Express;
+	app?: express.Express;
 	/**
 	 * Express session store instance.
 	 * Default: Connects-Mongo based on MongoDB connection.
@@ -2352,40 +2343,40 @@ interface KeystoneOptions {
 	/**
 	 * Middleware executed before static assets handling.
 	 */
-	"pre:static"?: RequestHandler | RequestHandler[];
+	"pre:static"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before body parser.
 	 */
-	"pre:bodyparser"?: RequestHandler | RequestHandler[];
+	"pre:bodyparser"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before session handling.
 	 */
-	"pre:session"?: RequestHandler | RequestHandler[];
+	"pre:session"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before logger.
 	 */
-	"pre:logger"?: RequestHandler | RequestHandler[];
+	"pre:logger"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before Admin UI.
 	 */
-	"pre:admin"?: RequestHandler | RequestHandler[];
+	"pre:admin"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before Admin UI routes.
 	 */
-	"pre:adminroutes"?: RequestHandler | RequestHandler[];
+	"pre:adminroutes"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before application routes.
 	 */
-	"pre:routes"?: RequestHandler | RequestHandler[];
+	"pre:routes"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Middleware executed before rendering views.
 	 */
-	"pre:render"?: RequestHandler | RequestHandler[];
+	"pre:render"?: express.RequestHandler | express.RequestHandler[];
 	/**
 	 * Custom route handler function.
 	 * @param app The Express application instance.
 	 */
-	routes?: (app: Application) => void;
+	routes?: (app: express.Application) => void;
 	/**
 	 * Trust proxy headers (X-Forwarded-For, etc).
 	 * Default: true
@@ -2456,7 +2447,7 @@ declare class Keystone {
 	>;
 
 	/** Express.js library instance. */
-	express: Express;
+	express: express.Express;
 	/** Mongoose library instance. */
 	mongoose: typeof mongoose;
 
@@ -2469,7 +2460,7 @@ declare class Keystone {
 	};
 
 	/** The Express application instance (available after init). */
-	app?: Express;
+	app?: express.Express;
 	/** Navigation structure for the Admin UI (available after initNav). */
 	nav?: {
 		sections: Array<{
