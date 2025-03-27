@@ -31,7 +31,10 @@ import * as numeral from "numeral"; // @todo: Needs @types/numeral
 
 // --- Base Field & List Interfaces ---
 
-/** Represents the constructor for a Keystone Field Type (e.g., `Types.Text`). */
+/**
+ * Represents the constructor for a Keystone Field Type (e.g., `Types.Text`).
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js
+ */
 interface KeystoneFieldTypeConstructor {
 	/** Creates an instance of the field type. */
 	new (
@@ -47,7 +50,10 @@ interface KeystoneFieldTypeConstructor {
 	name?: string; // JS constructor name
 }
 
-/** Options object used to define a field within a List. */
+/**
+ * Options object used to define a field within a List.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js
+ */
 interface KeystoneFieldOptions {
 	/**
 	 * The field type constructor (e.g., `keystone.Field.Types.Text`)
@@ -190,7 +196,10 @@ interface KeystoneFieldOptions {
 	[key: string]: any;
 }
 
-/** Represents an object defining one or more fields, potentially nested. */
+/**
+ * Represents an object defining one or more fields, potentially nested.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js
+ */
 type KeystoneFieldDefinition = {
 	[key: string]:
 		| KeystoneFieldOptions
@@ -202,7 +211,10 @@ type KeystoneFieldDefinition = {
 		| KeystoneFieldDefinition;
 };
 
-/** Represents an object defining a heading in the Admin UI form. */
+/**
+ * Represents an object defining a heading in the Admin UI form.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js
+ */
 interface KeystoneHeadingDefinition {
 	/** The text of the heading. */
 	heading: string;
@@ -211,7 +223,10 @@ interface KeystoneHeadingDefinition {
 	[key: string]: any;
 }
 
-/** Base interface representing a Keystone Field instance within a List. */
+/**
+ * Base interface representing a Keystone Field instance within a List.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js
+ */
 interface KeystoneField {
 	/** Reference to the parent List instance. */
 	list: KeystoneList;
@@ -446,7 +461,10 @@ interface KeystoneField {
 	[key: string]: any;
 }
 
-/** Represents an element in the Admin UI form structure. */
+/**
+ * Represents an element in the Admin UI form structure.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Field.js
+ */
 interface KeystoneFieldUIElement {
 	type: "field";
 	field: KeystoneField;
@@ -468,7 +486,10 @@ type KeystoneUIElement =
 	| KeystoneIndentUIElement
 	| KeystoneOutdentUIElement;
 
-/** Options for configuring a Keystone List. */
+/**
+ * Options for configuring a Keystone List.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/list.js
+ */
 interface KeystoneListOptions {
 	/**
 	 * Mongoose schema options applied to the underlying schema.
@@ -592,12 +613,20 @@ interface KeystoneListOptions {
 	[key: string]: any;
 }
 
-/** Defines the mapping between special list properties and field paths. */
+/**
+ * Defines the mapping between special list properties and field paths.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/list.js
+ */
 interface KeystoneListMappings {
+	/** Field path for the item's name/title */
 	name: string | null;
+	/** Field path for tracking who created the document */
 	createdBy: string | null;
+	/** Field path for tracking when the document was created */
 	createdOn: string | null;
+	/** Field path for tracking who last modified the document */
 	modifiedBy: string | null;
+	/** Field path for tracking when the document was last modified */
 	modifiedOn: string | null;
 }
 
@@ -606,6 +635,7 @@ interface KeystoneListMappings {
 // Text
 /**
  * Filter options for Text field queries.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js
  */
 interface KeystoneTextFilter {
 	/**
@@ -632,6 +662,7 @@ interface KeystoneTextFilter {
 
 /**
  * Options specific to Text fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js
  */
 interface KeystoneTextFieldOptions extends KeystoneFieldOptions {
 	/** Minimum length allowed. Validates on save. */
@@ -646,6 +677,7 @@ interface KeystoneTextFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Text field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js
  */
 interface KeystoneTextField extends KeystoneField {
 	/** The native JavaScript type constructor (String). */
@@ -704,6 +736,7 @@ interface KeystoneTextField extends KeystoneField {
 
 /**
  * Constructor for Text field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js
  */
 interface KeystoneTextTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -718,6 +751,7 @@ interface KeystoneTextTypeConstructor extends KeystoneFieldTypeConstructor {
 // Number
 /**
  * Filter options for Number field queries.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js
  */
 interface KeystoneNumberFilter {
 	/**
@@ -745,6 +779,7 @@ interface KeystoneNumberFilter {
 
 /**
  * Options specific to Number fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js
  */
 interface KeystoneNumberFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -759,6 +794,7 @@ interface KeystoneNumberFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Number field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js
  */
 interface KeystoneNumberField extends KeystoneField {
 	/** The native JavaScript type constructor (Number). */
@@ -829,6 +865,7 @@ interface KeystoneNumberField extends KeystoneField {
 
 /**
  * Constructor for Number field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js
  */
 interface KeystoneNumberTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -843,6 +880,7 @@ interface KeystoneNumberTypeConstructor extends KeystoneFieldTypeConstructor {
 // Textarea
 /**
  * Options specific to Textarea fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/textarea/TextareaType.js
  */
 interface KeystoneTextareaFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -860,6 +898,7 @@ interface KeystoneTextareaFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Textarea field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/textarea/TextareaType.js
  */
 interface KeystoneTextareaField extends KeystoneField {
 	/** The native JavaScript type constructor (String). */
@@ -932,6 +971,7 @@ interface KeystoneTextareaField extends KeystoneField {
 
 /**
  * Constructor for Textarea field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/textarea/TextareaType.js
  */
 interface KeystoneTextareaTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -957,6 +997,7 @@ interface KeystoneBooleanFilter {
 
 /**
  * Options specific to Boolean fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/boolean/BooleanType.js
  */
 interface KeystoneBooleanFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -975,6 +1016,7 @@ interface KeystoneBooleanFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Boolean field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/boolean/BooleanType.js
  */
 interface KeystoneBooleanField extends KeystoneField {
 	/** The native JavaScript type constructor (Boolean). */
@@ -1037,6 +1079,7 @@ interface KeystoneBooleanField extends KeystoneField {
 
 /**
  * Constructor for Boolean field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/boolean/BooleanType.js
  */
 interface KeystoneBooleanTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -1063,6 +1106,7 @@ interface KeystoneSelectOption {
 
 /**
  * Options specific to Select fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/select/SelectType.js
  */
 interface KeystoneSelectFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -1130,6 +1174,7 @@ interface KeystoneSelectFilter {
 
 /**
  * Interface for Select field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/select/SelectType.js
  */
 interface KeystoneSelectField extends KeystoneField {
 	/** Admin UI rendering style ('select' or 'radio'). */
@@ -1241,6 +1286,7 @@ interface KeystoneSelectField extends KeystoneField {
 
 /**
  * Constructor for Select field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/select/SelectType.js
  */
 interface KeystoneSelectTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -1280,6 +1326,7 @@ interface KeystoneDateFilter {
 
 /**
  * Options specific to Date fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/date/DateType.js
  */
 interface KeystoneDateFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -1319,6 +1366,7 @@ interface KeystoneDateFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Options specific to DateTime fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js
  */
 interface KeystoneDateTimeFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -1342,6 +1390,7 @@ interface KeystoneDateTimeFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Date field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/date/DateType.js
  */
 interface KeystoneDateField extends KeystoneField {
 	/** The native JavaScript type constructor (Date). */
@@ -1455,6 +1504,7 @@ interface KeystoneDateField extends KeystoneField {
 
 /**
  * Interface for DateTime field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js
  */
 interface KeystoneDateTimeField extends KeystoneField {
 	/** The native JavaScript type constructor (Date). */
@@ -1572,6 +1622,7 @@ interface KeystoneDateTimeField extends KeystoneField {
 
 /**
  * Constructor for Date field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/date/DateType.js
  */
 interface KeystoneDateTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -1585,6 +1636,7 @@ interface KeystoneDateTypeConstructor extends KeystoneFieldTypeConstructor {
 
 /**
  * Constructor for DateTime field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js
  */
 interface KeystoneDateTimeTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -1599,6 +1651,7 @@ interface KeystoneDateTimeTypeConstructor extends KeystoneFieldTypeConstructor {
 // Html
 /**
  * Options specific to Html fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/html/HtmlType.js
  */
 interface KeystoneHtmlFieldOptions extends KeystoneFieldOptions {
 	/**
@@ -1621,6 +1674,7 @@ interface KeystoneHtmlFieldOptions extends KeystoneFieldOptions {
 
 /**
  * Interface for Html field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/html/HtmlType.js
  */
 interface KeystoneHtmlField extends KeystoneField {
 	/** The native JavaScript type constructor (String). */
@@ -1668,6 +1722,7 @@ interface KeystoneHtmlField extends KeystoneField {
 
 /**
  * Constructor for Html field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/html/HtmlType.js
  */
 interface KeystoneHtmlTypeConstructor extends KeystoneFieldTypeConstructor {
 	new (
@@ -1681,7 +1736,10 @@ interface KeystoneHtmlTypeConstructor extends KeystoneFieldTypeConstructor {
 
 // --- Keystone & List Classes ---
 
-/** Represents a Keystone Data List. */
+/**
+ * Represents a Keystone Data List.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/list.js
+ */
 declare class KeystoneList {
 	/**
 	 * Creates a new List instance.
@@ -1728,7 +1786,7 @@ declare class KeystoneList {
 		}
 	>; // @todo Refine RelationshipDefinition
 
-	/** Field path mapping for special list properties (name, timestamps, etc.). */
+	/** Map of special list properties to field paths */
 	mappings: KeystoneListMappings;
 	/** The compiled Mongoose Model for this list. Available after `list.register()`. */
 	model: mongoose.Model<any>; // @todo Define Mongoose Document type
@@ -2134,7 +2192,10 @@ declare class KeystoneList {
 	) => Promise<any>;
 }
 
-/** Interface defining common KeystoneJS configuration options. */
+/**
+ * Interface defining common KeystoneJS configuration options.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/core/options.js
+ */
 interface KeystoneOptions {
 	/** Name of the project/application. Displayed in the Admin UI. */
 	name?: string;
@@ -2422,7 +2483,10 @@ interface KeystoneOptions {
 	[key: string]: any;
 }
 
-/** Represents a KeystoneJS v4 application instance. */
+/**
+ * Represents a KeystoneJS v4 application instance.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/index.js
+ */
 declare class Keystone {
 	/** Initializes a new Keystone instance. */
 	constructor();
@@ -2851,3 +2915,217 @@ Type Definition Notes:
 - Consider creating your own custom typings for specific models in your application for better type safety.
 - The Mongoose Document typing for List.model currently uses 'any' - ideally it would be a specific interface based on the fields.
 */
+
+// URL
+/**
+ * Options specific to URL fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/url/UrlType.js
+ */
+interface KeystoneUrlFieldOptions extends KeystoneFieldOptions {
+	/** Ensure type is specifically URL */
+	type: KeystoneUrlTypeConstructor | StringConstructor;
+}
+
+/**
+ * Interface for URL field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/url/UrlType.js
+ */
+interface KeystoneUrlField extends KeystoneField {
+	/** The native JavaScript type constructor (String). */
+	_nativeType: StringConstructor;
+	/** Field-specific options. */
+	options: KeystoneUrlFieldOptions;
+}
+
+/**
+ * Constructor for URL field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/url/UrlType.js
+ */
+interface KeystoneUrlTypeConstructor extends KeystoneFieldTypeConstructor {
+	/** Creates a new URL field instance. */
+	new (
+		list: KeystoneList,
+		path: string,
+		options?: KeystoneUrlFieldOptions
+	): KeystoneUrlField;
+}
+
+// Key
+/**
+ * Options specific to Key fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/key/KeyType.js
+ */
+interface KeystoneKeyFieldOptions extends KeystoneFieldOptions {
+	/** Ensure type is specifically Key */
+	type: KeystoneKeyTypeConstructor | StringConstructor;
+	/** Character used to separate words in the key. Defaults to '-'. */
+	separator?: string;
+}
+
+/**
+ * Interface for Key field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/key/KeyType.js
+ */
+interface KeystoneKeyField extends KeystoneField {
+	/** The native JavaScript type constructor (String). */
+	_nativeType: StringConstructor;
+	/** Field-specific options. */
+	options: KeystoneKeyFieldOptions;
+}
+
+/**
+ * Constructor for Key field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/key/KeyType.js
+ */
+interface KeystoneKeyTypeConstructor extends KeystoneFieldTypeConstructor {
+	/** Creates a new Key field instance. */
+	new (
+		list: KeystoneList,
+		path: string,
+		options?: KeystoneKeyFieldOptions
+	): KeystoneKeyField;
+}
+
+// Color
+/**
+ * Options specific to Color fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/color/ColorType.js
+ */
+interface KeystoneColorFieldOptions extends KeystoneFieldOptions {
+	/** Ensure type is specifically Color */
+	type: KeystoneColorTypeConstructor | StringConstructor;
+}
+
+/**
+ * Interface for Color field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/color/ColorType.js
+ */
+interface KeystoneColorField extends KeystoneField {
+	/** The native JavaScript type constructor (String). */
+	_nativeType: StringConstructor;
+	/** Field-specific options. */
+	options: KeystoneColorFieldOptions;
+}
+
+/**
+ * Constructor for Color field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/color/ColorType.js
+ */
+interface KeystoneColorTypeConstructor extends KeystoneFieldTypeConstructor {
+	/** Creates a new Color field instance. */
+	new (
+		list: KeystoneList,
+		path: string,
+		options?: KeystoneColorFieldOptions
+	): KeystoneColorField;
+}
+
+// Name
+/**
+ * Options specific to Name fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/name/NameType.js
+ */
+interface KeystoneNameFieldOptions extends KeystoneFieldOptions {
+	/** Ensure type is specifically Name */
+	type: KeystoneNameTypeConstructor;
+	/** Default value for the name field. */
+	default?: { first: string; last: string };
+}
+
+/**
+ * Interface for Name field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/name/NameType.js
+ */
+interface KeystoneNameField extends KeystoneField {
+	/** The native JavaScript type constructor (Object). */
+	_nativeType: ObjectConstructor;
+	/** Field-specific options. */
+	options: KeystoneNameFieldOptions;
+}
+
+/**
+ * Constructor for Name field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/name/NameType.js
+ */
+interface KeystoneNameTypeConstructor extends KeystoneFieldTypeConstructor {
+	/** Creates a new Name field instance. */
+	new (
+		list: KeystoneList,
+		path: string,
+		options?: KeystoneNameFieldOptions
+	): KeystoneNameField;
+}
+
+// Money
+/**
+ * Options specific to Money fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/money/MoneyType.js
+ */
+interface KeystoneMoneyFieldOptions extends KeystoneFieldOptions {
+	/** Ensure type is specifically Money */
+	type: KeystoneMoneyTypeConstructor | NumberConstructor;
+	/** Format string for displaying the money value. Defaults to '$0,0.00'. */
+	format?: string;
+}
+
+/**
+ * Interface for Money field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/money/MoneyType.js
+ */
+interface KeystoneMoneyField extends KeystoneField {
+	/** The native JavaScript type constructor (Number). */
+	_nativeType: NumberConstructor;
+	/** Field-specific options. */
+	options: KeystoneMoneyFieldOptions;
+	/** Format string for displaying the money value. */
+	_formatString: string;
+}
+
+/**
+ * Constructor for Money field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/money/MoneyType.js
+ */
+interface KeystoneMoneyTypeConstructor extends KeystoneFieldTypeConstructor {
+	/** Creates a new Money field instance. */
+	new (
+		list: KeystoneList,
+		path: string,
+		options?: KeystoneMoneyFieldOptions
+	): KeystoneMoneyField;
+}
+
+// Email
+/**
+ * Options specific to Email fields.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/email/EmailType.js
+ */
+interface KeystoneEmailFieldOptions extends KeystoneFieldOptions {
+	/** Ensure type is specifically Email */
+	type: KeystoneEmailTypeConstructor | StringConstructor;
+}
+
+/**
+ * Interface for Email field instances.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/email/EmailType.js
+ */
+interface KeystoneEmailField extends KeystoneField {
+	/** The native JavaScript type constructor (String). */
+	_nativeType: StringConstructor;
+	/** Field-specific options. */
+	options: KeystoneEmailFieldOptions;
+	/** Description of the field type. */
+	typeDescription: string;
+}
+
+/**
+ * Constructor for Email field type.
+ * @see https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/email/EmailType.js
+ */
+interface KeystoneEmailTypeConstructor extends KeystoneFieldTypeConstructor {
+	/** Creates a new Email field instance. */
+	new (
+		list: KeystoneList,
+		path: string,
+		options?: KeystoneEmailFieldOptions
+	): KeystoneEmailField;
+}
