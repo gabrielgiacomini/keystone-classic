@@ -1,0 +1,278 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# --- KeystoneJS v4 Typing Project: Setup & Context ---
+
+**Date:** 2025-03-26
+**Author:** Gabriel Giacomini (Giaco)
+**Project:** KeystoneJS v4 (Legacy CommonJS version)
+**Goal:** Add comprehensive TypeScript definition (`.d.ts`) files to the existing JavaScript codebase and set up the environment for developing and validating these definitions.
+
+---
+
+## Part 1: Environment Setup
+
+This section outlines the necessary steps to set up the development environment for creating and testing TypeScript definitions (`.d.ts`) for the KeystoneJS v4 project.
+
+### Prerequisites
+
+* Node.js installed
+* npm or yarn installed
+* KeystoneJS v4 project source code checked out
+
+### Step 1: Install Development Dependencies
+
+We need TypeScript itself and the type definitions for key libraries used by KeystoneJS v4.
+
+1.  **Install TypeScript:**
+    ```bash
+    npm install --save-dev typescript
+    # or
+    yarn add --dev typescript
+    ```
+
+2.  **Install Essential `@types` Packages:** These provide type information for Node.js built-ins and core Keystone dependencies.
+    ```bash
+    npm install --save-dev @types/node @types/express @types/mongoose
+    # or
+    yarn add --dev @types/node @types/express @types/mongoose
+    ```
+
+3.  **Install Other `@types` Packages (As Needed):** Examine KeystoneJS v4's `package.json` `dependencies`. For any dependency whose API surface is exposed through Keystone's types (e.g., in function parameters, return types, or options objects), install its corresponding `@types` package if available. Common examples might include:
+    * `@types/lodash` (Keystone uses Lodash)
+    * `@types/async`
+    * `@types/pug` (If view context or options expose Pug types)
+    * `@types/mongodb` (Mongoose builds upon this)
+    * *Search on npm (`npm search @types/package-name`) if unsure.*
+    ```bash
+    # Example: npm install --save-dev @types/lodash @types/async
+    # Example: yarn add --dev @types/lodash @types/async
+    ```
+    *AI Task:* You can help identify potentially missing `@types` packages by analyzing `require()` statements in the `.js` files corresponding to the `.d.ts` files we are working on.
+
+### Step 2: Configure `tsconfig.json`
+
+Create a `tsconfig.json` file in the project root. This file configures the TypeScript compiler (`tsc`) for type-checking our `.d.ts` files.
+
+```jsonc
+// tsconfig.json
+{
+  "compilerOptions": {
+    /* Base Options: */
+    "esModuleInterop": true, // Enables compatibility between CommonJS and ES Modules.
+    "skipLibCheck": true, // Speeds up compilation by skipping type checking of declaration files (*.d.ts) in node_modules.
+    "target": "ES2016", // Target modern Node.js versions compatible with Keystone v4.
+    "allowJs": false, // We don't need TS to look at the JS source files for type checking the definitions.
+    "checkJs": false, // Do not type-check JS files.
+    "resolveJsonModule": true, // Allows importing JSON files if needed by config/types.
+    "moduleResolution": "node", // How modules get resolved (standard for Node.js).
+    "module": "CommonJS", // CRUCIAL: Ensure TS understands the CommonJS module system used by Keystone v4.
+
+    /* Strictness Checks (Recommended - Start strict, loosen if necessary): */
+    "strict": true, // Enable all strict type-checking options.
+    // "noImplicitAny": true, // Raise error on expressions and declarations with an implied 'any' type.
+    // "strictNullChecks": true, // In strict null checking mode, the null and undefined values are not in the domain of every type.
+    // "strictFunctionTypes": true, // Enable stricter checking of function types.
+    // "strictPropertyInitialization": false, // Class fields defined using classes need to be initialized in the constructor - Less relevant for .d.ts focused work.
+    // "noImplicitThis": true, // Raise error on 'this' expressions with an implied 'any' type.
+    // "alwaysStrict": true, // Parse in strict mode and emit "use strict" for each source file.
+
+    /* Output & Declaration Files: */
+    "declaration": false, // We are writing .d.ts files manually.
+    "declarationMap": false, // Do not generate source maps for .d.ts files.
+    "emitDeclarationOnly": false,
+    "noEmit": true, // CRUCIAL: Prevent tsc from generating JS output files. We ONLY want type checking.
+
+    /* Project Structure: */
+    "baseUrl": "./", // Base directory for resolving non-relative module names.
+    // "paths": {}, // Optional: Define module path mappings if needed.
+    "rootDir": ".", // Specifies the root directory of input files.
+
+    /* Library Files: */
+    "lib": [
+      "ES2016" // Include necessary ES features used (adjust if needed). Add "DOM" if browser globals are somehow referenced.
+    ]
+  },
+  "include": [
+    "**/*.d.ts", // Include ALL our manually created definition files.
+    "test-types/**/*.ts" // Include our type-testing files (see Step 4).
+  ],
+  "exclude": [
+    "node_modules", // Standard exclusion.
+    "website", // Exclude website build/source if not typing it in this phase.
+    "admin/public", // Exclude bundled vendor libs if not typing them directly.
+    "coverage", // Exclude test coverage reports.
+    "**/test/**" // Exclude JS unit tests if they exist in test/ folders.
+    // Add any other build output or temporary directories.
+  ]
+}
+```
+
+*AI Task:* You can help generate or refine this tsconfig.json based on project specifics or errors encountered during type checking.
+
+### Step 3: Configure `package.json`
+
+Ensure `package.json` correctly points to the type definitions and includes them in the published package (using the co-location strategy).
+
+1.  **Set `types` field:** Point to the main definition file corresponding to the package's `main` entry point.
+    ```json
+    // package.json (partial)
+    {
+      "name": "keystone",
+      "version": "4.x.x",
+      "main": "index.js",
+      "types": "index.d.ts", // <--- Add this line
+      // ... other fields
+    }
+    ```
+
+2.  **Configure `files` array:** Ensure this array includes all necessary source `.js` files *and* all the co-located `.d.ts` files. Be careful not to exclude required files or include unnecessary ones (like tests).
+    ```json
+    // package.json (partial)
+    {
+      // ...
+      "files": [
+        "index.js",
+        "index.d.ts", // <--- Include main .d.ts
+        "lib/", // <--- Include source JS folder
+        "lib/**/*.d.ts", // <--- Include nested .d.ts
+        "server/",
+        "server/**/*.d.ts",
+        "fields/",
+        "fields/**/*.d.ts",
+        "admin/server/", // <--- Include if Admin UI backend is part of package
+        "admin/server/**/*.d.ts",
+        "README.md"
+        // Add other necessary files/folders
+        // Make sure to explicitly include .d.ts files if using folder includes!
+        // Alternatively, list all files explicitly if needed.
+      ]
+      // ...
+    }
+    ```
+    *Note:* Using glob patterns like `lib/**/*.d.ts` might require testing with `npm pack` to ensure they work as expected, or list files more explicitly.
+
+### Step 4: Validation Strategy
+
+1.  **Static Type Checking (`tsc --noEmit`):**
+    * **Purpose:** Primary check for syntax errors, type mismatches, and unresolved references within `.d.ts` files.
+    * **Command:** Run `npx tsc --noEmit` from the project root.
+    * **Workflow:** Run frequently. Fix reported errors.
+    * **npm Script:** Add to `package.json`:
+        ```json
+        // package.json (partial)
+        {
+          "scripts": {
+            "check-types": "tsc --noEmit"
+            // ... other scripts
+          }
+        }
+        ```
+        Run `npm run check-types` or `yarn check-types`.
+
+2.  **Usage Testing (Sample `.ts` file):**
+    * **Purpose:** Confirms practical usability and ergonomics of the types.
+    * **Setup:** Create `test-types/usage.ts`. Ensure `test-types/**/*.ts` is in `tsconfig.json`'s `include`.
+    * **Content (`usage.ts` Example):**
+        ```typescript
+        // test-types/usage.ts
+        import keystone = require('keystone');
+        import * as mongoose from 'mongoose';
+
+        // Test Keystone Initialization
+        keystone.init({
+          name: 'Test Project',
+          brand: 'Test',
+          'cookie secret': 'secret',
+          'auto update': true,
+          mongo: process.env.MONGO_URI || 'mongodb://localhost/test-db',
+          // Add other options... test their types
+        });
+
+        // Test List Definition
+        interface IUser extends mongoose.Document {
+          name: { first: string; last: string; };
+          email: string;
+          // Add other fields
+        }
+        const User = keystone.list<IUser>('User');
+        User.add({
+          name: { type: keystone.Field.Types.Name, required: true, index: true },
+          email: { type: keystone.Field.Types.Email, initial: true, required: true, unique: true, index: true },
+          password: { type: keystone.Field.Types.Password, initial: true, required: true },
+        });
+        User.register();
+
+        // Test Data Access (Example)
+        async function findUser() {
+          try {
+            const user = await User.model.findOne({ email: 'test@example.com' }).exec();
+            if (user) { console.log(user.name.first); }
+          } catch (err) { console.error(err); }
+        }
+        console.log('Type test file loaded.');
+        ```
+    * **Validation:** `npm run check-types` will also check this file.
+
+*AI Task:* You can help write/expand `test-types/usage.ts`, diagnose `tsc` errors, and identify missing `@types`.
+
+---
+
+## Part 2: Typing Context & Guidance
+
+This section provides context about KeystoneJS v4 and guidelines for generating the TypeScript definitions.
+
+### Project Overview Recap
+
+KeystoneJS v4 is a Node.js/Express/Mongoose CMS framework using CommonJS. The goal is **adding co-located `.d.ts` files** for external TS usage and internal clarity, not rewriting the JS source.
+
+### Core Technologies Recap
+
+* Node.js (`@types/node`)
+* Express (`@types/express`)
+* Mongoose (`@types/mongoose`)
+* CommonJS (`require`, `module.exports`, `exports`)
+* JavaScript (ES5/ES6)
+
+### Typing Strategy Recap
+
+* **Co-location:** `foo.d.ts` lives next to `foo.js`.
+* **`.d.ts` Only:** No JS code changes.
+* **CommonJS Compatibility:** Use `export = ...` for single exports, namespaces/interfaces for multiple exports. Use `declare module 'keystone' { ... export = keystone; }` for the main entry (`index.d.ts`).
+* **Placeholders:** Existing `.d.ts` files may have JSDoc placeholders (`@summary`, `@todo Giaco: ...`) - use these for context and replace with types.
+
+### Key Files & Directories (Core Structure)
+
+* **`index.js` (`index.d.ts`):** Main entry. `declare module 'keystone'`. Define `Keystone` interface (methods: `init`, `start`, `list`, etc.; props: `app`, `mongoose`, `lists`, `Field`/`Types`). `export = keystone`.
+* **`lib/core/`:** Core function implementations. Type exports. Define `KeystoneInitOptions` interface (from `init.js`).
+* **`lib/list.js` & `lib/list/`:** Defines `List<T extends mongoose.Document>` class/interface. Type constructor, methods (`add`, `register`, `getData`, etc.), `.model` property (`mongoose.Model<T>`).
+* **`lib/view.js`:** Defines `View` class/interface, `render()` method.
+* **`lib/updateHandler.js`:** Defines `UpdateHandler` interface/class, `process()` method.
+* **`lib/email.js`:** Defines `Email` class/interface, `send()` method.
+* **`lib/session.js`:** Type exported session functions (e.g., `signin`, `signout`).
+* **`fields/types/Type.js` & `fields/types/Field.js`:** **CRITICAL:** Define base interfaces/classes `FieldTypeBase` and `FieldBase` (common methods/properties).
+* **`fields/types/*/*.js`:** Specific field types. Define options interface (e.g., `TextOptions`), specific Type class (extends `FieldTypeBase`), specific Field class (extends `FieldBase`).
+* **`lib/fieldTypes.js` (or aggregator):** Define the namespace/object (e.g., `Keystone.Fields` or `Keystone.Types`) holding field type constructors.
+* **`server/`:** Express setup. Understand for context and potential `req`/`res` augmentation.
+* **`global.d.ts`:** For module augmentation (`declare global { namespace Express { ... } }`). Requires `export {};`.
+
+### AI Instructions (Cursor)
+
+When asked to generate or update type definitions for `some/path/file.d.ts`:
+
+1.  **Analyze Source (`.js`):** **Always** read `some/path/file.js` to identify exports, signatures, classes, dependencies, and API usage (Mongoose, Express, Node).
+2.  **Focus on Exports:** Primarily type the module's public API (`module.exports`, `exports.foo`).
+3.  **Use Existing Comments:** Leverage JSDoc placeholders (`@summary`, `@todo Giaco: ...`) for context, then **replace them with concrete types**.
+4.  **CommonJS Typing:** Use `export = Foo` for `module.exports = Foo`. Use namespaces/interfaces for `exports.foo = ...`. Use `declare module 'keystone'` for `index.d.ts`.
+5.  **Leverage Dependency Types:** Import and use types from `@types/node`, `@types/express`, `@types/mongoose` (e.g., `mongoose.Document`, `express.Request`).
+6.  **Define Interfaces:** Use interfaces for options objects and plain object shapes.
+7.  **Use Classes Carefully:** Declare classes if source uses ES6 classes or if mimicking constructor functions+prototypes is clearest.
+8.  **Avoid `any`:** Prefer specific types, inferred types, `unknown`, or library types (`mongoose.Document`). Use `any` as a last resort.
+9.  **Express Augmentation:** Note `req`/`res` modifications; these belong in `global.d.ts`.
+10. **Generics:** Use generics where helpful (e.g., `List<T>`, `Model<T>`).
+11. **Function Overloads:** Define multiple signatures if function behavior varies with arguments.
+12. **Be Iterative:** Start with core signatures/shapes, refine later. Accuracy of the main API is key.
+
+---

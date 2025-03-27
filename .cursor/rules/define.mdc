@@ -1,0 +1,147 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# --- KeystoneJS v4 TypeScript Definition Generation Context ---
+
+**Date:** 2025-03-26
+**Author:** Gabriel Giacomini (Giaco)
+**Project:** KeystoneJS v4 (Legacy CommonJS version)
+**Goal:** Add comprehensive TypeScript definition (`.d.ts`) files to the existing JavaScript codebase. This is a precursor to a potential future rewrite to TypeScript, but the current phase focuses *only* on adding types for external consumption and internal clarity.
+
+## Project Overview
+
+KeystoneJS v4 is a Node.js CMS and web application framework built on Express and Mongoose. It uses a schema-driven approach (Lists and Fields) to define data models and automatically generate an Admin UI. The codebase is written in JavaScript using CommonJS modules.
+
+The primary objective of this task is to create accurate `.d.ts` files for the existing `.js` files to:
+1.  Enable better developer experience when consuming KeystoneJS v4 in TypeScript projects.
+2.  Improve code understanding and maintainability internally via type hints.
+3.  Serve as a foundation for a potential future migration to TypeScript.
+
+## Core Technologies
+
+* **Node.js:** The runtime environment. Use types from `@types/node`.
+* **Express:** Web framework used extensively. Use types from `@types/express`.
+* **Mongoose:** MongoDB ODM used for database modeling and interaction. Use types from `@types/mongoose`.
+* **CommonJS:** The module system used throughout the project (`require`, `module.exports`, `exports`). Type definitions must reflect this.
+* **JavaScript (ES5/ES6):** Primarily pre-ES6 classes in core, heavy use of prototypes and constructor functions.
+
+## Typing Strategy
+
+1.  **Co-location:** `.d.ts` definition files are being created directly alongside their corresponding `.js` files within the existing project structure. (e.g., `lib/list.js` will have `lib/list.d.ts`).
+2.  **`.d.ts` Only:** We are *only* adding `.d.ts` files. The `.js` source code remains unchanged in this phase.
+3.  **CommonJS Compatibility:** Type definitions must accurately represent the CommonJS module structure.
+    * For modules exporting a single main function, class, or object (`module.exports = ...`), use `export = ...` in the `.d.ts` file.
+    * For modules exporting multiple named things (`exports.foo = ...`, `exports.bar = ...`), define an interface or namespace and export it.
+    * The main package entry (`index.js`) requires `declare module 'keystone' { ... export = keystone; }`.
+4.  **Placeholder Comments:** Many `.d.ts` files may already exist with placeholder JSDoc comments (`@summary`, `@module`, `@description`, `@see`, `@todo Giaco: ...`). Use these as a starting point and replace/enhance them with actual type definitions.
+
+## Key Files & Directories (Core Structure)
+
+This map outlines the core areas and their relevance for typing. (Note: This excludes `website/` and `admin/` structure for now, focusing on the reusable core package).
+
+* **`index.js` (`index.d.ts`)**
+    * **Role:** Main package entry point. Exports the global `keystone` singleton.
+    * **Typing:** Needs `declare module 'keystone' { ... }`. Define the main `Keystone` interface within the module declaration, typing all exported methods (`init`, `start`, `list`, `set`, `get`, etc.) and properties (`app`, `mongoose`, `lists`, `Field`/`Types`). Use `export = keystone;` at the end of the module block.
+* **`lib/core/`**
+    * **Role:** Implements core functionalities exposed via the `keystone` object.
+    * **Typing:** Type the exported functions/objects. Pay special attention to `init.js` (define `KeystoneInitOptions` interface) and `start.js`.
+* **`lib/list.js` & `lib/list/`**
+    * **Role:** Defines the `List` class/object (`lib/list.js`) and its prototype/helper methods (`lib/list/*`). Instances are returned by `keystone.list()`.
+    * **Typing:** Define a `List<T extends mongoose.Document>` interface/class. Type its constructor/options. Type methods like `add`, `register`, `getData`, `paginate`, `updateItem`, `getCSVData`. Crucially, type the `.model` property (which holds the `mongoose.Model<T>`).
+* **`lib/view.js`**
+    * **Role:** Handles view rendering, integrating with template engines.
+    * **Typing:** Define the `View` class/interface and its methods, especially `render()`. Note interaction with Express `res`.
+* **`lib/updateHandler.js`**
+    * **Role:** Processes data (usually from forms) for saving/updating Mongoose documents. Instantiated via `item.getUpdateHandler(req)`.
+    * **Typing:** Define the `UpdateHandler` interface/class, its constructor/options, and its primary method `process(data, options, callback)`. Type callback arguments accurately (err, item).
+* **`lib/email.js`**
+    * **Role:** Handles sending emails.
+    * **Typing:** Define the `Email` class/interface, its options, and the `send()` method signature.
+* **`lib/session.js`**
+    * **Role:** Manages user sessions (signin, signout, session data).
+    * **Typing:** Type the exported session management functions (e.g., `signin`, `signout`). Pay attention to Express `req.session` interaction.
+* **`fields/types/Type.js` & `fields/types/Field.js`**
+    * **Role:** **CRITICAL:** Define the base classes for Field Type *constructors* (`Type.js`) and Field *instances* (`Field.js`).
+    * **Typing:** Define `FieldTypeBase` and `FieldBase` interfaces/classes. These are fundamental for all specific field types. Type their common methods (`addToSchema`, `register`, `validateInput`, `updateItem`, `format`, etc.) and properties (`path`, `options`).
+* **`fields/types/*/*.js`**
+    * **Role:** Implementations for specific field types (Text, Relationship, Number, etc.). Often includes the Type, Field, Column, and Filter classes for that type.
+    * **Typing:** For each field type:
+        * Define a specific options interface (e.g., `TextOptions`) extending base options.
+        * Define the specific Field Type class/interface extending `FieldTypeBase`.
+        * Define the specific Field class/interface extending `FieldBase`.
+        * Type any associated Column/Filter classes if relevant to external API surface.
+* **`lib/fieldTypes.js` (or aggregator)**
+    * **Role:** Collects and exports the field type constructors, usually attached to `keystone.Field` or `keystone.Types`.
+    * **Typing:** Define the namespace or object (e.g., `Keystone.Fields` or `Keystone.Types`) that holds all the field type constructors (e.g., `Text: typeof TextFieldType; Relationship: typeof RelationshipFieldType;`).
+* **`server/`**
+    * **Role:** Sets up the Express application, binds middleware.
+    * **Typing:** Less critical for *external* library consumption, but important for understanding framework internals and potential Express `req`/`res` modifications. Type exported setup functions if any.
+* **`global.d.ts`**
+    * **Role:** Used for global augmentations.
+    * **Typing:** Primarily needed to add Keystone-specific properties to Express types: `declare global { namespace Express { interface Request { keystone?: Keystone; list?: List<any>; item?: mongoose.Document; /* ... others */ } } }`. Requires `export {};`.
+
+## AI Instructions (Cursor)
+
+I will point you to specific `.js` / `.d.ts` file pairs. When asked to generate or update type definitions for `some/path/file.d.ts`:
+
+1.  **Analyze Source (`.js`):** **Always** carefully read the corresponding `some/path/file.js`. Identify:
+    * What is being exported (`module.exports = ...` or `exports.foo = ...`).
+    * Function signatures (parameters, return types, use of `arguments`).
+    * Class/constructor function definitions and their methods/properties.
+    * Dependencies (`require(...)`).
+    * Usage of Mongoose, Express, Node.js APIs.
+2.  **Focus on Exports:** Primarily type the module's public API (what is exported). Internal implementation details usually don't need explicit types in the `.d.ts` unless they appear in the signatures of exported members.
+3.  **Use Existing Comments:** Leverage the `@summary`, `@description`, `@todo`, etc., in the existing `.d.ts` as context, but **replace placeholder comments with concrete type definitions**.
+4.  **CommonJS Typing:**
+    * If `module.exports = SomeThing`, use `export = SomeThing;` in the `.d.ts`.
+    * If `exports.foo = ...; exports.bar = ...;`, define and export a namespace or interface containing `foo`, `bar`.
+    * Within `declare module 'keystone'`, use standard TS syntax, ending with `export = keystoneInstance;`.
+5.  **Leverage Dependency Types:** Actively use types from `@types/node`, `@types/express`, `@types/mongoose`. Import them as needed (e.g., `import * as mongoose from 'mongoose';`). Reference types like `mongoose.Schema`, `mongoose.Document`, `mongoose.Model`, `express.Request`, `express.Response`, `express.NextFunction`, `NodeJS.ErrnoException`.
+6.  **Define Interfaces:** Use interfaces heavily for:
+    * Options objects passed to functions/constructors (e.g., `KeystoneInitOptions`, `ListOptions`, field type options).
+    * Shapes of plain objects.
+7.  **Use Classes Carefully:** Declare classes if the source JS truly uses ES6 classes, or if mimicking the structure of a constructor function with prototype methods is the clearest representation.
+8.  **Avoid `any`:** Strive to use specific types. Infer from code, JSDoc, library types (`mongoose.Document` is better than `any`). Use `unknown` if the type is truly unknown and needs checking. Use `any` only as a last resort or for highly dynamic/untyped structures.
+9.  **Express Augmentation:** If the code adds properties to `req` or `res`, note this, and I (Giaco) will ensure `global.d.ts` is updated accordingly using module augmentation.
+10. **Generics:** Use generics where appropriate, especially for `List<T extends mongoose.Document>` and `mongoose.Model<T>`.
+11. **Function Overloads:** Define multiple function signatures (overloads) if a function behaves differently based on its arguments (e.g., optional callbacks).
+12. **Be Iterative:** Start with the core signatures and shapes. We can refine complex types, generics, and edge cases later. Accuracy of the main API surface is the priority.
+
+## Example (Simple Module)
+
+```javascript
+// lib/utils/simpleUtil.js
+function capitalize(str) {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+module.exports = capitalize;
+```
+
+
+```ts
+// lib/utils/simpleUtil.d.ts
+
+/**
+ * @summary Capitalizes the first letter of a string.
+ * @module lib/utils/simpleUtil.js
+ * @creationDate ...
+ * @description Type definition for the capitalize utility function.
+ * @see lib/utils/simpleUtil.js
+ * @todo Giaco: Review and finalize.
+ */
+
+// Define the function signature
+declare function capitalize(str: string | null | undefined): string;
+
+// Export the function using 'export =' for CommonJS single export
+export = capitalize;
+
+// Note: No 'export {}' needed when using 'export =' at the top level.
+
+````
+
+---
+

@@ -1,0 +1,72 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# KeystoneJS v4 Typing Priority List (~50 items)
+# Files/areas to focus on first for creating corresponding .d.ts files.
+# Prioritizes core API, base types, common list methods, and common fields.
+
+# Phase 1: Core API Surface & Setup (Foundation)
+./index.js                    # Main keystone object, module declaration (`declare module 'keystone'`)
+./lib/core/init.js            # keystone.init() options interface (KeystoneInitOptions)
+./lib/core/options.js         # Option handling logic (provides context for init options)
+./lib/core/start.js           # keystone.start() signature and options
+./global.d.ts                 # Express Request/Response augmentation (needed early for other types)
+
+# Phase 2: Fundamental Classes & Base Types
+./lib/list.js                 # List class/interface definition (`List<T>`)
+./fields/types/Type.js        # Base class for Field Type constructors (`FieldTypeBase`)
+./fields/types/Field.js       # Base class for Field instances (`FieldBase`)
+./lib/updateHandler.js        # UpdateHandler class/interface definition (`process` method)
+./lib/view.js                 # View class/interface definition (`render` method)
+
+# Phase 3: Core List Instance Methods (API on `keystone.list()` results)
+./lib/list/add.js             # List.add() method signature and field definition options
+./lib/list/register.js        # List.register() method signature
+./lib/list/getData.js         # List.getData() method signature (internal/external querying)
+./lib/list/paginate.js        # List.paginate() method signature and options/result types
+./lib/list/updateItem.js      # List.updateItem() method signature
+./lib/list/relationship.js    # List relationship helpers/methods (important for Relationship field)
+
+# Phase 4: Common Field Types (Type Constructor + Field Instance pairs)
+./fields/types/key/KeyType.js         # Key Field Type constructor
+./fields/types/key/KeyField.js        # Key Field instance definition
+./fields/types/text/TextType.js       # Text Field Type constructor
+./fields/types/text/TextField.js      # Text Field instance definition
+./fields/types/textarea/TextareaType.js # Textarea Field Type constructor
+./fields/types/textarea/TextareaField.js  # Textarea Field instance definition
+./fields/types/number/NumberType.js     # Number Field Type constructor
+./fields/types/number/NumberField.js    # Number Field instance definition
+./fields/types/boolean/BooleanType.js   # Boolean Field Type constructor
+./fields/types/boolean/BooleanField.js  # Boolean Field instance definition
+./fields/types/select/SelectType.js     # Select Field Type constructor
+./fields/types/select/SelectField.js    # Select Field instance definition
+./fields/types/relationship/RelationshipType.js # Relationship Field Type constructor (Complex)
+./fields/types/relationship/RelationshipField.js # Relationship Field instance definition (Complex)
+./fields/types/date/DateType.js       # Date Field Type constructor
+./fields/types/date/DateField.js      # Date Field instance definition
+./fields/types/datetime/DatetimeType.js # Datetime Field Type constructor
+./fields/types/datetime/DatetimeField.js  # Datetime Field instance definition
+./fields/types/password/PasswordType.js   # Password Field Type constructor
+./fields/types/password/PasswordField.js  # Password Field instance definition
+./fields/types/email/EmailType.js       # Email Field Type constructor
+./fields/types/email/EmailField.js      # Email Field instance definition
+./fields/types/name/NameType.js         # Name Field Type constructor
+./fields/types/name/NameField.js        # Name Field instance definition
+./fields/types/url/UrlType.js           # Url Field Type constructor
+./fields/types/url/UrlField.js          # Url Field instance definition
+./fields/types/html/HtmlType.js         # Html Field Type constructor
+./fields/types/html/HtmlField.js        # Html Field instance definition
+./fields/types/markdown/MarkdownType.js   # Markdown Field Type constructor
+./fields/types/markdown/MarkdownField.js  # Markdown Field instance definition
+
+# Phase 5: Other Important Modules & Utilities
+./lib/fieldTypes.js           # Field Type aggregator/export structure (e.g., `keystone.Field.Types`)
+./lib/email.js                # Email class/interface definition (`send` method)
+./lib/session.js              # Session management function signatures (signin, signout, etc.)
+./lib/schemaPlugins.js        # Schema plugin registration/usage interface (if applicable)
+./lib/schemaPlugins/track.js    # Common 'track' schema plugin options/interface
+./lib/schemaPlugins/autokey.js  # Common 'autokey' schema plugin options/interface
+# ./lib/core/importer.js      # Utility for require (lower priority but potentially useful context)
+# ./lib/path.js               # Path utilities (lower priority)
