@@ -2865,22 +2865,43 @@ declare class Keystone {
 	 */
 	list: (key: string) => KeystoneList | undefined;
 
+	// Add or Replace these method signatures within the 'declare class Keystone' block
+
 	/**
 	 * Opens a connection to the MongoDB database.
-	 * @param options Connection options.
-	 * @param callback Callback for connection result.
+	 * It's usually called implicitly by `keystone.start()`.
+	 *
+	 * @param options Connection options, including optional `uri` or mongoose-specific settings.
+	 * @param callback Optional callback function `(err?: any) => void` executed after connection attempt.
 	 * @returns The Keystone instance for chaining.
+	 * @see ./lib/core/openDatabaseConnection.js
 	 */
-	openDatabaseConnection: (
+	openDatabaseConnection(
 		options?: mongoose.ConnectOptions & { uri?: string },
 		callback?: (err?: any) => void
-	) => this;
+	): this;
 
 	/**
 	 * Closes the current MongoDB connection.
-	 * @param callback Callback for when connection is closed.
+	 *
+	 * @param callback Optional callback function `(err?: any) => void` executed after disconnection attempt.
+	 * @see ./lib/core/closeDatabaseConnection.js
 	 */
-	closeDatabaseConnection: (callback?: (err?: any) => void) => void;
+	closeDatabaseConnection(callback?: (err?: any) => void): void;
+
+	/**
+	 * Starts the Keystone application server.
+	 * This typically includes initializing express, connecting to the database (if not already),
+	 * setting up middleware, mounting routes, and starting the HTTP(S) listeners.
+	 *
+	 * @param options Optional configuration options (often passed via `keystone.set` instead) or a callback function.
+	 * @param callback Optional callback function `(err?: any) => void` executed after the server has started or failed to start.
+	 * @see ./lib/core/start.js
+	 */
+	start(
+		options?: Record<string, any> | ((err?: any) => void),
+		callback?: (err?: any) => void
+	): void;
 
 	/**
 	 * Populates relationship fields in a document.
@@ -2898,16 +2919,6 @@ declare class Keystone {
 		from: string | Record<string, string | number>,
 		to?: string,
 		status?: number
-	) => void;
-
-	/**
-	 * Starts the Keystone server.
-	 * @param options Start options or callback.
-	 * @param callback Callback when server is started.
-	 */
-	start: (
-		options?: Record<string, any> | ((err?: any) => void),
-		callback?: (err?: any) => void
 	) => void;
 
 	/**
