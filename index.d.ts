@@ -79,7 +79,7 @@ export interface KeystoneFieldOptions {
 	 * Field must have a value. Can be a boolean or a function for conditional requirement.
 	 * When using a function, `this` context is the Mongoose document.
 	 */
-	required?: boolean | ((this: any) => boolean);
+	required?: boolean | ((this: any) => boolean) | string | string[]; // <-- ADDED string | string[] here
 	/**
 	 * Create a MongoDB index for this field.
 	 * Improves query performance on this field.
@@ -1212,7 +1212,7 @@ export interface KeystoneFieldSelectableOption {
  * @see ./fields/types/select/SelectType.js
  */
 export interface KeystoneFieldOptionsForSelectType
-	extends Omit<KeystoneFieldOptions, "type"> {
+	extends KeystoneFieldOptions {
 	/** Ensure type is specifically Select */
 	type: KeystoneTypeConstructorForSelectType;
 	/**
@@ -1281,8 +1281,7 @@ export interface KSAdminUiFilterForSelectField {
  * Interface for Select field instances.
  * @see ./fields/types/select/SelectType.js
  */
-export interface KeystoneFieldForSelectType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForSelectType extends KeystoneField {
 	/** Admin UI rendering style ('select' or 'radio'). */
 	ui: string;
 	/** Whether the value is stored as a Number. */
@@ -1317,51 +1316,15 @@ export interface KeystoneFieldForSelectType
 		map: string;
 	};
 
-	/**
-	 * Adds the enum path and virtuals to the schema.
-	 * Overrides the base Field.addToSchema method.
-	 * @param schema The Mongoose schema.
-	 */
+	// Required KeystoneField properties
+	list: KeystoneList;
+	path: string;
+	_path: any;
+	type: string;
+	typeDescription: string; // Changed from optional to required
+
+	// Required KeystoneField methods
 	addToSchema(schema: mongoose.Schema): void;
-
-	/**
-	 * Retrieves a property from the selected option object for an item.
-	 * Exposed as `item._.fieldPath.pluck(propertyName, defaultValue)`.
-	 * @param item The Keystone document.
-	 * @param property The key of the property to retrieve from the selected option object (e.g., 'label', 'value').
-	 * @param _default Default value if the option is not found or doesn't have the property.
-	 * @returns The value of the property from the selected option object, or the default value.
-	 */
-	pluck(
-		item: KeystoneDocument,
-		property: keyof KeystoneFieldSelectableOption | string,
-		_default?: any
-	): any;
-
-	/**
-	 * Returns a shallow clone of the options array.
-	 * @returns Array of cloned option objects.
-	 */
-	cloneOps(): KeystoneFieldSelectableOption[];
-
-	/**
-	 * Returns a shallow clone of the options map.
-	 * @returns Map of value to cloned option object.
-	 */
-	cloneMap(): Record<string | number, KeystoneFieldSelectableOption>;
-
-	/**
-	 * Adds filtering conditions to a Mongoose query.
-	 * @param filter Filter oAdminUiFieldReactptions with value(s) and inversion flag.
-	 * @returns MongoDB query conditions object.
-	 */
-	addFilterToQuery(filter: KSAdminUiFilterForSelectField): Record<string, any>;
-
-	/**
-	 * Validates that the input value is one of the predefined options or empty/null/undefined.
-	 * @param data Input data object.
-	 * @param callback Receives whether input is valid.
-	 */
 	validateInput(data: any, callback: (valid: boolean) => void): void;
 
 	/**
@@ -1375,13 +1338,15 @@ export interface KeystoneFieldForSelectType
 		data: any,
 		callback: (valid: boolean) => void
 	): void;
-
-	/**
-	 * Formats the field value.
-	 * @param item The Keystone document.
-	 * @returns The label of the selected option or empty string.
-	 */
+	addFilterToQuery(filter: KSAdminUiFilterForSelectField): Record<string, any>;
 	format(item: KeystoneDocument): string;
+	getData(item: KeystoneDocument): any;
+	isModified(item: KeystoneDocument): boolean;
+	updateItem(
+		item: KeystoneDocument,
+		data: any,
+		callback: (err?: Error) => void
+	): void;
 }
 
 /**
@@ -1389,7 +1354,7 @@ export interface KeystoneFieldForSelectType
  * @see ./fields/types/select/SelectType.js
  */
 export interface KeystoneTypeConstructorForSelectType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -1401,11 +1366,11 @@ export interface KeystoneTypeConstructorForSelectType
 
 // Date & DateTime
 /**
- * Filter oAdminUiFieldReactptions for Date and DateTime field queries.
+ * Filter options for Date and DateTime field queries.
  */
-export interface KSAdminUiFilterForDateField {
+export interface KSAdminUiFilterForDateAndDateTimeFields {
 	/**
-	 * Filter mAdminUFieldReactiode.
+	 * Filter mode.
 	 * - 'between': Matches dates between 'after' and 'before'.
 	 * - 'after': Matches dates after the value.
 	 * - 'before': Matches dates before the value.
@@ -1423,6 +1388,33 @@ export interface KSAdminUiFilterForDateField {
 	 * Default: false
 	 */
 	inverted?: boolean;
+}
+
+/**
+ * Filter options for DateArray field queries.
+ */
+export interface KSAdminUiFilterForDateArrayField {
+	/**
+	 * Filter mode.
+	 * - 'between': Matches dates between 'after' and 'before'.
+	 * - 'after': Matches dates after the value.
+	 * - 'before': Matches dates before the value.
+	 * Default: exact match for the day
+	 */
+	mode?: "between" | "after" | "before" | string;
+	/**
+	 * Presence mode.
+	 * - 'none': No dates match the filter.
+	 * - 'some': At least one date matches the filter.
+	 * Default: 'some'
+	 */
+	presence?: "none" | "some";
+	/** The date value(s) to filter by. */
+	value?: string | Date | moment.Moment;
+	/** Start date for 'between' mode. */
+	after?: string | Date | moment.Moment;
+	/** End date for 'between' mode. */
+	before?: string | Date | moment.Moment;
 }
 
 /**
@@ -1480,7 +1472,7 @@ export interface KeystoneFieldOptionsForDateType extends KeystoneFieldOptions {
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
  */
 export interface KeystoneFieldOptionsForDateTimeType
-	extends Omit<KeystoneFieldOptions, "type"> {
+	extends KeystoneFieldOptions {
 	/** Ensure type is specifically DateTime */
 	type: KeystoneTypeConstructorForDateTimeType | DateConstructor;
 	/**
@@ -1552,7 +1544,9 @@ export interface KeystoneFieldForDateType extends KeystoneField {
 	 * @param filter The filter definition.
 	 * @returns A Mongoose query condition object.
 	 */
-	addFilterToQuery(filter: KSAdminUiFilterForDateField): Record<string, any>;
+	addFilterToQuery(
+		filter: KSAdminUiFilterForDateAndDateTimeFields
+	): Record<string, any>;
 
 	/**
 	 * Formats the field's date value using moment.js.
@@ -1628,8 +1622,7 @@ export interface KeystoneFieldForDateType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
  */
-export interface KeystoneFieldForDateTimeType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForDateTimeType extends KeystoneField {
 	/** The native JavaScript type constructor (Date). */
 	_nativeType: DateConstructor;
 	/** Underscore methods added to documents (includes 'format', 'moment', 'parse'). */
@@ -1658,19 +1651,15 @@ export interface KeystoneFieldForDateTimeType
 		tzOffset: string;
 	};
 
-	/**
-	 * Gets the value from a data object; may be simple or a pair of fields.
-	 * @param data The input data object.
-	 * @returns The combined date/time value.
-	 */
-	getInputFromData(data: any): string | any;
+	// Required KeystoneField properties
+	list: KeystoneList;
+	path: string;
+	_path: any;
+	type: string;
 
-	/**
-	 * Validates that required input has been provided.
-	 * @param item The Keystone document.
-	 * @param data Input data object.
-	 * @param callback Receives whether input is valid.
-	 */
+	// Required KeystoneField methods
+	addToSchema(schema: mongoose.Schema): void;
+	validateInput(data: any, callback: (valid: boolean) => void): void;
 	validateRequiredInput(
 		item: KeystoneDocument,
 		data: any,
@@ -1739,7 +1728,13 @@ export interface KeystoneFieldForDateTimeType
 	 * @param filter The filter definition.
 	 * @returns MongoDB query conditions object.
 	 */
-	addFilterToQuery(filter: KSAdminUiFilterForDateField): Record<string, any>;
+	addFilterToQuery(
+		filter: KSAdminUiFilterForDateAndDateTimeFields
+	): Record<string, any>;
+	format(item: KeystoneDocument, format?: string): string;
+	getData(item: KeystoneDocument): any;
+	isModified(item: KeystoneDocument): boolean;
+	updateItem(item: KeystoneDocument, data: any, callback: () => void): void;
 }
 
 /**
@@ -1772,7 +1767,7 @@ export interface KeystoneTypeConstructorForDateType
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
  */
 export interface KeystoneTypeConstructorForDateTimeType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -1792,8 +1787,7 @@ export interface KeystoneTypeConstructorForDateTimeType
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/html/HtmlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/html/HtmlType.js}
  */
-export interface KeystoneFieldOptionsForHtmlType
-	extends Omit<KeystoneFieldOptions, "type"> {
+export interface KeystoneFieldOptionsForHtmlType extends KeystoneFieldOptions {
 	/** Ensure type is specifically Html */
 	type: KeystoneTypeConstructorForHtmlType;
 	/** Whether to use WYSIWYG editor. */
@@ -1850,8 +1844,7 @@ export interface KeystoneTypeConstructorForHtmlType
  * Options specific to HTML fields.
  * @see ./fields/types/html/HtmlType.js
  */
-export interface KeystoneFieldOptionsForHtmlType
-	extends Omit<KeystoneFieldOptions, "type"> {
+export interface KeystoneFieldOptionsForHtmlType extends KeystoneFieldOptions {
 	/** Ensure type is specifically HTML */
 	type: KeystoneTypeConstructorForHtmlType;
 	/**
@@ -1874,8 +1867,7 @@ export interface KeystoneFieldOptionsForHtmlType
  * Interface for HTML field instances.
  * @see ./fields/types/html/HtmlType.js
  */
-export interface KeystoneFieldForHtmlType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForHtmlType extends KeystoneField {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Default size for the field in the Admin UI. */
@@ -1925,7 +1917,7 @@ export interface KeystoneFieldForHtmlType
  * @see ./fields/types/html/HtmlType.js
  */
 export interface KeystoneTypeConstructorForHtmlType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -4644,8 +4636,7 @@ export interface KeystoneFileStorage {
  * Options specific to File fields.
  * @see ./fields/types/file/FileType.js
  */
-export interface KeystoneFieldOptionsForFileType
-	extends Omit<KeystoneFieldOptions, "type"> {
+export interface KeystoneFieldOptionsForFileType extends KeystoneFieldOptions {
 	/** Ensure type is specifically File */
 	type: KeystoneTypeConstructorForFileType;
 	/** Storage adapter for handling file uploads (required) */
@@ -4656,8 +4647,7 @@ export interface KeystoneFieldOptionsForFileType
  * Interface for File field instances.
  * @see ./fields/types/file/FileType.js
  */
-export interface KeystoneFieldForFileType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForFileType extends KeystoneField {
 	/** Underscore methods added to documents */
 	_underscoreMethods: ["format", "upload", "remove", "reset"];
 	/** Fixed size for the field in the Admin UI */
@@ -4669,43 +4659,29 @@ export interface KeystoneFieldForFileType
 	/** Paths for file data fields from storage schema */
 	paths: Record<string, string>;
 
-	/**
-	 * Uploads a new file.
-	 * @param item The Mongoose document.
-	 * @param file The uploaded file object.
-	 * @param callback Receives (err: Error | null, result?: any).
-	 */
-	upload(
-		item: any,
-		file: { path: string },
-		callback: (err: Error | null, result?: any) => void
+	// Required KeystoneField properties
+	list: KeystoneList;
+	path: string;
+	_path: any;
+	type: string;
+	typeDescription: string; // Changed from optional to required
+
+	// Required KeystoneField methods
+	addToSchema(schema: mongoose.Schema): void;
+	validateInput(data: any, callback: (valid: boolean) => void): void;
+	validateRequiredInput(
+		item: KeystoneDocument,
+		data: any,
+		callback: (valid: boolean) => void
 	): void;
-
-	/**
-	 * Resets the field value.
-	 * @param item The Mongoose document.
-	 */
-	reset(item: any): void;
-
-	/**
-	 * Deletes the stored file and resets the field value.
-	 * @param item The Mongoose document.
-	 */
-	remove(item: any): void;
-
-	/**
-	 * Formats the field value.
-	 * @param item The Mongoose document.
-	 * @returns The filename or empty string.
-	 */
-	format(item: any): string;
-
-	/**
-	 * Detects whether the field has been modified.
-	 * @param item The Mongoose document.
-	 * @returns Whether any file data paths have been modified.
-	 */
-	isModified(item: any): boolean;
+	format(item: KeystoneDocument): string;
+	getData(item: KeystoneDocument): any;
+	isModified(item: KeystoneDocument): boolean;
+	updateItem(
+		item: KeystoneDocument,
+		data: any,
+		callback: (err?: Error) => void
+	): void;
 }
 
 /**
@@ -4713,7 +4689,7 @@ export interface KeystoneFieldForFileType
  * @see ./fields/types/file/FileType.js
  */
 export interface KeystoneTypeConstructorForFileType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -4835,7 +4811,7 @@ export interface KeystoneTypeConstructorForNumberArrayType
  * @see ./fields/types/location/LocationType.js
  */
 export interface KeystoneFieldOptionsForLocationType
-	extends Omit<KeystoneFieldOptions, "type" | "required"> {
+	extends KeystoneFieldOptions {
 	/** Ensure type is specifically Location */
 	type: KeystoneTypeConstructorForLocationType;
 	/** Enable Google Maps API integration for geocoding */
@@ -4859,8 +4835,7 @@ export interface KeystoneFieldOptionsForLocationType
  * Interface for Location field instances.
  * @see ./fields/types/location/LocationType.js
  */
-export interface KeystoneFieldForLocationType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForLocationType extends KeystoneField {
 	/** Underscore methods added to documents */
 	_underscoreMethods: string[];
 	/** Fixed size for the field in the Admin UI */
@@ -4891,14 +4866,12 @@ export interface KeystoneFieldForLocationType
 		overwrite: string;
 	};
 
-	/**
-	 * Formats selected location fields as a string.
-	 * @param item The Mongoose document.
-	 * @param values Optional space-separated list of fields to include.
-	 * @param delimiter Optional delimiter (default: ', ').
-	 * @returns The formatted location string.
-	 */
-	format(item: any, values?: string, delimiter?: string): string;
+	// Required KeystoneField properties
+	list: KeystoneList;
+	path: string;
+	_path: any;
+	type: string;
+	typeDescription: string;
 
 	/**
 	 * Performs a Google Maps geocoding lookup.
@@ -4941,7 +4914,7 @@ export interface KeystoneFieldForLocationType
  * @see ./fields/types/location/LocationType.js
  */
 export interface KeystoneTypeConstructorForLocationType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -4956,7 +4929,7 @@ export interface KeystoneTypeConstructorForLocationType
  * @see ./fields/types/geopoint/GeoPointType.js
  */
 export interface KeystoneFieldOptionsForGeoPointType
-	extends Omit<KeystoneFieldOptions, "type"> {
+	extends KeystoneFieldOptions {
 	/** Ensure type is specifically GeoPoint */
 	type: KeystoneTypeConstructorForGeoPointType;
 }
@@ -4965,40 +4938,35 @@ export interface KeystoneFieldOptionsForGeoPointType
  * Interface for GeoPoint field instances.
  * @see ./fields/types/geopoint/GeoPointType.js
  */
-export interface KeystoneFieldForGeoPointType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForGeoPointType extends KeystoneField {
 	/** Fixed size for the field in the Admin UI */
 	_fixedSize: "medium";
 	/** Field-specific options */
 	options: KeystoneFieldOptionsForGeoPointType;
 
-	/**
-	 * Gets the field's data from an Item.
-	 * @param item The Mongoose document.
-	 * @returns Array of [longitude, latitude] or empty array.
-	 */
-	getData(item: any): number[];
+	// Required KeystoneField properties
+	list: KeystoneList;
+	path: string;
+	_path: any;
+	type: string;
+	typeDescription: string; // Changed from optional to required
 
-	/**
-	 * Formats the field value as "latitude, longitude".
-	 * @param item The Mongoose document.
-	 * @returns Formatted coordinates or null.
-	 */
-	format(item: any): string | null;
-
-	/**
-	 * Adds geospatial query filters.
-	 * @param filter Filter oAdminUiFieldReactptions with center point and distance.
-	 * @returns MongoDB query conditions.
-	 */
-	addFilterToQuery(filter: {
-		lat?: number;
-		lon?: number;
-		distance?: {
-			mode: "max" | "min";
-			value: number;
-		};
-	}): Record<string, any>;
+	// Required KeystoneField methods
+	addToSchema(schema: mongoose.Schema): void;
+	validateInput(data: any, callback: (valid: boolean) => void): void;
+	validateRequiredInput(
+		item: KeystoneDocument,
+		data: any,
+		callback: (valid: boolean) => void
+	): void;
+	format(item: KeystoneDocument): string | null;
+	getData(item: KeystoneDocument): number[];
+	isModified(item: KeystoneDocument): boolean;
+	updateItem(
+		item: KeystoneDocument,
+		data: any,
+		callback: (err?: Error) => void
+	): void;
 }
 
 /**
@@ -5006,7 +4974,7 @@ export interface KeystoneFieldForGeoPointType
  * @see ./fields/types/geopoint/GeoPointType.js
  */
 export interface KeystoneTypeConstructorForGeoPointType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -5020,8 +4988,7 @@ export interface KeystoneTypeConstructorForGeoPointType
  * Options specific to Code fields.
  * @see ./fields/types/code/CodeType.js
  */
-export interface KeystoneFieldOptionsForCodeType
-	extends Omit<KeystoneFieldOptions, "type"> {
+export interface KeystoneFieldOptionsForCodeType extends KeystoneFieldOptions {
 	/** Ensure type is specifically Code */
 	type: KeystoneTypeConstructorForCodeType;
 	/** Height of the code editor in pixels. Default: 180 */
@@ -5038,8 +5005,7 @@ export interface KeystoneFieldOptionsForCodeType
  * Interface for Code field instances.
  * @see ./fields/types/code/CodeType.js
  */
-export interface KeystoneFieldForCodeType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForCodeType extends KeystoneField {
 	/** The native JavaScript type constructor (String) */
 	_nativeType: StringConstructor;
 	/** Default size for the field in the Admin UI */
@@ -5056,6 +5022,30 @@ export interface KeystoneFieldForCodeType
 	editor: Record<string, any>;
 	/** Field-specific options */
 	options: KeystoneFieldOptionsForCodeType;
+
+	// Required KeystoneField properties
+	list: KeystoneList;
+	path: string;
+	_path: any;
+	type: string;
+	typeDescription: string; // Changed from optional to required
+
+	// Required KeystoneField methods
+	addToSchema(schema: mongoose.Schema): void;
+	validateInput(data: any, callback: (valid: boolean) => void): void;
+	validateRequiredInput(
+		item: KeystoneDocument,
+		data: any,
+		callback: (valid: boolean) => void
+	): void;
+	format(item: KeystoneDocument): string;
+	getData(item: KeystoneDocument): any;
+	isModified(item: KeystoneDocument): boolean;
+	updateItem(
+		item: KeystoneDocument,
+		data: any,
+		callback: (err?: Error) => void
+	): void;
 }
 
 /**
@@ -5063,7 +5053,7 @@ export interface KeystoneFieldForCodeType
  * @see ./fields/types/code/CodeType.js
  */
 export interface KeystoneTypeConstructorForCodeType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -5078,7 +5068,7 @@ export interface KeystoneTypeConstructorForCodeType
  * @see ./fields/types/embedly/EmbedlyType.js
  */
 export interface KeystoneFieldOptionsForEmbedlyType
-	extends Omit<KeystoneFieldOptions, "type" | "initial"> {
+	extends KeystoneFieldOptions {
 	/** Ensure type is specifically Embedly */
 	type: KeystoneTypeConstructorForEmbedlyType;
 	/** Path to the field containing the URL to expand (required) */
@@ -5091,8 +5081,7 @@ export interface KeystoneFieldOptionsForEmbedlyType
  * Interface for Embedly field instances.
  * @see ./fields/types/embedly/EmbedlyType.js
  */
-export interface KeystoneFieldForEmbedlyType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForEmbedlyType extends KeystoneField {
 	/** Underscore methods added to documents */
 	_underscoreMethods: string[];
 	/** Fixed size for the field in the Admin UI */
@@ -5123,32 +5112,29 @@ export interface KeystoneFieldForEmbedlyType
 		thumbnailHeight: string;
 	};
 
-	/**
-	 * Resets the field value to default state.
-	 * @param item The Mongoose document.
-	 */
-	reset(item: any): void;
+	// Required KeystoneField properties
+	list: KeystoneList;
+	path: string;
+	_path: any;
+	type: string;
+	typeDescription: string; // Changed from optional to required
 
-	/**
-	 * Formats the field value (returns HTML).
-	 * @param item The Mongoose document.
-	 * @returns The embedded HTML.
-	 */
-	format(item: any): string;
-
-	/**
-	 * Gets the field's data from an Item.
-	 * @param item The Mongoose document.
-	 * @returns The embedly data object.
-	 */
-	getData(item: any): Record<string, any>;
-
-	/**
-	 * Detects whether the field has been modified.
-	 * @param item The Mongoose document.
-	 * @returns Whether the URL has changed.
-	 */
-	isModified(item: any): boolean;
+	// Required KeystoneField methods
+	addToSchema(schema: mongoose.Schema): void;
+	validateInput(data: any, callback: (valid: boolean) => void): void;
+	validateRequiredInput(
+		item: KeystoneDocument,
+		data: any,
+		callback: (valid: boolean) => void
+	): void;
+	format(item: KeystoneDocument): string;
+	getData(item: KeystoneDocument): Record<string, any>;
+	isModified(item: KeystoneDocument): boolean;
+	updateItem(
+		item: KeystoneDocument,
+		data: any,
+		callback: (err?: Error) => void
+	): void;
 }
 
 /**
@@ -5156,7 +5142,7 @@ export interface KeystoneFieldForEmbedlyType
  * @see ./fields/types/embedly/EmbedlyType.js
  */
 export interface KeystoneTypeConstructorForEmbedlyType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -5171,7 +5157,7 @@ export interface KeystoneTypeConstructorForEmbedlyType
  * @see ./fields/types/cloudinaryimage/CloudinaryImageType.js
  */
 export interface KeystoneFieldOptionsForCloudinaryImageType
-	extends Omit<KeystoneFieldOptions, "type"> {
+	extends KeystoneFieldOptions {
 	/** Ensure type is specifically CloudinaryImage */
 	type: KeystoneTypeConstructorForCloudinaryImageType;
 	/** Custom folder for storing images */
@@ -5194,8 +5180,7 @@ export interface KeystoneFieldOptionsForCloudinaryImageType
  * Interface for CloudinaryImage field instances.
  * @see ./fields/types/cloudinaryimage/CloudinaryImageType.js
  */
-export interface KeystoneFieldForCloudinaryImageType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForCloudinaryImageType extends KeystoneField {
 	/** Underscore methods added to documents */
 	_underscoreMethods: string[];
 	/** Fixed size for the field in the Admin UI */
@@ -5220,11 +5205,29 @@ export interface KeystoneFieldForCloudinaryImageType
 		select: string;
 	};
 
-	/**
-	 * Gets the folder for images in this field.
-	 * @returns The cloudinary folder path.
-	 */
-	getFolder(): string | null;
+	// Required KeystoneField properties
+	list: KeystoneList;
+	path: string;
+	_path: any;
+	type: string;
+	typeDescription: string; // Changed from optional to required
+
+	// Required KeystoneField methods
+	addToSchema(schema: mongoose.Schema): void;
+	validateInput(data: any, callback: (valid: boolean) => void): void;
+	validateRequiredInput(
+		item: KeystoneDocument,
+		data: any,
+		callback: (valid: boolean) => void
+	): void;
+	format(item: KeystoneDocument): string;
+	getData(item: KeystoneDocument): any;
+	isModified(item: KeystoneDocument): boolean;
+	updateItem(
+		item: KeystoneDocument,
+		data: any,
+		callback: (err?: Error) => void
+	): void;
 }
 
 /**
@@ -5232,7 +5235,7 @@ export interface KeystoneFieldForCloudinaryImageType
  * @see ./fields/types/cloudinaryimage/CloudinaryImageType.js
  */
 export interface KeystoneTypeConstructorForCloudinaryImageType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -5247,7 +5250,7 @@ export interface KeystoneTypeConstructorForCloudinaryImageType
  * @see ./fields/types/cloudinaryimages/CloudinaryImagesType.js
  */
 export interface KeystoneFieldOptionsForCloudinaryImagesType
-	extends Omit<KeystoneFieldOptions, "type"> {
+	extends KeystoneFieldOptions {
 	/** Ensure type is specifically CloudinaryImages */
 	type: KeystoneTypeConstructorForCloudinaryImagesType;
 	/** Custom folder for storing images */
@@ -5266,8 +5269,7 @@ export interface KeystoneFieldOptionsForCloudinaryImagesType
  * Interface for CloudinaryImages field instances.
  * @see ./fields/types/cloudinaryimages/CloudinaryImagesType.js
  */
-export interface KeystoneFieldForCloudinaryImagesType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForCloudinaryImagesType extends KeystoneField {
 	/** Underscore methods added to documents */
 	_underscoreMethods: ["format"];
 	/** Fixed size for the field in the Admin UI */
@@ -5334,7 +5336,7 @@ export interface KeystoneFieldForCloudinaryImagesType
  * @see ./fields/types/cloudinaryimages/CloudinaryImagesType.js
  */
 export interface KeystoneTypeConstructorForCloudinaryImagesType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -5349,7 +5351,7 @@ export interface KeystoneTypeConstructorForCloudinaryImagesType
  * @see ./fields/types/datearray/DateArrayType.js
  */
 export interface KeystoneFieldOptionsForDateArrayType
-	extends Omit<KeystoneFieldOptions, "type"> {
+	extends KeystoneFieldOptions {
 	/** Ensure type is specifically DateArray */
 	type: KeystoneTypeConstructorForDateArrayType;
 	/** Format string for parsing input dates. Default: 'YYYY-MM-DD' */
@@ -5364,8 +5366,7 @@ export interface KeystoneFieldOptionsForDateArrayType
  * Interface for DateArray field instances.
  * @see ./fields/types/datearray/DateArrayType.js
  */
-export interface KeystoneFieldForDateArrayType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForDateArrayType extends KeystoneField {
 	/** The native JavaScript type constructor (Array of Dates). */
 	_nativeType: [DateConstructor];
 	/** Default size for the field in the Admin UI */
@@ -5430,7 +5431,7 @@ export interface KeystoneFieldForDateArrayType
  * @see ./fields/types/datearray/DateArrayType.js
  */
 export interface KeystoneTypeConstructorForDateArrayType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
@@ -5444,34 +5445,33 @@ export interface KeystoneTypeConstructorForDateArrayType
  * Filter oAdminUiFieldReactptions for Date field queries.
  * @see ./fields/types/date/DateType.js
  */
-export interface KSAdminUiFilterForDateField {
-	/**
-	 * Filter mAdminUFieldReactiode.
-	 * - 'between': Matches dates between 'after' and 'before'.
-	 * - 'after': Matches dates after the value.
-	 * - 'before': Matches dates before the value.
-	 * Default: exact match for the day
-	 */
-	mode?: "between" | "after" | "before" | string;
-	/** The date value(s) to filter by. */
-	value?: string | Date;
-	/** Start date for 'between' mode. */
-	after?: string | Date;
-	/** End date for 'between' mode. */
-	before?: string | Date;
-	/**
-	 * Invert the filter logic.
-	 * Default: false
-	 */
-	inverted?: boolean;
-}
+// export interface KSAdminUiFilterForDateAndDateTimeFields {
+// 	/**
+// 	 * Filter mAdminUFieldReactiode.
+// 	 * - 'between': Matches dates between 'after' and 'before'.
+// 	 * - 'after': Matches dates after the value.
+// 	 * - 'before': Matches dates before the value.
+// 	 * Default: exact match for the day
+// 	 */
+// 	mode?: "between" | "after" | "before" | string;
+// 	/** The date value(s) to filter by. */
+// 	value?: string | Date;
+// 	/** Start date for 'between' mode. */
+// 	after?: string | Date;
+// 	/** End date for 'between' mode. */
+// 	before?: string | Date;
+// 	/**
+// 	 * Invert the filter logic.
+// 	 * Default: false
+// 	 */
+// 	inverted?: boolean;
+// }
 
 /**
  * Options specific to Date fields.
  * @see ./fields/types/date/DateType.js
  */
-export interface KeystoneFieldOptionsForDateType
-	extends Omit<KeystoneFieldOptions, "type"> {
+export interface KeystoneFieldOptionsForDateType extends KeystoneFieldOptions {
 	/** Ensure type is specifically Date */
 	type: KeystoneTypeConstructorForDateType | DateConstructor;
 	/**
@@ -5510,8 +5510,7 @@ export interface KeystoneFieldOptionsForDateType
  * Interface for Date field instances.
  * @see ./fields/types/date/DateType.js
  */
-export interface KeystoneFieldForDateType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForDateType extends KeystoneField {
 	/** The native JavaScript type constructor (Date). */
 	_nativeType: DateConstructor;
 	/** Underscore methods added to documents (includes 'format', 'moment', 'parse'). */
@@ -5558,7 +5557,9 @@ export interface KeystoneFieldForDateType
 	 * @param filter The filter definition.
 	 * @returns MongoDB query conditions object.
 	 */
-	addFilterToQuery(filter: KSAdminUiFilterForDateField): Record<string, any>;
+	addFilterToQuery(
+		filter: KSAdminUiFilterForDateAndDateTimeFields
+	): Record<string, any>;
 
 	/**
 	 * Validates that required input has been provided.
@@ -5577,7 +5578,9 @@ export interface KeystoneFieldForDateType
 	 * @param filter Filter oAdminUiFieldReactptions with mode and presence.
 	 * @returns MongoDB query conditions.
 	 */
-	addFilterToQuery(filter: KSAdminUiFilterForDateField): Record<string, any>;
+	addFilterToQuery(
+		filter: KSAdminUiFilterForDateAndDateTimeFields
+	): Record<string, any>;
 
 	/**
 	 * (Deprecated) Checks that a valid array of dates has been provided.
@@ -5607,8 +5610,7 @@ export interface KeystoneFieldForDateType
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
  */
-export interface KeystoneFieldForDateTimeType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForDateTimeType extends KeystoneField {
 	/** The native JavaScript type constructor (Date). */
 	_nativeType: DateConstructor;
 	/** Underscore methods added to documents (includes 'format', 'moment', 'parse'). */
@@ -5637,88 +5639,27 @@ export interface KeystoneFieldForDateTimeType
 		tzOffset: string;
 	};
 
-	/**
-	 * Gets the value from a data object; may be simple or a pair of fields.
-	 * @param data The input data object.
-	 * @returns The combined date/time value.
-	 */
-	getInputFromData(data: any): string | any;
+	// Required KeystoneField properties
+	list: KeystoneList;
+	path: string;
+	_path: any;
+	type: string;
 
-	/**
-	 * Validates that required input has been provided.
-	 * @param item The Keystone document.
-	 * @param data Input data object.
-	 * @param callback Receives whether input is valid.
-	 */
+	// Required KeystoneField methods
+	addToSchema(schema: mongoose.Schema): void;
+	validateInput(data: any, callback: (valid: boolean) => void): void;
 	validateRequiredInput(
 		item: KeystoneDocument,
 		data: any,
 		callback: (valid: boolean) => void
 	): void;
-
-	/**
-	 * Validates that the input is a valid date/time.
-	 * @param data Input data object.
-	 * @param callback Receives whether input is valid.
-	 */
-	validateInput(data: any, callback: (valid: boolean) => void): void;
-
-	/**
-	 * (Deprecated) Checks that a valid date/time has been provided.
-	 * @param data Input data.
-	 * @param required Whether the field is required.
-	 * @param item Optional Keystone document for context.
-	 * @returns Whether the input is valid.
-	 * @deprecated Use validateInput or validateRequiredInput instead.
-	 */
-	inputIsValid(data: any, required?: boolean, item?: any): boolean;
-
-	/**
-	 * Updates the field's value in the item from a data object.
-	 * @param item The Keystone document to update.
-	 * @param data The input data object.
-	 * @param callback Called after update attempt.
-	 */
-	updateItem(item: any, data: any, callback: () => void): void;
-
-	/**
-	 * Formats the field's date/time value using moment.js.
-	 * Inherited from DateType.
-	 * @param item The Keystone document.
-	 * @param format Optional moment.js format string.
-	 * @returns Formatted date/time string.
-	 */
+	addFilterToQuery(
+		filter: KSAdminUiFilterForDateAndDateTimeFields
+	): Record<string, any>;
 	format(item: KeystoneDocument, format?: string): string;
-
-	/**
-	 * Returns the field's value as a moment.js object.
-	 * Inherited from DateType.
-	 * @param item The Keystone document.
-	 * @returns A moment object or null.
-	 */
-	moment(item: KeystoneDocument): moment.Moment | null;
-
-	/**
-	 * Parses input using moment.js.
-	 * Inherited from DateType.
-	 * @param value The value to parse.
-	 * @param format Optional format string(s).
-	 * @param strict Whether to use strict parsing.
-	 * @returns A moment object.
-	 */
-	parse(
-		value: any,
-		format?: string | string[],
-		strict?: boolean
-	): moment.Moment;
-
-	/**
-	 * Adds date-based filtering logic to a Mongoose query.
-	 * Inherited from DateType.
-	 * @param filter The filter definition.
-	 * @returns MongoDB query conditions object.
-	 */
-	addFilterToQuery(filter: KSAdminUiFilterForDateField): Record<string, any>;
+	getData(item: KeystoneDocument): any;
+	isModified(item: KeystoneDocument): boolean;
+	updateItem(item: KeystoneDocument, data: any, callback: () => void): void;
 }
 
 /**
@@ -5754,7 +5695,7 @@ export interface KSAdminUiFilterForDateArrayField {
  * @see ./fields/types/datearray/DateArrayType.js
  */
 export interface KeystoneFieldOptionsForDateArrayType
-	extends Omit<KeystoneFieldOptions, "type"> {
+	extends KeystoneFieldOptions {
 	/** Ensure type is specifically DateArray */
 	type: KeystoneTypeConstructorForDateArrayType;
 	/**
@@ -5778,8 +5719,7 @@ export interface KeystoneFieldOptionsForDateArrayType
  * Interface for DateArray field instances.
  * @see ./fields/types/datearray/DateArrayType.js
  */
-export interface KeystoneFieldForDateArrayType
-	extends Omit<KeystoneField, "options"> {
+export interface KeystoneFieldForDateArrayType extends KeystoneField {
 	/** The native JavaScript type constructor (Array of Dates). */
 	_nativeType: [DateConstructor];
 	/** Default size for the field in the Admin UI. */
@@ -5858,7 +5798,7 @@ export interface KeystoneFieldForDateArrayType
  * @see ./fields/types/datearray/DateArrayType.js
  */
 export interface KeystoneTypeConstructorForDateArrayType
-	extends Omit<KeystoneTypeConstructor, "prototype"> {
+	extends KeystoneTypeConstructor {
 	new (
 		list: KeystoneList,
 		path: string,
