@@ -50,7 +50,7 @@ export interface KeystoneTypeConstructor {
  *
  * @see KeystoneField
  * @see KeystoneFieldOptions
- * @link [https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js](https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js) Source Code
+ * @link [https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js](mdc:https:/github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js) Source Code
  */
 export interface KeystoneTypeConstructor {
   new (
