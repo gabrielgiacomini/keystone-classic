@@ -7,6 +7,15 @@ import { Hook } from "grappling-hook"; // @todo: Check if @types/grappling-hook 
 import * as numeral from "numeral"; // @todo: Needs @types/numeral
 
 /**
+ * Represents a Keystone document fetched from Mongoose, extending the base Mongoose Document.
+ * Use this as a base type for items retrieved from lists.
+ *
+ * @template T The shape of the data fields within the document. Defaults to a generic record.
+ * @see KeystoneList['model']
+ */
+export type KeystoneDocument<T = Record<string, any>> = mongoose.Document & T;
+
+/**
  * Represents the constructor for a Keystone Field Type (e.g., `Types.Text`).
  * @see ./fields/types/Type.js
  *
@@ -614,7 +623,7 @@ export interface KeystoneListOptions {
 	 */
 	pre?: {
 		/** Hook executed before saving a document */
-		save?: (this: mongoose.Document, next: (err?: Error) => void) => void;
+		save?: (this: KeystoneDocument, next: (err?: Error) => void) => void;
 	}; // @todo Add other pre/post hooks
 
 	/**
@@ -751,14 +760,14 @@ export interface KeystoneFieldForTextType extends KeystoneField {
 	/**
 	 * Crops the field's string value from an item to the specified length.
 	 * Exposed as `item._.fieldPath.crop(...)`.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @param length The target length.
 	 * @param append String to append if cropped (defaults to '...').
 	 * @param preserveWords If true, doesn't cut words in half.
 	 * @returns The cropped string.
 	 */
 	crop(
-		item: any,
+		item: KeystoneDocument,
 		length: number,
 		append?: string,
 		preserveWords?: boolean
@@ -909,11 +918,11 @@ export interface KeystoneFieldForNumberType extends KeystoneField {
 	/**
 	 * Formats the field's numeric value using numeral.js.
 	 * Exposed as `item._.fieldPath.format(...)`.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @param format Optional numeral.js format string (overrides field option).
 	 * @returns The formatted string, or an empty string for non-numeric values (except 0).
 	 */
-	format(item: any, format?: string): string;
+	format(item: KeystoneDocument, format?: string): string;
 }
 
 /**
@@ -1017,14 +1026,14 @@ export interface KeystoneFieldForTextareaType extends KeystoneField {
 	 * Crops the field's string value from an item to the specified length.
 	 * Inherited from TextType.
 	 * Exposed as `item._.fieldPath.crop(...)`.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @param length The target length.
 	 * @param append String to append if cropped (defaults to '...').
 	 * @param preserveWords If true, doesn't cut words in half.
 	 * @returns The cropped string.
 	 */
 	crop(
-		item: any,
+		item: KeystoneDocument,
 		length: number,
 		append?: string,
 		preserveWords?: boolean
@@ -1033,10 +1042,10 @@ export interface KeystoneFieldForTextareaType extends KeystoneField {
 	/**
 	 * Formats the field's value, converting newlines to <br> tags.
 	 * Exposed as `item._.fieldPath.format()`.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @returns The formatted HTML string.
 	 */
-	format(item: any): string;
+	format(item: KeystoneDocument): string;
 }
 
 /**
@@ -1318,13 +1327,13 @@ export interface KeystoneFieldForSelectType
 	/**
 	 * Retrieves a property from the selected option object for an item.
 	 * Exposed as `item._.fieldPath.pluck(propertyName, defaultValue)`.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @param property The key of the property to retrieve from the selected option object (e.g., 'label', 'value').
 	 * @param _default Default value if the option is not found or doesn't have the property.
 	 * @returns The value of the property from the selected option object, or the default value.
 	 */
 	pluck(
-		item: any,
+		item: KeystoneDocument,
 		property: keyof KeystoneFieldSelectableOption | string,
 		_default?: any
 	): any;
@@ -1357,22 +1366,22 @@ export interface KeystoneFieldForSelectType
 
 	/**
 	 * Validates that a non-empty, valid option is selected if required.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @param data Input data object.
 	 * @param callback Receives whether input is valid.
 	 */
 	validateRequiredInput(
-		item: any,
+		item: KeystoneDocument,
 		data: any,
 		callback: (valid: boolean) => void
 	): void;
 
 	/**
 	 * Formats the field value.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @returns The label of the selected option or empty string.
 	 */
-	format(item: any): string;
+	format(item: KeystoneDocument): string;
 }
 
 /**
@@ -1397,20 +1406,20 @@ export interface KeystoneTypeConstructorForSelectType
 export interface KSAdminUiFilterForDateField {
 	/**
 	 * Filter mAdminUFieldReactiode.
-	 * - 'between': Matches dates within the range specified by `after` and `before`.
-	 * - 'after': Matches dates after `value`.
-	 * - 'before': Matches dates before `value`.
-	 * Default: matches dates on the same day as `value` if mode is omitted.
+	 * - 'between': Matches dates between 'after' and 'before'.
+	 * - 'after': Matches dates after the value.
+	 * - 'before': Matches dates before the value.
+	 * Default: exact match for the day
 	 */
 	mode?: "between" | "after" | "before" | string;
-	/** The date value (as string, Date, or Moment) for basic comparisons. */
+	/** The date value(s) to filter by. */
 	value?: string | Date | moment.Moment;
-	/** The start date (as string, Date, or Moment) for 'between' mode. */
+	/** Start date for 'between' mode. */
 	after?: string | Date | moment.Moment;
-	/** The end date (as string, Date, or Moment) for 'between' mode. */
+	/** End date for 'between' mode. */
 	before?: string | Date | moment.Moment;
 	/**
-	 * Invert the filter logic (e.g., NOT between, NOT after).
+	 * Invert the filter logic.
 	 * Default: false
 	 */
 	inverted?: boolean;
@@ -1548,20 +1557,20 @@ export interface KeystoneFieldForDateType extends KeystoneField {
 	/**
 	 * Formats the field's date value using moment.js.
 	 * Exposed as `item._.fieldPath.format(formatString)`.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @param format Optional moment.js format string (overrides field option).
 	 * @returns Formatted date string or empty string if no valid date.
 	 */
-	format(item: any, format?: string): string;
+	format(item: KeystoneDocument, format?: string): string;
 
 	/**
 	 * Returns the field's value as a moment.js object.
 	 * Takes the `isUTC` option into account.
 	 * Exposed as `item._.fieldPath.moment()`.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @returns A moment object or null if no date.
 	 */
-	moment(item: any): moment.Moment | null;
+	moment(item: KeystoneDocument): moment.Moment | null;
 
 	/**
 	 * Parses input using moment.js with the field's `parseFormatString`.
@@ -1586,7 +1595,7 @@ export interface KeystoneFieldForDateType extends KeystoneField {
 
 	/**
 	 * Retrieves the date value, applying correction logic for potentially corrupted UTC dates.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @returns The Date object or null.
 	 */
 	getData(item: any): Date | null;
@@ -1595,7 +1604,7 @@ export interface KeystoneFieldForDateType extends KeystoneField {
 	 * (Deprecated) Synchronously checks if the input is a valid date.
 	 * @param data Input data.
 	 * @param required Whether the field is required.
-	 * @param item Optional Mongoose document for context.
+	 * @param item Optional Keystone document for context.
 	 * @returns Whether the input is valid.
 	 * @deprecated Use validateInput or validateRequiredInput instead.
 	 */
@@ -1603,7 +1612,7 @@ export interface KeystoneFieldForDateType extends KeystoneField {
 
 	/**
 	 * Updates the item's value with a parsed Date object, or null if input is empty/invalid.
-	 * @param item The Mongoose document to update.
+	 * @param item The Keystone document to update.
 	 * @param data The input data object.
 	 * @param callback Called after update attempt. Receives `(error?: Error)`.
 	 */
@@ -1658,12 +1667,12 @@ export interface KeystoneFieldForDateTimeType
 
 	/**
 	 * Validates that required input has been provided.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @param data Input data object.
 	 * @param callback Receives whether input is valid.
 	 */
 	validateRequiredInput(
-		item: any,
+		item: KeystoneDocument,
 		data: any,
 		callback: (valid: boolean) => void
 	): void;
@@ -1679,7 +1688,7 @@ export interface KeystoneFieldForDateTimeType
 	 * (Deprecated) Checks that a valid date/time has been provided.
 	 * @param data Input data.
 	 * @param required Whether the field is required.
-	 * @param item Optional Mongoose document for context.
+	 * @param item Optional Keystone document for context.
 	 * @returns Whether the input is valid.
 	 * @deprecated Use validateInput or validateRequiredInput instead.
 	 */
@@ -1687,7 +1696,7 @@ export interface KeystoneFieldForDateTimeType
 
 	/**
 	 * Updates the field's value in the item from a data object.
-	 * @param item The Mongoose document to update.
+	 * @param item The Keystone document to update.
 	 * @param data The input data object.
 	 * @param callback Called after update attempt.
 	 */
@@ -1696,19 +1705,19 @@ export interface KeystoneFieldForDateTimeType
 	/**
 	 * Formats the field's date/time value using moment.js.
 	 * Inherited from DateType.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @param format Optional moment.js format string.
 	 * @returns Formatted date/time string.
 	 */
-	format(item: any, format?: string): string;
+	format(item: KeystoneDocument, format?: string): string;
 
 	/**
 	 * Returns the field's value as a moment.js object.
 	 * Inherited from DateType.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @returns A moment object or null.
 	 */
-	moment(item: any): moment.Moment | null;
+	moment(item: KeystoneDocument): moment.Moment | null;
 
 	/**
 	 * Parses input using moment.js.
@@ -1986,7 +1995,7 @@ declare class KeystoneList {
 	/** Map of special list properties to field paths */
 	mappings: KeystoneListMappings;
 	/** The compiled Mongoose Model for this list. Available after `list.register()`. */
-	model: mongoose.Model<any>; // @todo Define Mongoose Document type
+	model: mongoose.Model<KeystoneDocument>; // Updated from mongoose.Model<any>
 
 	// Internal caches
 	/** @internal Cache for expanded search fields. */
@@ -2205,7 +2214,7 @@ declare class KeystoneList {
 	 * @param escapeHtml Whether to HTML-escape the name.
 	 * @returns The document's display name.
 	 */
-	getDocumentName: (doc: any, escapeHtml?: boolean) => string;
+	getDocumentName: (doc: KeystoneDocument, escapeHtml?: boolean) => string;
 
 	/**
 	 * Retrieves list options filtered by option set.
@@ -2344,16 +2353,16 @@ declare class KeystoneList {
 
 	/**
 	 * Updates an item with new data using UpdateHandler.
-	 * @param item Mongoose document to update.
+	 * @param item Keystone document to update.
 	 * @param data Update data.
 	 * @param options Update options.
 	 * @param callback Receives the updated item.
 	 */
 	updateItem: (
-		item: any,
+		item: KeystoneDocument,
 		data: any,
 		options: { files?: any; user?: any },
-		callback: (err: any, item: any) => void
+		callback: (err: any, item: KeystoneDocument) => void
 	) => void;
 
 	/**
@@ -4457,22 +4466,22 @@ export interface KeystoneFieldForPasswordType extends KeystoneField {
 
 	/**
 	 * Compares a candidate password with the stored hash.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @param candidate The password to check.
 	 * @param callback Receives (err: Error | null, isMatch: boolean).
 	 */
 	compare(
-		item: any,
+		item: KeystoneDocument,
 		candidate: string,
 		callback: (err: Error | null, isMatch: boolean) => void
 	): void;
 
 	/**
 	 * Formats the password as a random number of asterisks.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @returns A string of random-length asterisks.
 	 */
-	format(item: any): string;
+	format(item: KeystoneDocument): string;
 
 	/**
 	 * Validates the password against complexity requirements.
@@ -5637,12 +5646,12 @@ export interface KeystoneFieldForDateTimeType
 
 	/**
 	 * Validates that required input has been provided.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @param data Input data object.
 	 * @param callback Receives whether input is valid.
 	 */
 	validateRequiredInput(
-		item: any,
+		item: KeystoneDocument,
 		data: any,
 		callback: (valid: boolean) => void
 	): void;
@@ -5658,7 +5667,7 @@ export interface KeystoneFieldForDateTimeType
 	 * (Deprecated) Checks that a valid date/time has been provided.
 	 * @param data Input data.
 	 * @param required Whether the field is required.
-	 * @param item Optional Mongoose document for context.
+	 * @param item Optional Keystone document for context.
 	 * @returns Whether the input is valid.
 	 * @deprecated Use validateInput or validateRequiredInput instead.
 	 */
@@ -5666,7 +5675,7 @@ export interface KeystoneFieldForDateTimeType
 
 	/**
 	 * Updates the field's value in the item from a data object.
-	 * @param item The Mongoose document to update.
+	 * @param item The Keystone document to update.
 	 * @param data The input data object.
 	 * @param callback Called after update attempt.
 	 */
@@ -5675,19 +5684,19 @@ export interface KeystoneFieldForDateTimeType
 	/**
 	 * Formats the field's date/time value using moment.js.
 	 * Inherited from DateType.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @param format Optional moment.js format string.
 	 * @returns Formatted date/time string.
 	 */
-	format(item: any, format?: string): string;
+	format(item: KeystoneDocument, format?: string): string;
 
 	/**
 	 * Returns the field's value as a moment.js object.
 	 * Inherited from DateType.
-	 * @param item The Mongoose document.
+	 * @param item The Keystone document.
 	 * @returns A moment object or null.
 	 */
-	moment(item: any): moment.Moment | null;
+	moment(item: KeystoneDocument): moment.Moment | null;
 
 	/**
 	 * Parses input using moment.js.
