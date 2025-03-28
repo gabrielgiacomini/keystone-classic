@@ -1,0 +1,66 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Improvement Task: Enhance JSDoc Comments
+
+**Goal:** Improve the clarity, completeness, and usefulness of JSDoc comments throughout the entire type definition file.
+
+**Instructions:**
+
+1.  **Scan all existing interfaces, types, classes, methods, and properties** in the KeystoneJS v4 type definition file.
+2.  **For each item, review its JSDoc comment:**
+    * Ensure the primary description clearly explains the **purpose** of the type/member.
+    * Add missing descriptions where necessary.
+    * Verify and enhance `@param` descriptions for functions and methods, explaining what each parameter represents. Check the corresponding source file (using the `Sources:` links or logical file paths) for parameter usage.
+    * Verify and enhance `@returns` descriptions for functions and methods, explaining the return value. Check the source file for return statements.
+    * Add `@see` tags linking to related types or concepts within the definition file where helpful.
+    * Add `@link` tags pointing to relevant external documentation or specific sections in the KeystoneJS v4 source code if not already present or if the existing ones can be improved (use the `Sources:` links as a basis).
+    * Consider adding simple `@example` usage snippets for complex types or functions, referencing the source code for realistic usage patterns.
+    * Ensure comments accurately reflect the types and functionality, cross-referencing with the source code (`Sources:` links).
+    * Maintain a professional and informative tone.
+
+**Example (Before):**
+
+```typescript
+/**
+ * Represents the constructor for a Keystone Field Type
+ */
+export interface KeystoneTypeConstructor {
+  new (
+    list: KeystoneList,
+    path: string,
+    options: KeystoneFieldOptions
+  ): KeystoneField;
+  // ...
+}
+```
+
+**Example (After - Conceptual):**
+
+/**
+ * Represents the constructor function for a specific Keystone Field Type (e.g., `Types.Text`).
+ * These constructors are used by Keystone internally when processing List definitions.
+ *
+ * @param list The parent `KeystoneList` instance the field belongs to.
+ * @param path The field's path within the list (e.g., 'title', 'address.street').
+ * @param options The configuration options provided for this field instance.
+ * @returns An instance of the specific `KeystoneField` subclass (e.g., `KeystoneFieldForTextType`).
+ *
+ * @see KeystoneField
+ * @see KeystoneFieldOptions
+ * @link [https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js](https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js) Source Code
+ */
+export interface KeystoneTypeConstructor {
+  new (
+    list: KeystoneList,
+    path: string,
+    options: KeystoneFieldOptions
+  ): KeystoneField;
+  /** Canonical name of the field type (e.g., 'Text', 'Relationship'). Used internally. */
+  properName?: string;
+  /** Technical name (often JS class name, e.g., 'TextType'). Used for `list.fieldTypes`. */
+  name?: string; // JS constructor name
+  // ...
+}

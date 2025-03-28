@@ -1,0 +1,22 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Improvement Task: Consistency Check
+
+**Goal:** Review the entire type definition file for internal consistency in naming, style, and documentation.
+
+**Instructions:**
+
+1.  **Scan the entire definition file.**
+2.  **Verify Naming Conventions:**
+    * Ensure all types, interfaces, methods, and properties adhere to the established naming conventions (e.g., `Keystone...`, `...For...Type`, `KSAdminUi...`, `...Options`, `...Function`, `...Middleware`, PascalCase for types/interfaces).
+    * Correct any deviations found.
+3.  **Verify JSDoc Style:**
+    * Ensure JSDoc comments (`/** ... */`) are used consistently for exported types, interfaces, classes, methods, and properties.
+    * Check for consistent usage and formatting of JSDoc tags (`@param`, `@returns`, `@see`, `@link`, `@deprecated`, `@internal`, `@example`).
+4.  **Verify Type Usage:**
+    * Look for inconsistencies in how similar concepts are typed (e.g., are all callback functions typed similarly? Are options objects consistently defined?).
+    * Ensure related types reference each other correctly (e.g., a function parameter uses the correct `...Options` interface).
+5.  **Check Formatting:** Ensure consistent code formatting (indentation, spacing, line breaks) according to standard TypeScript practices or project guidelines.

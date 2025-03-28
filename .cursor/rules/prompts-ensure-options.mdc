@@ -1,0 +1,19 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Improvement Task: Ensure Options Interface Completeness
+
+**Goal:** Verify that all configuration options interfaces (`...Options`, `...Config`) accurately and completely reflect the options available in the corresponding KeystoneJS v4 source code.
+
+**Instructions:**
+
+1.  **Identify all interfaces ending in `Options` or `Config`** in the type definition file (e.g., `KeystoneGlobalOptions`, `KeystoneListOptions`, `KeystoneFieldOptions`, `KeystoneFieldOptionsForTextType`, etc.).
+2.  **For each options interface:**
+    * Locate the primary source code file(s) where these options are processed or defined in KeystoneJS v4. Use the `Sources:` links or logical paths (e.g., `lib/core/options.js` for global, `lib/list.js` for list, `fields/types/<TypeName>/<TypeName>Type.js` for field options).
+    * **Compare the properties defined in the TypeScript interface with the options actually used** or checked in the source code (look for `options.propertyName`, `this.get('optionName')`, object destructuring, etc.).
+    * **Add any missing option properties** to the interface, determining their correct type (`string`, `number`, `boolean`, function signature, specific object shape, etc.) based on the source code.
+    * **Verify the types of existing properties.** Correct any inaccuracies found by comparing with the source code usage.
+    * **Add JSDoc comments** for newly added properties, explaining their purpose and potential values, referencing the source code where necessary.
+    * Mark properties as optional (`?`) if they are not required in the source code.

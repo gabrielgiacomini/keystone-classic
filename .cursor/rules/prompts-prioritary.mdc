@@ -1,0 +1,27 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Improvement Task: Define Priority Missing Interfaces/Types
+
+**Goal:** Define the most critical missing interfaces and types identified in the `@todo` comments or analysis, focusing on those essential for understanding core functionality or unblocking further type definition work.
+
+**Instructions:**
+
+1.  **Review the previously generated list of undefined types** and the `@todo` comments in the main definition file.
+2.  **Prioritize the following types** (or similar core concepts if analysis differs):
+    * Core `Keystone` method signatures (especially `init`, `start`, `list`, `connect`, `applyUpdates`).
+    * Core `KeystoneList` method signatures (especially `register`, `add`, `updateItem`, `paginate`, data retrieval/filtering methods).
+    * Core configuration structures if incomplete (`KeystoneGlobalOptions`, `KeystoneListOptions`, key Field Options).
+    * Essential utility module interfaces (`KeystoneStorage`, `KeystoneEmail`, `KeystoneView`).
+    * Basic Middleware signatures (`Keystone...MiddlewareFactory` types).
+    * The generic `KeystoneDocument` type.
+3.  **For each prioritized item:**
+    * Consult the corresponding source file (`Sources:` links or logical path) in the `keystonejs/keystone-classic` repository.
+    * Define the interface, type alias, or refine the class method signature accurately.
+    * Pay attention to function parameters, return types, and the shape of objects/classes.
+    * Use the established naming conventions (`Keystone...`, `...Options`, `...Function`, etc.).
+    * Add clear JSDoc comments explaining the purpose and linking to the source.
+    * Replace `any` with specific types where possible based on the source code.
+    * Place the new definitions in logically appropriate sections of the file.
