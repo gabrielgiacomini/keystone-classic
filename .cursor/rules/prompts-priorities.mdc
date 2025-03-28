@@ -7,19 +7,19 @@ alwaysApply: false
 
 **Here's a prioritized list of type definitions to focus on next, based on impact and core functionality:**
 
-1.  **`Keystone` Class Methods:**
+1.  **Definitions for `Keystone` Class Methods:**
     * **Priority:** Highest. These define the main application API.
     * **Instructions:** Focus on refining signatures for `init`, `start`, `list`, `connect`, `applyUpdates`, `importer`, `get`, `set`, `options`. Read the corresponding `lib/core/*.js` files to accurately type parameters (especially options objects) and return values (including Promises/callbacks).
 
-2.  **`KeystoneList` Class Methods:**
+2.  **Definitions for `KeystoneList` Class Methods:**
     * **Priority:** High. Essential for defining and interacting with data models.
     * **Instructions:** Refine signatures for `add`, `register`, `field`, `paginate`, `updateItem`, `getData`, `getCSVData`, `addFiltersToQuery`, `addSearchToQuery`. Read the `lib/list/*.js` implementation files to detail `options`, `filters`, and callback/Promise types accurately. Define specific `Options` interfaces (e.g., `KeystonePaginateOptions`) for complex parameters.
 
-3.  **`KeystoneGlobalOptions` & `KeystoneListOptions`:**
+3.  **Definitions for `KeystoneGlobalOptions` & `KeystoneListOptions`:**
     * **Priority:** High. Control core framework and list behavior.
     * **Instructions:** Thoroughly review `lib/core/options.js` and `lib/list.js`. Ensure all available options are present in the interfaces, correctly typed, and commented. Pay attention to nested structures like `track` or `ssl`.
 
-4.  **`KeystoneFieldOptions` & `KeystoneField` (Base):**
+4.  **Definitions for `KeystoneFieldOptions` & `KeystoneField` (Base):**
     * **Priority:** Medium-High. The foundation for all field types.
     * **Instructions:** Re-verify the base options and field instance properties/methods against `fields/types/Type.js` and `fields/types/Field.js`. Ensure common properties like `dependsOn`, `note`, `required`, `initial` are correctly typed. Define `KeystoneInternalPath` and `MongooseSchemaColumnDefinition` more accurately if possible, or confirm `any` is acceptable with a comment.
 
@@ -31,22 +31,22 @@ alwaysApply: false
         * File/Image types (`File`, `CloudinaryImage`, `CloudinaryImages`). Define storage/adapter options clearly. Read the respective `fields/types/.../*.js` files.
         * `Select` (options array/object structure, numeric). Read `fields/types/select/SelectType.js`.
 
-6.  **`KeystoneDocument` Generic Type:**
+6.  **Definitions for `KeystoneDocument` Generic Type:**
     * **Priority:** Medium. Used frequently in method signatures.
     * **Instructions:** Define the generic `type KeystoneDocument<T = Record<string, any>> = mongoose.Document & T;`. Consider if a more specific base incorporating common Keystone methods (`_`, `save`, etc.) is feasible.
 
-7.  **Core Utility Modules (`Keystone['Storage']`, `Keystone['Email']`, `Keystone['View']`):**
+7.  **Definitions for Core Utility Modules (`Keystone['Storage']`, `Keystone['Email']`, `Keystone['View']`):**
     * **Priority:** Medium. Commonly used framework features.
     * **Instructions:** Define the constructor and instance interfaces (`KeystoneStorage`, `KeystoneStorageInstance`, `KeystoneEmail`, `KeystoneEmailConstructor`, etc.) based on `lib/storage.js`, `lib/email.js`, `lib/view.js`. Ensure options interfaces are complete.
 
-8.  **Middleware Signatures:**
+8.  **Definitions for Middleware Signatures:**
     * **Priority:** Medium-Low. Needed if using custom middleware configurations.
     * **Instructions:** Define the basic factory/handler types (`KeystoneCorsMiddlewareFactory`, `KeystoneApiMiddlewareFactory`, `KeystoneLanguageMiddleware`) based on `lib/middleware/*.js`. Focus on the function signature rather than deep implementation details initially.
 
-9.  **Schema Plugins (`Keystone...Plugin`, `Keystone...PluginOptions`):**
+9.  **Definitions for Schema Plugins (`Keystone...Plugin`, `Keystone...PluginOptions`):**
     * **Priority:** Low (unless actively using custom plugins).
     * **Instructions:** Define the basic `KeystoneSchemaPlugin` type and specific `...Options` interfaces for plugins like `track`, `sortable`, `autokey` by reading `lib/schemaPlugins/*.js`.
 
-10. **Remaining `@todo` Items & `any` Refinement:**
+10. **Definitions for Remaining `@todo` Items & `any` Refinement:**
     * **Priority:** Low. General cleanup and less critical types.
     * **Instructions:** Systematically work through the less critical `@todo` comments (e.g., security utils, content types, field utils) and replace remaining `any` types following the dedicated improvement task instructions.
