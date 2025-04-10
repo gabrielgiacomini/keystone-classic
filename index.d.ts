@@ -5,6 +5,9 @@ import * as mongoose from "mongoose";
 import * as moment from "moment"; // Requires @types/moment
 import { Hook } from "grappling-hook"; // @todo: Check if @types/grappling-hook exists or define basic type
 import * as numeral from "numeral"; // @todo: Needs @types/numeral
+import * as http from "http";
+import * as https from "https";
+import { Store as ExpressSessionStore } from "express-session";
 
 /**
  * Represents a Keystone document fetched from Mongoose, extending the base Mongoose Document.
@@ -3015,6 +3018,18 @@ declare class Keystone {
 
 	/** The initialized Express session middleware instance. Available after initExpressSession is called. */
 	expressSession?: express.RequestHandler;
+
+	/** The configured options object used for Express session middleware. Available after initExpressSession is called. */
+	"session options"?: Record<string, any>;
+
+	/** The instance of the session store used by Express session. Available after initExpressSession is called. */
+	"session store instance"?: ExpressSessionStore;
+
+	/** The Node.js HTTP server instance. Available after keystone.start() is called. */
+	httpServer?: http.Server;
+
+	/** The Node.js HTTPS server instance. Available after keystone.start() is called with SSL enabled. */
+	httpsServer?: https.Server;
 }
 
 /**
