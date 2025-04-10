@@ -2879,8 +2879,9 @@ declare class Keystone {
 	 * @returns The Keystone instance for chaining.
 	 * @see ./lib/core/openDatabaseConnection.js
 	 */
+	openDatabaseConnection(callback?: (err?: any) => void): this;
 	openDatabaseConnection(
-		options?: mongoose.ConnectOptions & { uri?: string },
+		options: mongoose.ConnectOptions & { uri?: string },
 		callback?: (err?: any) => void
 	): this;
 
@@ -3950,7 +3951,7 @@ export interface KeystoneTypeConstructorForEmailType
  */
 
 /**
- * Filter pAdminUiFieldReactessing
+ * Filter processing
  * @see ./lib/list/processFilters.js
  * @todo Define signature from lib/list/processFilters.js
  *
