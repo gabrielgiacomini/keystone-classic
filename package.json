@@ -9,8 +9,13 @@
     "url": "https://github.com/keystonejs/keystone.git"
   },
   "files": [
+    "lib",
+    "admin",
+    "fields",
     "index.js",
-    "index.d.ts"
+    "index.d.ts",
+    "updates",
+    "templates"
   ],
   "dependencies": {
     "@babel/core": "^7.4.4",
