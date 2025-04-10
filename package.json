@@ -112,7 +112,7 @@
   },
   "devDependencies": {
     "@babel/register": "^7.4.4",
-    "@types/express": "^5.0.1",
+    "@types/express": "^4.17.21",
     "@types/mongoose": "^5.11.97",
     "browserify-middleware": "^8.1.1",
     "codeclimate-test-reporter": "^0.5.1",
