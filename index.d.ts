@@ -3012,6 +3012,9 @@ declare class Keystone {
 	 * Originally used to define routes directly on the Keystone instance.
 	 */
 	routes: () => never;
+
+	/** The initialized Express session middleware instance. Available after initExpressSession is called. */
+	expressSession?: express.RequestHandler;
 }
 
 /**
