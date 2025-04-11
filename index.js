@@ -142,7 +142,7 @@ Keystone.prototype.prefixModel = function (key) {
 	if (modelPrefix) {
 		key = modelPrefix + "_" + key;
 	}
-	return require("mongoose/lib/utils").toCollectionName(key).toLowerCase(); // added to lower case for compatibility
+	return require("mongoose/lib/utils").toCollectionName(key); //.toLowerCase(); // added to lower case for compatibility
 };
 
 /* Attach core functionality to Keystone.prototype */
