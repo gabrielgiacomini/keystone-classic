@@ -30,7 +30,7 @@ export type KeystoneDocument<T = Record<string, any>> = mongoose.Document & T;
 export interface KeystoneTypeConstructor {
 	/** Creates an instance of the field type. */
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptions
 	): KeystoneField;
@@ -241,7 +241,7 @@ export interface KeystoneGroupHeading {
  */
 export interface KeystoneField {
 	/** Reference to the parent List instance. */
-	list: KeystoneList;
+	list: KeystoneList<any>;
 	/** The field's path (e.g., 'name', 'address.street'). */
 	path: string;
 	/** Internal Path object for handling nested paths. @internal @todo Define Path */
@@ -513,7 +513,7 @@ export type KSAdminUIElement =
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/list.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/lib/list.js}
  */
-export interface KeystoneListOptions {
+export interface KeystoneListOptions<T extends KeystoneDocument = KeystoneDocument> {
 	/**
 	 * Mongoose schema options applied to the underlying schema.
 	 * Pass options directly to the Mongoose schema.
@@ -569,7 +569,7 @@ export interface KeystoneListOptions {
 	 * Inherit schema and options from another List instance.
 	 * The parent list's fields will be included in this list.
 	 */
-	inherits?: KeystoneList;
+	inherits?: KeystoneList<T>;
 	/**
 	 * Default number of items per page in the Admin UI list view.
 	 * Controls pagination in the list view.
@@ -626,7 +626,7 @@ export interface KeystoneListOptions {
 	 */
 	pre?: {
 		/** Hook executed before saving a document */
-		save?: (this: KeystoneDocument, next: (err?: Error) => void) => void;
+		save?: (this: T, next: (err?: Error) => void) => void;
 	}; // @todo Add other pre/post hooks
 
 	/**
@@ -789,7 +789,7 @@ export interface KeystoneFieldForTextType extends KeystoneField {
 export interface KeystoneTypeConstructorForTextType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForTextType
 	): KeystoneFieldForTextType;
@@ -940,7 +940,7 @@ export interface KeystoneFieldForNumberType extends KeystoneField {
 export interface KeystoneTypeConstructorForNumberType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForNumberType
 	): KeystoneFieldForNumberType;
@@ -1063,7 +1063,7 @@ export interface KeystoneFieldForTextareaType extends KeystoneField {
 export interface KeystoneTypeConstructorForTextareaType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForTextareaType
 	): KeystoneFieldForTextareaType;
@@ -1188,7 +1188,7 @@ export interface KeystoneFieldForBooleanType extends KeystoneField {
 export interface KeystoneTypeConstructorForBooleanType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForBooleanType
 	): KeystoneFieldForBooleanType;
@@ -1359,7 +1359,7 @@ export interface KeystoneFieldForSelectType extends KeystoneField {
 export interface KeystoneTypeConstructorForSelectType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForSelectType
 	): KeystoneFieldForSelectType;
@@ -1752,7 +1752,7 @@ export interface KeystoneFieldForDateTimeType extends KeystoneField {
 export interface KeystoneTypeConstructorForDateType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForDateType
 	): KeystoneFieldForDateType;
@@ -1772,7 +1772,7 @@ export interface KeystoneTypeConstructorForDateType
 export interface KeystoneTypeConstructorForDateTimeType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForDateTimeType
 	): KeystoneFieldForDateTimeType;
@@ -1835,7 +1835,7 @@ export interface KeystoneFieldForHtmlType extends KeystoneField {
 export interface KeystoneTypeConstructorForHtmlType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForHtmlType
 	): KeystoneFieldForHtmlType;
@@ -1922,7 +1922,7 @@ export interface KeystoneFieldForHtmlType extends KeystoneField {
 export interface KeystoneTypeConstructorForHtmlType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForHtmlType
 	): KeystoneFieldForHtmlType;
@@ -1935,32 +1935,53 @@ export interface KeystoneTypeConstructorForHtmlType
 // --- Keystone & List Classes ---
 
 /**
- * Represents a Keystone Data List.
+ * Represents a Keystone Data List with generic document type support.
  * @see ./lib/list.js
+ *
+ * **Usage:**
+ * ```typescript
+ * interface UserDocument extends KeystoneDocument {
+ *   name: string;
+ *   email: string;
+ *   lastActiveAt: Date;
+ * }
+ *
+ * const User = new keystone.List<UserDocument>('User', {
+ *   fields: {
+ *     name: { type: String, required: true },
+ *     email: { type: String, unique: true }
+ *   }
+ * });
+ *
+ * // Schema methods now have properly typed 'this' context
+ * User.schema.methods.updateLastActiveAt = function(): void {
+ *   this.lastActiveAt = new Date(); // ✅ TypeScript knows this is UserDocument
+ * };
+ * ```
  *
  * Sources:
  * - File path: lib/content/types/text.js
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/list.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/lib/list.js}
  */
-declare class KeystoneList {
+declare class KeystoneList<T extends KeystoneDocument = KeystoneDocument> {
 	/**
 	 * Creates a new List instance.
 	 * @param key The unique key for the list (e.g., 'User', 'PostCategory'). Used to generate paths and labels.
 	 * @param options Configuration options for the list.
 	 */
-	constructor(key: string, options?: KeystoneListOptions);
+	constructor(key: string, options?: KeystoneListOptions<T>);
 
 	/** Reference to the Keystone instance. */
 	keystone: Keystone;
 	/** Merged configuration options for the list. */
-	options: KeystoneListOptions;
+	options: KeystoneListOptions<T>;
 	/** The unique key for the list. Used as identifier and to generate labels. */
 	key: string;
 	/** URL path for the list in the Admin UI (e.g., 'users'). */
 	path: string;
 	/** The Mongoose schema associated with this list. */
-	schema: mongoose.Schema;
+	schema: mongoose.Schema<T>;
 	/** Array of raw field/heading definitions added to the schema. */
 	schemaFields: Array<string | KeystoneGroupFields | KeystoneGroupHeading>;
 	/** Ordered array of UI elements (fields, headings, indents) for Admin UI forms. */
@@ -1982,7 +2003,7 @@ declare class KeystoneList {
 			ref: string;
 			refPath: string;
 			path: string;
-			list: KeystoneList;
+			list: KeystoneList<any>;
 			field: KeystoneField;
 		}
 	>; // @todo Refine RelationshipDefinition
@@ -1990,7 +2011,7 @@ declare class KeystoneList {
 	/** Map of special list properties to field paths */
 	mappings: KeystoneListMappings;
 	/** The compiled Mongoose Model for this list. Available after `list.register()`. */
-	model: mongoose.Model<KeystoneDocument>; // Updated from mongoose.Model<any>
+	model: mongoose.Model<T>;
 
 	// Internal caches
 	/** @internal Cache for expanded search fields. */
@@ -2054,7 +2075,7 @@ declare class KeystoneList {
 	 */
 	add(
 		...defs: Array<string | KeystoneGroupFields | KeystoneGroupHeading>
-	): KeystoneList;
+	): KeystoneList<T>;
 
 	/**
 	 * Retrieves a Field instance by its path, or creates a new field if options are provided.
@@ -2110,7 +2131,7 @@ declare class KeystoneList {
 	 * @param options Optionally specify which fields to map or exclude.
 	 * @returns The List instance for chaining.
 	 */
-	automap: (options?: Record<string, boolean>) => KeystoneList;
+	automap: (options?: Record<string, boolean>) => KeystoneList<T>;
 
 	/**
 	 * Generates API response data for an item, optionally expanding relationship fields.
@@ -2209,7 +2230,7 @@ declare class KeystoneList {
 	 * @param escapeHtml Whether to HTML-escape the name.
 	 * @returns The document's display name.
 	 */
-	getDocumentName: (doc: KeystoneDocument, escapeHtml?: boolean) => string;
+	getDocumentName: (doc: T, escapeHtml?: boolean) => string;
 
 	/**
 	 * Retrieves list options filtered by option set.
@@ -2322,7 +2343,7 @@ declare class KeystoneList {
 	 * Must be called after adding all fields and before using the list's model.
 	 * @returns The List instance for chaining.
 	 */
-	register: () => KeystoneList;
+	register: () => KeystoneList<T>;
 
 	/**
 	 * Defines a relationship to another list.
@@ -2354,10 +2375,10 @@ declare class KeystoneList {
 	 * @param callback Receives the updated item.
 	 */
 	updateItem: (
-		item: KeystoneDocument,
+		item: T,
 		data: any,
 		options: { files?: any; user?: any },
-		callback: (err: any, item: KeystoneDocument) => void
+		callback: (err: any, item: T) => void
 	) => void;
 
 	/**
@@ -2366,7 +2387,7 @@ declare class KeystoneList {
 	 * @param fn Method implementation.
 	 * @returns The List instance for chaining.
 	 */
-	underscoreMethod: (path: string, fn: Function) => KeystoneList;
+	underscoreMethod: (path: string, fn: Function) => KeystoneList<T>;
 
 	/**
 	 * Builds MongoDB text index for this list if configured.
@@ -2586,7 +2607,7 @@ export interface KeystoneGlobalOptions {
 	 * Enable authentication.
 	 * true requires 'user model' and 'cookie secret'.
 	 */
-	auth?: boolean | KeystoneList | string;
+	auth?: boolean | KeystoneList<any> | string;
 	/**
 	 * Key of the list to use for authentication.
 	 * Default: 'User'
@@ -2703,7 +2724,7 @@ declare class Keystone {
 	addHook: Hook["addHook"];
 
 	/** Map of all registered List instances, keyed by list key. */
-	lists: Record<string, KeystoneList>;
+	lists: Record<string, KeystoneList<any>>;
 	/** Map of registered field types. @todo Replace 'any' with defined FieldType constructor. */
 	fieldTypes: Record<string, any>;
 	/** Map of paths for custom view templates. @todo Define structure. */
@@ -2822,7 +2843,7 @@ declare class Keystone {
 	 * Retrieves lists that aren't part of the Admin UI navigation.
 	 * @returns Array of orphaned List instances.
 	 */
-	getOrphanedLists: () => KeystoneList[];
+	getOrphanedLists: () => KeystoneList<any>[];
 
 	/**
 	 * Creates an importer function for a specific module root.
@@ -2866,7 +2887,7 @@ declare class Keystone {
 	 * @param key List key.
 	 * @returns The List instance or undefined if not found.
 	 */
-	list: (key: string) => KeystoneList | undefined;
+	list: (key: string) => KeystoneList<any> | undefined;
 
 	// Add or Replace these method signatures within the 'declare class Keystone' block
 
@@ -3076,7 +3097,7 @@ export interface KeystoneTypeConstructorForUrlType
 	extends KeystoneTypeConstructor {
 	/** Creates a new URL field instance. */
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options?: KeystoneFieldOptionsForUrlType
 	): KeystoneFieldForUrlType;
@@ -3128,7 +3149,7 @@ export interface KeystoneTypeConstructorForKeyType
 	extends KeystoneTypeConstructor {
 	/** Creates a new Key field instance. */
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options?: KeystoneFieldOptionsForKeyType
 	): KeystoneFieldForKeyType;
@@ -3178,7 +3199,7 @@ export interface KeystoneTypeConstructorForColorType
 	extends KeystoneTypeConstructor {
 	/** Creates a new Color field instance. */
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options?: KeystoneFieldOptionsForColorType
 	): KeystoneFieldForColorType;
@@ -3230,7 +3251,7 @@ export interface KeystoneTypeConstructorForNameType
 	extends KeystoneTypeConstructor {
 	/** Creates a new Name field instance. */
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options?: KeystoneFieldOptionsForNameType
 	): KeystoneFieldForNameType;
@@ -3284,7 +3305,7 @@ export interface KeystoneTypeConstructorForMoneyType
 	extends KeystoneTypeConstructor {
 	/** Creates a new Money field instance. */
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options?: KeystoneFieldOptionsForMoneyType
 	): KeystoneFieldForMoneyType;
@@ -3336,7 +3357,7 @@ export interface KeystoneTypeConstructorForEmailType
 	extends KeystoneTypeConstructor {
 	/** Creates a new Email field instance. */
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options?: KeystoneFieldOptionsForEmailType
 	): KeystoneFieldForEmailType;
@@ -4535,7 +4556,7 @@ export interface KeystoneFieldForPasswordType extends KeystoneField {
 export interface KeystoneTypeConstructorForPasswordType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForPasswordType
 	): KeystoneFieldForPasswordType;
@@ -4639,7 +4660,7 @@ export interface KeystoneFieldForRelationshipType extends KeystoneField {
 export interface KeystoneTypeConstructorForRelationshipType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForRelationshipType
 	): KeystoneFieldForRelationshipType;
@@ -4721,7 +4742,7 @@ export interface KeystoneFieldForFileType extends KeystoneField {
 export interface KeystoneTypeConstructorForFileType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForFileType
 	): KeystoneFieldForFileType;
@@ -4771,7 +4792,7 @@ export interface KeystoneFieldForTextArrayType extends KeystoneField {
 export interface KeystoneTypeConstructorForTextArrayType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForTextArrayType
 	): KeystoneFieldForTextArrayType;
@@ -4828,7 +4849,7 @@ export interface KeystoneFieldForNumberArrayType extends KeystoneField {
 export interface KeystoneTypeConstructorForNumberArrayType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForNumberArrayType
 	): KeystoneFieldForNumberArrayType;
@@ -4946,7 +4967,7 @@ export interface KeystoneFieldForLocationType extends KeystoneField {
 export interface KeystoneTypeConstructorForLocationType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForLocationType
 	): KeystoneFieldForLocationType;
@@ -5006,7 +5027,7 @@ export interface KeystoneFieldForGeoPointType extends KeystoneField {
 export interface KeystoneTypeConstructorForGeoPointType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForGeoPointType
 	): KeystoneFieldForGeoPointType;
@@ -5085,7 +5106,7 @@ export interface KeystoneFieldForCodeType extends KeystoneField {
 export interface KeystoneTypeConstructorForCodeType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForCodeType
 	): KeystoneFieldForCodeType;
@@ -5174,7 +5195,7 @@ export interface KeystoneFieldForEmbedlyType extends KeystoneField {
 export interface KeystoneTypeConstructorForEmbedlyType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForEmbedlyType
 	): KeystoneFieldForEmbedlyType;
@@ -5267,7 +5288,7 @@ export interface KeystoneFieldForCloudinaryImageType extends KeystoneField {
 export interface KeystoneTypeConstructorForCloudinaryImageType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForCloudinaryImageType
 	): KeystoneFieldForCloudinaryImageType;
@@ -5368,7 +5389,7 @@ export interface KeystoneFieldForCloudinaryImagesType extends KeystoneField {
 export interface KeystoneTypeConstructorForCloudinaryImagesType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForCloudinaryImagesType
 	): KeystoneFieldForCloudinaryImagesType;
@@ -5463,7 +5484,7 @@ export interface KeystoneFieldForDateArrayType extends KeystoneField {
 export interface KeystoneTypeConstructorForDateArrayType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForDateArrayType
 	): KeystoneFieldForDateArrayType;
@@ -5830,7 +5851,7 @@ export interface KeystoneFieldForDateArrayType extends KeystoneField {
 export interface KeystoneTypeConstructorForDateArrayType
 	extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList,
+		list: KeystoneList<any>,
 		path: string,
 		options: KeystoneFieldOptionsForDateArrayType
 	): KeystoneFieldForDateArrayType;
