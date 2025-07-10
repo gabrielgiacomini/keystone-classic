@@ -1,0 +1,282 @@
+# Keystone-Classic Generic TypeScript Schema Methods PRD
+
+## Project Overview
+This project adds generic TypeScript support to keystone-classic's type definitions to enable proper typing for mongoose schema methods. The goal is to eliminate TypeScript linting errors when accessing specific document properties in schema methods while maintaining 100% backwards compatibility.
+
+## Problem Statement
+The current keystone-classic type definitions lack support for:
+1. Generic `KeystoneList<T>` interface where `T` is the specific document type
+2. Proper typing for `schema.methods` that preserves the document-specific `this` context
+3. Type-safe constructor that works with the existing `new keystone.List()` pattern
+
+This results in TypeScript errors when accessing document properties in schema methods:
+```typescript
+// Current issue - TypeScript doesn't know about specific document properties
+schema.methods.myMethod = function () {
+  this.email; // ❌ Error: Property 'email' does not exist on type 'Document'
+};
+```
+
+## Technical Requirements
+
+### Core Implementation Strategy
+**CRITICAL**: Use Constructor with Type Assertion pattern (Option A) as it:
+- ✅ Requires no runtime JavaScript changes
+- ✅ Works with existing codebase patterns
+- ✅ Provides full generic typing support
+- ✅ Maintains 100% backwards compatibility
+- ✅ Can be implemented immediately
+
+### Target File
+**File:** `index.d.ts` in the keystone-classic package root
+**Position:** Add new interfaces at the end of the file, after existing type definitions
+
+### Required Type Definitions
+
+#### 1. Generic KeystoneList Interface
+```typescript
+/**
+ * Represents a KeystoneJS List instance with generic document support.
+ * @template T - The document type for this list (extends mongoose.Document)
+ * @see /lib/list.js - Base list implementation
+ */
+export interface KeystoneList<T extends mongoose.Document = mongoose.Document> {
+  /** The name of the list */
+  key: string;
+
+  /** The mongoose schema associated with this list */
+  schema: mongoose.Schema<T> & {
+    /** Schema methods with proper typing for 'this' context */
+    methods: {
+      [K: string]: (this: T, ...args: any[]) => any;
+    };
+  };
+
+  /** The mongoose model */
+  model: mongoose.Model<T>;
+
+  /** List configuration options */
+  options: KeystoneListOptions;
+
+  /** Add fields to the schema */
+  add(fields: KeystoneGroupFields): void;
+  add(heading: KeystoneGroupHeading, fields: KeystoneGroupFields): void;
+
+  /** Register the list with keystone */
+  register(): void;
+
+  /** Default sort configuration */
+  defaultSort?: string;
+
+  /** Default columns configuration */
+  defaultColumns?: string;
+
+  /** Create relationships */
+  relationship(config: any): void;
+
+  /** Get a configuration option */
+  get(option: string): any;
+
+  /** Set a configuration option */
+  set(option: string, value: any): KeystoneList<T>;
+
+  /** The field mappings for this list */
+  mappings: KeystoneListMappings;
+
+  /** All fields in this list */
+  fields: { [fieldName: string]: KeystoneField };
+
+  /** Underscore methods attached to the schema */
+  underscoreMethods: { [methodName: string]: Function };
+}
+```
+
+#### 2. Enhanced Keystone Interface with Constructor Support
+```typescript
+/**
+ * Main KeystoneJS class with enhanced constructor support.
+ * @see /lib/keystone.js - Main keystone implementation
+ */
+export interface Keystone {
+  /**
+   * List constructor that supports generic typing via type assertion
+   * @param name - The name of the list
+   * @param options - Configuration options for the list
+   * @returns A new List instance
+   */
+  List: {
+    new (name: string, options?: KeystoneListOptions): KeystoneList<any>;
+    new <T extends mongoose.Document>(name: string, options?: KeystoneListOptions): KeystoneList<T>;
+  };
+
+  /** Get a list by name */
+  list(name: string): KeystoneList<any>;
+
+  /** Initialize keystone */
+  init(config: any): void;
+
+  /** Start keystone */
+  start(callback?: (err?: Error) => void): void;
+
+  /** Field types */
+  Field: {
+    Types: {
+      Text: KeystoneTypeConstructorForTextType;
+      Textarea: KeystoneTypeConstructorForTextareaType;
+      Email: KeystoneTypeConstructor;
+      Password: KeystoneTypeConstructor;
+      Name: KeystoneTypeConstructor;
+      Number: KeystoneTypeConstructorForNumberType;
+      Boolean: KeystoneTypeConstructorForBooleanType;
+      Date: KeystoneTypeConstructorForDateType;
+      Datetime: KeystoneTypeConstructorForDateTimeType;
+      Select: KeystoneTypeConstructor;
+      Relationship: KeystoneTypeConstructorForRelationshipType;
+      Location: KeystoneTypeConstructorForLocationType;
+      CloudinaryImage: KeystoneTypeConstructorForCloudinaryImageType;
+      CloudinaryImages: KeystoneTypeConstructorForCloudinaryImagesType;
+      File: KeystoneTypeConstructorForFileType;
+      Url: KeystoneTypeConstructor;
+      Html: KeystoneTypeConstructor;
+      Markdown: KeystoneTypeConstructor;
+      Money: KeystoneTypeConstructor;
+      Color: KeystoneTypeConstructor;
+      Code: KeystoneTypeConstructorForCodeType;
+    };
+  };
+}
+```
+
+#### 3. Backwards Compatibility Exports
+```typescript
+// Re-export for backwards compatibility
+export { KeystoneList as List };
+
+// Default export for the main keystone instance
+declare const keystone: Keystone;
+export default keystone;
+```
+
+### Dependencies & Prerequisites
+- **Required Imports**: `import * as mongoose from "mongoose";`
+- **Existing Type Dependencies** (should already be defined):
+  - `KeystoneListOptions`
+  - `KeystoneGroupFields`
+  - `KeystoneGroupHeading`
+  - `KeystoneListMappings`
+  - `KeystoneField`
+  - `KeystoneTypeConstructor*` interfaces (various field types)
+
+## Usage Examples
+
+### Current Problem (Before)
+```typescript
+import * as keystone from "keystone";
+
+const MyList = new keystone.List("MyModel", {});
+
+MyList.schema.methods.myMethod = function () {
+  this.email; // ❌ TypeScript Error: Property 'email' does not exist
+};
+```
+
+### Solution (After - Type Assertion Pattern)
+```typescript
+import { keystone, KeystoneTypes } from "@app-dir-source-root/keystone-server";
+import { MyDocumentInterface } from "./types";
+
+// Type assertion (RECOMMENDED)
+const MyList = new keystone.List("MyModel", {}) as KeystoneTypes.KeystoneList<MyDocumentInterface>;
+
+MyList.schema.methods.myMethod = function (this: MyDocumentInterface) {
+  this.email; // ✅ TypeScript knows about email property
+};
+```
+
+## Implementation Phases
+
+### Phase 1: Core Type Definitions
+1. Add Generic KeystoneList Interface to index.d.ts
+2. Ensure required imports are present
+3. Verify no conflicts with existing types
+
+### Phase 2: Enhanced Constructor Support
+1. Modify/add enhanced Keystone interface with constructor overloads
+2. Add support for generic typing via type assertion
+3. Maintain backwards compatibility
+
+### Phase 3: Export Configuration
+1. Add backwards compatibility exports
+2. Ensure proper module declarations
+3. Test import/export scenarios
+
+### Phase 4: Testing & Validation
+1. Test basic list creation with type assertion
+2. Test schema methods with proper typing
+3. Verify backwards compatibility with existing code
+4. Test compilation without errors
+
+### Phase 5: Documentation & Examples
+1. Create usage examples demonstrating type assertion pattern
+2. Document migration path for existing code
+3. Add JSDoc comments with @see references to source files
+
+## Quality Assurance Requirements
+
+### Testing Scenarios
+1. **Basic List Creation**: `new keystone.List("Name", {}) as KeystoneTypes.KeystoneList<DocumentType>`
+2. **Schema Methods**: Methods should recognize document properties via `this: DocumentType`
+3. **Backwards Compatibility**: Existing code without generics should continue working
+4. **Type Safety**: Compile-time error checking for property access
+5. **IDE Support**: Autocomplete for document properties in schema methods
+
+### Success Criteria
+- ✅ Full TypeScript support for schema methods with type assertion
+- ✅ Autocomplete for document properties in schema methods
+- ✅ Compile-time error checking for property access
+- ✅ Better IDE support and developer experience
+- ✅ Maintains full backwards compatibility
+- ✅ No runtime changes required - purely typing improvements
+- ✅ Works with existing `new keystone.List()` pattern
+
+## Technical Constraints
+
+### Must Maintain
+- **Runtime Compatibility**: No changes to JavaScript runtime behavior
+- **Constructor Pattern**: Support existing `new keystone.List()` usage
+- **Import/Export**: Existing import patterns must continue working
+- **Type Safety**: No breaking changes to existing type definitions
+
+### Implementation Notes
+- **Schema Methods Typing**: Key innovation is `schema: mongoose.Schema<T> & { methods: { [K: string]: (this: T, ...args: any[]) => any; }; }`
+- **Constructor Overloads**: Use constructor overloads for both generic and non-generic usage
+- **Type Assertion Pattern**: Provides full generic support while maintaining compatibility
+
+## Deployment Requirements
+1. Update index.d.ts with new interfaces at the end of file
+2. Test compilation with existing projects
+3. Test new functionality with simple generic list
+4. Version bump to indicate new feature
+5. Update documentation with type assertion pattern
+
+## Benefits
+After implementation:
+- Eliminates TypeScript linting errors in schema methods
+- Provides full IntelliSense support for document properties
+- Improves developer experience with better IDE support
+- Maintains 100% backwards compatibility
+- Enables type-safe schema method development
+- No runtime performance impact
+
+## Migration Path
+**Immediate (Type Assertion)**:
+```typescript
+const List = new keystone.List("Name", {}) as KeystoneTypes.KeystoneList<DocumentType>;
+```
+
+**Future Enhancement Option**:
+```typescript
+const List = new keystone.List<DocumentType>("Name", {});
+```
+
+This PRD focuses on the type assertion approach as the recommended solution that balances functionality, compatibility, and implementation simplicity.
