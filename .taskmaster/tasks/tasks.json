@@ -188,15 +188,15 @@
         "testStrategy": "1. Create a test document that imports the current types\n2. Verify all existing interfaces can be properly imported and used\n3. Create a simple test case that demonstrates the current typing limitations with schema methods\n4. Document the error messages produced by TypeScript when accessing document properties in schema methods",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
             "title": "Clone and Examine Repository Structure",
             "description": "Clone the keystone-classic repository and examine the overall project structure to understand the organization of TypeScript definitions.",
             "dependencies": [],
-            "details": "Clone the repository from GitHub, identify the location of all TypeScript definition files (especially index.d.ts), and document the overall organization of the codebase. Create a directory map highlighting the key files related to TypeScript definitions.",
-            "status": "pending",
+            "details": "Clone the repository from GitHub, identify the location of all TypeScript definition files (especially index.d.ts), and document the overall organization of the codebase. Create a directory map highlighting the key files related to TypeScript definitions.\n<info added on 2025-07-10T22:31:52.172Z>\n## Current State Assessment\n\n### ✅ CRITICAL DISCOVERY: Generic Support Already Exists\n- **KeystoneList is already generic**: `declare class KeystoneList<T extends KeystoneDocument = KeystoneDocument>`\n- **KeystoneDocument is already generic**: `export type KeystoneDocument<T = Record<string, any>> = mongoose.Document & T`\n- **Constructor pattern already works**: Runtime uses function constructor with `new List()` support\n\n### 🎯 REFINED PROBLEM STATEMENT\nThe issue is NOT about missing generic support - **it's about schema methods lacking proper `this` typing**:\n\n```typescript\n// Current problem:\nschema.methods.myMethod = function() {\n    this.email; // ❌ TypeScript error - 'this' is generic mongoose.Document\n};\n\n// Desired solution:\nschema.methods.myMethod = function() {\n    this.email; // ✅ TypeScript knows about specific document fields\n};\n```\n\n### 📁 Repository Structure\n- **Main types**: `index.d.ts` (5,861 lines)\n- **Runtime**: `lib/list.js` (function constructor pattern)\n- **Dependencies**: mongoose ^5.13.22, @types/mongoose ^5.11.97\n\n### 🔍 Key Implementation Details\n1. **Generic KeystoneList**: Already supports `KeystoneList<UserDocument>` pattern\n2. **Function Constructor**: `function List(key, options) { if (!(this instanceof List)) return new List(key, options); }`\n3. **Schema Methods**: Added in `register.js` via `this.model = keystone.mongoose.model(this.key, this.schema)`\n4. **Type Challenge**: TypeScript class declarations don't naturally support both constructor and function calls\n\n### 💡 SOLUTION APPROACH\nInstead of adding new generic interfaces, we need to:\n1. Add schema method typing support to existing `KeystoneList<T>` \n2. Ensure `this` context in schema methods is properly typed as `T`\n3. Consider type assertion approach for constructor pattern compatibility\n</info added on 2025-07-10T22:31:52.172Z>",
+            "status": "done",
             "testStrategy": "Verify successful repository clone and create a comprehensive file structure diagram focusing on TypeScript definition files."
           },
           {
@@ -206,8 +206,8 @@
             "dependencies": [
               1
             ],
-            "details": "Document all interfaces including KeystoneListOptions, KeystoneGroupFields, and others. Create a detailed inventory of existing types, their properties, methods, and relationships. Pay special attention to how types are currently structured and any patterns used.",
-            "status": "pending",
+            "details": "Document all interfaces including KeystoneListOptions, KeystoneGroupFields, and others. Create a detailed inventory of existing types, their properties, methods, and relationships. Pay special attention to how types are currently structured and any patterns used.\n<info added on 2025-07-10T22:33:09.322Z>\n# Interface Analysis Results\n\n## Key Discovery: Solution Pattern Already Exists\n\n### Current Generic Infrastructure\n- KeystoneList<T> class with generic type parameter extending KeystoneDocument\n- Generic schema implementation using mongoose.Schema<T>\n- Type-safe pre-hooks with properly typed 'this' context\n\n### Problem Identification\nThe documentation at line 1956 demonstrates the desired behavior where schema methods should have properly typed 'this' context, but the current mongoose.Schema<T> implementation doesn't provide this functionality automatically.\n\n### Solution Approach\nWe need to extend the mongoose.Schema<T> interface to include properly typed 'methods' property that follows the existing pattern used for pre-hooks:\n\n```typescript\n// Current working pattern for pre-hooks:\npre?: {\n    save?: (this: T, next: (err?: Error) => void) => void;\n};\n\n// Required pattern for schema methods:\nmethods?: {\n    [methodName: string]: (this: T, ...args: any[]) => any;\n};\n```\n\n### Implementation Strategy\n1. Use TypeScript module augmentation to extend mongoose.Schema<T>\n2. Ensure the generic type parameter flows correctly to method 'this' context\n3. Maintain backward compatibility with existing patterns\n\n### Current State Assessment\n- Generic foundation is already established\n- Type pattern for 'this' context exists in pre-hooks\n- Runtime constructor support is confirmed\n- Schema methods lack proper typing (target for improvement)\n</info added on 2025-07-10T22:33:09.322Z>",
+            "status": "done",
             "testStrategy": "Create a comprehensive type inventory document with complete interface definitions and their relationships."
           },
           {
@@ -217,8 +217,8 @@
             "dependencies": [
               2
             ],
-            "details": "Identify how mongoose.Document is extended or used in the current implementation. Document the relationship between Keystone's type system and mongoose models. Analyze how document types are handled in the codebase, particularly in list definitions and query operations.",
-            "status": "pending",
+            "details": "Identify how mongoose.Document is extended or used in the current implementation. Document the relationship between Keystone's type system and mongoose models. Analyze how document types are handled in the codebase, particularly in list definitions and query operations.\n<info added on 2025-07-10T22:40:34.774Z>\n## Mongoose Document Extension in Keystone\n\nIdentified the specific typing pattern used in Mongoose v5 for schema methods, which is critical for our TypeScript definitions:\n\nThe Schema constructor in Mongoose v5 uses three generic parameters:\n1. RawDocType - the document interface\n2. TModelType - the model type\n3. TInstanceMethods - interface for instance methods\n\nKeystone-classic implements methods using direct assignment via `schema.methods = {...}` pattern rather than the method() function approach. This requires specific TypeScript handling.\n\nFor proper typing integration, we need to:\n- Extend mongoose.Schema<T> interface to support typed methods\n- Implement module augmentation for mongoose to properly type schema methods\n- Follow the generic parameter pattern: `<DocType, ModelType, InstanceMethods>`\n\nProposed solution pattern involves module augmentation:\n```typescript\ndeclare module 'mongoose' {\n  interface Schema<T = any, M = Model<T>, TInstanceMethods = {}> {\n    methods: { [key: string]: (this: T, ...args: any[]) => any };\n  }\n}\n```\n\nThis approach aligns with Keystone's existing generic patterns while maintaining compatibility with Mongoose v5 conventions.\n</info added on 2025-07-10T22:40:34.774Z>",
+            "status": "done",
             "testStrategy": "Create a diagram showing the relationship between Keystone types and mongoose types, with code examples demonstrating the current integration patterns."
           },
           {
@@ -229,8 +229,8 @@
               2,
               3
             ],
-            "details": "Review the source code of the List constructor to understand how list options are processed, how fields are registered, and how mongoose schemas are generated. Document the flow of type information through the list creation process and identify key integration points for generic interfaces.",
-            "status": "pending",
+            "details": "Review the source code of the List constructor to understand how list options are processed, how fields are registered, and how mongoose schemas are generated. Document the flow of type information through the list creation process and identify key integration points for generic interfaces.\n<info added on 2025-07-10T22:42:06.078Z>\nThe List constructor in Keystone-Classic follows a well-defined flow for processing list options, registering fields, and generating mongoose schemas. The process begins with the List constructor initialization in lib/list.js, where a new mongoose schema is created and essential properties are set up. Field registration occurs through the add() method, which updates both the schema and schemaFields collections.\n\nKey integration points for generic interfaces include:\n1. Schema creation with mongoose.Schema constructor\n2. Field registration and type mapping to mongoose schema paths\n3. Method assignment to schema.methods\n4. Final model creation via mongoose.model()\n\nThe type information flows from list options to schema options, then from field definitions to schema paths, and finally from the schema to the mongoose model which is exposed as this.model.\n\nFor implementing generic interfaces, we should focus on:\n- Extending the mongoose.Schema interface to support typed methods\n- Leveraging the existing KeystoneList<T> generic infrastructure\n- Implementing module augmentation at the schema creation point\n- Ensuring type safety between field definitions and resulting mongoose models\n\nThis analysis provides the foundation for developing proper TypeScript definitions that maintain type safety throughout the list creation process.\n</info added on 2025-07-10T22:42:06.078Z>",
+            "status": "done",
             "testStrategy": "Create a flowchart of the List constructor execution process, highlighting where type information is used and transformed."
           },
           {
@@ -242,8 +242,8 @@
               3,
               4
             ],
-            "details": "Create a dependency graph of all relevant types. Identify potential backward compatibility issues when introducing generic interfaces. Prepare a comprehensive report documenting the current type system, integration points, and recommendations for implementing the new generic interfaces without breaking existing functionality.",
-            "status": "pending",
+            "details": "Create a dependency graph of all relevant types. Identify potential backward compatibility issues when introducing generic interfaces. Prepare a comprehensive report documenting the current type system, integration points, and recommendations for implementing the new generic interfaces without breaking existing functionality.\n<info added on 2025-07-10T22:43:03.829Z>\n# Comprehensive Implementation Report\n\n## Executive Summary\n\nResearch completed for implementing typed mongoose schema methods in keystone-classic. **Key finding**: The problem is NOT missing generics - they exist and work well. The issue is that `schema.methods` lacks proper TypeScript typing to provide correct `this` context.\n\n## Current State Analysis\n\n### Generic Infrastructure (✅ SOLID)\n- **KeystoneList<T>**: Already generic `declare class KeystoneList<T extends KeystoneDocument = KeystoneDocument>`\n- **KeystoneDocument<T>**: Already generic `export type KeystoneDocument<T = Record<string, any>> = mongoose.Document & T`\n- **Existing Pattern**: Pre-hooks already use typed `this` context: `save?: (this: T, next: (err?: Error) => void) => void`\n\n### Dependencies\n- **Mongoose**: v5.13.22 with @types/mongoose v5.11.97\n- **TypeScript**: Standard module augmentation support\n- **Keystone**: Function constructor pattern with generic support\n\n### Current Implementation Gap\n- **Problem**: `schema.methods` assignment lacks TypeScript typing\n- **Result**: Methods can't access `this.email` etc. due to generic `Document` typing\n- **Solution**: Extend mongoose.Schema<T> interface via module augmentation\n\n## Technical Architecture\n\n### List Constructor Flow\n1. **List Creation**: `new List(key, options)` (lib/list.js)\n2. **Schema Creation**: `new keystone.mongoose.Schema({}, options)` (line 44)\n3. **Field Addition**: Via `this.add()` method\n4. **Model Registration**: `keystone.mongoose.model(this.key, this.schema)` (register.js)\n\n### Key Integration Points\n- **Schema Creation**: Line 44 in lib/list.js\n- **Method Assignment**: Direct assignment to `schema.methods`\n- **Model Creation**: register.js lines 45-48\n\n## Recommended Solution\n\n### Approach: Module Augmentation (Maintains Backward Compatibility)\n\n```typescript\n// Extend mongoose to support typed methods\ndeclare module 'mongoose' {\n  interface Schema<T = any, M = Model<T>, TInstanceMethods = {}> {\n    methods: { [methodName: string]: (this: T, ...args: any[]) => any };\n  }\n}\n```\n\n### Implementation Strategy\n\n1. **Module Augmentation**: Add to index.d.ts around line 1956 (existing comment location)\n2. **Follow Existing Pattern**: Use same approach as pre-hooks typing\n3. **Preserve Compatibility**: No changes to runtime behavior\n4. **Generic Support**: Leverage existing KeystoneList<T> infrastructure\n\n## Risk Assessment\n\n### Backward Compatibility: ✅ LOW RISK\n- No runtime changes required\n- Maintains existing constructor pattern\n- Preserves all current functionality\n\n### Type Safety: ✅ HIGH BENEFIT\n- Provides proper `this` context typing\n- Enables IntelliSense for schema methods\n- Prevents runtime errors from typos\n\n### Implementation Complexity: ✅ LOW\n- Single module augmentation\n- Follows existing patterns\n- No new generic infrastructure needed\n\n## Implementation Plan\n\n1. **Phase 1**: Add module augmentation to index.d.ts\n2. **Phase 2**: Update documentation with typed method examples\n3. **Phase 3**: Add tests to verify TypeScript compilation\n4. **Phase 4**: Create migration guide for existing users\n\n## Dependencies Map\n\n**No Breaking Changes Required**:\n- ✅ KeystoneList<T> → Already generic\n- ✅ KeystoneDocument<T> → Already generic  \n- ✅ mongoose.Schema → Extend via module augmentation\n- ✅ List constructor → No changes needed\n\n## Conclusion\n\n**This is a simple fix with high impact**. The generic infrastructure already exists and works well. We just need to extend the mongoose.Schema interface to support typed methods, following the same pattern already used for pre-hooks.\n\n**Estimated effort**: 2-4 hours for implementation + testing\n**Risk level**: Very low - pure TypeScript enhancement\n**Benefit**: High - solves the core typing issue described in the requirements\n</info added on 2025-07-10T22:43:03.829Z>",
+            "status": "done",
             "testStrategy": "Review the final report with team members to ensure it provides sufficient guidance for implementing the new generic interfaces while maintaining backward compatibility."
           }
         ]
@@ -251,67 +251,67 @@
       {
         "id": 2,
         "title": "Implement Generic KeystoneList Interface",
-        "description": "Create the generic KeystoneList<T> interface that extends mongoose.Document to enable proper typing for document properties in schema methods.",
-        "details": "1. Add the required mongoose import at the top of index.d.ts: `import * as mongoose from \"mongoose\";`\n2. Implement the KeystoneList<T> interface as specified in the PRD:\n```typescript\nexport interface KeystoneList<T extends mongoose.Document = mongoose.Document> {\n  key: string;\n  schema: mongoose.Schema<T> & {\n    methods: {\n      [K: string]: (this: T, ...args: any[]) => any;\n    };\n  };\n  model: mongoose.Model<T>;\n  options: KeystoneListOptions;\n  add(fields: KeystoneGroupFields): void;\n  add(heading: KeystoneGroupHeading, fields: KeystoneGroupFields): void;\n  register(): void;\n  defaultSort?: string;\n  defaultColumns?: string;\n  relationship(config: any): void;\n  get(option: string): any;\n  set(option: string, value: any): KeystoneList<T>;\n  mappings: KeystoneListMappings;\n  fields: { [fieldName: string]: KeystoneField };\n  underscoreMethods: { [methodName: string]: Function };\n}\n```\n3. Place the interface at the end of the index.d.ts file to avoid conflicts\n4. Ensure the interface properly extends mongoose.Document\n5. Pay special attention to the schema.methods typing which is the key innovation\n\nImplementation notes:\n- The critical part is the schema methods typing: `schema: mongoose.Schema<T> & { methods: { [K: string]: (this: T, ...args: any[]) => any; }; }`\n- Use the latest TypeScript features for proper typing (TypeScript 4.7+ recommended)\n- Ensure backward compatibility by using a default type parameter: `<T extends mongoose.Document = mongoose.Document>`",
-        "testStrategy": "1. Create a test file that imports the new KeystoneList interface\n2. Define a sample document interface extending mongoose.Document\n3. Test type assertion with the new interface\n4. Verify that document properties are properly recognized in schema methods\n5. Test with both the generic and non-generic usage patterns",
-        "priority": "high",
+        "description": "Create the generic KeystoneList<T> interface that extends KeystoneDocument to enable proper typing for document properties in schema methods, using a specialized KeystoneListSchema<T> interface to avoid global mongoose namespace conflicts.",
+        "status": "pending",
         "dependencies": [
           1
         ],
-        "status": "pending",
+        "priority": "high",
+        "details": "1. Add the required mongoose import at the top of index.d.ts: `import * as mongoose from \"mongoose\";`\n2. Create a specific KeystoneListSchema<T> interface to avoid polluting the global mongoose namespace:\n```typescript\nexport interface KeystoneListSchema<T extends KeystoneDocument = KeystoneDocument> extends mongoose.Schema<T> {\n  methods: { [methodName: string]: (this: T, ...args: any[]) => any };\n}\n```\n3. Implement the KeystoneList<T> interface using the new KeystoneListSchema<T>:\n```typescript\nexport interface KeystoneList<T extends KeystoneDocument = KeystoneDocument> {\n  key: string;\n  schema: KeystoneListSchema<T>;\n  model: mongoose.Model<T>;\n  options: KeystoneListOptions;\n  add(fields: KeystoneGroupFields): void;\n  add(heading: KeystoneGroupHeading, fields: KeystoneGroupFields): void;\n  register(): void;\n  defaultSort?: string;\n  defaultColumns?: string;\n  relationship(config: any): void;\n  get(option: string): any;\n  set(option: string, value: any): KeystoneList<T>;\n  mappings: KeystoneListMappings;\n  fields: { [fieldName: string]: KeystoneField };\n  underscoreMethods: { [methodName: string]: Function };\n}\n```\n4. Place the interfaces at the end of the index.d.ts file to avoid conflicts\n5. Ensure the interfaces properly work with the existing KeystoneDocument<T> type system\n\nImplementation notes:\n- Use the existing KeystoneDocument<T> type system instead of mongoose.Document directly\n- Create a specific KeystoneListSchema<T> type to avoid global mongoose namespace conflicts\n- The critical part is still the schema methods typing, but now isolated to Keystone's ecosystem\n- Use the latest TypeScript features for proper typing (TypeScript 4.7+ recommended)\n- Ensure backward compatibility by using default type parameters",
+        "testStrategy": "1. Create a test file that imports the new KeystoneList and KeystoneListSchema interfaces\n2. Define a sample document interface extending KeystoneDocument\n3. Test type assertion with the new interfaces\n4. Verify that document properties are properly recognized in schema methods\n5. Test with both the generic and non-generic usage patterns\n6. Verify that regular mongoose usage in the same project is not affected by our Keystone types",
         "subtasks": [
           {
             "id": 1,
             "title": "Add mongoose import to index.d.ts",
             "description": "Add the required mongoose import statement at the top of the index.d.ts file to enable proper typing for mongoose-related interfaces.",
+            "status": "pending",
             "dependencies": [],
             "details": "Add the following import statement at the top of index.d.ts: `import * as mongoose from \"mongoose\";`. Ensure it's placed before any other code that might reference mongoose types.",
-            "status": "pending",
             "testStrategy": "Verify the import statement is correctly added and doesn't cause any TypeScript compilation errors."
           },
           {
             "id": 2,
-            "title": "Define KeystoneList interface structure",
-            "description": "Create the basic structure of the KeystoneList<T> interface with proper generic type parameter that extends mongoose.Document.",
+            "title": "Create KeystoneListSchema interface",
+            "description": "Create a specialized KeystoneListSchema<T> interface that extends mongoose.Schema<T> to provide typed schema methods without affecting the global mongoose namespace.",
+            "status": "pending",
             "dependencies": [
               1
             ],
-            "details": "Define the interface with the generic type parameter: `export interface KeystoneList<T extends mongoose.Document = mongoose.Document>`. Include the basic properties like key, model, and options without implementing the complex schema property yet.",
-            "status": "pending",
-            "testStrategy": "Check that the interface compiles without errors and properly extends mongoose.Document with the default type parameter."
+            "details": "Define the KeystoneListSchema<T> interface with the following structure:\n```typescript\nexport interface KeystoneListSchema<T extends KeystoneDocument = KeystoneDocument> extends mongoose.Schema<T> {\n  methods: { [methodName: string]: (this: T, ...args: any[]) => any };\n}\n```\nThis interface will provide typed schema methods without polluting the global mongoose namespace.",
+            "testStrategy": "Verify the interface compiles without errors and properly extends mongoose.Schema with the KeystoneDocument type parameter."
           },
           {
             "id": 3,
-            "title": "Implement schema methods typing",
-            "description": "Add the specialized schema property with methods typing that enables proper 'this' context in schema methods.",
+            "title": "Define KeystoneList interface structure",
+            "description": "Create the basic structure of the KeystoneList<T> interface with proper generic type parameter that extends KeystoneDocument.",
+            "status": "pending",
             "dependencies": [
               2
             ],
-            "details": "Implement the schema property with the following type: `schema: mongoose.Schema<T> & { methods: { [K: string]: (this: T, ...args: any[]) => any; }; }`. This is the key innovation that allows proper typing for document properties in schema methods.",
-            "status": "pending",
-            "testStrategy": "Create a simple test case that uses the schema methods typing to verify that 'this' context is properly typed within method implementations."
+            "details": "Define the interface with the generic type parameter: `export interface KeystoneList<T extends KeystoneDocument = KeystoneDocument>`. Include the basic properties like key, model, and options, using the new KeystoneListSchema<T> for the schema property.",
+            "testStrategy": "Check that the interface compiles without errors and properly uses KeystoneDocument with the default type parameter."
           },
           {
             "id": 4,
             "title": "Complete remaining interface properties",
             "description": "Add all remaining properties and methods to the KeystoneList interface according to the specification.",
+            "status": "pending",
             "dependencies": [
               3
             ],
             "details": "Add the remaining properties and methods: add(), register(), defaultSort, defaultColumns, relationship(), get(), set(), mappings, fields, and underscoreMethods. Ensure all method signatures match the specification exactly.",
-            "status": "pending",
             "testStrategy": "Verify all properties and methods are correctly typed and match the specification in the PRD."
           },
           {
             "id": 5,
             "title": "Position and test the interface",
-            "description": "Place the completed interface at the end of index.d.ts and test it with existing code to ensure backward compatibility.",
+            "description": "Place the completed interfaces at the end of index.d.ts and test them with existing code to ensure backward compatibility.",
+            "status": "pending",
             "dependencies": [
               4
             ],
-            "details": "Position the interface at the end of the index.d.ts file to avoid conflicts with other declarations. Test the interface with existing code to ensure it maintains backward compatibility while providing the enhanced typing for schema methods.",
-            "status": "pending",
-            "testStrategy": "Test the interface with existing code that uses KeystoneList to ensure no type errors are introduced. Specifically test a schema method that references document properties to verify the proper 'this' context typing."
+            "details": "Position the interfaces at the end of the index.d.ts file to avoid conflicts with other declarations. Test the interfaces with existing code to ensure they maintain backward compatibility while providing the enhanced typing for schema methods.",
+            "testStrategy": "Test the interfaces with existing code that uses KeystoneList to ensure no type errors are introduced. Specifically test a schema method that references document properties to verify the proper 'this' context typing. Also verify that regular mongoose usage in the same project is not affected by our Keystone types."
           }
         ]
       },
@@ -730,7 +730,7 @@
     ],
     "metadata": {
       "created": "2025-07-10T22:23:21.355Z",
-      "updated": "2025-07-10T22:25:57.860Z",
+      "updated": "2025-07-10T22:43:19.970Z",
       "description": "Tasks for generic-schema-types context"
     }
   }
