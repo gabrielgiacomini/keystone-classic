@@ -67,6 +67,6 @@ dev-debug.log
 
 # Cursor
 mcp.json
-.taskmaster
-.cursor/rules
-.env.example
+# .taskmaster
+# .cursor/rules
+# .env.example

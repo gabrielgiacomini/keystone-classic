@@ -1,0 +1,69 @@
+# Task ID: 2
+# Title: Define Core Keystone Interfaces
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: Create the foundational interfaces for the Keystone application, including the main Keystone class, initialization options, and core functionality.
+# Details:
+Define the core interfaces that represent the Keystone application and its configuration options in `types/index.d.ts`:
+
+```typescript
+// Core Keystone interface
+export interface Keystone {
+  init(options?: KeystoneInitOptions): Express.Application;
+  pre(hook: string, fn: HookFunction): void;
+  post(hook: string, fn: HookFunction): void;
+  createItems(data: Record<string, any[]>): Promise<void>;
+  list(key: ListKey): KeystoneList<any>;
+  lists: Record<string, KeystoneList<any>>;
+  get(path: string, fn: ExpressHandler): void;
+  post(path: string, fn: ExpressHandler): void;
+  set(key: string, value: any): void;
+  get(key: string): any;
+  // Add other core methods
+}
+
+// Branded type for list keys
+export type ListKey = string & { __brand: 'ListKey' };
+
+// Initialization options
+export interface KeystoneInitOptions {
+  name?: string;
+  brand?: string;
+  admin?: AdminOptions;
+  mongoose?: mongoose.ConnectionOptions;
+  mongo?: string | mongoose.Connection;
+  session?: boolean | SessionOptions;
+  static?: StaticOptions | string | string[];
+  views?: string | string[];
+  compress?: boolean;
+  env?: string;
+  logger?: any; // Define logger interface
+  cookie?: CookieOptions;
+  signin?: SigninOptions;
+  signout?: SignoutOptions;
+  auth?: AuthOptions;
+  // Add other initialization options
+}
+
+// Hook function type
+export type HookFunction = (next: () => void) => void | Promise<void>;
+
+// Express handler type
+export type ExpressHandler = (req: Express.Request, res: Express.Response, next: Express.NextFunction) => void;
+
+// Define other supporting interfaces
+export interface AdminOptions {
+  path?: string;
+  signin?: SigninOptions;
+  signout?: SignoutOptions;
+  // Add other admin options
+}
+
+// Add other necessary interfaces
+```
+
+Ensure all interfaces have proper JSDoc comments explaining their purpose and usage. Use branded types for domain-specific strings like ListKey to improve type safety.
+
+# Test Strategy:
+Verify the interfaces by creating a simple TypeScript file that imports and uses these interfaces. Check that the TypeScript compiler can correctly validate usage patterns. Ensure that the interfaces match the actual implementation by comparing with the source code.

@@ -1,0 +1,181 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Fix Missing Type Dependencies for External Modules",
+        "description": "Add proper module declarations for mongoose, moment, grappling-hook, and numeral modules to resolve linter errors in index.d.ts and fix TypeScript compilation errors.",
+        "details": "This task involves implementing Option A from the improvements plan: adding module declarations for external dependencies with fallback declarations.\n\nSteps to complete:\n1. Identify all instances where mongoose, moment, grappling-hook, and numeral modules are causing TypeScript errors in index.d.ts\n2. Create declaration files for each missing module in a 'types' directory:\n   - Create `types/mongoose/index.d.ts`\n   - Create `types/moment/index.d.ts`\n   - Create `types/grappling-hook/index.d.ts`\n   - Create `types/numeral/index.d.ts`\n\n3. For each module, implement a basic declaration that covers the functionality used in the project:\n\n```typescript\n// Example for mongoose\ndeclare module 'mongoose' {\n  export interface Schema {\n    // Add required interfaces and types\n  }\n  // Add other necessary types\n  export function model(name: string, schema: Schema): any;\n  // Add other necessary functions\n}\n\n// Similar structure for other modules\n```\n\n4. Update the tsconfig.json to include the new type declarations:\n```json\n{\n  \"compilerOptions\": {\n    \"typeRoots\": [\"./node_modules/@types\", \"./types\"]\n  }\n}\n```\n\n5. Verify that the linter errors in index.d.ts are resolved after adding these declarations.\n\nNote: Use fallback declarations where specific typing information is not available, ensuring the application can compile without errors while maintaining type safety where possible.",
+        "testStrategy": "1. Run TypeScript compiler to verify that compilation errors related to these modules are resolved:\n   ```\n   npx tsc --noEmit\n   ```\n\n2. Run the linter specifically on the index.d.ts file to confirm no linting errors remain:\n   ```\n   npx eslint index.d.ts\n   ```\n\n3. Verify each module declaration individually by creating small test files that import and use each module:\n   ```typescript\n   // test-mongoose.ts\n   import * as mongoose from 'mongoose';\n   // Use mongoose functionality that was previously causing errors\n   ```\n\n4. Ensure the application builds successfully with the new type declarations:\n   ```\n   npm run build\n   ```\n\n5. Run existing tests to ensure the type declarations don't interfere with runtime behavior:\n   ```\n   npm test\n   ```\n\n6. Have another developer review the type declarations to ensure they accurately represent the modules' APIs.",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Analyze TypeScript Errors in index.d.ts",
+            "description": "Identify all instances where mongoose, moment, grappling-hook, and numeral modules are causing TypeScript errors in index.d.ts",
+            "dependencies": [],
+            "details": "Review the index.d.ts file to locate all import statements and usages of the four external modules (mongoose, moment, grappling-hook, and numeral). Document each error location, the specific error message, and the context in which each module is being used. This will help understand what interfaces and types need to be declared for each module.",
+            "status": "pending",
+            "testStrategy": "Create a list of all error occurrences with line numbers, error messages, and required type definitions for each module."
+          },
+          {
+            "id": 2,
+            "title": "Create Types Directory Structure",
+            "description": "Set up the types directory and create declaration files for each missing module",
+            "dependencies": [
+              1
+            ],
+            "details": "Create a new 'types' directory at the project root. Within this directory, create subdirectories for each module (mongoose, moment, grappling-hook, and numeral). In each subdirectory, create an index.d.ts file that will contain the type declarations for that specific module.",
+            "status": "pending",
+            "testStrategy": "Verify the directory structure exists with the following paths: types/mongoose/index.d.ts, types/moment/index.d.ts, types/grappling-hook/index.d.ts, and types/numeral/index.d.ts."
+          },
+          {
+            "id": 3,
+            "title": "Implement Module Declarations for Mongoose and Moment",
+            "description": "Create type declarations for mongoose and moment modules based on their usage in the project",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Using the error analysis from subtask 1, implement type declarations for mongoose and moment in their respective index.d.ts files. For mongoose, include Schema interfaces, model functions, and any other types used in the project. For moment, declare the necessary date manipulation functions and interfaces. Use fallback declarations (any type) where specific typing information is not available.",
+            "status": "pending",
+            "testStrategy": "Check that the declarations compile without errors and that they cover all the functionality used in the project for these two modules."
+          },
+          {
+            "id": 4,
+            "title": "Implement Module Declarations for Grappling-hook and Numeral",
+            "description": "Create type declarations for grappling-hook and numeral modules based on their usage in the project",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Using the error analysis from subtask 1, implement type declarations for grappling-hook and numeral in their respective index.d.ts files. For grappling-hook, include any plugin or hook-related interfaces. For numeral, declare number formatting functions and options. Use fallback declarations (any type) where specific typing information is not available.",
+            "status": "pending",
+            "testStrategy": "Check that the declarations compile without errors and that they cover all the functionality used in the project for these two modules."
+          },
+          {
+            "id": 5,
+            "title": "Update tsconfig.json and Verify Resolution",
+            "description": "Update the TypeScript configuration to include the new type declarations and verify that all errors are resolved",
+            "dependencies": [
+              3,
+              4
+            ],
+            "details": "Modify the tsconfig.json file to include the new types directory in the typeRoots array. Run the TypeScript compiler to verify that all previous errors related to the four modules are now resolved. Make any necessary adjustments to the type declarations if errors persist. Ensure that the application can compile without errors while maintaining type safety where possible.",
+            "status": "pending",
+            "testStrategy": "Run the TypeScript compiler and linter to confirm that all errors related to the four modules in index.d.ts are resolved. Document any remaining issues that might need further attention."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Replace Critical `any` Types with Proper TypeScript Types",
+        "description": "Replace over 50 instances of `any` with proper TypeScript types to improve type safety, focusing on high and medium priority items in the codebase.",
+        "details": "This task involves systematically replacing `any` types with more specific TypeScript types to improve code quality and type safety. The implementation should be done in order of priority:\n\nHIGH PRIORITY replacements:\n1. Replace `_path: any` with `_path: mongoose.Types.ObjectId | string`\n2. Replace `col?: any` with `col?: mongoose.SchemaTypeOptions<any>`\n3. Replace `schema: any` with `schema: mongoose.SchemaDefinition`\n\nMEDIUM PRIORITY replacements:\n1. Replace `data: any` with `data: Record<string, unknown>`\n2. Replace `item: any` with `item: KeystoneDocument`\n3. Replace callback types with proper error handling patterns\n\nImplementation steps:\n1. Use the TypeScript compiler to identify all instances of `any` in the codebase:\n   ```bash\n   npx tsc --noEmit | grep -i \"any\"\n   ```\n\n2. Create a spreadsheet or tracking document to list all instances, categorizing them by priority (high, medium, low)\n\n3. For each high priority replacement:\n   - Ensure mongoose types are properly imported\n   - Replace the `any` type with the specified type\n   - Test the change to ensure it doesn't break existing functionality\n\n4. For medium priority replacements:\n   - Define the `KeystoneDocument` interface if it doesn't exist\n   - Replace callback types with proper function signatures including error handling\n   - Use `Record<string, unknown>` instead of generic `data: any` parameters\n\n5. Document any cases where `any` cannot be easily replaced for future refactoring\n\n6. Update relevant documentation to reflect the new type definitions",
+        "testStrategy": "1. Run TypeScript compiler in strict mode to verify type correctness:\n   ```bash\n   npx tsc --noEmit --strict\n   ```\n\n2. Create unit tests for functions where types were changed to verify they still work as expected:\n   ```typescript\n   // Example test for a function with updated types\n   describe('functionWithUpdatedTypes', () => {\n     it('should handle ObjectId paths correctly', () => {\n       const objectId = new mongoose.Types.ObjectId();\n       const result = functionWithUpdatedTypes({ _path: objectId });\n       expect(result).toBeDefined();\n     });\n     \n     it('should handle string paths correctly', () => {\n       const result = functionWithUpdatedTypes({ _path: 'some/path' });\n       expect(result).toBeDefined();\n     });\n   });\n   ```\n\n3. Verify IDE intellisense correctly shows the new types by checking:\n   - Hover information displays correct types\n   - Autocomplete suggestions are appropriate\n   - Type errors are correctly flagged for invalid usage\n\n4. Run existing test suite to ensure no regressions:\n   ```bash\n   npm test\n   ```\n\n5. Create a before/after comparison document showing the improvements in type safety with examples of how the new types prevent potential bugs",
+        "status": "pending",
+        "dependencies": [
+          1
+        ],
+        "priority": "high",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Fix Duplicate Method Definitions in Field Interfaces",
+        "description": "Remove duplicate method signatures in field interfaces, focusing on KeystoneFieldForDateType's validateRequiredInput and addFilterToQuery methods, and resolve all other duplicate method definitions throughout index.d.ts.",
+        "details": "This task involves identifying and removing duplicate method signatures in TypeScript interface definitions to improve code quality and prevent TypeScript errors. The implementation should follow these steps:\n\n1. Focus first on the identified duplicates in KeystoneFieldForDateType:\n   - Remove duplicate validateRequiredInput method at line 5616 (keeping the one at line 5590)\n   - Remove duplicate addFilterToQuery method at line 5624 (keeping the one at line 5598)\n\n2. Systematically scan the entire index.d.ts file for other duplicate method definitions:\n   - Use TypeScript's error messages as guidance for finding duplicates\n   - For each interface, check for methods with identical signatures\n   - When duplicates are found, keep only one implementation, ensuring it has the most accurate type definitions\n\n3. Pay special attention to field interfaces, as they are likely to have similar patterns of duplication:\n   - Check all KeystoneField* interfaces\n   - Examine List and Schema interfaces for potential duplicates\n   - Review any utility or helper interfaces\n\n4. Document all removed duplicates in a comment at the top of the file or in the commit message, including:\n   - Interface name\n   - Method name\n   - Line numbers of original and duplicate\n   - Reason for keeping the selected implementation\n\n5. Consider refactoring common method signatures into shared interfaces if appropriate to prevent future duplication.",
+        "testStrategy": "1. Run TypeScript compiler to verify that duplicate method errors are resolved:\n   ```bash\n   npx tsc --noEmit\n   ```\n\n2. Create a test script that validates the structure of the interfaces:\n   ```typescript\n   // test/types/interfaces.test.ts\n   import * as keystone from '../../index';\n   \n   describe('KeystoneFieldForDateType interface', () => {\n     test('should have single validateRequiredInput method', () => {\n       // This test will fail to compile if duplicate methods exist\n       const methods = Object.getOwnPropertyNames(keystone.KeystoneFieldForDateType.prototype);\n       const validateMethods = methods.filter(m => m === 'validateRequiredInput');\n       expect(validateMethods.length).toBe(1);\n     });\n   });\n   ```\n\n3. Manually verify each interface where duplicates were removed by:\n   - Creating a small test implementation of the interface\n   - Ensuring the implementation compiles without errors\n   - Checking that all expected methods are available\n\n4. Run a linter specifically on the index.d.ts file to confirm no duplicate method errors remain:\n   ```bash\n   npx eslint index.d.ts --rule 'no-dupe-class-members: error'\n   ```\n\n5. Verify that any code that depends on these interfaces still compiles and functions correctly by running the existing test suite.",
+        "status": "pending",
+        "dependencies": [
+          1
+        ],
+        "priority": "high",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Documentation Cleanup in index.d.ts",
+        "description": "Fix typos, incomplete TODOs, and inconsistent formatting in index.d.ts to improve code readability and maintainability.",
+        "details": "This task involves improving the documentation quality in index.d.ts by addressing several issues:\n\n1. Fix typos throughout the file:\n   - Correct \"mAdminUFieldReactiode\" to \"Admin UI Field Reaction mode\"\n   - Identify and fix other misspellings and incorrect terms\n\n2. Address incomplete @todo comments:\n   - Review all @todo comments in the file\n   - Either complete the implementation for each @todo\n   - Or remove @todo comments that are no longer relevant\n   - Document any @todo items that are intentionally left for future work in a separate tracking issue\n\n3. Standardize JSDoc comment formatting:\n   - Ensure consistent indentation in all JSDoc blocks\n   - Standardize parameter descriptions format (@param {Type} name - description)\n   - Ensure return type documentation follows the same format (@returns {Type} description)\n   - Add proper spacing between JSDoc sections\n\n4. Add missing @see references:\n   - Add @see references to relevant source files where implementation details can be found\n   - Format as @see {path/to/source-file.js} for consistency\n   - Ensure references point to the correct files\n\n5. Maintain consistency with existing documentation style:\n   - Follow the established documentation patterns in well-documented sections\n   - Ensure new documentation matches the style of existing documentation\n\nThis task should be performed after fixing type dependencies and duplicate method definitions to ensure documentation improvements align with the corrected code structure.",
+        "testStrategy": "1. Perform a comprehensive review of the changes:\n   - Use a diff tool to verify all identified typos have been corrected\n   - Confirm all @todo comments have been properly addressed\n   - Verify JSDoc formatting is consistent throughout the file\n\n2. Run documentation generation tools to ensure proper parsing:\n   ```bash\n   npx typedoc index.d.ts --out docs\n   ```\n   - Verify the generated documentation renders correctly\n   - Check that all @see references are properly linked\n\n3. Run TypeScript compiler to ensure documentation changes didn't introduce errors:\n   ```bash\n   npx tsc --noEmit\n   ```\n\n4. Create a checklist of specific issues to fix and verify each item is addressed:\n   - [ ] \"mAdminUFieldReactiode\" corrected\n   - [ ] All @todo comments addressed\n   - [ ] JSDoc formatting standardized\n   - [ ] @see references added where appropriate\n\n5. Have another team member review the documentation changes for clarity and correctness",
+        "status": "pending",
+        "dependencies": [
+          1,
+          2,
+          3
+        ],
+        "priority": "medium",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-10T21:12:16.268Z",
+      "updated": "2025-07-10T21:13:24.414Z",
+      "description": "Phase 1 Critical Issues - Urgent fixes for linter errors and immediate type safety issues"
+    }
+  },
+  "phase1-critical": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Fix Missing Type Dependencies for External Modules",
+        "description": "Add proper module declarations for mongoose, moment, grappling-hook, and numeral modules to resolve linter errors in index.d.ts and fix TypeScript compilation errors.",
+        "details": "This task involves implementing Option A from the improvements plan: adding module declarations for external dependencies with fallback declarations.\n\nSteps to complete:\n1. Identify all instances where mongoose, moment, grappling-hook, and numeral modules are causing TypeScript errors in index.d.ts\n2. Create declaration files for each missing module in a 'types' directory:\n   - Create `types/mongoose/index.d.ts`\n   - Create `types/moment/index.d.ts`\n   - Create `types/grappling-hook/index.d.ts`\n   - Create `types/numeral/index.d.ts`\n\n3. For each module, implement a basic declaration that covers the functionality used in the project:\n\n```typescript\n// Example for mongoose\ndeclare module 'mongoose' {\n  export interface Schema {\n    // Add required interfaces and types\n  }\n  // Add other necessary types\n  export function model(name: string, schema: Schema): any;\n  // Add other necessary functions\n}\n\n// Similar structure for other modules\n```\n\n4. Update the tsconfig.json to include the new type declarations:\n```json\n{\n  \"compilerOptions\": {\n    \"typeRoots\": [\"./node_modules/@types\", \"./types\"]\n  }\n}\n```\n\n5. Verify that the linter errors in index.d.ts are resolved after adding these declarations.\n\nNote: Use fallback declarations where specific typing information is not available, ensuring the application can compile without errors while maintaining type safety where possible.\n<info added on 2025-07-10T21:31:38.580Z>\n## Updated Analysis and Implementation Plan\n\nBased on the analysis, we can simplify our approach:\n\n1. Install available type definitions from DefinitelyTyped:\n   ```bash\n   npm install --save-dev @types/moment @types/numeral\n   ```\n\n2. Create custom module declaration only for grappling-hook:\n   - Create `types/grappling-hook/index.d.ts` with appropriate declarations\n\n3. For mongoose, check if @types/mongoose is available or create custom declarations if needed\n\n4. Update tsconfig.json to include both installed types and custom declarations:\n   ```json\n   {\n     \"compilerOptions\": {\n       \"typeRoots\": [\"./node_modules/@types\", \"./types\"]\n     }\n   }\n   ```\n\n5. Remove TODO comments from index.d.ts after implementing proper type imports\n\n6. Verify compilation succeeds without type errors\n\nThis approach reduces unnecessary work by leveraging existing type definitions where available.\n</info added on 2025-07-10T21:31:38.580Z>\n<info added on 2025-07-10T21:54:26.130Z>\n## Implementation Results\n\nImplementation details:\n- Installed @types/moment and @types/numeral via npm\n- Created custom @types/grappling-hook/index.d.ts with proper Hook interface\n- Created tsconfig.json with proper TypeScript configuration\n- Removed all TODO comments from index.d.ts imports\n- TypeScript check passes with no errors (npx tsc --noEmit)\n\nKey decisions made:\n- Used Option A: Module declarations for external dependencies  \n- Mongoose provides its own types (no @types/mongoose needed)\n- Moment.js provides its own types (despite @types/moment being deprecated)\n- Created custom declaration for grappling-hook based on usage pattern in KeystoneJS\n\nAll module import errors have been resolved. Task completed successfully.\n</info added on 2025-07-10T21:54:26.130Z>",
+        "testStrategy": "1. Run TypeScript compiler to verify that compilation errors related to these modules are resolved:\n   ```\n   npx tsc --noEmit\n   ```\n\n2. Run the linter specifically on the index.d.ts file to confirm no linting errors remain:\n   ```\n   npx eslint index.d.ts\n   ```\n\n3. Verify each module declaration individually by creating small test files that import and use each module:\n   ```typescript\n   // test-mongoose.ts\n   import * as mongoose from 'mongoose';\n   // Use mongoose functionality that was previously causing errors\n   ```\n\n4. Ensure the application builds successfully with the new type declarations:\n   ```\n   npm run build\n   ```\n\n5. Run existing tests to ensure the type declarations don't interfere with runtime behavior:\n   ```\n   npm test\n   ```\n\n6. Have another developer review the type declarations to ensure they accurately represent the modules' APIs.",
+        "status": "done",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Replace Critical `any` Types with Proper TypeScript Types",
+        "description": "Replace over 50 instances of `any` with proper TypeScript types to improve type safety, focusing on high and medium priority items in the codebase.",
+        "details": "This task involves systematically replacing `any` types with more specific TypeScript types to improve code quality and type safety. The implementation should be done in order of priority:\n\nHIGH PRIORITY replacements:\n1. Replace `_path: any` with `_path: mongoose.Types.ObjectId | string`\n2. Replace `col?: any` with `col?: mongoose.SchemaTypeOptions<any>`\n3. Replace `schema: any` with `schema: mongoose.SchemaDefinition`\n\nMEDIUM PRIORITY replacements:\n1. Replace `data: any` with `data: Record<string, unknown>`\n2. Replace `item: any` with `item: KeystoneDocument`\n3. Replace callback types with proper error handling patterns\n\nImplementation steps:\n1. Use the TypeScript compiler to identify all instances of `any` in the codebase:\n   ```bash\n   npx tsc --noEmit | grep -i \"any\"\n   ```\n\n2. Create a spreadsheet or tracking document to list all instances, categorizing them by priority (high, medium, low)\n\n3. For each high priority replacement:\n   - Ensure mongoose types are properly imported\n   - Replace the `any` type with the specified type\n   - Test the change to ensure it doesn't break existing functionality\n\n4. For medium priority replacements:\n   - Define the `KeystoneDocument` interface if it doesn't exist\n   - Replace callback types with proper function signatures including error handling\n   - Use `Record<string, unknown>` instead of generic `data: any` parameters\n\n5. Document any cases where `any` cannot be easily replaced for future refactoring\n\n6. Update relevant documentation to reflect the new type definitions\n<info added on 2025-07-10T21:55:41.423Z>\n## Implementation Progress\n\nStarted implementing high-priority replacements:\n\n### _path: any (10 occurrences)\n- Located in field definition files and list operations\n- These represent critical field path identifiers in the Keystone field system\n- Replacing with `mongoose.Types.ObjectId | string` type\n- Requires importing mongoose types: `import { Types } from 'mongoose'`\n- Testing each replacement to ensure field path resolution still works correctly\n\n### Next steps:\n- Will continue with remaining high-priority replacements:\n  - col?: any → mongoose.SchemaTypeOptions<any>\n  - schema: Record<string, any> → mongoose.SchemaDefinition\n- Will update type definitions in related interfaces that depend on these types\n</info added on 2025-07-10T21:55:41.423Z>",
+        "testStrategy": "1. Run TypeScript compiler in strict mode to verify type correctness:\n   ```bash\n   npx tsc --noEmit --strict\n   ```\n\n2. Create unit tests for functions where types were changed to verify they still work as expected:\n   ```typescript\n   // Example test for a function with updated types\n   describe('functionWithUpdatedTypes', () => {\n     it('should handle ObjectId paths correctly', () => {\n       const objectId = new mongoose.Types.ObjectId();\n       const result = functionWithUpdatedTypes({ _path: objectId });\n       expect(result).toBeDefined();\n     });\n     \n     it('should handle string paths correctly', () => {\n       const result = functionWithUpdatedTypes({ _path: 'some/path' });\n       expect(result).toBeDefined();\n     });\n   });\n   ```\n\n3. Verify IDE intellisense correctly shows the new types by checking:\n   - Hover information displays correct types\n   - Autocomplete suggestions are appropriate\n   - Type errors are correctly flagged for invalid usage\n\n4. Run existing test suite to ensure no regressions:\n   ```bash\n   npm test\n   ```\n\n5. Create a before/after comparison document showing the improvements in type safety with examples of how the new types prevent potential bugs",
+        "status": "in-progress",
+        "dependencies": [
+          1
+        ],
+        "priority": "high",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Fix Duplicate Method Definitions in Field Interfaces",
+        "description": "Remove duplicate method signatures in field interfaces, focusing on KeystoneFieldForDateType's validateRequiredInput and addFilterToQuery methods, and resolve all other duplicate method definitions throughout index.d.ts.",
+        "details": "This task involves identifying and removing duplicate method signatures in TypeScript interface definitions to improve code quality and prevent TypeScript errors. The implementation should follow these steps:\n\n1. Focus first on the identified duplicates in KeystoneFieldForDateType:\n   - Remove duplicate validateRequiredInput method at line 5616 (keeping the one at line 5590)\n   - Remove duplicate addFilterToQuery method at line 5624 (keeping the one at line 5598)\n\n2. Systematically scan the entire index.d.ts file for other duplicate method definitions:\n   - Use TypeScript's error messages as guidance for finding duplicates\n   - For each interface, check for methods with identical signatures\n   - When duplicates are found, keep only one implementation, ensuring it has the most accurate type definitions\n\n3. Pay special attention to field interfaces, as they are likely to have similar patterns of duplication:\n   - Check all KeystoneField* interfaces\n   - Examine List and Schema interfaces for potential duplicates\n   - Review any utility or helper interfaces\n\n4. Document all removed duplicates in a comment at the top of the file or in the commit message, including:\n   - Interface name\n   - Method name\n   - Line numbers of original and duplicate\n   - Reason for keeping the selected implementation\n\n5. Consider refactoring common method signatures into shared interfaces if appropriate to prevent future duplication.",
+        "testStrategy": "1. Run TypeScript compiler to verify that duplicate method errors are resolved:\n   ```bash\n   npx tsc --noEmit\n   ```\n\n2. Create a test script that validates the structure of the interfaces:\n   ```typescript\n   // test/types/interfaces.test.ts\n   import * as keystone from '../../index';\n   \n   describe('KeystoneFieldForDateType interface', () => {\n     test('should have single validateRequiredInput method', () => {\n       // This test will fail to compile if duplicate methods exist\n       const methods = Object.getOwnPropertyNames(keystone.KeystoneFieldForDateType.prototype);\n       const validateMethods = methods.filter(m => m === 'validateRequiredInput');\n       expect(validateMethods.length).toBe(1);\n     });\n   });\n   ```\n\n3. Manually verify each interface where duplicates were removed by:\n   - Creating a small test implementation of the interface\n   - Ensuring the implementation compiles without errors\n   - Checking that all expected methods are available\n\n4. Run a linter specifically on the index.d.ts file to confirm no duplicate method errors remain:\n   ```bash\n   npx eslint index.d.ts --rule 'no-dupe-class-members: error'\n   ```\n\n5. Verify that any code that depends on these interfaces still compiles and functions correctly by running the existing test suite.",
+        "status": "pending",
+        "dependencies": [
+          1
+        ],
+        "priority": "high",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Documentation Cleanup in index.d.ts",
+        "description": "Fix typos, incomplete TODOs, and inconsistent formatting in index.d.ts to improve code readability and maintainability.",
+        "details": "This task involves improving the documentation quality in index.d.ts by addressing several issues:\n\n1. Fix typos throughout the file:\n   - Correct \"mAdminUFieldReactiode\" to \"Admin UI Field Reaction mode\"\n   - Identify and fix other misspellings and incorrect terms\n\n2. Address incomplete @todo comments:\n   - Review all @todo comments in the file\n   - Either complete the implementation for each @todo\n   - Or remove @todo comments that are no longer relevant\n   - Document any @todo items that are intentionally left for future work in a separate tracking issue\n\n3. Standardize JSDoc comment formatting:\n   - Ensure consistent indentation in all JSDoc blocks\n   - Standardize parameter descriptions format (@param {Type} name - description)\n   - Ensure return type documentation follows the same format (@returns {Type} description)\n   - Add proper spacing between JSDoc sections\n\n4. Add missing @see references:\n   - Add @see references to relevant source files where implementation details can be found\n   - Format as @see {path/to/source-file.js} for consistency\n   - Ensure references point to the correct files\n\n5. Maintain consistency with existing documentation style:\n   - Follow the established documentation patterns in well-documented sections\n   - Ensure new documentation matches the style of existing documentation\n\nThis task should be performed after fixing type dependencies and duplicate method definitions to ensure documentation improvements align with the corrected code structure.",
+        "testStrategy": "1. Perform a comprehensive review of the changes:\n   - Use a diff tool to verify all identified typos have been corrected\n   - Confirm all @todo comments have been properly addressed\n   - Verify JSDoc formatting is consistent throughout the file\n\n2. Run documentation generation tools to ensure proper parsing:\n   ```bash\n   npx typedoc index.d.ts --out docs\n   ```\n   - Verify the generated documentation renders correctly\n   - Check that all @see references are properly linked\n\n3. Run TypeScript compiler to ensure documentation changes didn't introduce errors:\n   ```bash\n   npx tsc --noEmit\n   ```\n\n4. Create a checklist of specific issues to fix and verify each item is addressed:\n   - [ ] \"mAdminUFieldReactiode\" corrected\n   - [ ] All @todo comments addressed\n   - [ ] JSDoc formatting standardized\n   - [ ] @see references added where appropriate\n\n5. Have another team member review the documentation changes for clarity and correctness",
+        "status": "pending",
+        "dependencies": [
+          1,
+          2,
+          3
+        ],
+        "priority": "medium",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-10T21:12:16.268Z",
+      "updated": "2025-07-10T21:54:40.032Z",
+      "description": "Phase 1 Critical Issues - Urgent fixes for linter errors and immediate type safety issues"
+    }
+  }
+}

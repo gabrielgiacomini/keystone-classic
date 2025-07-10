@@ -1,0 +1,121 @@
+# Task ID: 4
+# Title: Define Base Field Interface and Common Field Types
+# Status: pending
+# Dependencies: 3
+# Priority: high
+# Description: Create the base field interface and common field type definitions that will be extended by specific field types.
+# Details:
+Define the base field interface and common field types in `types/fields/index.d.ts`:
+
+```typescript
+import * as mongoose from 'mongoose';
+import { KeystoneDocument, KeystoneList } from '../lib/list';
+
+// Base field interface
+export interface KeystoneField<Options = any, Value = any> {
+  path: string;
+  type: string;
+  options: Options;
+  list: KeystoneList<any>;
+  defaultValue?: Value | (() => Value);
+  label?: string;
+  note?: string | ((item: any) => string);
+  required?: boolean;
+  initial?: boolean;
+  noedit?: boolean;
+  nocol?: boolean;
+  nosort?: boolean;
+  nofilter?: boolean;
+  collapse?: boolean;
+  dependsOn?: Record<string, any>;
+  watch?: boolean | Record<string, any>;
+  hidden?: boolean;
+  
+  // Schema methods
+  getSchema(): mongoose.SchemaDefinition;
+  addToSchema(schema: mongoose.Schema): void;
+  
+  // Validation methods
+  validateInput(data: any, callback: ValidationCallback): void;
+  validateRequiredInput(item: any, data: any, callback: ValidationCallback): void;
+  
+  // Update methods
+  updateItem(item: any, data: any, callback: UpdateCallback): void;
+  
+  // UI methods
+  getAdminUI(): AdminUIOptions;
+  getFieldData(): FieldData;
+  
+  // Field type methods
+  format(item: any): any;
+  validateValue(value: any, callback: ValidationCallback): void;
+}
+
+// Common callback types
+export type ValidationCallback = (err: Error | null) => void;
+export type UpdateCallback = (err: Error | null) => void;
+
+// Field options interface
+export interface FieldOptions {
+  label?: string;
+  required?: boolean;
+  initial?: boolean;
+  noedit?: boolean;
+  nocol?: boolean;
+  nosort?: boolean;
+  nofilter?: boolean;
+  note?: string | ((item: any) => string);
+  collapse?: boolean;
+  dependsOn?: Record<string, any>;
+  watch?: boolean | Record<string, any>;
+  hidden?: boolean;
+  // Add other common field options
+}
+
+// Admin UI options
+export interface AdminUIOptions {
+  label?: string;
+  path?: string;
+  type?: string;
+  hidden?: boolean;
+  initial?: boolean;
+  required?: boolean;
+  noedit?: boolean;
+  nocol?: boolean;
+  nosort?: boolean;
+  nofilter?: boolean;
+  note?: string | ((item: any) => string);
+  collapse?: boolean;
+  dependsOn?: Record<string, any>;
+  // Add other admin UI options
+}
+
+// Field data interface
+export interface FieldData {
+  type: string;
+  path: string;
+  label: string;
+  note?: string;
+  required?: boolean;
+  initial?: boolean;
+  noedit?: boolean;
+  nocol?: boolean;
+  nosort?: boolean;
+  nofilter?: boolean;
+  collapse?: boolean;
+  dependsOn?: Record<string, any>;
+  // Add other field data properties
+}
+
+// Utility type for field paths
+export type FieldPathResolver<T> = {
+  [K in keyof T]: K extends string ? K : never
+}[keyof T];
+
+// Add other necessary interfaces and types
+```
+
+Ensure all interfaces have proper JSDoc comments explaining their purpose and usage. Use generic types to provide type safety for field options and values.
+
+# Test Strategy:
+Create test cases that import and use these interfaces with different generic parameters. Verify that the TypeScript compiler correctly enforces type constraints. Test with actual Keystone field usage patterns to ensure the interfaces match real-world usage.

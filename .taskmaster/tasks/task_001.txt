@@ -1,0 +1,60 @@
+# Task ID: 1
+# Title: Project Setup and External Dependencies Resolution
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Set up the project structure for TypeScript definitions and resolve missing type dependencies for external libraries used by KeystoneJS v4.
+# Details:
+Create the initial project structure for adding TypeScript definitions to KeystoneJS v4. This involves:
+
+1. Create a `tsconfig.json` file with appropriate settings:
+```json
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "lib": ["es2018"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "**/*.d.ts",
+    "**/*.ts"
+  ]
+}
+```
+
+2. Install required type dependencies:
+```bash
+npm install --save-dev typescript@4.9.5 @types/node@14.18.36 @types/express@4.17.17 @types/mongoose@5.11.97
+```
+
+3. Create declaration files for third-party libraries without existing type definitions:
+- Create `types/grappling-hook/index.d.ts`
+- Create `types/numeral/index.d.ts`
+- Create `types/moment/index.d.ts` (if needed beyond existing @types/moment)
+
+4. Set up module declaration for KeystoneJS itself in `index.d.ts`:
+```typescript
+declare module 'keystone' {
+  // Core exports will be defined here
+  export * from './types';
+}
+```
+
+5. Create a basic types directory structure mirroring the source code:
+```
+/types
+  /lib
+  /fields
+    /types
+  /admin
+  /server
+```
+
+# Test Strategy:
+Verify the setup by running the TypeScript compiler in check mode: `tsc --noEmit`. Ensure that the basic structure compiles without errors. Test importing the module in a simple TypeScript file to verify the module resolution works correctly.

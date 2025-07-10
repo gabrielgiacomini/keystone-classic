@@ -1,0 +1,114 @@
+# Task ID: 3
+# Title: Implement Document and List Base Types
+# Status: pending
+# Dependencies: 2
+# Priority: high
+# Description: Create the base types for Keystone documents and lists, including generic support for typed schemas and methods.
+# Details:
+Define the core document and list types in `types/lib/list.d.ts`:
+
+```typescript
+import * as mongoose from 'mongoose';
+
+// Generic document interface extending mongoose.Document
+export interface KeystoneDocument<T = any> extends mongoose.Document {
+  id: string;
+  _id: mongoose.Types.ObjectId;
+  createdAt?: Date;
+  updatedAt?: Date;
+  [key: string]: any;
+}
+
+// Branded type for field paths
+export type FieldPath = string & { __brand: 'FieldPath' };
+
+// Generic list interface
+export interface KeystoneList<T = any> {
+  model: mongoose.Model<KeystoneDocument<T> & T>;
+  schema: mongoose.Schema;
+  options: ListOptions;
+  key: ListKey;
+  path: string;
+  defaultColumns: string;
+  defaultSort: string;
+  fields: Record<string, KeystoneField>;
+  relationships: Record<string, Relationship>;
+  
+  // CRUD methods
+  createItem(data: Partial<T>, options?: ItemOptions): Promise<KeystoneDocument<T> & T>;
+  updateItem(id: string | mongoose.Types.ObjectId, data: Partial<T>, options?: ItemOptions): Promise<KeystoneDocument<T> & T>;
+  deleteItem(id: string | mongoose.Types.ObjectId, options?: ItemOptions): Promise<void>;
+  retrieveItem(id: string | mongoose.Types.ObjectId, options?: ItemOptions): Promise<KeystoneDocument<T> & T>;
+  
+  // Query methods
+  paginate(options?: PaginationOptions): Promise<PaginationResult<T>>;
+  find(query?: any): mongoose.Query<(KeystoneDocument<T> & T)[], KeystoneDocument<T> & T>;
+  findOne(query?: any): mongoose.Query<KeystoneDocument<T> & T | null, KeystoneDocument<T> & T>;
+  findById(id: string | mongoose.Types.ObjectId): mongoose.Query<KeystoneDocument<T> & T | null, KeystoneDocument<T> & T>;
+  
+  // Registration methods
+  register(): void;
+  addField(field: KeystoneField): void;
+  addRelationship(relationship: Relationship): void;
+  
+  // Hook methods
+  pre(hook: string, fn: HookFunction): void;
+  post(hook: string, fn: HookFunction): void;
+}
+
+// List options interface
+export interface ListOptions {
+  schema?: mongoose.SchemaOptions;
+  track?: boolean | { createdAt?: boolean; updatedAt?: boolean };
+  defaultSort?: string;
+  defaultColumns?: string;
+  path?: string;
+  plural?: string;
+  singular?: string;
+  label?: string;
+  hidden?: boolean;
+  nocreate?: boolean;
+  nodelete?: boolean;
+  noedit?: boolean;
+  map?: Record<string, string>;
+  inherits?: KeystoneList<any>;
+  perPage?: number;
+  searchFields?: string | string[];
+  searchUsesTextIndex?: boolean;
+  // Add other list options
+}
+
+// Item options for CRUD operations
+export interface ItemOptions {
+  user?: any; // User performing the operation
+  ignoreNoPermission?: boolean;
+  ignoreNoValidation?: boolean;
+  hooks?: boolean;
+  // Add other item options
+}
+
+// Pagination options and results
+export interface PaginationOptions {
+  page?: number;
+  perPage?: number;
+  maxPages?: number;
+  filters?: Record<string, any>;
+  search?: string;
+  sort?: string;
+}
+
+export interface PaginationResult<T = any> {
+  total: number;
+  pages: number;
+  currentPage: number;
+  perPage: number;
+  items: (KeystoneDocument<T> & T)[];
+}
+
+// Add other necessary interfaces
+```
+
+Ensure all interfaces have proper JSDoc comments explaining their purpose and usage. Use generic types to provide type safety for document data.
+
+# Test Strategy:
+Create test cases that import and use these interfaces with different generic parameters. Verify that the TypeScript compiler correctly enforces type constraints. Test with actual Keystone usage patterns to ensure the interfaces match real-world usage.

@@ -1,0 +1,133 @@
+# Task ID: 8
+# Title: Implement Select, File, and Image Field Type Definitions
+# Status: pending
+# Dependencies: 4
+# Priority: medium
+# Description: Create type definitions for Select, File, and Image field types, including all their specific options and methods.
+# Details:
+Define the Select, File, and Image field types in their respective files:
+
+```typescript
+// Select field type (types/fields/types/select.d.ts)
+import { KeystoneField, FieldOptions } from '../index';
+
+export interface SelectOption {
+  label: string;
+  value: string;
+}
+
+export interface SelectFieldOptions extends FieldOptions {
+  options: string | string[] | SelectOption[] | Record<string, string>;
+  numeric?: boolean;
+  emptyOption?: boolean | string;
+  default?: string | number;
+  initial?: string | number;
+  multiselect?: boolean;
+}
+
+export interface SelectField extends KeystoneField<SelectFieldOptions, string | string[]> {
+  // Select-specific properties
+  ops: SelectOption[];
+  numeric: boolean;
+  
+  // Select-specific methods
+  validateInput(data: any, callback: (err: Error | null) => void): void;
+  validateRequiredInput(item: any, data: any, callback: (err: Error | null) => void): void;
+  updateItem(item: any, data: any, callback: (err: Error | null) => void): void;
+  format(item: any): string | string[];
+}
+
+// File field type (types/fields/types/file.d.ts)
+import { KeystoneField, FieldOptions } from '../index';
+
+export interface FileFieldOptions extends FieldOptions {
+  storage?: Storage;
+  dest?: string;
+  filename?: (item: any, file: Express.Multer.File) => string;
+  path?: string;
+  prefix?: string;
+  datePrefix?: boolean | string;
+  allowedTypes?: string[] | string;
+  maxFileSize?: number;
+}
+
+export interface Storage {
+  uploadFile(file: Express.Multer.File, callback: (err: Error | null, result?: any) => void): void;
+  removeFile(file: any, callback: (err: Error | null) => void): void;
+  getFileURL(file: any): string;
+}
+
+export interface FileField extends KeystoneField<FileFieldOptions, FileValue> {
+  // File-specific methods
+  validateInput(data: any, callback: (err: Error | null) => void): void;
+  validateRequiredInput(item: any, data: any, callback: (err: Error | null) => void): void;
+  updateItem(item: any, data: any, callback: (err: Error | null) => void): void;
+  format(item: any): FileValue | null;
+  getFileURL(file: FileValue): string;
+}
+
+export interface FileValue {
+  filename: string;
+  originalname?: string;
+  path?: string;
+  size?: number;
+  mimetype?: string;
+  url?: string;
+}
+
+// Image field type (types/fields/types/image.d.ts)
+import { FileField, FileFieldOptions, FileValue } from './file';
+
+export interface ImageFieldOptions extends FileFieldOptions {
+  thumb?: boolean | ThumbOptions;
+  resize?: ResizeOptions;
+  crop?: CropOptions;
+}
+
+export interface ThumbOptions {
+  width?: number;
+  height?: number;
+  crop?: string;
+  quality?: number;
+}
+
+export interface ResizeOptions {
+  width?: number;
+  height?: number;
+  quality?: number;
+}
+
+export interface CropOptions {
+  width?: number;
+  height?: number;
+  quality?: number;
+}
+
+export interface ImageValue extends FileValue {
+  width?: number;
+  height?: number;
+  thumbnail?: {
+    filename: string;
+    width: number;
+    height: number;
+    url?: string;
+  };
+}
+
+export interface ImageField extends FileField {
+  options: ImageFieldOptions;
+  // Image-specific methods
+  getImageURL(file: ImageValue): string;
+  getThumbnailURL(file: ImageValue): string;
+}
+
+// Factory functions
+export function Select(options: SelectFieldOptions): SelectField;
+export function File(options: FileFieldOptions): FileField;
+export function Image(options: ImageFieldOptions): ImageField;
+```
+
+Ensure all interfaces have proper JSDoc comments explaining their purpose and usage. Include specific options and methods for each field type.
+
+# Test Strategy:
+Create test cases that import and use these field types with different options. Verify that the TypeScript compiler correctly enforces type constraints. Test with actual Keystone field usage patterns to ensure the interfaces match real-world usage.

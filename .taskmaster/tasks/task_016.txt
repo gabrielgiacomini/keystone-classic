@@ -1,0 +1,131 @@
+# Task ID: 16
+# Title: Implement Email and Notification Type Definitions
+# Status: pending
+# Dependencies: 2
+# Priority: medium
+# Description: Create type definitions for email templates, sending functionality, and notification systems.
+# Details:
+Define email and notification types in `types/lib/email.d.ts`:
+
+```typescript
+import * as nodemailer from 'nodemailer';
+
+// Email options
+export interface EmailOptions {
+  from?: string;
+  transport?: string | nodemailer.Transport | nodemailer.TransportOptions;
+  mandrill?: MandrillOptions;
+  mailgun?: MailgunOptions;
+  templateEngine?: string | TemplateEngine;
+  templateExt?: string;
+  templateDir?: string;
+  cssDir?: string;
+  root?: string;
+}
+
+// Mandrill options
+export interface MandrillOptions {
+  apiKey: string;
+  proxy?: string;
+  debug?: boolean;
+}
+
+// Mailgun options
+export interface MailgunOptions {
+  apiKey: string;
+  domain: string;
+  proxy?: string;
+  debug?: boolean;
+}
+
+// Template engine interface
+export interface TemplateEngine {
+  compile(template: string, options?: any): (locals?: any) => string;
+  render(template: string, locals?: any, options?: any): string;
+  extension: string;
+}
+
+// Email message
+export interface EmailMessage {
+  from?: string;
+  to: string | string[];
+  cc?: string | string[];
+  bcc?: string | string[];
+  subject: string;
+  text?: string;
+  html?: string;
+  template?: string;
+  templateData?: Record<string, any>;
+  attachments?: EmailAttachment[];
+  headers?: Record<string, string>;
+}
+
+// Email attachment
+export interface EmailAttachment {
+  filename?: string;
+  content?: string | Buffer;
+  path?: string;
+  contentType?: string;
+  cid?: string;
+}
+
+// Email result
+export interface EmailResult {
+  success: boolean;
+  messageId?: string;
+  response?: string;
+  error?: Error;
+}
+
+// Email class
+export interface Email {
+  send(message: EmailMessage, callback: (err: Error | null, result?: EmailResult) => void): void;
+  render(template: string, locals: Record<string, any>): string;
+  renderText(template: string, locals: Record<string, any>): string;
+  renderHTML(template: string, locals: Record<string, any>): string;
+  getTransport(): nodemailer.Transporter;
+}
+
+// Notification options
+export interface NotificationOptions {
+  transport?: 'email' | 'sms' | 'push' | string;
+  from?: string;
+  templates?: Record<string, string>;
+  templateData?: Record<string, any>;
+}
+
+// Notification message
+export interface NotificationMessage {
+  to: string | string[];
+  from?: string;
+  subject?: string;
+  template?: string;
+  templateData?: Record<string, any>;
+  data?: Record<string, any>;
+}
+
+// Notification result
+export interface NotificationResult {
+  success: boolean;
+  messageId?: string;
+  response?: string;
+  error?: Error;
+}
+
+// Notification class
+export interface Notification {
+  send(message: NotificationMessage, callback: (err: Error | null, result?: NotificationResult) => void): void;
+  addTemplate(name: string, template: string): void;
+  getTemplate(name: string): string;
+  getTransport(): any;
+}
+
+// Factory functions
+export function createEmail(options: EmailOptions): Email;
+export function createNotification(options: NotificationOptions): Notification;
+```
+
+Ensure all interfaces and functions have proper JSDoc comments explaining their purpose and usage. Include proper types for email and notification functionality.
+
+# Test Strategy:
+Create test cases that import and use these email and notification types in various scenarios. Verify that the TypeScript compiler correctly enforces type constraints. Test with actual Keystone email and notification usage patterns to ensure the types match real-world usage.

@@ -1,0 +1,117 @@
+# Task ID: 9
+# Title: Implement Remaining Field Type Definitions
+# Status: pending
+# Dependencies: 4
+# Priority: medium
+# Description: Create type definitions for the remaining field types (Email, URL, Location, Markdown, etc.), including all their specific options and methods.
+# Details:
+Define the remaining field types in their respective files:
+
+```typescript
+// Email field type (types/fields/types/email.d.ts)
+import { KeystoneField, FieldOptions } from '../index';
+
+export interface EmailFieldOptions extends FieldOptions {
+  default?: string;
+  initial?: string;
+  displayGravatar?: boolean;
+  gravatar?: GravatarOptions;
+  lowercase?: boolean;
+  validateInput?: (value: string) => boolean | string | Error;
+}
+
+export interface GravatarOptions {
+  size?: number;
+  default?: string;
+  rating?: 'g' | 'pg' | 'r' | 'x';
+}
+
+export interface EmailField extends KeystoneField<EmailFieldOptions, string> {
+  // Email-specific methods
+  validateInput(data: any, callback: (err: Error | null) => void): void;
+  validateRequiredInput(item: any, data: any, callback: (err: Error | null) => void): void;
+  updateItem(item: any, data: any, callback: (err: Error | null) => void): void;
+  format(item: any): string;
+  getGravatarUrl(email: string): string;
+}
+
+// URL field type (types/fields/types/url.d.ts)
+import { KeystoneField, FieldOptions } from '../index';
+
+export interface URLFieldOptions extends FieldOptions {
+  default?: string;
+  initial?: string;
+  monospace?: boolean;
+  collapse?: boolean;
+  note?: string;
+}
+
+export interface URLField extends KeystoneField<URLFieldOptions, string> {
+  // URL-specific methods
+  validateInput(data: any, callback: (err: Error | null) => void): void;
+  validateRequiredInput(item: any, data: any, callback: (err: Error | null) => void): void;
+  updateItem(item: any, data: any, callback: (err: Error | null) => void): void;
+  format(item: any): string;
+}
+
+// Location field type (types/fields/types/location.d.ts)
+import { KeystoneField, FieldOptions } from '../index';
+
+export interface LocationFieldOptions extends FieldOptions {
+  defaults?: LocationValue;
+  required?: string[] | boolean;
+  enableMapsAPI?: boolean;
+  googleMapsKey?: string;
+  improve?: boolean;
+}
+
+export interface LocationValue {
+  street1?: string;
+  street2?: string;
+  suburb?: string;
+  state?: string;
+  postcode?: string;
+  country?: string;
+  geo?: [number, number]; // [longitude, latitude]
+}
+
+export interface LocationField extends KeystoneField<LocationFieldOptions, LocationValue> {
+  // Location-specific methods
+  validateInput(data: any, callback: (err: Error | null) => void): void;
+  validateRequiredInput(item: any, data: any, callback: (err: Error | null) => void): void;
+  updateItem(item: any, data: any, callback: (err: Error | null) => void): void;
+  format(item: any): LocationValue;
+  googleLookup(address: string, region: string, callback: (err: Error | null, location?: LocationValue) => void): void;
+}
+
+// Markdown field type (types/fields/types/markdown.d.ts)
+import { KeystoneField, FieldOptions } from '../index';
+
+export interface MarkdownFieldOptions extends FieldOptions {
+  default?: string;
+  initial?: string;
+  height?: number;
+  toolbarOptions?: Record<string, any>;
+  markedOptions?: Record<string, any>;
+}
+
+export interface MarkdownField extends KeystoneField<MarkdownFieldOptions, string> {
+  // Markdown-specific methods
+  validateInput(data: any, callback: (err: Error | null) => void): void;
+  validateRequiredInput(item: any, data: any, callback: (err: Error | null) => void): void;
+  updateItem(item: any, data: any, callback: (err: Error | null) => void): void;
+  format(item: any): string;
+  getHTML(markdown: string): string;
+}
+
+// Factory functions
+export function Email(options?: EmailFieldOptions): EmailField;
+export function Url(options?: URLFieldOptions): URLField;
+export function Location(options?: LocationFieldOptions): LocationField;
+export function Markdown(options?: MarkdownFieldOptions): MarkdownField;
+```
+
+Continue defining the remaining field types (Code, Color, Money, Name, Password, etc.) following the same pattern. Ensure all interfaces have proper JSDoc comments explaining their purpose and usage.
+
+# Test Strategy:
+Create test cases that import and use these field types with different options. Verify that the TypeScript compiler correctly enforces type constraints. Test with actual Keystone field usage patterns to ensure the interfaces match real-world usage.

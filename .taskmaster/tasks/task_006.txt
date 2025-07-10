@@ -1,0 +1,81 @@
+# Task ID: 6
+# Title: Implement Number, Boolean, and Date Field Type Definitions
+# Status: pending
+# Dependencies: 4
+# Priority: medium
+# Description: Create type definitions for Number, Boolean, and Date field types, including all their specific options and methods.
+# Details:
+Define the Number, Boolean, and Date field types in their respective files:
+
+```typescript
+// Number field type (types/fields/types/number.d.ts)
+import { KeystoneField, FieldOptions } from '../index';
+
+export interface NumberFieldOptions extends FieldOptions {
+  default?: number;
+  initial?: number;
+  emptyString?: boolean;
+  format?: string;
+  min?: number;
+  max?: number;
+  step?: number;
+}
+
+export interface NumberField extends KeystoneField<NumberFieldOptions, number> {
+  // Number-specific methods
+  validateInput(data: any, callback: (err: Error | null) => void): void;
+  validateRequiredInput(item: any, data: any, callback: (err: Error | null) => void): void;
+  updateItem(item: any, data: any, callback: (err: Error | null) => void): void;
+  format(item: any): string | number;
+}
+
+// Boolean field type (types/fields/types/boolean.d.ts)
+import { KeystoneField, FieldOptions } from '../index';
+
+export interface BooleanFieldOptions extends FieldOptions {
+  default?: boolean;
+  initial?: boolean;
+  indent?: boolean;
+}
+
+export interface BooleanField extends KeystoneField<BooleanFieldOptions, boolean> {
+  // Boolean-specific methods
+  validateInput(data: any, callback: (err: Error | null) => void): void;
+  validateRequiredInput(item: any, data: any, callback: (err: Error | null) => void): void;
+  updateItem(item: any, data: any, callback: (err: Error | null) => void): void;
+  format(item: any): boolean;
+}
+
+// Date field type (types/fields/types/date.d.ts)
+import { KeystoneField, FieldOptions } from '../index';
+import * as moment from 'moment';
+
+export interface DateFieldOptions extends FieldOptions {
+  default?: Date | string | (() => Date);
+  initial?: Date | string;
+  dateFormat?: string;
+  timeFormat?: string;
+  showTime?: boolean;
+  todayButton?: boolean;
+  timezone?: string;
+}
+
+export interface DateField extends KeystoneField<DateFieldOptions, Date> {
+  // Date-specific methods
+  validateInput(data: any, callback: (err: Error | null) => void): void;
+  validateRequiredInput(item: any, data: any, callback: (err: Error | null) => void): void;
+  updateItem(item: any, data: any, callback: (err: Error | null) => void): void;
+  format(item: any): string;
+  moment(value: any): moment.Moment;
+}
+
+// Factory functions
+export function Number(options?: NumberFieldOptions): NumberField;
+export function Boolean(options?: BooleanFieldOptions): BooleanField;
+export function Date(options?: DateFieldOptions): DateField;
+```
+
+Ensure all interfaces have proper JSDoc comments explaining their purpose and usage. Include specific options and methods for each field type.
+
+# Test Strategy:
+Create test cases that import and use these field types with different options. Verify that the TypeScript compiler correctly enforces type constraints. Test with actual Keystone field usage patterns to ensure the interfaces match real-world usage.

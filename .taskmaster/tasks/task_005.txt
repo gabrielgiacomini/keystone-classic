@@ -1,0 +1,60 @@
+# Task ID: 5
+# Title: Implement Text and String Field Type Definitions
+# Status: pending
+# Dependencies: 4
+# Priority: medium
+# Description: Create type definitions for Text and String field types, including all their specific options and methods.
+# Details:
+Define the Text and String field types in `types/fields/types/text.d.ts` and `types/fields/types/string.d.ts`:
+
+```typescript
+// Text field type (types/fields/types/text.d.ts)
+import { KeystoneField, FieldOptions } from '../index';
+
+export interface TextFieldOptions extends FieldOptions {
+  default?: string;
+  initial?: string;
+  monospace?: boolean;
+  height?: number;
+  wysiwyg?: boolean | 'basic' | 'standard' | 'advanced';
+  sanitizeOptions?: Record<string, any>;
+}
+
+export interface TextField extends KeystoneField<TextFieldOptions, string> {
+  // Text-specific methods
+  validateInput(data: any, callback: (err: Error | null) => void): void;
+  validateRequiredInput(item: any, data: any, callback: (err: Error | null) => void): void;
+  updateItem(item: any, data: any, callback: (err: Error | null) => void): void;
+  format(item: any): string;
+}
+
+// String field type (types/fields/types/string.d.ts)
+import { KeystoneField, FieldOptions } from '../index';
+
+export interface StringFieldOptions extends FieldOptions {
+  default?: string;
+  initial?: string;
+  monospace?: boolean;
+  size?: 'small' | 'medium' | 'large' | number;
+  width?: 'small' | 'medium' | 'large' | number;
+  collapse?: boolean;
+  note?: string;
+}
+
+export interface StringField extends KeystoneField<StringFieldOptions, string> {
+  // String-specific methods
+  validateInput(data: any, callback: (err: Error | null) => void): void;
+  validateRequiredInput(item: any, data: any, callback: (err: Error | null) => void): void;
+  updateItem(item: any, data: any, callback: (err: Error | null) => void): void;
+  format(item: any): string;
+}
+
+// Factory functions
+export function Text(options?: TextFieldOptions): TextField;
+export function String(options?: StringFieldOptions): StringField;
+```
+
+Ensure all interfaces have proper JSDoc comments explaining their purpose and usage. Include specific options and methods for each field type.
+
+# Test Strategy:
+Create test cases that import and use these field types with different options. Verify that the TypeScript compiler correctly enforces type constraints. Test with actual Keystone field usage patterns to ensure the interfaces match real-world usage.
