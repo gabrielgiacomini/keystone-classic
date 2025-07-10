@@ -19,6 +19,37 @@ import { Store as ExpressSessionStore } from "express-session";
 export type KeystoneDocument<T = Record<string, any>> = mongoose.Document & T;
 
 /**
+ * Represents a Keystone-specific mongoose schema with typed method support.
+ * Extends mongoose.Schema to provide proper `this` context typing for schema methods.
+ * @template T The document type extending KeystoneDocument
+ * @see /lib/list.js - List schema implementation
+ */
+export interface KeystoneListSchema<T extends KeystoneDocument = KeystoneDocument> extends mongoose.Schema<T> {
+	/**
+	 * Schema methods with properly typed `this` context.
+	 * When methods are defined, TypeScript will know the correct type for `this` in method implementations.
+	 * @example
+	 * ```typescript
+	 * interface UserDoc extends KeystoneDocument {
+	 *   name: string;
+	 *   email: string;
+	 * }
+	 *
+	 * const userList = new keystone.List<UserDoc>('User', {
+	 *   schema: {
+	 *     methods: {
+	 *       getDisplayName(this: UserDoc) {
+	 *         return this.name; // TypeScript knows this.name exists
+	 *       }
+	 *     }
+	 *   }
+	 * });
+	 * ```
+	 */
+	methods: { [methodName: string]: (this: T, ...args: any[]) => any };
+}
+
+/**
  * Represents the constructor for a Keystone Field Type (e.g., `Types.Text`).
  * @see ./fields/types/Type.js
  *
@@ -1981,7 +2012,7 @@ declare class KeystoneList<T extends KeystoneDocument = KeystoneDocument> {
 	/** URL path for the list in the Admin UI (e.g., 'users'). */
 	path: string;
 	/** The Mongoose schema associated with this list. */
-	schema: mongoose.Schema<T>;
+	schema: KeystoneListSchema<T>;
 	/** Array of raw field/heading definitions added to the schema. */
 	schemaFields: Array<string | KeystoneGroupFields | KeystoneGroupHeading>;
 	/** Ordered array of UI elements (fields, headings, indents) for Admin UI forms. */
