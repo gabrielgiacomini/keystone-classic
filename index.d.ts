@@ -5946,3 +5946,116 @@ export interface KeystoneTypeConstructorForDateArrayType
 	prototype: KeystoneFieldForDateArrayType;
 	properName: "DateArray";
 }
+
+// =============================================================================
+// BACKWARD COMPATIBILITY EXPORTS
+// =============================================================================
+
+/**
+ * @deprecated Use KeystoneListSchema<T> instead for better type safety.
+ * Legacy alias for KeystoneListSchema interface.
+ * @see KeystoneListSchema
+ */
+export type ListSchema<T extends KeystoneDocument = KeystoneDocument> = KeystoneListSchema<T>;
+
+/**
+ * @deprecated Use KeystoneListConstructor instead for better type safety.
+ * Legacy alias for KeystoneListConstructor interface.
+ * @see KeystoneListConstructor
+ */
+export type ListConstructor = KeystoneListConstructor;
+
+/**
+ * @deprecated Use KeystoneList<T> instead for better type safety.
+ * Legacy alias for KeystoneList interface without proper generic constraints.
+ * @see KeystoneList
+ */
+export type List<T extends KeystoneDocument = KeystoneDocument> = KeystoneList<T>;
+
+// =============================================================================
+// USAGE EXAMPLES & MIGRATION GUIDE
+// =============================================================================
+
+/**
+ * ENHANCED PATTERN (RECOMMENDED):
+ *
+ * ```typescript
+ * // 1. Define your document interface
+ * interface UserDocument extends KeystoneDocument {
+ *   name: string;
+ *   email: string;
+ *   isActive: boolean;
+ * }
+ *
+ * // 2. Create typed list with generic assertion
+ * const Users = new keystone.List<UserDocument>('User', {
+ *   fields: {
+ *     name: { type: String, required: true },
+ *     email: { type: String, required: true, unique: true },
+ *     isActive: { type: Boolean, default: true }
+ *   }
+ * });
+ *
+ * // 3. Add typed schema methods
+ * Users.schema.methods.getDisplayName = function(this: UserDocument) {
+ *   return this.name; // ✅ TypeScript knows this.name exists
+ * };
+ *
+ * Users.schema.methods.deactivate = function(this: UserDocument) {
+ *   this.isActive = false; // ✅ TypeScript knows this.isActive exists
+ *   return this.save();
+ * };
+ * ```
+ *
+ * LEGACY PATTERN (STILL SUPPORTED):
+ *
+ * ```typescript
+ * // Standard usage without generic typing
+ * const Users = new keystone.List('User', {
+ *   fields: {
+ *     name: { type: String, required: true },
+ *     email: { type: String, required: true, unique: true },
+ *     isActive: { type: Boolean, default: true }
+ *   }
+ * });
+ *
+ * // Schema methods work but without type safety
+ * Users.schema.methods.getDisplayName = function() {
+ *   return this.name; // ⚠️ No TypeScript type checking
+ * };
+ * ```
+ *
+ * MIGRATION BENEFITS:
+ * - Enhanced TypeScript IntelliSense support
+ * - Compile-time type checking for schema methods
+ * - Better error detection during development
+ * - Improved code documentation through types
+ * - Full backward compatibility with existing code
+ */
+
+// =============================================================================
+// DEFAULT KEYSTONE EXPORT
+// =============================================================================
+
+/**
+ * The main keystone instance.
+ * Provides access to List constructors, field types, and other keystone functionality.
+ */
+declare const keystone: Keystone;
+
+/**
+ * Default export for the main keystone instance.
+ * Ensures backward compatibility with existing code that imports keystone as default.
+ *
+ * @example
+ * ```typescript
+ * import keystone from 'keystone-classic';
+ *
+ * const Users = new keystone.List('User', {
+ *   fields: {
+ *     name: { type: String, required: true }
+ *   }
+ * });
+ * ```
+ */
+export default keystone;
