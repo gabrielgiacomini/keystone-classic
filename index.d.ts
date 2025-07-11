@@ -50,6 +50,63 @@ export interface KeystoneListSchema<T extends KeystoneDocument = KeystoneDocumen
 }
 
 /**
+ * Constructor interface for Keystone Lists supporting generic type assertion.
+ * Allows both standard constructor usage and generic type assertion for proper typing.
+ * @template T The document type extending KeystoneDocument
+ * @see /lib/list.js - List constructor implementation
+ */
+export interface KeystoneListConstructor extends KeystoneList<KeystoneDocument> {
+	/**
+	 * Constructor function for creating new KeystoneList instances.
+	 *
+	 * @template T The document type for type assertion (extends KeystoneDocument)
+	 * @param key The unique key/name for the list
+	 * @param options Configuration options for the list
+	 * @returns A new KeystoneList instance
+	 *
+	 * @example
+	 * ```typescript
+	 * // Standard usage (backward compatible)
+	 * const Posts = new keystone.List('Post', {
+	 *   fields: { title: { type: String } }
+	 * });
+	 *
+	 * // Generic type assertion for typed schema methods
+	 * interface PostDoc extends KeystoneDocument {
+	 *   title: string;
+	 *   slug: string;
+	 * }
+	 *
+	 * const Posts = new keystone.List<PostDoc>('Post', {
+	 *   fields: { title: { type: String }, slug: { type: String } }
+	 * });
+	 *
+	 * // Now schema methods have proper 'this' typing
+	 * Posts.schema.methods.generateSlug = function() {
+	 *   this.slug = this.title.toLowerCase(); // TypeScript knows these properties exist
+	 * };
+	 * ```
+	 */
+	new <T extends KeystoneDocument = KeystoneDocument>(
+		key: string,
+		options?: KeystoneListOptions<T>
+	): KeystoneList<T>;
+
+	/**
+	 * Function constructor (also supports generic type assertion).
+	 * Enables usage without 'new' keyword.
+	 * @template T The document type for type assertion (extends KeystoneDocument)
+	 * @param key The unique key/name for the list
+	 * @param options Configuration options for the list
+	 * @returns A new KeystoneList instance
+	 */
+	<T extends KeystoneDocument = KeystoneDocument>(
+		key: string,
+		options?: KeystoneListOptions<T>
+	): KeystoneList<T>;
+}
+
+/**
  * Represents the constructor for a Keystone Field Type (e.g., `Types.Text`).
  * @see ./fields/types/Type.js
  *
@@ -3046,7 +3103,7 @@ declare class Keystone {
 	/** Reference to the Keystone constructor. */
 	Keystone: typeof Keystone;
 	/** Reference to the List constructor. */
-	List: typeof KeystoneList;
+	List: KeystoneListConstructor;
 	/** Storage adapters for file uploads. */
 	Storage: any;
 	/** Template rendering utilities. */
