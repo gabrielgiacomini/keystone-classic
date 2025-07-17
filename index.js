@@ -128,6 +128,9 @@ var Keystone = function () {
 	this.set("mongoose", require("mongoose"));
 	this.mongoose.Promise = require("es6-promise").Promise;
 
+	// Configure mongoose to use modern methods and prevent deprecation warnings
+	this.mongoose.set("useCreateIndex", true);
+
 	// Attach middleware packages, bound to this instance
 	this.middleware = {
 		api: require("./lib/middleware/api")(this),
