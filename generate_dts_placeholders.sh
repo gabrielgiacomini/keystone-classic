@@ -5,7 +5,7 @@
 # Generates individual 'printf ... > file.d.ts' commands based on an explicit
 # list of target .d.ts files provided within the script. Creates placeholder
 # type definition files with detailed JSDoc comments to guide implementation.
-# Tailored for the full KeystoneJS v4 project structure including admin UI & website.
+# Tailored for the full KeystoneJS v4 project structure including admin UI.
 #
 # Run this script from the KeystoneJS v4 project root.
 
@@ -99,17 +99,6 @@ get_file_info() {
         "admin/public/js/lib/"*) summary="Vendor JS Library (Admin UI): $(basename "$js_file" .js)"; description="A third-party JavaScript library bundled with the Admin UI. Types may exist externally"; specific_todo="Consider adding a triple-slash directive to existing @types if available (e.g., /// <reference types=\"jquery\" />). Otherwise, minimal definitions for required global/exports"; suggested_imports="// Check for existing @types package for this library.\n";;
         "admin/public/js/"*) summary="Admin UI Public JS: $(basename "$js_file" .js)"; description="Custom JavaScript for the Admin UI, potentially loaded outside the main React app"; specific_todo="Define any global functions, objects, or jQuery plugins defined here"; suggested_imports="// May interact with globals like jQuery, Keystone\n";;
 
-        # --- Website (Gatsby) ---
-        "website/gatsby-config.js") summary="Gatsby site configuration file"; description="Defines site metadata, plugins, and other configurations for the Gatsby build"; specific_todo="Define the shape of the exported configuration object, including plugin options"; suggested_imports="// Reference Gatsby types if available (@types/gatsby)\n";;
-        "website/gatsby-node.js") summary="Gatsby Node APIs implementation"; description="Implements Gatsby's Node APIs for controlling the build process (e.g., creating pages, modifying webpack config)"; specific_todo="Define functions like \`createPages\`, \`onCreateNode\`, etc., using Gatsby's API signatures"; suggested_imports="// Reference Gatsby Node API types (@types/gatsby)\n";;
-        "website/src/html.js") summary="Gatsby custom HTML shell component"; description="Provides a custom structure for the base HTML file Gatsby generates"; specific_todo="Define the React component props for the custom HTML shell"; suggested_imports="import React from 'react';\n";;
-        "website/src/layouts/"*) summary="Gatsby layout component: $(basename "$js_file" .js)"; description="A reusable layout component wrapping pages in the Gatsby site"; specific_todo="Define the React component props (usually includes \`children\`)"; suggested_imports="import React from 'react';\n";;
-        "website/src/pages/"*) summary="Gatsby page component: $(basename "$js_file" .js)"; description="A React component representing a page in the Gatsby site"; specific_todo="Define the React component props (including data from GraphQL queries if any)"; suggested_imports="import React from 'react';\n// May need 'graphql' tag type from Gatsby\n";;
-        "website/src/"*) summary="Gatsby website source file: $(basename "$js_file" .js)"; description="A source file within the Gatsby website project"; specific_todo="Determine purpose (component, util, template) and define types"; suggested_imports="// May need React, Gatsby APIs\n";;
-        "website/components/"*) summary="Gatsby website component: $(basename "$js_file" .js)"; description="A reusable React component for the Gatsby marketing website"; specific_todo="Define the React component props"; suggested_imports="import React from 'react';\n";;
-        "website/templates/"*) summary="Gatsby template component: $(basename "$js_file" .js)"; description="A template component used by Gatsby to generate pages programmatically"; specific_todo="Define the React component props (often includes \`pageContext\` and GraphQL \`data\`)"; suggested_imports="import React from 'react';\n// May need 'graphql' tag type from Gatsby\n";;
-        "website/utils/"*) summary="Gatsby website utility: $(basename "$js_file" .js)"; description="A utility function or module for the Gatsby website"; specific_todo="Define exported functions or objects";;
-        "website/"*) summary="Gatsby website file: $(basename "$js_file" .js)"; description="A file related to the Gatsby website configuration or build"; specific_todo="Determine file purpose (config, data, theme) and define types";;
 
         # --- Config Files ---
         ".eslintrc.js") summary="ESLint configuration file"; description="Defines linting rules and settings for the project"; specific_todo="Define the shape of the exported ESLint configuration object";;
@@ -207,41 +196,6 @@ while IFS= read -r ts_file; do
 
 done << 'EOF'
 greenkeeper-prs/filterbranches.d.ts
-website/theme.d.ts
-website/utils/typography.d.ts
-website/components/Navbar/index.d.ts
-website/components/Navbar/utils/index.d.ts
-website/components/Navbar/utils/makeSection.d.ts
-website/components/Navbar/Item.d.ts
-website/components/Navbar/Brand.d.ts
-website/components/Navbar/Menu.d.ts
-website/components/Version5.d.ts
-website/components/GithubButton.d.ts
-website/components/TwitterButton.d.ts
-website/components/index.d.ts
-website/components/Header.d.ts
-website/components/Navigation.d.ts
-website/components/Container.d.ts
-website/components/Grid/widths.d.ts
-website/components/Grid/index.d.ts
-website/gatsby-config.d.ts
-website/gatsby-node.d.ts
-website/.eslintrc.d.ts
-website/templates/template-doc-page.d.ts
-website/templates/template-doc-layout.d.ts
-website/data/navigation.d.ts
-website/src/html.d.ts
-website/src/layouts/components/Navbar.d.ts
-website/src/layouts/default.d.ts
-website/src/pages/404.d.ts
-website/src/pages/index.d.ts
-website/src/pages/components/home/ValueProps2.d.ts
-website/src/pages/components/home/WhereNext.d.ts
-website/src/pages/components/home/ValueProps.d.ts
-website/src/pages/components/home/AdminInterface.d.ts
-website/src/pages/components/home/Hero.d.ts
-website/src/pages/components/home/CommunityResponse.d.ts
-website/src/pages/components/home/Footer.d.ts
 build.d.ts
 admin/server/middleware/browserify.d.ts
 admin/server/middleware/apiError.d.ts

@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 # KeystoneJS v4 File Structure Documentation
@@ -15,8 +15,7 @@ keystone-classic/
 ├── package.json            # Package configuration and dependencies
 ├── lib/                    # Core library files
 ├── server/                 # Server initialization and middleware
-├── fields/                 # Field type system
-└── website/               # Documentation website (not part of package)
+└── fields/                 # Field type system
 ```
 
 ### Core Library (`/lib`)
@@ -121,27 +120,11 @@ fields/
 
 ## Development Components (Not in Package)
 
-### Website (`/website`)
-```
-website/
-├── templates/            # Website page templates
-├── theme.js             # Website theme configuration
-├── utils/               # Website utilities
-├── static/              # Static assets
-├── src/                 # Source code
-├── images/              # Website images
-├── components/          # React components
-├── css/                 # Website styles
-├── data/                # Website content
-├── gatsby-config.js     # Gatsby configuration
-├── gatsby-node.js       # Gatsby build configuration
-├── .babelrc            # Babel configuration
-└── .eslintrc.js        # ESLint configuration
-```
+
 
 ### Development Tools
 ```
-keystone-classic/
+/
 ├── admin/               # Admin UI development
 ├── build/               # Build output
 ├── scripts/             # Build scripts
@@ -186,7 +169,6 @@ keystone-classic/
 - Various Gatsby plugins
 
 ## Notes
-- The website directory is not included in the NPM package
 - Development tools and configurations are excluded
 - Test files and examples are not part of the package
-- Documentation is maintained separately 
+- Documentation is maintained separately

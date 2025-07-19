@@ -1,4 +1,3 @@
-website/**/*
 node_modules/**/*
 dist/**/*
 greenkeeper-prs/**/*

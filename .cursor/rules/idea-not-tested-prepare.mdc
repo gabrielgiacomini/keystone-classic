@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 # --- KeystoneJS v4 Typing Project: Setup & Context ---
@@ -101,7 +101,6 @@ Create a `tsconfig.json` file in the project root. This file configures the Type
   ],
   "exclude": [
     "node_modules", // Standard exclusion.
-    "website", // Exclude website build/source if not typing it in this phase.
     "admin/public", // Exclude bundled vendor libs if not typing them directly.
     "coverage", // Exclude test coverage reports.
     "**/test/**" // Exclude JS unit tests if they exist in test/ folders.

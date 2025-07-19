@@ -1,7 +1,7 @@
 {
   "name": "keystone",
   "version": "4.2.1",
-  "description": "Web Application Framework and Admin GUI / Content Management System built on Express.js and Mongoose",
+  "description": "Custom fork of Web Application Framework and Admin GUI / Content Management System built on Express.js and Mongoose",
   "main": "index.js",
   "types": "index.d.ts",
   "repository": {
@@ -172,7 +172,6 @@
     "mongoose",
     "gui",
     "site",
-    "website",
     "forms"
   ],
   "readmeFilename": "README.md",

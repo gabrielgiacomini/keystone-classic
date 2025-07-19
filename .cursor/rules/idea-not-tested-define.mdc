@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 # --- KeystoneJS v4 TypeScript Definition Generation Context ---
@@ -39,7 +39,7 @@ The primary objective of this task is to create accurate `.d.ts` files for the e
 
 ## Key Files & Directories (Core Structure)
 
-This map outlines the core areas and their relevance for typing. (Note: This excludes `website/` and `admin/` structure for now, focusing on the reusable core package).
+This map outlines the core areas and their relevance for typing. (Note: This excludes `admin/` structure for now, focusing on the reusable core package).
 
 * **`index.js` (`index.d.ts`)**
     * **Role:** Main package entry point. Exports the global `keystone` singleton.

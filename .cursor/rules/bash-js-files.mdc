@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 ## List of all JS files of the project, including the ones we are ignoring
@@ -31,44 +31,9 @@ find . \
 echo "touch global.d.ts"
 ```
 
-Files 
+Files
 ```bash
 ./greenkeeper-prs/filterbranches.js
-./website/theme.js
-./website/utils/typography.js
-./website/components/Navbar/index.js
-./website/components/Navbar/utils/index.js
-./website/components/Navbar/utils/makeSection.js
-./website/components/Navbar/Item.js
-./website/components/Navbar/Brand.js
-./website/components/Navbar/Menu.js
-./website/components/Version5.js
-./website/components/GithubButton.js
-./website/components/TwitterButton.js
-./website/components/index.js
-./website/components/Header.js
-./website/components/Navigation.js
-./website/components/Container.js
-./website/components/Grid/widths.js
-./website/components/Grid/index.js
-./website/gatsby-config.js
-./website/gatsby-node.js
-./website/.eslintrc.js
-./website/templates/template-doc-page.js
-./website/templates/template-doc-layout.js
-./website/data/navigation.js
-./website/src/html.js
-./website/src/layouts/components/Navbar.js
-./website/src/layouts/default.js
-./website/src/pages/404.js
-./website/src/pages/index.js
-./website/src/pages/components/home/ValueProps2.js
-./website/src/pages/components/home/WhereNext.js
-./website/src/pages/components/home/ValueProps.js
-./website/src/pages/components/home/AdminInterface.js
-./website/src/pages/components/home/Hero.js
-./website/src/pages/components/home/CommunityResponse.js
-./website/src/pages/components/home/Footer.js
 ./build.js
 ./admin/server/middleware/browserify.js
 ./admin/server/middleware/apiError.js

@@ -209,36 +209,6 @@ These are not included in the NPM package:
 - Development utilities
 - Documentation generators
 
-## Website-Specific Components
-
-The `/website/` directory contains the framework's documentation website and is not part of the NPM package. It includes:
-
-### Website Structure
-
-- `/website/templates/` - Website page templates
-- `/website/theme.js` - Website theme configuration
-- `/website/utils/` - Website utility functions
-- `/website/static/` - Static assets for the website
-- `/website/src/` - Source code for the website
-- `/website/images/` - Website images
-- `/website/components/` - React components for the website
-- `/website/css/` - Website styles
-- `/website/data/` - Website content data
-
-### Website Configuration
-
-- `gatsby-config.js` - Gatsby configuration
-- `gatsby-node.js` - Gatsby build configuration
-- `.babelrc` - Website-specific Babel config
-- `.eslintrc.js` - Website-specific ESLint config
-
-### Website Dependencies
-
-- `gatsby` and related packages - Static site generation
-- `react` and related packages - UI components
-- `typography` and related packages - Website styling
-- Various Gatsby plugins for documentation
-
 ## Server Components
 
 The `/server/` directory contains essential server initialization and middleware setup files that are part of the core package. These files are required for running a KeystoneJS application:
@@ -358,7 +328,6 @@ When using KeystoneJS as an NPM package (`require('keystone')`), the following c
    - Test files and examples
    - Build scripts and utilities
    - Documentation files
-   - Website components
 
 The NPM package includes all core runtime components necessary for using KeystoneJS in a Node.js application, including the complete field type system which is essential for data modeling and management.
 
