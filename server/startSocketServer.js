@@ -1,27 +1,35 @@
 /**
- * Configures and starts express server.
+ * @fileoverview Configures and starts the Express server on a Unix socket.
  *
- * Events are fired during initialisation to allow customisation, including:
- *   - onSocketServerCreated
+ * This script is used to start the KeystoneJS application listening on a
+ * Unix socket, which is useful for inter-process communication and can offer
+ * better performance than TCP/IP on a single machine.
  *
- * consumed by lib/core/start.js
+ * It is invoked by `lib/core/start.js`.
  *
  * @api private
  */
-
 var fs = require('fs');
 
+/**
+ * Starts the server on a Unix socket.
+ *
+ * @param {Keystone} keystone The Keystone instance.
+ * @param {Object} app The Express app.
+ * @param {Function} callback The callback to execute when the server is ready.
+ */
 module.exports = function (keystone, app, callback) {
-
+	// Get the Unix socket path.
 	var unixSocket = keystone.get('unix socket');
 	var message = keystone.get('name') + ' is ready on ' + unixSocket;
 
+	// Unlink the socket file if it exists, then start listening.
 	fs.unlink(unixSocket, function () {
-		// we expect err if the file is new so don't capture the argument
+		// We expect an error if the file doesn't exist, so we ignore it.
 		keystone.httpServer = app.listen(unixSocket, function (err) {
 			callback(err, message);
 		});
+		// Set file permissions to be world-writable.
 		fs.chmod(unixSocket, 0x777);
 	});
-
 };
