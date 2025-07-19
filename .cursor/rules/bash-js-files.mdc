@@ -33,7 +33,6 @@ echo "touch global.d.ts"
 
 Files
 ```bash
-./greenkeeper-prs/filterbranches.js
 ./build.js
 ./admin/server/middleware/browserify.js
 ./admin/server/middleware/apiError.js

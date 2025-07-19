@@ -1,7 +1,7 @@
 /**
  * @summary Project build script
  * @module build.js
- * @creationDate 2025-03-27 02:39:37 -03
+ * @creationDate 2025-07-19 16:23:56 -03
  *
  * @description
  * Custom script likely used for building or packaging parts of the project

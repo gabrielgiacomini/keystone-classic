@@ -106,7 +106,6 @@ get_file_info() {
 
         # --- Build/Other Scripts ---
         "build.js") summary="Project build script"; description="Custom script likely used for building or packaging parts of the project"; specific_todo="Define any exported functions or the main execution logic if run directly";;
-        "greenkeeper-prs/"*) summary="Greenkeeper utility script: $(basename "$js_file" .js)"; description="Script related to Greenkeeper dependency management"; specific_todo="Define exported functions or script logic";;
 
         # --- Global ---
         "global.d.ts") # Match the TS file directly for this special case
@@ -195,7 +194,6 @@ while IFS= read -r ts_file; do
     echo -e "$content" > "$ts_file"
 
 done << 'EOF'
-greenkeeper-prs/filterbranches.d.ts
 build.d.ts
 admin/server/middleware/browserify.d.ts
 admin/server/middleware/apiError.d.ts
@@ -410,7 +408,6 @@ admin/client/Signin/components/Alert.d.ts
 admin/client/Signin/components/Brand.d.ts
 admin/client/Signin/components/LoginForm.d.ts
 admin/client/Signin/components/UserInfo.d.ts
-index.d.ts
 server/bindIPRestrictions.d.ts
 server/startSecureServer.d.ts
 server/startSocketServer.d.ts
@@ -652,7 +649,6 @@ fields/utils/definePrototypeGetters.d.ts
 fields/utils/bindFunctions.d.ts
 fields/utils/evalDependsOn.d.ts
 global.d.ts
-# --- END OF LIST ---
 EOF
 
 echo ""
