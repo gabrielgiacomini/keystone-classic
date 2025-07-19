@@ -1,0 +1,21 @@
+in the file overviews, add an @example of how this file is used in the codebase
+
+in the file overviews, add @see to reference the most relevant files that are related to this file.
+
+Review the files for any original comments you might have removed. If you removed any comments, add them back, improving them if needed.
+
+Review the files for any actual code implementation you might have changed (check the entire branch for the files you edited, not only the last commit). No implementation was supposed to change (even console logs), only documentation.
+
+add a README.md file to the folder of the files you edited, describing the functionalities present there, and their usage in the project
+
+add a README.md file to the folder of the files you edited (check the entire branch, not only the last commit), describing the functionalities present there, and their usage in the project
+
+add a README.md file to the folders of the files you edited (check the entire branch for the files you edited, not only the last commit), listing the files in that folder, describing the functionalities present there, and their usage in the codebase.
+
+in the readme file, the file path should be relative to the root of the project, not the folder of the files you edited.
+
+In the readme files you created, add thorough documentation of the contents of the folder, including all supported options, and the usage of the files.
+
+In the usage examples of the readme files you created, add example usage of all supported options.
+
+In the readme files you created, add thorough documentation about each of the files in the folder,including all supported options, and the usage examples of the files.
