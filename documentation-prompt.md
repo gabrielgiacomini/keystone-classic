@@ -139,7 +139,7 @@ fields/utils/definePrototypeGetters.js
 fields/utils/addPresenceToQuery.js
 fields/utils/bindFunctions.js
 
-Add thorough and comprehensive JSDoc documentation to the following files in the project:
+2. Add thorough and comprehensive JSDoc documentation to the files.
 
 ---
 
