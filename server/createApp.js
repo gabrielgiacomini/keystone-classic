@@ -7,6 +7,7 @@
  * server setup.
  *
  * It is invoked by `keystone.start()`.
+ * @see {@link Keystone#start}
  */
 var compression = require('compression');
 var favicon = require('serve-favicon');

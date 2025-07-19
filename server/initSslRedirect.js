@@ -5,6 +5,7 @@
  * requests to HTTPS. It is enabled when the `ssl` option is set to 'force'.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 module.exports = function (keystone, app) {
 	var portString;

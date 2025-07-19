@@ -6,6 +6,7 @@
  * of the authentication and user management system.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 module.exports = function bindSessionMiddleware (keystone, app) {
 	// Bind the cookie parser middleware.

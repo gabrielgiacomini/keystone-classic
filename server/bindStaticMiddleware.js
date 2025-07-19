@@ -6,6 +6,7 @@
  * client-side JavaScript.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 var express = require('express');
 

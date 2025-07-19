@@ -5,6 +5,7 @@
  * with a single path or an array of paths to watch for `.scss` files.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 module.exports = function bindSassMiddleware (keystone, app) {
 	// The 'sass' option can be a single path or an array of paths.

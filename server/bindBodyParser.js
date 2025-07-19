@@ -6,6 +6,7 @@
  * handling file uploads.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 var bodyParser = require('body-parser');
 var uploads = require('../lib/uploads');

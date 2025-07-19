@@ -5,6 +5,7 @@
  * It allows for custom view engines and sets the location of view templates.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 module.exports = function initViewEngine (keystone, app) {
 	// Allow usage of custom view engines.

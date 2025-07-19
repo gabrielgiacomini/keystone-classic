@@ -5,6 +5,7 @@
  * default 'pretty html' option for non-production environments.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 var assign = require('object-assign');
 

@@ -6,6 +6,7 @@
  * object.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 module.exports = function bindRedirectsHandler (keystone, app) {
 	// If there are any redirects configured, bind the middleware.

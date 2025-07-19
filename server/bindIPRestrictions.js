@@ -6,6 +6,7 @@
  * address. It requires the 'trust proxy' setting to be enabled.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 var debug = require('debug')('keystone:server:bindIpRestrictions');
 

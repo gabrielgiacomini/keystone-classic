@@ -8,6 +8,7 @@
  * It is invoked by `lib/core/start.js`.
  *
  * @api private
+ * @see {@link module:lib/core/start}
  */
 var fs = require('fs');
 

@@ -7,6 +7,7 @@
  * header.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 module.exports = function initTrustProxy (keystone, app) {
 	// Enable or disable 'trust proxy' based on the Keystone configuration.

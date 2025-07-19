@@ -5,6 +5,7 @@
  * with a single path or an array of paths to watch for `.less` files.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 module.exports = function bindLessMiddleware (keystone, app) {
 	// The 'less' option can be a single path or an array of paths.

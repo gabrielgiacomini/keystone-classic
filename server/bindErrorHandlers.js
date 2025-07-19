@@ -6,6 +6,7 @@
  * in KeystoneJS.
  *
  * It is invoked by `server/createApp.js`.
+ * @see {@link module:server/createApp}
  */
 var dashes = '\n------------------------------------------------\n';
 var utils = require('keystone-utils');

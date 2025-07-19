@@ -5,6 +5,7 @@
  *
  * This is typically used during the build process to generate the client-side
  * JavaScript bundle that powers the KeystoneJS Admin UI.
+ * @see {@link module:./admin/client/packages}
  */
 
 var browserify = require('browserify');

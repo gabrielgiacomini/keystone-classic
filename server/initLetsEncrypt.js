@@ -8,6 +8,7 @@
  * It is invoked by `server/createApp.js`.
  *
  * @api private
+ * @see {@link module:server/createApp}
  */
 var letsencrypt = require('greenlock-express');
 
