@@ -8,7 +8,7 @@
  *
  * @see {@link http://localhost:8000}
  */
-import React, { Children, cloneElement, Component } from 'react';
+import React, { Children, cloneElement, Component, PropTypes } from 'react';
 import { Link, Router, Route, browserHistory, IndexRoute } from 'react-router';
 import ReactDOM from 'react-dom';
 import FieldType from './components/FieldType';
@@ -63,6 +63,10 @@ const navSections = generateNavSections(Object.keys(Types).map(i => Types[i]));
  * @extends React.Component
  */
 class App extends Component {
+	static propTypes = {
+		children: PropTypes.node,
+		params: PropTypes.object,
+	};
 	constructor () {
 		super();
 		this.toggleSidebar = this.toggleSidebar.bind(this);

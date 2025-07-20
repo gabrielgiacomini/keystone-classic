@@ -17,6 +17,18 @@ import FieldSpec from './FieldSpec';
  * @extends React.Component
  */
 const ExplorerFieldType = React.createClass({
+	propTypes: {
+		FieldComponent: React.PropTypes.func.isRequired,
+		FilterComponent: React.PropTypes.func.isRequired,
+		params: React.PropTypes.object.isRequired,
+		readme: React.PropTypes.string,
+		spec: React.PropTypes.oneOfType([
+			React.PropTypes.object,
+			React.PropTypes.arrayOf(React.PropTypes.object),
+		]).isRequired,
+		toggleSidebar: React.PropTypes.func.isRequired,
+		value: React.PropTypes.any,
+	},
 	/**
 	 * Gets the initial state of the component.
 	 * @returns {Object} The initial state.
