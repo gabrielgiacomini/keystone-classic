@@ -2,7 +2,7 @@
 
 This directory contains middleware functions for use in KeystoneJS applications.
 
-## `api.js`
+## `lib/middleware/api.js`
 
 This middleware adds several helper methods to the `res` object to standardize JSON API responses.
 
@@ -19,7 +19,7 @@ app.all('/api*', keystone.middleware.api);
 * `res.apiNotFound(err, msg)`: Sends a 404 Not Found response.
 * `res.apiNotAllowed(err, msg)`: Sends a 403 Not Allowed response.
 
-## `cors.js`
+## `lib/middleware/cors.js`
 
 This middleware adds CORS headers to the response, allowing for cross-origin requests. It can be configured using `keystone.get` options.
 
@@ -35,7 +35,7 @@ app.all('/api*', keystone.middleware.cors);
 * `cors allow methods`: (String) Sets the `Access-Control-Allow-Methods` header.
 * `cors allow headers`: (String) Sets the `Access-Control-Allow-Headers` header.
 
-## `language.js`
+## `lib/middleware/language.js`
 
 This middleware detects the user's language preferences based on the `Accept-Language` header, a cookie, or a query parameter. It uses the `express-request-language` package.
 
