@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var assign = require('object-assign');
 var di = require('asyncdi');
-var marked = require('marked');
+var marked = 'marked';
 var Path = require('../../lib/path');
 var utils = require('keystone-utils');
 var evalDependsOn = require('../utils/evalDependsOn.js');
@@ -33,12 +33,36 @@ var DEFAULT_OPTION_KEYS = [
 ];
 
 /**
- * Field Constructor
- * =================
+ * @typedef {Object} FieldOptions
+ * @property {string} [label] - The label for the field.
+ * @property {string} [note] - A note or description for the field.
+ * @property {string} [type] - The type of the field.
+ * @property {boolean} [initial] - Whether the field should be displayed in the initial form.
+ * @property {boolean} [required] - Whether the field is required.
+ * @property {Object} [dependsOn] - An object specifying dependencies on other fields.
+ * @property {boolean} [hidden] - Whether the field should be hidden in the Admin UI.
+ * @property {boolean} [collapse] - Whether the field should be collapsed by default in the Admin UI.
+ * @property {function} [watch] - A function to watch for changes in other fields.
+ * @property {*} [default] - The default value for the field.
+ * @property {string} [size] - The size of the field in the Admin UI (small, medium, large, full).
+ */
+
+/**
+ * The base `Field` class.
  *
- * Extended by fieldType Classes, should not be used directly.
+ * This class is extended by all other field types. It provides the common
+ * functionality and properties for all fields.
  *
- * @api public
+ * @class Field
+ * @param {List} list - The list that this field belongs to.
+ * @param {string} path - The path of the field.
+ * @param {FieldOptions} options - The options for the field.
+ * @property {List} list - The list that this field belongs to.
+ * @property {string} path - The path of the field.
+ * @property {FieldOptions} options - The options for the field.
+ * @property {string} type - The type of the field.
+ * @property {string} label - The label for the field.
+ * @property {string} typeDescription - A description of the field's type.
  */
 function Field (list, path, options) {
 
@@ -97,7 +121,9 @@ function Field (list, path, options) {
 }
 
 /**
- * Gets the options for the Field, as used by the React components
+ * Gets the options for the Field, as used by the React components.
+ *
+ * @returns {Object} The field options.
  */
 Field.prototype.getOptions = function () {
 	if (!this.__options) {
@@ -124,7 +150,8 @@ Field.prototype.getOptions = function () {
 
 /**
  * Validates and returns the size of the field.
- * Defaults to deprecated 'width' option.
+ *
+ * @returns {string} The size of the field.
  */
 Field.prototype.getSize = function () {
 	if (!this.__size) {
@@ -138,21 +165,30 @@ Field.prototype.getSize = function () {
 };
 
 /**
- * Gets default value for the field, based on the option or default for the type
+ * Gets the default value for the field.
+ *
+ * @returns {*} The default value.
  */
 Field.prototype.getDefaultValue = function () {
 	return typeof this.options.default !== 'undefined' ? this.options.default : '';
 };
 
 /**
- * Gets the field's data from an Item, as used by the React components
+ * Gets the field's data from an item.
+ *
+ * @param {Object} item - The item to get the data from.
+ * @returns {*} The field's data.
  */
 Field.prototype.getData = function (item) {
 	return item.get(this.path);
 };
 
 /**
- * Field watching implementation
+ * Returns a pre-save watcher function for the field.
+ *
+ * This is used to implement the `watch` option.
+ *
+ * @returns {function} The pre-save watcher function.
  */
 Field.prototype.getPreSaveWatcher = function () {
 	var field = this;
@@ -217,7 +253,24 @@ Field.prototype.getPreSaveWatcher = function () {
 };
 module.exports = Field;
 
-/** Getter properties for the Field prototype */
+/**
+ * Getter properties for the Field prototype.
+ *
+ * These properties are defined as getters so that they are only computed when
+ * they are accessed.
+ *
+ * @property {string} size - The size of the field.
+ * @property {boolean} initial - Whether the field is initial.
+ * @property {boolean} required - Whether the field is required.
+ * @property {string} note - The note for the field.
+ * @property {boolean} col - Whether the field is a column.
+ * @property {boolean} noedit - Whether the field is editable.
+ * @property {boolean} nocol - Whether the field is a column.
+ * @property {boolean} nosort - Whether the field is sortable.
+ * @property {boolean} collapse - Whether the field is collapsed.
+ * @property {boolean} hidden - Whether the field is hidden.
+ * @property {Object} dependsOn - The dependencies for the field.
+ */
 definePrototypeGetters(Field, {
 	size: function () { return this.getSize(); },
 	initial: function () { return this.options.initial || false; },
@@ -233,8 +286,9 @@ definePrototypeGetters(Field, {
 });
 
 /**
- * Default method to register the field on the List's Mongoose Schema.
- * Overridden by some fieldType Classes
+ * Adds the field to the Mongoose schema.
+ *
+ * @param {Object} schema - The Mongoose schema to add the field to.
  */
 Field.prototype.addToSchema = function (schema) {
 	var ops = (this._nativeType) ? _.defaults({ type: this._nativeType }, this.options) : this.options;
@@ -243,9 +297,9 @@ Field.prototype.addToSchema = function (schema) {
 };
 
 /**
- * Binds the methods specified by the _underscoreMethods property
- * Must be called by the field type's `addToSchema` method
- * Always includes the `update` method
+ * Binds underscore methods to the field.
+ *
+ * This is used to add methods to the field's underscore object.
  */
 Field.prototype.bindUnderscoreMethods = function () {
 	var field = this;
@@ -264,8 +318,10 @@ Field.prototype.bindUnderscoreMethods = function () {
 };
 
 /**
- * Adds a method to the underscoreMethods collection on the field's list,
- * with a path prefix to match this field's path and bound to the document
+ * Adds an underscore method to the field.
+ *
+ * @param {string} path - The path of the method.
+ * @param {function} fn - The method function.
  */
 Field.prototype.underscoreMethod = function (path, fn) {
 	this.list.underscoreMethod(this.path + '.' + path, function () {
@@ -274,10 +330,10 @@ Field.prototype.underscoreMethod = function (path, fn) {
 };
 
 /**
- * Default method to format the field value for display
- * Overridden by some fieldType Classes
+ * Formats the field's value.
  *
- * @api public
+ * @param {Object} item - The item to format the value from.
+ * @returns {string} The formatted value.
  */
 Field.prototype.format = function (item) {
 	var value = item.get(this.path);
@@ -286,20 +342,20 @@ Field.prototype.format = function (item) {
 };
 
 /**
- * Default method to detect whether the field has been modified in an item
- * Overridden by some fieldType Classes
+ * Checks if the field has been modified.
  *
- * @api public
+ * @param {Object} item - The item to check.
+ * @returns {boolean} Whether the field has been modified.
  */
 Field.prototype.isModified = function (item) {
 	return item.isModified(this.path);
 };
 
 /**
- * Checks whether a provided value for the field is in a valid format
- * Overridden by some fieldType Classes
+ * Validates the field's input.
  *
- * @api public
+ * @param {Object} data - The data to validate.
+ * @param {function} callback - The callback function.
  */
 Field.prototype.validateInput = function (data, callback) {
 	utils.defer(callback, this.inputIsValid(data));
@@ -307,21 +363,24 @@ Field.prototype.validateInput = function (data, callback) {
 
 /**
  * Validates that a value for this field has been provided in a data object,
- * taking into account existing data in an item
- * Overridden by some fieldType Classes
+ * taking into account existing data in an item.
  *
- * @api public
+ * @param {Object} item - The item to check.
+ * @param {Object} data - The data to validate.
+ * @param {function} callback - The callback function.
  */
 Field.prototype.validateRequiredInput = function (item, data, callback) {
 	utils.defer(callback, this.inputIsValid(data, true, item));
 };
 
 /**
- * Validates that a value for this field has been provided in a data object
- * Overridden by some fieldType Classes
+ * Checks if the field's input is valid.
  *
- * Not a reliable public API; use inputIsValid, which is async, instead.
- * This method has been deprecated.
+ * @param {Object} data - The data to validate.
+ * @param {boolean} required - Whether the field is required.
+ * @param {Object} item - The item to check.
+ * @returns {boolean} Whether the input is valid.
+ * @deprecated
  */
 Field.prototype.inputIsValid = function (data, required, item) {
 	if (!required) return true;
@@ -335,10 +394,11 @@ Field.prototype.inputIsValid = function (data, required, item) {
 };
 
 /**
- * Updates the value for this field in the item from a data object
- * Overridden by some fieldType Classes
+ * Updates the field's value in an item.
  *
- * @api public
+ * @param {Object} item - The item to update.
+ * @param {Object} data - The data to update the item with.
+ * @param {function} callback - The callback function.
  */
 Field.prototype.updateItem = function (item, data, callback) {
 	var value = this.getValueFromData(data);
@@ -350,9 +410,11 @@ Field.prototype.updateItem = function (item, data, callback) {
 };
 
 /**
- * Retrieves the value from an object, whether the path is nested or flattened
+ * Retrieves the value from a data object.
  *
- * @api public
+ * @param {Object} data - The data to retrieve the value from.
+ * @param {string} [subpath] - The subpath to retrieve the value from.
+ * @returns {*} The value.
  */
 Field.prototype.getValueFromData = function (data, subpath) {
 	return this._path.get(data, subpath);

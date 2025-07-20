@@ -34,12 +34,12 @@ var moduleRoot = (function (_rootPath) {
  * The main Keystone class.
  *
  * @class Keystone
- * @property {Object} lists - A map of all registered `List` instances.
- * @property {Object} fieldTypes - A map of all registered `Field` types.
+ * @property {Object.<string, List>} lists - A map of all registered `List` instances.
+ * @property {Object.<string, Field>} fieldTypes - A map of all registered `Field` types.
  * @property {Object} paths - A map of common paths for the application.
  * @property {Object} _options - Internal storage for Keystone's configuration options.
  * @property {Object} _redirects - A map of URL redirects.
- * @property {Function} express - The Express framework constructor.
+ * @property {function} express - The Express framework constructor.
  */
 var Keystone = function () {
 	// Inherit from GrapplingHook for event handling.
@@ -158,8 +158,8 @@ _.extend(Keystone.prototype, require('./lib/core/options'));
 /**
  * Prefixes a model key with the `model prefix` option.
  *
- * @param {String} key
- * @returns {String} The prefixed key.
+ * @param {string} key - The model key to prefix.
+ * @returns {string} The prefixed key.
  */
 Keystone.prototype.prefixModel = function (key) {
 	var modelPrefix = this.get('model prefix');
@@ -213,32 +213,65 @@ var keystone = (module.exports = new Keystone());
 */
 
 // Expose modules and Classes
-/** @member {Object} */
+/**
+ * The Admin UI server.
+ * @member {Object}
+ */
 keystone.Admin = {
 	Server: require('./admin/server'),
 };
-/** @member {Email} */
+/**
+ * The Email class.
+ * @member {Email}
+ */
 keystone.Email = require('./lib/email');
-/** @member {Field} */
+/**
+ * The base Field class.
+ * @member {Field}
+ */
 keystone.Field = require('./fields/types/Type');
-/** @member {Object} */
+/**
+ * A map of all registered field types.
+ * @member {Object.<string, Field>}
+ */
 keystone.Field.Types = require('./lib/fieldTypes');
-/** @member {Keystone} */
+/**
+ * The Keystone class.
+ * @member {Keystone}
+ */
 keystone.Keystone = Keystone;
-/** @member {List} */
+/**
+ * The List class.
+ * @member {List}
+ */
 keystone.List = require('./lib/list')(keystone);
-/** @member {Storage} */
+/**
+ * The Storage class.
+ * @member {Storage}
+ */
 keystone.Storage = require('./lib/storage');
-/** @member {View} */
+/**
+ * The View class.
+ * @member {View}
+ */
 keystone.View = require('./lib/view');
 
-/** @member {Object} */
+/**
+ * The content management module.
+ * @member {Object}
+ */
 keystone.content = require('./lib/content');
-/** @member {Object} */
+/**
+ * The security module.
+ * @member {Object}
+ */
 keystone.security = {
 	csrf: require('./lib/security/csrf'),
 };
-/** @member {Object} */
+/**
+ * A collection of utility functions.
+ * @member {Object}
+ */
 keystone.utils = utils;
 
 /**
@@ -247,7 +280,7 @@ keystone.utils = utils;
  * The path is resolved relative to the `module root` option, which defaults
  * to the root of the consuming project.
  *
- * @param {String} dirname The path to import modules from.
+ * @param {string} dirname - The path to import modules from.
  * @returns {Object} An object containing the imported modules.
  * @example
  * var models = keystone.import('models');
@@ -262,7 +295,7 @@ Keystone.prototype.import = function (dirname) {
  * This method is used to apply database updates and other patches during
  * development and deployment.
  *
- * @param {Function} callback
+ * @param {function} callback - A callback function to execute after updates are applied.
  */
 Keystone.prototype.applyUpdates = function (callback) {
 	var self = this;
@@ -278,8 +311,8 @@ Keystone.prototype.applyUpdates = function (callback) {
 /**
  * Logs a configuration error to the console.
  *
- * @param {String} type The type of error.
- * @param {String} msg The error message.
+ * @param {string} type - The type of error.
+ * @param {string} msg - The error message.
  */
 Keystone.prototype.console = {};
 Keystone.prototype.console.err = function (type, msg) {
@@ -292,10 +325,13 @@ Keystone.prototype.console.err = function (type, msg) {
 /**
  * The version of the KeystoneJS framework.
  *
- * @property {String} version
+ * @property {string} version
  */
 keystone.version = require('./package.json').version;
 
 // Expose session management module.
-/** @member {Object} */
+/**
+ * The session management module.
+ * @member {Object}
+ */
 keystone.session = require('./lib/session');
