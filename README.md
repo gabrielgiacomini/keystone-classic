@@ -62,6 +62,12 @@ You get helper methods on your models for dealing with each field type easily (s
 
 See the [KeystoneJS database documentation](https://keystonejs.com/documentation/database) for details and examples of the various field types, as well as how to set up and use database models in your application.
 
+### Core Files
+
+- **`index.js`**: The main entry point for the KeystoneJS framework. It initializes a new Keystone instance, configures it with default settings, and extends it with the core functionality required to run a Keystone application. It also exposes the major components of the framework such as `List`, `Field`, and `View`. The exported `keystone` object is a singleton instance of the `Keystone` class, which is the main interface for developers to interact with the framework.
+
+- **`build.js`**: This script bundles the client-side packages required for the Admin UI. It uses Browserify to create a bundle of all the packages specified in `./admin/client/packages.js` and outputs it to `stdout`. This is typically used during the build process to generate the client-side JavaScript bundle that powers the KeystoneJS Admin UI.
+
 ### Running KeystoneJS in Production
 
 When you deploy your KeystoneJS app to production, be sure to set your `ENV` environment variable to `production`.
