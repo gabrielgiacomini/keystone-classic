@@ -9,18 +9,35 @@ Adds one or more fields to the list. This is the primary way to define the schem
 
 **Usage:**
 ```javascript
-MyList.add({
-  name: { type: Types.Name, required: true, index: true },
-  email: { type: Types.Email, initial: true, required: true, index: true, unique: true },
-  password: { type: Types.Password, initial: true, required: true },
-});
+const { keystone } = require('keystone');
+const { Types } = keystone.Field;
+
+const MyList = new keystone.List('MyList');
+
+MyList.add(
+  {
+    name: { type: Types.Name, required: true, index: true },
+    email: { type: Types.Email, initial: true, required: true, index: true, unique: true },
+    password: { type: Types.Password, initial: true, required: true },
+  },
+  'Permissions',
+  {
+    isAdmin: { type: Types.Boolean, label: 'Can access Keystone', index: true },
+  }
+);
 ```
 
 ### `lib/list/addFiltersToQuery.js`
 Adds filters to a Mongoose query based on the list's fields. This is used internally by the Admin UI to filter items.
 
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
+
 ### `lib/list/addSearchToQuery.js`
 Adds a search query to a Mongoose query, using either a text index or regular expressions. This is used by the Admin UI search functionality.
+
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
 
 ### `lib/list/apiForGet.js`
 Returns JSON API middleware for a `GET /:id` endpoint, allowing for easy creation of API endpoints for your lists.
@@ -38,44 +55,98 @@ app.get('/api/my-list/:id', keystone.middleware.api, MyList.apiForGet());
 ### `lib/list/automap.js`
 Automatically maps a field path to itself if it is currently unmapped. This is used for fields that should be automatically mapped to a path, like `name`.
 
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
+
 ### `lib/list/buildSearchTextIndex.js`
 Builds a text index definition for the list's search fields. This is used internally when `searchUsesTextIndex` is enabled.
+
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
 
 ### `lib/list/declaresTextIndex.js`
 Checks if a text index is defined in the current list schema.
 
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
+
 ### `lib/list/ensureTextIndex.js`
 Ensures that a collection has an appropriate text index. This is used to work around unreliable behavior with the Mongo driver's `ensureIndex()` method.
+
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
 
 ### `lib/list/expandColumns.js`
 Expands a comma-separated string or array of columns into valid column objects. This is used by the Admin UI to display columns in the list view.
 
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
+
 ### `lib/list/expandPaths.js`
 Expands a comma-separated string or array of paths into valid path objects.
+
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
 
 ### `lib/list/expandSort.js`
 Expands a sort string into a sort object.
 
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
+
 ### `lib/list/field.js`
 Creates a new field at a specified path with the provided options. This is the underlying method used by `List.add()`.
+
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
 
 ### `lib/list/getAdminURL.js`
 Gets the Admin URL to view the list or an item.
 
+**Usage:**
+```javascript
+const listUrl = MyList.getAdminURL();
+const itemUrl = MyList.getAdminURL(item);
+```
+
 ### `lib/list/getCSVData.js`
 Gets the data from an item ready to be serialized to CSV for download.
+
+**Usage:**
+```javascript
+const csvData = MyList.getCSVData(item, {
+  fields: 'name, email',
+  expandRelationshipFields: true,
+});
+```
 
 ### `lib/list/getData.js`
 Gets the data from an item ready to be serialized for client-side use, as used by the React components and the Admin API.
 
+**Usage:**
+```javascript
+const data = MyList.getData(item, 'name, email');
+```
+
 ### `lib/list/getDocumentName.js`
 Gets the name of a document from the correct path, as defined by the `namePath` option on the list.
+
+**Usage:**
+```javascript
+const name = MyList.getDocumentName(item);
+```
 
 ### `lib/list/getOptions.js`
 Gets the options for the list, as used by the React components in the Admin UI.
 
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
+
 ### `lib/list/getPages.js`
 Generates an array of page numbers for pagination.
+
+**Usage:**
+This method is used internally by `List.paginate()`.
 
 ### `lib/list/getSearchFilters.js` (deprecated)
 Gets filters for a Mongoose query that will search for the provided string. Use `addSearchToQuery` instead.
@@ -83,11 +154,26 @@ Gets filters for a Mongoose query that will search for the provided string. Use 
 ### `lib/list/getUniqueValue.js`
 Gets a unique value from a generator method by checking for documents with the same value. This is useful for fields that need to be unique, like a slug.
 
+**Usage:**
+```javascript
+MyList.getUniqueValue('slug', 'my-post', (err, uniqueValue) => {
+  // ...
+});
+```
+
 ### `lib/list/isReserved.js`
 Checks whether a given path is a reserved path. This prevents overwriting of internal Keystone properties.
 
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
+
 ### `lib/list/map.js`
 Maps a built-in field (e.g., `name`) to a specific path.
+
+**Usage:**
+```javascript
+MyList.map('name', 'name');
+```
 
 ### `lib/list/paginate.js`
 Gets a special Query object that will paginate documents in the list.
@@ -113,6 +199,9 @@ Processes a filter string into a filters object. Use `addFiltersToQuery` instead
 ### `lib/list/register.js`
 Registers the list's schema with Mongoose and Keystone. This is a critical internal method that is called when Keystone is initialized.
 
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
+
 ### `lib/list/relationship.js`
 Registers relationships to this list defined on other lists.
 
@@ -124,11 +213,33 @@ Post.relationship({ ref: 'User', path: 'author', refPath: 'posts' });
 ### `lib/list/selectColumns.js`
 Specifies `select` and `populate` options for a Mongoose query based on the provided columns.
 
+**Usage:**
+This method is used internally by Keystone and is not intended for direct use.
+
 ### `lib/list/set.js`
 Gets and sets list options. This is used to configure the behavior of the list.
+
+**Usage:**
+```javascript
+MyList.set('nocreate', true);
+```
 
 ### `lib/list/underscoreMethod.js`
 Adds a method to the `underscoreMethods` collection on the list, which is then added to the schema before the list is registered with Mongoose. This allows for adding custom methods to the `_` property of documents.
 
+**Usage:**
+```javascript
+MyList.underscoreMethod('myMethod', function() {
+  return 'hello world';
+});
+```
+
 ### `lib/list/updateItem.js`
 Updates a Keystone item with new data. This handles field validation, updates, and error handling.
+
+**Usage:**
+```javascript
+MyList.updateItem(item, { name: 'New Name' }, (err) => {
+  // ...
+});
+```
