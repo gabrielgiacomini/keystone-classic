@@ -1,9 +1,11 @@
 /**
-TODO:
-- Format size of stored file (if present) using bytes package?
-- Display file type icon? (see LocalFileField)
-*/
-
+ * @fileoverview
+ * This file defines the `FileField` component, which is used to render a file
+ * field in the KeystoneJS Admin UI.
+ *
+ * It provides a button to upload a file, and it displays the name of the
+ * uploaded file. It also provides a button to remove the file.
+ */
 import Field from '../Field';
 import React, { PropTypes } from 'react';
 import {
@@ -18,6 +20,11 @@ import ImageThumbnail from '../../components/ImageThumbnail';
 
 let uploadInc = 1000;
 
+/**
+ * Returns the initial state of the component.
+ * @param {Object} props The component's props.
+ * @returns {Object} The initial state.
+ */
 const buildInitialState = (props) => ({
 	action: null,
 	removeExisting: false,
@@ -25,6 +32,10 @@ const buildInitialState = (props) => ({
 	userSelectedFile: null,
 });
 
+/**
+ * The `FileField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 	propTypes: {
 		autoCleanup: PropTypes.bool,
@@ -47,12 +58,24 @@ module.exports = Field.create({
 		type: 'File',
 		getDefaultValue: () => ({}),
 	},
+	/**
+	 * Gets the initial state of the component.
+	 * @returns {Object} The initial state.
+	 */
 	getInitialState () {
 		return buildInitialState(this.props);
 	},
+	/**
+	 * Determines whether the field should be collapsed.
+	 * @returns {boolean} Whether the field should be collapsed.
+	 */
 	shouldCollapse () {
 		return this.props.collapse && !this.hasExisting();
 	},
+	/**
+	 * Handles the component receiving new props.
+	 * @param {Object} nextProps The new props.
+	 */
 	componentWillUpdate (nextProps) {
 		// Show the new filename when it's finished uploading
 		if (this.props.value.filename !== nextProps.value.filename) {
@@ -64,20 +87,40 @@ module.exports = Field.create({
 	// HELPERS
 	// ==============================
 
+	/**
+	 * Returns whether the field has a file.
+	 * @returns {boolean} Whether the field has a file.
+	 */
 	hasFile () {
 		return this.hasExisting() || !!this.state.userSelectedFile;
 	},
+	/**
+	 * Returns whether the field has an existing file.
+	 * @returns {boolean} Whether the field has an existing file.
+	 */
 	hasExisting () {
 		return this.props.value && !!this.props.value.filename;
 	},
+	/**
+	 * Returns the name of the file.
+	 * @returns {string} The name of the file.
+	 */
 	getFilename () {
 		return this.state.userSelectedFile
 			? this.state.userSelectedFile.name
 			: this.props.value.filename;
 	},
+	/**
+	 * Returns the URL of the file.
+	 * @returns {string} The URL of the file.
+	 */
 	getFileUrl () {
 		return this.props.value && this.props.value.url;
 	},
+	/**
+	 * Returns whether the file is an image.
+	 * @returns {boolean} Whether the file is an image.
+	 */
 	isImage () {
 		const href = this.props.value ? this.props.value.url : undefined;
 		return href && href.match(/\.(jpeg|jpg|gif|png|svg)$/i) != null;
@@ -87,9 +130,16 @@ module.exports = Field.create({
 	// METHODS
 	// ==============================
 
+	/**
+	 * Triggers the file browser.
+	 */
 	triggerFileBrowser () {
 		this.refs.fileInput.clickDomNode();
 	},
+	/**
+	 * Handles a change in the file input.
+	 * @param {Object} event The event object.
+	 */
 	handleFileChange (event) {
 		const userSelectedFile = event.target.files[0];
 
@@ -97,6 +147,10 @@ module.exports = Field.create({
 			userSelectedFile: userSelectedFile,
 		});
 	},
+	/**
+	 * Handles the removal of a file.
+	 * @param {Object} e The event object.
+	 */
 	handleRemove (e) {
 		var state = {};
 
@@ -122,6 +176,9 @@ module.exports = Field.create({
 
 		this.setState(state);
 	},
+	/**
+	 * Undoes the removal of a file.
+	 */
 	undoRemove () {
 		this.setState(buildInitialState(this.props));
 	},
@@ -130,6 +187,10 @@ module.exports = Field.create({
 	// RENDERERS
 	// ==============================
 
+	/**
+	 * Renders the file name and change message.
+	 * @returns {React.Element} The rendered file name and change message.
+	 */
 	renderFileNameAndChangeMessage () {
 		const href = this.props.value ? this.props.value.url : undefined;
 		return (
@@ -143,6 +204,10 @@ module.exports = Field.create({
 			</div>
 		);
 	},
+	/**
+	 * Renders the change message.
+	 * @returns {React.Element} The rendered change message.
+	 */
 	renderChangeMessage () {
 		if (this.state.userSelectedFile) {
 			return (
@@ -160,6 +225,10 @@ module.exports = Field.create({
 			return null;
 		}
 	},
+	/**
+	 * Renders the clear button.
+	 * @returns {React.Element} The rendered clear button.
+	 */
 	renderClearButton () {
 		if (this.state.removeExisting) {
 			return (
@@ -181,6 +250,10 @@ module.exports = Field.create({
 			);
 		}
 	},
+	/**
+	 * Renders the action input.
+	 * @returns {React.Element} The rendered action input.
+	 */
 	renderActionInput () {
 		// If the user has selected a file for uploading, we need to point at
 		// the upload field. If the file is being deleted, we submit that.
@@ -199,6 +272,10 @@ module.exports = Field.create({
 			return null;
 		}
 	},
+	/**
+	 * Renders the image preview.
+	 * @returns {React.Element} The rendered image preview.
+	 */
 	renderImagePreview () {
 		const imageSource = this.getFileUrl();
 		return (
@@ -212,6 +289,10 @@ module.exports = Field.create({
 			</ImageThumbnail>
 		);
 	},
+	/**
+	 * Renders the UI for the field.
+	 * @returns {React.Element} The rendered UI.
+	 */
 	renderUI () {
 		const { label, note, path, thumb } = this.props;
 		const isImage = this.isImage();

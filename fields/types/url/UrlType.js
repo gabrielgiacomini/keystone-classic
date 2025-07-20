@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Url` field type, which is used to store and manage
+ * URLs in KeystoneJS.
+ *
+ * It inherits from the `Text` field type and provides a custom `format`
+ * method to remove the protocol from the URL for display.
+ */
 var FieldType = require('../Type');
 var TextType = require('../text/TextType');
 var util = require('util');

@@ -1,3 +1,8 @@
+/**
+ * @fileoverview
+ * This file defines the `EmailField` component, which is used to render an
+ * email field in the KeystoneJS Admin UI.
+ */
 import Field from '../Field';
 import React, { PropTypes } from 'react';
 import { FormInput } from '../../../admin/client/App/elemental';
@@ -8,6 +13,10 @@ import { FormInput } from '../../../admin/client/App/elemental';
 	- validate email address
  */
 
+/**
+ * The `EmailField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 	displayName: 'EmailField',
 	propTypes: {
@@ -17,6 +26,10 @@ module.exports = Field.create({
 	statics: {
 		type: 'Email',
 	},
+	/**
+	 * Renders the field.
+	 * @returns {React.Element} The rendered field.
+	 */
 	renderField () {
 		return (
 			<FormInput
@@ -29,6 +42,10 @@ module.exports = Field.create({
 			/>
 		);
 	},
+	/**
+	 * Renders the value of the field.
+	 * @returns {React.Element} The rendered value.
+	 */
 	renderValue () {
 		return this.props.value ? (
 			<FormInput noedit component="a" href={'mailto:' + this.props.value}>

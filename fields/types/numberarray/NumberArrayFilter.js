@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `NumberArrayFilter` component, which is used to filter
+ * `NumberArray` fields in the KeystoneJS Admin UI.
+ *
+ * It provides a set of options for filtering by number, and it supports
+ * inverting the filter.
+ */
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 
@@ -20,6 +28,10 @@ const PRESENCE_OPTIONS = [
 	{ label: 'No element', value: 'none' },
 ];
 
+/**
+ * Returns the default value for the filter.
+ * @returns {Object} The default value.
+ */
 function getDefaultValue () {
 	return {
 		mode: MODE_OPTIONS[0].value,
@@ -28,6 +40,10 @@ function getDefaultValue () {
 	};
 }
 
+/**
+ * The `NumberArrayFilter` component.
+ * @extends React.Component
+ */
 var NumberArrayFilter = React.createClass({
 	propTypes: {
 		filter: React.PropTypes.shape({
@@ -51,8 +67,12 @@ var NumberArrayFilter = React.createClass({
 			filter: getDefaultValue(),
 		};
 	},
-	// Returns a function that handles a specific type of onChange events for
-	// either 'minValue', 'maxValue' or simply 'value'
+	/**
+	 * Returns a function that handles a specific type of onChange events for
+	 * either 'minValue', 'maxValue' or simply 'value'
+	 * @param {string} type The type of the value to handle.
+	 * @returns {function} The change handler.
+	 */
 	handleValueChangeBuilder (type) {
 		var self = this;
 		return function (e) {
@@ -81,23 +101,37 @@ var NumberArrayFilter = React.createClass({
 			}
 		};
 	},
-	// Update the props with this.props.onChange
+	/**
+	 * Updates the filter with a new value.
+	 * @param {Object} changedProp The changed property.
+	 */
 	updateFilter (changedProp) {
 		this.props.onChange({ ...this.props.filter, ...changedProp });
 	},
-	// Update the filter mode
+	/**
+	 * Selects a new mode for the filter.
+	 * @param {Object} e The event object.
+	 */
 	selectMode (e) {
 		const mode = e.target.value;
 		this.updateFilter({ mode });
 		findDOMNode(this.refs.focusTarget).focus();
 	},
-	// Update the presence selection
+	/**
+	 * Selects a new presence for the filter.
+	 * @param {Object} e The event object.
+	 */
 	selectPresence (e) {
 		const presence = e.target.value;
 		this.updateFilter({ presence });
 		findDOMNode(this.refs.focusTarget).focus();
 	},
-	// Render the controls, showing two inputs when the mode is "between"
+	/**
+	 * Renders the controls for the filter.
+	 * @param {Object} presence The presence object.
+	 * @param {Object} mode The mode object.
+	 * @returns {React.Element} The rendered controls.
+	 */
 	renderControls (presence, mode) {
 		let controls;
 		const placeholder = presence.label + ' is ' + mode.label.toLowerCase() + '...';
@@ -140,6 +174,10 @@ var NumberArrayFilter = React.createClass({
 
 		return controls;
 	},
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { filter } = this.props;
 		// Get mode and presence based on their values with .filter

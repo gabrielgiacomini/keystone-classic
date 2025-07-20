@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Money` field type, which is used to store and manage
+ * monetary values in KeystoneJS.
+ *
+ * It inherits from the `Number` field type and adds support for formatting
+ * the value as a currency.
+ */
 var FieldType = require('../Type');
 var NumberType = require('../number/NumberType');
 var numeral = require('numeral');
@@ -36,6 +44,9 @@ money.prototype.addFilterToQuery = NumberType.prototype.addFilterToQuery;
 
 /**
  * Formats the field value
+ * @param {Object} item The item to format.
+ * @param {string} format The format string to use.
+ * @returns {string} The formatted value.
  */
 money.prototype.format = function (item, format) {
 	if (format || this._formatString) {

@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Relationship` field type, which is used to store and
+ * manage relationships between lists in KeystoneJS.
+ *
+ * It provides methods for formatting, filtering, and validating relationships,
+ * and for getting the data for the related items.
+ */
 var _ = require('lodash');
 var FieldType = require('../Type');
 var keystone = require('../../../');
@@ -50,6 +58,11 @@ function expandRelatedItemData (item) {
 	};
 }
 
+/**
+ * Returns true if the value is truthy.
+ * @param {*} value The value to check.
+ * @returns {boolean} Whether the value is truthy.
+ */
 function truthy (value) {
 	return value;
 }

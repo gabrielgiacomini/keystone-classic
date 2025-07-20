@@ -1,1 +1,6 @@
+/**
+ * @fileoverview
+ * This file re-exports the `NumberFilter` component, which is used to filter
+ * `Money` fields in the KeystoneJS Admin UI.
+ */
 module.exports = require('../number/NumberFilter');

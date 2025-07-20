@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `GeoPoint` field type, which is used to store and
+ * manage geographic coordinates in KeystoneJS.
+ *
+ * It stores the coordinates as a `[longitude, latitude]` array and uses a
+ * `2dsphere` index for geospatial queries.
+ */
 var _ = require('lodash');
 var FieldType = require('../Type');
 var util = require('util');

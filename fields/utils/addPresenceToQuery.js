@@ -1,4 +1,10 @@
 /**
+ * @fileoverview
+ * This file defines the `addPresenceToQuery` function, which is used to add
+ * a presence check to a query.
+ */
+
+/**
  * Accounts for the presence choice when filtering
  *
  * @param {String} presence  		The current presence choice

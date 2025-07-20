@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Date` field type, which is used to store and manage
+ * date values in KeystoneJS.
+ *
+ * It provides methods for formatting, parsing, and validating dates, and for
+ * filtering dates in queries.
+ */
 var FieldType = require('../Type');
 var moment = require('moment');
 var util = require('util');

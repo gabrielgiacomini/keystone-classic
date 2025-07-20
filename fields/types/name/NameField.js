@@ -1,3 +1,10 @@
+/**
+ * @fileoverview
+ * This file defines the `NameField` component, which is used to render a name
+ * field in the KeystoneJS Admin UI.
+ *
+ * It provides two text inputs for the first and last name.
+ */
 import Field from '../Field';
 import React, { PropTypes } from 'react';
 import {
@@ -10,6 +17,10 @@ const NAME_SHAPE = {
 	last: PropTypes.string,
 };
 
+/**
+ * The `NameField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 	displayName: 'NameField',
 	statics: {
@@ -26,6 +37,11 @@ module.exports = Field.create({
 		value: PropTypes.shape(NAME_SHAPE).isRequired,
 	},
 
+	/**
+	 * Handles a change in the value of one of the name fields.
+	 * @param {string} which The name of the field that changed.
+	 * @param {Object} event The event object.
+	 */
 	valueChanged: function (which, event) {
 		const { value = {}, path, onChange } = this.props;
 		onChange({
@@ -36,12 +52,24 @@ module.exports = Field.create({
 			},
 		});
 	},
+	/**
+	 * Handles a change in the first name field.
+	 * @param {Object} event The event object.
+	 */
 	changeFirst: function (event) {
 		return this.valueChanged('first', event);
 	},
+	/**
+	 * Handles a change in the last name field.
+	 * @param {Object} event The event object.
+	 */
 	changeLast: function (event) {
 		return this.valueChanged('last', event);
 	},
+	/**
+	 * Renders the value of the field.
+	 * @returns {React.Element} The rendered value.
+	 */
 	renderValue () {
 		const inputStyle = { width: '100%' };
 		const { value = {} } = this.props;
@@ -61,6 +89,10 @@ module.exports = Field.create({
 			</Grid.Row>
 		);
 	},
+	/**
+	 * Renders the field.
+	 * @returns {React.Element} The rendered field.
+	 */
 	renderField () {
 		const { value = {}, paths, autoFocus } = this.props;
 		return (

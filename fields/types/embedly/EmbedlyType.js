@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Embedly` field type, which is used to store and
+ * manage embedded content from services like YouTube, Vimeo, and SoundCloud.
+ *
+ * It uses the Embedly API to retrieve metadata for a given URL, and it
+ * stores the metadata in a set of sub-fields.
+ */
 var _ = require("lodash");
 var keystone = require("../../../");
 var util = require("util");

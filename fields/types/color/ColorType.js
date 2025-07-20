@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Color` field type, which is used to store and manage
+ * color values in KeystoneJS.
+ *
+ * It inherits from the `Text` field type and provides no additional
+ * functionality.
+ */
 var FieldType = require('../Type');
 var TextType = require('../text/TextType');
 var util = require('util');

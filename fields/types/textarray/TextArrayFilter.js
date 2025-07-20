@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `TextArrayFilter` component, which is used to filter
+ * `TextArray` fields in the KeystoneJS Admin UI.
+ *
+ * It provides a set of options for filtering by text, and it supports
+ * inverting the filter.
+ */
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 
@@ -19,6 +27,10 @@ const PRESENCE_OPTIONS = [
 	{ label: 'No element', value: 'none' },
 ];
 
+/**
+ * Returns the default value for the filter.
+ * @returns {Object} The default value.
+ */
 function getDefaultValue () {
 	return {
 		mode: MODE_OPTIONS[0].value,
@@ -27,6 +39,10 @@ function getDefaultValue () {
 	};
 }
 
+/**
+ * The `TextArrayFilter` component.
+ * @extends React.Component
+ */
 var TextArrayFilter = React.createClass({
 	propTypes: {
 		filter: React.PropTypes.shape({
@@ -43,22 +59,42 @@ var TextArrayFilter = React.createClass({
 			filter: getDefaultValue(),
 		};
 	},
+	/**
+	 * Updates the filter with a new value.
+	 * @param {Object} value The new value.
+	 */
 	updateFilter (value) {
 		this.props.onChange({ ...this.props.filter, ...value });
 	},
+	/**
+	 * Selects a new mode for the filter.
+	 * @param {Object} e The event object.
+	 */
 	selectMode (e) {
 		const mode = e.target.value;
 		this.updateFilter({ mode });
 		findDOMNode(this.refs.focusTarget).focus();
 	},
+	/**
+	 * Selects a new presence for the filter.
+	 * @param {Object} e The event object.
+	 */
 	selectPresence (e) {
 		const presence = e.target.value;
 		this.updateFilter({ presence });
 		findDOMNode(this.refs.focusTarget).focus();
 	},
+	/**
+	 * Handles a change in the value of the filter.
+	 * @param {Object} e The event object.
+	 */
 	updateValue (e) {
 		this.updateFilter({ value: e.target.value });
 	},
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { filter } = this.props;
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];
