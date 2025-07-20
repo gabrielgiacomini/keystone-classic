@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `MarkdownField` component, which is used to render a
+ * markdown field in the KeystoneJS Admin UI.
+ *
+ * It provides a WYSIWYG editor for markdown, and it can be configured to
+ * show a preview of the rendered HTML.
+ */
 import Field from '../Field';
 import React from 'react';
 import { FormInput } from '../../../admin/client/App/elemental';
@@ -11,6 +19,11 @@ import { FormInput } from '../../../admin/client/App/elemental';
 var $ = require('jquery');
 require('./lib/bootstrap-markdown');
 
+/**
+ * Toggles a heading on the selected text.
+ * @param {Object} e The event object.
+ * @param {string} level The heading level.
+ */
 // Append/remove ### surround the selection
 // Source: https://github.com/toopay/bootstrap-markdown/blob/master/js/bootstrap-markdown.js#L909
 var toggleHeading = function (e, level) {
@@ -47,6 +60,10 @@ var toggleHeading = function (e, level) {
 	e.setSelection(cursor, cursor + chunk.length);
 };
 
+/**
+ * Renders the markdown editor.
+ * @param {React.Component} component The component to render the editor on.
+ */
 var renderMarkdown = function (component) {
 	// dependsOn means that sometimes the component is mounted as a null, so account for that & noop
 	if (!component.refs.markdownTextarea) {
@@ -109,6 +126,11 @@ var renderMarkdown = function (component) {
 	$(component.refs.markdownTextarea).markdown(options);
 };
 
+/**
+ * Escapes HTML for rendering.
+ * @param {string} html The HTML to escape.
+ * @returns {string} The escaped HTML.
+ */
 // Simple escaping of html tags and replacing newlines for displaying the raw markdown string within an html doc
 var escapeHtmlForRender = function (html) {
 	return html
@@ -118,6 +140,10 @@ var escapeHtmlForRender = function (html) {
 		.replace(/\n/g, '<br />');
 };
 
+/**
+ * The `MarkdownField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 	displayName: 'MarkdownField',
 	statics: {
@@ -125,11 +151,18 @@ module.exports = Field.create({
 		getDefaultValue: () => ({}),
 	},
 
+	/**
+	 * Determines whether the field should be collapsed.
+	 * @returns {boolean} Whether the field should be collapsed.
+	 */
 	// override `shouldCollapse` to check the markdown field correctly
 	shouldCollapse () {
 		return this.props.collapse && !this.props.value.md;
 	},
 
+	/**
+	 * Renders the markdown editor when the component mounts.
+	 */
 	// only have access to `refs` once component is mounted
 	componentDidMount () {
 		if (this.props.wysiwyg) {
@@ -137,6 +170,9 @@ module.exports = Field.create({
 		}
 	},
 
+	/**
+	 * Renders the markdown editor when the component updates.
+	 */
 	// only have access to `refs` once component is mounted
 	componentDidUpdate  () {
 		if (this.props.wysiwyg) {
@@ -144,6 +180,10 @@ module.exports = Field.create({
 		}
 	},
 
+	/**
+	 * Renders the field.
+	 * @returns {React.Element} The rendered field.
+	 */
 	renderField () {
 		const styles = {
 			padding: 8,
@@ -167,6 +207,10 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Renders the value of the field.
+	 * @returns {React.Element} The rendered value.
+	 */
 	renderValue () {
 		// We want to render the raw markdown string, without parsing it to html
 		// The markdown string *itself* may include html though so we need to escape it first

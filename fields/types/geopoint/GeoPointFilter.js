@@ -1,3 +1,8 @@
+/**
+ * @fileoverview
+ * This file defines the `GeoPointFilter` component, which is used to filter
+ * `GeoPoint` fields in the KeystoneJS Admin UI.
+ */
 import React from 'react';
 
 import {
@@ -12,6 +17,10 @@ const DISTANCE_OPTIONS = [
 	{ label: 'Min distance (km)', value: 'min' },
 ];
 
+/**
+ * Returns the default value for the filter.
+ * @returns {Object} The default value.
+ */
 function getDefaultValue () {
 	return {
 		lat: undefined,
@@ -23,6 +32,10 @@ function getDefaultValue () {
 	};
 }
 
+/**
+ * The `GeoPointFilter` component.
+ * @extends React.Component
+ */
 var TextFilter = React.createClass({
 	propTypes: {
 		filter: React.PropTypes.shape({
@@ -42,15 +55,31 @@ var TextFilter = React.createClass({
 			filter: getDefaultValue(),
 		};
 	},
+	/**
+	 * Updates the filter with a new value.
+	 * @param {Object} value The new value.
+	 */
 	updateFilter (value) {
 		this.props.onChange({ ...this.props.filter, ...value });
 	},
+	/**
+	 * Handles a change in the latitude value.
+	 * @param {Object} evt The event object.
+	 */
 	changeLat (evt) {
 		this.updateFilter({ lat: evt.target.value });
 	},
+	/**
+	 * Handles a change in the longitude value.
+	 * @param {Object} evt The event object.
+	 */
 	changeLon (evt) {
 		this.updateFilter({ lon: evt.target.value });
 	},
+	/**
+	 * Handles a change in the distance value.
+	 * @param {Object} evt The event object.
+	 */
 	changeDistanceValue (evt) {
 		this.updateFilter({
 			distance: {
@@ -59,6 +88,10 @@ var TextFilter = React.createClass({
 			},
 		});
 	},
+	/**
+	 * Handles a change in the distance mode.
+	 * @param {string} mode The new distance mode.
+	 */
 	changeDistanceMode (mode) {
 		this.updateFilter({
 			distance: {
@@ -67,6 +100,10 @@ var TextFilter = React.createClass({
 			},
 		});
 	},
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { filter } = this.props;
 		const distanceModeVerb = filter.distance.mode === 'max' ? 'Maximum' : 'Minimum';

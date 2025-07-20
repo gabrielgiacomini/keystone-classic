@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Markdown` field type, which is used to store and
+ * manage markdown data in KeystoneJS.
+ *
+ * It provides a WYSIWYG editor for markdown, and it can be configured to
+ * show a preview of the rendered HTML.
+ */
 var FieldType = require('../Type');
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');

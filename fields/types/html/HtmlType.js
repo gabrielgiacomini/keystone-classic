@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Html` field type, which is used to store and manage
+ * HTML data in KeystoneJS.
+ *
+ * It inherits from the `Text` field type and adds support for a WYSIWYG
+ * editor.
+ */
 var FieldType = require('../Type');
 var TextType = require('../text/TextType');
 var util = require('util');

@@ -1,7 +1,16 @@
+/**
+ * @fileoverview
+ * This file defines the `TextColumn` component, which is used to render the
+ * value of a `Text` field in a list view.
+ */
 import React from 'react';
 import ItemsTableCell from '../../components/ItemsTableCell';
 import ItemsTableValue from '../../components/ItemsTableValue';
 
+/**
+ * The `TextColumn` component.
+ * @extends React.Component
+ */
 var TextColumn = React.createClass({
 	displayName: 'TextColumn',
 	propTypes: {
@@ -9,11 +18,19 @@ var TextColumn = React.createClass({
 		data: React.PropTypes.object,
 		linkTo: React.PropTypes.string,
 	},
+	/**
+	 * Renders the value of the field.
+	 * @returns {string} The value of the field.
+	 */
 	getValue () {
 		// cropping text is important for textarea, which uses this column
 		const value = this.props.data.fields[this.props.col.path];
 		return value ? value.substr(0, 100) : null;
 	},
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const value = this.getValue();
 		const empty = !value && this.props.linkTo ? true : false;

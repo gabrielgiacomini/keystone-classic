@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file is the server for the KeystoneJS Field Types Explorer.
+ * It sets up an Express server to serve the explorer's HTML, CSS, and JavaScript files.
+ * It also provides a stub API for relationship fields.
+ *
+ * @see {@link http://localhost:8000}
+ */
 const babelify = require('babelify');
 const browserify = require('browserify-middleware');
 const express = require('express');

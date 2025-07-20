@@ -1,3 +1,10 @@
+/**
+ * @fileoverview
+ * This file defines the `BooleanField` component, which is used to render a
+ * boolean field in the KeystoneJS Admin UI.
+ *
+ * It provides a checkbox to toggle the value of the field.
+ */
 import React from 'react';
 import Field from '../Field';
 import Checkbox from '../../components/Checkbox';
@@ -5,6 +12,10 @@ import { FormField } from '../../../admin/client/App/elemental';
 
 const NOOP = () => {};
 
+/**
+ * The `BooleanField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 	displayName: 'BooleanField',
 	statics: {
@@ -18,12 +29,20 @@ module.exports = Field.create({
 		value: React.PropTypes.bool,
 	},
 
+	/**
+	 * Handles a change in the value of the field.
+	 * @param {boolean} value The new value.
+	 */
 	valueChanged (value) {
 		this.props.onChange({
 			path: this.props.path,
 			value: value,
 		});
 	},
+	/**
+	 * Renders the form input.
+	 * @returns {React.Element} The rendered form input.
+	 */
 	renderFormInput () {
 		if (!this.shouldRenderField()) return;
 
@@ -35,6 +54,10 @@ module.exports = Field.create({
 			/>
 		);
 	},
+	/**
+	 * Renders the UI for the field.
+	 * @returns {React.Element} The rendered UI.
+	 */
 	renderUI () {
 		const { indent, value, label, path } = this.props;
 

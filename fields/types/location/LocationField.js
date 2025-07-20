@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `LocationField` component, which is used to render a
+ * location field in the KeystoneJS Admin UI.
+ *
+ * It provides a set of inputs for the different parts of a location, and it
+ * can be configured to use the Google Maps API to improve the location data.
+ */
 import _ from 'lodash';
 import React from 'react';
 import Field from '../Field';
@@ -18,6 +26,10 @@ import {
  * - Custom path support
  */
 
+/**
+ * The `LocationField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 
 	displayName: 'LocationField',
@@ -25,6 +37,10 @@ module.exports = Field.create({
 		type: 'Location',
 	},
 
+	/**
+	 * Gets the initial state of the component.
+	 * @returns {Object} The initial state.
+	 */
 	getInitialState () {
 		return {
 			collapsedFields: {},
@@ -33,6 +49,9 @@ module.exports = Field.create({
 		};
 	},
 
+	/**
+	 * Sets the initial collapsed state of the fields.
+	 */
 	componentWillMount () {
 		const { value = [] } = this.props;
 		var collapsedFields = {};
@@ -44,16 +63,28 @@ module.exports = Field.create({
 		this.setState({ collapsedFields });
 	},
 
+	/**
+	 * Determines whether the field should be collapsed.
+	 * @returns {boolean} Whether the field should be collapsed.
+	 */
 	shouldCollapse () {
 		return this.props.collapse && !this.formatValue();
 	},
 
+	/**
+	 * Uncollapses the fields.
+	 */
 	uncollapseFields () {
 		this.setState({
 			collapsedFields: {},
 		});
 	},
 
+	/**
+	 * Handles a change in the value of one of the location fields.
+	 * @param {string} fieldPath The path of the field that changed.
+	 * @param {Object} event The event object.
+	 */
 	fieldChanged (fieldPath, event) {
 		const { value = {}, path, onChange } = this.props;
 		onChange({
@@ -65,10 +96,20 @@ module.exports = Field.create({
 		});
 	},
 
+	/**
+	 * Returns a function that handles a change in the value of a location field.
+	 * @param {string} fieldPath The path of the field.
+	 * @returns {function} The change handler.
+	 */
 	makeChanger (fieldPath) {
 		return this.fieldChanged.bind(this, fieldPath);
 	},
 
+	/**
+	 * Handles a change in the value of one of the geo fields.
+	 * @param {number} i The index of the geo field.
+	 * @param {Object} event The event object.
+	 */
 	geoChanged (i, event) {
 		const { value = {}, path, onChange } = this.props;
 		const newVal = event.target.value;
@@ -85,10 +126,19 @@ module.exports = Field.create({
 		});
 	},
 
+	/**
+	 * Returns a function that handles a change in the value of a geo field.
+	 * @param {number} fieldPath The index of the geo field.
+	 * @returns {function} The change handler.
+	 */
 	makeGeoChanger (fieldPath) {
 		return this.geoChanged.bind(this, fieldPath);
 	},
 
+	/**
+	 * Formats the value of the field.
+	 * @returns {string} The formatted value.
+	 */
 	formatValue () {
 		const { value = {} } = this.props;
 		return _.compact([
@@ -103,10 +153,22 @@ module.exports = Field.create({
 		]).join(', ');
 	},
 
+	/**
+	 * Renders the value of the field.
+	 * @returns {React.Element} The rendered value.
+	 */
 	renderValue () {
 		return <FormInput noedit>{this.formatValue() || ''}</FormInput>;
 	},
 
+	/**
+	 * Renders a single field.
+	 * @param {string} fieldPath The path of the field.
+	 * @param {string} label The label of the field.
+	 * @param {boolean} collapse Whether the field should be collapsible.
+	 * @param {boolean} autoFocus Whether the field should be focused.
+	 * @returns {React.Element} The rendered field.
+	 */
 	renderField (fieldPath, label, collapse, autoFocus) {
 		if (this.state.collapsedFields[fieldPath]) {
 			return null;
@@ -125,6 +187,10 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Renders the suburb and state fields.
+	 * @returns {React.Element} The rendered fields.
+	 */
 	renderSuburbState () {
 		const { value = {}, path } = this.props;
 		return (
@@ -151,6 +217,10 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Renders the postcode and country fields.
+	 * @returns {React.Element} The rendered fields.
+	 */
 	renderPostcodeCountry () {
 		const { value = {}, path } = this.props;
 		return (
@@ -177,6 +247,10 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Renders the geo fields.
+	 * @returns {React.Element} The rendered fields.
+	 */
 	renderGeo () {
 		if (this.state.collapsedFields.geo) {
 			return null;
@@ -207,17 +281,31 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Handles a change in the value of one of the Google options.
+	 * @param {string} key The key of the option that changed.
+	 * @param {Object} e The event object.
+	 */
 	updateGoogleOption (key, e) {
 		var newState = {};
 		newState[key] = e.target.checked;
 		this.setState(newState);
 	},
 
+	/**
+	 * Returns a function that handles a change in the value of a Google option.
+	 * @param {string} key The key of the option.
+	 * @returns {function} The change handler.
+	 */
 	makeGoogler (key) {
 		return this.updateGoogleOption.bind(this, key);
 	},
 
 
+	/**
+	 * Renders the Google options.
+	 * @returns {React.Element} The rendered options.
+	 */
 	renderGoogleOptions () {
 		const { paths, enableMapsAPI } = this.props;
 		if (!enableMapsAPI) return null;
@@ -245,6 +333,10 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Renders the note.
+	 * @returns {React.Element} The rendered note.
+	 */
 	renderNote () {
 		const { note } = this.props;
 		if (!note) return null;
@@ -255,6 +347,10 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Renders the UI.
+	 * @returns {React.Element} The rendered UI.
+	 */
 	renderUI () {
 
 		if (!this.shouldRenderField()) {

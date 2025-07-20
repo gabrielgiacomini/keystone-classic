@@ -1,3 +1,10 @@
+/**
+ * @fileoverview
+ * This file defines the `NumberArray` field type, which is used to store and
+ * manage an array of numbers in KeystoneJS.
+ *
+ * It provides methods for formatting, filtering, and validating the array.
+ */
 var FieldType = require('../Type');
 var numeral = require('numeral');
 var util = require('util');
@@ -25,6 +32,10 @@ util.inherits(numberarray, FieldType);
 
 /**
  * Formats the field value
+ * @param {Object} item The item to format.
+ * @param {string} format The format string to use.
+ * @param {string} separator The separator to use between the values.
+ * @returns {string} The formatted value.
  */
 numberarray.prototype.format = function (item, format, separator) {
 	var value = item.get(this.path);

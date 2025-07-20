@@ -1,3 +1,8 @@
+/**
+ * @fileoverview
+ * This file defines the `GeoPointField` component, which is used to render
+ * a geopoint field in the KeystoneJS Admin UI.
+ */
 import Field from '../Field';
 import React from 'react';
 import {
@@ -5,6 +10,10 @@ import {
 	Grid,
 } from '../../../admin/client/App/elemental';
 
+/**
+ * The `GeoPointField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 
 	displayName: 'GeopointField',
@@ -14,6 +23,10 @@ module.exports = Field.create({
 
 	focusTargetRef: 'lat',
 
+	/**
+	 * Handles a change in the latitude value.
+	 * @param {Object} event The event object.
+	 */
 	handleLat (event) {
 		const { value = [], path, onChange } = this.props;
 		const newVal = event.target.value;
@@ -23,6 +36,10 @@ module.exports = Field.create({
 		});
 	},
 
+	/**
+	 * Handles a change in the longitude value.
+	 * @param {Object} event The event object.
+	 */
 	handleLong (event) {
 		const { value = [], path, onChange } = this.props;
 		const newVal = event.target.value;
@@ -32,6 +49,10 @@ module.exports = Field.create({
 		});
 	},
 
+	/**
+	 * Renders the value of the field.
+	 * @returns {React.Element} The rendered value.
+	 */
 	renderValue () {
 		const { value } = this.props;
 		if (value && value[1] && value[0]) {
@@ -40,6 +61,10 @@ module.exports = Field.create({
 		return <FormInput noedit>(not set)</FormInput>;
 	},
 
+	/**
+	 * Renders the field.
+	 * @returns {React.Element} The rendered field.
+	 */
 	renderField () {
 		const { value = [], path } = this.props;
 		return (

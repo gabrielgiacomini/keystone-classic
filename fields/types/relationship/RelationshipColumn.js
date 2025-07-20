@@ -1,3 +1,8 @@
+/**
+ * @fileoverview
+ * This file defines the `RelationshipColumn` component, which is used to render
+ * the value of a `Relationship` field in a list view.
+ */
 import React from 'react';
 import ItemsTableCell from '../../components/ItemsTableCell';
 import ItemsTableValue from '../../components/ItemsTableValue';
@@ -9,12 +14,21 @@ const moreIndicatorStyle = {
 	marginLeft: 8,
 };
 
+/**
+ * The `RelationshipColumn` component.
+ * @extends React.Component
+ */
 var RelationshipColumn = React.createClass({
 	displayName: 'RelationshipColumn',
 	propTypes: {
 		col: React.PropTypes.object,
 		data: React.PropTypes.object,
 	},
+	/**
+	 * Renders the values of a many-to-many relationship.
+	 * @param {Array} value The array of related items.
+	 * @returns {React.Element} The rendered values.
+	 */
 	renderMany (value) {
 		if (!value || !value.length) return;
 		const refList = this.props.col.field.refList;
@@ -39,6 +53,11 @@ var RelationshipColumn = React.createClass({
 			</ItemsTableValue>
 		);
 	},
+	/**
+	 * Renders the value of a one-to-many relationship.
+	 * @param {Object} value The related item.
+	 * @returns {React.Element} The rendered value.
+	 */
 	renderValue (value) {
 		if (!value) return;
 		const refList = this.props.col.field.refList;
@@ -48,6 +67,10 @@ var RelationshipColumn = React.createClass({
 			</ItemsTableValue>
 		);
 	},
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const value = this.props.data.fields[this.props.col.path];
 		const many = this.props.col.field.many;
