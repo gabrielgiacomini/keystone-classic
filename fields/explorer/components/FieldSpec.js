@@ -17,6 +17,14 @@ import Row from './Row';
  * @extends React.Component
  */
 const ExplorerFieldType = React.createClass({
+	propTypes: {
+		FieldComponent: React.PropTypes.func.isRequired,
+		FilterComponent: React.PropTypes.func.isRequired,
+		i: React.PropTypes.number,
+		readmeIsVisible: React.PropTypes.bool,
+		spec: React.PropTypes.object.isRequired,
+		value: React.PropTypes.any,
+	},
 	/**
 	 * Gets the initial state of the component.
 	 * @returns {Object} The initial state.

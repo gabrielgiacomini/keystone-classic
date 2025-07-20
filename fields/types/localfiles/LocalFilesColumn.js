@@ -1,3 +1,9 @@
+/**
+ * @fileoverview
+ * This field type is deprecated and will be removed in a future version.
+ *
+ * @see https://github.com/keystonejs/keystone/wiki/File-Fields-Upgrade-Guide
+ */
 var React = require('react');
 
 var LocalFilesColumn = React.createClass({

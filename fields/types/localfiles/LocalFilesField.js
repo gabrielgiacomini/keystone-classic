@@ -1,3 +1,9 @@
+/**
+ * @fileoverview
+ * This field type is deprecated and will be removed in a future version.
+ *
+ * @see https://github.com/keystonejs/keystone/wiki/File-Fields-Upgrade-Guide
+ */
 /*
 TODO: this file has been left as a reference for the new File type field.
 Some features here, including size formatting and icons, may be ported across.
