@@ -7,6 +7,11 @@
  *
  * It is invoked by `lib/core/start.js`.
  *
+ * @module server/startSecureServer
+ * @param {module:keystone} keystone The Keystone instance.
+ * @param {Object} app The Express app.
+ * @param {Function} created A callback to execute after the server is created.
+ * @param {Function} callback The callback to execute when the server is ready.
  * @api private
  * @see {@link module:lib/core/start}
  * @example
