@@ -1,3 +1,8 @@
+/**
+ * @fileoverview
+ * This file defines the `evalDependsOn` function, which is used to evaluate
+ * the visibility of a field based on its dependencies and their values.
+ */
 var ExMatch = require('expression-match'); // Matches objects with expressions
 
 /**

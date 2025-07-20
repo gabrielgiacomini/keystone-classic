@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Textarea` field type, which is used to store and
+ * manage multi-line text data in KeystoneJS.
+ *
+ * It inherits from the `Text` field type and adds a `height` property to
+ * control the height of the textarea in the Admin UI.
+ */
 var FieldType = require('../Type');
 var TextType = require('../text/TextType');
 var util = require('util');

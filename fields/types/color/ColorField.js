@@ -1,3 +1,10 @@
+/**
+ * @fileoverview
+ * This file defines the `ColorField` component, which is used to render a
+ * color field in the KeystoneJS Admin UI.
+ *
+ * It provides a color picker and a swatch to display the selected color.
+ */
 import { SketchPicker } from 'react-color';
 import { css } from 'glamor';
 import Field from '../Field';
@@ -12,6 +19,10 @@ import transparentSwatch from './transparent-swatch';
 import coloredSwatch from './colored-swatch';
 import theme from '../../../admin/client/theme';
 
+/**
+ * The `ColorField` component.
+ * @extends Field
+ */
 const ColorField = Field.create({
 	displayName: 'ColorField',
 	statics: {
@@ -23,17 +34,29 @@ const ColorField = Field.create({
 		value: React.PropTypes.string,
 	},
 
+	/**
+	 * Gets the initial state of the component.
+	 * @returns {Object} The initial state.
+	 */
 	getInitialState () {
 		return {
 			displayColorPicker: false,
 		};
 	},
+	/**
+	 * Updates the value of the field.
+	 * @param {string} value The new value.
+	 */
 	updateValue (value) {
 		this.props.onChange({
 			path: this.props.path,
 			value: value,
 		});
 	},
+	/**
+	 * Handles a change in the value of the input.
+	 * @param {Object} event The event object.
+	 */
 	handleInputChange (event) {
 		var newValue = event.target.value;
 		if (/^([0-9A-F]{3}){1,2}$/.test(newValue)) {
@@ -43,12 +66,22 @@ const ColorField = Field.create({
 
 		this.updateValue(newValue);
 	},
+	/**
+	 * Handles a click on the swatch.
+	 */
 	handleClick () {
 		this.setState({ displayColorPicker: !this.state.displayColorPicker });
 	},
+	/**
+	 * Handles the closing of the color picker.
+	 */
 	handleClose () {
 		this.setState({ displayColorPicker: false });
 	},
+	/**
+	 * Handles a change in the value of the color picker.
+	 * @param {Object} color The new color.
+	 */
 	handlePickerChange (color) {
 		var newValue = color.hex;
 
@@ -56,6 +89,10 @@ const ColorField = Field.create({
 
 		this.updateValue(newValue);
 	},
+	/**
+	 * Renders the swatch.
+	 * @returns {React.Element} The rendered swatch.
+	 */
 	renderSwatch () {
 		const className = `${css(classes.swatch)} e2e-type-color__swatch`;
 
@@ -72,6 +109,10 @@ const ColorField = Field.create({
 			/>
 		);
 	},
+	/**
+	 * Renders the field.
+	 * @returns {React.Element} The rendered field.
+	 */
 	renderField () {
 
 		const { displayColorPicker } = this.state;

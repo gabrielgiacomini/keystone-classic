@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `SelectFilter` component, which is used to filter
+ * `Select` fields in the KeystoneJS Admin UI.
+ *
+ * It provides a popout list of options to filter by, and it supports
+ * inverting the filter.
+ */
 import React, { Component, PropTypes } from 'react';
 import vkey from 'vkey';
 import {
@@ -15,6 +23,10 @@ const INVERTED_OPTIONS = [
 	{ label: 'Does NOT Match', value: true },
 ];
 
+/**
+ * Returns the default value for the filter.
+ * @returns {Object} The default value.
+ */
 function getDefaultValue () {
 	return {
 		inverted: INVERTED_OPTIONS[0].value,
@@ -22,6 +34,10 @@ function getDefaultValue () {
 	};
 }
 
+/**
+ * A component that renders a single option in the filter.
+ * @extends React.Component
+ */
 class FilterOption extends Component {
 	constructor () {
 		super();
@@ -30,10 +46,17 @@ class FilterOption extends Component {
 			'handleClick',
 		]);
 	}
+	/**
+	 * Handles a click on the option.
+	 */
 	handleClick () {
 		const { option, selected } = this.props;
 		this.props.onClick(option, selected);
 	}
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { option, selected } = this.props;
 		return (
@@ -47,6 +70,10 @@ class FilterOption extends Component {
 	}
 }
 
+/**
+ * The `SelectFilter` component.
+ * @extends React.Component
+ */
 class SelectFilter extends Component {
 	constructor () {
 		super();
@@ -79,6 +106,9 @@ class SelectFilter extends Component {
 	// METHODS
 	// ==============================
 
+	/**
+	 * Detects the user's operating system.
+	 */
 	// TODO this should probably be moved to the main App component and stored
 	// in context for other components to subscribe to when required
 	detectOS () {
@@ -91,20 +121,35 @@ class SelectFilter extends Component {
 
 		this.setState({ osName });
 	}
+	/**
+	 * Handles a keydown event.
+	 * @param {Object} e The event object.
+	 */
 	handleKeyDown (e) {
 		if (vkey[e.keyCode] !== '<meta>') return;
 
 		this.setState({ metaDown: true });
 	}
+	/**
+	 * Handles a keyup event.
+	 * @param {Object} e The event object.
+	 */
 	handleKeyUp (e) {
 		if (vkey[e.keyCode] !== '<meta>') return;
 
 		this.setState({ metaDown: false });
 	}
 
+	/**
+	 * Toggles the inverted state of the filter.
+	 * @param {boolean} inverted The new inverted state.
+	 */
 	toggleInverted (inverted) {
 		this.updateFilter({ inverted });
 	}
+	/**
+	 * Toggles all options on or off.
+	 */
 	toggleAllOptions () {
 		const { field, filter } = this.props;
 
@@ -114,6 +159,10 @@ class SelectFilter extends Component {
 			this.updateFilter({ value: [] });
 		}
 	}
+	/**
+	 * Selects an option.
+	 * @param {Object} option The option to select.
+	 */
 	selectOption (option) {
 		const value = this.state.metaDown
 			? this.props.filter.value.concat(option.value)
@@ -121,6 +170,10 @@ class SelectFilter extends Component {
 
 		this.updateFilter({ value });
 	}
+	/**
+	 * Removes an option from the filter.
+	 * @param {Object} option The option to remove.
+	 */
 	removeOption (option) {
 		const value = this.state.metaDown
 			? this.props.filter.value.filter(i => i !== option.value)
@@ -128,9 +181,18 @@ class SelectFilter extends Component {
 
 		this.updateFilter({ value });
 	}
+	/**
+	 * Handles a click on an option.
+	 * @param {Object} option The option that was clicked.
+	 * @param {boolean} selected Whether the option is currently selected.
+	 */
 	handleClick (option, selected) {
 		selected ? this.removeOption(option) : this.selectOption(option);
 	}
+	/**
+	 * Updates the filter with a new value.
+	 * @param {Object} value The new value.
+	 */
 	updateFilter (value) {
 		this.props.onChange({ ...this.props.filter, ...value });
 	}
@@ -139,6 +201,10 @@ class SelectFilter extends Component {
 	// RENDERERS
 	// ==============================
 
+	/**
+	 * Renders the options for the filter.
+	 * @returns {React.Element} The rendered options.
+	 */
 	renderOptions () {
 		return this.props.field.ops.map((option, i) => {
 			const selected = this.props.filter.value.indexOf(option.value) > -1;
@@ -152,6 +218,10 @@ class SelectFilter extends Component {
 			);
 		});
 	}
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { field, filter } = this.props;
 		const indeterminate = filter.value.length < field.ops.length;

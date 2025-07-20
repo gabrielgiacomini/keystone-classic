@@ -1,3 +1,13 @@
+/**
+ * @fileoverview
+ * This file is the main entry point for the KeystoneJS Field Types Explorer.
+ * It sets up the React Router and renders the main `App` component.
+ *
+ * The explorer is a tool that allows developers to see all of the available
+ * field types in KeystoneJS, and to interact with them in a live environment.
+ *
+ * @see {@link http://localhost:8000}
+ */
 import React, { Children, cloneElement, Component } from 'react';
 import { Link, Router, Route, browserHistory, IndexRoute } from 'react-router';
 import ReactDOM from 'react-dom';
@@ -31,6 +41,11 @@ const Types = {
 	Url: require('../types/url/test/explorer'),
 };
 
+/**
+ * Generates the navigation sections for the sidebar.
+ * @param {Array} arr The array of field types.
+ * @returns {Object} The navigation sections.
+ */
 function generateNavSections (arr) {
 	const navSections = {};
 	arr.forEach((t) => {
@@ -43,15 +58,26 @@ function generateNavSections (arr) {
 
 const navSections = generateNavSections(Object.keys(Types).map(i => Types[i]));
 
+/**
+ * The main component for the Field Types Explorer.
+ * @extends React.Component
+ */
 class App extends Component {
 	constructor () {
 		super();
 		this.toggleSidebar = this.toggleSidebar.bind(this);
 		this.state = { sidebarIsOpen: true };
 	}
+	/**
+	 * Toggles the sidebar's visibility.
+	 */
 	toggleSidebar () {
 		this.setState({ sidebarIsOpen: !this.state.sidebarIsOpen });
 	}
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { children, params } = this.props;
 		const { sidebarIsOpen } = this.state;
@@ -117,6 +143,10 @@ class App extends Component {
 	}
 };
 
+/**
+ * The home page component.
+ * @returns {React.Element} The rendered component.
+ */
 const Home = (props) => {
 	return (
 		<div className="fx-welcome">

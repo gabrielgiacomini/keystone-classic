@@ -1,3 +1,10 @@
+/**
+ * @fileoverview
+ * This file defines the `CloudinaryImage` field type, which is used to store
+ * and manage images in Cloudinary.
+ *
+ * It provides methods for uploading, deleting, and transforming images.
+ */
 var _ = require('lodash');
 var assign = require('object-assign');
 var ensureCallback = require('keystone-storage-namefunctions/ensureCallback');
@@ -21,6 +28,10 @@ var DEFAULT_OPTIONS = {
 	retryAttempts: 3, // For whenExists: 'retry'.
 };
 
+/**
+ * Returns an empty value for the field.
+ * @returns {Object} The empty value.
+ */
 function getEmptyValue () {
 	return {
 		public_id: '',

@@ -1,5 +1,17 @@
+/**
+ * @fileoverview
+ * This file defines the `Col` component, a layout component used in the
+ * KeystoneJS Field Types Explorer. It's a simple column component that can be
+ * used within a `Row` to create a grid layout.
+ */
 import React, { PropTypes } from 'react';
 
+/**
+ * A column component for the explorer.
+ * @param {Object} props The component's props.
+ * @param {Object} context The component's context.
+ * @returns {React.Element} The rendered component.
+ */
 const ExplorerCol = (props, context) => {
 	const { className, gutter, style = {}, width, ...incidentalProps } = props;
 	const { isCollapsed } = context;

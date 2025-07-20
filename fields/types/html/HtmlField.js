@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `HtmlField` component, which is used to render an HTML
+ * field in the KeystoneJS Admin UI.
+ *
+ * It provides a WYSIWYG editor for HTML, and it can be configured to show a
+ * preview of the rendered HTML.
+ */
 import Field from '../Field';
 import React from 'react';
 import tinymce from 'tinymce';
@@ -11,6 +19,10 @@ import evalDependsOn from '../../utils/evalDependsOn';
 
 var lastId = 0;
 
+/**
+ * Returns a unique ID for a component.
+ * @returns {string} The unique ID.
+ */
 function getId () {
 	return 'keystone-html-' + lastId++;
 }
@@ -24,6 +36,10 @@ function removeTinyMCEInstance (editor) {
 	}
 }
 
+/**
+ * The `HtmlField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 
 	displayName: 'HtmlField',
@@ -31,6 +47,10 @@ module.exports = Field.create({
 		type: 'Html',
 	},
 
+	/**
+	 * Gets the initial state of the component.
+	 * @returns {Object} The initial state.
+	 */
 	getInitialState () {
 		return {
 			id: getId(),
@@ -39,6 +59,9 @@ module.exports = Field.create({
 		};
 	},
 
+	/**
+	 * Initializes the WYSIWYG editor.
+	 */
 	initWysiwyg () {
 		if (!this.props.wysiwyg) return;
 
@@ -59,11 +82,20 @@ module.exports = Field.create({
 		}
 	},
 
+	/**
+	 * Removes the WYSIWYG editor.
+	 * @param {Object} state The component's state.
+	 */
 	removeWysiwyg (state) {
 		removeTinyMCEInstance(tinymce.get(state.id));
 		this.setState({ wysiwygActive: false });
 	},
 
+	/**
+	 * Handles the component updating.
+	 * @param {Object} prevProps The previous props.
+	 * @param {Object} prevState The previous state.
+	 */
 	componentDidUpdate (prevProps, prevState) {
 		if (prevState.isCollapsed && !this.state.isCollapsed) {
 			this.initWysiwyg();
@@ -80,22 +112,37 @@ module.exports = Field.create({
 		}
 	},
 
+	/**
+	 * Initializes the WYSIWYG editor when the component mounts.
+	 */
 	componentDidMount () {
 		this.initWysiwyg();
 	},
 
+	/**
+	 * Handles the component receiving new props.
+	 * @param {Object} nextProps The new props.
+	 */
 	componentWillReceiveProps (nextProps) {
 		if (this.editor && this._currentValue !== nextProps.value) {
 			this.editor.setContent(nextProps.value);
 		}
 	},
 
+	/**
+	 * Handles a change in the focus of the field.
+	 * @param {boolean} focused Whether the field is focused.
+	 */
 	focusChanged (focused) {
 		this.setState({
 			isFocused: focused,
 		});
 	},
 
+	/**
+	 * Handles a change in the value of the field.
+	 * @param {Object} event The event object.
+	 */
 	valueChanged  (event) {
 		var content;
 		if (this.editor) {
@@ -111,6 +158,10 @@ module.exports = Field.create({
 		});
 	},
 
+	/**
+	 * Gets the options for the WYSIWYG editor.
+	 * @returns {Object} The options.
+	 */
 	getOptions () {
 		var plugins = ['code', 'link'];
 		var options = Object.assign(
@@ -186,6 +237,10 @@ module.exports = Field.create({
 		return opts;
 	},
 
+	/**
+	 * Renders the field.
+	 * @returns {React.Element} The rendered field.
+	 */
 	renderField () {
 		var className = this.state.isFocused ? 'is-focused' : '';
 		var style = {
@@ -206,6 +261,10 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Renders the value of the field.
+	 * @returns {React.Element} The rendered value.
+	 */
 	renderValue () {
 		return (
 			<FormInput multiline noedit>

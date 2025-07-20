@@ -1,9 +1,11 @@
-/*
-TODO: CloudinaryImageType actally supports 'remove' and 'reset' actions, but
-this field will only submit `""` when 'remove' is clicked. @jossmac we need to
-work out whether we're going to support deleting through the UI.
-*/
-
+/**
+ * @fileoverview
+ * This file defines the `CloudinaryImageField` component, which is used to
+ * render a cloudinary image field in the KeystoneJS Admin UI.
+ *
+ * It provides a button to upload an image, and it displays a thumbnail of the
+ * uploaded image. It also provides a button to remove the image.
+ */
 import React, { PropTypes } from 'react';
 import Field from '../Field';
 import cloudinaryResize from '../../../admin/client/utils/cloudinaryResize';
@@ -19,12 +21,21 @@ const SUPPORTED_REGEX = new RegExp(/^image\/|application\/pdf|application\/posts
 
 let uploadInc = 1000;
 
+/**
+ * Returns the initial state of the component.
+ * @param {Object} props The component's props.
+ * @returns {Object} The initial state.
+ */
 const buildInitialState = (props) => ({
 	removeExisting: false,
 	uploadFieldPath: `CloudinaryImage-${props.path}-${++uploadInc}`,
 	userSelectedFile: null,
 });
 
+/**
+ * The `CloudinaryImageField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 	propTypes: {
 		collapse: PropTypes.bool,
@@ -48,12 +59,20 @@ module.exports = Field.create({
 		type: 'CloudinaryImage',
 		getDefaultValue: () => ({}),
 	},
+	/**
+	 * Gets the initial state of the component.
+	 * @returns {Object} The initial state.
+	 */
 	getInitialState () {
 		return buildInitialState(this.props);
 	},
 	componentWillReceiveProps (nextProps) {
 		// console.log('CloudinaryImageField nextProps:', nextProps);
 	},
+	/**
+	 * Handles the component receiving new props.
+	 * @param {Object} nextProps The new props.
+	 */
 	componentWillUpdate (nextProps) {
 		// Reset the action state when the value changes
 		// TODO: We should add a check for a new item ID in the store
@@ -69,15 +88,31 @@ module.exports = Field.create({
 	// HELPERS
 	// ==============================
 
+	/**
+	 * Returns whether the field has a local file.
+	 * @returns {boolean} Whether the field has a local file.
+	 */
 	hasLocal () {
 		return !!this.state.userSelectedFile;
 	},
+	/**
+	 * Returns whether the field has an existing file.
+	 * @returns {boolean} Whether the field has an existing file.
+	 */
 	hasExisting () {
 		return !!(this.props.value && this.props.value.url);
 	},
+	/**
+	 * Returns whether the field has an image.
+	 * @returns {boolean} Whether the field has an image.
+	 */
 	hasImage () {
 		return this.hasExisting() || this.hasLocal();
 	},
+	/**
+	 * Returns the name of the file.
+	 * @returns {string} The name of the file.
+	 */
 	getFilename () {
 		const { format, height, public_id, width } = this.props.value;
 
@@ -85,6 +120,11 @@ module.exports = Field.create({
 			? this.state.userSelectedFile.name
 			: `${public_id}.${format} (${width}×${height})`;
 	},
+	/**
+	 * Returns the URL of the image.
+	 * @param {number} height The height of the image.
+	 * @returns {string} The URL of the image.
+	 */
 	getImageSource (height = 90) {
 		// TODO: This lets really wide images break the layout
 		let src;
@@ -106,9 +146,16 @@ module.exports = Field.create({
 	// METHODS
 	// ==============================
 
+	/**
+	 * Triggers the file browser.
+	 */
 	triggerFileBrowser () {
 		this.refs.fileInput.clickDomNode();
 	},
+	/**
+	 * Handles a change in the file input.
+	 * @param {Object} event The event object.
+	 */
 	handleFileChange (event) {
 		const userSelectedFile = event.target.files[0];
 
@@ -116,12 +163,19 @@ module.exports = Field.create({
 	},
 
 	// Toggle the lightbox
+	/**
+	 * Opens the lightbox.
+	 * @param {Object} event The event object.
+	 */
 	openLightbox (event) {
 		event.preventDefault();
 		this.setState({
 			lightboxIsVisible: true,
 		});
 	},
+	/**
+	 * Closes the lightbox.
+	 */
 	closeLightbox () {
 		this.setState({
 			lightboxIsVisible: false,
@@ -129,6 +183,10 @@ module.exports = Field.create({
 	},
 
 	// Handle image selection in file browser
+	/**
+	 * Handles a change in the image input.
+	 * @param {Object} e The event object.
+	 */
 	handleImageChange (e) {
 		if (!window.FileReader) {
 			return alert('File reader not supported by browser.');
@@ -160,6 +218,10 @@ module.exports = Field.create({
 	},
 
 	// If we have a local file added then remove it and reset the file field.
+	/**
+	 * Handles the removal of an image.
+	 * @param {Object} e The event object.
+	 */
 	handleRemove (e) {
 		var state = {};
 
@@ -171,6 +233,9 @@ module.exports = Field.create({
 
 		this.setState(state);
 	},
+	/**
+	 * Undoes the removal of an image.
+	 */
 	undoRemove () {
 		this.setState(buildInitialState(this.props));
 	},
@@ -179,6 +244,10 @@ module.exports = Field.create({
 	// RENDERERS
 	// ==============================
 
+	/**
+	 * Renders the lightbox.
+	 * @returns {React.Element} The rendered lightbox.
+	 */
 	renderLightbox () {
 		const { value } = this.props;
 
@@ -194,6 +263,10 @@ module.exports = Field.create({
 			/>
 		);
 	},
+	/**
+	 * Renders the image preview.
+	 * @returns {React.Element} The rendered image preview.
+	 */
 	renderImagePreview () {
 		const { value } = this.props;
 
@@ -218,6 +291,11 @@ module.exports = Field.create({
 			</ImageThumbnail>
 		);
 	},
+	/**
+	 * Renders the file name and optional message.
+	 * @param {boolean} showChangeMessage Whether to show the change message.
+	 * @returns {React.Element} The rendered file name and message.
+	 */
 	renderFileNameAndOptionalMessage (showChangeMessage = false) {
 		return (
 			<div>
@@ -230,6 +308,10 @@ module.exports = Field.create({
 			</div>
 		);
 	},
+	/**
+	 * Renders the change message.
+	 * @returns {React.Element} The rendered change message.
+	 */
 	renderChangeMessage () {
 		if (this.state.userSelectedFile) {
 			return (
@@ -249,6 +331,10 @@ module.exports = Field.create({
 	},
 
 	// Output [cancel/remove/undo] button
+	/**
+	 * Renders the clear button.
+	 * @returns {React.Element} The rendered clear button.
+	 */
 	renderClearButton () {
 		const clearText = this.hasLocal() ? 'Cancel' : 'Remove Image';
 
@@ -263,6 +349,10 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Renders the image toolbar.
+	 * @returns {React.Element} The rendered image toolbar.
+	 */
 	renderImageToolbar () {
 		return (
 			<div key={this.props.path + '_toolbar'} className="image-toolbar">
@@ -274,6 +364,10 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Renders the file input.
+	 * @returns {React.Element} The rendered file input.
+	 */
 	renderFileInput () {
 		if (!this.shouldRenderField()) return null;
 
@@ -289,6 +383,10 @@ module.exports = Field.create({
 
 	// This renders a hidden input that holds the payload data for how the field
 	// should be updated. It should be upload:{filename}, undefined, or 'remove'
+	/**
+	 * Renders the action input.
+	 * @returns {React.Element} The rendered action input.
+	 */
 	renderActionInput () {
 		if (!this.shouldRenderField()) return null;
 
@@ -311,6 +409,10 @@ module.exports = Field.create({
 		}
 	},
 
+	/**
+	 * Renders the UI for the field.
+	 * @returns {React.Element} The rendered UI.
+	 */
 	renderUI () {
 		const { label, note, path } = this.props;
 

@@ -1,3 +1,10 @@
+/**
+ * @fileoverview
+ * This file defines the `Number` field type, which is used to store and manage
+ * numerical data in KeystoneJS.
+ *
+ * It provides methods for formatting, filtering, and validating numbers.
+ */
 var FieldType = require('../Type');
 var numeral = require('numeral');
 var util = require('util');
@@ -22,6 +29,11 @@ function number (list, path, options) {
 number.properName = 'Number';
 util.inherits(number, FieldType);
 
+/**
+ * Validates the input.
+ * @param {Object} data The data to validate.
+ * @param {function} callback The callback to call when validation is complete.
+ */
 number.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
 	var result = value === undefined || typeof value === 'number' || value === null;
@@ -36,6 +48,12 @@ number.prototype.validateInput = function (data, callback) {
 	utils.defer(callback, result);
 };
 
+/**
+ * Validates that a value has been provided for a required field.
+ * @param {Object} item The item to validate.
+ * @param {Object} data The data to validate.
+ * @param {function} callback The callback to call when validation is complete.
+ */
 number.prototype.validateRequiredInput = function (item, data, callback) {
 	var value = this.getValueFromData(data);
 	var result = !!(value || typeof value === 'number');
@@ -85,6 +103,9 @@ number.prototype.addFilterToQuery = function (filter) {
 
 /**
  * Formats the field value
+ * @param {Object} item The item to format.
+ * @param {string} format The format string to use.
+ * @returns {string} The formatted value.
  */
 number.prototype.format = function (item, format) {
 	var value = item.get(this.path);

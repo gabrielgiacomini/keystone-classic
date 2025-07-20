@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Password` field type, which is used to store and
+ * manage passwords in KeystoneJS.
+ *
+ * It provides methods for hashing and comparing passwords, and for validating
+ * their complexity.
+ */
 var _ = require('lodash');
 var bcrypt = require('bcrypt-nodejs');
 var FieldType = require('../Type');
@@ -152,8 +160,11 @@ password.prototype.format = function (item) {
 };
 
 /**
- * Compares
+ * Compares a candidate password with the hashed password.
  *
+ * @param {Object} item The item to compare against.
+ * @param {string} candidate The candidate password.
+ * @param {function} callback The callback to call with the result.
  * @api public
  */
 password.prototype.compare = function (item, candidate, callback) {
@@ -176,6 +187,16 @@ password.prototype.validateInput = function (data, callback) {
 	utils.defer(callback, validation.result, validation.detail);
 };
 
+/**
+ * Validates a password against the configured complexity rules.
+ * @param {string} pass The password to validate.
+ * @param {string} confirm The confirmation password.
+ * @param {number} min The minimum password length.
+ * @param {number} max The maximum password length.
+ * @param {Object} complexity The complexity rules.
+ * @param {boolean} rejectCommon Whether to reject common passwords.
+ * @returns {{result: boolean, detail: string}} The validation result.
+ */
 var validate = password.validate = function (pass, confirm, min, max, complexity, rejectCommon) {
 	var messages = [];
 

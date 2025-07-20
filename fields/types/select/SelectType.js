@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Select` field type, which is used to store and
+ * manage a single value from a set of options.
+ *
+ * It provides methods for formatting the value, and for filtering and
+ * validating the input.
+ */
 var _ = require('lodash');
 var FieldType = require('../Type');
 var util = require('util');
@@ -84,6 +92,10 @@ select.prototype.addToSchema = function (schema) {
 
 /**
  * Returns a key value from the selected option
+ * @param {Object} item The item to pluck the value from.
+ * @param {string} property The property to pluck.
+ * @param {*} _default The default value to return if the property doesn't exist.
+ * @returns {*} The plucked value.
  */
 select.prototype.pluck = function (item, property, _default) {
 	var option = item.get(this.paths.data);

@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Name` field type, which is used to store and manage
+ * names in KeystoneJS.
+ *
+ * It provides a `full` virtual property that concatenates the first and last
+ * names, and it provides methods for filtering and sorting by name.
+ */
 var _ = require('lodash');
 var FieldType = require('../Type');
 var util = require('util');

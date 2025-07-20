@@ -1,10 +1,9 @@
 /**
-Deprecated.
-
-Using this field will now throw an error, and this code will be removed soon.
-
-See https://github.com/keystonejs/keystone/wiki/File-Fields-Upgrade-Guide
-*/
+ * @fileoverview
+ * This field type is deprecated and will be removed in a future version.
+ *
+ * @see https://github.com/keystonejs/keystone/wiki/File-Fields-Upgrade-Guide
+ */
 
 /* eslint-disable */
 

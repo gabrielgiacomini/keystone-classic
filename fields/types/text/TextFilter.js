@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `TextFilter` component, which is used to filter `Text`
+ * fields in the KeystoneJS Admin UI.
+ *
+ * It provides a set of options for filtering by text, and it supports
+ * inverting the filter.
+ */
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 
@@ -20,6 +28,10 @@ const MODE_OPTIONS = [
 	{ label: 'Ends with', value: 'endsWith' },
 ];
 
+/**
+ * Returns the default value for the filter.
+ * @returns {Object} The default value.
+ */
 function getDefaultValue () {
 	return {
 		mode: MODE_OPTIONS[0].value,
@@ -28,6 +40,10 @@ function getDefaultValue () {
 	};
 }
 
+/**
+ * The `TextFilter` component.
+ * @extends React.Component
+ */
 var TextFilter = React.createClass({
 	propTypes: {
 		filter: React.PropTypes.shape({
@@ -44,21 +60,41 @@ var TextFilter = React.createClass({
 			filter: getDefaultValue(),
 		};
 	},
+	/**
+	 * Updates the filter with a new value.
+	 * @param {Object} value The new value.
+	 */
 	updateFilter (value) {
 		this.props.onChange({ ...this.props.filter, ...value });
 	},
+	/**
+	 * Selects a new mode for the filter.
+	 * @param {Object} e The event object.
+	 */
 	selectMode (e) {
 		const mode = e.target.value;
 		this.updateFilter({ mode });
 		findDOMNode(this.refs.focusTarget).focus();
 	},
+	/**
+	 * Toggles the inverted state of the filter.
+	 * @param {boolean} inverted The new inverted state.
+	 */
 	toggleInverted (inverted) {
 		this.updateFilter({ inverted });
 		findDOMNode(this.refs.focusTarget).focus();
 	},
+	/**
+	 * Handles a change in the value of the filter.
+	 * @param {Object} e The event object.
+	 */
 	updateValue (e) {
 		this.updateFilter({ value: e.target.value });
 	},
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { field, filter } = this.props;
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];

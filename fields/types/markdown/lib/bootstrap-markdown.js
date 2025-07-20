@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file is a third-party library, bootstrap-markdown.js.
+ *
+ * It is used to provide a WYSIWYG editor for markdown fields.
+ *
+ * @see https://github.com/toopay/bootstrap-markdown
+ */
 /* ===================================================
 * bootstrap-markdown.js v2.7.0
 * http://github.com/toopay/bootstrap-markdown

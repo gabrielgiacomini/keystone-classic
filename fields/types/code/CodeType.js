@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Code` field type, which is used to store and manage
+ * code snippets in KeystoneJS.
+ *
+ * It inherits from the `Text` field type and adds support for CodeMirror
+ * options.
+ */
 var assign = require('object-assign');
 var FieldType = require('../Type');
 var TextType = require('../text/TextType');

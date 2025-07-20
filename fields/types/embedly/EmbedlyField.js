@@ -1,9 +1,21 @@
+/**
+ * @fileoverview
+ * This file defines the `EmbedlyField` component, which is used to render an
+ * embedly field in the KeystoneJS Admin UI.
+ *
+ * It displays the embedded content, along with metadata such as the title,
+ * author, and dimensions.
+ */
 import React from 'react';
 import Field from '../Field';
 import { FormField, FormInput } from '../../../admin/client/App/elemental';
 import ImageThumbnail from '../../components/ImageThumbnail';
 import NestedFormField from '../../components/NestedFormField';
 
+/**
+ * The `EmbedlyField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 
 	displayName: 'EmbedlyField',
@@ -12,11 +24,22 @@ module.exports = Field.create({
 		getDefaultValue: () => ({}),
 	},
 
+	/**
+	 * Renders the field.
+	 * @returns {React.Element} The rendered field.
+	 */
 	// always defers to renderValue; there is no form UI for this field
 	renderField () {
 		return this.renderValue();
 	},
 
+	/**
+	 * Renders the value of the field.
+	 * @param {string} path The path of the value to render.
+	 * @param {string} label The label of the value.
+	 * @param {boolean} multiline Whether the value is multiline.
+	 * @returns {React.Element} The rendered value.
+	 */
 	renderValue (path, label, multiline) {
 		return (
 			<NestedFormField key={path} label={label}>
@@ -24,6 +47,10 @@ module.exports = Field.create({
 			</NestedFormField>
 		);
 	},
+	/**
+	 * Renders the author of the embedded content.
+	 * @returns {React.Element} The rendered author.
+	 */
 	renderAuthor () {
 		if (!this.props.value.authorName) return;
 		return (
@@ -32,6 +59,10 @@ module.exports = Field.create({
 			</NestedFormField>
 		);
 	},
+	/**
+	 * Renders the dimensions of the embedded content.
+	 * @returns {React.Element} The rendered dimensions.
+	 */
 	renderDimensions () {
 		if (!this.props.value.width || !this.props.value.height) return;
 		return (
@@ -40,6 +71,10 @@ module.exports = Field.create({
 			</NestedFormField>
 		);
 	},
+	/**
+	 * Renders a preview of the embedded content.
+	 * @returns {React.Element} The rendered preview.
+	 */
 	renderPreview () {
 		if (!this.props.value.thumbnailUrl) return;
 
@@ -60,6 +95,10 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Renders the UI for the field.
+	 * @returns {React.Element} The rendered UI.
+	 */
 	renderUI () {
 		if (!this.props.value.exists) {
 			return (
