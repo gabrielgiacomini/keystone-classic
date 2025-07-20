@@ -1,12 +1,25 @@
+/**
+ * @fileoverview This file defines the TextArray field type in KeystoneJS.
+ *
+ * It is used for storing an array of strings.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var FieldType = require('../Type');
 var util = require('util');
 var utils = require('keystone-utils');
 var addPresenceToQuery = require('../../utils/addPresenceToQuery');
 
 /**
- * TextArray FieldType Constructor
+ * TextArray FieldType Constructor.
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
+ * @param {String} [options.separator=' | '] The separator to use when formatting the array.
  */
 function textarray (list, path, options) {
 	this._nativeType = [String];
@@ -18,22 +31,24 @@ textarray.properName = 'TextArray';
 util.inherits(textarray, FieldType);
 
 /**
- * Formats the field value
+ * Formats the field value.
+ *
+ * @param {Object} item The item to format.
+ * @param {String} [separator] The separator to use.
+ * @return {String} The formatted value.
  */
 textarray.prototype.format = function (item, separator) {
 	return item.get(this.path).join(separator || this.separator);
 };
 
 /**
- * Add filters to a query
+ * Adds filters to a query.
  *
- * @param {Object} filter 			   		The data from the frontend
- * @param {String} filter.mode  	   		The filter mode, either one of
- *                                     		"beginsWith", "endsWith", "exactly"
- *                                     		or "contains"
- * @param {String} [filter.presence='some'] The presence mode, either on of
- *                                          "none" and "some". Default: 'some'
- * @param {String|Object} filter.value 		The value that is filtered for
+ * @param {Object} filter The data from the frontend.
+ * @param {String} filter.mode The filter mode, either "beginsWith", "endsWith", "exactly", or "contains".
+ * @param {String} [filter.presence='some'] The presence mode, either "none" or "some". Default: 'some'.
+ * @param {String|Object} filter.value The value that is filtered for.
+ * @return {Object} The query object.
  */
 textarray.prototype.addFilterToQuery = function (filter) {
 	var query = {};
@@ -74,7 +89,10 @@ textarray.prototype.addFilterToQuery = function (filter) {
 };
 
 /**
- * Asynchronously confirms that the provided value is valid
+ * Asynchronously confirms that the provided value is valid.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 textarray.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
@@ -101,7 +119,11 @@ textarray.prototype.validateInput = function (data, callback) {
 };
 
 /**
- * Asynchronously confirms that the a value is present
+ * Asynchronously confirms that a value is present.
+ *
+ * @param {Object} item The item being validated.
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 textarray.prototype.validateRequiredInput = function (item, data, callback) {
 	var value = this.getValueFromData(data);
@@ -136,9 +158,13 @@ textarray.prototype.validateRequiredInput = function (item, data, callback) {
 };
 
 /**
- * Validates that a value for this field has been provided in a data object
+ * Validates that a value for this field has been provided in a data object.
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @param {Boolean} required Whether the field is required.
+ * @param {Object} item The item being validated.
+ * @return {Boolean}
  */
 textarray.prototype.inputIsValid = function (data, required, item) {
 	var value = this.getValueFromData(data);
@@ -159,6 +185,10 @@ textarray.prototype.inputIsValid = function (data, required, item) {
 /**
  * Updates the value for this field in the item from a data object.
  * If the data object does not contain the value, then the value is set to empty array.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Function} callback The callback function.
  */
 textarray.prototype.updateItem = function (item, data, callback) {
 	var value = this.getValueFromData(data);

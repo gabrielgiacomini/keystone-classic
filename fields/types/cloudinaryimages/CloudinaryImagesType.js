@@ -1,3 +1,11 @@
+/**
+ * @fileoverview This file defines the CloudinaryImages field type in KeystoneJS.
+ *
+ * It is used for uploading and storing multiple images in Cloudinary.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var _ = require('lodash');
 var assign = require('object-assign');
 var async = require('async');
@@ -5,6 +13,11 @@ var FieldType = require('../Type');
 var keystone = require('../../../');
 var util = require('util');
 
+/**
+ * Returns an empty value for the field.
+ *
+ * @return {Object} The empty value.
+ */
 function getEmptyValue () {
 	return {
 		public_id: '',
@@ -19,13 +32,23 @@ function getEmptyValue () {
 	};
 }
 
+/**
+ * Returns true if the value is truthy.
+ *
+ * @param {*} value The value to check.
+ * @return {Boolean}
+ */
 function truthy (value) {
 	return value;
 }
 
-/*
-* Uses a before and after snapshot of the images array to find out what images are no longer included
-*/
+/**
+ * Uses a before and after snapshot of the images array to find out what images
+ * are no longer included and removes them from Cloudinary.
+ *
+ * @param {Array} oldValues The old array of images.
+ * @param {Array} newValues The new array of images.
+ */
 function cleanUp (oldValues, newValues) {
 	var cloudinary = require('cloudinary');
 	var oldvalIds = oldValues.map(function (val) {
@@ -46,7 +69,13 @@ function cleanUp (oldValues, newValues) {
 };
 
 /**
- * CloudinaryImages FieldType Constructor
+ * CloudinaryImages FieldType Constructor.
+ * @extends Field
+ * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
  */
 function cloudinaryimages (list, path, options) {
 	this._underscoreMethods = ['format'];
@@ -66,7 +95,9 @@ cloudinaryimages.properName = 'CloudinaryImages';
 util.inherits(cloudinaryimages, FieldType);
 
 /**
- * Gets the folder for images in this field
+ * Gets the folder for images in this field.
+ *
+ * @return {String} The folder.
  */
 cloudinaryimages.prototype.getFolder = function () {
 	var folder = null;
@@ -84,6 +115,8 @@ cloudinaryimages.prototype.getFolder = function () {
 
 /**
  * Registers the field on the List's Mongoose Schema.
+ *
+ * @param {Object} schema The Mongoose schema to add the field to.
  */
 cloudinaryimages.prototype.addToSchema = function (schema) {
 
@@ -215,7 +248,10 @@ cloudinaryimages.prototype.addToSchema = function (schema) {
 };
 
 /**
- * Formats the field value
+ * Formats the field value.
+ *
+ * @param {Object} item The item to format.
+ * @return {String} The formatted value.
  */
 cloudinaryimages.prototype.format = function (item) {
 	return _.map(item.get(this.path), function (img) {
@@ -224,7 +260,10 @@ cloudinaryimages.prototype.format = function (item) {
 };
 
 /**
- * Gets the field's data from an Item, as used by the React components
+ * Gets the field's data from an Item, as used by the React components.
+ *
+ * @param {Object} item The item to get the data from.
+ * @return {Array} The field's data.
  */
 cloudinaryimages.prototype.getData = function (item) {
 	var value = item.get(this.path);
@@ -232,9 +271,11 @@ cloudinaryimages.prototype.getData = function (item) {
 };
 
 /**
- * Validates that a value for this field has been provided in a data object
+ * Validates that a value for this field has been provided in a data object.
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @return {Boolean}
  */
 cloudinaryimages.prototype.inputIsValid = function (data) { // eslint-disable-line no-unused-vars
 	// TODO - how should image field input be validated?
@@ -258,7 +299,12 @@ cloudinaryimages.prototype.getOptions = function () {
 };
 
 /**
- * Updates the value for this field in the item from a data object
+ * Updates the value for this field in the item from a data object.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Object} files The files object from the request.
+ * @param {Function} callback The callback function.
  */
 cloudinaryimages.prototype.updateItem = function (item, data, files, callback) {
 	if (typeof files === 'function') {

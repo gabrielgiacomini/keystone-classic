@@ -1,3 +1,12 @@
+/**
+ * @fileoverview This file defines the Embedly field type in KeystoneJS.
+ *
+ * It is used for embedding content from other websites using the Embedly API.
+ * It requires a `from` option to specify the path to the URL to embed.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var _ = require("lodash");
 var keystone = require("../../../");
 var util = require("util");
@@ -5,13 +14,19 @@ var EmbedlyAPI = require("embedly");
 var FieldType = require("../Type");
 
 /**
- * Embedly FieldType Constructor
+ * Embedly FieldType Constructor.
  *
- * Reqires the option `from` to refer to another path in the schema
- * that provides the url to expand
+ * Requires the option `from` to refer to another path in the schema
+ * that provides the url to expand.
  *
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
+ * @param {String} options.from The path to the field containing the URL to embed.
+ * @param {Object} [options.options] Options to pass to the Embedly API.
  */
 function embedly(list, path, options) {
 	this._underscoreMethods = ["reset"];
@@ -66,6 +81,7 @@ util.inherits(embedly, FieldType);
  * Registers the field on the List's Mongoose Schema.
  *
  * @api public
+ * @param {Object} schema The Mongoose schema to add the field to.
  */
 embedly.prototype.addToSchema = function(schema) {
 	var field = this;
@@ -169,9 +185,10 @@ embedly.prototype.addToSchema = function(schema) {
 };
 
 /**
- * Resets the value of the field
+ * Resets the value of the field.
  *
  * @api public
+ * @param {Object} item The item to reset.
  */
 embedly.prototype.reset = function(item) {
 	return item.set(
@@ -197,16 +214,21 @@ embedly.prototype.reset = function(item) {
 };
 
 /**
- * Formats the field value
+ * Formats the field value.
  *
  * @api public
+ * @param {Object} item The item to format.
+ * @return {String} The formatted value.
  */
 embedly.prototype.format = function(item) {
 	return item.get(this.paths.html);
 };
 
 /**
- * Gets the field's data from an Item, as used by the React components
+ * Gets the field's data from an Item, as used by the React components.
+ *
+ * @param {Object} item The item to get the data from.
+ * @return {Object} The field's data.
  */
 embedly.prototype.getData = function(item) {
 	var value = item.get(this.path);
@@ -214,9 +236,11 @@ embedly.prototype.getData = function(item) {
 };
 
 /**
- * Detects whether the field has been modified
+ * Detects whether the field has been modified.
  *
  * @api public
+ * @param {Object} item The item to check.
+ * @return {Boolean} `true` if the field has been modified, otherwise `false`.
  */
 embedly.prototype.isModified = function(item) {
 	// Assume that it has changed if the url is different
@@ -224,18 +248,22 @@ embedly.prototype.isModified = function(item) {
 };
 
 /**
- * Field has no input and is always valid
+ * Field has no input and is always valid.
  *
- * Deprecated
+ * @deprecated
+ * @return {Boolean} `true`
  */
 embedly.prototype.inputIsValid = function() {
 	return true;
 };
 
 /**
- * Updates the value for this field in the item from a data object
+ * Updates the value for this field in the item from a data object.
  *
  * @api public
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Function} callback The callback function.
  */
 embedly.prototype.updateItem = function(item, data, callback) {
 	// TODO: This could be more granular and check for actual changes to values,

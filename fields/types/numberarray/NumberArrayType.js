@@ -1,3 +1,11 @@
+/**
+ * @fileoverview This file defines the NumberArray field type in KeystoneJS.
+ *
+ * It is used for storing an array of numbers.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var FieldType = require('../Type');
 var numeral = require('numeral');
 var util = require('util');
@@ -5,9 +13,15 @@ var utils = require('keystone-utils');
 var addPresenceToQuery = require('../../utils/addPresenceToQuery');
 
 /**
- * Number FieldType Constructor
+ * NumberArray FieldType Constructor.
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
+ * @param {String} [options.format] The format string to use for formatting the numbers.
+ * @param {String} [options.separator=' | '] The separator to use when formatting the array.
  */
 function numberarray (list, path, options) {
 	this._nativeType = [Number];
@@ -24,7 +38,12 @@ numberarray.properName = 'NumberArray';
 util.inherits(numberarray, FieldType);
 
 /**
- * Formats the field value
+ * Formats the field value.
+ *
+ * @param {Object} item The item to format.
+ * @param {String} [format] The format string to use.
+ * @param {String} [separator] The separator to use.
+ * @return {String} The formatted value.
  */
 numberarray.prototype.format = function (item, format, separator) {
 	var value = item.get(this.path);
@@ -37,14 +56,20 @@ numberarray.prototype.format = function (item, format, separator) {
 };
 
 /**
- * Checks if a value is a valid number
+ * Checks if a value is a valid number.
+ *
+ * @param {*} value The value to check.
+ * @return {Boolean} `true` if the value is a valid number, otherwise `false`.
  */
 function isValidNumber (value) {
 	return !Number.isNaN(utils.number(value));
 }
 
 /**
- * Asynchronously confirms that the provided value is valid
+ * Asynchronously confirms that the provided value is valid.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 numberarray.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
@@ -72,7 +97,11 @@ numberarray.prototype.validateInput = function (data, callback) {
 };
 
 /**
- * Asynchronously confirms that the a value is present
+ * Asynchronously confirms that a value is present.
+ *
+ * @param {Object} item The item being validated.
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 numberarray.prototype.validateRequiredInput = function (item, data, callback) {
 	var value = this.getValueFromData(data);
@@ -109,14 +138,13 @@ numberarray.prototype.validateRequiredInput = function (item, data, callback) {
 };
 
 /**
- * Add filters to a query
+ * Adds filters to a query.
  *
- * @param {Object} filter 			   		The data from the frontend
- * @param {String} filter.mode			  	The filter mode, either one of
- *                                     		"between", "gt" or "lt"
- * @param {String} [filter.presence='some'] The presence mode, either on of
- *                                          "none" and "some". Default: 'some'
- * @param {String|Object} filter.value 		The value that is filtered for
+ * @param {Object} filter The data from the frontend.
+ * @param {String} filter.mode The filter mode, either "between", "gt", or "lt".
+ * @param {String} [filter.presence='some'] The presence mode, either "none" or "some". Default: 'some'.
+ * @param {String|Object} filter.value The value that is filtered for.
+ * @return {Object} The query object.
  */
 numberarray.prototype.addFilterToQuery = function (filter) {
 	var query = {};
@@ -176,10 +204,14 @@ numberarray.prototype.addFilterToQuery = function (filter) {
 };
 
 /**
- * Checks that a valid array of number has been provided in a data object
- * An empty value clears the stored value and is considered valid
+ * Checks that a valid array of numbers has been provided in a data object.
+ * An empty value clears the stored value and is considered valid.
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @param {Boolean} required Whether the field is required.
+ * @param {Object} item The item being validated.
+ * @return {Boolean}
  */
 numberarray.prototype.inputIsValid = function (data, required, item) {
 	var value = this.getValueFromData(data);
@@ -210,7 +242,11 @@ numberarray.prototype.inputIsValid = function (data, required, item) {
 };
 
 /**
- * Updates the value for this field in the item from a data object
+ * Updates the value for this field in the item from a data object.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Function} callback The callback function.
  */
 numberarray.prototype.updateItem = function (item, data, callback) {
 	var value = this.getValueFromData(data);

@@ -1,3 +1,11 @@
+/**
+ * @fileoverview This file defines the DateArray field type in KeystoneJS.
+ *
+ * It is used for storing an array of dates.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var FieldType = require('../Type');
 var moment = require('moment');
 var util = require('util');
@@ -6,9 +14,16 @@ var addPresenceToQuery = require('../../utils/addPresenceToQuery');
 var DateType = require('../date/DateType');
 
 /**
- * Date FieldType Constructor
+ * DateArray FieldType Constructor.
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
+ * @param {String} [options.parseFormat='YYYY-MM-DD'] The format for parsing input.
+ * @param {String} [options.format='Do MMM YYYY'] The format for displaying the dates.
+ * @param {String} [options.separator=' | '] The separator to use when formatting the array.
  */
 function datearray (list, path, options) {
 	this._nativeType = [Date];
@@ -27,7 +42,12 @@ datearray.properName = 'DateArray';
 util.inherits(datearray, FieldType);
 
 /**
- * Formats the field value
+ * Formats the field value.
+ *
+ * @param {Object} item The item to format.
+ * @param {String} [format] The format string to use.
+ * @param {String} [separator] The separator to use.
+ * @return {String} The formatted value.
  */
 datearray.prototype.format = function (item, format, separator) {
 	var value = item.get(this.path);
@@ -40,7 +60,10 @@ datearray.prototype.format = function (item, format, separator) {
 };
 
 /**
- * Asynchronously confirms that the provided value is valid
+ * Asynchronously confirms that the provided value is valid.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 datearray.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
@@ -68,7 +91,11 @@ datearray.prototype.validateInput = function (data, callback) {
 };
 
 /**
- * Asynchronously confirms that the a value is present
+ * Asynchronously confirms that a value is present.
+ *
+ * @param {Object} item The item being validated.
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 datearray.prototype.validateRequiredInput = function (item, data, callback) {
 	var value = this.getValueFromData(data);
@@ -108,14 +135,13 @@ datearray.prototype.validateRequiredInput = function (item, data, callback) {
 };
 
 /**
- * Add filters to a query
+ * Adds filters to a query.
  *
- * @param {Object} filter 			   		The data from the frontend
- * @param {String} filter.mode  	   		The filter mode, either one of "on",
- *                                     		"after", "before" or "between"
- * @param {String} [filter.presence='some'] The presence mode, either on of
- *                                          "none" and "some". Default: 'some'
- * @param {String|Object} filter.value 		The value that is filtered for
+ * @param {Object} filter The data from the frontend.
+ * @param {String} filter.mode The filter mode, either "on", "after", "before", or "between".
+ * @param {String} [filter.presence='some'] The presence mode, either "none" or "some". Default: 'some'.
+ * @param {String|Object} filter.value The value that is filtered for.
+ * @return {Object} The query object.
  */
 datearray.prototype.addFilterToQuery = function (filter) {
 	var dateTypeAddFilterToQuery = DateType.prototype.addFilterToQuery.bind(this);
@@ -127,10 +153,14 @@ datearray.prototype.addFilterToQuery = function (filter) {
 };
 
 /**
- * Checks that a valid array of dates has been provided in a data object
- * An empty value clears the stored value and is considered valid
+ * Checks that a valid array of dates has been provided in a data object.
+ * An empty value clears the stored value and is considered valid.
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @param {Boolean} required Whether the field is required.
+ * @param {Object} item The item being validated.
+ * @return {Boolean}
  */
 datearray.prototype.inputIsValid = function (data, required, item) {
 
@@ -177,7 +207,11 @@ datearray.prototype.inputIsValid = function (data, required, item) {
 
 
 /**
- * Updates the value for this field in the item from a data object
+ * Updates the value for this field in the item from a data object.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Function} callback The callback function.
  */
 datearray.prototype.updateItem = function (item, data, callback) {
 

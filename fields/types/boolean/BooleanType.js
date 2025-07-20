@@ -1,11 +1,23 @@
+/**
+ * @fileoverview This file defines the Boolean field type in KeystoneJS.
+ *
+ * It is used for storing true/false values.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var FieldType = require('../Type');
 var utils = require('keystone-utils');
 var util = require('util');
 
 /**
- * Boolean FieldType Constructor
+ * Boolean FieldType Constructor.
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
  */
 function boolean (list, path, options) {
 	this._nativeType = Boolean;
@@ -21,6 +33,12 @@ boolean.prototype.defaults = {
 	default: false,
 };
 
+/**
+ * Validates the input for this field.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
+ */
 boolean.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
 	var result = true;
@@ -34,6 +52,13 @@ boolean.prototype.validateInput = function (data, callback) {
 	utils.defer(callback, result);
 };
 
+/**
+ * Validates that a required value for this field is present.
+ *
+ * @param {Object} item The item being validated.
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
+ */
 boolean.prototype.validateRequiredInput = function (item, data, callback) {
 	var value = this.getValueFromData(data);
 	var result = value && value !== 'false'
@@ -43,7 +68,10 @@ boolean.prototype.validateRequiredInput = function (item, data, callback) {
 };
 
 /**
- * Add filters to a query
+ * Adds filters to a query.
+ *
+ * @param {Object} filter The filter to apply.
+ * @return {Object} The query object.
  */
 boolean.prototype.addFilterToQuery = function (filter) {
 	var query = {};
@@ -57,9 +85,12 @@ boolean.prototype.addFilterToQuery = function (filter) {
 
 /**
  * Validates that a truthy value for this field has been provided in a data object.
- * Useful for checkboxes that are required to be true (e.g. agreed to terms and cond's)
+ * Useful for checkboxes that are required to be true (e.g. agreed to terms and cond's).
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @param {Boolean} required Whether the field is required.
+ * @return {Boolean}
  */
 boolean.prototype.inputIsValid = function (data, required) {
 	if (required) {
@@ -73,6 +104,10 @@ boolean.prototype.inputIsValid = function (data, required) {
  * Updates the value for this field in the item from a data object.
  * Only updates the value if it has changed.
  * Treats a falsy value or the string "false" as false, everything else as true.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Function} callback The callback function.
  */
 boolean.prototype.updateItem = function (item, data, callback) {
 	var value = this.getValueFromData(data);

@@ -1,12 +1,29 @@
+/**
+ * @fileoverview This file defines the Select field type in KeystoneJS.
+ *
+ * It is used for creating a dropdown select menu. It supports both string and
+ * numeric values.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var _ = require('lodash');
 var FieldType = require('../Type');
 var util = require('util');
 var utils = require('keystone-utils');
 
 /**
- * Select FieldType Constructor
+ * Select FieldType Constructor.
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
+ * @param {String} [options.ui='select'] The UI to use for the field.
+ * @param {Boolean} [options.numeric=false] Whether the values are numeric.
+ * @param {Array|String} options.options The options for the select field.
+ * @param {Boolean} [options.emptyOption=true] Whether to include an empty option.
  */
 function select (list, path, options) {
 	this.ui = options.ui || 'select';
@@ -83,7 +100,12 @@ select.prototype.addToSchema = function (schema) {
 };
 
 /**
- * Returns a key value from the selected option
+ * Returns a key value from the selected option.
+ *
+ * @param {Object} item The item to pluck the value from.
+ * @param {String} property The property to pluck.
+ * @param {*} _default The default value to return if the property is not found.
+ * @return {*} The plucked value.
  */
 select.prototype.pluck = function (item, property, _default) {
 	var option = item.get(this.paths.data);
@@ -91,21 +113,28 @@ select.prototype.pluck = function (item, property, _default) {
 };
 
 /**
- * Retrieves a shallow clone of the options array
+ * Retrieves a shallow clone of the options array.
+ *
+ * @return {Array} The cloned options array.
  */
 select.prototype.cloneOps = function () {
 	return _.map(this.ops, _.clone);
 };
 
 /**
- * Retrieves a shallow clone of the options map
+ * Retrieves a shallow clone of the options map.
+ *
+ * @return {Object} The cloned options map.
  */
 select.prototype.cloneMap = function () {
 	return utils.optionsMap(this.ops, true);
 };
 
 /**
- * Add filters to a query
+ * Adds filters to a query.
+ *
+ * @param {Object} filter The filter to apply.
+ * @return {Object} The query object.
  */
 select.prototype.addFilterToQuery = function (filter) {
 	var query = {};
@@ -127,7 +156,10 @@ select.prototype.addFilterToQuery = function (filter) {
 };
 
 /**
- * Asynchronously confirms that the provided value is valid
+ * Asynchronously confirms that the provided value is valid.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 select.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
@@ -139,7 +171,11 @@ select.prototype.validateInput = function (data, callback) {
 };
 
 /**
- * Asynchronously confirms that the provided value is present
+ * Asynchronously confirms that the provided value is present.
+ *
+ * @param {Object} item The item being validated.
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 select.prototype.validateRequiredInput = function (item, data, callback) {
 	var value = this.getValueFromData(data);
@@ -161,9 +197,13 @@ select.prototype.validateRequiredInput = function (item, data, callback) {
 };
 
 /**
- * Validates that a valid option has been provided in a data object
+ * Validates that a valid option has been provided in a data object.
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @param {Boolean} required Whether the field is required.
+ * @param {Object} item The item being validated.
+ * @return {Boolean}
  */
 select.prototype.inputIsValid = function (data, required, item) {
 	if (data[this.path]) {
@@ -174,7 +214,10 @@ select.prototype.inputIsValid = function (data, required, item) {
 };
 
 /**
- * Formats the field value
+ * Formats the field value.
+ *
+ * @param {Object} item The item to format.
+ * @return {String} The formatted value.
  */
 select.prototype.format = function (item) {
 	return this.labels[item.get(this.path)] || '';

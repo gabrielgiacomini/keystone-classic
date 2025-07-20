@@ -1,3 +1,12 @@
+/**
+ * @fileoverview This file defines the Relationship field type in KeystoneJS.
+ *
+ * It is used for creating relationships between different lists. It can be
+ * used for one-to-one, one-to-many, and many-to-many relationships.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var _ = require('lodash');
 var FieldType = require('../Type');
 var keystone = require('../../../');
@@ -6,9 +15,16 @@ var utils = require('keystone-utils');
 var definePrototypeGetters = require('../../utils/definePrototypeGetters');
 
 /**
- * Relationship FieldType Constructor
+ * Relationship FieldType Constructor.
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
+ * @param {Boolean} [options.many=false] Whether it is a one-to-many relationship.
+ * @param {Object} [options.filters] Filters to apply to the related list.
+ * @param {Boolean} [options.createInline=false] Whether to allow creating related items inline.
  */
 function relationship (list, path, options) {
 	this.many = (options.many) ? true : false;
@@ -25,6 +41,8 @@ util.inherits(relationship, FieldType);
 
 /**
  * Get client-side properties to pass to react field.
+ *
+ * @return {Object} The client-side properties.
  */
 relationship.prototype.getProperties = function () {
 	var refList = this.refList;
@@ -39,9 +57,11 @@ relationship.prototype.getProperties = function () {
 };
 
 /**
- * Gets id and name for the related item(s) from populated values
+ * Gets id and name for the related item(s) from populated values.
+ *
+ * @param {Object} item The item to get the related data from.
+ * @return {Object|Array} The related data.
  */
-
 function expandRelatedItemData (item) {
 	if (!item || !item.id) return undefined;
 	return {
@@ -50,10 +70,22 @@ function expandRelatedItemData (item) {
 	};
 }
 
+/**
+ * Returns true if the value is truthy.
+ *
+ * @param {*} value The value to check.
+ * @return {Boolean}
+ */
 function truthy (value) {
 	return value;
 }
 
+/**
+ * Gets the expanded data for the related item(s).
+ *
+ * @param {Object} item The item to get the expanded data from.
+ * @return {Object|Array} The expanded data.
+ */
 relationship.prototype.getExpandedData = function (item) {
 	var value = item.get(this.path);
 	if (this.many) {
@@ -66,6 +98,8 @@ relationship.prototype.getExpandedData = function (item) {
 
 /**
  * Registers the field on the List's Mongoose Schema.
+ *
+ * @param {Object} schema The Mongoose schema to add the field to.
  */
 relationship.prototype.addToSchema = function (schema) {
 	var field = this;
@@ -87,7 +121,10 @@ relationship.prototype.addToSchema = function (schema) {
 };
 
 /**
- * Gets the field's data from an Item, as used by the React components
+ * Gets the field's data from an Item, as used by the React components.
+ *
+ * @param {Object} item The item to get the data from.
+ * @return {Object|Array} The field's data.
  */
 relationship.prototype.getData = function (item) {
 	var value = item.get(this.path);
@@ -99,7 +136,10 @@ relationship.prototype.getData = function (item) {
 };
 
 /**
- * Add filters to a query
+ * Adds filters to a query.
+ *
+ * @param {Object} filter The filter to apply.
+ * @return {Object} The query object.
  */
 relationship.prototype.addFilterToQuery = function (filter) {
 	var query = {};
@@ -123,7 +163,10 @@ relationship.prototype.addFilterToQuery = function (filter) {
 };
 
 /**
- * Formats the field value
+ * Formats the field value.
+ *
+ * @param {Object} item The item to format.
+ * @return {String} The formatted value.
  */
 relationship.prototype.format = function (item) {
 	var value = item.get(this.path);
@@ -132,11 +175,14 @@ relationship.prototype.format = function (item) {
 };
 
 /**
- * Asynchronously confirms that the provided value is valid
+ * Asynchronously confirms that the provided value is valid.
  *
  * TODO: might be a good idea to check the value provided looks like a MongoID
  * TODO: we're just testing for strings here, so actual MongoID Objects (from
  * mongoose) would fail validation. not sure if this is an issue.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 relationship.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
@@ -164,7 +210,11 @@ relationship.prototype.validateInput = function (data, callback) {
 };
 
 /**
- * Asynchronously confirms that the provided value is present
+ * Asynchronously confirms that the provided value is present.
+ *
+ * @param {Object} item The item being validated.
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 relationship.prototype.validateRequiredInput = function (item, data, callback) {
 	var value = this.getValueFromData(data);
@@ -195,9 +245,13 @@ relationship.prototype.validateRequiredInput = function (item, data, callback) {
 };
 
 /**
- * Validates that a value for this field has been provided in a data object
+ * Validates that a value for this field has been provided in a data object.
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @param {Boolean} required Whether the field is required.
+ * @param {Object} item The item being validated.
+ * @return {Boolean}
  */
 relationship.prototype.inputIsValid = function (data, required, item) {
 	if (!required) return true;
@@ -214,7 +268,11 @@ relationship.prototype.inputIsValid = function (data, required, item) {
  * Only updates the value if it has changed.
  * Treats an empty string as a null value.
  * If data object does not contain the path field, then leave the field untouched.
- * falsey values such as `null` or an empty string will reset the field
+ * falsey values such as `null` or an empty string will reset the field.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Function} callback The callback function.
  */
 relationship.prototype.updateItem = function (item, data, callback) {
 	if (item.populated(this.path)) {

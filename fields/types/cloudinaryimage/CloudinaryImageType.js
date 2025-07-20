@@ -1,3 +1,11 @@
+/**
+ * @fileoverview This file defines the CloudinaryImage field type in KeystoneJS.
+ *
+ * It is used for uploading and storing images in Cloudinary.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var _ = require('lodash');
 var assign = require('object-assign');
 var ensureCallback = require('keystone-storage-namefunctions/ensureCallback');
@@ -21,6 +29,11 @@ var DEFAULT_OPTIONS = {
 	retryAttempts: 3, // For whenExists: 'retry'.
 };
 
+/**
+ * Returns an empty value for the field.
+ *
+ * @return {Object} The empty value.
+ */
 function getEmptyValue () {
 	return {
 		public_id: '',
@@ -36,9 +49,13 @@ function getEmptyValue () {
 }
 
 /**
- * CloudinaryImage FieldType Constructor
+ * CloudinaryImage FieldType Constructor.
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
  */
 function cloudinaryimage (list, path, options) {
 	this._underscoreMethods = ['format'];
@@ -67,7 +84,9 @@ cloudinaryimage.properName = 'CloudinaryImage';
 util.inherits(cloudinaryimage, FieldType);
 
 /**
- * Gets the folder for images in this field
+ * Gets the folder for images in this field.
+ *
+ * @return {String} The folder.
  */
 cloudinaryimage.prototype.getFolder = function () {
 	var folder = null;
@@ -86,6 +105,8 @@ cloudinaryimage.prototype.getFolder = function () {
 
 /**
  * Registers the field on the List's Mongoose Schema.
+ *
+ * @param {Object} schema The Mongoose schema to add the field to.
  */
 cloudinaryimage.prototype.addToSchema = function (schema) {
 
@@ -213,7 +234,7 @@ cloudinaryimage.prototype.addToSchema = function (schema) {
 			return src(this, addSize({ crop: 'thumb', gravity: 'faces' }, width, height, options));
 		},
 		/**
-		 * Resets the value of the field
+		 * Resets the value of the field.
 		 *
 		 * @api public
 		 */
@@ -221,7 +242,7 @@ cloudinaryimage.prototype.addToSchema = function (schema) {
 			reset(this);
 		},
 		/**
-		 * Deletes the image from Cloudinary and resets the field
+		 * Deletes the image from Cloudinary and resets the field.
 		 *
 		 * @api public
 		 */
@@ -236,7 +257,7 @@ cloudinaryimage.prototype.addToSchema = function (schema) {
 			return promise;
 		},
 		/**
-		 * Uploads the image to Cloudinary
+		 * Uploads the image to Cloudinary.
 		 *
 		 * @api public
 		 */
@@ -263,14 +284,20 @@ cloudinaryimage.prototype.addToSchema = function (schema) {
 };
 
 /**
- * Formats the field value
+ * Formats the field value.
+ *
+ * @param {Object} item The item to format.
+ * @return {String} The formatted value.
  */
 cloudinaryimage.prototype.format = function (item) {
 	return item.get(this.paths.url);
 };
 
 /**
- * Gets the field's data from an Item, as used by the React components
+ * Gets the field's data from an Item, as used by the React components.
+ *
+ * @param {Object} item The item to get the data from.
+ * @return {Object} The field's data.
  */
 cloudinaryimage.prototype.getData = function (item) {
 	var value = item.get(this.path);
@@ -293,13 +320,22 @@ cloudinaryimage.prototype.getOptions = function () {
 };
 
 /**
- * Detects whether the field has been modified
+ * Detects whether the field has been modified.
+ *
+ * @param {Object} item The item to check.
+ * @return {Boolean} `true` if the field has been modified, otherwise `false`.
  */
 cloudinaryimage.prototype.isModified = function (item) {
 	return item.isModified(this.paths.public_id);
 };
 
 
+/**
+ * Validates input.
+ *
+ * @param {*} value The value to validate.
+ * @return {Boolean} `true` if the value is valid, otherwise `false`.
+ */
 function validateInput (value) {
 	// undefined values are always valid
 	if (value === undefined || value === null || value === '') return true;
@@ -313,7 +349,10 @@ function validateInput (value) {
 }
 
 /**
- * Validates that a value for this field has been provided in a data object
+ * Validates that a value for this field has been provided in a data object.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 cloudinaryimage.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
@@ -322,7 +361,11 @@ cloudinaryimage.prototype.validateInput = function (data, callback) {
 };
 
 /**
- * Validates that input has been provided
+ * Validates that input has been provided.
+ *
+ * @param {Object} item The item being validated.
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 cloudinaryimage.prototype.validateRequiredInput = function (item, data, callback) {
 	// TODO: We need to also get the `files` argument, so we can check for
@@ -335,9 +378,10 @@ cloudinaryimage.prototype.validateRequiredInput = function (item, data, callback
 };
 
 /**
- * Always assumes the input is valid
+ * Always assumes the input is valid.
  *
- * Deprecated
+ * @deprecated
+ * @return {Boolean} `true`
  */
 cloudinaryimage.prototype.inputIsValid = function () {
 	return true;
@@ -345,7 +389,10 @@ cloudinaryimage.prototype.inputIsValid = function () {
 
 /**
  * Trim supported file extensions from the public id because cloudinary uses these at
- * the end of the a url to dynamically convert the image filetype
+ * the end of the a url to dynamically convert the image filetype.
+ *
+ * @param {String} publicId The public ID to trim.
+ * @return {String} The trimmed public ID.
  */
 function trimSupportedFileExtensions (publicId) {
 	var supportedExtensions = [
@@ -364,9 +411,14 @@ function trimSupportedFileExtensions (publicId) {
 }
 
 /**
- * Updates the value for this field in the item from a data object
+ * Updates the value for this field in the item from a data object.
  * TODO: It is not possible to remove an existing value and upload a new image
- * in the same action, this should be supported
+ * in the same action, this should be supported.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Object} files The files object.
+ * @param {Function} callback The callback function.
  */
 cloudinaryimage.prototype.updateItem = function (item, data, files, callback) {
 	// Process arguments
@@ -476,6 +528,12 @@ cloudinaryimage.prototype.retryFilename = prototypeMethods.retryFilename;
 */
 cloudinaryimage.prototype.getFilename = prototypeMethods.getFilename;
 
+/**
+ * Checks if a file exists in Cloudinary.
+ *
+ * @param {String} filename The filename to check.
+ * @param {Function} callback The callback function.
+ */
 cloudinaryimage.prototype.fileExists = function (filename, callback) {
 	var cloudinary = require('cloudinary');
 	cloudinary.api.resource(filename, function (result) {
@@ -493,13 +551,18 @@ cloudinaryimage.prototype.fileExists = function (filename, callback) {
 };
 
 /**
- * Returns a callback that handles a standard form submission for the field
+ * Returns a callback that handles a standard form submission for the field.
  *
  * Expected form parts are
  * - `field.paths.action` in `req.body` (`clear` or `delete`)
  * - `field.paths.upload` in `req.files` (uploads the image to cloudinary)
  *
  * @api public
+ * @param {Object} item The item to handle the submission for.
+ * @param {Object} req The request object.
+ * @param {Object} paths The paths to use.
+ * @param {Function} callback The callback function.
+ * @return {Function} The callback function.
  */
 cloudinaryimage.prototype.getRequestHandler = function (item, req, paths, callback) {
 

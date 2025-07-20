@@ -1,3 +1,13 @@
+/**
+ * @fileoverview This file defines the Location field type in KeystoneJS.
+ *
+ * It is used for storing location data, including address components and
+ * geographic coordinates. It provides functionality for geocoding using the
+ * Google Maps API, as well as distance calculations.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var _ = require('lodash');
 var FieldType = require('../Type');
 var https = require('https');
@@ -10,7 +20,16 @@ var RADIUS_KM = 6371;
 var RADIUS_MILES = 3959;
 
 /**
- * Location FieldType Constructor
+ * Location FieldType Constructor.
+ * @extends Field
+ * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
+ * @param {Boolean} [options.enableImprove=false] Whether to enable the Google Maps API for improving location data.
+ * @param {Object} [options.defaults] Default values for the location fields.
+ * @param {Array|String} [options.required] The required location fields.
  */
 function location (list, path, options) {
 
@@ -52,6 +71,8 @@ util.inherits(location, FieldType);
 
 /**
  * Registers the field on the List's Mongoose Schema.
+ *
+ * @param {Object} schema The Mongoose schema to add the field to.
  */
 location.prototype.addToSchema = function (schema) {
 
@@ -123,7 +144,10 @@ location.prototype.addToSchema = function (schema) {
 };
 
 /**
- * Add filters to a query
+ * Adds filters to a query.
+ *
+ * @param {Object} filter The filter to apply.
+ * @return {Object} The query object.
  */
 var FILTER_PATH_MAP = {
 	street: 'street1',
@@ -151,6 +175,11 @@ location.prototype.addFilterToQuery = function (filter) {
  * Optionally provide a space-separated list of values to include.
  *
  * Delimiter defaults to `', '`.
+ *
+ * @param {Object} item The item to format.
+ * @param {String} [values] A space-separated list of values to include.
+ * @param {String} [delimiter=', '] The delimiter to use.
+ * @return {String} The formatted value.
  */
 location.prototype.format = function (item, values, delimiter) {
 	if (!values) {
@@ -164,7 +193,10 @@ location.prototype.format = function (item, values, delimiter) {
 };
 
 /**
- * Detects whether the field has been modified
+ * Detects whether the field has been modified.
+ *
+ * @param {Object} item The item to check.
+ * @return {Boolean} `true` if the field has been modified, otherwise `false`.
  */
 location.prototype.isModified = function (item) {
 	return item.isModified(this.paths.number)
@@ -178,6 +210,12 @@ location.prototype.isModified = function (item) {
 	|| item.isModified(this.paths.geo);
 };
 
+/**
+ * Gets the input from a data object.
+ *
+ * @param {Object} data The data object.
+ * @return {Object} The input object.
+ */
 location.prototype.getInputFromData = function (data) {
 	// Allow JSON structured data
 	var input = this.getValueFromData(data);
@@ -205,7 +243,10 @@ location.prototype.getInputFromData = function (data) {
 };
 
 /**
- * Validates that a value for this field has been provided in a data object
+ * Validates that a value for this field has been provided in a data object.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 location.prototype.validateInput = function (data, callback) {
 	// var input = this.getInputFromData(data);
@@ -214,8 +255,12 @@ location.prototype.validateInput = function (data, callback) {
 };
 
 /**
- * Validates that input has been provided
+ * Validates that input has been provided.
  * TODO: Needs test coverage
+ *
+ * @param {Object} item The item being validated.
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 location.prototype.validateRequiredInput = function (item, data, callback) {
 	var result = true;
@@ -233,12 +278,16 @@ location.prototype.validateRequiredInput = function (item, data, callback) {
 };
 
 /**
- * Validates that a value for this field has been provided in a data object
+ * Validates that a value for this field has been provided in a data object.
  *
  * options.required specifies an array or space-delimited list of paths that
- * are required (defaults to street1, suburb)
+ * are required (defaults to street1, suburb).
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @param {Boolean} required Whether the field is required.
+ * @param {Object} item The item being validated.
+ * @return {Boolean}
  */
 location.prototype.inputIsValid = function (data, required, item) {
 	if (!required) return true;
@@ -267,7 +316,11 @@ location.prototype.inputIsValid = function (data, required, item) {
 };
 
 /**
- * Updates the value for this field in the item from a data object
+ * Updates the value for this field in the item from a data object.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Function} callback The callback function.
  */
 location.prototype.updateItem = function (item, data, callback) {
 
@@ -331,7 +384,11 @@ location.prototype.updateItem = function (item, data, callback) {
 };
 
 /**
- * Internal Google geocode request method
+ * Internal Google geocode request method.
+ *
+ * @param {String} address The address to geocode.
+ * @param {String} [region] The region to bias the results to.
+ * @param {Function} callback The callback function.
  */
 function doGoogleGeocodeRequest (address, region, callback) {
 
@@ -397,6 +454,11 @@ function doGoogleGeocodeRequest (address, region, callback) {
  * Please make sure your Keystone app complies with the Google Maps API License.
  *
  * Internal status codes mimic the Google API status codes.
+ *
+ * @param {Object} item The item to geocode.
+ * @param {String} [region] The region to bias the results to.
+ * @param {Boolean|String} [update=false] Whether to update the item with the geocoded data.
+ * @param {Function} callback The callback function.
  */
 location.prototype.googleLookup = function (item, region, update, callback) {
 
@@ -508,9 +570,13 @@ location.prototype.googleLookup = function (item, region, update, callback) {
 };
 
 /**
- * Internal Distance calculation function
+ * Internal Distance calculation function.
  *
  * See http://en.wikipedia.org/wiki/Haversine_formula
+ *
+ * @param {Array} point1 The first point [lng, lat].
+ * @param {Array} point2 The second point [lng, lat].
+ * @return {Number} The distance between the two points in radians.
  */
 function calculateDistance (point1, point2) {
 	var dLng = (point2[0] - point1[0]) * Math.PI / 180;
@@ -525,14 +591,22 @@ function calculateDistance (point1, point2) {
 }
 
 /**
- * Returns the distance from a [lng, lat] point in kilometres
+ * Returns the distance from a [lng, lat] point in kilometres.
+ *
+ * @param {Object} item The item to calculate the distance from.
+ * @param {Array} point The point to calculate the distance to [lng, lat].
+ * @return {Number} The distance in kilometres.
  */
 location.prototype.kmFrom = function (item, point) {
 	return calculateDistance(item.get(this.paths.geo), point) * RADIUS_KM;
 };
 
 /**
- * Returns the distance from a [lng, lat] point in miles
+ * Returns the distance from a [lng, lat] point in miles.
+ *
+ * @param {Object} item The item to calculate the distance from.
+ * @param {Array} point The point to calculate the distance to [lng, lat].
+ * @return {Number} The distance in miles.
  */
 location.prototype.milesFrom = function (item, point) {
 	return calculateDistance(item.get(this.paths.geo), point) * RADIUS_MILES;

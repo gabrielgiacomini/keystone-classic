@@ -1,3 +1,12 @@
+/**
+ * @fileoverview This file defines the Markdown field type in KeystoneJS.
+ *
+ * It is used for storing markdown content and provides a WYSIWYG editor
+ * in the Admin UI.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var FieldType = require('../Type');
 var marked = require('marked');
 var sanitizeHtml = require('sanitize-html');
@@ -6,9 +15,18 @@ var util = require('util');
 var utils = require('keystone-utils');
 
 /**
- * Markdown FieldType Constructor
+ * Markdown FieldType Constructor.
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
+ * @param {Object} [options.toolbarOptions] Options for the toolbar.
+ * @param {Object} [options.markedOptions] Options for the marked library.
+ * @param {Object} [options.sanitizeOptions] Options for the sanitize-html library.
+ * @param {Number} [options.height=90] The height of the editor in pixels.
+ * @param {Boolean} [options.wysiwyg=true] Whether to use the WYSIWYG editor.
  */
 function markdown (list, path, options) {
 	this._defaultSize = 'full';
@@ -37,8 +55,10 @@ markdown.prototype.validateRequiredInput = TextType.prototype.validateRequiredIn
 /**
  * Registers the field on the List's Mongoose Schema.
  *
- * Adds String properties for .md and .html markdown, and a setter for .md
+ * Adds String properties for `.md` and `.html` markdown, and a setter for `.md`
  * that generates html when it is updated.
+ *
+ * @param {Object} schema The Mongoose schema to add the field to.
  */
 markdown.prototype.addToSchema = function (schema) {
 
@@ -83,8 +103,11 @@ markdown.prototype.addToSchema = function (schema) {
 };
 
 /**
- * Add filters to a query (this is copy & pasted from the text field, with
- * the only difference being that the path isn't this.path but this.paths.md)
+ * Adds filters to a query (this is copy & pasted from the text field, with
+ * the only difference being that the path isn't this.path but this.paths.md).
+ *
+ * @param {Object} filter The filter to apply.
+ * @return {Object} The query object.
  */
 markdown.prototype.addFilterToQuery = function (filter) {
 	var query = {};
@@ -106,14 +129,20 @@ markdown.prototype.addFilterToQuery = function (filter) {
 };
 
 /**
- * Formats the field value
+ * Formats the field value.
+ *
+ * @param {Object} item The item to format.
+ * @return {String} The formatted value.
  */
 markdown.prototype.format = function (item) {
 	return item.get(this.paths.html);
 };
 
 /**
- * Gets the field's data from an Item, as used by the React components
+ * Gets the field's data from an Item, as used by the React components.
+ *
+ * @param {Object} item The item to get the data from.
+ * @return {Object} The field's data.
  */
 markdown.prototype.getData = function (item) {
 	var value = item.get(this.path);
@@ -121,9 +150,13 @@ markdown.prototype.getData = function (item) {
 };
 
 /**
- * Validates that a value for this field has been provided in a data object
+ * Validates that a value for this field has been provided in a data object.
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @param {Boolean} required Whether the field is required.
+ * @param {Object} item The item being validated.
+ * @return {Boolean}
  */
 markdown.prototype.inputIsValid = function (data, required, item) {
 	if (!(this.path in data) && item && item.get(this.paths.md)) {
@@ -133,16 +166,23 @@ markdown.prototype.inputIsValid = function (data, required, item) {
 };
 
 /**
- * Detects whether the field has been modified
+ * Detects whether the field has been modified.
+ *
+ * @param {Object} item The item to check.
+ * @return {Boolean} `true` if the field has been modified, otherwise `false`.
  */
 markdown.prototype.isModified = function (item) {
 	return item.isModified(this.paths.md);
 };
 
 /**
- * Updates the value for this field in the item from a data object
+ * Updates the value for this field in the item from a data object.
  *
- * Will accept either the field path, or paths.md
+ * Will accept either the field path, or paths.md.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Function} callback The callback function.
  */
 markdown.prototype.updateItem = function (item, data, callback) {
 	var value = this.getValueFromData(data);

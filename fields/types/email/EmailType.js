@@ -1,3 +1,13 @@
+/**
+ * @fileoverview This file defines the Email field type in KeystoneJS.
+ *
+ * It inherits from the `Text` field type and is used for storing and validating
+ * email addresses. It also provides a method for generating Gravatar URLs.
+ *
+ * @see module:keystone/lib/field
+ * @see module:keystone/lib/fields/types/text/TextType
+ */
+
 var crypto = require('crypto');
 var FieldType = require('../Type');
 var TextType = require('../text/TextType');
@@ -5,14 +15,22 @@ var util = require('util');
 var utils = require('keystone-utils');
 
 /**
- * Email FieldType Constructor
+ * Email FieldType Constructor.
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
  */
 function email (list, path, options) {
+	// Set the native type of the field
 	this._nativeType = String;
+	// Add gravatarUrl to the underscore methods
 	this._underscoreMethods = ['gravatarUrl'];
+	// Set the type description
 	this.typeDescription = 'email address';
+	// Call the super constructor
 	email.super_.call(this, list, path, options);
 }
 email.properName = 'Email';
@@ -22,7 +40,13 @@ util.inherits(email, FieldType);
 email.prototype.addFilterToQuery = TextType.prototype.addFilterToQuery;
 
 /**
- * Generate a gravatar image request url
+ * Generate a gravatar image request url.
+ *
+ * @param {Object} item The item containing the email address.
+ * @param {Number} [size=80] The size of the gravatar image.
+ * @param {String} [defaultImage='identicon'] The default image to use if the user does not have a gravatar.
+ * @param {String} [rating='g'] The rating of the gravatar image.
+ * @return {String} The gravatar URL.
  */
 email.prototype.gravatarUrl = function (item, size, defaultImage, rating) {
 	var value = item.get(this.path);
@@ -44,11 +68,15 @@ email.prototype.gravatarUrl = function (item, size, defaultImage, rating) {
 };
 
 /**
- * Asynchronously confirms that the provided email is valid
+ * Asynchronously confirms that the provided email is valid.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function to call with the validation result.
  */
 email.prototype.validateInput = function (data, callback) {
 	var input = this.getValueFromData(data);
 	var result = true;
+	// If there is an input, check if it is a valid email
 	if (input) {
 		result = utils.isEmail(input);
 	}
@@ -56,33 +84,45 @@ email.prototype.validateInput = function (data, callback) {
 };
 
 /**
- * Asynchronously confirms that required input is present
+ * Asynchronously confirms that required input is present.
  */
 email.prototype.validateRequiredInput = TextType.prototype.validateRequiredInput;
 
 /**
- * Validates that a valid email has been provided in a data object
+ * Validates that a valid email has been provided in a data object.
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @param {Boolean} required Whether the field is required.
+ * @param {Object} item The item being validated.
+ * @return {Boolean} True if the input is valid, false otherwise.
  */
 email.prototype.inputIsValid = function (data, required, item) {
 	var value = this.getValueFromData(data);
+	// If there is a value, check if it is a valid email
 	if (value) {
 		return utils.isEmail(value);
 	} else {
+		// If there is no value, it is valid if not required or if the item has a value
 		return (!required || (item && item.get(this.path))) ? true : false;
 	}
 };
 
 /**
- * Updates the value for this field in the item from a data object
- * Ensures that the email address is lowercase
+ * Updates the value for this field in the item from a data object.
+ * Ensures that the email address is lowercase.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Function} callback The callback function to call when done.
  */
 email.prototype.updateItem = function (item, data, callback) {
 	var newValue = this.getValueFromData(data);
+	// If the new value is a string, convert it to lowercase
 	if (typeof newValue === 'string') {
 		newValue = newValue.toLowerCase();
 	}
+	// If the new value is different from the old value, update it
 	if (newValue !== undefined && newValue !== item.get(this.path)) {
 		item.set(this.path, newValue);
 	}

@@ -1,3 +1,12 @@
+/**
+ * @fileoverview This file defines the File field type in KeystoneJS.
+ *
+ * It is used for uploading and storing files, and requires a storage adapter
+ * to be configured.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var FieldType = require('../Type');
 var util = require('util');
 var utils = require('keystone-utils');
@@ -5,7 +14,14 @@ var utils = require('keystone-utils');
 var debug = require('debug')('keystone:fields:file');
 
 /**
- * File FieldType Constructor
+ * File FieldType Constructor.
+ * @extends Field
+ * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
+ * @param {Object} options.storage The storage adapter instance.
  */
 function file (list, path, options) {
 	this._underscoreMethods = ['format', 'upload', 'remove', 'reset'];
@@ -23,6 +39,8 @@ util.inherits(file, FieldType);
 
 /**
  * Registers the field on the List's Mongoose Schema.
+ *
+ * @param {Object} schema The Mongoose schema to add the field to.
  */
 file.prototype.addToSchema = function (schema) {
 
@@ -41,7 +59,11 @@ file.prototype.addToSchema = function (schema) {
 };
 
 /**
- * Uploads a new file
+ * Uploads a new file.
+ *
+ * @param {Object} item The item to upload the file for.
+ * @param {Object} file The file to upload.
+ * @param {Function} callback The callback function.
  */
 file.prototype.upload = function (item, file, callback) {
 	var field = this;
@@ -56,7 +78,9 @@ file.prototype.upload = function (item, file, callback) {
 };
 
 /**
- * Resets the field value
+ * Resets the field value.
+ *
+ * @param {Object} item The item to reset.
  */
 file.prototype.reset = function (item) {
 	var value = {};
@@ -67,7 +91,9 @@ file.prototype.reset = function (item) {
 };
 
 /**
- * Deletes the stored file and resets the field value
+ * Deletes the stored file and resets the field value.
+ *
+ * @param {Object} item The item to remove the file from.
  */
 // TODO: Should we accept a callback here? Seems like a good idea.
 file.prototype.remove = function (item) {
@@ -76,7 +102,10 @@ file.prototype.remove = function (item) {
 };
 
 /**
- * Formats the field value
+ * Formats the field value.
+ *
+ * @param {Object} item The item to format.
+ * @return {String} The formatted value.
  */
 file.prototype.format = function (item) {
 	var value = item.get(this.path);
@@ -85,7 +114,10 @@ file.prototype.format = function (item) {
 };
 
 /**
- * Detects whether the field has been modified
+ * Detects whether the field has been modified.
+ *
+ * @param {Object} item The item to check.
+ * @return {Boolean} `true` if the field has been modified, otherwise `false`.
  */
 file.prototype.isModified = function (item) {
 	var modified = false;
@@ -97,6 +129,12 @@ file.prototype.isModified = function (item) {
 };
 
 
+/**
+ * Validates input.
+ *
+ * @param {*} value The value to validate.
+ * @return {Boolean} `true` if the value is valid, otherwise `false`.
+ */
 function validateInput (value) {
 	// undefined, null and empty values are always valid
 	if (value === undefined || value === null || value === '') return true;
@@ -109,7 +147,10 @@ function validateInput (value) {
 }
 
 /**
- * Validates that a value for this field has been provided in a data object
+ * Validates that a value for this field has been provided in a data object.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 file.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
@@ -120,7 +161,11 @@ file.prototype.validateInput = function (data, callback) {
 };
 
 /**
- * Validates that input has been provided
+ * Validates that input has been provided.
+ *
+ * @param {Object} item The item being validated.
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 file.prototype.validateRequiredInput = function (item, data, callback) {
 	// TODO: We need to also get the `files` argument, so we can check for
@@ -137,9 +182,14 @@ file.prototype.validateRequiredInput = function (item, data, callback) {
 };
 
 /**
- * Updates the value for this field in the item from a data object
- * TODO: It is not possible to remove an existing value and upload a new fiel
- * in the same action, this should be supported
+ * Updates the value for this field in the item from a data object.
+ * TODO: It is not possible to remove an existing value and upload a new file
+ * in the same action, this should be supported.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Object} files The files object.
+ * @param {Function} callback The callback function.
  */
 file.prototype.updateItem = function (item, data, files, callback) {
 	// Process arguments

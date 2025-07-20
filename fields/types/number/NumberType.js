@@ -1,3 +1,11 @@
+/**
+ * @fileoverview This file defines the Number field type in KeystoneJS.
+ *
+ * It is used for storing numeric values.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var FieldType = require('../Type');
 var numeral = require('numeral');
 var util = require('util');
@@ -5,9 +13,14 @@ var utils = require('keystone-utils');
 
 
 /**
- * Number FieldType Constructor
+ * Number FieldType Constructor.
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
+ * @param {String} [options.format] The format string to use for formatting the numbers.
  */
 function number (list, path, options) {
 	this._nativeType = Number;
@@ -22,6 +35,12 @@ function number (list, path, options) {
 number.properName = 'Number';
 util.inherits(number, FieldType);
 
+/**
+ * Validates the input for this field.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
+ */
 number.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
 	var result = value === undefined || typeof value === 'number' || value === null;
@@ -36,6 +55,13 @@ number.prototype.validateInput = function (data, callback) {
 	utils.defer(callback, result);
 };
 
+/**
+ * Validates that a required value for this field is present.
+ *
+ * @param {Object} item The item being validated.
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
+ */
 number.prototype.validateRequiredInput = function (item, data, callback) {
 	var value = this.getValueFromData(data);
 	var result = !!(value || typeof value === 'number');
@@ -46,7 +72,10 @@ number.prototype.validateRequiredInput = function (item, data, callback) {
 };
 
 /**
- * Add filters to a query
+ * Adds filters to a query.
+ *
+ * @param {Object} filter The filter to apply.
+ * @return {Object} The query object.
  */
 number.prototype.addFilterToQuery = function (filter) {
 	var query = {};
@@ -84,7 +113,11 @@ number.prototype.addFilterToQuery = function (filter) {
 };
 
 /**
- * Formats the field value
+ * Formats the field value.
+ *
+ * @param {Object} item The item to format.
+ * @param {String} [format] The format string to use.
+ * @return {String} The formatted value.
  */
 number.prototype.format = function (item, format) {
 	var value = item.get(this.path);
@@ -96,10 +129,14 @@ number.prototype.format = function (item, format) {
 };
 
 /**
- * Checks that a valid number has been provided in a data object
- * An empty value clears the stored value and is considered valid
+ * Checks that a valid number has been provided in a data object.
+ * An empty value clears the stored value and is considered valid.
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @param {Boolean} required Whether the field is required.
+ * @param {Object} item The item being validated.
+ * @return {Boolean}
  */
 number.prototype.inputIsValid = function (data, required, item) {
 	var value = this.getValueFromData(data);
@@ -115,7 +152,11 @@ number.prototype.inputIsValid = function (data, required, item) {
 };
 
 /**
- * Updates the value for this field in the item from a data object
+ * Updates the value for this field in the item from a data object.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Function} callback The callback function.
  */
 number.prototype.updateItem = function (item, data, callback) {
 	var value = this.getValueFromData(data);

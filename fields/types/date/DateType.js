@@ -1,3 +1,13 @@
+/**
+ * @fileoverview This file defines the Date field type in KeystoneJS.
+ *
+ * It is used for storing and managing dates. It provides functionalities for
+ * formatting, parsing, and validating dates, and supports UTC and timezone
+ * offsets.
+ *
+ * @see module:keystone/lib/field
+ */
+
 var FieldType = require('../Type');
 var moment = require('moment');
 var util = require('util');
@@ -5,9 +15,19 @@ var utils = require('keystone-utils');
 var TextType = require('../text/TextType');
 
 /**
- * Date FieldType Constructor
+ * Date FieldType Constructor.
  * @extends Field
  * @api public
+ *
+ * @param {Object} list The list instance this field belongs to.
+ * @param {String} path The path of this field in the list.
+ * @param {Object} options The field options.
+ * @param {String} [options.inputFormat='YYYY-MM-DD'] The format for parsing input.
+ * @param {String} [options.format='Do MMM YYYY'] The format for displaying the date.
+ * @param {Array} [options.yearRange] The range of years to display in the date picker.
+ * @param {Boolean} [options.utc=false] Whether to store the date in UTC.
+ * @param {Boolean} [options.todayButton=true] Whether to show the 'Today' button in the date picker.
+ * @param {Number} [options.timezoneUtcOffsetMinutes] The timezone offset in minutes.
  */
 function date (list, path, options) {
 	this._nativeType = Date;
@@ -42,7 +62,10 @@ util.inherits(date, FieldType);
 date.prototype.validateRequiredInput = TextType.prototype.validateRequiredInput;
 
 /**
- * Add filters to a query
+ * Adds filters to a query.
+ *
+ * @param {Object} filter The filter to apply.
+ * @return {Object} The query object.
  */
 date.prototype.addFilterToQuery = function (filter) {
 	var query = {};
@@ -80,7 +103,11 @@ date.prototype.addFilterToQuery = function (filter) {
 };
 
 /**
- * Formats the field value
+ * Formats the field value.
+ *
+ * @param {Object} item The item to format.
+ * @param {String} [format] The format string to use.
+ * @return {String} The formatted date.
  */
 date.prototype.format = function (item, format) {
 	if (format || this.formatString) {
@@ -91,7 +118,10 @@ date.prototype.format = function (item, format) {
 };
 
 /**
- * Returns a new `moment` object with the field value
+ * Returns a new `moment` object with the field value.
+ *
+ * @param {Object} item The item to get the moment from.
+ * @return {moment} The moment object.
  */
 date.prototype.moment = function (item) {
 	var m = moment(item.get(this.path));
@@ -101,7 +131,12 @@ date.prototype.moment = function (item) {
 
 /**
  * Parses input with the correct moment version (normal or utc) and uses
- * either the provided input format or the default for the field
+ * either the provided input format or the default for the field.
+ *
+ * @param {String|Number|Date} value The value to parse.
+ * @param {String} [format] The format to parse with.
+ * @param {Boolean} [strict] Whether to use strict parsing.
+ * @return {moment} The parsed moment object.
  */
 date.prototype.parse = function (value, format, strict) {
 	var m = this.isUTC ? moment.utc : moment;
@@ -115,7 +150,10 @@ date.prototype.parse = function (value, format, strict) {
 };
 
 /**
- * Asynchronously confirms that the provided date is valid
+ * Asynchronously confirms that the provided date is valid.
+ *
+ * @param {Object} data The data to validate.
+ * @param {Function} callback The callback function.
  */
 date.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
@@ -127,12 +165,14 @@ date.prototype.validateInput = function (data, callback) {
 };
 
 /**
- *
- * Retrives the date as a 'Javascript Date'.
+ * Retrieves the date as a 'Javascript Date'.
  *
  * Note: If the JS date retrieved is UTC and has a time other than midnight,
  * it has likely become corrupted. In this instance, the below code will
  * attempt to add the server offset to it to fix the date.
+ *
+ * @param {Object} item The item to get the data from.
+ * @return {Date} The date object.
  */
 date.prototype.getData = function (item) {
 	var value = item.get(this.path);
@@ -170,10 +210,14 @@ date.prototype.getData = function (item) {
 };
 
 /**
- * Checks that a valid date has been provided in a data object
- * An empty value clears the stored value and is considered valid
+ * Checks that a valid date has been provided in a data object.
+ * An empty value clears the stored value and is considered valid.
  *
- * Deprecated
+ * @deprecated
+ * @param {Object} data The data to validate.
+ * @param {Boolean} required Whether the field is required.
+ * @param {Object} item The item being validated.
+ * @return {Boolean}
  */
 date.prototype.inputIsValid = function (data, required, item) {
 	if (!(this.path in data) && item && item.get(this.path)) return true;
@@ -188,7 +232,11 @@ date.prototype.inputIsValid = function (data, required, item) {
 };
 
 /**
- * Updates the value for this field in the item from a data object
+ * Updates the value for this field in the item from a data object.
+ *
+ * @param {Object} item The item to update.
+ * @param {Object} data The data to update from.
+ * @param {Function} callback The callback function.
  */
 date.prototype.updateItem = function (item, data, callback) {
 	var value = this.getValueFromData(data);
