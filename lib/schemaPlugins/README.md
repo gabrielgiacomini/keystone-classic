@@ -8,6 +8,15 @@ This directory contains various schema plugins for KeystoneJS. These plugins can
 
 The `autokey` plugin automatically generates a unique key for a list based on the values of other fields. This is useful for creating human-readable URLs or identifiers.
 
+**Options:**
+
+*   `from`: (String or Array) The field or fields to generate the key from.
+*   `path`: (String) The path to store the generated key in.
+*   `unique`: (Boolean or Object) Whether the key should be unique. Can be an object to specify additional uniqueness constraints.
+*   `fixed`: (Boolean) If `true`, the key will not be updated after it has been set.
+*   `locale`: (String) The locale to use for slug generation.
+*   `ingoreIncompleteSource`: (Boolean) If `true`, a key will be generated even if the source fields are not all set.
+
 **Usage:**
 
 ```javascript
@@ -29,9 +38,15 @@ Enable the `history` plugin on your list:
 MyList.set('history', true);
 ```
 
+This will create a `_revisions` collection for your list that stores the history of changes.
+
 ### `lib/schemaPlugins/sortable.js`
 
 The `sortable` plugin adds a `sortOrder` field to a list's schema and provides functionality to reorder documents.
+
+**Options:**
+
+*   Can be set to `'unshift'` to add new items to the beginning of the list instead of the end.
 
 **Usage:**
 
@@ -45,6 +60,15 @@ MyList.set('sortable', true);
 
 The `track` plugin adds fields to a list's schema to track when a document is created and updated, and by whom.
 
+**Options:**
+
+Can be a boolean to enable all tracking fields, or an object to customize the fields:
+
+*   `createdAt`: (Boolean or String) The path to store the creation timestamp. Defaults to `createdAt`.
+*   `createdBy`: (Boolean or String) The path to store the user who created the document. Defaults to `createdBy`.
+*   `updatedAt`: (Boolean or String) The path to store the update timestamp. Defaults to `updatedAt`.
+*   `updatedBy`: (Boolean or String) The path to store the user who last updated the document. Defaults to `updatedBy`.
+
 **Usage:**
 
 Enable the `track` plugin on your list:
@@ -57,10 +81,10 @@ You can also customize the fields:
 
 ```javascript
 MyList.set('track', {
-  createdAt: true,
-  createdBy: true,
-  updatedAt: true,
-  updatedBy: true
+  createdAt: 'createdOn',
+  createdBy: 'author',
+  updatedAt: 'updatedOn',
+  updatedBy: 'editor'
 });
 ```
 
@@ -75,7 +99,7 @@ The `getRelated` method is used to fetch and populate related data from other li
 **Usage:**
 
 ```javascript
-myDocument.getRelated('relatedField', function(err, relatedDocs) {
+myDocument.getRelated('relatedField[name, email]', function(err, result) {
   // ...
 });
 ```
