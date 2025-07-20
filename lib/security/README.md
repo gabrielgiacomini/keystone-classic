@@ -33,35 +33,61 @@ DISABLE_CSRF=true node keystone.js
 
 Provides middleware to set the `X-Frame-Options` header, which protects against clickjacking attacks by controlling whether the site can be embedded in an `<iframe>`, `<frame>`, `<embed>`, or `<object>`.
 
-### Usage
+### Usage and Supported Options
 
 The `frameGuard` middleware is configured via the `'frame guard'` option in your `keystone.js` file.
 
-```javascript
-keystone.set('frame guard', 'SAMEORIGIN');
-```
+-   **`'deny'`**: Prevents the page from being displayed in a frame.
 
-This middleware is applied in `server/createApp.js`.
+    ```javascript
+    keystone.set('frame guard', 'deny');
+    ```
 
-### Supported Options
+-   **`'sameorigin'`**: Allows the page to be displayed in a frame on the same origin as the page itself. This is the recommended setting for most applications.
 
--   `'deny'`: Prevents the page from being displayed in a frame.
--   `'sameorigin'`: Allows the page to be displayed in a frame on the same origin as the page itself.
--   `'allow-from <uri>'`: Allows the page to be displayed in a frame on the specified URI.
+    ```javascript
+    keystone.set('frame guard', 'sameorigin');
+    ```
 
-If the `'frame guard'` option is not set, the `X-Frame-Options` header will not be sent.
+-   **`'allow-from <uri>'`**: Allows the page to be displayed in a frame on the specified URI.
+
+    ```javascript
+    keystone.set('frame guard', 'allow-from https://example.com/');
+    ```
+
+If the `'frame guard'` option is not set, the `X-Frame-Options` header will not be sent. This middleware is applied in `server/createApp.js`.
 
 ## IP Range Restriction (`lib/security/ipRangeRestrict.js`)
 
 Provides middleware to restrict access to the application based on the client's IP address. This is useful for limiting access to the Admin UI to a trusted network.
 
-### Usage
+### Usage and Supported Options
 
 The `ipRangeRestrict` middleware is configured via the `'ip range restrict'` option in your `keystone.js` file. The option should be a string containing one or more CIDR ranges, separated by spaces or commas.
 
-```javascript
-keystone.set('ip range restrict', '127.0.0.1, 192.168.0.0/16');
-```
+-   **Single IP Address:**
+
+    ```javascript
+    keystone.set('ip range restrict', '127.0.0.1');
+    ```
+
+-   **Multiple IP Addresses (comma-separated):**
+
+    ```javascript
+    keystone.set('ip range restrict', '127.0.0.1, 192.168.0.1');
+    ```
+
+-   **CIDR Range:**
+
+    ```javascript
+    keystone.set('ip range restrict', '192.168.0.0/16');
+    ```
+
+-   **Mixed IP Addresses and CIDR Ranges (space-separated):**
+
+    ```javascript
+    keystone.set('ip range restrict', '127.0.0.1 192.168.0.0/16');
+    ```
 
 This middleware is applied in `server/bindIPRestrictions.js`.
 
