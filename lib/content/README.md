@@ -14,13 +14,13 @@ The content management system is built around the following core concepts:
 
 Here's a breakdown of the files in this directory and their roles:
 
-- **`index.js`:** The main entry point for the content management system. It exposes the `Content` class, which provides methods for fetching, storing, and registering pages. It is the primary interface for interacting with the content system.
-- **`page.js`:** Defines the `Page` class, which is used to create and configure content pages. It allows you to add fields, set options, and register the page with KeystoneJS.
-- **`type.js`:** Defines the base `Type` class, which serves as a blueprint for all content types. It is intended to be extended by specific content type implementations.
-- **`types/`:** This directory contains the specific content type implementations.
-  - **`index.js`:** An index file that exports all available content types, making them easy to import in other parts of the application.
-  - **`text.js`:** Defines the `Text` content type for handling plain text content.
-  - **`html.js`:** Defines the `Html` content type for handling rich HTML content.
+- **`lib/content/index.js`:** The main entry point for the content management system. It exposes the `Content` class, which provides methods for fetching, storing, and registering pages. It is the primary interface for interacting with the content system.
+- **`lib/content/page.js`:** Defines the `Page` class, which is used to create and configure content pages. It allows you to add fields, set options, and register the page with KeystoneJS.
+- **`lib/content/type.js`:** Defines the base `Type` class, which serves as a blueprint for all content types. It is intended to be extended by specific content type implementations.
+- **`lib/content/types/`:** This directory contains the specific content type implementations.
+  - **`lib/content/types/index.js`:** An index file that exports all available content types, making them easy to import in other parts of the application.
+  - **`lib/content/types/text.js`:** Defines the `Text` content type for handling plain text content.
+  - **`lib/content/types/html.js`:** Defines the `Html` content type for handling rich HTML content.
 
 ## Usage
 
