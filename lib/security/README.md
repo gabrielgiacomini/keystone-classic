@@ -2,7 +2,7 @@
 
 This directory contains various security-related modules for KeystoneJS.
 
-## CSRF Protection (`csrf.js`)
+## CSRF Protection (`lib/security/csrf.js`)
 
 Provides CSRF (Cross-Site Request Forgery) protection middleware. This is a critical security feature to prevent unauthorized commands from being performed on behalf of an authenticated user.
 
@@ -15,7 +15,7 @@ The CSRF protection is enabled and used throughout the Admin UI to protect again
 
 The main consumer of this middleware is `server/createApp.js`, which applies it to the Express app.
 
-## Frame Guard (`frameGuard.js`)
+## Frame Guard (`lib/security/frameGuard.js`)
 
 Provides middleware to set the `X-Frame-Options` header, which protects against clickjacking attacks.
 
@@ -27,7 +27,7 @@ The `frameGuard` middleware is enabled via the `frame guard` option in `keystone
 keystone.set('frame guard', 'SAMEORIGIN');
 ```
 
-## IP Range Restriction (`ipRangeRestrict.js`)
+## IP Range Restriction (`lib/security/ipRangeRestrict.js`)
 
 Provides middleware to restrict access to the application based on the client's IP address. This is useful for limiting access to the Admin UI to a trusted network.
 
@@ -39,7 +39,7 @@ The `ipRangeRestrict` middleware is enabled via the `ip range restrict` option i
 keystone.set('ip range restrict', '127.0.0.1');
 ```
 
-## Excel Value Escaping (`escapeValueForExcel.js`)
+## Excel Value Escaping (`lib/security/escapeValueForExcel.js`)
 
 Provides a utility function to escape values that are being exported to a CSV file. This prevents macro injection vulnerabilities in spreadsheet software like Microsoft Excel.
 
