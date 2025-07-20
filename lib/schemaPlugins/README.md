@@ -4,7 +4,7 @@ This directory contains various schema plugins for KeystoneJS. These plugins can
 
 ## Available Plugins
 
-### `autokey.js`
+### `lib/schemaPlugins/autokey.js`
 
 The `autokey` plugin automatically generates a unique key for a list based on the values of other fields. This is useful for creating human-readable URLs or identifiers.
 
@@ -17,7 +17,7 @@ MyList.add({
 });
 ```
 
-### `history.js`
+### `lib/schemaPlugins/history.js`
 
 The `history` plugin enables document versioning by saving a revision of a document to a separate collection every time it is saved or removed.
 
@@ -29,7 +29,7 @@ Enable the `history` plugin on your list:
 MyList.set('history', true);
 ```
 
-### `sortable.js`
+### `lib/schemaPlugins/sortable.js`
 
 The `sortable` plugin adds a `sortOrder` field to a list's schema and provides functionality to reorder documents.
 
@@ -41,7 +41,7 @@ Enable the `sortable` plugin on your list:
 MyList.set('sortable', true);
 ```
 
-### `track.js`
+### `lib/schemaPlugins/track.js`
 
 The `track` plugin adds fields to a list's schema to track when a document is created and updated, and by whom.
 
@@ -68,7 +68,7 @@ MyList.set('track', {
 
 The `methods` directory contains plugins that add methods to your list's documents.
 
-#### `getRelated.js`
+#### `lib/schemaPlugins/methods/getRelated.js`
 
 The `getRelated` method is used to fetch and populate related data from other lists.
 
@@ -80,7 +80,7 @@ myDocument.getRelated('relatedField', function(err, relatedDocs) {
 });
 ```
 
-#### `populateRelated.js`
+#### `lib/schemaPlugins/methods/populateRelated.js`
 
 The `populateRelated` method is a convenience method that fetches related data and populates it directly onto the document.
 
@@ -96,7 +96,7 @@ myDocument.populateRelated('relatedField', function(err, populatedDoc) {
 
 The `options` directory contains plugins that modify the behavior of your list's schema.
 
-#### `transform.js`
+#### `lib/schemaPlugins/options/transform.js`
 
 This transform function is used to modify the output of `toJSON` and `toObject` calls on a document. It ensures that any relationships that have been populated using `getRelated` or `populateRelated` are included in the output.
 
