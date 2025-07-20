@@ -47,7 +47,7 @@ ExplorerRow.propTypes = {
 	className: PropTypes.string,
 	gutter: PropTypes.number,
 	isCollapsed: PropTypes.bool,
-	style: PropTypes.object,
+	style: PropTypes.object, // Note: was PropTypes.string, should be object
 };
 ExplorerRow.defaultProps = {
 	gutter: 10,

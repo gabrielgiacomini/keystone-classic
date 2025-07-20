@@ -142,7 +142,7 @@ App.propTypes = {
 	params: React.PropTypes.object,
 };
 
-const Home = () => {
+const Home = (props) => {
 	return (
 		<div className="fx-welcome">
 			<div className="fx-welcome__inner">

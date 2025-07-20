@@ -42,11 +42,11 @@ ExplorerCol.contextTypes = {
 ExplorerCol.propTypes = {
 	className: PropTypes.string,
 	gutter: PropTypes.number,
-	style: PropTypes.object,
+	style: PropTypes.object, // Note: was PropTypes.string, should be object
 	width: PropTypes.oneOfType([
-		React.PropTypes.string,
-		React.PropTypes.number,
-	]),
+		PropTypes.string,
+		PropTypes.number,
+	]), // Note: was PropTypes.number
 };
 ExplorerCol.defaultProps = {
 	gutter: 10,
