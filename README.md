@@ -66,7 +66,17 @@ See the [KeystoneJS database documentation](https://keystonejs.com/documentation
 
 - **`index.js`**: The main entry point for the KeystoneJS framework. It initializes a new Keystone instance, configures it with default settings, and extends it with the core functionality required to run a Keystone application. It also exposes the major components of the framework such as `List`, `Field`, and `View`. The exported `keystone` object is a singleton instance of the `Keystone` class, which is the main interface for developers to interact with the framework.
 
+  **Usage**:
+  ```javascript
+  var keystone = require('keystone');
+  ```
+
 - **`build.js`**: This script bundles the client-side packages required for the Admin UI. It uses Browserify to create a bundle of all the packages specified in `./admin/client/packages.js` and outputs it to `stdout`. This is typically used during the build process to generate the client-side JavaScript bundle that powers the KeystoneJS Admin UI.
+
+  **Usage**:
+  ```bash
+  node build.js > public/js/bundle.js
+  ```
 
 ### Running KeystoneJS in Production
 
