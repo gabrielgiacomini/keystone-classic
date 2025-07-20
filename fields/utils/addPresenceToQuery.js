@@ -1,4 +1,9 @@
 /**
+ * @fileoverview
+ * This utility modifies a MongoDB query to account for the presence of a
+ * field. It's used in the filtering of relationship fields.
+ */
+/**
  * Accounts for the presence choice when filtering
  *
  * @param {String} presence  		The current presence choice
@@ -6,8 +11,7 @@
  */
 function addPresenceToQuery (presence, currentPathQuery) {
 	var newQuery;
-	// Adds $elemMatch if the presence choice is 'all'
-	// ('all' is the default)
+	// Adds $elemMatch if the presence choice is 'some'
 	if (presence === 'some') {
 		newQuery = {
 			$elemMatch: currentPathQuery,

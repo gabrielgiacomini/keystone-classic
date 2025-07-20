@@ -1,8 +1,14 @@
+/**
+ * @fileoverview
+ * This is the main entry point for the Field Types Explorer UI. It renders the
+ * sidebar navigation and the main content area, which is handled by react-router.
+ */
 import React, { Children, cloneElement, Component } from 'react';
 import { Link, Router, Route, browserHistory, IndexRoute } from 'react-router';
 import ReactDOM from 'react-dom';
 import FieldType from './components/FieldType';
 
+// All the field type explorers
 const Types = {
 	Boolean: require('../types/boolean/test/explorer'),
 	Code: require('../types/code/test/explorer'),
@@ -31,11 +37,19 @@ const Types = {
 	Url: require('../types/url/test/explorer'),
 };
 
+/**
+ * Generates the navigation sections for the sidebar.
+ *
+ * @param {Array} arr The array of field types.
+ * @return {Object} The navigation sections.
+ */
 function generateNavSections (arr) {
 	const navSections = {};
+	// Group types by section
 	arr.forEach((t) => {
 		if (!navSections[t.section]) navSections[t.section] = [];
 	});
+	// Populate sections with types
 	arr.forEach(t => navSections[t.section].push(t.Field.type));
 
 	return navSections;
@@ -49,6 +63,9 @@ class App extends Component {
 		this.toggleSidebar = this.toggleSidebar.bind(this);
 		this.state = { sidebarIsOpen: true };
 	}
+	/**
+	 * Toggles the visibility of the sidebar.
+	 */
 	toggleSidebar () {
 		this.setState({ sidebarIsOpen: !this.state.sidebarIsOpen });
 	}
@@ -65,6 +82,7 @@ class App extends Component {
 							: 'Ready'}
 						<div className="fx-sidebar__header__border" />
 					</div>
+					{/* Render the navigation sections */}
 					{Object.keys(navSections).sort().map(section => {
 						let currentSection;
 						const types = navSections[section].map(type => {
@@ -97,10 +115,13 @@ class App extends Component {
 					})}
 				</div>
 				<div className="fx-body">{Children.map(children, (child) => {
+					// If we're on the homepage, just render the child
 					if (!params.type) return child;
 
+					// Get the current field type
 					const Type = Types[params.type];
 
+					// Clone the child and pass in the props it needs
 					return cloneElement(child, {
 						FieldComponent: Type.Field,
 						FilterComponent: Type.Filter,
@@ -116,8 +137,12 @@ class App extends Component {
 		);
 	}
 };
+App.propTypes = {
+	children: React.PropTypes.node,
+	params: React.PropTypes.object,
+};
 
-const Home = (props) => {
+const Home = () => {
 	return (
 		<div className="fx-welcome">
 			<div className="fx-welcome__inner">
@@ -128,6 +153,7 @@ const Home = (props) => {
 	);
 };
 
+// Render the router
 ReactDOM.render(
 	<Router history={browserHistory}>
 		<Route path="/" component={App}>

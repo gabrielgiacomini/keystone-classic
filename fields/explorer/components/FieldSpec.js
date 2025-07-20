@@ -1,3 +1,9 @@
+/**
+ * @fileoverview
+ * This component renders a single field specification in the Field Types
+ * Explorer. It includes the field's component, its current value, and the
+ * filter component.
+ */
 import Domify from 'react-domify';
 import React from 'react';
 import { Form } from '../../../admin/client/App/elemental';
@@ -6,12 +12,25 @@ import Col from './Col';
 import Row from './Row';
 
 const ExplorerFieldType = React.createClass({
+	propTypes: {
+		FieldComponent: React.PropTypes.func.isRequired,
+		FilterComponent: React.PropTypes.func.isRequired,
+		i: React.PropTypes.number,
+		readmeIsVisible: React.PropTypes.bool,
+		spec: React.PropTypes.object.isRequired,
+		value: React.PropTypes.any,
+	},
 	getInitialState () {
 		return {
 			filter: this.props.FilterComponent.getDefaultValue(),
 			value: this.props.value,
 		};
 	},
+	/**
+	 * Handles a change in the field's value.
+	 *
+	 * @param {Event} e The event object.
+	 */
 	onFieldChange (e) {
 		var logValue = typeof e.value === 'string' ? `"${e.value}"` : e.value;
 		console.log(`${this.props.FieldComponent.type} field value changed:`, logValue);
@@ -19,6 +38,11 @@ const ExplorerFieldType = React.createClass({
 			value: e.value,
 		});
 	},
+	/**
+	 * Handles a change in the filter's value.
+	 *
+	 * @param {*} value The new filter value.
+	 */
 	onFilterChange (value) {
 		console.log(`${this.props.FieldComponent.type} filter value changed:`, value);
 		this.setState({
@@ -27,12 +51,14 @@ const ExplorerFieldType = React.createClass({
 	},
 	render () {
 		const { FieldComponent, FilterComponent, readmeIsVisible, spec } = this.props;
+		// Add a border to all but the first field spec
 		const className = this.props.i ? 'fx-page__field__bordered' : undefined;
 		return (
 			<div className={className}>
 				<Form variant="horizontal" component="div">
 					<Row isCollapsed={readmeIsVisible}>
 						<Col width={readmeIsVisible ? 300 : null} style={{ minWidth: 300, maxWidth: 640 }}>
+							{/* The field component itself */}
 							<FieldComponent
 								{...spec}
 								onChange={this.onFieldChange}
@@ -40,6 +66,7 @@ const ExplorerFieldType = React.createClass({
 							/>
 						</Col>
 						<Col>
+							{/* Display the field's current value */}
 							<Domify
 								className="Domify"
 								value={{ value: this.state.value }}
@@ -51,6 +78,7 @@ const ExplorerFieldType = React.createClass({
 					<div className="fx-page__filter__title">Filter</div>
 					<Row>
 						<Col width={300}>
+							{/* The filter component */}
 							<FilterComponent
 								field={spec}
 								filter={this.state.filter}
@@ -59,6 +87,7 @@ const ExplorerFieldType = React.createClass({
 						</Col>
 						<Col>
 							<div style={{ marginLeft: 30 }}>
+								{/* Display the filter's current value */}
 								<Domify
 									className="Domify"
 									value={this.state.filter}

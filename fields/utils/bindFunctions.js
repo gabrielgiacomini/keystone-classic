@@ -1,12 +1,14 @@
-/*
-	Tidier binding for component methods to Classes
-	===============================================
-
-	constructor() {
-		super();
-		bindFunctions.call(this, ['handleClick', 'handleOther']);
-	}
-*/
+/**
+ * @fileoverview
+ * A utility for binding methods to a component's instance. This is a tidier
+ * way to bind methods in a component's constructor.
+ *
+ * @example
+ * constructor() {
+ *   super();
+ *   bindFunctions.call(this, ['handleClick', 'handleOther']);
+ * }
+ */
 module.exports = function bindFunctions (functions) {
 	functions.forEach(f => (this[f] = this[f].bind(this)));
 };

@@ -1,3 +1,9 @@
+/**
+ * @fileoverview
+ * This mixin provides functionality for managing an array of values for a
+ * field. It includes methods for adding, removing, and updating items, as well
+ * as rendering the field and its values.
+ */
 var React = require('react');
 
 import _ from 'lodash';
@@ -10,16 +16,34 @@ var FormInput = require('elemental').FormInput;
 var lastId = 0;
 var ENTER_KEYCODE = 13;
 
+/**
+ * Creates a new item with a unique key.
+ *
+ * @param {*} value The value of the new item.
+ * @return {object} The new item.
+ */
 function newItem (value) {
 	lastId = lastId + 1;
 	return { key: 'i' + lastId, value: value };
 }
 
+/**
+ * Reduces an array of items to an array of their values.
+ *
+ * @param {array} values The array of items.
+ * @return {array} The array of values.
+ */
 function reduceValues (values) {
 	return values.map(i => i.value);
 }
 
 module.exports = {
+	propTypes: {
+		value: React.PropTypes.array,
+		onChange: React.PropTypes.func.isRequired,
+		path: React.PropTypes.string.isRequired,
+		collapse: React.PropTypes.bool,
+	},
 	getInitialState: function () {
 		return {
 			values: Array.isArray(this.props.value) ? this.props.value.map(newItem) : [],
@@ -27,6 +51,7 @@ module.exports = {
 	},
 
 	componentWillReceiveProps: function (nextProps) {
+		// If the component receives new values, update the state
 		if (nextProps.value.join('|') !== reduceValues(this.state.values).join('|')) {
 			this.setState({
 				values: nextProps.value.map(newItem),
@@ -34,31 +59,48 @@ module.exports = {
 		}
 	},
 
+	/**
+	 * Adds a new item to the array.
+	 */
 	addItem: function () {
 		var newValues = this.state.values.concat(newItem(''));
 		this.setState({
 			values: newValues,
 		}, () => {
+			// Focus the new item
 			if (!this.state.values.length) return;
 			findDOMNode(this.refs['item_' + this.state.values.length]).focus();
 		});
 		this.valueChanged(reduceValues(newValues));
 	},
 
+	/**
+	 * Removes an item from the array.
+	 *
+	 * @param {object} i The item to remove.
+	 */
 	removeItem: function (i) {
 		var newValues = _.without(this.state.values, i);
 		this.setState({
 			values: newValues,
 		}, function () {
+			// Focus the add button
 			findDOMNode(this.refs.button).focus();
 		});
 		this.valueChanged(reduceValues(newValues));
 	},
 
+	/**
+	 * Updates an item in the array.
+	 *
+	 * @param {object} i The item to update.
+	 * @param {Event} event The change event.
+	 */
 	updateItem: function (i, event) {
 		var updatedValues = this.state.values;
 		var updateIndex = updatedValues.indexOf(i);
 		var newValue = event.value || event.target.value;
+		// If the new value is valid, update the item's value
 		if (this.isValid === undefined || this.isValid(newValue)) {
 			updatedValues[updateIndex].value = this.cleanInput ? this.cleanInput(newValue) : newValue;
 		}
@@ -68,6 +110,11 @@ module.exports = {
 		this.valueChanged(reduceValues(updatedValues));
 	},
 
+	/**
+	 * Called when the values of the array have changed.
+	 *
+	 * @param {array} values The new array of values.
+	 */
 	valueChanged: function (values) {
 		this.props.onChange({
 			path: this.props.path,
@@ -75,6 +122,11 @@ module.exports = {
 		});
 	},
 
+	/**
+	 * Renders the field.
+	 *
+	 * @return {React.Element}
+	 */
 	renderField: function () {
 		return (
 			<div>
@@ -84,6 +136,13 @@ module.exports = {
 		);
 	},
 
+	/**
+	 * Renders an item in the array.
+	 *
+	 * @param {object} item The item to render.
+	 * @param {number} index The index of the item.
+	 * @return {React.Element}
+	 */
 	renderItem: function (item, index) {
 		const Input = this.getInputComponent ? this.getInputComponent() : FormInput;
 		const value = this.processInputValue ? this.processInputValue(item.value) : item.value;
@@ -97,6 +156,11 @@ module.exports = {
 		);
 	},
 
+	/**
+	 * Renders the value of the field.
+	 *
+	 * @return {React.Element}
+	 */
 	renderValue: function () {
 		const Input = this.getInputComponent ? this.getInputComponent() : FormInput;
 		return (
@@ -113,11 +177,21 @@ module.exports = {
 		);
 	},
 
+	/**
+	 * Whether the field should be collapsed.
+	 *
+	 * @return {boolean}
+	 */
 	// Override shouldCollapse to check for array length
 	shouldCollapse: function () {
 		return this.props.collapse && !this.props.value.length;
 	},
 
+	/**
+	 * Adds a new item when the enter key is pressed.
+	 *
+	 * @param {Event} event The keydown event.
+	 */
 	addItemOnEnter: function (event) {
 		if (event.keyCode === ENTER_KEYCODE) {
 			this.addItem();

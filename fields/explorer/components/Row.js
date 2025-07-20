@@ -1,6 +1,16 @@
+/**
+ * @fileoverview
+ * This component is a layout utility for creating rows in the Field Types
+ * Explorer. It's a simple wrapper around a div that applies flexbox styles.
+ */
 import React, { Component, PropTypes } from 'react';
 
 class ExplorerRow extends Component {
+	/**
+	 * Get the child context.
+	 *
+	 * @return {object} The child context.
+	 */
 	getChildContext () {
 		return {
 			isCollapsed: this.props.isCollapsed,
@@ -8,6 +18,8 @@ class ExplorerRow extends Component {
 	}
 	render () {
 		const { className, gutter, isCollapsed, style = {}, ...incidentalProps } = this.props;
+
+		// Apply styles based on whether the row is collapsed
 		const __style__ = isCollapsed ? style : {
 			display: 'flex',
 			flexWrap: 'wrap',
@@ -34,7 +46,8 @@ ExplorerRow.childContextTypes = {
 ExplorerRow.propTypes = {
 	className: PropTypes.string,
 	gutter: PropTypes.number,
-	style: PropTypes.string,
+	isCollapsed: PropTypes.bool,
+	style: PropTypes.object,
 };
 ExplorerRow.defaultProps = {
 	gutter: 10,

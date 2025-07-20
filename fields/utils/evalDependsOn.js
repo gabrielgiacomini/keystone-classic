@@ -1,3 +1,8 @@
+/**
+ * @fileoverview
+ * This utility evaluates the `dependsOn` option of a field.
+ * It uses the `expression-match` library to evaluate the conditions.
+ */
 var ExMatch = require('expression-match'); // Matches objects with expressions
 
 /**
@@ -19,6 +24,7 @@ function isObject (arg) {
  *                          	  on it's dependencies and their values
  */
 module.exports = function evalDependsOn (dependsOn, values) {
+	// If dependsOn is not an object or is empty, the field is always visible
 	if (!isObject(dependsOn) || !Object.keys(dependsOn).length) {
 		return true;
 	}
