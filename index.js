@@ -47,6 +47,21 @@ var moduleRoot = (function (_rootPath) {
  * @property {Object} _options - Internal storage for Keystone's configuration options.
  * @property {Object} _redirects - A map of URL redirects.
  * @property {Function} express - The Express framework constructor.
+ * @property {Object} app - The Express app instance.
+ * @property {Object} mongoose - The Mongoose instance.
+ * @property {Object} middleware - An object containing Keystone's middleware.
+ * @property {Object} Admin - An object containing the Admin UI server.
+ * @property {Email} Email - The Email class.
+ * @property {Field} Field - The Field class.
+ * @property {Keystone} Keystone - The Keystone class.
+ * @property {List} List - The List class.
+ * @property {Storage} Storage - The Storage class.
+ * @property {View} View - The View class.
+ * @property {Object} content - An object containing content management functionality.
+ * @property {Object} security - An object containing security-related functionality.
+ * @property {Object} utils - An object containing utility functions.
+ * @property {String} version - The version of KeystoneJS.
+ * @property {Object} session - An object containing session management functionality.
  */
 var Keystone = function () {
 	// Inherit from GrapplingHook for event handling.
