@@ -32,14 +32,22 @@ var keystone = require('keystone');
 var Types = keystone.Field.Types;
 
 var User = new keystone.List('User', {
+    schema: {
+        collection: 'users',
+    },
+    noedit: false,
+    nocreate: false,
+    nodelete: false,
     autocreate: true,
-    nocreate: true,
-    noedit: true,
-    nodelete: true,
-    hidden: true,
     sortable: true,
+    hidden: false,
+    track: true,
+    inherits: false,
+    perPage: 100,
     searchFields: 'name, email',
+    searchUsesTextIndex: false,
     defaultSort: '-createdAt',
+    defaultColumns: 'name, email',
 });
 
 User.add({
