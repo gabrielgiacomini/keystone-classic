@@ -8,13 +8,39 @@ This directory contains the core library files for KeystoneJS. These modules pro
 
 The `List` class is the heart of Keystone's data modeling. It is used to define the schema and behavior of your application's data models, which are analogous to tables or collections in a database.
 
+**Supported Options:**
+
+*   `schema`: Mongoose schema options.
+*   `noedit`: Prevents editing of items in the Admin UI.
+*   `nocreate`: Prevents creating new items in the Admin UI.
+*   `nodelete`: Prevents deleting items in the Admin UI.
+*   `autocreate`: Automatically creates the list if it doesn't exist.
+*   `sortable`: Enables drag-and-drop sorting of items in the Admin UI.
+*   `hidden`: Hides the list from the Admin UI navigation.
+*   `track`: Automatically adds `createdAt`, `createdBy`, `updatedAt`, and `updatedBy` fields.
+*   `inherits`: Inherits the schema from another list.
+*   `perPage`: The number of items to display per page in the Admin UI.
+*   `searchFields`: The fields to search when using the search bar in the Admin UI.
+*   `searchUsesTextIndex`: Whether to use a text index for searching.
+*   `defaultSort`: The default sort order for the list.
+*   `defaultColumns`: The default columns to display in the Admin UI.
+
 **Usage:**
 
 ```javascript
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
 
-var User = new keystone.List('User');
+var User = new keystone.List('User', {
+    autocreate: true,
+    nocreate: true,
+    noedit: true,
+    nodelete: true,
+    hidden: true,
+    sortable: true,
+    searchFields: 'name, email',
+    defaultSort: '-createdAt',
+});
 
 User.add({
 	name: { type: Types.Name, required: true, index: true },
