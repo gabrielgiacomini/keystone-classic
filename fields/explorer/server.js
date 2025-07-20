@@ -3,6 +3,8 @@
  * This file sets up an Express server to explore KeystoneJS field types.
  * It serves the explorer's HTML, CSS, and JavaScript, and includes a stub API
  * for relationship fields.
+ * @typedef {import('express').Request} Request
+ * @typedef {import('express').Response} Response
  */
 
 const babelify = require('babelify');
@@ -16,7 +18,10 @@ const packages = require('../../admin/client/packages');
 const app = new express();
 
 // Serve the explorer stylesheet
-app.get('/index.css', (req, res) => res.sendFile(path.resolve('./fields/explorer/index.css')));
+app.get('/index.css', (
+	/** @type {Request} */ req,
+	/** @type {Response} */ res
+) => res.sendFile(path.resolve('./fields/explorer/index.css')));
 
 /**
  * Serve script bundles
@@ -66,7 +71,10 @@ app.use(express.static('./admin/public'));
  *
  * @api public
  */
-app.get('/api/flavours', (req, res) => res.json({
+app.get('/api/flavours', (
+	/** @type {Request} */ req,
+	/** @type {Response} */ res
+) => res.json({
 	results: [
 		{ id: 'chocolate', name: 'Chocolate' },
 		{ id: 'vanilla', name: 'Vanilla' },
@@ -80,7 +88,10 @@ app.get('/api/flavours', (req, res) => res.json({
  *
  * @api public
  */
-app.use('/', (req, res) => res.sendFile(path.resolve('./fields/explorer/index.html')));
+app.use('/', (
+	/** @type {Request} */ req,
+	/** @type {Response} */ res
+) => res.sendFile(path.resolve('./fields/explorer/index.html')));
 
 app.listen(8000, function () {
 	console.log('Field Types Explorer ready on http://localhost:8000');

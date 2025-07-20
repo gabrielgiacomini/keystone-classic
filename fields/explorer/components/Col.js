@@ -2,14 +2,24 @@
  * @fileoverview
  * This component is a layout utility for creating columns in the Field Types
  * Explorer. It's a simple wrapper around a div that applies flexbox styles.
+ *
+ * @typedef {Object} ExplorerColProps
+ * @property {string} [className] - Additional class names to apply.
+ * @property {number} [gutter] - The gutter between columns.
+ * @property {React.CSSProperties} [style] - Custom styles to apply.
+ * @property {number|string} [width] - The width of the column.
+ *
+ * @typedef {Object} ExplorerColContext
+ * @property {boolean} [isCollapsed] - Whether the column is collapsed.
  */
 import React, { PropTypes } from 'react';
 
 /**
  * A column component for the explorer.
  *
- * @param {object} props The component props.
- * @param {object} context The component context.
+ * @param {ExplorerColProps} props The component props.
+ * @param {ExplorerColContext} context The component context.
+ * @returns {React.ReactElement}
  */
 const ExplorerCol = (props, context) => {
 	const { className, gutter, style = {}, width, ...incidentalProps } = props;
@@ -42,11 +52,11 @@ ExplorerCol.contextTypes = {
 ExplorerCol.propTypes = {
 	className: PropTypes.string,
 	gutter: PropTypes.number,
-	style: PropTypes.object, // Note: was PropTypes.string, should be object
+	style: PropTypes.object,
 	width: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.number,
-	]), // Note: was PropTypes.number
+	]),
 };
 ExplorerCol.defaultProps = {
 	gutter: 10,

@@ -8,6 +8,8 @@
  *   super();
  *   bindFunctions.call(this, ['handleClick', 'handleOther']);
  * }
+ *
+ * @param {string[]} functions An array of function names to bind to the component instance.
  */
 module.exports = function bindFunctions (functions) {
 	functions.forEach(f => (this[f] = this[f].bind(this)));

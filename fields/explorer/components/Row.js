@@ -2,6 +2,12 @@
  * @fileoverview
  * This component is a layout utility for creating rows in the Field Types
  * Explorer. It's a simple wrapper around a div that applies flexbox styles.
+ *
+ * @typedef {Object} ExplorerRowProps
+ * @property {string} [className] - Additional class names to apply.
+ * @property {number} [gutter] - The gutter between columns.
+ * @property {boolean} [isCollapsed] - Whether the row is collapsed.
+ * @property {React.CSSProperties} [style] - Custom styles to apply.
  */
 import React, { Component, PropTypes } from 'react';
 
@@ -9,7 +15,7 @@ class ExplorerRow extends Component {
 	/**
 	 * Get the child context.
 	 *
-	 * @return {object} The child context.
+	 * @return {{isCollapsed: boolean}} The child context.
 	 */
 	getChildContext () {
 		return {
@@ -47,7 +53,7 @@ ExplorerRow.propTypes = {
 	className: PropTypes.string,
 	gutter: PropTypes.number,
 	isCollapsed: PropTypes.bool,
-	style: PropTypes.object, // Note: was PropTypes.string, should be object
+	style: PropTypes.object,
 };
 ExplorerRow.defaultProps = {
 	gutter: 10,

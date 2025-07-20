@@ -2,6 +2,15 @@
  * @fileoverview
  * This is the main view for a specific field type in the explorer. It renders
  * the field's header, the field specs, and the readme.
+ *
+ * @typedef {Object} ExplorerFieldTypeProps
+ * @property {React.ComponentType<any>} FieldComponent The field component to render.
+ * @property {React.ComponentType<any>} FilterComponent The filter component to render.
+ * @property {{type: string}} params The router params.
+ * @property {string} readme The readme content.
+ * @property {Object | Object[]} spec The field spec or an array of specs.
+ * @property {function} toggleSidebar Toggles the sidebar visibility.
+ * @property {any} value The field value.
  */
 import React from 'react';
 import Markdown from 'react-markdown';
@@ -33,7 +42,7 @@ const ExplorerFieldType = React.createClass({
 	/**
 	 * Updates the state when the component receives new props.
 	 *
-	 * @param {object} newProps The new props.
+	 * @param {ExplorerFieldTypeProps} newProps The new props.
 	 */
 	componentWillReceiveProps (newProps) {
 		// If the field type has changed, reset the state
@@ -50,7 +59,8 @@ const ExplorerFieldType = React.createClass({
 	/**
 	 * Handles a change in the field's value.
 	 *
-	 * @param {Event} e The event object.
+	 * @param {Object} e The event object.
+	 * @param {any} e.value The new value.
 	 */
 	onFieldChange (e) {
 		var logValue = typeof e.value === 'string' ? `"${e.value}"` : e.value;
@@ -62,7 +72,7 @@ const ExplorerFieldType = React.createClass({
 	/**
 	 * Handles a change in the filter's value.
 	 *
-	 * @param {*} value The new filter value.
+	 * @param {any} value The new filter value.
 	 */
 	onFilterChange (value) {
 		console.log(`${this.props.params.type} filter value changed:`, value);

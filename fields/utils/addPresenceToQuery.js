@@ -3,11 +3,13 @@
  * This utility modifies a MongoDB query to account for the presence of a
  * field. It's used in the filtering of relationship fields.
  */
+
 /**
- * Accounts for the presence choice when filtering
+ * Accounts for the presence choice when filtering.
  *
- * @param {String} presence  		The current presence choice
- * @param {Object} currentPathQuery The current request query
+ * @param {'some' | 'none'} presence The current presence choice.
+ * @param {Object} currentPathQuery The current request query.
+ * @returns {Object} The modified query.
  */
 function addPresenceToQuery (presence, currentPathQuery) {
 	var newQuery;

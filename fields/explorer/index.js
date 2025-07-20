@@ -2,6 +2,20 @@
  * @fileoverview
  * This is the main entry point for the Field Types Explorer UI. It renders the
  * sidebar navigation and the main content area, which is handled by react-router.
+ *
+ * @typedef {Object} FieldTypeExplorer
+ * @property {React.ComponentType<any>} Field The field component.
+ * @property {React.ComponentType<any>} Filter The filter component.
+ * @property {any} value The initial value for the field.
+ * @property {string} readme The readme content for the field.
+ * @property {string} section The section the field belongs to.
+ * @property {Object | Object[]} spec The field spec or an array of specs.
+ *
+ * @typedef {Object.<string, FieldTypeExplorer>} TypesObject
+ *
+ * @typedef {Object} AppProps
+ * @property {React.ReactNode} children The children to render.
+ * @property {{type: string}} params The router params.
  */
 import React, { Children, cloneElement, Component } from 'react';
 import { Link, Router, Route, browserHistory, IndexRoute } from 'react-router';
@@ -9,6 +23,7 @@ import ReactDOM from 'react-dom';
 import FieldType from './components/FieldType';
 
 // All the field type explorers
+/** @type {TypesObject} */
 const Types = {
 	Boolean: require('../types/boolean/test/explorer'),
 	Code: require('../types/code/test/explorer'),
@@ -40,8 +55,8 @@ const Types = {
 /**
  * Generates the navigation sections for the sidebar.
  *
- * @param {Array} arr The array of field types.
- * @return {Object} The navigation sections.
+ * @param {FieldTypeExplorer[]} arr The array of field types.
+ * @return {Object.<string, string[]>} The navigation sections.
  */
 function generateNavSections (arr) {
 	const navSections = {};

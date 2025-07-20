@@ -3,6 +3,14 @@
  * This component renders a single field specification in the Field Types
  * Explorer. It includes the field's component, its current value, and the
  * filter component.
+ *
+ * @typedef {Object} FieldSpecProps
+ * @property {React.ComponentType<any>} FieldComponent The field component to render.
+ * @property {React.ComponentType<any>} FilterComponent The filter component to render.
+ * @property {number} i The index of the field spec.
+ * @property {boolean} readmeIsVisible Whether the readme is visible.
+ * @property {Object} spec The field spec.
+ * @property {any} value The field value.
  */
 import Domify from 'react-domify';
 import React from 'react';
@@ -29,7 +37,8 @@ const ExplorerFieldType = React.createClass({
 	/**
 	 * Handles a change in the field's value.
 	 *
-	 * @param {Event} e The event object.
+	 * @param {Object} e The event object.
+	 * @param {any} e.value The new value.
 	 */
 	onFieldChange (e) {
 		var logValue = typeof e.value === 'string' ? `"${e.value}"` : e.value;
@@ -41,7 +50,7 @@ const ExplorerFieldType = React.createClass({
 	/**
 	 * Handles a change in the filter's value.
 	 *
-	 * @param {*} value The new filter value.
+	 * @param {any} value The new filter value.
 	 */
 	onFilterChange (value) {
 		console.log(`${this.props.FieldComponent.type} filter value changed:`, value);

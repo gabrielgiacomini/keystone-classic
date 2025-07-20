@@ -3,6 +3,16 @@
  * This mixin provides functionality for managing an array of values for a
  * field. It includes methods for adding, removing, and updating items, as well
  * as rendering the field and its values.
+ *
+ * @typedef {Object} ArrayFieldItem
+ * @property {string} key A unique key for the item.
+ * @property {any} value The value of the item.
+ *
+ * @typedef {Object} ArrayFieldProps
+ * @property {any[]} value The array of values.
+ * @property {function(Object): void} onChange A function to call when the value changes.
+ * @property {string} path The path of the field.
+ * @property {boolean} [collapse] Whether the field should be collapsed.
  */
 var React = require('react');
 
@@ -19,8 +29,8 @@ var ENTER_KEYCODE = 13;
 /**
  * Creates a new item with a unique key.
  *
- * @param {*} value The value of the new item.
- * @return {object} The new item.
+ * @param {any} value The value of the new item.
+ * @return {ArrayFieldItem} The new item.
  */
 function newItem (value) {
 	lastId = lastId + 1;
@@ -30,8 +40,8 @@ function newItem (value) {
 /**
  * Reduces an array of items to an array of their values.
  *
- * @param {array} values The array of items.
- * @return {array} The array of values.
+ * @param {ArrayFieldItem[]} values The array of items.
+ * @return {any[]} The array of values.
  */
 function reduceValues (values) {
 	return values.map(i => i.value);
@@ -50,6 +60,9 @@ module.exports = {
 		};
 	},
 
+	/**
+	 * @param {ArrayFieldProps} nextProps
+	 */
 	componentWillReceiveProps: function (nextProps) {
 		// If the component receives new values, update the state
 		if (nextProps.value.join('|') !== reduceValues(this.state.values).join('|')) {
@@ -77,7 +90,7 @@ module.exports = {
 	/**
 	 * Removes an item from the array.
 	 *
-	 * @param {object} i The item to remove.
+	 * @param {ArrayFieldItem} i The item to remove.
 	 */
 	removeItem: function (i) {
 		var newValues = _.without(this.state.values, i);
@@ -93,8 +106,11 @@ module.exports = {
 	/**
 	 * Updates an item in the array.
 	 *
-	 * @param {object} i The item to update.
-	 * @param {Event} event The change event.
+	 * @param {ArrayFieldItem} i The item to update.
+	 * @param {Object} event The change event.
+	 * @param {any} [event.value] The new value.
+	 * @param {Object} [event.target] The event target.
+	 * @param {any} [event.target.value] The new value from the event target.
 	 */
 	updateItem: function (i, event) {
 		var updatedValues = this.state.values;
@@ -113,7 +129,7 @@ module.exports = {
 	/**
 	 * Called when the values of the array have changed.
 	 *
-	 * @param {array} values The new array of values.
+	 * @param {any[]} values The new array of values.
 	 */
 	valueChanged: function (values) {
 		this.props.onChange({
@@ -139,7 +155,7 @@ module.exports = {
 	/**
 	 * Renders an item in the array.
 	 *
-	 * @param {object} item The item to render.
+	 * @param {ArrayFieldItem} item The item to render.
 	 * @param {number} index The index of the item.
 	 * @return {React.Element}
 	 */
@@ -190,7 +206,7 @@ module.exports = {
 	/**
 	 * Adds a new item when the enter key is pressed.
 	 *
-	 * @param {Event} event The keydown event.
+	 * @param {KeyboardEvent} event The keydown event.
 	 */
 	addItemOnEnter: function (event) {
 		if (event.keyCode === ENTER_KEYCODE) {

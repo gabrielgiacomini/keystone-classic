@@ -8,8 +8,8 @@ var ExMatch = require('expression-match'); // Matches objects with expressions
 /**
  * Checks if something is an object
  *
- * @param  {Any} arg   The something we want to check the type of
- * @return {Boolean} If arg is an object or not
+ * @param  {any} arg The something we want to check the type of
+ * @return {boolean} If arg is an object or not
  */
 function isObject (arg) {
 	return Object.prototype.toString.call(arg) === '[object Object]';
@@ -18,9 +18,9 @@ function isObject (arg) {
 /**
  * Evaluates the visibility of a field based on its dependencies and their values
  *
- * @param  {Object|Any} dependsOn The dependsOn variable we get from the field
- * @param  {Object}		values    The values currently in the fields
- * @return {Boolean}			  If the current field should be displayed based
+ * @param  {Object} dependsOn The dependsOn variable we get from the field
+ * @param  {Object} values    The values currently in the fields
+ * @return {boolean}			  If the current field should be displayed based
  *                          	  on it's dependencies and their values
  */
 module.exports = function evalDependsOn (dependsOn, values) {
