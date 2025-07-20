@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the actions for the drag and drop
+ * functionality of the list.
+ */
 import {
 	SET_ROW_ALERT,
 	RESET_DRAG_PAGE,
@@ -13,6 +17,13 @@ import {
 	loadItems,
 } from '../actions';
 
+/**
+ * Sets the drag base.
+ *
+ * @param {object} item The item to drag.
+ * @param {number} index The index of the item.
+ * @returns {function} A thunk that dispatches an action.
+ */
 export function setDragBase (item, index) {
 	return (dispatch) => {
 		dispatch(resetDragPage());
@@ -26,18 +37,34 @@ export function setDragBase (item, index) {
 	};
 };
 
+/**
+ * Resets the drag page.
+ *
+ * @returns {object} The action object.
+ */
 export function resetDragPage () {
 	return {
 		type: RESET_DRAG_PAGE,
 	};
 }
 
+/**
+ * Resets the drag items.
+ *
+ * @returns {object} The action object.
+ */
 export function resetDragItems () {
 	return {
 		type: RESET_DRAG_ITEMS,
 	};
 }
 
+/**
+ * Sets the drag item.
+ *
+ * @param {object} item The item to drag.
+ * @returns {object} The action object.
+ */
 export function setDragItem (item) {
 	return {
 		type: SET_DRAG_ITEM,
@@ -45,6 +72,12 @@ export function setDragItem (item) {
 	};
 }
 
+/**
+ * Sets the drag index.
+ *
+ * @param {number} index The index of the item.
+ * @returns {object} The action object.
+ */
 export function setDragIndex (index) {
 	return {
 		type: SET_DRAG_INDEX,
@@ -52,6 +85,12 @@ export function setDragIndex (index) {
 	};
 }
 
+/**
+ * Sets the row alert.
+ *
+ * @param {object} data The data for the alert.
+ * @returns {object} The action object.
+ */
 export function setRowAlert (data) {
 	return {
 		type: SET_ROW_ALERT,
@@ -59,6 +98,14 @@ export function setRowAlert (data) {
 	};
 }
 
+/**
+ * Moves an item.
+ *
+ * @param {number} prevIndex The previous index of the item.
+ * @param {number} newIndex The new index of the item.
+ * @param {object} options The options for the move.
+ * @returns {object} The action object.
+ */
 export function moveItem (prevIndex, newIndex, options) {
 	return {
 		type: DRAG_MOVE_ITEM,
@@ -68,6 +115,15 @@ export function moveItem (prevIndex, newIndex, options) {
 	};
 }
 
+/**
+ * Reorders the items.
+ *
+ * @param {object} item The item to reorder.
+ * @param {number} prevSortOrder The previous sort order of the item.
+ * @param {number} newSortOrder The new sort order of the item.
+ * @param {number} goToPage The page to go to after reordering.
+ * @returns {function} A thunk that dispatches an action.
+ */
 export function reorderItems (item, prevSortOrder, newSortOrder, goToPage) {
 	// // reset drag
 	// defaultDrag();
@@ -108,6 +164,12 @@ export function reorderItems (item, prevSortOrder, newSortOrder, goToPage) {
 	};
 }
 
+/**
+ * Resets the items.
+ *
+ * @param {string} itemId The id of the item to reset.
+ * @returns {function} A thunk that dispatches an action.
+ */
 export function resetItems (itemId) {
 	return (dispatch, getState) => {
 		const state = getState();

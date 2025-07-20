@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the actions for the Item screen.
+ */
 import {
 	SELECT_ITEM,
 	LOAD_DATA,
@@ -13,9 +16,10 @@ import {
 } from '../List/actions';
 
 /**
- * Select an item
+ * Select an item.
  *
- * @param  {String} itemId The item ID
+ * @param {string} itemId The item ID.
+ * @returns {object} The action object.
  */
 export function selectItem (itemId) {
 	return {
@@ -25,7 +29,9 @@ export function selectItem (itemId) {
 }
 
 /**
- * Load the item data of the current item
+ * Load the item data of the current item.
+ *
+ * @returns {function} A thunk that dispatches an action.
  */
 export function loadItemData () {
 	return (dispatch, getState) => {
@@ -61,6 +67,16 @@ export function loadItemData () {
 	};
 }
 
+/**
+ * Load relationship item data.
+ *
+ * @param {object} options The options for the request.
+ * @param {array} options.columns The columns to load.
+ * @param {object} options.refList The reference list.
+ * @param {object} options.relationship The relationship.
+ * @param {string} options.relatedItemId The related item ID.
+ * @returns {function} A thunk that dispatches an action.
+ */
 export function loadRelationshipItemData ({ columns, refList, relationship, relatedItemId }) {
 	return (dispatch, getState) => {
 		refList.loadItems({
@@ -79,9 +95,10 @@ export function loadRelationshipItemData ({ columns, refList, relationship, rela
 
 
 /**
- * Called when data of the current item is loaded
+ * Called when data of the current item is loaded.
  *
- * @param  {Object} data The item data
+ * @param {object} data The item data.
+ * @returns {object} The action object.
  */
 export function dataLoaded (data) {
 	return {
@@ -91,6 +108,13 @@ export function dataLoaded (data) {
 	};
 }
 
+/**
+ * Called when relationship data is loaded.
+ *
+ * @param {string} path The relationship path.
+ * @param {object} data The relationship data.
+ * @returns {object} The action object.
+ */
 export function relationshipDataLoaded (path, data) {
 	return {
 		type: LOAD_RELATIONSHIP_DATA,
@@ -101,9 +125,10 @@ export function relationshipDataLoaded (path, data) {
 
 /**
  * Called when there was an error during the loading of the current item data,
- * will retry loading the data ever NETWORK_ERROR_RETRY_DELAY milliseconds
+ * will retry loading the data ever NETWORK_ERROR_RETRY_DELAY milliseconds.
  *
- * @param  {Object} error The error
+ * @param {object} error The error.
+ * @returns {object} The action object.
  */
 export function dataLoadingError (err) {
 	return {
@@ -114,11 +139,12 @@ export function dataLoadingError (err) {
 }
 
 /**
- * Deletes an item and optionally redirects to the current list URL
+ * Deletes an item and optionally redirects to the current list URL.
  *
- * @param  {String} id     The ID of the item we want to delete
- * @param  {Object} router A react-router router object. If this is passed, we
- *                         redirect to Keystone.adminPath/currentList.path!
+ * @param {string} id The ID of the item we want to delete.
+ * @param {object} router A react-router router object. If this is passed, we
+ *                        redirect to Keystone.adminPath/currentList.path!
+ * @returns {function} A thunk that dispatches an action.
  */
 export function deleteItem (id, router) {
 	return (dispatch, getState) => {
@@ -144,6 +170,19 @@ export function deleteItem (id, router) {
 	};
 }
 
+/**
+ * Reorders items in a relationship list.
+ *
+ * @param {object} options The options for the request.
+ * @param {array} options.columns The columns to load.
+ * @param {object} options.refList The reference list.
+ * @param {object} options.relationship The relationship.
+ * @param {string} options.relatedItemId The related item ID.
+ * @param {object} options.item The item to reorder.
+ * @param {number} options.prevSortOrder The previous sort order.
+ * @param {number} options.newSortOrder The new sort order.
+ * @returns {function} A thunk that dispatches an action.
+ */
 export function reorderItems ({ columns, refList, relationship, relatedItemId, item, prevSortOrder, newSortOrder }) {
 	return (dispatch, getState) => {
 		// Send the item, previous sortOrder and the new sortOrder
@@ -177,6 +216,16 @@ export function reorderItems ({ columns, refList, relationship, relatedItemId, i
 	};
 }
 
+/**
+ * Moves an item in a relationship list.
+ *
+ * @param {object} options The options for the request.
+ * @param {number} options.prevIndex The previous index of the item.
+ * @param {number} options.newIndex The new index of the item.
+ * @param {string} options.relationshipPath The relationship path.
+ * @param {number} options.newSortOrder The new sort order.
+ * @returns {object} The action object.
+ */
 export function moveItem ({ prevIndex, newIndex, relationshipPath, newSortOrder }) {
 	return {
 		type: DRAG_MOVE_ITEM,
@@ -187,6 +236,11 @@ export function moveItem ({ prevIndex, newIndex, relationshipPath, newSortOrder 
 	};
 }
 
+/**
+ * Resets the items in a relationship list.
+ *
+ * @returns {object} The action object.
+ */
 export function resetItems () {
 	return {
 		type: DRAG_RESET_ITEMS,

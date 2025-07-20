@@ -1,12 +1,13 @@
-/*
- * jQuery File Upload Processing Plugin 1.2.2
- * https://github.com/blueimp/jQuery-File-Upload
+/**
+ * @fileoverview jQuery File Upload Processing Plugin.
  *
- * Copyright 2012, Sebastian Tschan
- * https://blueimp.net
+ * This plugin extends the jQuery File Upload widget with file processing
+ * functionality. It allows for a queue of processing actions to be applied to
+ * files before they are uploaded.
  *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * @see https://github.com/blueimp/jQuery-File-Upload
+ * @author Sebastian Tschan
+ * @license MIT
  */
 
 /*jslint nomen: true, unparam: true */

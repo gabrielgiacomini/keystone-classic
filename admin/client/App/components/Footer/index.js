@@ -1,13 +1,27 @@
 /**
- * The global Footer, displays a link to the website and the current Keystone
- * version in use
+ * @fileoverview This file contains the Footer component, which is displayed at
+ * the bottom of the page. It displays the brand, the current Keystone version,
+ * and a link to the KeystoneJS website. It also displays the currently logged
+ * in user and a signout link.
  */
-
 import React from "react";
 import { css } from "glamor";
 import { Container } from "../../elemental";
 import theme from "../../../theme";
 
+/**
+ * The global Footer, displays a link to the website and the current Keystone
+ * version in use.
+ *
+ * @param {object} props The properties for the component.
+ * @param {string} props.appversion The version of the app.
+ * @param {string} props.backUrl The URL to go back to.
+ * @param {string} props.brand The brand name.
+ * @param {object} props.user The currently logged in user.
+ * @param {object} props.User The User model.
+ * @param {string} props.version The version of KeystoneJS.
+ * @returns {React.Element} The rendered component.
+ */
 var Footer = React.createClass({
 	displayName: "Footer",
 	propTypes: {
@@ -18,7 +32,11 @@ var Footer = React.createClass({
 		User: React.PropTypes.object, // eslint-disable-line react/sort-prop-types
 		version: React.PropTypes.string
 	},
-	// Render the user
+	/**
+	 * Renders the user.
+	 *
+	 * @returns {React.Element} The rendered user.
+	 */
 	renderUser() {
 		const { User, user } = this.props;
 		if (!user) return null;
@@ -37,6 +55,11 @@ var Footer = React.createClass({
 			</span>
 		);
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render() {
 		const { backUrl, brand, appversion, version } = this.props;
 
@@ -64,10 +87,17 @@ var Footer = React.createClass({
 });
 
 /* eslint quote-props: ["error", "as-needed"] */
+/**
+ * The styles for the link on hover and focus.
+ */
 const linkHoverAndFocus = {
 	color: theme.color.gray60,
 	outline: "none"
 };
+
+/**
+ * The styles for the component.
+ */
 const classes = {
 	footer: {
 		boxShadow: "0 -1px 0 rgba(0, 0, 0, 0.1)",

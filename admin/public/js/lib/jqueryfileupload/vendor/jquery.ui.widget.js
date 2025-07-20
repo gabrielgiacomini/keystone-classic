@@ -1,12 +1,12 @@
-/*
- * jQuery UI Widget 1.10.3+amd
- * https://github.com/blueimp/jQuery-File-Upload
+/**
+ * @fileoverview jQuery UI Widget factory.
  *
- * Copyright 2013 jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
+ * This file provides the jQuery UI Widget factory, which is a lightweight base
+ * for creating stateful jQuery plugins.
  *
- * http://api.jqueryui.com/jQuery.widget/
+ * @see http://api.jqueryui.com/jQuery.widget/
+ * @author jQuery Foundation and other contributors
+ * @license MIT
  */
 
 (function (factory) {

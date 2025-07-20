@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the Filter component, which is used to
+ * render a filter chip and a popout for editing the filter.
+ */
 import React, { Component, PropTypes } from 'react';
 import { Filters } from 'FieldTypes';
 import { Chip } from '../../../../elemental';
@@ -6,6 +10,9 @@ import Popout from '../../../../shared/Popout';
 import { setFilter, clearFilter } from '../../actions';
 import getFilterLabel from './getFilterLabel';
 
+/**
+ * A filter chip that opens a popout for editing the filter.
+ */
 class Filter extends Component {
 	constructor () {
 		super();
@@ -20,31 +27,55 @@ class Filter extends Component {
 			isOpen: false,
 		};
 	}
+	/**
+	 * Opens the popout.
+	 */
 	open () {
 		this.setState({
 			isOpen: true,
 			filterValue: this.props.filter.value,
 		});
 	}
+	/**
+	 * Closes the popout.
+	 */
 	close () {
 		this.setState({
 			isOpen: false,
 		});
 	}
+	/**
+	 * Updates the value of the filter.
+	 *
+	 * @param {object} filterValue The new value of the filter.
+	 */
 	updateValue (filterValue) {
 		this.setState({
 			filterValue: filterValue,
 		});
 	}
+	/**
+	 * Updates the filter.
+	 *
+	 * @param {Event} e The event object.
+	 */
 	updateFilter (e) {
 		const { dispatch, filter } = this.props;
 		dispatch(setFilter(filter.field.path, this.state.filterValue));
 		this.close();
 		e.preventDefault();
 	}
+	/**
+	 * Removes the filter.
+	 */
 	removeFilter () {
 		this.props.dispatch(clearFilter(this.props.filter.field.path));
 	}
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { filter } = this.props;
 		const filterId = `activeFilter__${filter.field.path}`;

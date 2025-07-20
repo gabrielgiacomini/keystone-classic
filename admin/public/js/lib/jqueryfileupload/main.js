@@ -1,12 +1,11 @@
-/*
- * jQuery File Upload Plugin JS Example 8.9.0
- * https://github.com/blueimp/jQuery-File-Upload
+/**
+ * @fileoverview This is the main JavaScript file for the jQuery File Upload
+ * plugin's example. It initializes the file upload widget and sets up the
+ * necessary options and event handlers.
  *
- * Copyright 2010, Sebastian Tschan
- * https://blueimp.net
- *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * @see https://github.com/blueimp/jQuery-File-Upload
+ * @author Sebastian Tschan
+ * @license MIT
  */
 
 /*jslint nomen: true, regexp: true */

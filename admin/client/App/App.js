@@ -1,8 +1,7 @@
 /**
- * The App component is the component that is rendered around all views, and
- * contains common things like navigation, footer, etc.
+ * @fileoverview This file is the main application component. It is rendered
+ * around all views and contains common things like navigation and the footer.
  */
-
 import React from 'react';
 import { Container } from './elemental';
 import { Link } from 'react-router';
@@ -13,18 +12,14 @@ import PrimaryNavigation from './components/Navigation/Primary';
 import SecondaryNavigation from './components/Navigation/Secondary';
 import Footer from './components/Footer';
 
-const classes = {
-	wrapper: {
-		display: 'flex',
-		flexDirection: 'column',
-		minHeight: '100vh',
-	},
-	body: {
-		flexGrow: 1,
-	},
-};
-
+/**
+ * The main application component.
+ *
+ * @param {object} props The component's properties.
+ * @returns {React.Element} The rendered component.
+ */
 const App = (props) => {
+	// Get the lists and current list from the Keystone object.
 	const listsByPath = require('../utils/lists').listsByPath;
 	let children = props.children;
 	// If we're on either a list or an item view
@@ -87,6 +82,20 @@ const App = (props) => {
 			/>
 		</div>
 	);
+};
+
+/**
+ * The styles for the component.
+ */
+const classes = {
+	wrapper: {
+		display: 'flex',
+		flexDirection: 'column',
+		minHeight: '100vh',
+	},
+	body: {
+		flexGrow: 1,
+	},
 };
 
 module.exports = App;

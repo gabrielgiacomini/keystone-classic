@@ -1,8 +1,21 @@
+/**
+ * @fileoverview This file contains the ListTile component, which is used to
+ * display information about a list and lets you create a new one.
+ */
 import React from 'react';
 import { Link } from 'react-router';
 
 /**
  * Displays information about a list and lets you create a new one.
+ *
+ * @param {object} props The properties for the component.
+ * @param {string} props.count The number of items in the list.
+ * @param {boolean} props.hideCreateButton Whether to hide the create button.
+ * @param {string} props.href The href for the list.
+ * @param {string} props.label The label for the list.
+ * @param {string} props.path The path for the list.
+ * @param {React.Element} props.spinner The spinner to display while loading.
+ * @returns {React.Element} The rendered component.
  */
 var ListTile = React.createClass({
 	propTypes: {
@@ -13,6 +26,11 @@ var ListTile = React.createClass({
 		path: React.PropTypes.string,
 		spinner: React.PropTypes.object,
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		var opts = {
 			'data-list-path': this.props.path,

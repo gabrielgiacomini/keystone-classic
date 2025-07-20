@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the sagas for managing the query parameters
+ * of the application.
+ */
 import { updateQueryParams, stringifyColumns, parametizeFilters, createSortQueryParams, createPageQueryParams } from '../../utils/queryParams';
 import { replace, push } from 'react-router-redux';
 import { select, put, call } from 'redux-saga/effects';
@@ -10,6 +14,13 @@ import { loadItems } from '../screens/List/actions';
 import isEqual from 'lodash/isEqual';
 import { columnsParser, sortParser, filtersParser } from '../parsers';
 
+/**
+ * Updates the URL with the new query parameters.
+ *
+ * @param {object} query The new query parameters.
+ * @param {object} cache The cached query parameters.
+ * @param {string} pathname The current pathname.
+ */
 export function * urlUpdate (query, cache, pathname) {
 	const blacklistedField = 'search';
 	const attenuatedQuery = blacklist(query, blacklistedField);
@@ -26,8 +37,9 @@ export function * urlUpdate (query, cache, pathname) {
 		}));
 	}
 }
+
 /**
- * Update the query params based on the current state
+ * Updates the query parameters based on the current state.
  */
 export function * updateParams () {
 	// Select all the things
@@ -61,7 +73,9 @@ export function * updateParams () {
 	yield put(loadItems());
 }
 
-
+/**
+ * Evaluates the query parameters and updates the state if necessary.
+ */
 export function * evalQueryParams () {
 	const { pathname, query } = yield select(state => state.routing.locationBeforeTransitions);
 
@@ -79,6 +93,13 @@ export function * evalQueryParams () {
 	}
 }
 
+/**
+ * Parses the query parameters.
+ *
+ * @param {object} query The query parameters.
+ * @param {object} currentList The current list.
+ * @returns {object} The parsed query parameters.
+ */
 export function parseQueryParams (query, currentList) {
 	const columns = columnsParser(query.columns, currentList);
 	const sort = sortParser(query.sort, currentList);

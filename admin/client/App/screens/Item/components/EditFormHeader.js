@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the EditFormHeader component, which is used
+ * to render the header of the edit form.
+ */
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
@@ -10,6 +14,15 @@ import { Link } from 'react-router';
 import Drilldown from './Drilldown';
 import { GlyphButton, ResponsiveText } from '../../../elemental';
 
+/**
+ * Renders the header of the edit form.
+ *
+ * @param {object} props The properties for the component.
+ * @param {object} props.data The data for the item.
+ * @param {object} props.list The list object.
+ * @param {function} props.toggleCreate The function to toggle the create form.
+ * @returns {React.Element} The rendered component.
+ */
 export const EditFormHeader = React.createClass({
 	displayName: 'EditFormHeader',
 	propTypes: {
@@ -22,14 +35,29 @@ export const EditFormHeader = React.createClass({
 			searchString: '',
 		};
 	},
+	/**
+	 * Toggles the create form.
+	 *
+	 * @param {boolean} visible Whether the create form should be visible.
+	 */
 	toggleCreate (visible) {
 		this.props.toggleCreate(visible);
 	},
+	/**
+	 * Handles a change in the search string.
+	 *
+	 * @param {Event} event The event object.
+	 */
 	searchStringChanged (event) {
 		this.setState({
 			searchString: event.target.value,
 		});
 	},
+	/**
+	 * Handles the escape key.
+	 *
+	 * @param {Event} event The event object.
+	 */
 	handleEscapeKey (event) {
 		const escapeKeyCode = 27;
 
@@ -37,6 +65,11 @@ export const EditFormHeader = React.createClass({
 			findDOMNode(this.refs.searchField).blur();
 		}
 	},
+	/**
+	 * Renders the drilldown.
+	 *
+	 * @returns {React.Element} The rendered drilldown.
+	 */
 	renderDrilldown () {
 		return (
 			<ToolbarSection left>
@@ -45,6 +78,11 @@ export const EditFormHeader = React.createClass({
 			</ToolbarSection>
 		);
 	},
+	/**
+	 * Renders the drilldown items.
+	 *
+	 * @returns {React.Element} The rendered drilldown items.
+	 */
 	renderDrilldownItems () {
 		const { data, list } = this.props;
 		const items = data.drilldown ? data.drilldown.items : [];
@@ -99,6 +137,11 @@ export const EditFormHeader = React.createClass({
 			<Drilldown items={drilldown} />
 		);
 	},
+	/**
+	 * Renders the search form.
+	 *
+	 * @returns {React.Element} The rendered search form.
+	 */
 	renderSearch () {
 		var list = this.props.list;
 		return (
@@ -123,6 +166,11 @@ export const EditFormHeader = React.createClass({
 			</form>
 		);
 	},
+	/**
+	 * Renders the info section.
+	 *
+	 * @returns {React.Element} The rendered info section.
+	 */
 	renderInfo () {
 		return (
 			<ToolbarSection right>
@@ -130,6 +178,11 @@ export const EditFormHeader = React.createClass({
 			</ToolbarSection>
 		);
 	},
+	/**
+	 * Renders the create button.
+	 *
+	 * @returns {React.Element} The rendered create button.
+	 */
 	renderCreateButton () {
 		const { nocreate, autocreate, singular } = this.props.list;
 
@@ -147,6 +200,11 @@ export const EditFormHeader = React.createClass({
 			</GlyphButton>
 		);
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		return (
 			<Toolbar>

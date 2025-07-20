@@ -1,8 +1,7 @@
 /**
- * The list view is a paginated table of all items in the list. It can show a
- * variety of information about the individual items in columns.
+ * @fileoverview The list view is a paginated table of all items in the list.
+ * It can show a variety of information about the individual items in columns.
  */
-
 import React from 'react';
 // import { findDOMNode } from 'react-dom'; // TODO re-implement focus when ready
 import numeral from 'numeral';
@@ -47,6 +46,12 @@ import {
 
 const ESC_KEY_CODE = 27;
 
+/**
+ * The list view.
+ *
+ * @param {object} props The properties for the component.
+ * @returns {React.Element} The rendered component.
+ */
 const ListView = React.createClass({
 	contextTypes: {
 		router: React.PropTypes.object.isRequired,
@@ -93,7 +98,11 @@ const ListView = React.createClass({
 	// ==============================
 	// HEADER
 	// ==============================
-	// Called when a new item is created
+	/**
+	 * Called when a new item is created.
+	 *
+	 * @param {object} item The new item.
+	 */
 	onCreate (item) {
 		// Hide the create form
 		this.toggleCreateModal(false);
@@ -101,6 +110,9 @@ const ListView = React.createClass({
 		const list = this.props.currentList;
 		this.context.router.push(`${Keystone.adminPath}/${list.path}/${item.id}`);
 	},
+	/**
+	 * Creates a new item with autocreate.
+	 */
 	createAutocreate () {
 		const list = this.props.currentList;
 		list.createItem(null, (err, data) => {
@@ -113,41 +125,75 @@ const ListView = React.createClass({
 			}
 		});
 	},
+	/**
+	 * Updates the search string.
+	 *
+	 * @param {Event} e The event object.
+	 */
 	updateSearch (e) {
 		this.props.dispatch(setActiveSearch(e.target.value));
 	},
+	/**
+	 * Handles clearing the search.
+	 */
 	handleSearchClear () {
 		this.props.dispatch(setActiveSearch(''));
 
 		// TODO re-implement focus when ready
 		// findDOMNode(this.refs.listSearchInput).focus();
 	},
+	/**
+	 * Handles a key press in the search input.
+	 *
+	 * @param {Event} e The event object.
+	 */
 	handleSearchKey (e) {
 		// clear on esc
 		if (e.which === ESC_KEY_CODE) {
 			this.handleSearchClear();
 		}
 	},
+	/**
+	 * Handles a page select.
+	 *
+	 * @param {number} i The page number.
+	 */
 	handlePageSelect (i) {
 		// If the current page index is the same as the index we are intending to pass to redux, bail out.
 		if (i === this.props.lists.page.index) return;
 		return this.props.dispatch(setCurrentPage(i));
 	},
+	/**
+	 * Toggles the manage mode.
+	 *
+	 * @param {boolean} filter Whether to filter the list.
+	 */
 	toggleManageMode (filter = !this.state.manageMode) {
 		this.setState({
 			manageMode: filter,
 			checkedItems: {},
 		});
 	},
+	/**
+	 * Toggles the update modal.
+	 *
+	 * @param {boolean} filter Whether to filter the list.
+	 */
 	toggleUpdateModal (filter = !this.state.showUpdateForm) {
 		this.setState({
 			showUpdateForm: filter,
 		});
 	},
+	/**
+	 * Mass updates the items.
+	 */
 	massUpdate () {
 		// TODO: Implement update multi-item
 		console.log('Update ALL the things!');
 	},
+	/**
+	 * Mass deletes the items.
+	 */
 	massDelete () {
 		const { checkedItems } = this.state;
 		const list = this.props.currentList;
@@ -174,12 +220,22 @@ const ListView = React.createClass({
 			},
 		});
 	},
+	/**
+	 * Handles a management select.
+	 *
+	 * @param {string} selection The selection.
+	 */
 	handleManagementSelect (selection) {
 		if (selection === 'all') this.checkAllItems();
 		if (selection === 'none') this.uncheckAllTableItems();
 		if (selection === 'visible') this.checkAllTableItems();
 		return false;
 	},
+	/**
+	 * Renders the confirmation dialog.
+	 *
+	 * @returns {React.Element} The rendered confirmation dialog.
+	 */
 	renderConfirmationDialog () {
 		const props = this.state.confirmationDialog;
 		return (
@@ -193,6 +249,11 @@ const ListView = React.createClass({
 			</ConfirmationDialog>
 		);
 	},
+	/**
+	 * Renders the management controls.
+	 *
+	 * @returns {React.Element} The rendered management controls.
+	 */
 	renderManagement () {
 		const { checkedItems, manageMode, selectAllItemsLoading } = this.state;
 		const { currentList } = this.props;
@@ -212,6 +273,11 @@ const ListView = React.createClass({
 			/>
 		);
 	},
+	/**
+	 * Renders the pagination.
+	 *
+	 * @returns {React.Element} The rendered pagination.
+	 */
 	renderPagination () {
 		const items = this.props.items;
 		if (this.state.manageMode || !items.count) return;
@@ -233,6 +299,11 @@ const ListView = React.createClass({
 			/>
 		);
 	},
+	/**
+	 * Renders the header.
+	 *
+	 * @returns {React.Element} The rendered header.
+	 */
 	renderHeader () {
 		const items = this.props.items;
 		const { autocreate, nocreate, plural, singular } = this.props.currentList;
@@ -292,6 +363,12 @@ const ListView = React.createClass({
 	// TABLE
 	// ==============================
 
+	/**
+	 * Checks an item in the table.
+	 *
+	 * @param {object} item The item to check.
+	 * @param {Event} e The event object.
+	 */
 	checkTableItem (item, e) {
 		e.preventDefault();
 		const newCheckedItems = { ...this.state.checkedItems };
@@ -305,6 +382,9 @@ const ListView = React.createClass({
 			checkedItems: newCheckedItems,
 		});
 	},
+	/**
+	 * Checks all items in the table.
+	 */
 	checkAllTableItems () {
 		const checkedItems = {};
 		this.props.items.results.forEach(item => {
@@ -314,6 +394,9 @@ const ListView = React.createClass({
 			checkedItems: checkedItems,
 		});
 	},
+	/**
+	 * Checks all items.
+	 */
 	checkAllItems () {
 		const checkedItems = { ...this.state.checkedItems };
 		// Just in case this API call takes a long time, we'll update the select all button with
@@ -330,11 +413,20 @@ const ListView = React.createClass({
 			});
 		});
 	},
+	/**
+	 * Unchecks all items in the table.
+	 */
 	uncheckAllTableItems () {
 		this.setState({
 			checkedItems: {},
 		});
 	},
+	/**
+	 * Deletes an item in the table.
+	 *
+	 * @param {object} item The item to delete.
+	 * @param {Event} e The event object.
+	 */
 	deleteTableItem (item, e) {
 		if (e.altKey) {
 			this.props.dispatch(deleteItem(item.id));
@@ -362,6 +454,9 @@ const ListView = React.createClass({
 			},
 		});
 	},
+	/**
+	 * Removes the confirmation dialog.
+	 */
 	removeConfirmationDialog () {
 		this.setState({
 			confirmationDialog: {
@@ -369,6 +464,9 @@ const ListView = React.createClass({
 			},
 		});
 	},
+	/**
+	 * Toggles the table width.
+	 */
 	toggleTableWidth () {
 		this.setState({
 			constrainTableWidth: !this.state.constrainTableWidth,
@@ -379,27 +477,54 @@ const ListView = React.createClass({
 	// COMMON
 	// ==============================
 
+	/**
+	 * Handles a sort select.
+	 *
+	 * @param {string} path The path of the sort.
+	 * @param {boolean} inverted Whether the sort is inverted.
+	 */
 	handleSortSelect (path, inverted) {
 		if (inverted) path = '-' + path;
 		this.props.dispatch(setActiveSort(path));
 	},
+	/**
+	 * Toggles the create modal.
+	 *
+	 * @param {boolean} visible Whether the modal is visible.
+	 */
 	toggleCreateModal (visible) {
 		this.setState({
 			showCreateForm: visible,
 		});
 	},
+	/**
+	 * Opens the create modal.
+	 */
 	openCreateModal () {
 		this.toggleCreateModal(true);
 	},
+	/**
+	 * Closes the create modal.
+	 */
 	closeCreateModal () {
 		this.toggleCreateModal(false);
 	},
+	/**
+	 * Shows the blank state.
+	 *
+	 * @returns {boolean} Whether to show the blank state.
+	 */
 	showBlankState () {
 		return !this.props.loading
 				&& !this.props.items.results.length
 				&& !this.props.active.search
 				&& !this.props.active.filters.length;
 	},
+	/**
+	 * Renders the blank state.
+	 *
+	 * @returns {React.Element} The rendered blank state.
+	 */
 	renderBlankState () {
 		const { currentList } = this.props;
 
@@ -432,6 +557,11 @@ const ListView = React.createClass({
 			</Container>
 		);
 	},
+	/**
+	 * Renders the active state.
+	 *
+	 * @returns {React.Element} The rendered active state.
+	 */
 	renderActiveState () {
 		if (this.showBlankState()) return null;
 
@@ -491,6 +621,11 @@ const ListView = React.createClass({
 			</div>
 		);
 	},
+	/**
+	 * Renders the no search results message.
+	 *
+	 * @returns {React.Element} The rendered message.
+	 */
 	renderNoSearchResults () {
 		if (this.props.items.results.length) return null;
 		let matching = this.props.active.search;
@@ -511,6 +646,11 @@ const ListView = React.createClass({
 			</BlankState>
 		);
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		if (!this.props.ready) {
 			return (

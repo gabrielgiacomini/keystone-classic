@@ -1,12 +1,12 @@
-/*
- * jQuery postMessage Transport Plugin 1.1.1
- * https://github.com/blueimp/jQuery-File-Upload
+/**
+ * @fileoverview jQuery postMessage Transport Plugin.
  *
- * Copyright 2011, Sebastian Tschan
- * https://blueimp.net
+ * This plugin provides a transport for cross-domain file uploads using
+ * window.postMessage. It is part of the jQuery File Upload project.
  *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * @see https://github.com/blueimp/jQuery-File-Upload
+ * @author Sebastian Tschan
+ * @license MIT
  */
 
 /*jslint unparam: true, nomen: true */

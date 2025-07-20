@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the root saga for the application.
+ * It is responsible for starting all the sagas.
+ */
 import { takeLatest, delay } from 'redux-saga';
 import { fork, select, put, take, call } from 'redux-saga/effects';
 
@@ -6,9 +10,8 @@ import { updateParams, evalQueryParams } from './queryParamsSagas';
 import { columnsParser, sortParser, filterParser } from '../parsers';
 
 /**
- * Debounce the search loading new items by 500ms
+ * Debounces the search loading new items by 500ms.
  */
-
 function * debouncedSearch () {
 	const searchString = yield select((state) => state.active.search);
 	if (searchString) {
@@ -17,6 +20,9 @@ function * debouncedSearch () {
 	yield call(updateParams);
 }
 
+/**
+ * Sets the active columns.
+ */
 export function * setActiveColumnsSaga () {
 	while (true) {
 		const { columns } = yield take(actions.SELECT_ACTIVE_COLUMNS);
@@ -26,6 +32,9 @@ export function * setActiveColumnsSaga () {
 	}
 }
 
+/**
+ * Sets the active sort.
+ */
 export function * setActiveSortSaga () {
 	while (true) {
 		const { path } = yield take(actions.SELECT_ACTIVE_SORT);
@@ -36,6 +45,9 @@ export function * setActiveSortSaga () {
 	}
 }
 
+/**
+ * Sets the active filter.
+ */
 export function * setActiveFilterSaga () {
 	while (true) {
 		const { filter } = yield take(actions.SELECT_FILTER);
@@ -47,6 +59,9 @@ export function * setActiveFilterSaga () {
 	}
 }
 
+/**
+ * The root saga.
+ */
 function * rootSaga () {
 	yield fork(takeLatest, actions.SET_ACTIVE_SEARCH, debouncedSearch);
 	yield fork(takeLatest, actions.SET_ACTIVE_LIST, evalQueryParams);

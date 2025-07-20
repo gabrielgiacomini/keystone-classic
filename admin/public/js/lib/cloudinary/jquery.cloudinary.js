@@ -1,7 +1,11 @@
-/*
- * Cloudinary's jQuery library - v1.0.8
- * Copyright Cloudinary
- * see https://github.com/cloudinary/cloudinary_js
+/**
+ * @fileoverview Cloudinary's jQuery library.
+ *
+ * This library provides a set of jQuery plugins and helper functions for
+ * working with Cloudinary's image and video management service.
+ *
+ * @see https://github.com/cloudinary/cloudinary_js
+ * @version 1.0.8
  */
 
 (function( $ ) {

@@ -1,7 +1,8 @@
 /**
- * The secondary navigation links to inidvidual lists of a section
+ * @fileoverview The secondary navigation component. This component is used to
+ * render the secondary navigation bar, which links to individual lists of a
+ * section.
  */
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { Container } from '../../../elemental';
@@ -11,6 +12,14 @@ import {
 } from '../../../screens/List/actions/active';
 import SecondaryNavItem from './NavItem';
 
+/**
+ * The secondary navigation component.
+ *
+ * @param {object} props The component's properties.
+ * @param {string} props.currentListKey The key of the current list.
+ * @param {array} props.lists An array of lists to display.
+ * @returns {React.Element} The rendered component.
+ */
 var SecondaryNavigation = React.createClass({
 	displayName: 'SecondaryNavigation',
 	propTypes: {
@@ -28,12 +37,20 @@ var SecondaryNavigation = React.createClass({
 	componentWillUnmount () {
 		window.removeEventListener('resize', this.handleResize);
 	},
+	/**
+	 * Handles the resize event.
+	 */
 	handleResize () {
 		this.setState({
 			navIsVisible: this.props.lists && Object.keys(this.props.lists).length > 0 && window.innerWidth >= 768,
 		});
 	},
-	// Render the navigation
+	/**
+	 * Renders the navigation.
+	 *
+	 * @param {array} lists An array of lists to display.
+	 * @returns {React.Element} The rendered navigation.
+	 */
 	renderNavigation (lists) {
 		const navigation = Object.keys(lists).map((key) => {
 			const list = lists[key];
@@ -71,6 +88,11 @@ var SecondaryNavigation = React.createClass({
 			</ul>
 		);
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		if (!this.state.navIsVisible) return null;
 

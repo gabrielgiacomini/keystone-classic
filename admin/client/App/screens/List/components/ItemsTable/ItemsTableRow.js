@@ -1,3 +1,8 @@
+/**
+ * @fileoverview This file contains the ItemsTableRow component, which is used
+ * to render a row in the items table. It also contains the drag and drop
+ * functionality for the items table.
+ */
 import React from 'react';
 import classnames from 'classnames';
 
@@ -14,6 +19,21 @@ import {
 	moveItem,
 } from '../../actions';
 
+/**
+ * Renders a row in the items table.
+ *
+ * @param {object} props The properties for the component.
+ * @param {array} props.columns The columns of the table.
+ * @param {any} props.id The id of the item.
+ * @param {number} props.index The index of the item.
+ * @param {object} props.items The items in the table.
+ * @param {object} props.list The list object.
+ * @param {boolean} props.isDragging Whether the item is being dragged.
+ * @param {function} props.connectDragSource The function to connect the drag source.
+ * @param {function} props.connectDropTarget The function to connect the drop target.
+ * @param {function} props.connectDragPreview The function to connect the drag preview.
+ * @returns {React.Element} The rendered component.
+ */
 const ItemsRow = React.createClass({
 	propTypes: {
 		columns: React.PropTypes.array,
@@ -27,6 +47,12 @@ const ItemsRow = React.createClass({
 		connectDropTarget: React.PropTypes.func, // eslint-disable-line react/sort-prop-types
 		connectDragPreview: React.PropTypes.func, // eslint-disable-line react/sort-prop-types
 	},
+	/**
+	 * Renders a row.
+	 *
+	 * @param {object} item The item to render.
+	 * @returns {React.Element} The rendered row.
+	 */
 	renderRow (item) {
 		const itemId = item.id;
 		const rowClassname = classnames({
@@ -69,6 +95,11 @@ const ItemsRow = React.createClass({
 			return (addRow);
 		}
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		return this.renderRow(this.props.item);
 	},
@@ -142,6 +173,10 @@ const dropItem = {
 
 /**
  * Specifies the props to inject into your component.
+ *
+ * @param {object} connect The connect object.
+ * @param {object} monitor The monitor object.
+ * @returns {object} The props to inject.
  */
 function dragProps (connect, monitor) {
 	return {
@@ -151,6 +186,12 @@ function dragProps (connect, monitor) {
 	};
 }
 
+/**
+ * Specifies the props to inject into your component.
+ *
+ * @param {object} connect The connect object.
+ * @returns {object} The props to inject.
+ */
 function dropProps (connect) {
 	return {
 		connectDropTarget: connect.dropTarget(),

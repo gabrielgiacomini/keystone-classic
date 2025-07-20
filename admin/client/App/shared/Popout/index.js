@@ -1,19 +1,31 @@
 /**
- * A Popout component.
- * One can also add a Header (Popout/Header), a Footer
+ * @fileoverview This file contains the Popout component, which is used to
+ * render a popout. It can also use a Header (Popout/Header), a Footer
  * (Popout/Footer), a Body (Popout/Body) and a Pan (Popout/Pane).
  */
-
 import React from 'react';
 import Portal from '../Portal';
 import Transition from 'react-addons-css-transition-group';
 
+/**
+ * The sizes for the popout.
+ * @type {{arrowHeight: number, arrowWidth: number, horizontalMargin: number}}
+ */
 const SIZES = {
 	arrowHeight: 12,
 	arrowWidth: 16,
 	horizontalMargin: 20,
 };
 
+/**
+ * Renders a popout.
+ *
+ * @prop {boolean} isOpen - Whether the popout is open.
+ * @prop {function} onCancel - The function to call when the popout is cancelled.
+ * @prop {function} onSubmit - The function to call when the popout is submitted.
+ * @prop {string} relativeToID - The ID of the element to which the popout is relative.
+ * @prop {number} width - The width of the popout.
+ */
 var Popout = React.createClass({
 	displayName: 'Popout',
 	propTypes: {
@@ -39,9 +51,19 @@ var Popout = React.createClass({
 			window.removeEventListener('resize', this.calculatePosition);
 		}
 	},
+	/**
+	 * Gets the DOM node of the portal.
+	 *
+	 * @returns {DOMNode} The DOM node of the portal.
+	 */
 	getPortalDOMNode () {
 		return this.refs.portal.getPortalDOMNode();
 	},
+	/**
+	 * Calculates the position of the popout.
+	 *
+	 * @param {boolean} isOpen - Whether the popout is open.
+	 */
 	calculatePosition (isOpen) {
 		if (!isOpen) return;
 		let posNode = document.getElementById(this.props.relativeToID);
@@ -82,6 +104,11 @@ var Popout = React.createClass({
 			});
 		}
 	},
+	/**
+	 * Renders the popout.
+	 *
+	 * @returns {React.Element} The rendered popout.
+	 */
 	renderPopout () {
 		if (!this.props.isOpen) return null;
 
@@ -101,10 +128,20 @@ var Popout = React.createClass({
 			</div>
 		);
 	},
+	/**
+	 * Renders the blockout.
+	 *
+	 * @returns {React.Element} The rendered blockout.
+	 */
 	renderBlockout () {
 		if (!this.props.isOpen) return;
 		return <div className="blockout" onClick={this.props.onCancel} />;
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		return (
 			<Portal className="Popout-wrapper" ref="portal">

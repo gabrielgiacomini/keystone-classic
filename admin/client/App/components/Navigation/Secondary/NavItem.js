@@ -1,10 +1,22 @@
 /**
- * A navigation item of the secondary navigation
+ * @fileoverview This file contains the SecondaryNavItem component, which represents
+ * a navigation item in the secondary navigation.
  */
-
 import React from 'react';
 import { Link } from 'react-router';
 
+/**
+ * Renders a navigation item for the secondary navigation.
+ *
+ * @param {object} props The properties for the component.
+ * @param {React.Element} props.children The children to render.
+ * @param {string} props.className The class name for the component.
+ * @param {string} props.href The href for the link.
+ * @param {function} props.onClick The function to call when the link is clicked.
+ * @param {string} props.path The path for the link.
+ * @param {string} props.title The title for the link.
+ * @returns {React.Element} The rendered component.
+ */
 const SecondaryNavItem = React.createClass({
 	displayName: 'SecondaryNavItem',
 	propTypes: {
@@ -15,6 +27,11 @@ const SecondaryNavItem = React.createClass({
 		path: React.PropTypes.string,
 		title: React.PropTypes.string,
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		return (
 			<li className={this.props.className} data-list-path={this.props.path}>

@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the actions for the List screen.
+ */
 import {
 	SELECT_LIST,
 	SET_CURRENT_PAGE,
@@ -10,7 +13,7 @@ import { setActiveList } from './active';
  * Select a list, and set it as the active list. Called whenever the main
  * List component mounts or the list changes.
  *
- * @param  {String} id The list ID, passed via this.props.params.listId
+ * @param {string} id The list ID, passed via this.props.params.listId
  */
 export function selectList (id) {
 	return (dispatch, getState) => {
@@ -22,6 +25,10 @@ export function selectList (id) {
 	};
 }
 
+/**
+ *
+ * @returns {{type: string}}
+ */
 export function loadInitialItems () {
 	return {
 		type: INITIAL_LIST_LOAD,
@@ -31,7 +38,7 @@ export function loadInitialItems () {
 /**
  * Set the current page
  *
- * @param {Number} index The page number we want to be on
+ * @param {number} index The page number we want to be on
  */
 export function setCurrentPage (index) {
 	return {

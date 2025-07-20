@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the ListDownloadForm component, which is
+ * used to render the download form in the list view.
+ */
 import React, { PropTypes } from 'react';
 import assign from 'object-assign';
 import Popout from '../../../shared/Popout';
@@ -11,6 +15,15 @@ const FORMAT_OPTIONS = [
 	{ label: 'JSON', value: 'json' },
 ];
 
+/**
+ * Renders the download form in the list view.
+ *
+ * @param {object} props The properties for the component.
+ * @param {array} props.activeColumns The active columns.
+ * @param {function} props.dispatch The dispatch function.
+ * @param {object} props.list The list object.
+ * @returns {React.Element} The rendered component.
+ */
 var ListDownloadForm = React.createClass({
 	propTypes: {
 		activeColumns: PropTypes.array,
@@ -25,6 +38,11 @@ var ListDownloadForm = React.createClass({
 			selectedColumns: this.getDefaultSelectedColumns(),
 		};
 	},
+	/**
+	 * Gets the default selected columns.
+	 *
+	 * @returns {object} The default selected columns.
+	 */
 	getDefaultSelectedColumns () {
 		var selectedColumns = {};
 		this.props.activeColumns.forEach(col => {
@@ -32,6 +50,11 @@ var ListDownloadForm = React.createClass({
 		});
 		return selectedColumns;
 	},
+	/**
+	 * Gets the list UI elements.
+	 *
+	 * @returns {array} The list UI elements.
+	 */
 	getListUIElements () {
 		return this.props.list.uiElements.map((el) => {
 			return el.type === 'field' ? {
@@ -40,16 +63,32 @@ var ListDownloadForm = React.createClass({
 			} : el;
 		});
 	},
+	/**
+	 * Checks if all columns are selected.
+	 *
+	 * @returns {boolean} Whether all columns are selected.
+	 */
 	allColumnsSelected () {
 		const selectedColumns = Object.keys(this.state.selectedColumns).length;
 		const columnAmount = this.getListUIElements().filter((el) => el.type !== 'heading').length;
 		return selectedColumns === columnAmount;
 	},
+	/**
+	 * Toggles the popout.
+	 *
+	 * @param {boolean} visible Whether the popout should be visible.
+	 */
 	togglePopout (visible) {
 		this.setState({
 			isOpen: visible,
 		});
 	},
+	/**
+	 * Toggles a column.
+	 *
+	 * @param {string} column The column to toggle.
+	 * @param {boolean} value Whether the column should be selected.
+	 */
 	toggleColumn (column, value) {
 		const newColumns = assign({}, this.state.selectedColumns);
 		if (value) {
@@ -61,11 +100,21 @@ var ListDownloadForm = React.createClass({
 			selectedColumns: newColumns,
 		});
 	},
+	/**
+	 * Changes the format.
+	 *
+	 * @param {string} value The new format.
+	 */
 	changeFormat (value) {
 		this.setState({
 			format: value,
 		});
 	},
+	/**
+	 * Toggles the currently selected columns.
+	 *
+	 * @param {Event} e The event object.
+	 */
 	toggleCurrentlySelectedColumns (e) {
 		const newState = {
 			useCurrentColumns: e.target.checked,
@@ -73,6 +122,9 @@ var ListDownloadForm = React.createClass({
 		};
 		this.setState(newState);
 	},
+	/**
+	 * Clicks the select all button.
+	 */
 	clickSelectAll () {
 		if (this.allColumnsSelected()) {
 			this.selectNoColumns();
@@ -80,6 +132,9 @@ var ListDownloadForm = React.createClass({
 			this.selectAllColumns();
 		}
 	},
+	/**
+	 * Selects all columns.
+	 */
 	selectAllColumns () {
 		const newColumns = {};
 		this.getListUIElements().map((el) => {
@@ -91,15 +146,26 @@ var ListDownloadForm = React.createClass({
 			selectedColumns: newColumns,
 		});
 	},
+	/**
+	 * Selects no columns.
+	 */
 	selectNoColumns () {
 		this.setState({
 			selectedColumns: {},
 		});
 	},
+	/**
+	 * Handles a download request.
+	 */
 	handleDownloadRequest () {
 		this.props.dispatch(downloadItems(this.state.format, Object.keys(this.state.selectedColumns)));
 		this.togglePopout(false);
 	},
+	/**
+	 * Renders the column select.
+	 *
+	 * @returns {React.Element} The rendered column select.
+	 */
 	renderColumnSelect () {
 		if (this.state.useCurrentColumns) return null;
 
@@ -142,6 +208,11 @@ var ListDownloadForm = React.createClass({
 			</div>
 		);
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { useCurrentColumns } = this.state;
 

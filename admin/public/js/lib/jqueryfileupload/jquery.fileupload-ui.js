@@ -1,12 +1,13 @@
-/*
- * jQuery File Upload User Interface Plugin 8.9.0
- * https://github.com/blueimp/jQuery-File-Upload
+/**
+ * @fileoverview jQuery File Upload User Interface Plugin.
  *
- * Copyright 2010, Sebastian Tschan
- * https://blueimp.net
+ * This file extends the jQuery File Upload widget to provide a complete user
+ * interface for uploading files. It includes features like file previews,
+ * progress bars, and error handling.
  *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * @see https://github.com/blueimp/jQuery-File-Upload
+ * @author Sebastian Tschan
+ * @license MIT
  */
 
 /*jslint nomen: true, unparam: true, regexp: true */

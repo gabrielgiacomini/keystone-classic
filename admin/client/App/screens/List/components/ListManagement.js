@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the ListManagement component, which is used
+ * to render the list management controls.
+ */
 import React, { PropTypes } from 'react';
 import {
 	Button,
@@ -7,6 +11,22 @@ import {
 	Spinner,
 } from '../../../elemental';
 
+/**
+ * Renders the list management controls.
+ *
+ * @param {object} props The properties for the component.
+ * @param {number} props.checkedItemCount The number of checked items.
+ * @param {function} props.handleDelete The function to call when the delete button is clicked.
+ * @param {function} props.handleSelect The function to call when a select button is clicked.
+ * @param {function} props.handleToggle The function to call when the toggle button is clicked.
+ * @param {boolean} props.isOpen Whether the list management controls are open.
+ * @param {number} props.itemCount The number of items in the list.
+ * @param {number} props.itemsPerPage The number of items per page.
+ * @param {boolean} props.nodelete Whether to hide the delete button.
+ * @param {boolean} props.noedit Whether to hide the edit button.
+ * @param {boolean} props.selectAllItemsLoading Whether all items are being selected.
+ * @returns {React.Element} The rendered component.
+ */
 function ListManagement ({
 	checkedItemCount,
 	handleDelete,

@@ -1,12 +1,13 @@
-/*
- * jQuery File Upload AngularJS Plugin 1.5.0
- * https://github.com/blueimp/jQuery-File-Upload
+/**
+ * @fileoverview jQuery File Upload AngularJS Plugin.
  *
- * Copyright 2013, Sebastian Tschan
- * https://blueimp.net
+ * This file provides the AngularJS integration for the jQuery File Upload
+ * plugin. It defines a module, a service, controllers, and directives to
+ * use the file upload functionality in an AngularJS application.
  *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * @see https://github.com/blueimp/jQuery-File-Upload
+ * @author Sebastian Tschan
+ * @license MIT
  */
 
 /*jslint nomen: true, unparam: true */

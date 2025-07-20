@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the ItemsTable component, which is used to
+ * render the items table in the list view.
+ */
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 
@@ -6,6 +10,20 @@ import DragDrop from './ItemsTableDragDrop';
 
 import { TABLE_CONTROL_COLUMN_WIDTH } from '../../../../../constants';
 
+/**
+ * Renders the items table in the list view.
+ *
+ * @param {object} props The properties for the component.
+ * @param {object} props.checkedItems The checked items.
+ * @param {array} props.columns The columns of the table.
+ * @param {function} props.deleteTableItem The function to call when an item is deleted.
+ * @param {function} props.handleSortSelect The function to call when a sort is selected.
+ * @param {object} props.items The items in the table.
+ * @param {object} props.list The list object.
+ * @param {boolean} props.manageMode Whether the list is in manage mode.
+ * @param {object} props.rowAlert The row alert.
+ * @returns {React.Element} The rendered component.
+ */
 const ItemsTable = React.createClass({
 	propTypes: {
 		checkedItems: PropTypes.object.isRequired,
@@ -17,6 +35,11 @@ const ItemsTable = React.createClass({
 		manageMode: PropTypes.bool.isRequired,
 		rowAlert: PropTypes.object.isRequired,
 	},
+	/**
+	 * Renders the columns.
+	 *
+	 * @returns {React.Element} The rendered columns.
+	 */
 	renderCols () {
 		let cols = this.props.columns.map(col => (
 			<col key={col.path} width={col.width} />
@@ -42,6 +65,11 @@ const ItemsTable = React.createClass({
 			</colgroup>
 		);
 	},
+	/**
+	 * Renders the headers.
+	 *
+	 * @returns {React.Element} The rendered headers.
+	 */
 	renderHeaders () {
 		let listControlCount = 0;
 
@@ -93,6 +121,11 @@ const ItemsTable = React.createClass({
 			</thead>
 		);
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { items } = this.props;
 		if (!items.results.length) return null;

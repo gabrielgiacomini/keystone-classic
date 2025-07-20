@@ -1,9 +1,14 @@
 /**
+ * @fileoverview This file contains a utility function for getting a related
+ * icon for a string.
+ */
+
+/**
  * Gets a related icon for a string, returned as a classname to be applied to a span. If no related
  * icon is found, returns a classname for a dot icon
  *
- * @param  [String] string
- * @return [String]        The classname of the icon
+ * @param {string} string The string to get the icon for.
+ * @returns {string} The classname of the icon.
  */
 export default function getRelatedIconClass (string) {
 	const icons = [

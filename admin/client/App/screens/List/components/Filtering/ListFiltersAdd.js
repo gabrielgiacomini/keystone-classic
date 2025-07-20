@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the ListFiltersAdd component, which is used
+ * to render the "add filter" button in the list view.
+ */
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import Transition
@@ -11,6 +15,13 @@ import ListHeaderButton from '../ListHeaderButton';
 
 import { setFilter } from '../../actions';
 
+/**
+ * Renders the "add filter" button in the list view.
+ *
+ * @param {object} props The properties for the component.
+ * @param {number} props.maxHeight The maximum height of the popout.
+ * @returns {React.Element} The rendered component.
+ */
 var ListFiltersAdd = React.createClass({
 	displayName: 'ListFiltersAdd',
 	propTypes: {
@@ -29,12 +40,23 @@ var ListFiltersAdd = React.createClass({
 			selectedField: false,
 		};
 	},
+	/**
+	 * Updates the search string.
+	 *
+	 * @param {Event} e The event object.
+	 */
 	updateSearch (e) {
 		this.setState({ searchString: e.target.value });
 	},
+	/**
+	 * Opens the popout.
+	 */
 	openPopout () {
 		this.setState({ isOpen: true }, this.focusSearch);
 	},
+	/**
+	 * Closes the popout.
+	 */
 	closePopout () {
 		this.setState({
 			innerHeight: 0,
@@ -43,9 +65,17 @@ var ListFiltersAdd = React.createClass({
 			selectedField: false,
 		});
 	},
+	/**
+	 * Sets the height of the popout.
+	 *
+	 * @param {number} height The height of the popout.
+	 */
 	setPopoutHeight (height) {
 		this.setState({ innerHeight: Math.min(this.props.maxHeight, height) });
 	},
+	/**
+	 * Navigates back to the list of filters.
+	 */
 	navigateBack () {
 		this.setState({
 			selectedField: false,
@@ -53,18 +83,36 @@ var ListFiltersAdd = React.createClass({
 			innerHeight: 0,
 		}, this.focusSearch);
 	},
+	/**
+	 * Focuses the search input.
+	 */
 	focusSearch () {
 		findDOMNode(this.refs.search).focus();
 	},
+	/**
+	 * Selects a field.
+	 *
+	 * @param {object} field The field to select.
+	 */
 	selectField (field) {
 		this.setState({
 			selectedField: field,
 		});
 	},
+	/**
+	 * Applies a filter.
+	 *
+	 * @param {object} value The value of the filter.
+	 */
 	applyFilter (value) {
 		this.props.dispatch(setFilter(this.state.selectedField.path, value));
 		this.closePopout();
 	},
+	/**
+	 * Renders the list of filters.
+	 *
+	 * @returns {React.Element} The rendered list.
+	 */
 	renderList () {
 		const activeFilterFields = this.props.activeFilters.map(obj => obj.field);
 		const activeFilterPaths = activeFilterFields.map(obj => obj.path);
@@ -122,6 +170,11 @@ var ListFiltersAdd = React.createClass({
 			</Popout.Pane>
 		);
 	},
+	/**
+	 * Renders the form for adding a filter.
+	 *
+	 * @returns {React.Element} The rendered form.
+	 */
 	renderForm () {
 		return (
 			<Popout.Pane onLayout={this.setPopoutHeight} key="form">
@@ -138,6 +191,11 @@ var ListFiltersAdd = React.createClass({
 			</Popout.Pane>
 		);
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { isOpen, selectedField } = this.state;
 		const popoutBodyStyle = this.state.innerHeight

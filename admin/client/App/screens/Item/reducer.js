@@ -1,5 +1,6 @@
 /**
- * Item reducer, handles the item data and loading
+ * @fileoverview This file contains the reducer for the Item screen. It handles
+ * the item data and loading state.
  */
 import assign from 'object-assign';
 import {
@@ -12,6 +13,20 @@ import {
 	LOAD_RELATIONSHIP_DATA,
 } from './constants';
 
+/**
+ * The initial state of the Item screen.
+ *
+ * @property {null} data The item data.
+ * @property {null} id The item ID.
+ * @property {boolean} loading Whether the item is loading.
+ * @property {boolean} ready Whether the item is ready.
+ * @property {null} error The error, if any.
+ * @property {object} relationshipData The relationship data.
+ * @property {object} drag The drag and drop data.
+ * @property {boolean} drag.clonedItems The cloned items.
+ * @property {null} drag.newSortOrder The new sort order.
+ * @property {boolean} drag.relationshipPath The relationship path.
+ */
 const initialState = {
 	data: null,
 	id: null,
@@ -26,6 +41,13 @@ const initialState = {
 	},
 };
 
+/**
+ * The reducer for the Item screen.
+ *
+ * @param {object} state The previous state.
+ * @param {object} action The action to perform.
+ * @returns {object} The new state.
+ */
 function item (state = initialState, action) {
 	switch (action.type) {
 		case SELECT_ITEM:

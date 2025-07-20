@@ -1,12 +1,12 @@
-/*
- * jQuery File Upload Plugin 5.34.0
- * https://github.com/blueimp/jQuery-File-Upload
+/**
+ * @fileoverview jQuery File Upload Plugin.
  *
- * Copyright 2010, Sebastian Tschan
- * https://blueimp.net
+ * This is the core file for the jQuery File Upload plugin. It provides the
+ * basic functionality for handling file uploads.
  *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * @see https://github.com/blueimp/jQuery-File-Upload
+ * @author Sebastian Tschan
+ * @license MIT
  */
 
 /*jslint nomen: true, unparam: true, regexp: true */

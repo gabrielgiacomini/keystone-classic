@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the constants for the List screen.
+ */
+
 // General
 export const SELECT_LIST = 'app/List/SELECT_LIST';
 export const SET_CURRENT_PAGE = 'app/List/SET_CURRENT_PAGE';

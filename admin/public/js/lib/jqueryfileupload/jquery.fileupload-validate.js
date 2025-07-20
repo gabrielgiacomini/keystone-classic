@@ -1,12 +1,13 @@
-/*
- * jQuery File Upload Validation Plugin 1.1.1
- * https://github.com/blueimp/jQuery-File-Upload
+/**
+ * @fileoverview jQuery File Upload Validation Plugin.
  *
- * Copyright 2013, Sebastian Tschan
- * https://blueimp.net
+ * This plugin extends the jQuery File Upload widget with file validation
+ * functionality. It allows for validation of file types, sizes, and the
+ * number of files.
  *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * @see https://github.com/blueimp/jQuery-File-Upload
+ * @author Sebastian Tschan
+ * @license MIT
  */
 
 /*jslint nomen: true, unparam: true, regexp: true */

@@ -1,3 +1,9 @@
+/**
+ * @fileoverview This file contains the reducer for the active list.
+ *
+ * The active list is the list that is currently being viewed. It is
+ * responsible for managing the active columns, filters, search, and sort.
+ */
 import _ from 'lodash';
 import assign from 'object-assign';
 
@@ -15,6 +21,9 @@ import {
 	CLEAR_CACHED_QUERY,
 } from '../constants';
 
+/**
+ * The initial state for the active list.
+ */
 const initialState = {
 	columns: [],
 	filters: [],
@@ -30,6 +39,10 @@ const initialState = {
 
 /**
  * Manage the active state
+ *
+ * @param {object} state The previous state
+ * @param {object} action The action to perform
+ * @returns {object} The new state
  */
 function active (state = initialState, action) {
 	switch (action.type) {

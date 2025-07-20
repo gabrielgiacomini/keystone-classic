@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the actions for the items in a list.
+ */
 import {
 	LOAD_ITEMS,
 	ITEMS_LOADED,
@@ -5,6 +8,13 @@ import {
 } from '../constants';
 
 import { NETWORK_ERROR_RETRY_DELAY } from '../../../../constants';
+
+/**
+ * Loads the items for the current list.
+ *
+ * @param {object} options The options for the request.
+ * @returns {function} A thunk that dispatches an action.
+ */
 export function loadItems (options = {}) {
 	return (dispatch, getState) => {
 		let currentLoadCounter = getState().lists.loadCounter + 1;
@@ -68,6 +78,13 @@ export function loadItems (options = {}) {
 	};
 }
 
+/**
+ * Downloads the items for the current list.
+ *
+ * @param {string} format The format to download the items in.
+ * @param {array} columns The columns to download.
+ * @returns {function} A thunk that opens a new window with the download URL.
+ */
 export function downloadItems (format, columns) {
 	return (dispatch, getState) => {
 		const state = getState();
@@ -84,6 +101,12 @@ export function downloadItems (format, columns) {
 	};
 }
 
+/**
+ * Dispatched when the items were loaded.
+ *
+ * @param {object} items The items that were loaded.
+ * @returns {object} The action object.
+ */
 export function itemsLoaded (items) {
 	return {
 		type: ITEMS_LOADED,
@@ -93,9 +116,10 @@ export function itemsLoaded (items) {
 
 /**
  * Dispatched when unsuccessfully trying to load the items, will redispatch
- * loadItems after NETWORK_ERROR_RETRY_DELAY milliseconds until we get items back
+ * loadItems after NETWORK_ERROR_RETRY_DELAY milliseconds until we get items back.
+ *
+ * @returns {function} A thunk that dispatches an action.
  */
-
 export function itemLoadingError () {
 	return (dispatch) => {
 		dispatch({
@@ -108,6 +132,12 @@ export function itemLoadingError () {
 	};
 }
 
+/**
+ * Deletes the items with the given ids.
+ *
+ * @param {array} ids The ids of the items to delete.
+ * @returns {function} A thunk that dispatches an action.
+ */
 export function deleteItems (ids) {
 	return (dispatch, getState) => {
 		const list = getState().lists.currentList;

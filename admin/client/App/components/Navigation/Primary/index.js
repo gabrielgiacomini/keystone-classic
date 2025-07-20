@@ -1,12 +1,23 @@
 /**
- * The primary (i.e. uppermost) navigation on desktop. Renders all sections and
- * the home-, website- and signout buttons.
+ * @fileoverview This file contains the primary navigation component.
+ * This component is responsible for rendering the primary navigation bar on
+ * desktop, which includes all sections, the home button, the website button,
+ * and the signout button.
  */
-
 import React from 'react';
 import { Container } from '../../../elemental';
 import PrimaryNavItem from './NavItem';
 
+/**
+ * The primary navigation component.
+ *
+ * @param {object} props The properties for the component.
+ * @param {string} props.brand The brand name.
+ * @param {string} props.currentSectionKey The key of the current section.
+ * @param {array} props.sections An array of sections to display.
+ * @param {string} props.signoutUrl The URL for the signout link.
+ * @returns {React.Element} The rendered component.
+ */
 var PrimaryNavigation = React.createClass({
 	displayName: 'PrimaryNavigation',
 	propTypes: {
@@ -26,12 +37,19 @@ var PrimaryNavigation = React.createClass({
 	componentWillUnmount () {
 		window.removeEventListener('resize', this.handleResize);
 	},
+	/**
+	 * Handles the resize event.
+	 */
 	handleResize () {
 		this.setState({
 			navIsVisible: window.innerWidth >= 768,
 		});
 	},
-	// Render the sign out button
+	/**
+	 * Renders the signout button.
+	 *
+	 * @returns {React.Element} The rendered signout button.
+	 */
 	renderSignout () {
 		if (!this.props.signoutUrl) return null;
 
@@ -45,7 +63,11 @@ var PrimaryNavigation = React.createClass({
 			</PrimaryNavItem>
 		);
 	},
-	// Render the back button
+	/**
+	 * Renders the back button.
+	 *
+	 * @returns {React.Element} The rendered back button.
+	 */
 	renderBackButton () {
 		if (!Keystone.backUrl) return null;
 
@@ -59,7 +81,11 @@ var PrimaryNavigation = React.createClass({
 			</PrimaryNavItem>
 		);
 	},
-	// Render the link to the webpage
+	/**
+	 * Renders the link to the front page.
+	 *
+	 * @returns {React.Element} The rendered link.
+	 */
 	renderFrontLink () {
 		return (
 			<ul className="app-nav app-nav--primary app-nav--right">
@@ -68,6 +94,11 @@ var PrimaryNavigation = React.createClass({
 			</ul>
 		);
 	},
+	/**
+	 * Renders the brand.
+	 *
+	 * @returns {React.Element} The rendered brand.
+	 */
 	renderBrand () {
 		// TODO: support navbarLogo from keystone config
 
@@ -85,7 +116,11 @@ var PrimaryNavigation = React.createClass({
 			</PrimaryNavItem>
 		);
 	},
-	// Render the navigation
+	/**
+	 * Renders the navigation.
+	 *
+	 * @returns {React.Element} The rendered navigation.
+	 */
 	renderNavigation () {
 		if (!this.props.sections || !this.props.sections.length) return null;
 
@@ -110,6 +145,11 @@ var PrimaryNavigation = React.createClass({
 			);
 		});
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		if (!this.state.navIsVisible) return null;
 

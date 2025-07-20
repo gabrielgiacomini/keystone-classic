@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the tests for the query parsers.
+ */
 import demand from 'must';
 import { columnsParser, sortParser, filtersParser, filterParser, createFilterObject } from '../index';
 import sinon from 'sinon';

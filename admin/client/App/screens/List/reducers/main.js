@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the main reducer for the lists section of
+ * the application.
+ */
 import assign from 'object-assign';
 import List from '../../../../utils/List';
 import {
@@ -19,6 +23,31 @@ import {
 	DELETE_ITEM,
 } from '../../Item/constants';
 
+/**
+ * The initial state of the lists section.
+ *
+ * @property {null} loadingRef - A reference to the loading indicator.
+ * @property {number} loadCounter - A counter for the number of loads.
+ * @property {null} currentList - The current list.
+ * @property {boolean} loading - Whether the list is loading.
+ * @property {boolean} ready - Whether the list is ready.
+ * @property {null} error - The error, if any.
+ * @property {object} data - The lists data.
+ * @property {object} items - The items in the list.
+ * @property {array} items.results - The items in the list.
+ * @property {null} items.count - The number of items in the list.
+ * @property {object} page - The pagination data.
+ * @property {null} page.size - The page size.
+ * @property {undefined} page.index - The page index.
+ * @property {object} rowAlert - The row alert data.
+ * @property {boolean} rowAlert.success - Whether the row alert is a success.
+ * @property {boolean} rowAlert.fail - Whether the row alert is a failure.
+ * @property {object} drag - The drag and drop data.
+ * @property {number} drag.page - The drag page.
+ * @property {boolean} drag.item - The drag item.
+ * @property {boolean} drag.clonedItems - The cloned items.
+ * @property {boolean} drag.index - The drag index.
+ */
 const initialState = {
 	loadingRef: null,
 	loadCounter: 0,
@@ -62,7 +91,11 @@ for (const name in initialLists) {
 }
 
 /**
- * Manage all lists
+ * The reducer for the lists section.
+ *
+ * @param {object} state The previous state.
+ * @param {object} action The action to perform.
+ * @returns {object} The new state.
  */
 function lists (state = initialState, action) {
 	switch (action.type) {

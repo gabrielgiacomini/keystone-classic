@@ -1,3 +1,13 @@
+/**
+ * @fileoverview This file contains the actions for the Home screen.
+ *
+ * The actions are functions that return an object with a `type` property.
+ * This object is called an "action object".
+ *
+ * The actions are dispatched to the Redux store to update the state.
+ *
+ * @see http://redux.js.org/docs/basics/Actions.html
+ */
 import xhr from 'xhr';
 import {
 	LOAD_COUNTS,
@@ -7,7 +17,9 @@ import {
 import { NETWORK_ERROR_RETRY_DELAY } from '../../../constants';
 
 /**
- * Load the counts of all lists
+ * Load the counts of all lists.
+ *
+ * @returns {function} A thunk that dispatches an action.
  */
 export function loadCounts () {
 	return (dispatch) => {
@@ -36,9 +48,10 @@ export function loadCounts () {
 }
 
 /**
- * Dispatched when the counts were loaded
+ * Dispatched when the counts were loaded.
  *
- * @param  {Object} counts The counts object as returned by the API
+ * @param {object} counts The counts object as returned by the API.
+ * @returns {object} The action object.
  */
 export function countsLoaded (counts) {
 	return {
@@ -49,9 +62,10 @@ export function countsLoaded (counts) {
 
 /**
  * Dispatched when unsuccessfully trying to load the counts, will redispatch
- * loadCounts after NETWORK_ERROR_RETRY_DELAY until we get counts back
+ * loadCounts after NETWORK_ERROR_RETRY_DELAY until we get counts back.
  *
- * @param  {object} error The error
+ * @param {object} error The error.
+ * @returns {function} A thunk that dispatches an action.
  */
 export function countsLoadingError (error) {
 	return (dispatch, getState) => {

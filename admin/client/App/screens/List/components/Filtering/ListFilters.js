@@ -1,9 +1,21 @@
+/**
+ * @fileoverview This file contains the ListFilters component, which is used to
+ * render the active filters in the list view.
+ */
 import React, { PropTypes } from 'react';
 import { Chip } from '../../../../elemental';
 import Filter from './Filter';
 
 import { clearAllFilters } from '../../actions';
 
+/**
+ * Renders the active filters in the list view.
+ *
+ * @param {object} props The properties for the component.
+ * @param {function} props.dispatch The dispatch function.
+ * @param {array} props.filters The active filters.
+ * @returns {React.Element} The rendered component.
+ */
 const ListFilters = ({ dispatch, filters }) => {
 
 	if (!filters.length) return <div />;

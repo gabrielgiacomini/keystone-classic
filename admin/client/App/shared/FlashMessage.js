@@ -1,10 +1,18 @@
 /**
- * A single flash message component. Used by FlashMessages.js
+ * @fileoverview This file contains the FlashMessage component, which is used to
+ * render a single flash message. It is used by the FlashMessages component.
  */
-
 import React, { PropTypes } from 'react';
 import { Alert } from '../elemental';
 
+/**
+ * Renders a single flash message.
+ *
+ * @param {object} props The properties for the component.
+ * @param {object|string} props.message The message to render.
+ * @param {string} props.type The type of message.
+ * @returns {React.Element} The rendered component.
+ */
 const FlashMessage = React.createClass({
 	propTypes: {
 		message: PropTypes.oneOfType([
@@ -13,7 +21,12 @@ const FlashMessage = React.createClass({
 		]).isRequired,
 		type: PropTypes.string,
 	},
-	// Render the message
+	/**
+	 * Renders the message.
+	 *
+	 * @param {object|string} message The message to render.
+	 * @returns {React.Element} The rendered message.
+	 */
 	renderMessage (message) {
 		// If the message is only a string, render the string
 		if (typeof message === 'string') {
@@ -42,6 +55,11 @@ const FlashMessage = React.createClass({
 			</span>
 		);
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { message, type } = this.props;
 

@@ -1,14 +1,28 @@
+/**
+ * @fileoverview This file contains the Kbd component, which is used to render
+ * keyboard input.
+ */
 import React from 'react';
 import { css } from 'glamor';
 import theme from '../../theme';
 import { darken, lighten } from '../../utils/color';
 
+/**
+ * Renders a keyboard input element.
+ *
+ * @param {object} props The properties for the component.
+ * @param {string} props.className The class name for the component.
+ * @returns {React.Element} The rendered component.
+ */
 function Kbd ({ className, ...props }) {
 	props.className = css(classes.kbd);
 
 	return <kbd {...props} />;
 };
 
+/**
+ * The styles for the component.
+ */
 const classes = {
 	kbd: {
 		backgroundColor: theme.color.body,

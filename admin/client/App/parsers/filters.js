@@ -1,3 +1,10 @@
+/**
+ * @fileoverview This file contains the parsers for the filters.
+ *
+ * The filters are used to filter the items in the list view.
+ * The parsers are used to convert the filters from a string representation
+ * to an array of filter objects.
+ */
 import isPlainObject from 'lodash/isPlainObject';
 import isArray from 'lodash/isArray';
 import isObject from 'lodash/isObject';
@@ -6,11 +13,10 @@ import isObject from 'lodash/isObject';
  * Returns an array of expanded filter objects,
  * given (a string representation | an array of filters) and a currentList object.
  *
- * @param { String|Array } Either a string representation of an array of filter objects, or an array of filter objects.
- * @param { Object } the current instantiation of the List prototype used for the <List/> scene
- * @return { Array } of { Objects } as an expanded representation of the filters passed in.
- **/
-
+ * @param {string|Array} filters Either a string representation of an array of filter objects, or an array of filter objects.
+ * @param {Object} currentList The current instantiation of the List prototype used for the <List/> scene.
+ * @returns {Array} of {Objects} as an expanded representation of the filters passed in.
+ */
 export function filtersParser (filters, currentList) {
 	if (typeof filters === 'string') {
 		try {
@@ -38,13 +44,11 @@ export function filtersParser (filters, currentList) {
  * Returns an array of expanded filter objects,
  * given (a string representation | an array of filters) and a currentList object.
  *
- * @param { Object } Filter object  containing the following key value pairs {path} and {value}.
- * @param { Array } of { Objects } an array of the currently active filters.
- * @param { Object } the current instantiation of the List prototype used for the <List/> scene
- * @return { Object } an expanded representation of the passed in filter { Object }.
- **/
-
-
+ * @param {Object} filterObject Filter object containing the following key value pairs {path} and {value}.
+ * @param {Array} activeFilters of {Objects} an array of the currently active filters.
+ * @param {Object} currentList The current instantiation of the List prototype used for the <List/> scene.
+ * @returns {Object} an expanded representation of the passed in filter {Object}.
+ */
 export function filterParser ({ path, value }, activeFilters, currentList) {
 	if (!activeFilters || !isArray(activeFilters)) {
 		throw new Error('activeFilters must be an array');
@@ -69,23 +73,17 @@ export function filterParser ({ path, value }, activeFilters, currentList) {
 	return filter;
 }
 
-/*
-* This method is a util, but has such a specific use that it is being left within
-* the file that uses it.
-*/
-
 /**
  * Returns a filter object
  * given a path, a value, and the fields within an instance of the List prototype.
  *
- * @param { String } filter path
- * @param { Object } of filter values.
- * @param { Object } of fields from the current instance of the List prototype.
- * @return { Object } a filter comprised of the:filters.js
- *	- corresponding field value within the current List,
- *	- and the passed in value { Object }.
- **/
-
+ * @param {string} path The filter path.
+ * @param {Object} value of filter values.
+ * @param {Object} currentListFields of fields from the current instance of the List prototype.
+ * @returns {Object} a filter comprised of the:filters.js
+ * - corresponding field value within the current List,
+ * - and the passed in value {Object}.
+ */
 export function createFilterObject (path, value, currentListFields) {
 	if (!currentListFields || !isPlainObject(currentListFields)) {
 		console.warn('currentListFields must be a plain object', currentListFields);

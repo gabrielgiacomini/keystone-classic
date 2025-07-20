@@ -1,6 +1,6 @@
 /**
- * This is the main entry file, which we compile the main JS bundle from. It
- * only contains the client side routing setup.
+ * @fileoverview This is the main entry file for the client-side application.
+ * It sets up the client-side routing and renders the main application component.
  */
 
 // Needed for ES6 generators (redux-saga) to work

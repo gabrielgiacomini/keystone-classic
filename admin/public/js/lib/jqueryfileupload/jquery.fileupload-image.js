@@ -1,12 +1,12 @@
-/*
- * jQuery File Upload Image Preview & Resize Plugin 1.3.0
- * https://github.com/blueimp/jQuery-File-Upload
+/**
+ * @fileoverview jQuery File Upload Image Preview & Resize Plugin.
  *
- * Copyright 2013, Sebastian Tschan
- * https://blueimp.net
+ * This plugin extends the jQuery File Upload widget with image preview and
+ * resizing functionality. It is part of the jQuery File Upload project.
  *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * @see https://github.com/blueimp/jQuery-File-Upload
+ * @author Sebastian Tschan
+ * @license MIT
  */
 
 /*jslint nomen: true, unparam: true, regexp: true */

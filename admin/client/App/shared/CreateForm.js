@@ -1,8 +1,7 @@
 /**
- * The form that's visible when "Create <ItemName>" is clicked on either the
- * List screen or the Item screen
+ * @fileoverview This file contains the CreateForm component, which is used to
+ * render the form for creating a new item.
  */
-
 import React from 'react';
 import assign from 'object-assign';
 import vkey from 'vkey';
@@ -11,6 +10,17 @@ import { Fields } from 'FieldTypes';
 import InvalidFieldType from './InvalidFieldType';
 import { Button, Form, Modal } from '../elemental';
 
+/**
+ * Renders the form for creating a new item.
+ *
+ * @param {object} props The properties for the component.
+ * @param {object} props.err The error object.
+ * @param {boolean} props.isOpen Whether the form is open.
+ * @param {object} props.list The list object.
+ * @param {function} props.onCancel The function to call when the form is cancelled.
+ * @param {function} props.onCreate The function to call when a new item is created.
+ * @returns {React.Element} The rendered component.
+ */
 const CreateForm = React.createClass({
 	displayName: 'CreateForm',
 	propTypes: {
@@ -46,12 +56,21 @@ const CreateForm = React.createClass({
 	componentWillUnmount () {
 		document.body.removeEventListener('keyup', this.handleKeyPress, false);
 	},
+	/**
+	 * Handles key press events.
+	 *
+	 * @param {Event} evt The event object.
+	 */
 	handleKeyPress (evt) {
 		if (vkey[evt.keyCode] === '<escape>') {
 			this.props.onCancel();
 		}
 	},
-	// Handle input change events
+	/**
+	 * Handles input change events.
+	 *
+	 * @param {Event} event The event object.
+	 */
 	handleChange (event) {
 		var values = assign({}, this.state.values);
 		values[event.path] = event.value;
@@ -59,7 +78,12 @@ const CreateForm = React.createClass({
 			values: values,
 		});
 	},
-	// Set the props of a field
+	/**
+	 * Gets the props for a field.
+	 *
+	 * @param {object} field The field object.
+	 * @returns {object} The props for the field.
+	 */
 	getFieldProps (field) {
 		var props = assign({}, field);
 		props.value = this.state.values[field.path];
@@ -69,7 +93,11 @@ const CreateForm = React.createClass({
 		props.key = field.path;
 		return props;
 	},
-	// Create a new item when the form is submitted
+	/**
+	 * Submits the form to create a new item.
+	 *
+	 * @param {Event} event The event object.
+	 */
 	submitForm (event) {
 		event.preventDefault();
 		const createForm = event.target;
@@ -108,7 +136,11 @@ const CreateForm = React.createClass({
 			}
 		});
 	},
-	// Render the form itself
+	/**
+	 * Renders the form.
+	 *
+	 * @returns {React.Element} The rendered form.
+	 */
 	renderForm () {
 		if (!this.props.isOpen) return;
 
@@ -176,6 +208,11 @@ const CreateForm = React.createClass({
 			</Form>
 		);
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		return (
 			<Modal.Dialog

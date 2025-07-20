@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file creates the Redux store for the application.
+ * It combines the reducers, applies middleware, and creates the store.
+ */
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { browserHistory } from 'react-router';
@@ -11,8 +15,10 @@ import homeReducer from './screens/Home/reducer';
 
 import rootSaga from './sagas';
 
-
-// Combine the reducers to one state
+/**
+ * The combined reducers for the application.
+ * @type {function}
+ */
 const reducers = combineReducers({
 	lists: listsReducer,
 	active: activeReducer,
@@ -21,9 +27,16 @@ const reducers = combineReducers({
 	routing: routerReducer,
 });
 
+/**
+ * The saga middleware for the application.
+ * @type {function}
+ */
 const sagaMiddleware = createSagaMiddleware();
 
-// Create the store
+/**
+ * The Redux store for the application.
+ * @type {object}
+ */
 const store = createStore(
 	reducers,
 	compose(

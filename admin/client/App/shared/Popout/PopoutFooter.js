@@ -1,11 +1,23 @@
 /**
- * Render a footer for a popout
+ * @fileoverview This file contains the PopoutFooter component, which is used to
+ * render a footer for a popout.
  */
-
 import React from 'react';
 
 const BUTTON_BASE_CLASSNAME = 'Popout__footer__button Popout__footer__button--';
 
+/**
+ * Renders a footer for a popout.
+ *
+ * @param {object} props The properties for the component.
+ * @param {React.Element} props.children The children to render.
+ * @param {function} props.primaryButtonAction The function to call when the primary button is clicked.
+ * @param {boolean} props.primaryButtonIsSubmit Whether the primary button is a submit button.
+ * @param {string} props.primaryButtonLabel The label for the primary button.
+ * @param {function} props.secondaryButtonAction The function to call when the secondary button is clicked.
+ * @param {string} props.secondaryButtonLabel The label for the secondary button.
+ * @returns {React.Element} The rendered component.
+ */
 const PopoutFooter = React.createClass({
 	displayName: 'PopoutFooter',
 	propTypes: {
@@ -16,7 +28,11 @@ const PopoutFooter = React.createClass({
 		secondaryButtonAction: React.PropTypes.func,
 		secondaryButtonLabel: React.PropTypes.string,
 	},
-	// Render a primary button
+	/**
+	 * Renders a primary button.
+	 *
+	 * @returns {React.Element} The rendered primary button.
+	 */
 	renderPrimaryButton () {
 		if (!this.props.primaryButtonLabel) return null;
 
@@ -30,7 +46,11 @@ const PopoutFooter = React.createClass({
 			</button>
 		);
 	},
-	// Render a secondary button
+	/**
+	 * Renders a secondary button.
+	 *
+	 * @returns {React.Element} The rendered secondary button.
+	 */
 	renderSecondaryButton () {
 		if (!this.props.secondaryButtonAction || !this.props.secondaryButtonLabel) return null;
 
@@ -44,6 +64,11 @@ const PopoutFooter = React.createClass({
 			</button>
 		);
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		return (
 			<div className="Popout__footer">

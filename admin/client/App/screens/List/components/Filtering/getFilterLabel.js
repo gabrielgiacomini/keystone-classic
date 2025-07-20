@@ -1,8 +1,18 @@
+/**
+ * @fileoverview This file contains the utility function for getting a filter label.
+ */
 import moment from 'moment';
 
 const DATE_FORMAT = 'MMM D YYYY';
 const DATETIME_FORMAT = 'MMM D YYYY h:mm:ss';
 
+/**
+ * Gets a filter label.
+ *
+ * @param {object} field The field object.
+ * @param {object} value The value object.
+ * @returns {string} The filter label.
+ */
 function getFilterLabel (field, value) {
 	const label = field.label;
 
@@ -148,6 +158,13 @@ function getFilterLabel (field, value) {
 	}
 };
 
+/**
+ * Resolves the number format for a filter label.
+ *
+ * @param {object} value The value object.
+ * @param {string} conjunction The conjunction to use.
+ * @returns {string} The resolved number format.
+ */
 function resolveNumberFormat (value, conjunction = 'is') {
 	let mode = '';
 	if (value.mode === 'equals') mode = conjunction;
@@ -161,6 +178,14 @@ function resolveNumberFormat (value, conjunction = 'is') {
 	return `${mode} ${formattedValue}`;
 }
 
+/**
+ * Resolves the date format for a filter label.
+ *
+ * @param {object} value The value object.
+ * @param {string} format The date format.
+ * @param {string} conjunction The conjunction to use.
+ * @returns {string} The resolved date format.
+ */
 function resolveDateFormat (value, format, conjunction = 'is') {
 	const joiner = value.inverted ? `${conjunction} NOT` : conjunction;
 	const mode = value.mode === 'on' ? '' : value.mode;

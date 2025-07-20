@@ -1,6 +1,20 @@
+/**
+ * @fileoverview This file contains the Section component, which is used to
+ * render a section on the home screen.
+ */
 import React from 'react';
 import getRelatedIconClass from '../utils/getRelatedIconClass';
 
+/**
+ * Renders a section on the home screen.
+ *
+ * @param {object} props The properties for the component.
+ * @param {React.Element} props.children The children to render.
+ * @param {string} props.icon The icon to display.
+ * @param {string} props.id The id of the section.
+ * @param {string} props.label The label for the section.
+ * @returns {React.Element} The rendered component.
+ */
 class Section extends React.Component {
 	render () {
 		const iconClass = this.props.icon || getRelatedIconClass(this.props.id);

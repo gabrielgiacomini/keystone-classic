@@ -1,24 +1,22 @@
 /**
- * Render a few flash messages, e.g. errors, success messages, warnings,...
- *
- * Use like this:
- * <FlashMessages
- *   messages={{
- *	   error: [{
- *	     title: 'There is a network problem',
- *	     detail: 'Please try again later...',
- *	   }],
- *   }}
- * />
- *
- * Instead of error, it can also be hilight, info, success or warning
+ * @fileoverview This component renders flash messages, such as errors, success
+ * messages, warnings, etc.
  */
-
 import React from 'react';
 import _ from 'lodash';
 
 import FlashMessage from './FlashMessage';
 
+/**
+ * Renders a list of flash messages.
+ *
+ * @prop {object|boolean} messages - The messages to render. If false, nothing is rendered.
+ * @prop {array} messages.error - An array of error messages.
+ * @prop {array} messages.hilight - An array of highlight messages.
+ * @prop {array} messages.info - An array of info messages.
+ * @prop {array} messages.success - An array of success messages.
+ * @prop {array} messages.warning - An array of warning messages.
+ */
 var FlashMessages = React.createClass({
 	displayName: 'FlashMessages',
 	propTypes: {
@@ -33,7 +31,13 @@ var FlashMessages = React.createClass({
 			}),
 		]),
 	},
-	// Render messages by their type
+	/**
+	 * Renders a list of messages for a given type.
+	 *
+	 * @param {array} messages - The messages to render.
+	 * @param {string} type - The type of message.
+	 * @returns {React.Element[]} The rendered messages.
+	 */
 	renderMessages (messages, type) {
 		if (!messages || !messages.length) return null;
 
@@ -41,10 +45,20 @@ var FlashMessages = React.createClass({
 			return <FlashMessage message={message} type={type} key={`i${i}`} />;
 		});
 	},
-	// Render the individual messages based on their type
+	/**
+	 * Renders the messages for each type.
+	 *
+	 * @param {object} types - The messages to render, grouped by type.
+	 * @returns {React.Element[]} The rendered messages.
+	 */
 	renderTypes (types) {
 		return Object.keys(types).map(type => this.renderMessages(types[type], type));
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		if (!this.props.messages) return null;
 

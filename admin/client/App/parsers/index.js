@@ -1,13 +1,16 @@
+/**
+ * @fileoverview This file contains the parsers for the columns, filters, and
+ * sort.
+ */
 import { filtersParser, filterParser, createFilterObject } from './filters.js';
 
 /**
  * Returns an array of expanded columns object, given a list of columns and currentList object.
  *
- * @param { String } columns, a string representation of a list of columns.
- * @param { Object } the current instantiation of the List prototype used for the <List/> scene
- * @return { Array } of { Objects } as an expanded representation of the column values passed in.
+ * @param {string} columns A string representation of a list of columns.
+ * @param {Object} currentList The current instantiation of the List prototype used for the <List/> scene.
+ * @returns {Array} of {Objects} as an expanded representation of the column values passed in.
  */
-
 function columnsParser (columns, currentList) {
 	if (!currentList) {
 		throw new Error('No currentList selected');
@@ -21,11 +24,10 @@ function columnsParser (columns, currentList) {
 /**
  * Returns an expanded sort object, given a sort path and currentList object.
  *
- * @param { String } path, a string representation of a list of columns.
- * @param { Object } the current instantiation of the List prototype used for the <List/> scene
- * @return { Object } an expanded representation of the sort path passed in.
+ * @param {string} path A string representation of a list of columns.
+ * @param {Object} currentList The current instantiation of the List prototype used for the <List/> scene.
+ * @returns {Object} an expanded representation of the sort path passed in.
  */
-
 function sortParser (path, currentList) {
 	if (!currentList) {
 		throw new Error('No currentList selected');

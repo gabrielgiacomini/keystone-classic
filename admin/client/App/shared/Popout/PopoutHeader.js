@@ -1,10 +1,20 @@
 /**
- * Render a header for a popout
+ * @fileoverview This file contains the PopoutHeader component, which is used to
+ * render a header for a popout.
  */
-
 import React from 'react';
 import Transition from 'react-addons-css-transition-group';
 
+/**
+ * Renders a header for a popout.
+ *
+ * @param {object} props The properties for the component.
+ * @param {function} props.leftAction The function to call when the left action is triggered.
+ * @param {string} props.leftIcon The name of the icon to display for the left action.
+ * @param {string} props.title The title of the popout.
+ * @param {string} props.transitionDirection The direction of the transition.
+ * @returns {React.Element} The rendered component.
+ */
 const PopoutHeader = React.createClass({
 	displayName: 'PopoutHeader',
 	propTypes: {
@@ -13,6 +23,11 @@ const PopoutHeader = React.createClass({
 		title: React.PropTypes.string.isRequired,
 		transitionDirection: React.PropTypes.oneOf(['next', 'prev']),
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		// If we have a left action and a left icon, render a header button
 		var headerButton = (this.props.leftAction && this.props.leftIcon) ? (

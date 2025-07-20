@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the ListHeaderToolbar component, which is
+ * used to render the toolbar in the list header.
+ */
 import React, { PropTypes } from 'react';
 import {
 	GlyphButton,
@@ -13,6 +17,13 @@ import ListHeaderSearch from './ListHeaderSearch';
 
 import ListFiltersAdd from './Filtering/ListFiltersAdd';
 
+/**
+ * Renders a button divider.
+ *
+ * @param {object} props The properties for the component.
+ * @param {object} props.style The style for the component.
+ * @returns {React.Element} The rendered component.
+ */
 function ButtonDivider ({ style, ...props }) {
 	props.style = {
 		borderLeft: '1px solid rgba(0, 0, 0, 0.1)',
@@ -23,6 +34,14 @@ function ButtonDivider ({ style, ...props }) {
 	return <div {...props} />;
 };
 
+/**
+ * Renders a create button.
+ *
+ * @param {object} props The properties for the component.
+ * @param {string} props.listName The name of the list.
+ * @param {function} props.onClick The function to call when the button is clicked.
+ * @returns {React.Element} The rendered component.
+ */
 function CreateButton ({ listName, onClick, ...props }) {
 	return (
 		<GlyphButton
@@ -44,6 +63,27 @@ function CreateButton ({ listName, onClick, ...props }) {
 	);
 };
 
+/**
+ * Renders the toolbar in the list header.
+ *
+ * @param {object} props The properties for the component.
+ * @param {function} props.dispatch The dispatch function.
+ * @param {object} props.list The list object.
+ * @param {boolean} props.expandIsActive Whether the expand button is active.
+ * @param {function} props.expandOnClick The function to call when the expand button is clicked.
+ * @param {boolean} props.createIsAvailable Whether the create button is available.
+ * @param {string} props.createListName The name of the list to create.
+ * @param {function} props.createOnClick The function to call when the create button is clicked.
+ * @param {function} props.searchHandleChange The function to call when the search input changes.
+ * @param {function} props.searchHandleClear The function to call when the clear button is clicked.
+ * @param {function} props.searchHandleKeyup The function to call when a key is released.
+ * @param {string} props.searchValue The value of the search input.
+ * @param {array} props.filtersActive The active filters.
+ * @param {array} props.filtersAvailable The available filters.
+ * @param {array} props.columnsAvailable The available columns.
+ * @param {array} props.columnsActive The active columns.
+ * @returns {React.Element} The rendered component.
+ */
 function ListHeaderToolbar ({
 	// common
 	dispatch,
@@ -149,12 +189,18 @@ ListHeaderToolbar.propTypes = {
 	searchValue: PropTypes.string,
 };
 
+/**
+ * The styles for the tablet grow.
+ */
 const tabletGrowStyles = {
 	[`@media (max-width: ${theme.breakpoint.tabletPortraitMax})`]: {
 		flexGrow: 1,
 	},
 };
 
+/**
+ * The styles for the component.
+ */
 const classes = {
 	// main wrapper
 	wrapper: {

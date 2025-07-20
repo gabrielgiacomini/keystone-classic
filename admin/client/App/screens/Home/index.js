@@ -1,8 +1,7 @@
 /**
- * The Home view is the view one sees at /keystone. It shows a list of all lists,
- * grouped by their section.
+ * @fileoverview This file is the main entry point for the Home screen.
+ * It shows a list of all lists, grouped by their section.
  */
-
 import React from 'react';
 import { Container, Spinner } from '../../elemental';
 import { connect } from 'react-redux';
@@ -14,6 +13,12 @@ import {
 	loadCounts,
 } from './actions';
 
+/**
+ * The Home view.
+ *
+ * @param {object} props The properties for the component.
+ * @returns {React.Element} The rendered component.
+ */
 var HomeView = React.createClass({
 	displayName: 'HomeView',
 	getInitialState () {
@@ -26,6 +31,11 @@ var HomeView = React.createClass({
 	componentDidMount () {
 		this.props.dispatch(loadCounts());
 	},
+	/**
+	 * Gets the spinner.
+	 *
+	 * @returns {React.Element} The spinner.
+	 */
 	getSpinner () {
 		if (this.props.counts && Object.keys(this.props.counts).length === 0
 			&& (this.props.error || this.props.loading)) {
@@ -35,6 +45,11 @@ var HomeView = React.createClass({
 		}
 		return null;
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const spinner = this.getSpinner();
 		return (

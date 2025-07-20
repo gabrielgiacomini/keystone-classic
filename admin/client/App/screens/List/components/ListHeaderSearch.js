@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the ListHeaderSearch component, which is
+ * used to render the search input in the list header.
+ */
 import { css } from 'glamor';
 import React, { PropTypes } from 'react';
 import theme from '../../../../theme';
@@ -5,6 +9,17 @@ import { darken } from '../../../../utils/color';
 
 import { FormInput, Glyph } from '../../../elemental';
 
+/**
+ * Renders the search input in the list header.
+ *
+ * @param {object} props The properties for the component.
+ * @param {boolean} props.focusInput Whether to focus the input.
+ * @param {function} props.handleChange The function to call when the input changes.
+ * @param {function} props.handleClear The function to call when the clear button is clicked.
+ * @param {function} props.handleKeyup The function to call when a key is released.
+ * @param {string} props.value The value of the input.
+ * @returns {React.Element} The rendered component.
+ */
 function ListHeaderSearch ({
 	focusInput,
 	handleChange,
@@ -44,12 +59,18 @@ ListHeaderSearch.propTypes = {
 	value: PropTypes.string,
 };
 
+/**
+ * The styles for the clear button on hover and focus.
+ */
 const clearHoverAndFocusStyles = {
 	color: theme.color.danger,
 	outline: 0,
 	textDecoration: 'none',
 };
 
+/**
+ * The styles for the component.
+ */
 const classes = {
 	wrapper: {
 		position: 'relative',

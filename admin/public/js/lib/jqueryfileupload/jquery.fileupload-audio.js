@@ -1,12 +1,12 @@
-/*
- * jQuery File Upload Audio Preview Plugin 1.0.3
- * https://github.com/blueimp/jQuery-File-Upload
+/**
+ * @fileoverview jQuery File Upload Audio Preview Plugin.
  *
- * Copyright 2013, Sebastian Tschan
- * https://blueimp.net
+ * This plugin extends the jQuery File Upload widget with audio preview
+ * functionality. It is part of the jQuery File Upload project.
  *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * @see https://github.com/blueimp/jQuery-File-Upload
+ * @author Sebastian Tschan
+ * @license MIT
  */
 
 /*jslint nomen: true, unparam: true, regexp: true */

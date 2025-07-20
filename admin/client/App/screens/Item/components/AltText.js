@@ -1,6 +1,20 @@
+/**
+ * @fileoverview This file contains the AltText component, which is used to
+ * render different text when a modifier key is held down.
+ */
 import React, { Component, PropTypes } from 'react';
 import vkey from 'vkey';
 
+/**
+ * Renders different text when a modifier key is held down.
+ *
+ * @param {object} props The properties for the component.
+ * @param {function|string} props.component The component to render.
+ * @param {React.Element|string} props.modified The text to render when the modifier key is held down.
+ * @param {string} props.modifier The modifier key to listen for.
+ * @param {React.Element|string} props.normal The text to render normally.
+ * @returns {React.Element} The rendered component.
+ */
 class AltText extends Component {
 	constructor () {
 		super();
@@ -20,18 +34,33 @@ class AltText extends Component {
 		document.body.removeEventListener('keydown', this.handleKeyDown);
 		document.body.removeEventListener('keyup', this.handleKeyUp);
 	}
+	/**
+	 * Handles a key down event.
+	 *
+	 * @param {Event} e The event object.
+	 */
 	handleKeyDown (e) {
 		if (vkey[e.keyCode] !== this.props.modifier) return;
 		this.setState({
 			modified: true,
 		});
 	}
+	/**
+	 * Handles a key up event.
+	 *
+	 * @param {Event} e The event object.
+	 */
 	handleKeyUp (e) {
 		if (vkey[e.keyCode] !== this.props.modifier) return;
 		this.setState({
 			modified: false,
 		});
 	}
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		// NOTE `modifier` is declared to remove it from `props`, though never used
 		const {
@@ -50,6 +79,10 @@ class AltText extends Component {
 	}
 };
 
+/**
+ * The supported modifier keys.
+ * @type {string[]}
+ */
 const SUPPORTED_KEYS = [
 	'<alt>',
 	'<control>',

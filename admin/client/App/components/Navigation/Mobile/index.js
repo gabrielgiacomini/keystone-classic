@@ -1,7 +1,7 @@
 /**
- * The mobile navigation, displayed on screens < 768px
+ * @fileoverview This file contains the mobile navigation component, which is
+ * displayed on screens smaller than 768px.
  */
-
 import React from 'react';
 import Transition from 'react-addons-css-transition-group';
 
@@ -9,6 +9,17 @@ import MobileSectionItem from './SectionItem';
 
 const ESCAPE_KEY_CODE = 27;
 
+/**
+ * The mobile navigation component.
+ *
+ * @param {object} props The properties for the component.
+ * @param {string} props.brand The brand name.
+ * @param {string} props.currentListKey The key of the current list.
+ * @param {string} props.currentSectionKey The key of the current section.
+ * @param {array} props.sections An array of sections to display.
+ * @param {string} props.signoutUrl The URL for the signout link.
+ * @returns {React.Element} The rendered component.
+ */
 const MobileNavigation = React.createClass({
 	displayName: 'MobileNavigation',
 	propTypes: {
@@ -32,16 +43,23 @@ const MobileNavigation = React.createClass({
 	componentWillUnmount () {
 		window.removeEventListener('resize', this.handleResize);
 	},
+	/**
+	 * Handles the resize event.
+	 */
 	handleResize () {
 		this.setState({
 			barIsVisible: window.innerWidth < 768,
 		});
 	},
-	// Toggle the menu
+	/**
+	 * Toggles the menu.
+	 */
 	toggleMenu () {
 		this[this.state.menuIsVisible ? 'hideMenu' : 'showMenu']();
 	},
-	// Show the menu
+	/**
+	 * Shows the menu.
+	 */
 	showMenu () {
 		this.setState({
 			menuIsVisible: true,
@@ -51,7 +69,9 @@ const MobileNavigation = React.createClass({
 		document.body.style.overflow = 'hidden';
 		document.body.addEventListener('keyup', this.handleEscapeKey, false);
 	},
-	// Hide the menu
+	/**
+	 * Hides the menu.
+	 */
 	hideMenu () {
 		this.setState({
 			menuIsVisible: false,
@@ -61,12 +81,21 @@ const MobileNavigation = React.createClass({
 		document.body.style.overflow = null;
 		document.body.removeEventListener('keyup', this.handleEscapeKey, false);
 	},
-	// If the escape key was pressed, hide the menu
+	/**
+	 * If the escape key was pressed, hide the menu.
+	 *
+	 * @param {Event} event The event object.
+	 */
 	handleEscapeKey (event) {
 		if (event.which === ESCAPE_KEY_CODE) {
 			this.hideMenu();
 		}
 	},
+	/**
+	 * Renders the navigation.
+	 *
+	 * @returns {React.Element} The rendered navigation.
+	 */
 	renderNavigation () {
 		if (!this.props.sections || !this.props.sections.length) return null;
 
@@ -90,13 +119,21 @@ const MobileNavigation = React.createClass({
 			);
 		});
 	},
-	// Render a blockout
+	/**
+	 * Renders a blockout.
+	 *
+	 * @returns {React.Element} The rendered blockout.
+	 */
 	renderBlockout () {
 		if (!this.state.menuIsVisible) return null;
 
 		return <div className="MobileNavigation__blockout" onClick={this.toggleMenu} />;
 	},
-	// Render the sidebar menu
+	/**
+	 * Renders the sidebar menu.
+	 *
+	 * @returns {React.Element} The rendered menu.
+	 */
 	renderMenu () {
 		if (!this.state.menuIsVisible) return null;
 
@@ -108,6 +145,11 @@ const MobileNavigation = React.createClass({
 			</nav>
 		);
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		if (!this.state.barIsVisible) return null;
 

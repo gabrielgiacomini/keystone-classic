@@ -1,21 +1,22 @@
+/**
+ * @fileoverview This component renders alerts for API success and error responses.
+ * It is used to display messages to the user based on the outcome of an API call.
+ */
 import React from 'react';
 import { Alert } from '../elemental';
 
 import { upcase } from '../../utils/string';
 
 /**
- * This renders alerts for API success and error responses.
- *   Error format: {
- *     error: 'validation errors' // The unique error type identifier
- *     detail: { ... } // Optional details specific to that error type
- *   }
- *   Success format: {
- *     success: 'item updated', // The unique success type identifier
- *     details: { ... } // Optional details specific to that success type
- *   }
- *   Eventually success and error responses should be handled individually
- *   based on their type. For example: validation errors should be displayed next
- *   to each invalid field and signin errors should promt the user to sign in.
+ * Renders alerts for API success and error responses.
+ *
+ * @prop {object} alerts - The alerts object.
+ * @prop {object} alerts.error - The error object.
+ * @prop {string} alerts.error.error - The unique error type identifier.
+ * @prop {object} alerts.error.detail - Optional details specific to that error type.
+ * @prop {object} alerts.success - The success object.
+ * @prop {string} alerts.success.success - The unique success type identifier.
+ * @prop {object} alerts.success.details - Optional details specific to that success type.
  */
 var AlertMessages = React.createClass({
 	displayName: 'AlertMessages',
@@ -30,6 +31,11 @@ var AlertMessages = React.createClass({
 			alerts: {},
 		};
 	},
+	/**
+	 * Renders validation errors.
+	 *
+	 * @returns {React.Element} The rendered validation errors.
+	 */
 	renderValidationErrors () {
 		let errors = this.props.alerts.error.detail;
 		if (errors.name === 'ValidationError') {
@@ -66,6 +72,11 @@ var AlertMessages = React.createClass({
 
 		return <Alert color="danger">{alertContent}</Alert>;
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		let { error, success } = this.props.alerts;
 

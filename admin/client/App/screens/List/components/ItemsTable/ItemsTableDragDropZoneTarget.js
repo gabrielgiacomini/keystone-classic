@@ -1,9 +1,10 @@
 /**
- * THIS IS ORPHANED AND ISN'T RENDERED AT THE MOMENT
- * THIS WAS DONE TO FINISH THE REDUX INTEGRATION, WILL REWRITE SOON
- * - @mxstbr
+ * @fileoverview This file contains the ItemsTableDragDropZoneTarget component,
+ * which is a drop target for the items table.
+ *
+ * This component is currently orphaned and not rendered. It was created to
+ * finish the Redux integration and will be rewritten soon.
  */
-
 import React from 'react';
 import { DropTarget } from 'react-dnd';
 
@@ -11,7 +12,16 @@ import { setCurrentPage } from '../../actions';
 
 let timeoutID = false;
 
-// drop target
+/**
+ * Renders the drop target for the items table.
+ *
+ * @param {object} props The properties for the component.
+ * @param {string} props.className The class name for the component.
+ * @param {function} props.connectDropTarget The function to connect the drop target.
+ * @param {boolean} props.isOver Whether the drop target is over.
+ * @param {string} props.pageItems The items on the page.
+ * @returns {React.Element} The rendered component.
+ */
 var ItemsTableDragDropZoneTarget = React.createClass({
 	displayName: 'ItemsTableDragDropZoneTarget',
 	propTypes: {
@@ -26,6 +36,11 @@ var ItemsTableDragDropZoneTarget = React.createClass({
 			timeoutID = false;
 		}
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { pageItems, page, isOver, dispatch } = this.props;
 		let { className } = this.props;
@@ -93,6 +108,10 @@ const dropTarget = {
 };
 /**
  * Specifies the props to inject into your component.
+ *
+ * @param {object} connect The connect object.
+ * @param {object} monitor The monitor object.
+ * @returns {object} The props to inject.
  */
 function dropProps (connect, monitor) {
 	return {

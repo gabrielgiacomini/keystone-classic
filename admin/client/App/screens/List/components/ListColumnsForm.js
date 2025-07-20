@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the ListColumnsForm component, which is used
+ * to render the form for selecting the columns to display in the list.
+ */
 import React from 'react';
 import assign from 'object-assign';
 
@@ -16,6 +20,11 @@ var ListColumnsForm = React.createClass({
 			searchString: '',
 		};
 	},
+	/**
+	 * Gets the selected columns from the store.
+	 *
+	 * @returns {object} The selected columns.
+	 */
 	getSelectedColumnsFromStore () {
 		var selectedColumns = {};
 		this.props.activeColumns.forEach(col => {
@@ -23,6 +32,11 @@ var ListColumnsForm = React.createClass({
 		});
 		return selectedColumns;
 	},
+	/**
+	 * Toggles the popout.
+	 *
+	 * @param {boolean} visible Whether the popout should be visible.
+	 */
 	togglePopout (visible) {
 		this.setState({
 			selectedColumns: this.getSelectedColumnsFromStore(),
@@ -30,6 +44,12 @@ var ListColumnsForm = React.createClass({
 			searchString: '',
 		});
 	},
+	/**
+	 * Toggles a column.
+	 *
+	 * @param {string} path The path of the column to toggle.
+	 * @param {boolean} value Whether the column should be selected.
+	 */
 	toggleColumn (path, value) {
 		const newColumns = assign({}, this.state.selectedColumns);
 
@@ -43,13 +63,26 @@ var ListColumnsForm = React.createClass({
 			selectedColumns: newColumns,
 		});
 	},
+	/**
+	 * Applies the selected columns.
+	 */
 	applyColumns () {
 		this.props.dispatch(setActiveColumns(Object.keys(this.state.selectedColumns)));
 		this.togglePopout(false);
 	},
+	/**
+	 * Updates the search string.
+	 *
+	 * @param {Event} e The event object.
+	 */
 	updateSearch (e) {
 		this.setState({ searchString: e.target.value });
 	},
+	/**
+	 * Renders the columns.
+	 *
+	 * @returns {React.Element} The rendered columns.
+	 */
 	renderColumns () {
 		const availableColumns = this.props.availableColumns;
 		const { searchString } = this.state;
@@ -80,6 +113,11 @@ var ListColumnsForm = React.createClass({
 			);
 		});
 	},
+	/**
+	 * Renders the component.
+	 *
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const formFieldStyles = {
 			borderBottom: '1px dashed rgba(0,0,0,0.1)',

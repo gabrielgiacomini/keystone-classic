@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the Lists component, which is used to
+ * render a list of lists on the home screen.
+ */
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
@@ -5,6 +9,15 @@ import { connect } from 'react-redux';
 import { plural } from '../../../../utils/string';
 import ListTile from './ListTile';
 
+/**
+ * Renders a list of lists.
+ *
+ * @param {object} props The properties for the component.
+ * @param {object} props.counts The counts for each list.
+ * @param {array|object} props.lists The lists to render.
+ * @param {React.Element} props.spinner The spinner to display while loading.
+ * @returns {React.Element} The rendered component.
+ */
 export class Lists extends React.Component {
 	render () {
 		return (
