@@ -17,12 +17,37 @@ var app = new (require('express'))();
 // Add the API middleware
 app.all('/api*', keystone.middleware.api);
 
-// Your API routes
+// Example route
 app.get('/api/posts', function(req, res) {
-  res.apiResponse({ posts: [] });
+  // Example of a successful response
+  res.apiResponse({ posts: [{ title: 'Hello World' }] });
 });
 
-// ...
+app.get('/api/posts/:id', function(req, res) {
+  // Example of a not found response
+  if (!req.post) {
+    return res.apiNotFound();
+  }
+  res.apiResponse({ post: req.post });
+});
+
+app.post('/api/posts', function(req, res) {
+  // Example of a not allowed response
+  if (!req.user.can.createPosts) {
+    return res.apiNotAllowed('You are not allowed to create posts.');
+  }
+  // ...
+});
+
+app.put('/api/posts/:id', function(req, res) {
+  // Example of an error response
+  req.post.save(function(err) {
+    if (err) {
+      return res.apiError('database error', err);
+    }
+    res.apiResponse({ post: req.post });
+  });
+});
 ```
 
 ### Methods
@@ -62,11 +87,16 @@ This middleware adds CORS (Cross-Origin Resource Sharing) headers to the respons
 
 ### Usage
 
-To use this middleware, add it to your Express app before your API routes.
+To use this middleware, add it to your Express app before your API routes. You can configure the options via `keystone.set()`.
 
 ```javascript
 var keystone = require('keystone');
 var app = new (require('express'))();
+
+// Configure CORS options
+keystone.set('cors allow origin', 'https://example.com');
+keystone.set('cors allow methods', 'GET,POST,PUT,DELETE');
+keystone.set('cors allow headers', 'Content-Type, Authorization');
 
 // Add the CORS middleware
 app.all('/api*', keystone.middleware.cors);
@@ -82,11 +112,8 @@ The CORS middleware can be configured using `keystone.set()` with the following 
 - `cors allow origin` (String | Boolean): Sets the `Access-Control-Allow-Origin` header.
   - If `true`, it will be set to `*`, allowing any origin.
   - If a string, it will be set to that string.
-  - Example: `keystone.set('cors allow origin', 'https://example.com');`
 - `cors allow methods` (String): Sets the `Access-Control-Allow-Methods` header. Defaults to `'GET,PUT,POST,DELETE,OPTIONS'`.
-  - Example: `keystone.set('cors allow methods', 'GET,POST');`
 - `cors allow headers` (String): Sets the `Access-Control-Allow-Headers` header. Defaults to `'Content-Type, Authorization'`.
-  - Example: `keystone.set('cors allow headers', 'Content-Type, Authorization, X-Requested-With');`
 
 ## `lib/middleware/language.js`
 
@@ -101,9 +128,13 @@ keystone.init({
   // ...
   'language options': {
     'supported languages': ['en-US', 'es-ES', 'fr-FR'],
-    'language cookie': 'my-lang-cookie',
-    'language cookie options': { maxAge: 900000 },
-    'language select url': '/change-language?lang={language}',
+    'language cookie': 'my-keystone-app-language',
+    'language cookie options': {
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+      path: '/',
+    },
+    'language select url': '/change-language/{language}',
+    'language query name': 'lang',
   }
 });
 ```
