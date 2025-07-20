@@ -5,6 +5,9 @@
  * with a single path or an array of paths to watch for `.scss` files.
  *
  * It is invoked by `server/createApp.js`.
+ * @module server/bindSassMiddleware
+ * @param {module:keystone} keystone The Keystone instance.
+ * @param {Object} app The Express app.
  * @see {@link module:server/createApp}
  * @example
  * // In a KeystoneJS startup script

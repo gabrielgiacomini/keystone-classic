@@ -7,6 +7,13 @@
  * server setup.
  *
  * It is invoked by `keystone.start()`.
+ * @module server/createApp
+ * @requires module:compression
+ * @requires module:serve-favicon
+ * @requires module:method-override
+ * @requires module:morgan
+ * @requires module:../lib/middleware/language
+ * @returns {Object} The configured Express app.
  * @see {@link Keystone#start}
  * @example
  * // In a KeystoneJS startup script

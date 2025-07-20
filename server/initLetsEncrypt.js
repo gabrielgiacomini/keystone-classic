@@ -7,6 +7,9 @@
  *
  * It is invoked by `server/createApp.js`.
  *
+ * @module server/initLetsEncrypt
+ * @param {module:keystone} keystone The Keystone instance.
+ * @param {Object} app The Express app.
  * @api private
  * @see {@link module:server/createApp}
  * @example

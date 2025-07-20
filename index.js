@@ -9,6 +9,13 @@
  * The exported `keystone` object is a singleton instance of the `Keystone`
  * class, which is the main interface for developers to interact with the
  * framework.
+ * @module keystone
+ * @requires module:lodash
+ * @requires module:express
+ * @requires module:grappling-hook
+ * @requires module:path
+ * @requires module:keystone-utils
+ * @requires module:./lib/core/importer
  */
 
 var _ = require('lodash');

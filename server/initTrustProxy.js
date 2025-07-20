@@ -7,6 +7,9 @@
  * header.
  *
  * It is invoked by `server/createApp.js`.
+ * @module server/initTrustProxy
+ * @param {module:keystone} keystone The Keystone instance.
+ * @param {Object} app The Express app.
  * @see {@link module:server/createApp}
  * @example
  * // In a KeystoneJS startup script
