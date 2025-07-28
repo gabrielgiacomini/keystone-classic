@@ -12,6 +12,9 @@ export * from "./types/fields/number";
 export * from "./types/fields/boolean";
 export * from "./types/fields/relationship";
 
+// Type inference
+export * from "./types/inference";
+
 // Re-export commonly used types with more specific names for backwards compatibility
 export {
 	KeystoneDocument,
@@ -85,6 +88,19 @@ export {
 	KeystoneFieldForRelationshipType,
 	KeystoneTypeConstructorForRelationshipType,
 } from "./types/fields/relationship";
+
+// Type inference exports
+export {
+	InferKeystoneDocumentFromFields,
+	KeystoneListConstructorWithInference,
+	KeystoneListWithInference,
+	ExtractDocumentType,
+	KeystoneFieldDefinitions,
+	createTypedKeystoneList,
+	RelationshipField,
+	RequiredField,
+	FieldHelpers,
+} from "./types/inference";
 
 // TODO: Add remaining field type exports as more field type files are created
 // export * from "./types/fields/textarea";
