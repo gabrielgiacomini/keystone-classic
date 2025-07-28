@@ -24,7 +24,9 @@ export type KeystoneDocument<T = Record<string, any>> = mongoose.Document & T;
  * @template T The document type extending KeystoneDocument
  * @see /lib/list.js - List schema implementation
  */
-export interface KeystoneListSchema<T extends KeystoneDocument = KeystoneDocument> extends mongoose.Schema<T> {
+export interface KeystoneListSchema<
+	T extends KeystoneDocument = KeystoneDocument
+> extends mongoose.Schema<T> {
 	/**
 	 * Schema methods with properly typed `this` context.
 	 * When methods are defined, TypeScript will know the correct type for `this` in method implementations.
@@ -55,7 +57,8 @@ export interface KeystoneListSchema<T extends KeystoneDocument = KeystoneDocumen
  * @template T The document type extending KeystoneDocument
  * @see /lib/list.js - List constructor implementation
  */
-export interface KeystoneListConstructor extends KeystoneList<KeystoneDocument> {
+export interface KeystoneListConstructor
+	extends KeystoneList<KeystoneDocument> {
 	/**
 	 * Constructor function for creating new KeystoneList instances.
 	 *
@@ -601,7 +604,9 @@ export type KSAdminUIElement =
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/list.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/lib/list.js}
  */
-export interface KeystoneListOptions<T extends KeystoneDocument = KeystoneDocument> {
+export interface KeystoneListOptions<
+	T extends KeystoneDocument = KeystoneDocument
+> {
 	/**
 	 * Mongoose schema options applied to the underlying schema.
 	 * Pass options directly to the Mongoose schema.
@@ -2052,7 +2057,7 @@ export interface KeystoneTypeConstructorForHtmlType
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/lib/list.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/lib/list.js}
  */
-declare class KeystoneList<T extends KeystoneDocument = KeystoneDocument> {
+export class KeystoneList<T extends KeystoneDocument = KeystoneDocument> {
 	/**
 	 * Creates a new List instance.
 	 * @param key The unique key for the list (e.g., 'User', 'PostCategory'). Used to generate paths and labels.
@@ -5946,31 +5951,6 @@ export interface KeystoneTypeConstructorForDateArrayType
 	prototype: KeystoneFieldForDateArrayType;
 	properName: "DateArray";
 }
-
-// =============================================================================
-// BACKWARD COMPATIBILITY EXPORTS
-// =============================================================================
-
-/**
- * @deprecated Use KeystoneListSchema<T> instead for better type safety.
- * Legacy alias for KeystoneListSchema interface.
- * @see KeystoneListSchema
- */
-export type ListSchema<T extends KeystoneDocument = KeystoneDocument> = KeystoneListSchema<T>;
-
-/**
- * @deprecated Use KeystoneListConstructor instead for better type safety.
- * Legacy alias for KeystoneListConstructor interface.
- * @see KeystoneListConstructor
- */
-export type ListConstructor = KeystoneListConstructor;
-
-/**
- * @deprecated Use KeystoneList<T> instead for better type safety.
- * Legacy alias for KeystoneList interface without proper generic constraints.
- * @see KeystoneList
- */
-export type List<T extends KeystoneDocument = KeystoneDocument> = KeystoneList<T>;
 
 // =============================================================================
 // USAGE EXAMPLES & MIGRATION GUIDE
