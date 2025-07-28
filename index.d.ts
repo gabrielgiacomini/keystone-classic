@@ -2807,7 +2807,7 @@ export interface KeystoneGlobalOptions {
  * Represents a KeystoneJS v4 application instance.
  * @see ./https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/index.js
  */
-declare class Keystone {
+export class Keystone {
 	/** Initializes a new Keystone instance. */
 	constructor();
 
