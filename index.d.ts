@@ -10,6 +10,7 @@ export * from "./types/global";
 export * from "./types/fields/text";
 export * from "./types/fields/number";
 export * from "./types/fields/boolean";
+export * from "./types/fields/relationship";
 
 // Re-export commonly used types with more specific names for backwards compatibility
 export {
@@ -44,6 +45,7 @@ export {
 	KSAdminUiFilterForSelectField,
 	KSAdminUiFilterForDateAndDateTimeFields,
 	KSAdminUiFilterForDateArrayField,
+	KSAdminUiFilterForRelationshipField,
 } from "./types/filters";
 
 export { Keystone, KeystoneGlobalOptions } from "./types/global";
@@ -66,6 +68,23 @@ export {
 	KeystoneFieldForBooleanType,
 	KeystoneTypeConstructorForBooleanType,
 } from "./types/fields/boolean";
+
+export {
+	KeystoneRelationshipFieldValue,
+	KeystoneRelationshipFieldValueUnpopulated,
+	KeystoneRelationshipFieldValuePopulated,
+	KeystoneRelationshipExpandedItem,
+	KeystoneRelationshipExpandedData,
+	KeystoneSingleRelationshipValue,
+	KeystoneManyRelationshipValue,
+	KeystoneSingleRelationshipValueUnpopulated,
+	KeystoneManyRelationshipValueUnpopulated,
+	KeystoneSingleRelationshipValuePopulated,
+	KeystoneManyRelationshipValuePopulated,
+	KeystoneFieldOptionsForRelationshipType,
+	KeystoneFieldForRelationshipType,
+	KeystoneTypeConstructorForRelationshipType,
+} from "./types/fields/relationship";
 
 // TODO: Add remaining field type exports as more field type files are created
 // export * from "./types/fields/textarea";

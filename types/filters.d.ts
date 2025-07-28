@@ -139,3 +139,22 @@ export interface KSAdminUiFilterForDateArrayField {
 	/** End date for 'between' mode. */
 	before?: string | Date | moment.Moment;
 }
+
+/**
+ * Filter options for Relationship fields.
+ * @see /fields/types/relationship/RelationshipType.js - Relationship field filtering implementation
+ */
+export interface KSAdminUiFilterForRelationshipField {
+	/**
+	 * The ObjectId value(s) to filter by.
+	 * - Single value: Matches documents with exactly this relationship.
+	 * - Array of values: Matches documents with any of these relationships.
+	 * - Empty array: For many relationships, matches empty arrays; for single, matches null.
+	 */
+	value?: string | string[];
+	/**
+	 * Invert the filter logic (NOT equals, or NOT IN array).
+	 * Default: false
+	 */
+	inverted?: boolean;
+}
