@@ -3,7 +3,24 @@ import * as mongoose from "mongoose";
 /**
  * Base document type for all Keystone models.
  * Extends Mongoose Document with additional Keystone functionality.
+ *
+ * Includes all standard Mongoose document methods and properties:
+ * - `_id`: ObjectId - The document's unique identifier
+ * - `save()`: Promise<this> - Save the document to the database
+ * - `remove()`: Promise<this> - Remove the document from the database
+ * - `populate()`: Promise<this> - Populate reference fields
+ * - `toJSON()`: any - Convert document to JSON
+ * - `toObject()`: any - Convert document to plain JavaScript object
+ * - `isModified()`: boolean - Check if document has been modified
+ * - `markModified()`: void - Mark a path as modified
+ * - `get()`: any - Get a value from the document
+ * - `set()`: this - Set a value on the document
+ * - `isNew`: boolean - Whether this is a new document
+ * - `errors`: any - Validation errors
+ * - And many other Mongoose document methods...
+ *
  * @see /lib/list/list.js - Base list implementation
+ * @see https://mongoosejs.com/docs/api/document.html - Mongoose Document API
  */
 export type KeystoneDocument<T = Record<string, any>> = mongoose.Document & T;
 

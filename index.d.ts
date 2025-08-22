@@ -92,6 +92,11 @@ export {
 // Type inference exports
 export {
 	InferKeystoneDocumentFromFields,
+	InferKeystoneDocumentFromMixedFields,
+	InferKeystoneDocumentFromArray,
+	ArrayToFieldDefinitions,
+	KeystoneFieldArrayItem,
+	KeystoneFieldDefinitionArray,
 	KeystoneListConstructorWithInference,
 	KeystoneListWithInference,
 	ExtractDocumentType,

@@ -11,8 +11,126 @@ import {
 } from "./fields/relationship";
 
 // =============================================================================
-// TYPE INFERENCE FOR KEYSTONE FIELD DEFINITIONS
+// TYPE INFERENCE FOR KEYSTONE FIELD DEFINITIONS WITH HEADINGS SUPPORT
 // =============================================================================
+
+/**
+ * Helper type to identify heading objects vs field definitions.
+ * Heading objects have a required 'heading' property.
+ */
+type IsHeadingObject<T> = T extends { heading: string } ? true : false;
+
+/**
+ * Filter out heading objects from a mixed fields object, keeping only actual field definitions.
+ */
+type FilterFieldsOnly<T extends Record<string, any>> = {
+	[K in keyof T]: IsHeadingObject<T[K]> extends true ? never : T[K];
+};
+
+/**
+ * Remove never values from an object type (cleanup after filtering).
+ */
+type RemoveNeverValues<T> = {
+	[K in keyof T as T[K] extends never ? never : K]: T[K];
+};
+
+/**
+ * Extract only the actual field definitions from a mixed object that may contain headings.
+ */
+type ExtractFieldDefinitions<T extends Record<string, any>> = RemoveNeverValues<
+	FilterFieldsOnly<T>
+>;
+
+// =============================================================================
+// ARRAY-BASED FIELD DEFINITIONS (FOR .add() METHOD WORKFLOW)
+// =============================================================================
+
+/**
+ * Represents a single item in a Keystone field definition array.
+ * Can be a heading string, heading object, or field definitions object.
+ */
+export type KeystoneFieldArrayItem =
+	| string // Simple heading like 'User', 'Permissions'
+	| import("./core").KeystoneGroupHeading // Heading object with options
+	| Record<
+			string,
+			| KeystoneFieldOptions
+			| KeystoneTypeConstructor
+			| StringConstructor
+			| NumberConstructor
+			| BooleanConstructor
+			| DateConstructor
+	  >; // Field definitions object
+
+/**
+ * Array of mixed field definitions and headings, as used with List.add() method.
+ * This represents the complete UI structure including sections and fields.
+ */
+export type KeystoneFieldDefinitionArray = readonly KeystoneFieldArrayItem[];
+
+/**
+ * Extract only field definition objects from a KeystoneFieldDefinitionArray.
+ * Filters out strings and heading objects, keeping only field definitions.
+ */
+type ExtractFieldObjectsFromArray<T extends readonly KeystoneFieldArrayItem[]> =
+	{
+		[K in keyof T]: T[K] extends string
+			? never
+			: T[K] extends import("./core").KeystoneGroupHeading
+			? never
+			: T[K] extends Record<string, any>
+			? T[K]
+			: never;
+	};
+
+/**
+ * Utility type to convert union types to intersection types.
+ * This helps merge multiple field objects into a single combined object.
+ */
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+	k: infer I
+) => void
+	? I
+	: never;
+
+/**
+ * Remove never values from a tuple type.
+ */
+type RemoveNeverFromTuple<T extends readonly any[]> = {
+	[K in keyof T]: T[K] extends never ? {} : T[K];
+};
+
+/**
+ * Merge multiple field definition objects into a single object.
+ * Takes an array of field objects and combines them into one.
+ */
+type MergeFieldObjects<T extends readonly any[]> = UnionToIntersection<
+	RemoveNeverFromTuple<T>[number]
+>;
+
+/**
+ * Convert a KeystoneFieldDefinitionArray to a single merged field definitions object.
+ * This extracts all field definitions and combines them, ready for type inference.
+ */
+export type ArrayToFieldDefinitions<T extends KeystoneFieldDefinitionArray> =
+	MergeFieldObjects<ExtractFieldObjectsFromArray<T>> extends Record<string, any>
+		? MergeFieldObjects<ExtractFieldObjectsFromArray<T>>
+		: Record<string, any>;
+
+/**
+ * Infer document type from a KeystoneFieldDefinitionArray.
+ * This is the main type for the array-based workflow.
+ */
+export type InferKeystoneDocumentFromArray<
+	TArray extends KeystoneFieldDefinitionArray,
+	TRefDocuments extends Record<string, KeystoneDocument> = Record<
+		string,
+		KeystoneDocument
+	>
+> = InferKeystoneDocumentFromFields<
+	ArrayToFieldDefinitions<TArray>,
+	TRefDocuments
+>;
 
 /**
  * Maps Keystone field types to their corresponding TypeScript types.
@@ -84,6 +202,7 @@ type ConvertFieldToProperty<
 /**
  * Main type that converts Keystone field definitions to a TypeScript interface.
  * This is the magic that enables automatic type inference!
+ * Now supports mixed objects with both field definitions and heading objects.
  */
 export type InferKeystoneDocumentFromFields<
 	TFields extends Record<string, any>,
@@ -92,8 +211,26 @@ export type InferKeystoneDocumentFromFields<
 		KeystoneDocument
 	>
 > = KeystoneDocument & {
-	[K in keyof TFields]: ConvertFieldToProperty<TFields[K], TRefDocuments>;
+	[K in keyof ExtractFieldDefinitions<TFields>]: ConvertFieldToProperty<
+		ExtractFieldDefinitions<TFields>[K],
+		TRefDocuments
+	>;
 };
+
+/**
+ * Alternative type that works with mixed field definitions including headings.
+ * Use this when you have heading objects mixed in with your field definitions.
+ */
+export type InferKeystoneDocumentFromMixedFields<
+	TMixedFields extends Record<string, any>,
+	TRefDocuments extends Record<string, KeystoneDocument> = Record<
+		string,
+		KeystoneDocument
+	>
+> = InferKeystoneDocumentFromFields<
+	ExtractFieldDefinitions<TMixedFields>,
+	TRefDocuments
+>;
 
 // =============================================================================
 // ENHANCED LIST CONSTRUCTOR WITH TYPE INFERENCE
