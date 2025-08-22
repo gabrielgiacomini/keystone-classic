@@ -14,6 +14,7 @@
     "fields",
     "index.js",
     "index.d.ts",
+    "types",
     "updates",
     "templates"
   ],
