@@ -834,7 +834,9 @@ export interface KeystoneFieldOptionsForTextType<
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/text/TextType.js}
  */
-export interface KeystoneFieldForTextType extends KeystoneField {
+export interface KeystoneFieldForTextType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Properties exposed to Admin UI (includes 'monospace'). */
@@ -975,7 +977,9 @@ export interface KeystoneFieldOptionsForNumberType<
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/number/NumberType.js}
  */
-export interface KeystoneFieldForNumberType extends KeystoneField {
+export interface KeystoneFieldForNumberType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (Number). */
 	_nativeType: NumberConstructor;
 	/** Fixed size for the field in the Admin UI. */
@@ -1098,7 +1102,9 @@ export interface KeystoneFieldOptionsForTextareaType<
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/textarea/TextareaType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/textarea/TextareaType.js}
  */
-export interface KeystoneFieldForTextareaType extends KeystoneField {
+export interface KeystoneFieldForTextareaType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Underscore methods added to documents (includes 'format', 'crop'). */
@@ -1235,7 +1241,9 @@ export interface KeystoneFieldOptionsForBooleanType<
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/boolean/BooleanType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/boolean/BooleanType.js}
  */
-export interface KeystoneFieldForBooleanType extends KeystoneField {
+export interface KeystoneFieldForBooleanType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (Boolean). */
 	_nativeType: BooleanConstructor;
 	/** Properties exposed to Admin UI (includes 'indent'). */
@@ -1404,7 +1412,9 @@ export interface KSAdminUiFilterForSelectField {
  * Interface for Select field instances.
  * @see ./fields/types/select/SelectType.js
  */
-export interface KeystoneFieldForSelectType extends KeystoneField {
+export interface KeystoneFieldForSelectType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** Admin UI rendering style ('select' or 'radio'). */
 	ui: string;
 	/** Whether the value is stored as a Number. */
@@ -1628,7 +1638,9 @@ export interface KeystoneFieldOptionsForDateTimeType<
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/date/DateType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/date/DateType.js}
  */
-export interface KeystoneFieldForDateType extends KeystoneField {
+export interface KeystoneFieldForDateType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (Date). */
 	_nativeType: DateConstructor;
 	/** Underscore methods added to documents (includes 'format', 'moment', 'parse'). */
@@ -1749,7 +1761,9 @@ export interface KeystoneFieldForDateType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
  */
-export interface KeystoneFieldForDateTimeType extends KeystoneField {
+export interface KeystoneFieldForDateTimeType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (Date). */
 	_nativeType: DateConstructor;
 	/** Underscore methods added to documents (includes 'format', 'moment', 'parse'). */
@@ -1940,7 +1954,9 @@ export interface KeystoneFieldOptionsForHtmlType<
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/html/HtmlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/html/HtmlType.js}
  */
-export interface KeystoneFieldForHtmlType extends KeystoneField {
+export interface KeystoneFieldForHtmlType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Default size for the field in the Admin UI. */
@@ -4675,7 +4691,9 @@ export interface KeystoneFieldOptionsForPasswordType<
  * Interface for Password field instances.
  * @see ./fields/types/password/PasswordType.js
  */
-export interface KeystoneFieldForPasswordType extends KeystoneField {
+export interface KeystoneFieldForPasswordType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Underscore methods added to documents (includes 'format', 'compare'). */
@@ -4784,7 +4802,9 @@ export interface KeystoneFieldOptionsForRelationshipType<
  * Interface for Relationship field instances.
  * @see ./fields/types/relationship/RelationshipType.js
  */
-export interface KeystoneFieldForRelationshipType extends KeystoneField {
+export interface KeystoneFieldForRelationshipType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** Whether this is a many-to-many relationship */
 	many: boolean;
 	/** Filters to apply to the reference list */
@@ -4888,7 +4908,9 @@ export interface KeystoneFieldOptionsForFileType<
  * Interface for File field instances.
  * @see ./fields/types/file/FileType.js
  */
-export interface KeystoneFieldForFileType extends KeystoneField {
+export interface KeystoneFieldForFileType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** Underscore methods added to documents */
 	_underscoreMethods: ["format", "upload", "remove", "reset"];
 	/** Fixed size for the field in the Admin UI */
@@ -4958,7 +4980,9 @@ export interface KeystoneFieldOptionsForTextArrayType<
  * Interface for TextArray field instances.
  * @see ./fields/types/textarray/TextArrayType.js
  */
-export interface KeystoneFieldForTextArrayType extends KeystoneField {
+export interface KeystoneFieldForTextArrayType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (Array of String) */
 	_nativeType: [StringConstructor];
 	/** Underscore methods added to documents */
@@ -5012,7 +5036,9 @@ export interface KeystoneFieldOptionsForNumberArrayType<
  * Interface for NumberArray field instances.
  * @see ./fields/types/numberarray/NumberArrayType.js
  */
-export interface KeystoneFieldForNumberArrayType extends KeystoneField {
+export interface KeystoneFieldForNumberArrayType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (Array of Number) */
 	_nativeType: [NumberConstructor];
 	/** Underscore methods added to documents */
@@ -5082,7 +5108,9 @@ export interface KeystoneFieldOptionsForLocationType<
  * Interface for Location field instances.
  * @see ./fields/types/location/LocationType.js
  */
-export interface KeystoneFieldForLocationType extends KeystoneField {
+export interface KeystoneFieldForLocationType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** Underscore methods added to documents */
 	_underscoreMethods: string[];
 	/** Fixed size for the field in the Admin UI */
