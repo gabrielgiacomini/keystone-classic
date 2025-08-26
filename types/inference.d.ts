@@ -24,7 +24,7 @@ type KeystoneFieldTypeToTSType<
 		KeystoneDocument
 	>
 > =
-	// Handle relationship fields
+	// Handle relationship fields first due to their complex structure
 	TFieldDef extends { type: any; ref: infer TRef; many: true }
 		? TRef extends keyof TRefDocuments
 			? KeystoneRelationshipFieldValue<true, TRefDocuments[TRef]>
@@ -33,6 +33,15 @@ type KeystoneFieldTypeToTSType<
 		? TRef extends keyof TRefDocuments
 			? KeystoneRelationshipFieldValue<false, TRefDocuments[TRef]>
 			: KeystoneRelationshipFieldValue<false, KeystoneDocument>
+		: // Handle Keystone field types by their 'properName'
+		TFieldDef extends { type: { properName: "Text" | "Textarea" | "Key" | "Url" | "Email" | "Password" | "Html" | "Color" | "Code" } }
+		? string
+		: TFieldDef extends { type: { properName: "Number" } }
+		? number
+		: TFieldDef extends { type: { properName: "Boolean" } }
+		? boolean
+		: TFieldDef extends { type: { properName: "Date" | "Datetime" } }
+		? Date
 		: // Handle native JS constructors
 		TFieldDef extends { type: StringConstructor }
 		? string
@@ -51,9 +60,9 @@ type KeystoneFieldTypeToTSType<
 		? boolean
 		: TFieldDef extends DateConstructor
 		? Date
-		: // Default fallback for Keystone field types
+		: // Fallback for any other Keystone field type
 		TFieldDef extends { type: KeystoneTypeConstructor }
-		? any
+		? any // Could be a more complex type like Location, File, etc.
 		: TFieldDef extends KeystoneTypeConstructor
 		? any
 		: // Ultimate fallback
@@ -96,98 +105,6 @@ export type InferKeystoneDocumentFromFields<
 };
 
 // =============================================================================
-// ENHANCED LIST CONSTRUCTOR WITH TYPE INFERENCE
-// =============================================================================
-
-/**
- * Enhanced List constructor interface that provides automatic type inference.
- * This allows you to get full TypeScript support without manually defining document interfaces!
- */
-export interface KeystoneListConstructorWithInference {
-	/**
-	 * Creates a new Keystone List with automatic TypeScript type inference.
-	 * The document type is automatically inferred from the field definitions!
-	 *
-	 * @template TFields - The field definitions object
-	 * @template TRefDocuments - Map of referenced document types for relationships
-	 * @param key - The unique key/name for the list
-	 * @param options - Configuration options including field definitions
-	 * @returns A new KeystoneList with the inferred document type
-	 *
-	 * @example
-	 * ```typescript
-	 * // Define your referenced document types
-	 * interface UserDocument extends KeystoneDocument {
-	 *   name: string;
-	 *   email: string;
-	 * }
-	 *
-	 * interface CategoryDocument extends KeystoneDocument {
-	 *   name: string;
-	 * }
-	 *
-	 * type RefDocs = {
-	 *   User: UserDocument;
-	 *   Category: CategoryDocument;
-	 * };
-	 *
-	 * // Create list with automatic type inference
-	 * const Posts = new keystone.List('Post', {
-	 *   fields: {
-	 *     title: { type: String, required: true },
-	 *     content: { type: String },
-	 *     published: { type: Boolean, default: false },
-	 *     publishedAt: { type: Date },
-	 *     author: { type: Types.Relationship, ref: 'User', required: true },
-	 *     categories: { type: Types.Relationship, ref: 'Category', many: true }
-	 *   }
-	 * } as const) as KeystoneListWithInference<typeof Posts['fields'], RefDocs>;
-	 *
-	 * // Now Posts.model has the correct inferred type:
-	 * // {
-	 * //   title: string;
-	 * //   content?: string;
-	 * //   published?: boolean;
-	 * //   publishedAt?: Date;
-	 * //   author: KeystoneRelationshipFieldValue<false, UserDocument>;
-	 * //   categories: KeystoneRelationshipFieldValue<true, CategoryDocument>;
-	 * // }
-	 * ```
-	 */
-	new <
-		TFields extends Record<string, any>,
-		TRefDocuments extends Record<string, KeystoneDocument> = Record<
-			string,
-			KeystoneDocument
-		>
-	>(
-		key: string,
-		options: {
-			fields?: TFields;
-			[key: string]: any;
-		}
-	): KeystoneListWithInference<TFields, TRefDocuments>;
-}
-
-/**
- * Enhanced KeystoneList type with automatic document type inference.
- */
-export type KeystoneListWithInference<
-	TFields extends Record<string, any>,
-	TRefDocuments extends Record<string, KeystoneDocument> = Record<
-		string,
-		KeystoneDocument
-	>
-> = import("./list").KeystoneList<KeystoneDocument> & {
-	/** The Mongoose model with the correctly inferred document type */
-	model: mongoose.Model<
-		InferKeystoneDocumentFromFields<TFields, TRefDocuments>
-	>;
-	/** The inferred document type for this list */
-	DocumentType: InferKeystoneDocumentFromFields<TFields, TRefDocuments>;
-};
-
-// =============================================================================
 // HELPER TYPES FOR EASIER USAGE
 // =============================================================================
 
@@ -202,13 +119,7 @@ export type KeystoneListWithInference<
  * ```
  */
 export type ExtractDocumentType<TList> =
-	TList extends KeystoneListWithInference<any, any>
-		? TList["DocumentType"]
-		: TList extends import("./list").KeystoneList<
-				infer TDoc extends KeystoneDocument
-		  >
-		? TDoc
-		: never;
+	TList extends import("./list").KeystoneList<infer TDoc, any> ? TDoc : never;
 
 /**
  * Utility type for defining field definitions with better IntelliSense.
@@ -233,43 +144,6 @@ export type KeystoneFieldDefinitions = Record<
 	| BooleanConstructor
 	| DateConstructor
 >;
-
-/**
- * Advanced helper for creating lists with full type safety and inference.
- * This provides the most ergonomic way to create typed Keystone lists.
- *
- * @example
- * ```typescript
- * interface UserDocument extends KeystoneDocument {
- *   name: string;
- *   email: string;
- * }
- *
- * const Posts = createTypedKeystoneList({
- *   key: 'Post',
- *   fields: {
- *     title: { type: String, required: true },
- *     content: { type: String },
- *     author: { type: Types.Relationship, ref: 'User' as const }
- *   },
- *   refDocuments: {} as { User: UserDocument }
- * });
- *
- * // Posts.model now has the correctly inferred type!
- * ```
- */
-export declare function createTypedKeystoneList<
-	TFields extends Record<string, any>,
-	TRefDocuments extends Record<string, KeystoneDocument> = Record<
-		string,
-		KeystoneDocument
-	>
->(config: {
-	key: string;
-	fields: TFields;
-	refDocuments?: TRefDocuments;
-	options?: Omit<import("./list").KeystoneListOptions, "fields">;
-}): KeystoneListWithInference<TFields, TRefDocuments>;
 
 // =============================================================================
 // TYPE-ONLY HELPERS FOR COMMON PATTERNS

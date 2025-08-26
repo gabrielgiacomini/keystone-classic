@@ -92,11 +92,8 @@ export {
 // Type inference exports
 export {
 	InferKeystoneDocumentFromFields,
-	KeystoneListConstructorWithInference,
-	KeystoneListWithInference,
 	ExtractDocumentType,
 	KeystoneFieldDefinitions,
-	createTypedKeystoneList,
 	RelationshipField,
 	RequiredField,
 	FieldHelpers,

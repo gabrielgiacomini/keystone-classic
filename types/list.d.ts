@@ -30,8 +30,11 @@ export interface KeystoneListMappings {
  * Configuration options for Keystone lists.
  * @see /lib/list/list.js - List options implementation
  */
+import { InferKeystoneDocumentFromFields } from "./inference";
+
 export interface KeystoneListOptions<
-	T extends KeystoneDocument = KeystoneDocument
+	TDoc extends KeystoneDocument = KeystoneDocument,
+	TFields extends Record<string, any> = Record<string, any>
 > {
 	/**
 	 * Mongoose schema options applied to the underlying schema.
@@ -88,7 +91,7 @@ export interface KeystoneListOptions<
 	 * Inherit schema and options from another List instance.
 	 * The parent list's fields will be included in this list.
 	 */
-	inherits?: KeystoneList<T>;
+	inherits?: KeystoneList<any, any>;
 	/**
 	 * Default number of items per page in the Admin UI list view.
 	 * Controls pagination in the list view.
@@ -145,9 +148,10 @@ export interface KeystoneListOptions<
 	 */
 	pre?: {
 		/** Hook executed before saving a document */
-		save?: (this: T, next: (err?: Error) => void) => void;
+		save?: (this: TDoc, next: (err?: Error) => void) => void;
 	};
-
+	/** The field definitions for this list. */
+	fields?: TFields;
 	/**
 	 * Allow any other custom options.
 	 * These will be accessible via list.get()
@@ -157,75 +161,75 @@ export interface KeystoneListOptions<
 
 /**
  * Constructor interface for KeystoneList.
+ * Provides automatic type inference for fields.
  * @see /lib/list/list.js - List constructor implementation
  */
-export interface KeystoneListConstructor
-	extends KeystoneList<KeystoneDocument> {
+export interface KeystoneListConstructor {
 	/**
-	 * Constructor function for creating new KeystoneList instances.
+	 * Creates a new KeystoneList instance with automatic type inference.
+	 * The document type is inferred from the `fields` definition.
 	 *
-	 * @template T The document type for type assertion (extends KeystoneDocument)
-	 * @param key The unique key/name for the list
-	 * @param options Configuration options for the list
-	 * @returns A new KeystoneList instance
+	 * @template TFields - The shape of the `fields` object.
+	 * @template TRefDocuments - A map of reference document types for relationships.
+	 * @param key The unique key/name for the list.
+	 * @param options Configuration options for the list, including `fields`.
+	 * @returns A new KeystoneList instance with a typed `model`.
 	 *
 	 * @example
 	 * ```typescript
-	 * // Standard usage (backward compatible)
-	 * const Posts = new keystone.List('Post', {
-	 *   fields: { title: { type: String } }
-	 * });
-	 *
-	 * // Generic type assertion for typed schema methods
-	 * interface PostDoc extends KeystoneDocument {
-	 *   title: string;
-	 *   slug: string;
-	 * }
-	 *
-	 * const Posts = new keystone.List<PostDoc>('Post', {
-	 *   fields: { title: { type: String }, slug: { type: String } }
-	 * });
-	 *
-	 * // Now schema methods have proper 'this' typing
-	 * Posts.schema.methods.generateSlug = function() {
-	 *   this.slug = this.title.toLowerCase(); // TypeScript knows these properties exist
+	 * // Define referenced documents for relationships
+	 * type RefDocs = {
+	 *   User: UserDocument; // Assuming UserDocument is defined elsewhere
 	 * };
+	 *
+	 * // Keystone will automatically infer the document type
+	 * const Posts = new keystone.List('Post', {
+	 *   fields: {
+	 *     title: { type: String, required: true },
+	 *     author: { type: Types.Relationship, ref: 'User' },
+	 *   }
+	 * } as const);
+	 *
+	 * // `Posts.model` is now fully typed!
+	 * // You can access `title` (string) and `author` (KeystoneRelationship)
 	 * ```
 	 */
-	new <T extends KeystoneDocument = KeystoneDocument>(
+	new <
+		TFields extends Record<string, any>,
+		TRefDocuments extends Record<string, KeystoneDocument> = Record<
+			string,
+			KeystoneDocument
+		>
+	>(
 		key: string,
-		options?: KeystoneListOptions<T>
-	): KeystoneList<T>;
-
-	/**
-	 * Function constructor (also supports generic type assertion).
-	 * Enables usage without 'new' keyword.
-	 * @template T The document type for type assertion (extends KeystoneDocument)
-	 * @param key The unique key/name for the list
-	 * @param options Configuration options for the list
-	 * @returns A new KeystoneList instance
-	 */
-	<T extends KeystoneDocument = KeystoneDocument>(
-		key: string,
-		options?: KeystoneListOptions<T>
-	): KeystoneList<T>;
+		options?: KeystoneListOptions<
+			InferKeystoneDocumentFromFields<TFields, TRefDocuments>,
+			TFields
+		>
+	): KeystoneList<
+		InferKeystoneDocumentFromFields<TFields, TRefDocuments>,
+		TFields
+	>;
 }
 
 /**
- * Main Keystone List class.
+ * Main Keystone List class with integrated type inference.
  * @see /lib/list/list.js - List implementation
  */
-export class KeystoneList<T extends KeystoneDocument = KeystoneDocument> {
+export class KeystoneList<
+	TDoc extends KeystoneDocument,
+	TFields extends Record<string, any>
+> {
 	/** Reference to the Keystone instance that owns this list. */
 	keystone: Keystone;
 	/** Configuration options for this list. */
-	options: KeystoneListOptions<T>;
+	options: KeystoneListOptions<TDoc, TFields>;
 	/** The unique key/name for this list. */
 	key: string;
 	/** The URL path for this list in the Admin UI. */
 	path: string;
 	/** The Mongoose schema for this list. */
-	schema: KeystoneListSchema<T>;
+	schema: KeystoneListSchema<TDoc>;
 	/** Array of field definitions and UI elements as provided in constructor. */
 	schemaFields: Array<string | KeystoneGroupFields | KeystoneGroupHeading>;
 	/** Array of processed Admin UI elements for rendering forms. */
@@ -247,14 +251,16 @@ export class KeystoneList<T extends KeystoneDocument = KeystoneDocument> {
 			ref: string;
 			refPath: string;
 			path: string;
-			list: KeystoneList<any>;
+			list: KeystoneList<any, any>;
 			field: KeystoneField;
 		}
 	>;
 	/** Field path mappings for special list functionality. */
 	mappings: KeystoneListMappings;
-	/** The Mongoose model for this list. */
-	model: mongoose.Model<T>;
+	/** The Mongoose model with the correctly inferred document type. */
+	model: mongoose.Model<TDoc>;
+	/** The inferred document type for this list. */
+	readonly DocumentType: TDoc;
 
 	/** Cached array of search fields. @internal */
 	_searchFields?: KeystoneField[];

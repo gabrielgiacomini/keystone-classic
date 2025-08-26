@@ -15,6 +15,8 @@ import {
 	KeystoneSingleRelationshipValuePopulated,
 	KeystoneManyRelationshipValuePopulated,
 	KeystoneRelationshipExpandedItem,
+	KeystoneList,
+	KeystoneFieldOptionsForRelationshipType,
 } from "../../index";
 
 // Example document types
@@ -214,3 +216,72 @@ const populatedCategories: KeystoneManyRelationshipValuePopulated<CategoryDocume
 // This demonstrates type safety - TypeScript will catch errors
 // const invalidRelationship: KeystoneSingleRelationshipValue = "not-an-objectid"; // ❌ Type error
 // const invalidMany: KeystoneManyRelationshipValue = "also-invalid"; // ❌ Type error
+
+// =============================================================================
+// TYPE INFERENCE VERIFICATION
+// =============================================================================
+
+// Mock Keystone instance for constructor
+const keystone = {
+	List: KeystoneList,
+};
+
+// Define a User list to be referenced
+const User = new keystone.List("User", {
+	fields: {
+		name: { type: String, required: true },
+		email: { type: String, required: true },
+	},
+} as const);
+
+// Define a Post list that references the User list
+const Post = new keystone.List("Post", {
+	fields: {
+		title: { type: String, required: true },
+		// Test single relationship inference
+		author: {
+			type: "Relationship" as const,
+			ref: "User",
+			required: true,
+		} as KeystoneFieldOptionsForRelationshipType,
+		// Test many relationship inference
+		contributors: {
+			type: "Relationship" as const,
+			ref: "User",
+			many: true,
+		} as KeystoneFieldOptionsForRelationshipType,
+	},
+} as const);
+
+// Verification functions
+function verifyPostDocument() {
+	// If type inference is working, this function will compile without errors
+	const postInstance: (typeof Post)["DocumentType"] = {} as any;
+
+	// `title` should be inferred as `string`
+	const title: string = postInstance.title;
+	// `author` should be inferred as a single relationship to User
+	const author: KeystoneSingleRelationshipValue<typeof User.DocumentType> =
+		postInstance.author;
+	// `contributors` should be inferred as a many relationship to User
+	const contributors: KeystoneManyRelationshipValue<typeof User.DocumentType> =
+		postInstance.contributors;
+
+	// Example of using the typed relationships
+	if (author && "name" in author) {
+		const authorName: string = author.name;
+		console.log(authorName);
+	}
+
+	if (contributors.length > 0 && "name" in contributors[0]) {
+		const contributorName: string = contributors[0].name;
+		console.log(contributorName);
+	}
+
+	console.log(title);
+}
+
+// This line is just to satisfy TypeScript that the function is used.
+if (false) {
+	verifyPostDocument();
+}
