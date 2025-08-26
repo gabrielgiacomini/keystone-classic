@@ -1,3 +1,10 @@
+/**
+ * @fileoverview
+ * This file defines the `Boolean` field type, which is used to store and
+ * manage boolean values in KeystoneJS.
+ *
+ * It provides methods for filtering and validating the input.
+ */
 var FieldType = require('../Type');
 var utils = require('keystone-utils');
 var util = require('util');
@@ -21,6 +28,11 @@ boolean.prototype.defaults = {
 	default: false,
 };
 
+/**
+ * Validates the input.
+ * @param {Object} data The data to validate.
+ * @param {function} callback The callback to call when validation is complete.
+ */
 boolean.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
 	var result = true;
@@ -34,6 +46,12 @@ boolean.prototype.validateInput = function (data, callback) {
 	utils.defer(callback, result);
 };
 
+/**
+ * Validates that a value has been provided for a required field.
+ * @param {Object} item The item to validate.
+ * @param {Object} data The data to validate.
+ * @param {function} callback The callback to call when validation is complete.
+ */
 boolean.prototype.validateRequiredInput = function (item, data, callback) {
 	var value = this.getValueFromData(data);
 	var result = value && value !== 'false'

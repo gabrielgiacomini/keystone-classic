@@ -1,3 +1,10 @@
+/**
+ * @fileoverview
+ * This file defines the `TextArray` field type, which is used to store and
+ * manage an array of strings in KeystoneJS.
+ *
+ * It provides methods for formatting, filtering, and validating the array.
+ */
 var FieldType = require('../Type');
 var util = require('util');
 var utils = require('keystone-utils');
@@ -19,6 +26,9 @@ util.inherits(textarray, FieldType);
 
 /**
  * Formats the field value
+ * @param {Object} item The item to format.
+ * @param {string} separator The separator to use between the values.
+ * @returns {string} The formatted value.
  */
 textarray.prototype.format = function (item, separator) {
 	return item.get(this.path).join(separator || this.separator);

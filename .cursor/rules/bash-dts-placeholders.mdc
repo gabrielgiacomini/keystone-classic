@@ -1,0 +1,89 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+
+
+```bash
+
+#!/bin/bash
+
+# generate_ts_commands.sh
+# Generates individual 'printf ... > file.d.ts' commands to create
+# placeholder type definition files with basic JSDoc comments.
+# Run this script from the KeystoneJS v4 project root.
+
+echo "# --- Commands to generate .d.ts files with placeholder comments ---"
+echo "# Review these commands before executing."
+echo "# You can execute them by running: bash <(bash generate_ts_commands.sh)"
+echo ""
+
+find . \
+  \( -path ./node_modules -o -path ./fields/components -o -wholename '*/test/*' \) -prune \
+  -o \
+  -name '*.js' -exec bash -c '
+    js_file="{}"
+    # Ensure path starts with ./ for consistency if find returns relative paths
+    [[ "$js_file" != ./* ]] && js_file="./$js_file"
+
+    ts_file="${js_file%.js}.d.ts"
+
+    # --- Basic summary deduction (Improve these conditions as needed) ---
+    summary="Type definitions for ${js_file}"
+    description="Placeholder description for the types defined in this file."
+
+    if [[ "$js_file" == "./index.js" ]]; then
+      summary="Main module definition for KeystoneJS v4."
+      description="Defines the main \`keystone\` object exported by the package, including core methods like init(), start(), list(), etc."
+    elif [[ "$js_file" == "./lib/list.js" ]]; then
+      summary="KeystoneJS List class/object definition."
+      description="Defines the shape of a Keystone List object returned by \`keystone.list()\`, including methods for data operations, registration, etc."
+    elif [[ "$js_file" == "./lib/view.js" ]]; then
+      summary="KeystoneJS View class/object definition."
+      description="Defines the types related to KeystoneJS Views, used for rendering templates."
+    elif [[ "$js_file" == "./lib/updateHandler.js" ]]; then
+      summary="KeystoneJS UpdateHandler definition."
+      description="Defines the types for Keystone'\''s UpdateHandler, used for processing form data."
+    elif [[ "$js_file" == "./lib/email.js" ]]; then
+       summary="KeystoneJS Email class/object definition."
+       description="Defines the types related to sending emails via KeystoneJS."
+    elif [[ "$js_file" == *"/fields/types/Field.js"* ]]; then
+      summary="Base class definition for KeystoneJS Fields."
+      description="Defines the common interface and properties for all KeystoneJS field instances."
+    elif [[ "$js_file" == *"/fields/types/Type.js"* ]]; then
+      summary="Base class definition for KeystoneJS Field Types."
+      description="Defines the common interface and properties for all KeystoneJS field type *constructors*."
+    elif [[ "$js_file" == *"/fields/types/"*"/"*.js ]]; then
+      # Extract field type name for summary
+      field_name=$(basename "${js_file%.js}" Type) # Basic extraction
+      summary="KeystoneJS ${field_name} Field Type definition."
+      description="Defines the specific options, methods, and properties for the ${field_name} field type."
+    fi
+    # --- End summary deduction ---
+
+    # Prepare the content using printf format strings for safety
+    # Using $'\''...' allows \n and easier quote handling inside.
+    content=$(printf "/**\n * @summary %s\n * @module %s\n *\n * @description\n * %s\n *\n * @see %s\n *\n * @todo Giaco: Implement the actual type definitions here.\n */\n\n// Add imports and definitions below.\n\nexport {}; // Ensures this file is treated as a module.\n" \
+      "$summary" "$js_file" "$description" "$js_file" )
+
+    # Escape single quotes within the content for the outer printf command
+    # Using bash parameter expansion: ${parameter//pattern/string}
+    escaped_content="${content//\'/\'\\\'\'}" # Replaces ' with '\''
+
+    # Generate the final printf command for this file
+    # Format: printf 'CONTENT' > 'FILENAME'
+    printf "printf '%s' > '%s'\n" "$escaped_content" "$ts_file"
+
+  ' {} \;
+
+# --- Command for global.d.ts ---
+global_content=$(printf "/**\n * @summary Global type augmentations for KeystoneJS v4.\n * @module global.d.ts\n *\n * @description\n * Use this file for module augmentation, for example, adding properties\n * to the Express Request or Response objects if Keystone modifies them.\n *\n * @todo Giaco: Add necessary global augmentations (e.g., for Express Request/Response).\n */\n\n// Example:\n// declare global {\n//   namespace Express {\n//     interface Request {\n//       keystone?: import(\"./index\").Keystone; // Adjust import path\n//       list?: import(\"./lib/list\").List;\n//       item?: import(\"mongoose\").Document;\n//     }\n//   }\n// }\n\nexport {}; // Ensures this file is treated as a module.\n")
+escaped_global_content="${global_content//\'/\'\\\'\'}"
+printf "printf '%s' > '%s'\n" "$escaped_global_content" "global.d.ts"
+
+echo ""
+echo "# --- End of commands ---"
+
+```
+

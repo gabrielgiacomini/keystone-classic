@@ -1,5 +1,13 @@
-/*!
- * Module dependencies.
+/**
+ * @fileoverview
+ * This file defines the `Field` constructor, which is the base class for all
+ * field types in KeystoneJS.
+ *
+ * It provides the basic functionality for a field, such as registering it on a
+ * list, adding it to a schema, and validating its input.
+ *
+ * It is not meant to be used directly, but should be extended by other field
+ * types.
  */
 var _ = require('lodash');
 var assign = require('object-assign');
@@ -213,7 +221,6 @@ Field.prototype.getPreSaveWatcher = function () {
 			next();
 		}.bind(this));
 	};
-
 };
 module.exports = Field;
 

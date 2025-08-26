@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Email` field type, which is used to store and
+ * manage email addresses in KeystoneJS.
+ *
+ * It provides a `gravatarUrl` method to generate a Gravatar URL for the
+ * email address, and validates that the input is a valid email address.
+ */
 var crypto = require('crypto');
 var FieldType = require('../Type');
 var TextType = require('../text/TextType');
@@ -23,6 +31,11 @@ email.prototype.addFilterToQuery = TextType.prototype.addFilterToQuery;
 
 /**
  * Generate a gravatar image request url
+ * @param {Object} item The item to get the email from.
+ * @param {number} size The size of the gravatar image.
+ * @param {string} defaultImage The default image to use if the user doesn't have a gravatar.
+ * @param {string} rating The rating of the gravatar image.
+ * @returns {string} The gravatar URL.
  */
 email.prototype.gravatarUrl = function (item, size, defaultImage, rating) {
 	var value = item.get(this.path);

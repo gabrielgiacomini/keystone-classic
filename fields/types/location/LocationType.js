@@ -1,3 +1,12 @@
+/**
+ * @fileoverview
+ * This file defines the `Location` field type, which is used to store and
+ * manage location data in KeystoneJS.
+ *
+ * It provides a set of sub-fields for storing the different parts of a
+ * location, and it can be configured to use the Google Maps API to improve
+ * the location data.
+ */
 var _ = require('lodash');
 var FieldType = require('../Type');
 var https = require('https');
@@ -397,6 +406,11 @@ function doGoogleGeocodeRequest (address, region, callback) {
  * Please make sure your Keystone app complies with the Google Maps API License.
  *
  * Internal status codes mimic the Google API status codes.
+ *
+ * @param {Object} item The item to lookup.
+ * @param {string} region The region to bias the search towards.
+ * @param {boolean|string} update Whether to update the item with the lookup results.
+ * @param {function} callback The callback to call with the results.
  */
 location.prototype.googleLookup = function (item, region, update, callback) {
 

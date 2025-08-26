@@ -1,3 +1,10 @@
+/**
+ * @fileoverview
+ * This file defines the `Text` field type, which is used to store and manage
+ * single-line text data in KeystoneJS.
+ *
+ * It provides methods for filtering and validating the input.
+ */
 var FieldType = require('../Type');
 var util = require('util');
 var utils = require('keystone-utils');
@@ -17,6 +24,11 @@ function text (list, path, options) {
 text.properName = 'Text';
 util.inherits(text, FieldType);
 
+/**
+ * Validates the input.
+ * @param {Object} data The data to validate.
+ * @param {function} callback The callback to call when validation is complete.
+ */
 text.prototype.validateInput = function (data, callback) {
 	var max = this.options.max;
 	var min = this.options.min;
@@ -31,6 +43,12 @@ text.prototype.validateInput = function (data, callback) {
 	utils.defer(callback, result);
 };
 
+/**
+ * Validates that a value has been provided for a required field.
+ * @param {Object} item The item to validate.
+ * @param {Object} data The data to validate.
+ * @param {function} callback The callback to call when validation is complete.
+ */
 text.prototype.validateRequiredInput = function (item, data, callback) {
 	var value = this.getValueFromData(data);
 	var result = !!value;
@@ -64,6 +82,11 @@ text.prototype.addFilterToQuery = function (filter) {
 
 /**
  * Crops the string to the specifed length.
+ * @param {Object} item The item to crop.
+ * @param {number} length The length to crop the string to.
+ * @param {string} append The string to append to the cropped string.
+ * @param {boolean} preserveWords Whether to preserve whole words.
+ * @returns {string} The cropped string.
  */
 text.prototype.crop = function (item, length, append, preserveWords) {
 	return utils.cropString(item.get(this.path), length, append, preserveWords);

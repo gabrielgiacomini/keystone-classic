@@ -1,0 +1,445 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# KeystoneJS v4 Type Naming Conventions (.mdc)
+
+**Author:** Gabriel Giacomini (Giaco)
+**Date:** 2025-03-27
+**Project:** KeystoneJS v4 Type Definitions
+
+## 1. Goal
+
+To establish clear, consistent, and predictable naming conventions for the remaining TypeScript interfaces and types needed for the KeystoneJS v4 project, based on analysis of existing types and the source files referenced in `@todo` comments.
+
+## 2. General Principles
+
+1.  **Clarity:** Names must clearly indicate the purpose and scope of the type.
+2.  **Consistency:** Follow established patterns from the existing definitions.
+3.  **Prefixes:** Use `Keystone` for framework-level concepts. Use `KSAdminUi` for types specifically related to the Admin UI components or filters.
+4.  **Suffixes:**
+    * Use `...Options` for configuration objects passed to functions or constructors.
+    * Use `...Config` for broader configuration structures (like global Keystone config).
+    * Use `...Type` for types representing *Field Types* themselves (consistent with existing `TextType`, `NumberType`, etc., although the interfaces often use `...For<Type>Type`). Stick to the `...For<Type>Type` pattern for Options, Field Instances, and Constructors as established.
+    * Use `...Function` for types representing specific function signatures.
+    * Use `...Middleware` for Express request handlers.
+    * Use `...Factory` for functions that *return* middleware or other configured objects.
+    * Use `...Module` for types representing the exports of a specific JS module file.
+    * Use `...Plugin` for Mongoose schema plugin functions.
+    * Use `...Adapter` for storage or other adapter implementations.
+5.  **Interfaces vs. Types:**
+    * Use `interface` for defining the shape of objects, classes, or extending existing interfaces.
+    * Use `type` for function signatures, unions, intersections, primitive aliases, or simple aliases.
+6.  **Specificity:** Prefer specific types over `any` whenever the structure or signature is known or can be reasonably inferred. Mark deliberate uses of `any` with comments if necessary (e.g., `// @internal - Structure not critical`).
+7.  **Readability:** Use PascalCase for type and interface names.
+
+## 3. Naming Patterns for Undefined Types
+
+Based on the `@todo` comments and source file analysis:
+
+
+### 3.1. External Libraries (`@types`)
+
+* **`grappling-hook`**: If `@types/grappling-hook` doesn't exist, define a basic interface:
+    ```typescript
+    // Define basic structure based on usage (addHook, callHook)
+    interface GrapplingHookInstance {
+        addHook(name: string, fn: Function): void;
+        callHook(name: string, ...args: any[]): Promise<any>;
+        // Add other methods if known/used
+    }
+    ```
+* **`numeral`**: Install `@types/numeral`. No internal definition needed.
+    ```bash
+    npm install --save-dev @types/numeral
+    ```
+
+### 3.2. Mongoose / Internal Details
+
+* **`mongoose.Document`**: Define a generic base or use specific ones per List.
+    ```typescript
+    // Generic Keystone Document Type
+    type KeystoneDocument<T = Record<string, any>> = mongoose.Document & T;
+    ```
+* **`Path` object (Internal in `KeystoneField`)**:
+    ```typescript
+    // Represents the internal path structure used by Fields
+    type KeystoneInternalPath = any; // @internal - Keep simple unless structure needed
+    // Or interface KeystoneInternalPath { parts: string[]; /* ... */ }
+    ```
+* **`col` type (Mongoose Schema Definition)**:
+    ```typescript
+    // Represents a Mongoose Schema path definition object
+    type MongooseSchemaColumnDefinition = mongoose.SchemaDefinition[keyof mongoose.SchemaDefinition];
+    // Usage: col?: MongooseSchemaColumnDefinition;
+    ```
+* **`autoCleanup`, `thumb` flags**: These are booleans. Verify their exact usage context in specific field types (like Relationships, Files/Images) if defining stricter options interfaces.
+
+### 3.3. Middleware (`lib/middleware/`)
+
+* **`cors.js`**: Represents a factory function returning CORS middleware.
+    ```typescript
+    // Options for CORS middleware
+    interface KeystoneCorsMiddlewareOptions {
+        origin?: boolean | string | RegExp | (string | RegExp)[];
+        methods?: string | string[];
+        // ... other 'cors' package options
+    }
+
+    // Factory function type
+    type KeystoneCorsMiddlewareFactory = (options?: KeystoneCorsMiddlewareOptions) => express.RequestHandler;
+    ```
+* **`api.js`**: Represents a factory function returning an API router.
+    ```typescript
+    // Factory function type returning an Express Router for the API
+    type KeystoneApiMiddlewareFactory = (keystone: Keystone) => express.Router;
+    ```
+* **`language.js`**: Represents language detection middleware.
+    ```typescript
+    // Options for language middleware (if any)
+    interface KeystoneLanguageMiddlewareOptions {
+        // Define options based on source file
+    }
+
+    // Middleware function type (or factory if it takes options)
+    type KeystoneLanguageMiddleware = (options?: KeystoneLanguageMiddlewareOptions) => express.RequestHandler;
+    // Or: type KeystoneLanguageMiddleware = express.RequestHandler;
+    ```
+
+### 3.4. Core Functions/Modules (`lib/core/`)
+
+* **`safeRequire.js`**: Utility function.
+    ```typescript
+    type KeystoneSafeRequireFunction = <T = any>(id: string) => T | null;
+    ```
+* **`updates.js`**: Module for applying schema updates.
+    ```typescript
+    interface KeystoneUpdatesModule {
+        apply(callback: (err?: any) => void): void;
+        // ... other potential exports from the module
+    }
+    ```
+* **`closeDatabaseConnection.js`**: Function signature (likely method on `Keystone`). Refine `Keystone['closeDatabaseConnection']` signature if needed.
+* **`redirect.js`**: Function signature (likely method on `Keystone`). Refine `Keystone['redirect']` signature if needed.
+* **`start.js`**: Function signature (method on `Keystone`). Refine `Keystone['start']` signature if needed.
+* **`initDatabaseConfig.js`**: Function signature (method on `Keystone`). Refine `Keystone['initDatabaseConfig']` signature.
+* **`initExpressApp.js`**: Function signature (method on `Keystone`). Refine `Keystone['initExpressApp']` signature.
+* **`createItems.js`**: Function signature (method on `Keystone`). Refine `Keystone['createItems']` signature.
+    ```typescript
+    interface KeystoneCreateItemsData {
+        [listKey: string]: Record<string, any>[];
+    }
+    type KeystoneCreateItemsFunction = (data: KeystoneCreateItemsData, options?: any, callback?: (err: any, results: any) => void) => Promise<any> | void;
+    ```
+* **`openDatabaseConnection.js`**: Function signature (method on `Keystone`). Refine `Keystone['openDatabaseConnection']` signature.
+* **`options.js`**: Core options handling (already covered by `KeystoneGlobalOptions` and methods `get`, `set`, `options`).
+* **`initNav.js`**: Function signature (method on `Keystone`). Refine `Keystone['initNav']` signature and the structure of `Keystone['nav']`.
+* **`importer.js`**: Function signature (method on `Keystone`). Refine `Keystone['importer']` signature.
+* **`list.js`**: Function signature (method on `Keystone`). Refine `Keystone['list']` signature.
+* **`init.js`**: Function signature (method on `Keystone`). Refine `Keystone['init']` signature.
+* **`populateRelated.js`**: Function signature (method on `Keystone`). Refine `Keystone['populateRelated']` signature.
+    ```typescript
+    interface KeystonePopulateRelatedOptions {
+        // Define options based on source: paths, cacheHints etc.
+    }
+    type KeystonePopulateRelatedFunction = (itemOrItems: KeystoneDocument | KeystoneDocument[], options: string | KeystonePopulateRelatedOptions, callback: (err: any, populated: any) => void) => void;
+    ```
+* **`createRouter.js`**: Function signature (method on `Keystone`). Refine `Keystone['createRouter']` signature (it's just `express.Router`).
+* **`wrapHTMLError.js`**: Function signature (method on `Keystone`). Refine `Keystone['wrapHTMLError']` signature.
+    ```typescript
+    type KeystoneWrapHTMLErrorFunction = (title?: string, err?: string | Error) => string;
+    ```
+* **`createKeystoneHash.js`**: Function signature (method on `Keystone`). Refine `Keystone['createKeystoneHash']` signature.
+    ```typescript
+    type KeystoneCreateKeystoneHashFunction = (keys: string[], secret: string) => string;
+    ```
+* **`initExpressSession.js`**: Function signature (method on `Keystone`). Refine `Keystone['initExpressSession']` signature.
+* **`getOrphanedLists.js`**: Function signature (method on `Keystone`). Refine `Keystone['getOrphanedLists']` signature (returns `KeystoneList[]`).
+
+### 3.5. Security Functions/Modules (`lib/security/`)
+
+* **`frameGuard.js`**: Factory returning middleware.
+    ```typescript
+    type KeystoneFrameGuardMiddlewareFactory = (options?: 'deny' | 'sameorigin' | string | boolean) => express.RequestHandler;
+    ```
+* **`ipRangeRestrict.js`**: Factory returning middleware.
+    ```typescript
+    interface KeystoneIpRangeRestrictOptions {
+        allowedIpRanges: string | string[];
+        // ... other options from source
+    }
+    type KeystoneIpRangeRestrictMiddlewareFactory = (options: KeystoneIpRangeRestrictOptions) => express.RequestHandler;
+    ```
+* **`csrf.js`**: Module providing CSRF utilities (likely includes middleware).
+    ```typescript
+    interface KeystoneCsrfUtils {
+        middleware: {
+            init: express.RequestHandler;
+            validate: express.RequestHandler;
+            // ... other middleware parts
+        };
+        getToken(req: express.Request, res: express.Response): string;
+        // ... other utility functions
+    }
+    // This seems to be what `Keystone['security']['csrf']` should conform to.
+    ```
+* **`escapeValueForExcel.js`**: Utility function.
+    ```typescript
+    type KeystoneEscapeValueForExcelFunction = (value: any) => string;
+    ```
+
+### 3.6. Schema Plugins (`lib/schemaPlugins/`)
+
+* **General Plugin Type**:
+    ```typescript
+    // General type for a Mongoose schema plugin function
+    type KeystoneSchemaPlugin = (schema: mongoose.Schema, options: any) => void;
+    ```
+* **Specific Plugins**: Define options interfaces and use the general type.
+    ```typescript
+    interface KeystoneSortablePluginOptions {
+        list: KeystoneList;
+        path?: string;
+        // ... other options
+    }
+    type KeystoneSortablePlugin = (schema: mongoose.Schema, options: KeystoneSortablePluginOptions) => void;
+
+    interface KeystoneTrackPluginOptions {
+        list: KeystoneList;
+        fields: KeystoneListOptions['track']; // Reuse existing type
+        // ... other options
+    }
+    type KeystoneTrackPlugin = (schema: mongoose.Schema, options: KeystoneTrackPluginOptions) => void;
+
+    interface KeystoneAutokeyPluginOptions {
+        list: KeystoneList;
+        path: string;
+        from: string | string[];
+        // ... other options (unique, separator etc)
+    }
+    type KeystoneAutokeyPlugin = (schema: mongoose.Schema, options: KeystoneAutokeyPluginOptions) => void;
+
+    interface KeystoneHistoryPluginOptions {
+        list: KeystoneList;
+        path?: string;
+        // ... other options
+    }
+    type KeystoneHistoryPlugin = (schema: mongoose.Schema, options: KeystoneHistoryPluginOptions) => void;
+
+    // For plugins defining schema methods (getRelated, populateRelated):
+    // These add methods to mongoose.Document, handled within the plugin logic.
+    // No specific top-level type needed, focus on the plugin function itself.
+
+    // For transform plugin:
+    interface KeystoneTransformPluginOptions {
+        // Options for transform plugin
+    }
+    type KeystoneTransformPlugin = (schema: mongoose.Schema, options: KeystoneTransformPluginOptions) => void;
+
+    ```
+
+### 3.7. Content Types (`lib/content/`)
+
+* **`type.js` (Base Type)**:
+    ```typescript
+    interface KeystoneContentType {
+        // Define common methods based on source (e.g., register, format)
+        register(list: KeystoneList, path: string, options: any): void;
+        format(item: KeystoneDocument, options?: any): string;
+        // ... other common methods
+    }
+    ```
+* **Specific Content Types**: Extend the base type.
+    ```typescript
+    interface KeystoneHtmlContentType extends KeystoneContentType {
+        // HTML specific methods/properties
+    }
+    interface KeystoneTextContentType extends KeystoneContentType {
+        // Text specific methods/properties
+    }
+    ```
+* **`page.js`**: Class or interface for content pages.
+    ```typescript
+    interface KeystoneContentPageOptions { /* ... */ }
+    interface KeystoneContentPage {
+        // Properties like sections, content, data
+        // Methods like load, render
+        constructor(options: KeystoneContentPageOptions): void;
+        load(callback: (err?: any) => void): void;
+        render(req: express.Request, res: express.Response, locals?: any, callback?: (err: any, html: string) => void): void;
+    }
+    type KeystoneContentPageConstructor = new (options: KeystoneContentPageOptions) => KeystoneContentPage;
+    ```
+* **`index.js` (Content Module Exports)**:
+    ```typescript
+    interface KeystoneContentModule {
+        types: Record<string, KeystoneContentType>;
+        Type: KeystoneContentType; // Base type constructor/class?
+        Page: KeystoneContentPageConstructor;
+    }
+    // This matches Keystone['content']
+    ```
+
+### 3.8. Storage (`lib/storage/`)
+
+* **`index.js` (Storage Module Exports)**:
+    ```typescript
+    interface KeystoneStorageModule {
+        Storage: typeof KeystoneStorage; // The main Storage class constructor
+        Adapters: {
+            FS: typeof FileSystemStorageAdapter; // Assuming class defined below
+            S3?: any; // Add other adapters if used
+            Azure?: any;
+        };
+    }
+    // This matches Keystone['Storage']
+
+    // Interface for the Storage class instance
+    interface KeystoneStorageInstance {
+        options: any;
+        adapter: KeystoneFileStorage; // Using existing type, make more generic if needed
+        // methods like upload, remove etc.
+    }
+    // Type for the Storage class constructor
+    type KeystoneStorage = new (options: any) => KeystoneStorageInstance;
+    ```
+* **`adapters/fs/index.js`**: File System Adapter (Class). `KeystoneFileStorage` already covers the interface. Define options.
+    ```typescript
+    interface KeystoneFsAdapterOptions {
+        path: string;
+        src?: string; // URL base path
+        uploadPath?: string; // Subdir within path
+        generateFilename?: (file: any, attempt: number) => string;
+        // ... other FS options
+    }
+    // Assuming the FS Adapter is a class implementing KeystoneFileStorage
+    type FileSystemStorageAdapter = new (options: KeystoneFsAdapterOptions) => KeystoneFileStorage;
+
+    ```
+
+### 3.9. Uploads (`lib/uploads.js`)
+
+* Module providing upload handling utilities.
+    ```typescript
+    interface KeystoneUploadedFile {
+        name: string;
+        mimetype: string;
+        path: string;
+        size: number;
+        // ... other properties added by multer or processing
+    }
+
+    interface KeystoneUploadsModule {
+        getRequestFiles(req: express.Request): Record<string, KeystoneUploadedFile | KeystoneUploadedFile[]> | undefined;
+        // ... other potential utility functions
+    }
+    ```
+
+### 3.10. List Methods (`lib/list/*.js`)
+
+* **Goal:** Refine the *existing method signatures* within the `KeystoneList` class definition, rather than creating new top-level types for each file.
+* **Process:** For each method (e.g., `getCSVData`, `paginate`, `updateItem`, `getUniqueValue`), examine the corresponding source file (`lib/list/getCSVData.js`, etc.) to define more specific types for `options`, `filters`, `callback` arguments, and return values.
+* **Examples:**
+    ```typescript
+    // In KeystoneList definition:
+
+    // Example for getCSVData
+    interface KeystoneGetCsvOptions {
+        list?: KeystoneList;
+        query?: any; // Mongoose Query
+        filters?: Record<string, any>;
+        search?: string;
+        columns?: string | string[] | Array<{ path: string; label?: string; /*...*/ }>;
+        // ... other options from source
+    }
+    getCSVData(options: KeystoneGetCsvOptions, user: any, callback: (err: any, csvData: string) => void): void;
+
+    // Example for paginate
+    interface KeystonePaginateOptions {
+        page?: number | string;
+        perPage?: number;
+        maxPages?: number;
+        filters?: Record<string, any>;
+        // ... maybe include query? Based on source
+    }
+    interface KeystonePaginateResults<T = KeystoneDocument> {
+        total: number;
+        results: T[];
+        currentPage: number;
+        totalPages: number;
+        pages: number[];
+        previous: number | false;
+        next: number | false;
+        first: number;
+        last: number;
+    }
+    paginate(options: KeystonePaginateOptions, callback: (err: any, results: KeystonePaginateResults) => void): void;
+
+    // Example for updateItem
+    interface KeystoneUpdateItemOptions {
+        files?: Record<string, KeystoneUploadedFile | KeystoneUploadedFile[]>;
+        user?: KeystoneDocument; // Assuming user model document
+        // ... other potential options
+    }
+    updateItem(item: KeystoneDocument, data: any, options: KeystoneUpdateItemOptions, callback: (err: any, updatedItem: KeystoneDocument) => void): void;
+    ```
+
+### 3.11. Utility Types (`lib/`)
+
+* **`path.js`**: Path utilities.
+    ```typescript
+    interface KeystonePathUtils {
+        // Define functions based on source (e.g., expand, trim)
+    }
+    ```
+* **`view.js`**: View rendering utilities (likely related to `Keystone['View']`).
+    ```typescript
+    interface KeystoneViewOptions { /* ... */ }
+    interface KeystoneView {
+        // Methods like render, engine
+        constructor(options?: KeystoneViewOptions): void;
+        render(templatePath: string, locals?: any, callback?: (err: any, html: string) => void): Promise<string> | void;
+        // ... other methods
+    }
+    type KeystoneViewConstructor = new (options?: KeystoneViewOptions) => KeystoneView;
+    // Keystone['View'] might be this constructor or an instance. Verify.
+    ```
+* **`email.js`**: Email utilities (likely related to `Keystone['Email']`).
+    ```typescript
+    interface KeystoneEmailOptions { /* ... based on Email class options */ }
+    interface KeystoneEmail {
+        // Methods like send
+        constructor(options?: string | KeystoneEmailOptions): void;
+        send(locals: any, callback: (err: any, info: any) => void): void;
+        // ... other methods
+    }
+    type KeystoneEmailConstructor = new (options?: string | KeystoneEmailOptions) => KeystoneEmail;
+    // Keystone['Email'] is likely this constructor.
+    ```
+
+### 3.12. Field Mixins / Explorer / Utilities (`fields/`)
+
+* **`mixins/ArrayField.js`**: A mixin applied to field prototypes.
+    ```typescript
+    // Likely a function that modifies a Field prototype or class
+    type KeystoneArrayFieldMixinFunction = (fieldClass: any, options?: any) => void;
+    // Or an interface if it's an object with methods to be mixed in
+    interface KeystoneArrayFieldMixin { /* ... methods ... */ }
+    ```
+* **`explorer/server.js`**: Sets up the field explorer UI/API.
+    ```typescript
+    // A function that likely adds routes to the Keystone Express app
+    type KeystoneFieldExplorerServerFunction = (keystone: Keystone) => void;
+    ```
+* **`utils/*.js`**: Specific utility functions.
+    ```typescript
+    type KeystoneAddPresenceToQueryFunction = (query: any, fieldPath: string) => void;
+    type KeystoneDefinePrototypeGettersFunction = (proto: any, getters: Record<string, () => any>) => void;
+    type KeystoneBindFunctionsFunction = (obj: any, methodNames: string[]) => void;
+    type KeystoneEvalDependsOnFunction = (dependsOn: Record<string, any> | undefined, values: Record<string, any>) => boolean;
+    ```
+
+## 4. Conclusion
+
+By following these patterns, we can ensure the remaining type definitions are consistent with the existing ones and accurately reflect the structure of KeystoneJS v4. Remember to consult the actual source code (`Sources:` links) when defining the specifics of options interfaces and function signatures. Good luck!

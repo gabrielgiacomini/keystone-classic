@@ -1,9 +1,35 @@
+/**
+ * @fileoverview Binds error handling middleware to the KeystoneJS app.
+ *
+ * This script sets up middleware to handle 404 (Not Found) and 500 (Internal
+ * Server Error) errors. It allows for custom error handlers to be configured
+ * in KeystoneJS.
+ *
+ * It is invoked by `server/createApp.js`.
+ * @module server/bindErrorHandlers
+ * @param {module:keystone} keystone The Keystone instance.
+ * @param {Object} app The Express app.
+ * @see {@link module:server/createApp}
+ * @example
+ * // In a KeystoneJS startup script
+ * keystone.set('404', function(req, res, next) {
+ *   res.status(404).send('Custom 404');
+ * });
+ * keystone.set('500', function(err, req, res, next) {
+ *   res.status(500).send('Custom 500');
+ * });
+ */
 var dashes = '\n------------------------------------------------\n';
 var utils = require('keystone-utils');
 
+/**
+ * Binds error handling middleware.
+ *
+ * @param {Keystone} keystone The Keystone instance.
+ * @param {Object} app The Express app.
+ */
 module.exports = function bindErrorHandlers (keystone, app) {
-
-	// Handle 404 (no route matched) errors
+	// 404 (Not Found) Handler
 	var default404Handler = function (req, res) {
 		if (req.headers.accept === 'application/json') {
 			return res.status(404).json({ error: 'not found' });
@@ -41,8 +67,7 @@ module.exports = function bindErrorHandlers (keystone, app) {
 		}
 	});
 
-	// Handle other errors
-
+	// 500 (Internal Server Error) Handler
 	var default500Handler = function (err, req, res, next) { // eslint-disable-line no-unused-vars
 		if (keystone.get('logger')) {
 			if (err instanceof Error) {
@@ -52,7 +77,7 @@ module.exports = function bindErrorHandlers (keystone, app) {
 			}
 			console.log(err.stack || err);
 		}
-		// TODO: Take into account dev settings to send a more useful JSON error
+		// Provide a more useful JSON error in development.
 		if (req.headers.accept === 'application/json') {
 			return res.status(500).json({ error: 'unknown error' });
 		}

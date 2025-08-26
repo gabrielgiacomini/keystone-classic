@@ -1,0 +1,25 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Improvement Task: Replace Generic `any` Types
+
+**Goal:** Reduce the usage of the generic `any` type throughout the definition file by replacing it with more specific types where the structure or type can be determined.
+
+**Instructions:**
+
+1.  **Search the entire type definition file for occurrences of `any`**.
+2.  **For each occurrence, evaluate the context:**
+    * Is it used for a function parameter, return value, property, or type alias?
+    * Consult the relevant source code file (`Sources:` links or logical path) to understand the actual data structure or type being used in KeystoneJS v4.
+    * Can it be replaced with a primitive type (`string`, `number`, `boolean`, `Date`, `null`, `undefined`)?
+    * Can it be replaced with an existing interface or type from the file (e.g., `KeystoneList`, `KeystoneField`, `KeystoneDocument`, a specific options type)?
+    * Can it be replaced with a union type (e.g., `string | number`)?
+    * Can it be replaced with a more specific object shape (e.g., `Record<string, string>`, ` { id: string; name: string }`)?
+    * Can it be replaced with a specific function signature type?
+    * Can it be replaced with a Mongoose type (`mongoose.Schema`, `mongoose.Query`, etc.)?
+    * If the type is complex and recurring, define a new specific interface or type alias for it following the naming conventions.
+3.  **Prioritize replacing `any`** in public-facing APIs (e.g., `Keystone` methods, `KeystoneList` methods, Field options/methods) over strictly internal details (though specificity is always preferred).
+4.  **If `any` is genuinely the most appropriate type** (e.g., for highly dynamic data where structure isn't known or relevant), add a comment explaining why: `// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Data structure is dynamic/unknown`.
+5.  **Ensure consistency** with the rest of the type definitions.

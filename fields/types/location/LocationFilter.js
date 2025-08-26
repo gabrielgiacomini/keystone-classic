@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `LocationFilter` component, which is used to filter
+ * `Location` fields in the KeystoneJS Admin UI.
+ *
+ * It provides a set of inputs for the different parts of a location, and it
+ * supports inverting the filter.
+ */
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 
@@ -13,6 +21,10 @@ const INVERTED_OPTIONS = [
 	{ label: 'Does NOT Match', value: true },
 ];
 
+/**
+ * Returns the default value for the filter.
+ * @returns {Object} The default value.
+ */
 function getDefaultValue () {
 	return {
 		inverted: INVERTED_OPTIONS[0].value,
@@ -24,6 +36,10 @@ function getDefaultValue () {
 	};
 }
 
+/**
+ * The `LocationFilter` component.
+ * @extends React.Component
+ */
 var TextFilter = React.createClass({
 	propTypes: {
 		filter: React.PropTypes.shape({
@@ -43,18 +59,35 @@ var TextFilter = React.createClass({
 			filter: getDefaultValue(),
 		};
 	},
+	/**
+	 * Updates the filter with a new value.
+	 * @param {string} key The key of the value to update.
+	 * @param {*} val The new value.
+	 */
 	updateFilter (key, val) {
 		const update = {};
 		update[key] = val;
 		this.props.onChange(Object.assign(this.props.filter, update));
 	},
+	/**
+	 * Toggles the inverted state of the filter.
+	 * @param {boolean} value The new inverted state.
+	 */
 	toggleInverted (value) {
 		this.updateFilter('inverted', value);
 		findDOMNode(this.refs.focusTarget).focus();
 	},
+	/**
+	 * Handles a change in the value of one of the filter fields.
+	 * @param {Object} e The event object.
+	 */
 	updateValue (e) {
 		this.updateFilter(e.target.name, e.target.value);
 	},
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { filter } = this.props;
 

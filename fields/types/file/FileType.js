@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `File` field type, which is used to store and manage
+ * files in KeystoneJS.
+ *
+ * It provides methods for uploading, removing, and resetting files, and for
+ * validating the input.
+ */
 var FieldType = require('../Type');
 var util = require('util');
 var utils = require('keystone-utils');
@@ -42,6 +50,9 @@ file.prototype.addToSchema = function (schema) {
 
 /**
  * Uploads a new file
+ * @param {Object} item The item to upload the file for.
+ * @param {Object} file The file to upload.
+ * @param {function} callback The callback to call when the upload is complete.
  */
 file.prototype.upload = function (item, file, callback) {
 	var field = this;
@@ -57,6 +68,7 @@ file.prototype.upload = function (item, file, callback) {
 
 /**
  * Resets the field value
+ * @param {Object} item The item to reset the field for.
  */
 file.prototype.reset = function (item) {
 	var value = {};
@@ -68,6 +80,7 @@ file.prototype.reset = function (item) {
 
 /**
  * Deletes the stored file and resets the field value
+ * @param {Object} item The item to remove the file from.
  */
 // TODO: Should we accept a callback here? Seems like a good idea.
 file.prototype.remove = function (item) {
@@ -77,6 +90,8 @@ file.prototype.remove = function (item) {
 
 /**
  * Formats the field value
+ * @param {Object} item The item to format.
+ * @returns {string} The formatted value.
  */
 file.prototype.format = function (item) {
 	var value = item.get(this.path);
@@ -97,6 +112,11 @@ file.prototype.isModified = function (item) {
 };
 
 
+/**
+ * Validates the input.
+ * @param {*} value The value to validate.
+ * @returns {boolean} Whether the value is valid.
+ */
 function validateInput (value) {
 	// undefined, null and empty values are always valid
 	if (value === undefined || value === null || value === '') return true;

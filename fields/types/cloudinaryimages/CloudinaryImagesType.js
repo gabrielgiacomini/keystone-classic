@@ -1,3 +1,10 @@
+/**
+ * @fileoverview
+ * This file defines the `CloudinaryImages` field type, which is used to store
+ * and manage multiple images in Cloudinary.
+ *
+ * It provides methods for uploading, deleting, and transforming images.
+ */
 var _ = require('lodash');
 var assign = require('object-assign');
 var async = require('async');
@@ -5,6 +12,10 @@ var FieldType = require('../Type');
 var keystone = require('../../../');
 var util = require('util');
 
+/**
+ * Returns an empty value for the field.
+ * @returns {Object} The empty value.
+ */
 function getEmptyValue () {
 	return {
 		public_id: '',
@@ -19,6 +30,11 @@ function getEmptyValue () {
 	};
 }
 
+/**
+ * Returns true if the value is truthy.
+ * @param {*} value The value to check.
+ * @returns {boolean} Whether the value is truthy.
+ */
 function truthy (value) {
 	return value;
 }

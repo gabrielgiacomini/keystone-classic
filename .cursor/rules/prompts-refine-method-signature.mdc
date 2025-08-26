@@ -1,0 +1,20 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Improvement Task: Refine Method Signatures (Keystone/KeystoneList)
+
+**Goal:** Improve the accuracy and specificity of method signatures (parameters and return types) within the `Keystone` and `KeystoneList` class definitions.
+
+**Instructions:**
+
+1.  **Focus on the `Keystone` and `KeystoneList` class declarations** in the type definition file.
+2.  **Iterate through each method** defined within these classes (e.g., `keystone.start`, `keystone.list`, `list.add`, `list.paginate`, `list.updateItem`, `list.getCSVData`, etc.).
+3.  **For each method:**
+    * Locate the corresponding implementation file in the `keystonejs/keystone-classic` repository (e.g., `lib/core/start.js`, `lib/list/add.js`, `lib/list/paginate.js`). Use the `Sources:` links provided in earlier comments or logical paths.
+    * **Analyze the function parameters:** Identify their names, types, optionality, and default values in the source code. Update the TypeScript signature accordingly. Define specific `...Options` interfaces for complex parameter objects if not already done.
+    * **Analyze the return value:** Determine the type of value returned or whether the function uses callbacks. Update the TypeScript return type (or use `void` for callback-based functions). For callback functions, define the types of the callback parameters (e.g., `(err: Error | null, result: SpecificResultType) => void`).
+    * **Analyze Promises:** If the source code uses Promises (e.g., via `async/await` or direct `Promise` usage, especially when callbacks are optional), reflect this in the return type (e.g., `Promise<SpecificResultType>` or `Promise<void>`). Update signatures to show potential dual callback/Promise usage if applicable (though often one is idiomatic).
+    * Replace generic types like `any`, `Function`, or `Object` with specific interfaces, types, or function signatures.
+    * Ensure the JSDoc comments (`@param`, `@returns`) accurately reflect the refined signature.

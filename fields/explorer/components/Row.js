@@ -1,11 +1,29 @@
+/**
+ * @fileoverview
+ * This file defines the `Row` component, a layout component used in the
+ * KeystoneJS Field Types Explorer. It's a simple row component that can be
+ * used with `Col` components to create a grid layout.
+ */
 import React, { Component, PropTypes } from 'react';
 
+/**
+ * A row component for the explorer.
+ * @extends React.Component
+ */
 class ExplorerRow extends Component {
+	/**
+	 * Gets the child context for the component.
+	 * @returns {Object} The child context.
+	 */
 	getChildContext () {
 		return {
 			isCollapsed: this.props.isCollapsed,
 		};
 	}
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { className, gutter, isCollapsed, style = {}, ...incidentalProps } = this.props;
 		const __style__ = isCollapsed ? style : {
@@ -34,6 +52,7 @@ ExplorerRow.childContextTypes = {
 ExplorerRow.propTypes = {
 	className: PropTypes.string,
 	gutter: PropTypes.number,
+	isCollapsed: PropTypes.bool,
 	style: PropTypes.string,
 };
 ExplorerRow.defaultProps = {

@@ -1,3 +1,8 @@
+/**
+ * @fileoverview
+ * This file defines the `CloudinaryImagesColumn` component, which is used to
+ * render the value of a `CloudinaryImages` field in a list view.
+ */
 import React from 'react';
 import CloudinaryImageSummary from '../../components/columns/CloudinaryImageSummary';
 import ItemsTableCell from '../../components/ItemsTableCell';
@@ -8,12 +13,21 @@ const moreIndicatorStyle = {
 	fontSize: '.8rem',
 };
 
+/**
+ * The `CloudinaryImagesColumn` component.
+ * @extends React.Component
+ */
 var CloudinaryImagesColumn = React.createClass({
 	displayName: 'CloudinaryImagesColumn',
 	propTypes: {
 		col: React.PropTypes.object,
 		data: React.PropTypes.object,
 	},
+	/**
+	 * Renders the values of a many-to-many relationship.
+	 * @param {Array} value The array of related items.
+	 * @returns {React.Element} The rendered values.
+	 */
 	renderMany (value) {
 		if (!value || !value.length) return;
 		const items = [];
@@ -26,12 +40,21 @@ var CloudinaryImagesColumn = React.createClass({
 		}
 		return items;
 	},
+	/**
+	 * Renders the value of a one-to-many relationship.
+	 * @param {Object} value The related item.
+	 * @returns {React.Element} The rendered value.
+	 */
 	renderValue (value) {
 		if (!value || !Object.keys(value).length) return;
 
 		return <CloudinaryImageSummary image={value} secure={this.props.col.field.secure} />;
 
 	},
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const value = this.props.data.fields[this.props.col.path];
 		const many = value.length > 1;

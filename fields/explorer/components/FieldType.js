@@ -1,3 +1,10 @@
+/**
+ * @fileoverview
+ * This file defines the `FieldType` component, which is the main component for
+ * the KeystoneJS Field Types Explorer. It renders the header for a field type,
+ * and a `FieldSpec` for each of the field's specs. It also handles the display
+ * of the field's readme.
+ */
 import React from 'react';
 import Markdown from 'react-markdown';
 
@@ -5,7 +12,27 @@ import Col from './Col';
 import Row from './Row';
 import FieldSpec from './FieldSpec';
 
+/**
+ * A component that renders a field type, including its specs and readme.
+ * @extends React.Component
+ */
 const ExplorerFieldType = React.createClass({
+	propTypes: {
+		FieldComponent: React.PropTypes.func.isRequired,
+		FilterComponent: React.PropTypes.func.isRequired,
+		params: React.PropTypes.object.isRequired,
+		readme: React.PropTypes.string,
+		spec: React.PropTypes.oneOfType([
+			React.PropTypes.object,
+			React.PropTypes.arrayOf(React.PropTypes.object),
+		]).isRequired,
+		toggleSidebar: React.PropTypes.func.isRequired,
+		value: React.PropTypes.any,
+	},
+	/**
+	 * Gets the initial state of the component.
+	 * @returns {Object} The initial state.
+	 */
 	getInitialState () {
 		return {
 			readmeIsVisible: !!this.props.readme,
@@ -13,6 +40,10 @@ const ExplorerFieldType = React.createClass({
 			value: this.props.value,
 		};
 	},
+	/**
+	 * Handles the component receiving new props.
+	 * @param {Object} newProps The new props.
+	 */
 	componentWillReceiveProps (newProps) {
 		if (this.props.params.type === newProps.params.type) return;
 
@@ -24,6 +55,10 @@ const ExplorerFieldType = React.createClass({
 			value: newProps.value,
 		});
 	},
+	/**
+	 * Handles a change in the field's value.
+	 * @param {Object} e The event object.
+	 */
 	onFieldChange (e) {
 		var logValue = typeof e.value === 'string' ? `"${e.value}"` : e.value;
 		console.log(`${this.props.params.type} field value changed:`, logValue);
@@ -31,15 +66,26 @@ const ExplorerFieldType = React.createClass({
 			value: e.value,
 		});
 	},
+	/**
+	 * Handles a change in the filter's value.
+	 * @param {*} value The new filter value.
+	 */
 	onFilterChange (value) {
 		console.log(`${this.props.params.type} filter value changed:`, value);
 		this.setState({
 			filter: value,
 		});
 	},
+	/**
+	 * Toggles the visibility of the readme.
+	 */
 	toggleReadme () {
 		this.setState({ readmeIsVisible: !this.state.readmeIsVisible });
 	},
+	/**
+	 * Renders the component.
+	 * @returns {React.Element} The rendered component.
+	 */
 	render () {
 		const { FieldComponent, FilterComponent, readme, toggleSidebar } = this.props;
 		const { readmeIsVisible } = this.state;

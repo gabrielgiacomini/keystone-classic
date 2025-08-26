@@ -1,10 +1,11 @@
-/*
-TODO: This component manages thumbnails using some wacky internal state.
-It works, but would really benefit from a cleanup/rewrite. It may not behave
-as expected in different situations (i.e. does not report updated value
-to props.onChange correctly as the user interacts with it)
-*/
-
+/**
+ * @fileoverview
+ * This file defines the `CloudinaryImagesField` component, which is used to
+ * render a cloudinary images field in the KeystoneJS Admin UI.
+ *
+ * It provides a button to upload images, and it displays thumbnails of the
+ * uploaded images. It also provides a button to remove images.
+ */
 import _ from 'lodash';
 import async from 'async';
 import React, { cloneElement } from 'react';
@@ -25,15 +26,27 @@ const RESIZE_DEFAULTS = {
 
 let uploadInc = 1000;
 
+/**
+ * The `CloudinaryImagesField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 	displayName: 'CloudinaryImagesField',
 	statics: {
 		type: 'CloudinaryImages',
 		getDefaultValue: () => ([]),
 	},
+	/**
+	 * Gets the initial state of the component.
+	 * @returns {Object} The initial state.
+	 */
 	getInitialState () {
 		return this.buildInitialState(this.props);
 	},
+	/**
+	 * Handles the component receiving new props.
+	 * @param {Object} nextProps The new props.
+	 */
 	componentWillUpdate (nextProps) {
 		// Reset the thumbnails and upload ID when the item value changes
 		// TODO: We should add a check for a new item ID in the store
@@ -43,6 +56,11 @@ module.exports = Field.create({
 			this.setState(this.buildInitialState(nextProps));
 		}
 	},
+	/**
+	 * Builds the initial state of the component.
+	 * @param {Object} props The component's props.
+	 * @returns {Object} The initial state.
+	 */
 	buildInitialState (props) {
 		const uploadFieldPath = `CloudinaryImages-${props.path}-${++uploadInc}`;
 		const thumbnails = props.value ? props.value.map((img, index) => {
@@ -63,6 +81,12 @@ module.exports = Field.create({
 		}) : [];
 		return { thumbnails, uploadFieldPath };
 	},
+	/**
+	 * Gets a thumbnail component for an image.
+	 * @param {Object} props The props for the thumbnail.
+	 * @param {number} index The index of the thumbnail.
+	 * @returns {React.Element} The thumbnail component.
+	 */
 	getThumbnail (props, index) {
 		return (
 			<Thumbnail
@@ -80,12 +104,24 @@ module.exports = Field.create({
 	// HELPERS
 	// ==============================
 
+	/**
+	 * Triggers the file browser.
+	 */
 	triggerFileBrowser () {
 		this.refs.fileInput.clickDomNode();
 	},
+	/**
+	 * Returns whether the field has files.
+	 * @returns {boolean} Whether the field has files.
+	 */
 	hasFiles () {
 		return this.refs.fileInput && this.refs.fileInput.hasValue();
 	},
+	/**
+	 * Opens the lightbox.
+	 * @param {Object} event The event object.
+	 * @param {number} index The index of the image to open.
+	 */
 	openLightbox (event, index) {
 		event.preventDefault();
 		this.setState({
@@ -93,17 +129,26 @@ module.exports = Field.create({
 			lightboxImageIndex: index,
 		});
 	},
+	/**
+	 * Closes the lightbox.
+	 */
 	closeLightbox () {
 		this.setState({
 			lightboxIsVisible: false,
 			lightboxImageIndex: null,
 		});
 	},
+	/**
+	 * Goes to the previous image in the lightbox.
+	 */
 	lightboxPrevious () {
 		this.setState({
 			lightboxImageIndex: this.state.lightboxImageIndex - 1,
 		});
 	},
+	/**
+	 * Goes to the next image in the lightbox.
+	 */
 	lightboxNext () {
 		this.setState({
 			lightboxImageIndex: this.state.lightboxImageIndex + 1,
@@ -114,6 +159,10 @@ module.exports = Field.create({
 	// METHODS
 	// ==============================
 
+	/**
+	 * Removes an image from the field.
+	 * @param {number} index The index of the image to remove.
+	 */
 	removeImage (index) {
 		const newThumbnails = [...this.state.thumbnails];
 		const target = newThumbnails[index];
@@ -125,6 +174,11 @@ module.exports = Field.create({
 
 		this.setState({ thumbnails: newThumbnails });
 	},
+	/**
+	 * Gets the count of thumbnails with a given key.
+	 * @param {string} key The key to count.
+	 * @returns {number} The count.
+	 */
 	getCount (key) {
 		var count = 0;
 
@@ -134,6 +188,9 @@ module.exports = Field.create({
 
 		return count;
 	},
+	/**
+	 * Clears the file input.
+	 */
 	clearFiles () {
 		this.refs.fileInput.clearValue();
 
@@ -143,6 +200,10 @@ module.exports = Field.create({
 			}),
 		});
 	},
+	/**
+	 * Handles a change in the file input.
+	 * @param {Object} event The event object.
+	 */
 	uploadFile (event) {
 		if (!window.FileReader) {
 			return alert('File reader not supported by browser.');
@@ -179,6 +240,10 @@ module.exports = Field.create({
 	// RENDERERS
 	// ==============================
 
+	/**
+	 * Renders the file input.
+	 * @returns {React.Element} The rendered file input.
+	 */
 	renderFileInput () {
 		if (!this.shouldRenderField()) return null;
 
@@ -193,6 +258,10 @@ module.exports = Field.create({
 			/>
 		);
 	},
+	/**
+	 * Renders the value input.
+	 * @returns {React.Element} The rendered value input.
+	 */
 	renderValueInput () {
 		if (!this.shouldRenderField()) return null;
 
@@ -216,6 +285,10 @@ module.exports = Field.create({
 			);
 		}
 	},
+	/**
+	 * Renders the lightbox.
+	 * @returns {React.Element} The rendered lightbox.
+	 */
 	renderLightbox () {
 		const { value, secure } = this.props;
 		if (!value || !value.length) return;
@@ -240,6 +313,10 @@ module.exports = Field.create({
 			/>
 		);
 	},
+	/**
+	 * Renders the toolbar.
+	 * @returns {React.Element} The rendered toolbar.
+	 */
 	renderToolbar () {
 		if (!this.shouldRenderField()) return null;
 
@@ -288,6 +365,10 @@ module.exports = Field.create({
 			</div>
 		);
 	},
+	/**
+	 * Renders the UI for the field.
+	 * @returns {React.Element} The rendered UI.
+	 */
 	renderUI () {
 		const { label, note, path } = this.props;
 		const { thumbnails } = this.state;

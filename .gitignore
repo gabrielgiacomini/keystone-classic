@@ -36,9 +36,33 @@ test/e2e/drivers/*
 package-lock.json
 yarn.lock
 
-# Website dependencies
-website/.cache
-website/public
-
 .vscode
 
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+# Dependency directories
+# Environment variables
+.env
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+.DS_Store
+
+# Task files
+# tasks.json
+# tasks/
+
+# Cursor
+mcp.json
+# .taskmaster
+# .cursor/rules
+# .env.example

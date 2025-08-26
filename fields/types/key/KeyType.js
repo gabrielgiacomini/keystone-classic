@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * This file defines the `Key` field type, which is used to store and manage
+ * unique keys in KeystoneJS.
+ *
+ * It inherits from the `Text` field type and provides a `generateKey` method
+ * to generate a URL-friendly key from a string.
+ */
 var FieldType = require('../Type');
 var TextType = require('../text/TextType');
 var util = require('util');
@@ -24,6 +32,8 @@ key.prototype.validateRequiredInput = TextType.prototype.validateRequiredInput;
 
 /**
  * Generates a valid key from a string
+ * @param {string} str The string to generate the key from.
+ * @returns {string} The generated key.
  */
 key.prototype.generateKey = function (str) {
 	return utils.slug(String(str), this.separator);

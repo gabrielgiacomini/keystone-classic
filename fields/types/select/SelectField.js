@@ -1,3 +1,8 @@
+/**
+ * @fileoverview
+ * This file defines the `SelectField` component, which is used to render a
+ * select field in the KeystoneJS Admin UI.
+ */
 import Field from '../Field';
 import React from 'react';
 import Select from 'react-select';
@@ -8,6 +13,10 @@ import { FormInput } from '../../../admin/client/App/elemental';
  * - Custom path support
  */
 
+/**
+ * The `SelectField` component.
+ * @extends Field
+ */
 module.exports = Field.create({
 
 	displayName: 'SelectField',
@@ -15,6 +24,10 @@ module.exports = Field.create({
 		type: 'Select',
 	},
 
+	/**
+	 * Handles a change in the value of the field.
+	 * @param {*} newValue The new value.
+	 */
 	valueChanged (newValue) {
 		// TODO: This should be natively handled by the Select component
 		if (this.props.numeric && typeof newValue === 'string') {
@@ -26,6 +39,10 @@ module.exports = Field.create({
 		});
 	},
 
+	/**
+	 * Renders the value of the field.
+	 * @returns {React.Element} The rendered value.
+	 */
 	renderValue () {
 		const { ops, value } = this.props;
 		const selected = ops.find(opt => opt.value === value);
@@ -37,6 +54,10 @@ module.exports = Field.create({
 		);
 	},
 
+	/**
+	 * Renders the field.
+	 * @returns {React.Element} The rendered field.
+	 */
 	renderField () {
 		const { numeric, ops, path, value: val } = this.props;
 
