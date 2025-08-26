@@ -142,7 +142,9 @@ export interface KeystoneTypeConstructor {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js}
  */
-export interface KeystoneFieldOptions {
+export interface KeystoneFieldOptions<
+	T extends KeystoneDocument = KeystoneDocument
+> {
 	/**
 	 * The field type constructor (e.g., `keystone.Field.Types.Text`)
 	 * or a native JS constructor (`String`, `Number`, `Boolean`, `Date`)
@@ -293,9 +295,11 @@ export interface KeystoneFieldOptions {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js}
  */
-export type KeystoneGroupFields = {
+export type KeystoneGroupFields<
+	T extends KeystoneDocument = KeystoneDocument
+> = {
 	[key: string]:
-		| KeystoneFieldOptions
+		| KeystoneFieldOptions<T>
 		| KeystoneTypeConstructor
 		| StringConstructor
 		| NumberConstructor
@@ -330,9 +334,11 @@ export interface KeystoneGroupHeading {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js}
  */
-export interface KeystoneField {
+export interface KeystoneField<
+	T extends KeystoneDocument = KeystoneDocument
+> {
 	/** Reference to the parent List instance. */
-	list: KeystoneList<any>;
+	list: KeystoneList<T>;
 	/** The field's path (e.g., 'name', 'address.street'). */
 	path: string;
 	/** Internal Path object for handling nested paths. @internal @todo Define Path */
@@ -340,7 +346,7 @@ export interface KeystoneField {
 	/** The field type name (e.g., 'text', 'relationship'). Set by the Field Type constructor. */
 	type: string;
 	/** The final, merged options for this field instance. */
-	options: KeystoneFieldOptions; // Should be overridden by specific field option types
+	options: KeystoneFieldOptions<T>; // Should be overridden by specific field option types
 	/** Display label for the field. */
 	label: string;
 	/** Description of the field type (e.g., 'Text', 'Boolean'). */
@@ -574,9 +580,11 @@ export interface KeystoneField {
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Field.js}
  */
 
-export interface KSAdminUiElementField {
+export interface KSAdminUiElementField<
+	T extends KeystoneDocument = KeystoneDocument
+> {
 	type: "field";
-	field: KeystoneField;
+	field: KeystoneField<T>;
 }
 export interface KSAdminUiElementHeading {
 	type: "heading";
@@ -589,8 +597,10 @@ export interface KSAdminUiElementIndent {
 export interface KSAdminUiElementOutdent {
 	type: "outdent";
 }
-export type KSAdminUIElement =
-	| KSAdminUiElementField
+export type KSAdminUIElement<
+	T extends KeystoneDocument = KeystoneDocument
+> =
+	| KSAdminUiElementField<T>
 	| KSAdminUiElementHeading
 	| KSAdminUiElementIndent
 	| KSAdminUiElementOutdent;
@@ -727,6 +737,13 @@ export interface KeystoneListOptions<
 	 * These will be accessible via list.get()
 	 */
 	[key: string]: any;
+
+	/**
+	 * A ` KeystoneGroupFields` object or array of such objects
+	 *
+	 * @see `KeystoneGroupFields`
+	 */
+	fields?: KeystoneGroupFields<T> | KeystoneGroupFields<T>[];
 }
 
 /**
@@ -795,7 +812,9 @@ export interface KSAdminUiFilterForTextField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/text/TextType.js}
  */
-export interface KeystoneFieldOptionsForTextType extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForTextType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Minimum length allowed. Validates on save. */
 	min?: number;
 	/** Maximum length allowed. Validates on save. */
@@ -823,7 +842,7 @@ export interface KeystoneFieldForTextType extends KeystoneField {
 	/** Underscore methods added to documents (includes 'crop'). */
 	_underscoreMethods: string[];
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForTextType;
+	options: KeystoneFieldOptionsForTextType<T>;
 
 	/**
 	 * Validates input string length based on min/max options.
@@ -879,12 +898,13 @@ export interface KeystoneFieldForTextType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/text/TextType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/text/TextType.js}
  */
-export interface KeystoneTypeConstructorForTextType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForTextType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForTextType
+		options: KeystoneFieldOptionsForTextType<T>
 	): KeystoneFieldForTextType;
 	prototype: KeystoneFieldForTextType;
 	properName: "Text";
@@ -933,8 +953,9 @@ export interface KSAdminUiFilterForNumberField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/number/NumberType.js}
  */
-export interface KeystoneFieldOptionsForNumberType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForNumberType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/**
 	 * Numeral.js format string (e.g., '0,0.00', '$0,0.00') or `false` to disable formatting.
 	 * See http://numeraljs.com/ for format options.
@@ -962,7 +983,7 @@ export interface KeystoneFieldForNumberType extends KeystoneField {
 	/** Underscore methods added to documents (includes 'format'). */
 	_underscoreMethods: string[];
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForNumberType;
+	options: KeystoneFieldOptionsForNumberType<T>;
 	/** The numeral.js format string to use, or false if formatting is disabled. */
 	formatString?: string | false;
 
@@ -1030,12 +1051,13 @@ export interface KeystoneFieldForNumberType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/number/NumberType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/number/NumberType.js}
  */
-export interface KeystoneTypeConstructorForNumberType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForNumberType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForNumberType
+		options: KeystoneFieldOptionsForNumberType<T>
 	): KeystoneFieldForNumberType;
 	prototype: KeystoneFieldForNumberType;
 	properName: "Number";
@@ -1051,8 +1073,9 @@ export interface KeystoneTypeConstructorForNumberType
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/textarea/TextareaType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/textarea/TextareaType.js}
  */
-export interface KeystoneFieldOptionsForTextareaType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForTextareaType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/**
 	 * Height of the textarea in pixels.
 	 * Default: 90
@@ -1087,7 +1110,7 @@ export interface KeystoneFieldForTextareaType extends KeystoneField {
 	/** Properties exposed to Admin UI (includes 'height', 'multiline'). */
 	_properties: string[];
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForTextareaType;
+	options: KeystoneFieldOptionsForTextareaType<T>;
 
 	/**
 	 * Validates input string length based on min/max options.
@@ -1153,12 +1176,13 @@ export interface KeystoneFieldForTextareaType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/textarea/TextareaType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/textarea/TextareaType.js}
  */
-export interface KeystoneTypeConstructorForTextareaType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForTextareaType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForTextareaType
+		options: KeystoneFieldOptionsForTextareaType<T>
 	): KeystoneFieldForTextareaType;
 	prototype: KeystoneFieldForTextareaType;
 	properName: "Textarea";
@@ -1185,8 +1209,9 @@ export interface KSAdminUiFilterForBooleanField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/boolean/BooleanType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/boolean/BooleanType.js}
  */
-export interface KeystoneFieldOptionsForBooleanType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForBooleanType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/**
 	 * Indent the checkbox in the Admin UI form.
 	 * Default: false
@@ -1220,7 +1245,7 @@ export interface KeystoneFieldForBooleanType extends KeystoneField {
 	/** Whether the field is indented in the Admin UI. */
 	indent: boolean;
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForBooleanType;
+	options: KeystoneFieldOptionsForBooleanType<T>;
 	/** Default values for the Boolean type. */
 	defaults: { default: boolean };
 
@@ -1278,12 +1303,13 @@ export interface KeystoneFieldForBooleanType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/boolean/BooleanType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/boolean/BooleanType.js}
  */
-export interface KeystoneTypeConstructorForBooleanType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForBooleanType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForBooleanType
+		options: KeystoneFieldOptionsForBooleanType<T>
 	): KeystoneFieldForBooleanType;
 	prototype: KeystoneFieldForBooleanType;
 	properName: "Boolean";
@@ -1307,8 +1333,9 @@ export interface KeystoneFieldSelectableOption {
  * Options specific to Select fields.
  * @see ./fields/types/select/SelectType.js
  */
-export interface KeystoneFieldOptionsForSelectType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForSelectType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Select */
 	type: KeystoneTypeConstructorForSelectType;
 	/**
@@ -1399,7 +1426,7 @@ export interface KeystoneFieldForSelectType extends KeystoneField {
 	/** Array of valid enum values for the schema path. */
 	values: Array<string | number>;
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForSelectType;
+	options: KeystoneFieldOptionsForSelectType<T>;
 	/** Paths for virtual properties added to the schema. */
 	paths: {
 		/** Path to the virtual property returning the full selected option object. */
@@ -1449,12 +1476,13 @@ export interface KeystoneFieldForSelectType extends KeystoneField {
  * Constructor for Select field type.
  * @see ./fields/types/select/SelectType.js
  */
-export interface KeystoneTypeConstructorForSelectType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForSelectType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForSelectType
+		options: KeystoneFieldOptionsForSelectType<T>
 	): KeystoneFieldForSelectType;
 	prototype: KeystoneFieldForSelectType;
 	properName: "Select";
@@ -1522,7 +1550,9 @@ export interface KSAdminUiFilterForDateArrayField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/date/DateType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/date/DateType.js}
  */
-export interface KeystoneFieldOptionsForDateType extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForDateType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/**
 	 * Moment.js format string used for output formatting, or `false` to disable formatting.
 	 * Default: 'Do MMM YYYY'
@@ -1567,8 +1597,9 @@ export interface KeystoneFieldOptionsForDateType extends KeystoneFieldOptions {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
  */
-export interface KeystoneFieldOptionsForDateTimeType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForDateTimeType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically DateTime */
 	type: KeystoneTypeConstructorForDateTimeType | DateConstructor;
 	/**
@@ -1619,7 +1650,7 @@ export interface KeystoneFieldForDateType extends KeystoneField {
 	/** UTC offset used for potential date correction. */
 	timezoneUtcOffsetMinutes: number;
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForDateType;
+	options: KeystoneFieldOptionsForDateType<T>;
 
 	/**
 	 * Validates that required input has been provided (presence of a date value).
@@ -1736,7 +1767,7 @@ export interface KeystoneFieldForDateTimeType extends KeystoneField {
 	/** Whether to treat the date/time as UTC. */
 	isUTC: boolean;
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForDateTimeType;
+	options: KeystoneFieldOptionsForDateTimeType<T>;
 	/** Paths for the sub-fields used in the Admin UI. */
 	paths: {
 		/** Path for the date part input. */
@@ -1842,12 +1873,13 @@ export interface KeystoneFieldForDateTimeType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/date/DateType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/date/DateType.js}
  */
-export interface KeystoneTypeConstructorForDateType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForDateType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForDateType
+		options: KeystoneFieldOptionsForDateType<T>
 	): KeystoneFieldForDateType;
 	prototype: KeystoneFieldForDateType;
 	properName: "Date";
@@ -1862,12 +1894,13 @@ export interface KeystoneTypeConstructorForDateType
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/datetime/DateTimeType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/datetime/DateTimeType.js}
  */
-export interface KeystoneTypeConstructorForDateTimeType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForDateTimeType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForDateTimeType
+		options: KeystoneFieldOptionsForDateTimeType<T>
 	): KeystoneFieldForDateTimeType;
 	prototype: KeystoneFieldForDateTimeType;
 	properName: "Datetime";
@@ -1883,7 +1916,9 @@ export interface KeystoneTypeConstructorForDateTimeType
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/html/HtmlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/html/HtmlType.js}
  */
-export interface KeystoneFieldOptionsForHtmlType extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForHtmlType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Html */
 	type: KeystoneTypeConstructorForHtmlType;
 	/** Whether to use WYSIWYG editor. */
@@ -1913,7 +1948,7 @@ export interface KeystoneFieldForHtmlType extends KeystoneField {
 	/** Properties exposed to Admin UI. */
 	_properties: string[];
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForHtmlType;
+	options: KeystoneFieldOptionsForHtmlType<T>;
 }
 
 /**
@@ -1925,12 +1960,13 @@ export interface KeystoneFieldForHtmlType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/html/HtmlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/html/HtmlType.js}
  */
-export interface KeystoneTypeConstructorForHtmlType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForHtmlType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForHtmlType
+		options: KeystoneFieldOptionsForHtmlType<T>
 	): KeystoneFieldForHtmlType;
 	prototype: KeystoneFieldForHtmlType;
 	properName: "Html";
@@ -2078,17 +2114,17 @@ export class KeystoneList<T extends KeystoneDocument = KeystoneDocument> {
 	/** Array of raw field/heading definitions added to the schema. */
 	schemaFields: Array<string | KeystoneGroupFields | KeystoneGroupHeading>;
 	/** Ordered array of UI elements (fields, headings, indents) for Admin UI forms. */
-	uiElements: KSAdminUIElement[];
+	uiElements: KSAdminUIElement<T>[];
 	/** Map of custom methods added to the Mongoose documents via `list.underscoreMethod()`. */
 	underscoreMethods: Record<string, Function>;
 	/** Map of Field instances associated with the list, keyed by path. */
-	fields: Record<string, KeystoneField>; // Holds instances of Field or its subclasses
+	fields: Record<string, KeystoneField<T>>; // Holds instances of Field or its subclasses
 	/** Array of all Field instances associated with the list. */
-	fieldsArray: KeystoneField[];
+	fieldsArray: KeystoneField<T>[];
 	/** Map of field type constructors used in this list. */
 	fieldTypes: Record<string, string | boolean>; // Map of Type JS name -> properName or true
 	/** Array of all relationship Field instances in this list. */
-	relationshipFields: KeystoneField[]; // @todo Use RelationshipField[] type when defined
+	relationshipFields: KeystoneField<T>[]; // @todo Use RelationshipField[] type when defined
 	/** Map of relationship definitions defined on this list. */
 	relationships: Record<
 		string,
@@ -2108,11 +2144,11 @@ export class KeystoneList<T extends KeystoneDocument = KeystoneDocument> {
 
 	// Internal caches
 	/** @internal Cache for expanded search fields. */
-	_searchFields?: KeystoneField[];
+	_searchFields?: KeystoneField<T>[];
 	/** @internal Cache for expanded default columns. */
 	_defaultColumns?: Array<{
 		path: string;
-		field?: KeystoneField;
+		field?: KeystoneField<T>;
 		type?: string;
 		label?: string;
 		options?: any;
@@ -2128,7 +2164,7 @@ export class KeystoneList<T extends KeystoneDocument = KeystoneDocument> {
 	/** The path of the field used as the item name/title. */
 	readonly namePath: string;
 	/** The Field instance used as the item name/title. */
-	readonly nameField: KeystoneField | undefined;
+	readonly nameField: KeystoneField<T> | undefined;
 	/** Whether the name field is a virtual field. */
 	readonly nameIsVirtual: boolean;
 	/** Whether the name field type is compatible as an Admin UI form header. */
@@ -2136,7 +2172,7 @@ export class KeystoneList<T extends KeystoneDocument = KeystoneDocument> {
 	/** Whether the name field is available on the create form. */
 	readonly nameIsInitial: boolean;
 	/** Array of fields marked as initial (shown on the create form). */
-	readonly initialFields: KeystoneField[];
+	readonly initialFields: KeystoneField<T>[];
 
 	// --- Getter/Setters ---
 	/** Gets or sets the fields used for Admin UI searching. Updates internal cache. */
@@ -3076,32 +3112,57 @@ export class Keystone {
 	Field: KeystoneTypeConstructor & {
 		Types: {
 			/** Standard text field. */
-			Text?: KeystoneTypeConstructorForTextType;
+			Text: KeystoneTypeConstructorForTextType;
 			/** Numeric field with formatting options. */
-			Number?: KeystoneTypeConstructorForNumberType;
+			Number: KeystoneTypeConstructorForNumberType;
 			/** Multi-line text field. */
-			Textarea?: KeystoneTypeConstructorForTextareaType;
+			Textarea: KeystoneTypeConstructorForTextareaType;
 			/** Boolean/checkbox field. */
-			Boolean?: KeystoneTypeConstructorForBooleanType;
+			Boolean: KeystoneTypeConstructorForBooleanType;
 			/** Single-select dropdown/radio field. */
-			Select?: KeystoneTypeConstructorForSelectType;
+			Select: KeystoneTypeConstructorForSelectType;
 			/** Combined date and time field. */
-			Datetime?: KeystoneTypeConstructorForDateTimeType;
+			Datetime: KeystoneTypeConstructorForDateTimeType;
 			/** Date-only field. */
-			Date?: KeystoneTypeConstructorForDateType;
+			Date: KeystoneTypeConstructorForDateType;
 			/** Rich text WYSIWYG editor field. */
-			Html?: KeystoneTypeConstructorForHtmlType;
+			Html: KeystoneTypeConstructorForHtmlType;
 			/** Relationship to other list items. */
-			Relationship?: KeystoneTypeConstructor;
+			Relationship: KeystoneTypeConstructorForRelationshipType;
 			/** Name field (first/last name). */
-			Name?: KeystoneTypeConstructor;
+			Name: KeystoneTypeConstructorForNameType;
 			/** Email field with validation. */
-			Email?: KeystoneTypeConstructor;
+			Email: KeystoneTypeConstructorForEmailType;
 			/** Password field with encryption. */
-			Password?: KeystoneTypeConstructor;
+			Password: KeystoneTypeConstructorForPasswordType;
 			/** Currency field with formatting. */
-			Money?: KeystoneTypeConstructor;
-			// ... other core types ...
+			Money: KeystoneTypeConstructorForMoneyType;
+			/** URL field. */
+			Url: KeystoneTypeConstructorForUrlType;
+			/** Key field. */
+			Key: KeystoneTypeConstructorForKeyType;
+			/** Color field. */
+			Color: KeystoneTypeConstructorForColorType;
+			/** File field. */
+			File: KeystoneTypeConstructorForFileType;
+			/** TextArray field. */
+			TextArray: KeystoneTypeConstructorForTextArrayType;
+			/** NumberArray field. */
+			NumberArray: KeystoneTypeConstructorForNumberArrayType;
+			/** DateArray field. */
+			DateArray: KeystoneTypeConstructorForDateArrayType;
+			/** Location field. */
+			Location: KeystoneTypeConstructorForLocationType;
+			/** GeoPoint field. */
+			GeoPoint: KeystoneTypeConstructorForGeoPointType;
+			/** Code field. */
+			Code: KeystoneTypeConstructorForCodeType;
+			/** Embedly field. */
+			Embedly: KeystoneTypeConstructorForEmbedlyType;
+			/** CloudinaryImage field. */
+			CloudinaryImage: KeystoneTypeConstructorForCloudinaryImageType;
+			/** CloudinaryImages field. */
+			CloudinaryImages: KeystoneTypeConstructorForCloudinaryImagesType;
 			[key: string]: KeystoneTypeConstructor | undefined;
 		};
 	};
@@ -3156,7 +3217,9 @@ export class Keystone {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/url/UrlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/url/UrlType.js}
  */
-export interface KeystoneFieldOptionsForUrlType extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForUrlType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically URL */
 	type: KeystoneTypeConstructorForUrlType | StringConstructor;
 }
@@ -3170,11 +3233,13 @@ export interface KeystoneFieldOptionsForUrlType extends KeystoneFieldOptions {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/url/UrlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/url/UrlType.js}
  */
-export interface KeystoneFieldForUrlType extends KeystoneField {
+export interface KeystoneFieldForUrlType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForUrlType;
+	options: KeystoneFieldOptionsForUrlType<T>;
 }
 
 /**
@@ -3186,13 +3251,14 @@ export interface KeystoneFieldForUrlType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/url/UrlType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/url/UrlType.js}
  */
-export interface KeystoneTypeConstructorForUrlType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForUrlType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	/** Creates a new URL field instance. */
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options?: KeystoneFieldOptionsForUrlType
+		options?: KeystoneFieldOptionsForUrlType<T>
 	): KeystoneFieldForUrlType;
 }
 
@@ -3206,7 +3272,9 @@ export interface KeystoneTypeConstructorForUrlType
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/key/KeyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/key/KeyType.js}
  */
-export interface KeystoneFieldOptionsForKeyType extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForKeyType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Key */
 	type: KeystoneTypeConstructorForKeyType | StringConstructor;
 	/** Character used to separate words in the key. Defaults to '-'. */
@@ -3222,11 +3290,13 @@ export interface KeystoneFieldOptionsForKeyType extends KeystoneFieldOptions {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/key/KeyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/key/KeyType.js}
  */
-export interface KeystoneFieldForKeyType extends KeystoneField {
+export interface KeystoneFieldForKeyType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForKeyType;
+	options: KeystoneFieldOptionsForKeyType<T>;
 }
 
 /**
@@ -3238,13 +3308,14 @@ export interface KeystoneFieldForKeyType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/key/KeyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/key/KeyType.js}
  */
-export interface KeystoneTypeConstructorForKeyType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForKeyType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	/** Creates a new Key field instance. */
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options?: KeystoneFieldOptionsForKeyType
+		options?: KeystoneFieldOptionsForKeyType<T>
 	): KeystoneFieldForKeyType;
 }
 
@@ -3258,7 +3329,9 @@ export interface KeystoneTypeConstructorForKeyType
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/color/ColorType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/color/ColorType.js}
  */
-export interface KeystoneFieldOptionsForColorType extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForColorType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Color */
 	type: KeystoneTypeConstructorForColorType | StringConstructor;
 }
@@ -3272,11 +3345,13 @@ export interface KeystoneFieldOptionsForColorType extends KeystoneFieldOptions {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/color/ColorType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/color/ColorType.js}
  */
-export interface KeystoneFieldForColorType extends KeystoneField {
+export interface KeystoneFieldForColorType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForColorType;
+	options: KeystoneFieldOptionsForColorType<T>;
 }
 
 /**
@@ -3288,13 +3363,14 @@ export interface KeystoneFieldForColorType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/color/ColorType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/color/ColorType.js}
  */
-export interface KeystoneTypeConstructorForColorType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForColorType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	/** Creates a new Color field instance. */
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options?: KeystoneFieldOptionsForColorType
+		options?: KeystoneFieldOptionsForColorType<T>
 	): KeystoneFieldForColorType;
 }
 
@@ -3308,7 +3384,9 @@ export interface KeystoneTypeConstructorForColorType
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/name/NameType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/name/NameType.js}
  */
-export interface KeystoneFieldOptionsForNameType extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForNameType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Name */
 	type: KeystoneTypeConstructorForNameType;
 	/** Default value for the name field. */
@@ -3324,11 +3402,13 @@ export interface KeystoneFieldOptionsForNameType extends KeystoneFieldOptions {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/name/NameType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/name/NameType.js}
  */
-export interface KeystoneFieldForNameType extends KeystoneField {
+export interface KeystoneFieldForNameType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (Object). */
 	_nativeType: ObjectConstructor;
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForNameType;
+	options: KeystoneFieldOptionsForNameType<T>;
 }
 
 /**
@@ -3340,13 +3420,14 @@ export interface KeystoneFieldForNameType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/name/NameType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/name/NameType.js}
  */
-export interface KeystoneTypeConstructorForNameType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForNameType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	/** Creates a new Name field instance. */
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options?: KeystoneFieldOptionsForNameType
+		options?: KeystoneFieldOptionsForNameType<T>
 	): KeystoneFieldForNameType;
 }
 
@@ -3360,7 +3441,9 @@ export interface KeystoneTypeConstructorForNameType
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/money/MoneyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/money/MoneyType.js}
  */
-export interface KeystoneFieldOptionsForMoneyType extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForMoneyType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Money */
 	type: KeystoneTypeConstructorForMoneyType | NumberConstructor;
 	/** Format string for displaying the money value. Defaults to '$0,0.00'. */
@@ -3376,11 +3459,13 @@ export interface KeystoneFieldOptionsForMoneyType extends KeystoneFieldOptions {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/money/MoneyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/money/MoneyType.js}
  */
-export interface KeystoneFieldForMoneyType extends KeystoneField {
+export interface KeystoneFieldForMoneyType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (Number). */
 	_nativeType: NumberConstructor;
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForMoneyType;
+	options: KeystoneFieldOptionsForMoneyType<T>;
 	/** Format string for displaying the money value. */
 	_formatString: string;
 }
@@ -3394,13 +3479,14 @@ export interface KeystoneFieldForMoneyType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/money/MoneyType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/money/MoneyType.js}
  */
-export interface KeystoneTypeConstructorForMoneyType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForMoneyType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	/** Creates a new Money field instance. */
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options?: KeystoneFieldOptionsForMoneyType
+		options?: KeystoneFieldOptionsForMoneyType<T>
 	): KeystoneFieldForMoneyType;
 }
 
@@ -3414,7 +3500,9 @@ export interface KeystoneTypeConstructorForMoneyType
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/email/EmailType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/email/EmailType.js}
  */
-export interface KeystoneFieldOptionsForEmailType extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForEmailType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Email */
 	type: KeystoneTypeConstructorForEmailType | StringConstructor;
 }
@@ -3428,11 +3516,13 @@ export interface KeystoneFieldOptionsForEmailType extends KeystoneFieldOptions {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/email/EmailType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/email/EmailType.js}
  */
-export interface KeystoneFieldForEmailType extends KeystoneField {
+export interface KeystoneFieldForEmailType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** The native JavaScript type constructor (String). */
 	_nativeType: StringConstructor;
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForEmailType;
+	options: KeystoneFieldOptionsForEmailType<T>;
 	/** Description of the field type. */
 	typeDescription: string;
 }
@@ -3446,13 +3536,14 @@ export interface KeystoneFieldForEmailType extends KeystoneField {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/email/EmailType.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/email/EmailType.js}
  */
-export interface KeystoneTypeConstructorForEmailType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForEmailType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	/** Creates a new Email field instance. */
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options?: KeystoneFieldOptionsForEmailType
+		options?: KeystoneFieldOptionsForEmailType<T>
 	): KeystoneFieldForEmailType;
 }
 
@@ -4548,8 +4639,9 @@ export interface KeystoneTypeConstructorForEmailType
  * Options specific to Password fields.
  * @see ./fields/types/password/PasswordType.js
  */
-export interface KeystoneFieldOptionsForPasswordType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForPasswordType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Password */
 	type: KeystoneTypeConstructorForPasswordType;
 	/** Minimum password length. Default: 8 */
@@ -4591,7 +4683,7 @@ export interface KeystoneFieldForPasswordType extends KeystoneField {
 	/** Fixed size for the field in the Admin UI. */
 	_fixedSize: "full";
 	/** Field-specific options. */
-	options: KeystoneFieldOptionsForPasswordType;
+	options: KeystoneFieldOptionsForPasswordType<T>;
 	/** Paths for virtual fields */
 	paths: {
 		/** Path for password confirmation field */
@@ -4646,12 +4738,13 @@ export interface KeystoneFieldForPasswordType extends KeystoneField {
  * Constructor for Password field type.
  * @see ./fields/types/password/PasswordType.js
  */
-export interface KeystoneTypeConstructorForPasswordType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForPasswordType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForPasswordType
+		options: KeystoneFieldOptionsForPasswordType<T>
 	): KeystoneFieldForPasswordType;
 	prototype: KeystoneFieldForPasswordType;
 	properName: "Password";
@@ -4670,8 +4763,9 @@ export interface KeystoneTypeConstructorForPasswordType
  * Options specific to Relationship fields.
  * @see ./fields/types/relationship/RelationshipType.js
  */
-export interface KeystoneFieldOptionsForRelationshipType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForRelationshipType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Relationship */
 	type: KeystoneTypeConstructorForRelationshipType;
 	/** The List key to relate to (required) */
@@ -4706,7 +4800,7 @@ export interface KeystoneFieldForRelationshipType extends KeystoneField {
 	/** Properties exposed to Admin UI */
 	_properties: string[];
 	/** Field-specific options */
-	options: KeystoneFieldOptionsForRelationshipType;
+	options: KeystoneFieldOptionsForRelationshipType<T>;
 	/** Paths for virtual fields */
 	paths: {
 		/** Path for the refList virtual */
@@ -4750,12 +4844,13 @@ export interface KeystoneFieldForRelationshipType extends KeystoneField {
  * Constructor for Relationship field type.
  * @see ./fields/types/relationship/RelationshipType.js
  */
-export interface KeystoneTypeConstructorForRelationshipType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForRelationshipType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForRelationshipType
+		options: KeystoneFieldOptionsForRelationshipType<T>
 	): KeystoneFieldForRelationshipType;
 	prototype: KeystoneFieldForRelationshipType;
 	properName: "Relationship";
@@ -4780,7 +4875,9 @@ export interface KeystoneFileStorage {
  * Options specific to File fields.
  * @see ./fields/types/file/FileType.js
  */
-export interface KeystoneFieldOptionsForFileType extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForFileType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically File */
 	type: KeystoneTypeConstructorForFileType;
 	/** Storage adapter for handling file uploads (required) */
@@ -4799,7 +4896,7 @@ export interface KeystoneFieldForFileType extends KeystoneField {
 	/** Storage adapter instance */
 	storage: KeystoneFileStorage;
 	/** Field-specific options */
-	options: KeystoneFieldOptionsForFileType;
+	options: KeystoneFieldOptionsForFileType<T>;
 	/** Paths for file data fields from storage schema */
 	paths: Record<string, string>;
 
@@ -4832,12 +4929,13 @@ export interface KeystoneFieldForFileType extends KeystoneField {
  * Constructor for File field type.
  * @see ./fields/types/file/FileType.js
  */
-export interface KeystoneTypeConstructorForFileType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForFileType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForFileType
+		options: KeystoneFieldOptionsForFileType<T>
 	): KeystoneFieldForFileType;
 	prototype: KeystoneFieldForFileType;
 	properName: "File";
@@ -4847,8 +4945,9 @@ export interface KeystoneTypeConstructorForFileType
  * Options specific to TextArray fields.
  * @see ./fields/types/textarray/TextArrayType.js
  */
-export interface KeystoneFieldOptionsForTextArrayType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForTextArrayType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically TextArray */
 	type: KeystoneTypeConstructorForTextArrayType;
 	/** Separator used when formatting array values. Default: ' | ' */
@@ -4867,7 +4966,7 @@ export interface KeystoneFieldForTextArrayType extends KeystoneField {
 	/** Separator used when formatting array values */
 	separator: string;
 	/** Field-specific options */
-	options: KeystoneFieldOptionsForTextArrayType;
+	options: KeystoneFieldOptionsForTextArrayType<T>;
 
 	/**
 	 * Formats the array value as a string.
@@ -4882,12 +4981,13 @@ export interface KeystoneFieldForTextArrayType extends KeystoneField {
  * Constructor for TextArray field type.
  * @see ./fields/types/textarray/TextArrayType.js
  */
-export interface KeystoneTypeConstructorForTextArrayType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForTextArrayType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForTextArrayType
+		options: KeystoneFieldOptionsForTextArrayType<T>
 	): KeystoneFieldForTextArrayType;
 	prototype: KeystoneFieldForTextArrayType;
 	properName: "TextArray";
@@ -4897,8 +4997,9 @@ export interface KeystoneTypeConstructorForTextArrayType
  * Options specific to NumberArray fields.
  * @see ./fields/types/numberarray/NumberArrayType.js
  */
-export interface KeystoneFieldOptionsForNumberArrayType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForNumberArrayType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically NumberArray */
 	type: KeystoneTypeConstructorForNumberArrayType;
 	/** Numeral.js format string or false to disable formatting. Default: '0,0[.][000000000000]' */
@@ -4923,7 +5024,7 @@ export interface KeystoneFieldForNumberArrayType extends KeystoneField {
 	/** Separator used when formatting array values */
 	separator: string;
 	/** Field-specific options */
-	options: KeystoneFieldOptionsForNumberArrayType;
+	options: KeystoneFieldOptionsForNumberArrayType<T>;
 
 	/**
 	 * Formats the array value as a string.
@@ -4939,12 +5040,13 @@ export interface KeystoneFieldForNumberArrayType extends KeystoneField {
  * Constructor for NumberArray field type.
  * @see ./fields/types/numberarray/NumberArrayType.js
  */
-export interface KeystoneTypeConstructorForNumberArrayType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForNumberArrayType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForNumberArrayType
+		options: KeystoneFieldOptionsForNumberArrayType<T>
 	): KeystoneFieldForNumberArrayType;
 	prototype: KeystoneFieldForNumberArrayType;
 	properName: "NumberArray";
@@ -4954,8 +5056,9 @@ export interface KeystoneTypeConstructorForNumberArrayType
  * Options specific to Location fields.
  * @see ./fields/types/location/LocationType.js
  */
-export interface KeystoneFieldOptionsForLocationType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForLocationType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Location */
 	type: KeystoneTypeConstructorForLocationType;
 	/** Enable Google Maps API integration for geocoding */
@@ -4991,7 +5094,7 @@ export interface KeystoneFieldForLocationType extends KeystoneField {
 	/** Required location fields */
 	requiredPaths: string[];
 	/** Field-specific options */
-	options: KeystoneFieldOptionsForLocationType;
+	options: KeystoneFieldOptionsForLocationType<T>;
 	/** Paths for location fields and virtuals */
 	paths: {
 		number: string;
@@ -5057,12 +5160,13 @@ export interface KeystoneFieldForLocationType extends KeystoneField {
  * Constructor for Location field type.
  * @see ./fields/types/location/LocationType.js
  */
-export interface KeystoneTypeConstructorForLocationType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForLocationType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForLocationType
+		options: KeystoneFieldOptionsForLocationType<T>
 	): KeystoneFieldForLocationType;
 	prototype: KeystoneFieldForLocationType;
 	properName: "Location";
@@ -5072,8 +5176,9 @@ export interface KeystoneTypeConstructorForLocationType
  * Options specific to GeoPoint fields.
  * @see ./fields/types/geopoint/GeoPointType.js
  */
-export interface KeystoneFieldOptionsForGeoPointType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForGeoPointType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically GeoPoint */
 	type: KeystoneTypeConstructorForGeoPointType;
 }
@@ -5082,11 +5187,13 @@ export interface KeystoneFieldOptionsForGeoPointType
  * Interface for GeoPoint field instances.
  * @see ./fields/types/geopoint/GeoPointType.js
  */
-export interface KeystoneFieldForGeoPointType extends KeystoneField {
+export interface KeystoneFieldForGeoPointType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneField<T> {
 	/** Fixed size for the field in the Admin UI */
 	_fixedSize: "medium";
 	/** Field-specific options */
-	options: KeystoneFieldOptionsForGeoPointType;
+	options: KeystoneFieldOptionsForGeoPointType<T>;
 
 	// Required KeystoneField properties
 	list: KeystoneList;
@@ -5117,12 +5224,13 @@ export interface KeystoneFieldForGeoPointType extends KeystoneField {
  * Constructor for GeoPoint field type.
  * @see ./fields/types/geopoint/GeoPointType.js
  */
-export interface KeystoneTypeConstructorForGeoPointType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForGeoPointType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForGeoPointType
+		options: KeystoneFieldOptionsForGeoPointType<T>
 	): KeystoneFieldForGeoPointType;
 	prototype: KeystoneFieldForGeoPointType;
 	properName: "GeoPoint";
@@ -5132,7 +5240,9 @@ export interface KeystoneTypeConstructorForGeoPointType
  * Options specific to Code fields.
  * @see ./fields/types/code/CodeType.js
  */
-export interface KeystoneFieldOptionsForCodeType extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForCodeType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Code */
 	type: KeystoneTypeConstructorForCodeType;
 	/** Height of the code editor in pixels. Default: 180 */
@@ -5165,7 +5275,7 @@ export interface KeystoneFieldForCodeType extends KeystoneField {
 	/** Combined editor options */
 	editor: Record<string, any>;
 	/** Field-specific options */
-	options: KeystoneFieldOptionsForCodeType;
+	options: KeystoneFieldOptionsForCodeType<T>;
 
 	// Required KeystoneField properties
 	list: KeystoneList;
@@ -5196,12 +5306,13 @@ export interface KeystoneFieldForCodeType extends KeystoneField {
  * Constructor for Code field type.
  * @see ./fields/types/code/CodeType.js
  */
-export interface KeystoneTypeConstructorForCodeType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForCodeType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForCodeType
+		options: KeystoneFieldOptionsForCodeType<T>
 	): KeystoneFieldForCodeType;
 	prototype: KeystoneFieldForCodeType;
 	properName: "Code";
@@ -5211,8 +5322,9 @@ export interface KeystoneTypeConstructorForCodeType
  * Options specific to Embedly fields.
  * @see ./fields/types/embedly/EmbedlyType.js
  */
-export interface KeystoneFieldOptionsForEmbedlyType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForEmbedlyType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically Embedly */
 	type: KeystoneTypeConstructorForEmbedlyType;
 	/** Path to the field containing the URL to expand (required) */
@@ -5235,7 +5347,7 @@ export interface KeystoneFieldForEmbedlyType extends KeystoneField {
 	/** Additional options to pass to the Embedly API */
 	embedlyOptions: Record<string, any>;
 	/** Field-specific options */
-	options: KeystoneFieldOptionsForEmbedlyType;
+	options: KeystoneFieldOptionsForEmbedlyType<T>;
 	/** Paths for embedly data fields */
 	paths: {
 		exists: string;
@@ -5285,12 +5397,13 @@ export interface KeystoneFieldForEmbedlyType extends KeystoneField {
  * Constructor for Embedly field type.
  * @see ./fields/types/embedly/EmbedlyType.js
  */
-export interface KeystoneTypeConstructorForEmbedlyType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForEmbedlyType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForEmbedlyType
+		options: KeystoneFieldOptionsForEmbedlyType<T>
 	): KeystoneFieldForEmbedlyType;
 	prototype: KeystoneFieldForEmbedlyType;
 	properName: "Embedly";
@@ -5300,8 +5413,9 @@ export interface KeystoneTypeConstructorForEmbedlyType
  * Options specific to CloudinaryImage fields.
  * @see ./fields/types/cloudinaryimage/CloudinaryImageType.js
  */
-export interface KeystoneFieldOptionsForCloudinaryImageType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForCloudinaryImageType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically CloudinaryImage */
 	type: KeystoneTypeConstructorForCloudinaryImageType;
 	/** Custom folder for storing images */
@@ -5332,7 +5446,7 @@ export interface KeystoneFieldForCloudinaryImageType extends KeystoneField {
 	/** Properties exposed to Admin UI */
 	_properties: string[];
 	/** Field-specific options */
-	options: KeystoneFieldOptionsForCloudinaryImageType;
+	options: KeystoneFieldOptionsForCloudinaryImageType<T>;
 	/** Paths for cloudinary data fields */
 	paths: {
 		public_id: string;
@@ -5378,12 +5492,13 @@ export interface KeystoneFieldForCloudinaryImageType extends KeystoneField {
  * Constructor for CloudinaryImage field type.
  * @see ./fields/types/cloudinaryimage/CloudinaryImageType.js
  */
-export interface KeystoneTypeConstructorForCloudinaryImageType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForCloudinaryImageType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForCloudinaryImageType
+		options: KeystoneFieldOptionsForCloudinaryImageType<T>
 	): KeystoneFieldForCloudinaryImageType;
 	prototype: KeystoneFieldForCloudinaryImageType;
 	properName: "CloudinaryImage";
@@ -5393,8 +5508,9 @@ export interface KeystoneTypeConstructorForCloudinaryImageType
  * Options specific to CloudinaryImages fields.
  * @see ./fields/types/cloudinaryimages/CloudinaryImagesType.js
  */
-export interface KeystoneFieldOptionsForCloudinaryImagesType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForCloudinaryImagesType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically CloudinaryImages */
 	type: KeystoneTypeConstructorForCloudinaryImagesType;
 	/** Custom folder for storing images */
@@ -5428,7 +5544,7 @@ export interface KeystoneFieldForCloudinaryImagesType extends KeystoneField {
 		"filenameAsPublicID"
 	];
 	/** Field-specific options */
-	options: KeystoneFieldOptionsForCloudinaryImagesType;
+	options: KeystoneFieldOptionsForCloudinaryImagesType<T>;
 
 	/**
 	 * Formats the field value
@@ -5479,12 +5595,13 @@ export interface KeystoneFieldForCloudinaryImagesType extends KeystoneField {
  * Constructor for CloudinaryImages field type.
  * @see ./fields/types/cloudinaryimages/CloudinaryImagesType.js
  */
-export interface KeystoneTypeConstructorForCloudinaryImagesType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForCloudinaryImagesType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForCloudinaryImagesType
+		options: KeystoneFieldOptionsForCloudinaryImagesType<T>
 	): KeystoneFieldForCloudinaryImagesType;
 	prototype: KeystoneFieldForCloudinaryImagesType;
 	properName: "CloudinaryImages";
@@ -5494,8 +5611,9 @@ export interface KeystoneTypeConstructorForCloudinaryImagesType
  * Options specific to DateArray fields.
  * @see ./fields/types/datearray/DateArrayType.js
  */
-export interface KeystoneFieldOptionsForDateArrayType
-	extends KeystoneFieldOptions {
+export interface KeystoneFieldOptionsForDateArrayType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneFieldOptions<T> {
 	/** Ensure type is specifically DateArray */
 	type: KeystoneTypeConstructorForDateArrayType;
 	/** Format string for parsing input dates. Default: 'YYYY-MM-DD' */
@@ -5526,7 +5644,7 @@ export interface KeystoneFieldForDateArrayType extends KeystoneField {
 	/** Separator for joining multiple dates in display */
 	separator: string;
 	/** Field-specific options */
-	options: KeystoneFieldOptionsForDateArrayType;
+	options: KeystoneFieldOptionsForDateArrayType<T>;
 
 	/**
 	 * Formats the field value
@@ -5574,12 +5692,13 @@ export interface KeystoneFieldForDateArrayType extends KeystoneField {
  * Constructor for DateArray field type.
  * @see ./fields/types/datearray/DateArrayType.js
  */
-export interface KeystoneTypeConstructorForDateArrayType
-	extends KeystoneTypeConstructor {
+export interface KeystoneTypeConstructorForDateArrayType<
+	T extends KeystoneDocument = KeystoneDocument
+> extends KeystoneTypeConstructor {
 	new (
-		list: KeystoneList<any>,
+		list: KeystoneList<T>,
 		path: string,
-		options: KeystoneFieldOptionsForDateArrayType
+		options: KeystoneFieldOptionsForDateArrayType<T>
 	): KeystoneFieldForDateArrayType;
 	prototype: KeystoneFieldForDateArrayType;
 	properName: "DateArray";
