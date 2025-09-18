@@ -62,6 +62,10 @@ from keystone's root directory:
             test/e2e/drivers/chrome/mac32/chromedriver, if you are on a mac system
             test/e2e/drivers/chrome/win32/chromedriver, if you are on a windows system
 
+           Alternatively, set the environment variable `KNE_CHROMEDRIVER_PATH` (or `CHROMEDRIVER_PATH`) to
+           point directly at the chromedriver binary. The end-to-end harness will also respect `KNE_DRIVER_ROOT`
+           if you prefer to keep driver binaries in a different directory tree.
+
           For browser compatibility, see http://www.seleniumhq.org/about/platforms.jsp#browsers
 
         - Make sure that you have a local mongo instance running.
