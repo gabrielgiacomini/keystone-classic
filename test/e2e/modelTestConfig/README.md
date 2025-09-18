@@ -7,7 +7,7 @@ The structure of a Model Test Config is very simple.  In the following example, 
 a Text Field Test Object and a Boolean Field Test Object.  Note that the config is passed through to the fields updated with the field name.
 
     var objectAssign = require('object-assign');
-var fieldTestObjectsPath = require('keystone-nightwatch-e2e').fieldTestObjectsPath;
+var fieldTestObjectsPath = require('../keystone-nightwatch').fieldTestObjectsPath;
 var path = require('path');
     var TextFieldTestObject = require('../fieldTestObjects/textField');
     var BooleanFieldTestObject = require('../fieldTestObjects/booleanField');

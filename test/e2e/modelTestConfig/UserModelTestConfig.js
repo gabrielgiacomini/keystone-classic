@@ -1,5 +1,5 @@
 var objectAssign = require('object-assign');
-var fieldTestObjectsPath = require('keystone-nightwatch-e2e').fieldTestObjectsPath;
+var fieldTestObjectsPath = require('../keystone-nightwatch').fieldTestObjectsPath;
 var path = require('path');
 var NameFieldTestObject = require(path.resolve(fieldTestObjectsPath, 'NameFieldTestObject'));
 var EmailFieldTestObject = require(path.resolve(fieldTestObjectsPath, 'EmailFieldTestObject'));

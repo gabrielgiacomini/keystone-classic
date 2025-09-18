@@ -6,7 +6,7 @@ var request = require("superagent");
 var moment = require("moment");
 var mongoose = require("mongoose");
 var path = require("path");
-var keystoneNightwatchE2e = require("keystone-nightwatch-e2e");
+var keystoneNightwatchE2e = require("./keystone-nightwatch");
 
 // Set app-specific env for nightwatch session
 process.env.KNE_TEST_PATHS = "test/e2e/adminUI/tests";
