@@ -91,6 +91,7 @@ var ListColumnsForm = React.createClass({
 				<ListHeaderButton
 					active={this.state.isOpen}
 					id="listHeaderColumnButton"
+					data-testid="list-columns-button"
 					glyph="list-unordered"
 					label="Columns"
 					onClick={() => this.togglePopout(!this.state.isOpen)}

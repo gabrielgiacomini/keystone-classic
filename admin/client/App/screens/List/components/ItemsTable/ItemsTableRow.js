@@ -57,7 +57,7 @@ const ItemsRow = React.createClass({
 			));
 		}
 
-		var addRow = (<tr key={'i' + item.id} onClick={this.props.manageMode ? (e) => this.props.checkTableItem(item, e) : null} className={rowClassname}>{cells}</tr>);
+		var addRow = (<tr key={'i' + item.id} onClick={this.props.manageMode ? (e) => this.props.checkTableItem(item, e) : null} className={rowClassname} data-testid={`list-row-${item.id}`} data-item-id={item.id}>{cells}</tr>);
 
 		if (this.props.list.sortable) {
 			return (

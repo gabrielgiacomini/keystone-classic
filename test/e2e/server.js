@@ -15,8 +15,10 @@ process.env.KNE_EXCLUDE_TEST_PATHS =
 
 // determine the mongo uri and database name
 var dbName = "/e2e" + (process.env.KEYSTONEJS_PORT || 3000);
+var mongoHost = process.env.MONGO_HOST || "localhost";
+var mongoPort = process.env.MONGO_PORT || "27017";
 var mongoUri =
-	"mongodb://" + (process.env.KEYSTONEJS_HOST || "localhost") + dbName;
+	process.env.MONGO_URI || ("mongodb://" + mongoHost + ":" + mongoPort + dbName);
 
 // Function that drops the test database before starting testing
 function dropTestDatabase(done) {
@@ -176,6 +178,7 @@ function runKeystone(cb) {
 		Miscs: [
 			"date-field-maps",
 			"depends-ons",
+			"field-attributes",
 			"no-default-columns",
 			"inline-relationships",
 			"many-relationships",

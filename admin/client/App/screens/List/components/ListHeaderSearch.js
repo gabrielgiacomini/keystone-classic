@@ -17,6 +17,7 @@ function ListHeaderSearch ({
 		<div {...props} className={css(classes.wrapper)}>
 			<FormInput
 				data-search-input-field
+				data-testid="list-search-input"
 				onChange={handleChange}
 				onKeyUp={handleKeyup}
 				placeholder="Search"
@@ -25,6 +26,7 @@ function ListHeaderSearch ({
 			<button
 				className={css(classes.icon, !!value.length && classes.iconWhenClear)}
 				data-search-input-field-clear-icon
+				data-testid="list-search-clear"
 				disabled={!value.length}
 				onClick={value.length && handleClear}
 				title="Clear search query"

@@ -330,12 +330,13 @@ var EditForm = React.createClass({
 							loading={loading}
 							onClick={this.updateItem}
 							data-button="update"
+							data-testid="item-save-button"
 						>
 							{loadingButtonText}
 						</LoadingButton>
 					)}
 					{!this.props.list.noedit && (
-						<Button disabled={loading} onClick={this.toggleResetDialog} variant="link" color="cancel" data-button="reset">
+						<Button disabled={loading} onClick={this.toggleResetDialog} variant="link" color="cancel" data-button="reset" data-testid="item-reset-button">
 							<ResponsiveText
 								hiddenXS="reset changes"
 								visibleXS="reset"
@@ -343,7 +344,7 @@ var EditForm = React.createClass({
 						</Button>
 					)}
 					{!this.props.list.nodelete && (
-						<Button disabled={loading} onClick={this.toggleDeleteDialog} variant="link" color="delete" style={styles.deleteButton} data-button="delete">
+						<Button disabled={loading} onClick={this.toggleDeleteDialog} variant="link" color="delete" style={styles.deleteButton} data-button="delete" data-testid="item-delete-button">
 							<ResponsiveText
 								hiddenXS={`delete ${this.props.list.singular.toLowerCase()}`}
 								visibleXS="delete"
@@ -424,7 +425,7 @@ var EditForm = React.createClass({
 	},
 	render () {
 		return (
-			<form ref="editForm" className="EditForm-container">
+			<form ref="editForm" className="EditForm-container" data-testid="edit-form">
 				{(this.state.alerts) ? <AlertMessages alerts={this.state.alerts} /> : null}
 				<Grid.Row>
 					<Grid.Col large="three-quarters">

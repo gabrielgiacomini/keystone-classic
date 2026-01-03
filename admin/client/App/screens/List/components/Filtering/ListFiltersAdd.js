@@ -153,6 +153,7 @@ var ListFiltersAdd = React.createClass({
 					active={isOpen}
 					glyph="eye"
 					id="listHeaderFilterButton"
+					data-testid="list-filter-button"
 					label="Filter"
 					onClick={isOpen ? this.closePopout : this.openPopout}
 				/>

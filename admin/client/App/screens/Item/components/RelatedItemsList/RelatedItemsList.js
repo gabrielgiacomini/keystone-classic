@@ -129,7 +129,7 @@ const RelatedItemsList = React.createClass({
 		);
 
 		return (
-			<div className="Relationship">
+			<div className="Relationship" data-testid={`related-items-${this.props.refList.path}`}>
 				<h3 className="Relationship__link"><Link to={listHref}>{this.props.refList.label}</Link></h3>
 				{this.props.items ? this.renderItems() : loadingElement}
 			</div>

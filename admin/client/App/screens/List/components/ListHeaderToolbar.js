@@ -29,6 +29,7 @@ function CreateButton ({ listName, onClick, ...props }) {
 			block
 			color="success"
 			data-e2e-list-create-button="header"
+			data-testid="list-create-button"
 			glyph="plus"
 			onClick={onClick}
 			position="left"

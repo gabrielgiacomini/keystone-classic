@@ -67,7 +67,7 @@ const ItemsTable = React.createClass({
 			});
 
 			return (
-				<th key={col.path} colSpan="1">
+				<th key={col.path} colSpan="1" data-testid={`list-header-${col.path}`}>
 					<button
 						className={colClassName}
 						onClick={() => {
@@ -76,7 +76,8 @@ const ItemsTable = React.createClass({
 								isSelected && !isInverted
 							);
 						}}
-						title={buttonTitle}>
+						title={buttonTitle}
+						data-testid={`list-sort-${col.path}`}>
 						{col.label}
 						<span className="th-sort__icon" />
 					</button>
@@ -117,8 +118,8 @@ const ItemsTable = React.createClass({
 		);
 
 		return (
-			<div className="ItemList-wrapper">
-				<table cellPadding="0" cellSpacing="0" className="Table ItemList">
+			<div className="ItemList-wrapper" data-testid="list-table-wrapper">
+				<table cellPadding="0" cellSpacing="0" className="Table ItemList" data-testid="list-table">
 					{this.renderCols()}
 					{this.renderHeaders()}
 					{tableBody}

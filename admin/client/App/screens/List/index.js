@@ -410,9 +410,8 @@ const ListView = React.createClass({
 			? this.createAutocreate
 			: this.openCreateModal;
 
-		// display the button if create allowed
 		const button = !currentList.nocreate ? (
-			<GlyphButton color="success" glyph="plus" position="left" onClick={onClick} data-e2e-list-create-button="no-results">
+			<GlyphButton color="success" glyph="plus" position="left" onClick={onClick} data-e2e-list-create-button="no-results" data-testid="list-create-button">
 				Create {currentList.singular}
 			</GlyphButton>
 		) : null;

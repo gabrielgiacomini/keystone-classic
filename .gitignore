@@ -32,6 +32,9 @@ admin/public/styles/keystone.min.css
 reports
 
 test/e2e/drivers/*
+test-screenshots/
+test-results/
+test/e2e-playwright/report/
 
 package-lock.json
 yarn.lock

@@ -13,7 +13,7 @@ const LoginForm = ({
 	password,
 }) => {
 	return (
-		<div className="auth-box__col">
+		<div className="auth-box__col" data-testid="signin-form">
 			<Form onSubmit={handleSubmit} noValidate>
 				<FormField label="Email" htmlFor="email">
 					<FormInput
@@ -22,6 +22,7 @@ const LoginForm = ({
 						name="email"
 						onChange={handleInputChange}
 						value={email}
+						data-testid="signin-email-input"
 					/>
 				</FormField>
 				<FormField label="Password" htmlFor="password">
@@ -30,9 +31,10 @@ const LoginForm = ({
 						name="password"
 						onChange={handleInputChange}
 						value={password}
+						data-testid="signin-password-input"
 					/>
 				</FormField>
-				<Button disabled={isAnimating} color="primary" type="submit">
+				<Button disabled={isAnimating} color="primary" type="submit" data-testid="signin-submit-button">
 					Sign In
 				</Button>
 			</Form>

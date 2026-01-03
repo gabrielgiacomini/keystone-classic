@@ -295,18 +295,17 @@ export interface KeystoneFieldOptions<
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js}
  */
-export type KeystoneGroupFields<
-	T extends KeystoneDocument = KeystoneDocument
-> = {
-	[key: string]:
-		| KeystoneFieldOptions<T>
-		| KeystoneTypeConstructor
-		| StringConstructor
-		| NumberConstructor
-		| BooleanConstructor
-		| DateConstructor
-		| KeystoneGroupFields;
-};
+export type KeystoneGroupFields<T extends KeystoneDocument = KeystoneDocument> =
+	{
+		[key: string]:
+			| KeystoneFieldOptions<T>
+			| KeystoneTypeConstructor
+			| StringConstructor
+			| NumberConstructor
+			| BooleanConstructor
+			| DateConstructor
+			| KeystoneGroupFields;
+	};
 
 /**
  * Represents an object defining a heading in the Admin UI form.
@@ -334,9 +333,7 @@ export interface KeystoneGroupHeading {
  * - Raw Source Code: {@link https://raw.githubusercontent.com/keystonejs/keystone-classic/refs/heads/master/fields/types/Type.js}
  * - GitHub page: {@link https://github.com/keystonejs/keystone-classic/blob/master/fields/types/Type.js}
  */
-export interface KeystoneField<
-	T extends KeystoneDocument = KeystoneDocument
-> {
+export interface KeystoneField<T extends KeystoneDocument = KeystoneDocument> {
 	/** Reference to the parent List instance. */
 	list: KeystoneList<T>;
 	/** The field's path (e.g., 'name', 'address.street'). */
@@ -597,9 +594,7 @@ export interface KSAdminUiElementIndent {
 export interface KSAdminUiElementOutdent {
 	type: "outdent";
 }
-export type KSAdminUIElement<
-	T extends KeystoneDocument = KeystoneDocument
-> =
+export type KSAdminUIElement<T extends KeystoneDocument = KeystoneDocument> =
 	| KSAdminUiElementField<T>
 	| KSAdminUiElementHeading
 	| KSAdminUiElementIndent

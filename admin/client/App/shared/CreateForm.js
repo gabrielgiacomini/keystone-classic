@@ -161,13 +161,14 @@ const CreateForm = React.createClass({
 					{form}
 				</Modal.Body>
 				<Modal.Footer>
-					<Button color="success" type="submit" data-button-type="submit">
+					<Button color="success" type="submit" data-button-type="submit" data-testid="create-submit-button">
 						Create
 					</Button>
 					<Button
 						variant="link"
 						color="cancel"
 						data-button-type="cancel"
+						data-testid="create-cancel-button"
 						onClick={this.props.onCancel}
 					>
 						Cancel
@@ -182,6 +183,7 @@ const CreateForm = React.createClass({
 				isOpen={this.props.isOpen}
 				onClose={this.props.onCancel}
 				backdropClosesModal
+				data-testid="create-modal"
 			>
 				{this.renderForm()}
 			</Modal.Dialog>
