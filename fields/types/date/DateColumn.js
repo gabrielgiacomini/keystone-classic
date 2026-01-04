@@ -59,4 +59,4 @@ var DateColumn = React.createClass({
 	},
 });
 
-module.exports = DateColumn;
+export default DateColumn;

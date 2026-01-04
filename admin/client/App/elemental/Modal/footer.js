@@ -10,7 +10,7 @@ function ModalFooter ({
 	return (
 		<div {...props} className={css(classes.footer, classes['align__' + align], className)} />
 	);
-};
+}
 
 ModalFooter.propTypes = {
 	align: PropTypes.oneOf(['center', 'left', 'right']),
@@ -45,4 +45,4 @@ const classes = {
 	},
 };
 
-module.exports = ModalFooter;
+export default ModalFooter;

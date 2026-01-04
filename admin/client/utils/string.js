@@ -18,7 +18,7 @@ import { compact, size } from 'lodash';
  * @api public
  */
 
-exports.plural = function (count, sn, pl) {
+export const plural = function (count, sn, pl) {
 	if (arguments.length === 1) {
 		return inflect.pluralize(count);
 	}
@@ -34,7 +34,6 @@ exports.plural = function (count, sn, pl) {
 	return (count === 1 ? sn : pl).replace('*', count);
 };
 
-
 /**
  * Converts the first letter in a string to uppercase
  *
@@ -43,12 +42,11 @@ exports.plural = function (count, sn, pl) {
  * @api public
  */
 
-exports.upcase = function (str) {
+export const upcase = function (str) {
 	if (str && str.toString) str = str.toString();
 	if (typeof str !== 'string' || !str.length) return '';
 	return (str.substr(0, 1).toUpperCase() + str.substr(1));
 };
-
 
 /**
  * Converts the first letter in a string to lowercase
@@ -58,12 +56,11 @@ exports.upcase = function (str) {
  * @api public
  */
 
-exports.downcase = function (str) {
+export const downcase = function (str) {
 	if (str && str.toString) str = str.toString();
 	if (typeof str !== 'string' || !str.length) return '';
 	return (str.substr(0, 1).toLowerCase() + str.substr(1));
 };
-
 
 /**
  * Converts a string to title case
@@ -73,19 +70,18 @@ exports.downcase = function (str) {
  * @api public
  */
 
-exports.titlecase = function (str) {
+export const titlecase = function (str) {
 	if (str && str.toString) str = str.toString();
 	if (typeof str !== 'string' || !str.length) return '';
 	str = str.replace(/([a-z])([A-Z])/g, '$1 $2');
 	var parts = str.split(/\s|_|\-/);
 	for (var i = 0; i < parts.length; i++) {
 		if (parts[i] && !/^[A-Z0-9]+$/.test(parts[i])) {
-			parts[i] = exports.upcase(parts[i]);
+			parts[i] = upcase(parts[i]);
 		}
 	}
 	return compact(parts).join(' ');
 };
-
 
 /**
  * Converts a string to camel case
@@ -96,6 +92,8 @@ exports.titlecase = function (str) {
  * @api public
  */
 
-exports.camelcase = function (str, lc) {
+export const camelcase = function (str, lc) {
 	return inflect.camelize(str, !(lc));
 };
+
+export default { plural, upcase, downcase, titlecase, camelcase };

@@ -29,6 +29,13 @@ admin/public/styles/auth.css
 admin/public/styles/auth.min.css
 admin/public/styles/keystone.css
 admin/public/styles/keystone.min.css
+
+# Vite build output (experimental)
+admin/public/js/admin.js
+admin/public/js/fields.js
+admin/public/js/shared.js
+admin/public/js/signin.js
+dist/
 reports
 
 test/e2e/drivers/*

@@ -13,7 +13,7 @@ function Center ({
 	props.style = { height, ...style };
 
 	return <Component {...props} />;
-};
+}
 Center.propTypes = {
 	component: PropTypes.oneOfType([
 		PropTypes.func,
@@ -29,4 +29,4 @@ Center.defaultProps = {
 	height: 'auto',
 };
 
-module.exports = Center;
+export default Center;

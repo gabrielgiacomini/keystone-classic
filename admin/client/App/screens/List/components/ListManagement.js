@@ -98,7 +98,7 @@ function ListManagement ({
 			</Group>
 		</div>
 	);
-};
+}
 
 ListManagement.propTypes = {
 	checkedItems: PropTypes.number,
@@ -113,4 +113,4 @@ ListManagement.propTypes = {
 	selectAllItemsLoading: PropTypes.bool,
 };
 
-module.exports = ListManagement;
+export default ListManagement;

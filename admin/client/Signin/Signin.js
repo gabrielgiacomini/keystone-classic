@@ -155,4 +155,4 @@ var SigninView = React.createClass({
 	}
 });
 
-module.exports = SigninView;
+export default SigninView;

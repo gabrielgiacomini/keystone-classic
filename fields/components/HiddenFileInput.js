@@ -56,4 +56,4 @@ HiddenFileInput.propTypes = {
 	onChange: PropTypes.func.isRequired,
 };
 
-module.exports = HiddenFileInput;
+export default HiddenFileInput;

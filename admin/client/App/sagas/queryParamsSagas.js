@@ -94,3 +94,5 @@ export function parseQueryParams (query, currentList) {
 		search,
 	};
 }
+
+export default { parseQueryParams };

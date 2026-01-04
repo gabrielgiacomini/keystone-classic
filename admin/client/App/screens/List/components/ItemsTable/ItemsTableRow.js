@@ -61,10 +61,10 @@ const ItemsRow = React.createClass({
 
 		if (this.props.list.sortable) {
 			return (
-				// we could add a preview container/image
-				// this.props.connectDragPreview(this.props.connectDropTarget(addRow))
-				this.props.connectDropTarget(addRow)
-			);
+                // we could add a preview container/image
+                // this.props.connectDragPreview(this.props.connectDropTarget(addRow))
+                (this.props.connectDropTarget(addRow))
+            );
 		} else {
 			return (addRow);
 		}
@@ -74,7 +74,7 @@ const ItemsRow = React.createClass({
 	},
 });
 
-module.exports = exports = ItemsRow;
+export default exports = ItemsRow;
 
 // Expose Sortable
 
@@ -155,6 +155,5 @@ function dropProps (connect) {
 	return {
 		connectDropTarget: connect.dropTarget(),
 	};
-};
-
-exports.Sortable = DragSource('item', dragItem, dragProps)(DropTarget('item', dropItem, dropProps)(ItemsRow));
+}
+export const Sortable = DragSource('item', dragItem, dragProps)(DropTarget('item', dropItem, dropProps)(ItemsRow));

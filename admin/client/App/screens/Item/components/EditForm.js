@@ -479,4 +479,4 @@ const styles = {
 	},
 };
 
-module.exports = EditForm;
+export default EditForm;

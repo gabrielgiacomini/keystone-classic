@@ -11,7 +11,7 @@ import React, { PropTypes } from 'react';
  * The `MoneyField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'MoneyField',
 	propTypes: {
 		onChange: PropTypes.func.isRequired,

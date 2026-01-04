@@ -41,3 +41,5 @@ export {
 	sortParser,
 	columnsParser,
 };
+
+export default { createFilterObject, filtersParser, filterParser, sortParser, columnsParser };

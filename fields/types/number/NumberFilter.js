@@ -178,4 +178,4 @@ var NumberFilter = React.createClass({
 
 });
 
-module.exports = NumberFilter;
+export default NumberFilter;

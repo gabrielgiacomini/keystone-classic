@@ -18,7 +18,7 @@ function Container ({
 	);
 
 	return <Component {...props} />;
-};
+}
 
 Container.propTypes = {
 	clearFloatingChildren: PropTypes.bool,
@@ -33,4 +33,4 @@ Container.defaultProps = {
 	width: 'large',
 };
 
-module.exports = Container;
+export default Container;

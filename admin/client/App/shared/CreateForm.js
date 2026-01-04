@@ -191,4 +191,4 @@ const CreateForm = React.createClass({
 	},
 });
 
-module.exports = CreateForm;
+export default CreateForm;

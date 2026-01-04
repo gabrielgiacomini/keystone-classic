@@ -22,8 +22,9 @@ const PopoutList = React.createClass({
 	},
 });
 
-module.exports = PopoutList;
+export default PopoutList;
 
 // expose the child to the top level export
-module.exports.Item = require('./PopoutListItem');
-module.exports.Heading = require('./PopoutListHeading');
+export const Item = require('./PopoutListItem');
+
+export const Heading = require('./PopoutListHeading');

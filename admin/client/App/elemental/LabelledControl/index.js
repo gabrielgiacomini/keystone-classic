@@ -21,7 +21,7 @@ function LabelledControl ({
 			<span className={css(classes.label)}>{label}</span>
 		</label>
 	);
-};
+}
 
 LabelledControl.propTypes = {
 	inline: PropTypes.bool,
@@ -29,4 +29,4 @@ LabelledControl.propTypes = {
 	type: PropTypes.oneOf(['checkbox', 'radio']).isRequired,
 };
 
-module.exports = LabelledControl;
+export default LabelledControl;

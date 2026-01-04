@@ -14,7 +14,7 @@ import Field from '../Field';
  * The `NumberArrayField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 
 	displayName: 'NumberArrayField',
 	statics: {

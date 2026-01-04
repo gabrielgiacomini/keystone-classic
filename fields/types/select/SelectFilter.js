@@ -261,7 +261,7 @@ class SelectFilter extends Component {
 			</div>
 		);
 	}
-};
+}
 
 
 SelectFilter.propTypes = {
@@ -276,4 +276,4 @@ SelectFilter.defaultProps = {
 	filter: getDefaultValue(),
 };
 
-module.exports = SelectFilter;
+export default SelectFilter;

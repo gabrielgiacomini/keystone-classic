@@ -66,7 +66,7 @@ class ResponsiveText extends Component {
 
 		return text ? <Component {...props}>{text}</Component> : null;
 	}
-};
+}
 
 ResponsiveText.propTypes = {
 	hiddenLG: PropTypes.string,
@@ -82,4 +82,4 @@ ResponsiveText.defaultProps = {
 	component: 'span',
 };
 
-module.exports = ResponsiveText;
+export default ResponsiveText;

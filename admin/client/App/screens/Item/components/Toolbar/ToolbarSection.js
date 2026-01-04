@@ -8,11 +8,11 @@ function ToolbarSection ({ className, left, right, ...props }) {
 	}, className);
 
 	return <div {...props} />;
-};
+}
 
 ToolbarSection.propTypes = {
 	left: PropTypes.bool,
 	right: PropTypes.bool,
 };
 
-module.exports = ToolbarSection;
+export default ToolbarSection;

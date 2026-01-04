@@ -48,7 +48,7 @@ class AltText extends Component {
 
 		return <Component {...props} />;
 	}
-};
+}
 
 const SUPPORTED_KEYS = [
 	'<alt>',
@@ -77,4 +77,4 @@ AltText.defaultProps = {
 	modifier: '<alt>',
 };
 
-module.exports = AltText;
+export default AltText;

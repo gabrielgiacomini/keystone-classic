@@ -21,7 +21,7 @@ Object.keys(sizes).forEach(size => {
 	};
 });
 
-module.exports = {
+export default {
 	glyph: {},
 
 	// Colors

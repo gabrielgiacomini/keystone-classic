@@ -37,7 +37,7 @@ function Glyph ({
 	};
 
 	return <Component {...props} />;
-};
+}
 
 Glyph.propTypes = {
 	color: PropTypes.oneOfType([
@@ -57,4 +57,4 @@ Glyph.defaultProps = {
 	size: 'small',
 };
 
-module.exports = Glyph;
+export default Glyph;

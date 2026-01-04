@@ -130,4 +130,4 @@ var TextArrayFilter = React.createClass({
 	},
 });
 
-module.exports = TextArrayFilter;
+export default TextArrayFilter;

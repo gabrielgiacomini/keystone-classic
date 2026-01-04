@@ -36,7 +36,7 @@ function GlyphField ({
 			{isRight && icon}
 		</Field>
 	);
-};
+}
 
 // For props "glyph", "glyphColor", and "glyphSize":
 // prop type validation will occur within the Glyph component, no need to
@@ -63,4 +63,4 @@ const classes = {
 	},
 };
 
-module.exports = GlyphField;
+export default GlyphField;

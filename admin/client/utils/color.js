@@ -19,7 +19,7 @@ function validateHex (color) {
 	}
 
 	return hex;
-};
+}
 
 /**
 	Fade Color
@@ -52,7 +52,7 @@ function fade (color, opacity = 100) {
 		+ ')';
 
 	return result;
-};
+}
 
 
 /**
@@ -86,13 +86,13 @@ function shade (color, percent) {
 		+ (Math.round((t - R) * p) + R) * 0x10000
 		+ (Math.round((t - G) * p) + G) * 0x100
 		+ (Math.round((t - B) * p) + B)).toString(16).slice(1);
-};
+}
 
 // shade helpers
 const lighten = shade;
 function darken (color, percent) {
 	return shade(color, percent * -1);
-};
+}
 
 
 /**
@@ -133,7 +133,14 @@ function blend (color1, color2, percent) {
 		+ (Math.round((B2 - B1) * decimalFraction) + B1)).toString(16).slice(1);
 }
 
-module.exports = {
+export {
+	blend,
+	darken,
+	fade,
+	lighten,
+};
+
+export default {
 	blend,
 	darken,
 	fade,

@@ -23,4 +23,4 @@ const classes = {
 	},
 };
 
-module.exports = NestedFormField;
+export default NestedFormField;

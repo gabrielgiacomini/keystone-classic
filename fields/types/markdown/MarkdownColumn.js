@@ -40,4 +40,4 @@ var MarkdownColumn = React.createClass({
 	},
 });
 
-module.exports = MarkdownColumn;
+export default MarkdownColumn;

@@ -17,4 +17,4 @@ function CollapsedFieldLabel ({ style, ...props }) {
 	);
 };
 
-module.exports = CollapsedFieldLabel;
+export default CollapsedFieldLabel;

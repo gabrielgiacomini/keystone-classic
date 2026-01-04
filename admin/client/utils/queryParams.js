@@ -100,3 +100,5 @@ export function parametizeFilters (filterArray) {
 		}, filter.value);
 	});
 }
+
+export default { checkForQueryChange, normaliseValue, createSortQueryParams, createPageQueryParams, updateQueryParams, stringifyColumns, parametizeFilters };

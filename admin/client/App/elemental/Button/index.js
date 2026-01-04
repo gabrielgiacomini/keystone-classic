@@ -60,7 +60,7 @@ class Button extends Component {
 
 		return <Tag {...props} />;
 	}
-};
+}
 
 Button.propTypes = {
 	active: PropTypes.bool,
@@ -85,4 +85,4 @@ Button.defaultProps = {
 	variant: 'fill',
 };
 
-module.exports = Button;
+export default Button;

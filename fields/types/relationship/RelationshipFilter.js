@@ -277,4 +277,4 @@ var RelationshipFilter = React.createClass({
 	},
 });
 
-module.exports = RelationshipFilter;
+export default RelationshipFilter;

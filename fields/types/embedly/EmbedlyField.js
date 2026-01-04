@@ -16,7 +16,7 @@ import NestedFormField from '../../components/NestedFormField';
  * The `EmbedlyField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 
 	displayName: 'EmbedlyField',
 	statics: {

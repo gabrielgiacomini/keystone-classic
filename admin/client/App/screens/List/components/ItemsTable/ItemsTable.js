@@ -129,4 +129,4 @@ const ItemsTable = React.createClass({
 	},
 });
 
-module.exports = exports = ItemsTable;
+export default exports = ItemsTable;

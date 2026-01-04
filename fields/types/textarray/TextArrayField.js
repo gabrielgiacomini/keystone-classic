@@ -13,7 +13,7 @@ import Field from '../Field';
  * The `TextArrayField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'TextArrayField',
 	statics: {
 		type: 'TextArray',

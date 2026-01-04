@@ -21,7 +21,7 @@ const NAME_SHAPE = {
  * The `NameField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'NameField',
 	statics: {
 		type: 'Name',

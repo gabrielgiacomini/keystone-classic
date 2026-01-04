@@ -14,7 +14,7 @@ import {
  * The `GeoPointField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 
 	displayName: 'GeopointField',
 	statics: {

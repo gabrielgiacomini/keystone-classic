@@ -63,7 +63,7 @@ function CloudinaryImagesThumbnail ({
 		</div>
 	);
 
-};
+}
 
 CloudinaryImagesThumbnail.propTypes = {
 	imageSourceLarge: PropTypes.string,
@@ -75,4 +75,4 @@ CloudinaryImagesThumbnail.propTypes = {
 	toggleDelete: PropTypes.func.isRequired,
 };
 
-module.exports = CloudinaryImagesThumbnail;
+export default CloudinaryImagesThumbnail;

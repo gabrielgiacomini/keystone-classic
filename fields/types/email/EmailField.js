@@ -17,7 +17,7 @@ import { FormInput } from '../../../admin/client/App/elemental';
  * The `EmailField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'EmailField',
 	propTypes: {
 		path: PropTypes.string.isRequired,

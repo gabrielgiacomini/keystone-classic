@@ -340,4 +340,4 @@ var DateFilter = React.createClass({
 	},
 });
 
-module.exports = DateFilter;
+export default DateFilter;

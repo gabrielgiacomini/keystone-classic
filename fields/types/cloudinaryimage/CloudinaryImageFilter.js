@@ -67,4 +67,4 @@ var CloudinaryImageFilter = React.createClass({
 	},
 });
 
-module.exports = CloudinaryImageFilter;
+export default CloudinaryImageFilter;

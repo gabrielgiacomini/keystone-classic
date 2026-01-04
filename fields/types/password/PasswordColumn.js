@@ -42,4 +42,4 @@ var PasswordColumn = React.createClass({
 	},
 });
 
-module.exports = PasswordColumn;
+export default PasswordColumn;

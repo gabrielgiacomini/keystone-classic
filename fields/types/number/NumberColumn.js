@@ -45,4 +45,4 @@ var NumberColumn = React.createClass({
 	},
 });
 
-module.exports = NumberColumn;
+export default NumberColumn;

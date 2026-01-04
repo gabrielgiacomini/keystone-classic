@@ -77,7 +77,7 @@ class Pagination extends Component {
 			</div>
 		);
 	}
-};
+}
 
 const classes = {
 	container: {
@@ -108,4 +108,4 @@ Pagination.propTypes = {
 	total: PropTypes.number.isRequired,
 };
 
-module.exports = Pagination;
+export default Pagination;

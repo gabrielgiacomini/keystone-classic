@@ -541,7 +541,7 @@ const ListView = React.createClass({
 	},
 });
 
-module.exports = connect((state) => {
+export default connect((state) => {
 	return {
 		lists: state.lists,
 		loading: state.lists.loading,

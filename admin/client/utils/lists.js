@@ -5,8 +5,8 @@
 
 import List from './List';
 
-exports.listsByKey = {};
-exports.listsByPath = {};
+export const listsByKey = {};
+export const listsByPath = {};
 
 for (const key in Keystone.lists) {
 	// Guard for-ins
@@ -16,3 +16,5 @@ for (const key in Keystone.lists) {
 		exports.listsByPath[list.path] = list;
 	}
 }
+
+export default { listsByKey, listsByPath };

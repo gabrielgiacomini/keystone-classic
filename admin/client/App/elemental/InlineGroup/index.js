@@ -50,7 +50,7 @@ function InlineGroup ({
 	});
 
 	return <Component {...props} />;
-};
+}
 
 InlineGroup.propTypes = {
 	block: PropTypes.bool,
@@ -77,4 +77,4 @@ const classes = {
 	},
 };
 
-module.exports = InlineGroup;
+export default InlineGroup;

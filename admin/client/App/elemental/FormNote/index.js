@@ -21,7 +21,7 @@ function FormNote ({
 	) : (
 		<Component {...props}>{children}</Component>
 	);
-};
+}
 FormNote.propTypes = {
 	component: PropTypes.oneOfType([
 		PropTypes.func,
@@ -33,4 +33,4 @@ FormNote.defaultProps = {
 	component: 'div',
 };
 
-module.exports = FormNote;
+export default FormNote;

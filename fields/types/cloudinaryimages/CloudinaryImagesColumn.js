@@ -69,4 +69,4 @@ var CloudinaryImagesColumn = React.createClass({
 	},
 });
 
-module.exports = CloudinaryImagesColumn;
+export default CloudinaryImagesColumn;

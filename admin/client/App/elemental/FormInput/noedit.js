@@ -24,7 +24,7 @@ function FormInputNoedit ({
 	);
 
 	return <Component {...props} />;
-};
+}
 
 FormInputNoedit.propTypes = {
 	component: PropTypes.oneOfType([
@@ -90,4 +90,4 @@ const classes = {
 	},
 };
 
-module.exports = FormInputNoedit;
+export default FormInputNoedit;

@@ -21,7 +21,7 @@ function ListHeaderTitle ({
 			/>
 		</h2>
 	);
-};
+}
 
 ListHeaderTitle.propTypes = {
 	activeSort: PropTypes.object,
@@ -39,4 +39,4 @@ const classes = {
 	},
 };
 
-module.exports = ListHeaderTitle;
+export default ListHeaderTitle;

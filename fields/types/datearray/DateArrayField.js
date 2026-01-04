@@ -19,7 +19,7 @@ const DEFAULT_FORMAT_STRING = 'Do MMM YYYY';
  * The `DateArrayField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 
 	displayName: 'DateArrayField',
 	statics: {

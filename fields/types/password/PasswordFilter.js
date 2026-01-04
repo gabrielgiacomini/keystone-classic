@@ -68,4 +68,4 @@ var PasswordFilter = React.createClass({
 	},
 });
 
-module.exports = PasswordFilter;
+export default PasswordFilter;

@@ -42,4 +42,4 @@ var BooleanColumn = React.createClass({
 	},
 });
 
-module.exports = BooleanColumn;
+export default BooleanColumn;

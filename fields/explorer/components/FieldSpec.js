@@ -107,4 +107,4 @@ const ExplorerFieldType = React.createClass({
 	},
 });
 
-module.exports = ExplorerFieldType;
+export default ExplorerFieldType;

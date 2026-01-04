@@ -53,4 +53,4 @@ var UrlColumn = React.createClass({
 	},
 });
 
-module.exports = UrlColumn;
+export default UrlColumn;

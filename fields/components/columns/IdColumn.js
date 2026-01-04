@@ -28,4 +28,4 @@ var IdColumn = React.createClass({
 	},
 });
 
-module.exports = IdColumn;
+export default IdColumn;

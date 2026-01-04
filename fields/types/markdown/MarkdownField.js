@@ -144,7 +144,7 @@ var escapeHtmlForRender = function (html) {
  * The `MarkdownField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'MarkdownField',
 	statics: {
 		type: 'Markdown',

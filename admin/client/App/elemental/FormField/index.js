@@ -57,7 +57,7 @@ class FormField extends Component {
 			</div>
 		);
 	}
-};
+}
 
 const stylesShape = {
 	_definition: PropTypes.object,
@@ -88,6 +88,5 @@ FormField.propTypes = {
 
 function generateId () {
 	return Math.random().toString(36).substr(2, 9);
-};
-
-module.exports = FormField;
+}
+export default FormField;

@@ -30,7 +30,7 @@ let uploadInc = 1000;
  * The `CloudinaryImagesField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'CloudinaryImagesField',
 	statics: {
 		type: 'CloudinaryImages',

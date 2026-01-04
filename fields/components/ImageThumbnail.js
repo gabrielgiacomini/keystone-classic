@@ -89,4 +89,4 @@ const classes = {
 	},
 };
 
-module.exports = ImageThumbnail;
+export default ImageThumbnail;

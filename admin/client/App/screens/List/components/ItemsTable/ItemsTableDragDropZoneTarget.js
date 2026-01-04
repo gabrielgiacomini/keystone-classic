@@ -99,6 +99,5 @@ function dropProps (connect, monitor) {
 		connectDropTarget: connect.dropTarget(),
 		isOver: monitor.isOver(),
 	};
-};
-
-module.exports = DropTarget('item', dropTarget, dropProps)(ItemsTableDragDropZoneTarget);
+}
+export default DropTarget('item', dropTarget, dropProps)(ItemsTableDragDropZoneTarget);

@@ -82,4 +82,4 @@ var RelationshipColumn = React.createClass({
 	},
 });
 
-module.exports = RelationshipColumn;
+export default RelationshipColumn;

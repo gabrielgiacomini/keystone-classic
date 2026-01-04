@@ -11,7 +11,7 @@ import Field from '../Field';
  * The `KeyField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'KeyField',
 	statics: {
 		type: 'Key',

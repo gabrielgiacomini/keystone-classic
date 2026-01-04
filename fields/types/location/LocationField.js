@@ -30,7 +30,7 @@ import {
  * The `LocationField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 
 	displayName: 'LocationField',
 	statics: {

@@ -191,4 +191,4 @@ const classes = {
 	},
 };
 
-module.exports = ColorField;
+export default ColorField;

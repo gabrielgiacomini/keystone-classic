@@ -2,6 +2,6 @@
 // Form
 // ==============================
 
-module.exports = {
+export default {
 	Form: {},
 };

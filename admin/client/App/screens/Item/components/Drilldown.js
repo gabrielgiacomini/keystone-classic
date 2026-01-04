@@ -17,7 +17,7 @@ function Drilldown ({ className, items, ...props }) {
 			))}
 		</ul>
 	);
-};
+}
 
 Drilldown.propTypes = {
 	items: PropTypes.arrayOf(
@@ -38,4 +38,4 @@ const classes = {
 	},
 };
 
-module.exports = Drilldown;
+export default Drilldown;

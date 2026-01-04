@@ -26,7 +26,7 @@ class GridRow extends Component {
 			</div>
 		);
 	}
-};
+}
 
 GridRow.childContextTypes = {
 	gutter: PropTypes.number,
@@ -56,4 +56,4 @@ const classes = {
 	},
 };
 
-module.exports = GridRow;
+export default GridRow;

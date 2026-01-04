@@ -45,7 +45,7 @@ function SegmentedControl ({
 				);
 			})}
 		</div>);
-};
+}
 
 const valuePropShape = [
 	PropTypes.bool,
@@ -72,4 +72,4 @@ SegmentedControl.defaultProps = {
 	color: 'default',
 };
 
-module.exports = SegmentedControl;
+export default SegmentedControl;

@@ -64,7 +64,7 @@ class EditFormHeaderSearch extends Component {
 			</GlyphButton>
 		);
 	}
-};
+}
 
 // For props "glyph", "glyphColor", and "glyphSize":
 // prop type validation will occur within the Glyph component, no need to
@@ -105,7 +105,7 @@ const classes = {
 	},
 };
 
-module.exports = EditFormHeaderSearch;
+export default EditFormHeaderSearch;
 
 
 // Search

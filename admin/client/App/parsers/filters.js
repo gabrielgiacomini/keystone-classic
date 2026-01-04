@@ -104,3 +104,5 @@ export function createFilterObject (path, value, currentListFields) {
 		value,
 	};
 }
+
+export default { filtersParser, filterParser, createFilterObject };

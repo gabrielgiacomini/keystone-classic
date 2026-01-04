@@ -21,7 +21,7 @@ function ButtonDivider ({ style, ...props }) {
 	};
 
 	return <div {...props} />;
-};
+}
 
 function CreateButton ({ listName, onClick, ...props }) {
 	return (
@@ -43,7 +43,7 @@ function CreateButton ({ listName, onClick, ...props }) {
 			/>
 		</GlyphButton>
 	);
-};
+}
 
 function ListHeaderToolbar ({
 	// common
@@ -130,7 +130,7 @@ function ListHeaderToolbar ({
 			</Section>
 		</Group>
 	);
-};
+}
 
 ListHeaderToolbar.propTypes = {
 	columnsActive: PropTypes.array,
@@ -194,4 +194,4 @@ const classes = {
 	},
 };
 
-module.exports = ListHeaderToolbar;
+export default ListHeaderToolbar;

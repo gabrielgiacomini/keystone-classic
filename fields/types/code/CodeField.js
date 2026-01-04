@@ -25,7 +25,7 @@ import classnames from 'classnames';
  * The `CodeField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'CodeField',
 	statics: {
 		type: 'Code',

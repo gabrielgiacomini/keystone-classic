@@ -57,4 +57,4 @@ var ColorColumn = React.createClass({
 	},
 });
 
-module.exports = ColorColumn;
+export default ColorColumn;

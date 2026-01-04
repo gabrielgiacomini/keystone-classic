@@ -46,7 +46,7 @@ function validateSpec (spec) {
  * The base class for all field components.
  * @type {Object}
  */
-var Base = module.exports.Base = {
+export const Base = {
 	/**
 	 * Gets the initial state of the component.
 	 * @returns {Object} The initial state.
@@ -170,7 +170,7 @@ var Base = module.exports.Base = {
  * A set of mixins for field components.
  * @type {Object}
  */
-var Mixins = module.exports.Mixins = {
+export const Mixins = {
 	Collapse: {
 		/**
 		 * Sets the initial collapsed state of the field.
@@ -218,7 +218,7 @@ var Mixins = module.exports.Mixins = {
  * @param {Object} spec The spec for the field.
  * @returns {React.Component} The new field component.
  */
-module.exports.create = function (spec) {
+export const create = function (spec) {
 
 	spec = validateSpec(spec);
 
@@ -271,3 +271,5 @@ module.exports.create = function (spec) {
 	return React.createClass(field);
 
 };
+
+export default { create, Base, Mixins };

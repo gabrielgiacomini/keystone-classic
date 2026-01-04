@@ -24,4 +24,4 @@ var InvalidColumn = React.createClass({
 	},
 });
 
-module.exports = InvalidColumn;
+export default InvalidColumn;

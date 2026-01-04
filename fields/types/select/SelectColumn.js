@@ -45,4 +45,4 @@ var SelectColumn = React.createClass({
 	},
 });
 
-module.exports = SelectColumn;
+export default SelectColumn;

@@ -43,4 +43,4 @@ var NameColumn = React.createClass({
 	},
 });
 
-module.exports = NameColumn;
+export default NameColumn;

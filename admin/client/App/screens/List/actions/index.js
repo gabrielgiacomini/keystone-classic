@@ -47,7 +47,6 @@ import {
 	setFilter,
 	clearFilter,
 	clearAllFilters,
-	setActiveFilters,
 	setActiveSearch,
 	setActiveColumns,
 	clearCachedQuery,
@@ -74,7 +73,6 @@ export {
 	setFilter,
 	clearFilter,
 	clearAllFilters,
-	setActiveFilters,
 	setActiveSearch,
 	setActiveColumns,
 	setActiveSort,
@@ -90,3 +88,5 @@ export {
 	moveItem,
 	downloadItems,
 };
+
+export default { selectList, loadInitialItems, setCurrentPage, setFilter, clearFilter, clearAllFilters, setActiveSearch, setActiveColumns, setActiveSort, clearCachedQuery, loadItems, itemsLoaded, itemLoadingError, deleteItems, setDragBase, resetItems, reorderItems, setRowAlert, moveItem, downloadItems };

@@ -37,7 +37,7 @@ function InlineGroupSection ({
 			{children}
 		</div>
 	);
-};
+}
 
 InlineGroupSection.propTypes = {
 	active: PropTypes.bool, // buttons only
@@ -47,4 +47,4 @@ InlineGroupSection.propTypes = {
 	position: PropTypes.oneOf(['first', 'last', 'middle', 'only']),
 };
 
-module.exports = InlineGroupSection;
+export default InlineGroupSection;

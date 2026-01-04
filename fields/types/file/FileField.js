@@ -36,7 +36,7 @@ const buildInitialState = (props) => ({
  * The `FileField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	propTypes: {
 		autoCleanup: PropTypes.bool,
 		collapse: PropTypes.bool,

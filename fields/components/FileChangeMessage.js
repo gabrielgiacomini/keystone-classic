@@ -32,4 +32,4 @@ FileChangeMessage.defaultProps = {
 	color: 'default',
 };
 
-module.exports = FileChangeMessage;
+export default FileChangeMessage;

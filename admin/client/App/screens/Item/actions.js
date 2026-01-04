@@ -192,3 +192,5 @@ export function resetItems () {
 		type: DRAG_RESET_ITEMS,
 	};
 }
+
+export default { selectItem, loadItemData, loadRelationshipItemData, dataLoaded, relationshipDataLoaded, dataLoadingError, deleteItem, reorderItems, moveItem, resetItems };

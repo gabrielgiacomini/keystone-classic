@@ -121,10 +121,11 @@ var Popout = React.createClass({
 	},
 });
 
-module.exports = Popout;
+export default Popout;
 
 // expose the child to the top level export
-module.exports.Header = require('./PopoutHeader');
-module.exports.Body = require('./PopoutBody');
-module.exports.Footer = require('./PopoutFooter');
-module.exports.Pane = require('./PopoutPane');
+export const Header = require('./PopoutHeader');
+
+export const Body = require('./PopoutBody');
+export const Footer = require('./PopoutFooter');
+export const Pane = require('./PopoutPane');

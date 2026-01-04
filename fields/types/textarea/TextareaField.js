@@ -11,7 +11,7 @@ import { FormInput } from '../../../admin/client/App/elemental';
  * The `TextareaField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'TextareaField',
 	statics: {
 		type: 'Textarea',

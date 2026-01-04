@@ -11,7 +11,7 @@ import { FormInput } from '../../../admin/client/App/elemental';
  * The `UrlField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'URLField',
 	statics: {
 		type: 'Url',

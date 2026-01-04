@@ -20,7 +20,7 @@ function Spinner ({ className, size, color, ...props }) {
 			<ScreenReaderOnly>Loading...</ScreenReaderOnly>
 		</div>
 	);
-};
+}
 
 Spinner.propTypes = {
 	color: PropTypes.oneOf(colors),
@@ -31,4 +31,4 @@ Spinner.defaultProps = {
 	color: 'default',
 };
 
-module.exports = Spinner;
+export default Spinner;

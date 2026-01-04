@@ -59,4 +59,4 @@ ExplorerRow.defaultProps = {
 	gutter: 10,
 };
 
-module.exports = ExplorerRow;
+export default ExplorerRow;

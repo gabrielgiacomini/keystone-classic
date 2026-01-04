@@ -11,7 +11,7 @@ function DropdownButton ({ children, ...props }) {
 			<span className={css(classes.arrow)} />
 		</Button>
 	);
-};
+}
 
 // NOTE
 // 1: take advantage of `currentColor` by leaving border top color undefined
@@ -38,4 +38,4 @@ const classes = {
 	},
 };
 
-module.exports = DropdownButton;
+export default DropdownButton;

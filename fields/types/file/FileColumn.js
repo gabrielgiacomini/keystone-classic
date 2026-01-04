@@ -38,4 +38,4 @@ var LocalFileColumn = React.createClass({
 	},
 });
 
-module.exports = LocalFileColumn;
+export default LocalFileColumn;

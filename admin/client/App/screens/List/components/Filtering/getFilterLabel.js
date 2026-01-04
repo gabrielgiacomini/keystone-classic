@@ -146,7 +146,7 @@ function getFilterLabel (field, value) {
 			return `${label} "${value.value}"`;
 		}
 	}
-};
+}
 
 function resolveNumberFormat (value, conjunction = 'is') {
 	let mode = '';
@@ -171,4 +171,4 @@ function resolveDateFormat (value, format, conjunction = 'is') {
 	return `${joiner} ${mode} ${formattedValue}`;
 }
 
-module.exports = getFilterLabel;
+export default getFilterLabel;

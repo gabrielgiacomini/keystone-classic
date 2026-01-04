@@ -13,6 +13,5 @@ function cloudinaryResize (publicId, options = {}) {
 		quality: 80, // 80% quality, which ~halves image download size
 		...options,
 	});
-};
-
-module.exports = cloudinaryResize;
+}
+export default cloudinaryResize;

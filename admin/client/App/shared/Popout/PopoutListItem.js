@@ -59,4 +59,4 @@ var PopoutListItem = React.createClass({
 	},
 });
 
-module.exports = PopoutListItem;
+export default PopoutListItem;

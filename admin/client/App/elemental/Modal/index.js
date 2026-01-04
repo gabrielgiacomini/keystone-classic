@@ -9,3 +9,5 @@ export {
 	Footer,
 	Header,
 };
+
+export default { Body, Dialog, Footer, Header };

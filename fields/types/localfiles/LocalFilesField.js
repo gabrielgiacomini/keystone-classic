@@ -71,7 +71,7 @@ var LocalFilesFieldItem = React.createClass({
 
 var tempId = 0;
 
-module.exports = Field.create({
+export default Field.create({
 
 	getInitialState () {
 		var items = [];

@@ -117,3 +117,5 @@ export function deleteItems (ids) {
 		});
 	};
 }
+
+export default { loadItems, downloadItems, itemsLoaded, itemLoadingError, deleteItems };

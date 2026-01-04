@@ -7,7 +7,7 @@ import { FormInput } from '../../admin/client/App/elemental';
 
 let lastId = 0;
 
-module.exports = React.createClass({
+export default React.createClass({
 	displayName: 'DateInput',
 	propTypes: {
 		format: React.PropTypes.string,

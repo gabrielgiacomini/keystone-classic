@@ -7,7 +7,7 @@ function Kbd ({ className, ...props }) {
 	props.className = css(classes.kbd);
 
 	return <kbd {...props} />;
-};
+}
 
 const classes = {
 	kbd: {
@@ -31,4 +31,4 @@ const classes = {
 	},
 };
 
-module.exports = Kbd;
+export default Kbd;

@@ -74,4 +74,4 @@ var CloudinaryImageSummary = React.createClass({
 	},
 });
 
-module.exports = CloudinaryImageSummary;
+export default CloudinaryImageSummary;

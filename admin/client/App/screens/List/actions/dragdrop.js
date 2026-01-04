@@ -136,3 +136,5 @@ export function resetItems (itemId) {
 		// this.notifyChange();
 	};
 }
+
+export default { setDragBase, resetDragPage, resetDragItems, setDragItem, setDragIndex, setRowAlert, moveItem, reorderItems, resetItems };

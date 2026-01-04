@@ -41,7 +41,7 @@ function getFilters (filterArray) {
 		filters[filter.field.path] = filter.value;
 	});
 	return filters;
-};
+}
 
 /**
  * Get the sorting string for the URI
@@ -55,7 +55,7 @@ function getSortString (sort) {
 		// If we want to sort inverted, we prefix a "-" before the sort path
 		return i.invert ? '-' + i.path : i.path;
 	}).filter(truthy).join(',');
-};
+}
 
 /**
  * Build a query string from a bunch of options
@@ -70,7 +70,7 @@ function buildQueryString (options) {
 	if (options.sort) query.sort = getSortString(options.sort);
 	query.expandRelationshipFields = true;
 	return '?' + qs.stringify(query);
-};
+}
 
 /**
  * The main list helper class
@@ -348,4 +348,4 @@ List.prototype.reorderItems = function (item, oldSortOrder, newSortOrder, pageOp
 };
 
 
-module.exports = List;
+export default List;

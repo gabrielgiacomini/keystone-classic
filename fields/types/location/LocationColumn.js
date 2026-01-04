@@ -53,4 +53,4 @@ var LocationColumn = React.createClass({
 	},
 });
 
-module.exports = LocationColumn;
+export default LocationColumn;

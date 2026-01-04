@@ -73,3 +73,5 @@ export function clearCachedQuery () {
 		type: CLEAR_CACHED_QUERY,
 	};
 }
+
+export default { setActiveSearch, setActiveSort, setActiveColumns, setActiveList, clearFilter, clearAllFilters, setFilter, clearCachedQuery };

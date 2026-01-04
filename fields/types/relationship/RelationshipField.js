@@ -40,7 +40,7 @@ function compareValues (current, next) {
  * The `RelationshipField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'RelationshipField',
 	statics: {
 		type: 'Relationship',

@@ -2,7 +2,7 @@
 // Center
 // ==============================
 
-module.exports = {
+export default {
 	center: {
 		display: 'flex',
 		alignItems: 'center',

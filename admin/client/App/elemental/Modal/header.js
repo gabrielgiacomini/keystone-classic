@@ -37,7 +37,7 @@ function ModalHeader ({
 			)}
 		</div>
 	);
-};
+}
 
 ModalHeader.propTypes = {
 	children: PropTypes.node,
@@ -75,4 +75,4 @@ const classes = {
 	},
 };
 
-module.exports = ModalHeader;
+export default ModalHeader;

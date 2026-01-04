@@ -36,7 +36,7 @@ const buildInitialState = (props) => ({
  * The `CloudinaryImageField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	propTypes: {
 		collapse: PropTypes.bool,
 		label: PropTypes.string,

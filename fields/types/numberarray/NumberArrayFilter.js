@@ -207,4 +207,4 @@ var NumberArrayFilter = React.createClass({
 
 });
 
-module.exports = NumberArrayFilter;
+export default NumberArrayFilter;

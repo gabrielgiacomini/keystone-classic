@@ -53,7 +53,7 @@ class FormInput extends Component {
 			/>
 		);
 	}
-};
+}
 
 const stylesShape = {
 	_definition: PropTypes.object,
@@ -78,4 +78,4 @@ FormInput.contextTypes = {
 	formFieldId: PropTypes.string,
 };
 
-module.exports = FormInput;
+export default FormInput;

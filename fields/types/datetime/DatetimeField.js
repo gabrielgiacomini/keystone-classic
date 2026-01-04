@@ -23,7 +23,7 @@ import {
  * The `DatetimeField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 
 	displayName: 'DatetimeField',
 	statics: {

@@ -40,7 +40,7 @@ function removeTinyMCEInstance (editor) {
  * The `HtmlField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 
 	displayName: 'HtmlField',
 	statics: {

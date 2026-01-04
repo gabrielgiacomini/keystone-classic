@@ -47,4 +47,4 @@ var GeoPointColumn = React.createClass({
 	},
 });
 
-module.exports = GeoPointColumn;
+export default GeoPointColumn;

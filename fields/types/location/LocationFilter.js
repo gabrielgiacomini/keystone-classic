@@ -152,4 +152,4 @@ var TextFilter = React.createClass({
 	},
 });
 
-module.exports = TextFilter;
+export default TextFilter;

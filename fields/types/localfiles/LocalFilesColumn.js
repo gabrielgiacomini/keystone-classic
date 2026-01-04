@@ -22,4 +22,4 @@ var LocalFilesColumn = React.createClass({
 	},
 });
 
-module.exports = LocalFilesColumn;
+export default LocalFilesColumn;

@@ -64,3 +64,5 @@ export function countsLoadingError (error) {
 		}, NETWORK_ERROR_RETRY_DELAY);
 	};
 }
+
+export default { loadCounts, countsLoaded, countsLoadingError };

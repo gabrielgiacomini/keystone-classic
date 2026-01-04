@@ -44,4 +44,4 @@ var EmailColumn = React.createClass({
 	},
 });
 
-module.exports = EmailColumn;
+export default EmailColumn;

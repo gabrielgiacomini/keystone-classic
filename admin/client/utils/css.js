@@ -73,14 +73,20 @@ function borderLeftRadius (radius) {
 	};
 }
 
-// Return
-
-module.exports = {
+export {
 	borderTopRadius,
 	borderRightRadius,
 	borderBottomRadius,
 	borderLeftRadius,
+	gradientHorizontal,
+	gradientVertical,
+};
 
+export default {
+	borderTopRadius,
+	borderRightRadius,
+	borderBottomRadius,
+	borderLeftRadius,
 	gradientHorizontal,
 	gradientVertical,
 };

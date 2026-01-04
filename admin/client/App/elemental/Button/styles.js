@@ -10,7 +10,7 @@ import theme from '../../../theme';
 // Common Styles
 // ----------------
 
-exports.common = {
+export const common = {
 	// Base Button
 	// ----------------
 	base: {
@@ -162,7 +162,8 @@ function buttonFillDefault () {
 		},
 	};
 }
-exports.fill = (color) => {
+
+export const fill = (color) => {
 	switch (color) {
 		case 'default':
 			return buttonFillDefault();
@@ -207,8 +208,9 @@ function buttonHollowVariant (textColor, borderColor) {
 		},
 		active: activeStyles,
 	};
-};
-exports.hollow = (color) => {
+}
+
+export const hollow = (color) => {
 	// TODO: better handling of cancel and delete colors
 	if (color === 'cancel' || color === 'delete') color = 'danger';
 
@@ -238,7 +240,7 @@ function buttonLinkVariant (textColor, hoverColor) {
 		},
 		active: hoverStyles,
 	};
-};
+}
 function buttonLinkDelete () {
 	const styles = buttonLinkVariant(theme.color.gray40, theme.color.danger);
 	const hoverStyles = {
@@ -267,7 +269,7 @@ function buttonLinkDelete () {
 	};
 }
 
-exports.link = (color) => {
+export const link = (color) => {
 	switch (color) {
 		case 'default':
 			return buttonLinkVariant(theme.color.link, theme.color.linkHover);
@@ -279,3 +281,5 @@ exports.link = (color) => {
 			return buttonLinkVariant(theme.color[color], theme.color[color]);
 	}
 };
+
+export default { common, fill, hollow, link };

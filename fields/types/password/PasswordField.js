@@ -19,7 +19,7 @@ import {
  * The `PasswordField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 
 	displayName: 'PasswordField',
 	statics: {

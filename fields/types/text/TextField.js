@@ -9,7 +9,7 @@ import Field from '../Field';
  * The `TextField` component.
  * @extends Field
  */
-module.exports = Field.create({
+export default Field.create({
 	displayName: 'TextField',
 	statics: {
 		type: 'Text',

@@ -25,4 +25,4 @@ var ArrayColumn = React.createClass({
 	},
 });
 
-module.exports = ArrayColumn;
+export default ArrayColumn;

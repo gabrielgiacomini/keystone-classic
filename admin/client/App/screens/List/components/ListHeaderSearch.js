@@ -36,7 +36,7 @@ function ListHeaderSearch ({
 			</button>
 		</div>
 	);
-};
+}
 
 ListHeaderSearch.propTypes = {
 	focusInput: PropTypes.bool,
@@ -77,4 +77,4 @@ const classes = {
 	},
 };
 
-module.exports = ListHeaderSearch;
+export default ListHeaderSearch;

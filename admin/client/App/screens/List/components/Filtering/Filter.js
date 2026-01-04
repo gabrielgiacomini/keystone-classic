@@ -80,7 +80,7 @@ class Filter extends Component {
 			</span>
 		);
 	}
-};
+}
 
 Filter.propTypes = {
 	dispatch: PropTypes.func.isRequired,
@@ -90,4 +90,4 @@ Filter.propTypes = {
 	}).isRequired,
 };
 
-module.exports = Filter;
+export default Filter;

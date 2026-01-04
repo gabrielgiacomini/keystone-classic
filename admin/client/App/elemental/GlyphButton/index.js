@@ -43,7 +43,7 @@ function GlyphButton ({
 			{isRight && icon}
 		</Button>
 	);
-};
+}
 
 // For props "glyph", "glyphColor", and "glyphSize":
 // prop type validation will occur within the Glyph component, no need to
@@ -68,4 +68,4 @@ const classes = {
 	},
 };
 
-module.exports = GlyphButton;
+export default GlyphButton;

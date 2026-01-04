@@ -32,4 +32,4 @@ var EmbedlyColumn = React.createClass({
 	},
 });
 
-module.exports = EmbedlyColumn;
+export default EmbedlyColumn;

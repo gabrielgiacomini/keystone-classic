@@ -122,4 +122,4 @@ var ListColumnsForm = React.createClass({
 	},
 });
 
-module.exports = ListColumnsForm;
+export default ListColumnsForm;

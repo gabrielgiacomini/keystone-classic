@@ -20,7 +20,7 @@ function BlankState ({
 			{children}
 		</Component>
 	);
-};
+}
 
 BlankState.propTypes = {
 	component: PropTypes.oneOfType([
@@ -56,4 +56,4 @@ const classes = {
 	},
 };
 
-module.exports = BlankState;
+export default BlankState;

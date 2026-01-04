@@ -48,4 +48,4 @@ ExplorerCol.defaultProps = {
 	gutter: 10,
 };
 
-module.exports = ExplorerCol;
+export default ExplorerCol;

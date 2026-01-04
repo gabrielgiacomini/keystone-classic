@@ -58,4 +58,4 @@ var BooleanFilter = React.createClass({
 	},
 });
 
-module.exports = BooleanFilter;
+export default BooleanFilter;

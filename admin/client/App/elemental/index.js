@@ -1,29 +1,87 @@
-module.exports = {
-	Alert: require('./Alert'),
-	BlankState: require('./BlankState'),
-	Button: require('./Button'),
-	Center: require('./Center'),
-	Chip: require('./Chip'),
-	Container: require('./Container'),
-	DropdownButton: require('./DropdownButton'),
-	Form: require('./Form'),
-	FormField: require('./FormField'),
-	FormInput: require('./FormInput'),
-	FormLabel: require('./FormLabel'),
-	FormNote: require('./FormNote'),
-	FormSelect: require('./FormSelect'),
-	Glyph: require('./Glyph'),
-	GlyphButton: require('./GlyphButton'),
-	GlyphField: require('./GlyphField'),
-	Grid: require('./Grid'),
-	InlineGroup: require('./InlineGroup'),
-	InlineGroupSection: require('./InlineGroupSection'),
-	LabelledControl: require('./LabelledControl'),
-	LoadingButton: require('./LoadingButton'),
-	Modal: require('./Modal'),
-	Pagination: require('./Pagination'),
-	ResponsiveText: require('./ResponsiveText'),
-	ScreenReaderOnly: require('./ScreenReaderOnly'),
-	SegmentedControl: require('./SegmentedControl'),
-	Spinner: require('./Spinner'),
+import Alert from './Alert';
+import BlankState from './BlankState';
+import Button from './Button';
+import Center from './Center';
+import Chip from './Chip';
+import Container from './Container';
+import DropdownButton from './DropdownButton';
+import Form from './Form';
+import FormField from './FormField';
+import FormInput from './FormInput';
+import FormLabel from './FormLabel';
+import FormNote from './FormNote';
+import FormSelect from './FormSelect';
+import Glyph from './Glyph';
+import GlyphButton from './GlyphButton';
+import GlyphField from './GlyphField';
+import Grid from './Grid';
+import InlineGroup from './InlineGroup';
+import InlineGroupSection from './InlineGroupSection';
+import LabelledControl from './LabelledControl';
+import LoadingButton from './LoadingButton';
+import Modal from './Modal';
+import Pagination from './Pagination';
+import ResponsiveText from './ResponsiveText';
+import ScreenReaderOnly from './ScreenReaderOnly';
+import SegmentedControl from './SegmentedControl';
+import Spinner from './Spinner';
+
+export {
+	Alert,
+	BlankState,
+	Button,
+	Center,
+	Chip,
+	Container,
+	DropdownButton,
+	Form,
+	FormField,
+	FormInput,
+	FormLabel,
+	FormNote,
+	FormSelect,
+	Glyph,
+	GlyphButton,
+	GlyphField,
+	Grid,
+	InlineGroup,
+	InlineGroupSection,
+	LabelledControl,
+	LoadingButton,
+	Modal,
+	Pagination,
+	ResponsiveText,
+	ScreenReaderOnly,
+	SegmentedControl,
+	Spinner,
+};
+
+export default {
+	Alert,
+	BlankState,
+	Button,
+	Center,
+	Chip,
+	Container,
+	DropdownButton,
+	Form,
+	FormField,
+	FormInput,
+	FormLabel,
+	FormNote,
+	FormSelect,
+	Glyph,
+	GlyphButton,
+	GlyphField,
+	Grid,
+	InlineGroup,
+	InlineGroupSection,
+	LabelledControl,
+	LoadingButton,
+	Modal,
+	Pagination,
+	ResponsiveText,
+	ScreenReaderOnly,
+	SegmentedControl,
+	Spinner,
 };

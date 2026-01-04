@@ -4,4 +4,4 @@
  *
  * @see https://github.com/keystonejs/keystone/wiki/File-Fields-Upgrade-Guide
  */
-module.exports = undefined;
+export default undefined;

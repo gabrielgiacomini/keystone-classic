@@ -12,7 +12,7 @@ function ModalBody ({
 			{...props}
 		/>
 	);
-};
+}
 
 const classes = {
 	body: {
@@ -23,4 +23,4 @@ const classes = {
 	},
 };
 
-module.exports = ModalBody;
+export default ModalBody;

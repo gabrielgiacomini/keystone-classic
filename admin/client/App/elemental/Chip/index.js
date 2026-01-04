@@ -41,7 +41,7 @@ function Chip ({
 			)}
 		</div>
 	);
-};
+}
 
 Chip.propTypes = {
 	color: PropTypes.oneOf(Object.keys(colors)).isRequired,
@@ -54,4 +54,4 @@ Chip.defaultProps = {
 	color: 'default',
 };
 
-module.exports = Chip;
+export default Chip;

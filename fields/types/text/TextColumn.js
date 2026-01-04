@@ -45,4 +45,4 @@ var TextColumn = React.createClass({
 	},
 });
 
-module.exports = TextColumn;
+export default TextColumn;

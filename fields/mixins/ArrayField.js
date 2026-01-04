@@ -43,7 +43,7 @@ function reduceValues (values) {
  * The `ArrayField` mixin.
  * @type {Object}
  */
-module.exports = {
+export default {
 	/**
 	 * Gets the initial state of the component.
 	 * @returns {Object} The initial state.
