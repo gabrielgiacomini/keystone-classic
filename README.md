@@ -6,6 +6,23 @@
 </div>
 <br>
 
+---
+
+## ⚠️ FOR AI AGENTS: DISABLED MCP TOOLS ⚠️
+
+**CRITICAL**: The following MCP tools are **DISABLED** to save context. If you need any of these tools, **STOP IMMEDIATELY** and ask the user to enable them first.
+
+### Disabled Tools
+- **MongoDB Admin**: `mongodb-mcp-server` (~20 tools) - Database manipulation, schema changes
+- **Screenshot Analysis**: `zai-mcp-server` (7 tools) - UI mockup conversion, error screenshot analysis
+- **Browser Automation**: `mcp-playwright`, `mcp-puppeteer` - Automated testing, web scraping
+- **Duplicate Web Search**: `web-search-prime_webSearchPrime` - Use `websearch_exa` instead
+
+**What you CAN use**: `context7`, `websearch_exa`, `web-reader`, `zread`, file tools, LSP tools (when installed)
+
+**If a task requires a disabled tool**: Tell the user immediately and wait for them to enable it.
+
+---
 
 # ![KeystoneJS](http://v3.keystonejs.com/images/logo.svg)
 

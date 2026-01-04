@@ -6,6 +6,33 @@
 
 ---
 
+## ⚠️ CRITICAL: DISABLED MCP TOOLS ⚠️
+
+**The following MCP tools are DISABLED to save context. If you need any of these, STOP and ask the user to enable them first.**
+
+### Disabled Tools
+
+| Tool Category | Tools | When You Might Need |
+|---------------|-------|---------------------|
+| **MongoDB Admin** | `mongodb-mcp-server` (~20 tools) | Direct database manipulation, schema changes, data migrations |
+| **Screenshot Analysis** | `zai-mcp-server` (7 tools: ui_to_artifact, extract_text, diagnose_error, understand_technical_diagram, analyze_data_visualization, ui_diff_check, analyze_video) | Converting UI mockups to code, analyzing error screenshots, extracting text from images |
+| **Browser Automation** | `mcp-playwright`, `mcp-puppeteer` | Automated browser testing, web scraping, screenshot capture |
+| **Web Search (duplicate)** | `web-search-prime_webSearchPrime` | Alternative web search (websearch_exa is enabled) |
+
+### What You CAN Use
+
+- `context7` - Official library documentation
+- `websearch_exa_web_search_exa` - Web search
+- `web-reader_webReader` - Read web pages
+- `zread` - GitHub repository exploration
+- All file system tools (read, write, edit, glob, grep, bash)
+- All LSP tools (when TypeScript LSP is installed)
+
+**REMEMBER**: If a task requires any disabled tool, **STOP IMMEDIATELY** and tell the user:
+> "This task requires [TOOL_NAME] which is currently disabled. Please enable it to proceed."
+
+---
+
 ## Session Handoff (2026-01-04)
 
 ### Status Summary
