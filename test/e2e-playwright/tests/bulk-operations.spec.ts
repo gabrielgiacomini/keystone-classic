@@ -29,7 +29,7 @@ test.describe('Bulk Operations', () => {
 
 			await page.getByRole('button', { name: 'Manage' }).click();
 
-			await expect(page.getByRole('button', { name: /All|Page/ })).toBeVisible();
+			await expect(page.getByRole('button', { name: /All|Page/ }).first()).toBeVisible();
 			await expect(page.getByRole('button', { name: 'None' })).toBeVisible();
 		});
 
@@ -60,7 +60,7 @@ test.describe('Bulk Operations', () => {
 			await page.waitForLoadState('networkidle');
 
 			await page.getByRole('button', { name: 'Manage' }).click();
-			await page.getByRole('button', { name: /All|Page/ }).click();
+			await page.getByRole('button', { name: /All|Page/ }).first().click();
 
 			await expect(page.getByText(/\d+ selected/)).toBeVisible();
 		});
@@ -70,7 +70,7 @@ test.describe('Bulk Operations', () => {
 			await page.waitForLoadState('networkidle');
 
 			await page.getByRole('button', { name: 'Manage' }).click();
-			await page.getByRole('button', { name: /All|Page/ }).click();
+			await page.getByRole('button', { name: /All|Page/ }).first().click();
 			await page.getByRole('button', { name: 'None' }).click();
 
 			await expect(page.getByText('0 selected')).toBeVisible();
@@ -82,7 +82,7 @@ test.describe('Bulk Operations', () => {
 			const rowCount = await listPage.getRowCount();
 
 			await page.getByRole('button', { name: 'Manage' }).click();
-			await page.getByRole('button', { name: /All|Page/ }).click();
+			await page.getByRole('button', { name: /All|Page/ }).first().click();
 
 			const selectedText = await page.getByText(/\d+ selected/).textContent();
 			expect(selectedText).toContain('selected');
@@ -97,7 +97,7 @@ test.describe('Bulk Operations', () => {
 
 			if (rowCount > 0) {
 				await page.getByRole('button', { name: 'Manage' }).click();
-				await page.getByRole('button', { name: /All|Page/ }).click();
+				await page.getByRole('button', { name: /All|Page/ }).first().click();
 				await page.getByRole('button', { name: /Delete/i }).click();
 
 				await expect(page.getByText('Are you sure you want to')).toBeVisible();
@@ -112,7 +112,7 @@ test.describe('Bulk Operations', () => {
 
 			if (initialCount > 0) {
 				await page.getByRole('button', { name: 'Manage' }).click();
-				await page.getByRole('button', { name: /All|Page/ }).click();
+				await page.getByRole('button', { name: /All|Page/ }).first().click();
 				await page.getByRole('button', { name: /Delete/i }).click();
 
 				await page.getByRole('button', { name: 'Cancel' }).click();
