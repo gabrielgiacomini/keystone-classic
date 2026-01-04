@@ -12,7 +12,7 @@ if (!React.PropTypes) {
 	React.PropTypes = PropTypes;
 }
 if (!React.createClass) {
-	React.createClass = require('create-react-class');
+	React.createClass = createReactClass;
 }
 
 import elemental from 'elemental';

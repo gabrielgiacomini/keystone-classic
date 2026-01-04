@@ -3,7 +3,7 @@
  * This file defines the `EmbedlyColumn` component, which is used to render the
  * value of an `Embedly` field in a list view.
  */
-var React = require('react');
+import React from 'react';
 
 /**
  * The `EmbedlyColumn` component.

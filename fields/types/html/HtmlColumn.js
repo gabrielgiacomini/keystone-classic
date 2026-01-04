@@ -3,4 +3,4 @@
  * This file re-exports the `TextColumn` component, which is used to render
  * the value of an `Html` field in a list view.
  */
-export default require('../text/TextColumn');
+export { default } from '../text/TextColumn';

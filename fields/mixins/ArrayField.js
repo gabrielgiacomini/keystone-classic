@@ -8,14 +8,10 @@
  * This mixin is used by the `DateArray`, `NumberArray`, and `TextArray`
  * field types.
  */
-var React = require('react');
-
+import React from 'react';
 import _ from 'lodash';
 import { findDOMNode } from 'react-dom';
-
-var Button = require('elemental').Button;
-var FormField = require('elemental').FormField;
-var FormInput = require('elemental').FormInput;
+import { Button, FormField, FormInput } from '../../admin/client/App/elemental';
 
 var lastId = 0;
 var ENTER_KEYCODE = 13;

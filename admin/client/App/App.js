@@ -12,6 +12,7 @@ import MobileNavigation from './components/Navigation/Mobile';
 import PrimaryNavigation from './components/Navigation/Primary';
 import SecondaryNavigation from './components/Navigation/Secondary';
 import Footer from './components/Footer';
+import { listsByPath } from '../utils/lists';
 
 const classes = {
 	wrapper: {
@@ -25,7 +26,6 @@ const classes = {
 };
 
 const App = (props) => {
-	const listsByPath = require('../utils/lists').listsByPath;
 	let children = props.children;
 	// If we're on either a list or an item view
 	let currentList, currentSection;

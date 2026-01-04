@@ -3,4 +3,4 @@
  * This file re-exports the `NumberColumn` component, which is used to render
  * the value of a `Money` field in a list view.
  */
-export default require('../number/NumberColumn');
+export { default } from '../number/NumberColumn';

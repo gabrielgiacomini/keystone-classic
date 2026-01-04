@@ -8,330 +8,305 @@
 
 ## Session Handoff (2026-01-04)
 
-### Completed This Session
+### Status Summary
 
-| Task | Commit/Status | Notes |
-|------|---------------|-------|
-| ESM Conversion | `8e4373a7` | ~230 client files converted from CommonJS to ESM |
-| React Codemods | `6ed2e922` | createClass → ES6 classes, PropTypes → prop-types package |
-| ESM/CJS Interop Fix | `2156d04c` | Added `babel-plugin-add-module-exports` |
-| Vite Investigation | BLOCKED | Old npm packages lack proper ESM support |
-| E2E Validation | ✅ 167/167 pass | All tests green |
-
-### Key Decision: Phase Reordering
-
-**Problem Discovered**: Vite migration is blocked by legacy npm packages:
-- `react` 15.4.2 - CJS only, no named exports
-- `react-router` 3.x - ESM build imports CJS packages incorrectly
-- `react-redux` 5.x - Same ESM/CJS interop issues
-
-**Solution**: Reorder phases - upgrade React ecosystem FIRST, then migrate to Vite.
-
-| Original Order | New Order | Rationale |
-|---------------|-----------|-----------|
-| Phase 1: Vite | Phase 1: React 18 | Modern React has proper ESM |
-| Phase 2: TypeScript | Phase 2: Vite | Trivial with modern packages |
-| Phase 3: React 18 | Phase 3: TypeScript | Build on stable foundation |
+| Phase | Status | Notes |
+|-------|--------|-------|
+| Phase 1: React 18 Upgrade | ✅ Complete | 15.4.2 → 18.2.0 |
+| Phase 2: Vite Migration | ✅ Complete | Browserify removed |
+| Phase 3: TypeScript Foundation | ⏳ **NEXT** | See detailed steps below |
+| Phase 4-8 | Pending | See roadmap below |
 
 ### Quick Start for Next Session
 
 ```bash
-# 1. Start E2E server
-cd /Users/giaco/Projects/keystone-classic
-MONGO_PORT=27020 KEYSTONE_DEV=true npm run test-e2e-server
+# 1. Install dependencies (use legacy peer deps for old packages)
+npm install --legacy-peer-deps
 
-# 2. Access Admin UI
+# 2. Build the admin bundles
+npm run build
+
+# 3. Start E2E server (Terminal 1)
+MONGO_PORT=27020 npm run test-e2e-server
+
+# 4. Access Admin UI
 open http://localhost:3000/keystone/
 # Login: user@test.e2e / test
 
-# 3. Run E2E tests
+# 5. Run E2E tests (Terminal 2)
 npm run test-playwright
 ```
 
 ---
 
-## Current State
+## Current Architecture
 
-| Layer | Current | Target | Status |
-|-------|---------|--------|--------|
-| Module System | ESM (client) | ESM | ✅ Done |
-| React Components | ES6 Classes | Functional + Hooks | ✅ Codemods applied |
-| React | 15.4.2 (2016) | 18.x | 🔄 **NEXT** |
-| Build System | Browserify + Babelify | Vite | ⏳ After React 18 |
-| JavaScript | ES6 with Babel | TypeScript | ⏳ Pending |
-| State Management | Redux + Redux-Saga | TBD | ⏳ Pending |
-| Styling | Glamor + Elemental | TBD | ⏳ Pending |
-| Backend | Express 4 + Mongoose 5 | Express 4 + Mongoose 8 | ⏳ Pending |
+### Build System: Vite 7.3.0
+
+The admin UI is built with Vite. The configuration includes custom plugins to handle legacy packages:
+
+**File**: `vite.config.ts`
+
+| Plugin | Purpose |
+|--------|---------|
+| `forceCjsPlugin` | Forces react-router@3.x to use CJS build (ESM build is broken) |
+| `globalShimsPlugin` | Maps window globals: tinymce, jquery, codemirror, underscore |
+| `injectReactPropTypesShim` | Patches shared chunk to add `React.PropTypes` for old packages |
+
+**Build Output**:
+```
+admin/public/js/
+├── admin.js        (~510 KB, gzip: 101 KB)
+├── signin.js       (~10 KB, gzip: 3 KB)
+├── shared-*.js     (vendor chunk, ~4.2 MB)
+└── shared-*.js     (elemental chunk, ~93 KB)
+```
+
+### Module System: ESM
+
+All client-side code has been converted to ESM. Key conversions:
+- `export default require(...)` → `export { default } from '...'`
+- `require()` in module scope → `import`
+- `module.exports = { ... }` → `export { ... }`
+
+### React: 18.2.0
+
+Upgraded from React 15.4.2 through intermediate steps (15→16→17→18).
+
+**Compatibility Shims** (handled in `vite.config.ts`):
+- `React.PropTypes` - shimmed for react-day-picker, elemental
+- `React.createClass` - available via create-react-class package
 
 ---
 
-## Pre-Migration Work (COMPLETED)
+## Phase 3: TypeScript Foundation (NEXT)
 
-### ESM Conversion (Commit `8e4373a7`)
-- Converted ~230 client-side files from CommonJS to ESM
-- Pattern: `module.exports = X` → `export default X`
-- Pattern: `const X = require('x')` → `import X from 'x'`
+**Objective**: Enable incremental TypeScript adoption without breaking existing code.
 
-### React Codemods (Commit `6ed2e922`)
-- **createClass → ES6 classes**: 83 files converted using `react-codemod`
-- **PropTypes migration**: 147 files, `React.PropTypes` → `import PropTypes from 'prop-types'`
-- **Lifecycle methods**: 17 files had `UNSAFE_` prefix added, then reverted (React 15 incompatible)
+### Prerequisites
+- Current `tsconfig.json` only covers unit tests
+- Vite already handles TypeScript via its config
 
-### ESM/CJS Interop Fix (Commit `2156d04c`)
-- Installed `babel-plugin-add-module-exports`
-- Fixed broken exports in ItemsTable, Popout components
-- Updated .nvmrc to Node 24.11.1
+### Steps
+
+1. **Update tsconfig.json for full project**:
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowJs": true,
+    "checkJs": false,
+    "strict": false,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "FieldTypes": ["admin/client/FieldTypes.js"]
+    }
+  },
+  "include": [
+    "admin/client/**/*",
+    "fields/**/*",
+    "lib/**/*",
+    "test/**/*"
+  ],
+  "exclude": ["node_modules", "admin/public"]
+}
+```
+
+2. **Install TypeScript dependencies** (if not present):
+```bash
+npm install --save-dev typescript @types/react @types/react-dom --legacy-peer-deps
+```
+
+3. **Convert entry points to TypeScript**:
+   - `admin/client/App/index.js` → `admin/client/App/index.tsx`
+   - `admin/client/Signin/index.js` → `admin/client/Signin/index.tsx`
+   - Update `vite.config.ts` input paths
+
+4. **Add type checking to npm scripts**:
+```json
+{
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && vite build"
+  }
+}
+```
+
+5. **Gradually convert files**:
+   - Start with utility files (simpler, fewer dependencies)
+   - Add `.d.ts` files for complex legacy modules
+   - Use `// @ts-nocheck` temporarily for files not ready for checking
+
+### Success Criteria
+- [ ] `npm run typecheck` passes
+- [ ] `npm run build` succeeds
+- [ ] All 167 E2E tests pass
+- [ ] New files can be written in TypeScript
 
 ---
 
-## Phase 1: React 18 Upgrade (NEXT)
+## Completed Phases
 
-**Objective**: Upgrade from React 15 to React 18 with minimal breaking changes.
+### Phase 1: React 18 Upgrade ✅
 
-### Why React First?
-- Modern React packages have proper ESM support
-- Unblocks Vite migration
-- Most prep work already done (ES6 classes, PropTypes extraction)
+**Commits**: See git log for React upgrade commits
 
-### Pre-work Completed
-- ✅ `React.createClass` → ES6 classes (83 files)
-- ✅ `React.PropTypes` → `prop-types` package (147 files)
-- ⚠️ Lifecycle methods use old names (`componentWillMount`, etc.)
+**What Was Done**:
+- Upgraded `react` and `react-dom`: 15.4.2 → 18.2.0
+- Upgraded `react-redux`: 5.1.2 → 8.1.3
+- Added `react-transition-group`: ^4.4.5
+- Migrated `ReactDOM.render` → `createRoot` API
+- Added `UNSAFE_` prefix to deprecated lifecycle methods
+- Shimmed `React.PropTypes` and `React.createClass` for legacy packages
 
-### Upgrade Strategy: Incremental
+**Breaking Changes Handled**:
+- `react-day-picker` 2.5.0 expects `React.PropTypes` → shimmed
+- `elemental` expects old React API → shimmed
 
-#### 1.1 React 15 → 16.14 (LTS Bridge)
-React 16.14 is the last version before major breaking changes.
+### Phase 2: Build System Migration ✅
 
-- [ ] Update `react`, `react-dom` to 16.14.0
-- [ ] Add `UNSAFE_` prefix to deprecated lifecycle methods:
-  - `componentWillMount` → `UNSAFE_componentWillMount`
-  - `componentWillReceiveProps` → `UNSAFE_componentWillReceiveProps`
-  - `componentWillUpdate` → `UNSAFE_componentWillUpdate`
-- [ ] Replace `react-addons-css-transition-group` with `react-transition-group`
-- [ ] Run E2E tests
+**What Was Done**:
+- Created `vite.config.ts` with custom plugins (see Architecture section)
+- Converted CJS→ESM in 30+ files
+- Removed Browserify: `browserify`, `babelify`, `brfs`, `browserify-shim`, `watchify`
+- Removed `admin/server/middleware/browserify.js`
+- Simplified `admin/server/app/createStaticRouter.js`
+- Renamed `build.js` → `build.browserify.js` (kept for reference)
 
-#### 1.2 React 16.14 → 17.0
-React 17 is a "stepping stone" release with no new features.
+**Files Modified** (partial list):
+- `admin/client/utils/List.js` - ESM conversion
+- `admin/client/utils/lists.js` - ESM conversion
+- `admin/client/App/App.js` - ESM conversion
+- `fields/mixins/ArrayField.js` - ESM conversion
+- `fields/types/*/` - 24+ filter/column re-export files
+- `fields/utils/evalDependsOn.js` - ESM conversion
+- `package.json` - Scripts and dependencies updated
 
-- [ ] Update to React 17.0.2
-- [ ] Verify no breaking changes
-- [ ] Run E2E tests
+---
 
-#### 1.3 React 17 → 18.x
-React 18 introduces concurrent features.
+## Future Phases
 
-- [ ] Update to React 18.2.0
-- [ ] Migrate `ReactDOM.render` → `createRoot`
-- [ ] Handle Strict Mode double-rendering (if enabled)
-- [ ] Run E2E tests
-
-### Dependency Upgrades (with React)
+### Phase 4: Dependency Updates
 
 | Package | Current | Target | Notes |
 |---------|---------|--------|-------|
-| react | 15.4.2 | 18.2.0 | Core upgrade |
-| react-dom | 15.4.2 | 18.2.0 | Core upgrade |
-| react-router | 3.2.6 | 6.x | Major API changes |
-| react-redux | 5.1.2 | 8.x | Hooks API |
-| react-select | 1.3.0 | 5.x | Complete rewrite |
+| react-router | 3.0.2 | 6.x | Major API changes (consider carefully) |
+| react-select | 1.2.4 | 5.x | Complete rewrite |
 | react-day-picker | 2.5.0 | 8.x | API changes |
-| react-dnd | 2.6.0 | 16.x | Hooks-based |
+| react-dnd | 2.5.3 | 16.x | Hooks-based |
+| mongoose | 5.13.x | 8.x | Query API changes |
 
-### Success Criteria
-- React 18.x installed
-- All 167 E2E tests pass
-- No deprecation warnings in console
-- Admin UI fully functional
+### Phase 5: State Management
 
----
+**Current**: Redux + Redux-Saga
 
-## Phase 2: Build System Migration (After React 18)
+**Options**:
+- Option A: React Query + Zustand (remove Redux)
+- Option B: Redux Toolkit + RTK Query
+- Option C: Keep Redux + Saga (minimal changes)
 
-**Objective**: Replace Browserify with Vite.
+### Phase 6: Styling
 
-### Why Deferred?
-Vite requires proper ESM from npm packages. Old React ecosystem packages have broken ESM builds that import CJS incorrectly. After React 18 upgrade, all packages will have proper ESM support.
+**Current**: Glamor + Elemental (abandoned)
 
-### Current Browserify Setup (Reference)
+**Options**:
+- Option A: Tailwind CSS
+- Option B: CSS Modules + Radix UI
+- Option C: styled-components / Emotion
 
-**Entry Points:**
-- `admin/client/App/index.js` - Main admin app
-- `admin/client/Signin/index.js` - Signin page
-- `admin/client/packages.js` - Vendor bundle
+### Phase 7: React Component Modernization
 
-**Global Shims:**
-- `tinymce` → `window.tinymce`
-- `codemirror` → `window.CodeMirror`
-- `jquery` → `window.$`
+Convert 83 class components to functional components with hooks.
 
-### Steps (Post React 18)
-- [ ] Install Vite and @vitejs/plugin-react
-- [ ] Create vite.config.ts with proper aliases
-- [ ] Build bundles with Vite
-- [ ] Update Express to serve Vite bundles
-- [ ] Run E2E tests
-- [ ] Remove Browserify dependencies
+### Phase 8: Field Types Modernization
 
-### Success Criteria
-- `npm run build` uses Vite
-- `npm run dev` starts Vite dev server with HMR
-- All 167 E2E tests pass
-- Build time < 5 seconds
+Modernize 32 field type implementations with TypeScript and hooks.
 
 ---
 
-## Phase 3: TypeScript Foundation
+## Key Files Reference
 
-**Objective**: Enable incremental TypeScript adoption.
-
-### Steps
-- [ ] Add `tsconfig.json` with `allowJs: true`
-- [ ] Configure path aliases
-- [ ] Convert entry points to .ts/.tsx
-- [ ] Add types for core utilities
-- [ ] Set up strict mode for new files only
-
-### Success Criteria
-- New files can be written in TypeScript
-- Existing JS files continue to work
-- No type errors in converted files
-- E2E tests pass
-
----
-
-## Phase 4: Dependency Updates
-
-**Objective**: Update backend and remaining frontend dependencies.
-
-### Backend
-| Package | Current | Target | Breaking Changes |
-|---------|---------|--------|------------------|
-| mongoose | 5.13.x | 8.x | Yes - query API |
-| express | 4.x | 4.x or 5.x | Minor |
-| Node.js | 24.x | 24.x | Already updated |
-
-### Steps
-- [ ] Update Mongoose to 8.x
-- [ ] Fix query API changes
-- [ ] Run unit tests
-- [ ] Run E2E tests
-
----
-
-## Phase 5: State Management (Decision Required)
-
-**Objective**: Simplify or modernize state management.
-
-### Current Architecture
-```
-Redux Store
-├── lists (reducer)
-├── home (reducer)
-├── item (reducer)
-└── active (reducer)
-
-Side Effects: Redux-Saga
-API Calls: Manual fetch in sagas
-```
-
-### Options
-- **Option A**: React Query + Zustand (remove Redux)
-- **Option B**: Redux Toolkit + RTK Query (modernize Redux)
-- **Option C**: Keep Redux + Saga (minimal changes)
-
----
-
-## Phase 6: Styling (Decision Required)
-
-**Objective**: Replace Glamor + Elemental with modern solution.
-
-### Current Architecture
-- Glamor: CSS-in-JS (runtime)
-- Elemental: Component library (abandoned)
-- Inline styles in some places
-- LESS for server-rendered pages
-
-### Options
-- **Option A**: Tailwind CSS
-- **Option B**: CSS Modules + Radix UI
-- **Option C**: styled-components / Emotion
-
----
-
-## Phase 7: Field Types Modernization
-
-**Objective**: Modernize the 32 field type implementations.
-
-### Steps
-- [ ] Convert to TypeScript
-- [ ] Modernize React components (hooks)
-- [ ] Add proper interfaces
-- [ ] Improve accessibility
-- [ ] Add unit tests
-
----
-
-## Testing Strategy
-
-### E2E Tests (Playwright)
-- **167 tests** covering all major functionality
-- Run after EVERY migration step
-- Primary validation mechanism
-
-### Unit Tests (Mocha → Vitest)
-- Existing tests for lib/ and some components
-- Consider migrating to Vitest after build system change
-
-### Type Checking
-- TypeScript compiler as a test
-- Strict mode for new code
-- Gradual strictness increase
-
----
-
-## Timeline Estimate (Revised)
-
-| Phase | Estimated Duration | Dependencies |
-|-------|-------------------|--------------|
-| Phase 1: React 18 | 2-3 weeks | None |
-| Phase 2: Vite | 1 week | Phase 1 |
-| Phase 3: TypeScript | 1 week | Phase 2 |
-| Phase 4: Dependencies | 1-2 weeks | Phase 1 |
-| Phase 5: State Management | 2-3 weeks | Phase 1, 4 |
-| Phase 6: Styling | 2-3 weeks | Phase 1 |
-| Phase 7: Field Types | 3-4 weeks | Phase 3, 6 |
-
-**Total: 12-17 weeks** (3-4 months)
-
----
-
-## Quick Reference
-
-### Validate Current State
-```bash
-npm run test-playwright
-```
-
-### Development Workflow
-```bash
-# Terminal 1: Start E2E server
-MONGO_PORT=27020 KEYSTONE_DEV=true npm run test-e2e-server
-
-# Terminal 2: Run tests
-npm run test-playwright
-
-# Access Admin UI
-open http://localhost:3000/keystone/
-# Login: user@test.e2e / test
-```
-
-### Key Files
 | Purpose | Location |
 |---------|----------|
-| Browserify config | `admin/server/middleware/browserify.js` |
+| Vite config | `vite.config.ts` |
 | Babel config | `.babelrc` |
+| TypeScript config | `tsconfig.json` |
+| Package manifest | `package.json` |
+| Admin entry | `admin/client/App/index.js` |
+| Signin entry | `admin/client/Signin/index.js` |
 | Field types registry | `admin/client/FieldTypes.js` |
 | Redux store | `admin/client/App/store.js` |
 | E2E tests | `test/e2e-playwright/tests/` |
+| E2E server | `test/e2e/server.js` |
 | Agent docs | `AGENTS.md`, `admin/AGENTS.md`, `fields/AGENTS.md` |
+
+---
+
+## Testing Commands
+
+```bash
+# Build
+npm run build              # Production build
+npm run build:dev          # Development build (with sourcemaps)
+
+# E2E Tests (Playwright)
+npm run test-playwright           # Run all 167 tests
+npm run test-playwright:headed    # Run with visible browser
+npm run test-playwright:ui        # Interactive UI mode
+npm run test-playwright:debug     # Debug mode
+
+# Unit Tests (Mocha)
+npm run test-unit          # Run unit tests
+npm run test               # Run all tests (lint + unit + admin)
+
+# Linting
+npm run lint               # ESLint check
+npm run lint-fix           # ESLint with auto-fix
+```
+
+---
+
+## Known Issues & Workarounds
+
+### 1. react-router@3.x ESM Build Broken
+**Issue**: react-router 3.0.2 has a broken ESM build that imports from non-existent paths.
+**Workaround**: `forceCjsPlugin` in vite.config.ts redirects to CJS build.
+
+### 2. Legacy Packages Need React.PropTypes
+**Issue**: `react-day-picker@2.5.0` and `elemental` expect `React.PropTypes`.
+**Workaround**: `injectReactPropTypesShim` plugin patches the shared chunk at build time.
+
+### 3. Window Globals Required
+**Issue**: Some packages expect globals: `window.tinymce`, `window.$`, `window.CodeMirror`.
+**Workaround**: `globalShimsPlugin` provides virtual modules that return window globals.
+
+### 4. npm install Requires Legacy Peer Deps
+**Issue**: Old packages have conflicting peer dependencies.
+**Workaround**: Always use `npm install --legacy-peer-deps`.
+
+---
+
+## Timeline Estimate
+
+| Phase | Estimated Time | Notes |
+|-------|----------------|-------|
+| Phase 3: TypeScript | 1 week | Foundation only |
+| Phase 4: Dependencies | 1-2 weeks | May skip router upgrade |
+| Phase 5: State Management | 2-3 weeks | Decision required |
+| Phase 6: Styling | 2-3 weeks | Decision required |
+| Phase 7: React Hooks | 2-3 weeks | 83 components |
+| Phase 8: Field Types | 3-4 weeks | 32 field types |
+
+**Remaining: ~12-16 weeks** (3-4 months)

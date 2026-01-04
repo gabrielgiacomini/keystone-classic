@@ -4,4 +4,4 @@
  *
  * @see https://github.com/keystonejs/keystone/wiki/File-Fields-Upgrade-Guide
  */
-export default require('../cloudinaryimage/CloudinaryImageFilter');
+export { default } from '../cloudinaryimage/CloudinaryImageFilter';

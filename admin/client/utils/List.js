@@ -3,10 +3,10 @@
  * getting information about those lists, etc.
  */
 
-const listToArray = require('list-to-array');
-const qs = require('qs');
-const xhr = require('xhr');
-const assign = require('object-assign');
+import listToArray from 'list-to-array';
+import qs from 'qs';
+import xhr from 'xhr';
+import assign from 'object-assign';
 // Filters for truthy elements in an array
 const truthy = (i) => i;
 

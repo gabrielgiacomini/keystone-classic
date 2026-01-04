@@ -4,7 +4,7 @@
  *
  * @see https://github.com/keystonejs/keystone/wiki/File-Fields-Upgrade-Guide
  */
-var React = require('react');
+import React from 'react';
 
 class LocalFilesColumn extends React.Component {
     renderValue = () => {

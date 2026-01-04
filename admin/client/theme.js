@@ -1,6 +1,6 @@
 /* eslint-disable key-spacing */
+import { blend, darken, fade, lighten } from './utils/color';
 const theme = {};
-const { blend, darken, fade, lighten } = require('./utils/color');
 
 // ==============================
 // COMMON

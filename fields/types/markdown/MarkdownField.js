@@ -16,8 +16,8 @@ import { FormInput } from '../../../admin/client/App/elemental';
  */
 
 // Scope jQuery and the bootstrap-markdown editor so it will mount
-var $ = require('jquery');
-require('./lib/bootstrap-markdown');
+import $ from 'jquery';
+import './lib/bootstrap-markdown';
 
 /**
  * Toggles a heading on the selected text.

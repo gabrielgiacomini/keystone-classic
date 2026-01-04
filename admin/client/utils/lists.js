@@ -9,11 +9,10 @@ export const listsByKey = {};
 export const listsByPath = {};
 
 for (const key in Keystone.lists) {
-	// Guard for-ins
 	if ({}.hasOwnProperty.call(Keystone.lists, key)) {
 		var list = new List(Keystone.lists[key]);
-		exports.listsByKey[key] = list;
-		exports.listsByPath[list.path] = list;
+		listsByKey[key] = list;
+		listsByPath[list.path] = list;
 	}
 }
 

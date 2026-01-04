@@ -25,8 +25,8 @@
 * limitations under the License.
 * ========================================================== */
 
-var $ = require('jquery');
-var marked = require('marked');
+import $ from 'jquery';
+import marked from 'marked';
 
 /* MARKDOWN CLASS DEFINITION
  * ========================== */
