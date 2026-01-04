@@ -17,7 +17,8 @@
 |---------------|-------|---------------------|
 | **MongoDB Admin** | `mongodb-mcp-server` (~20 tools) | Direct database manipulation, schema changes, data migrations |
 | **Screenshot Analysis** | `zai-mcp-server` (7 tools: ui_to_artifact, extract_text, diagnose_error, understand_technical_diagram, analyze_data_visualization, ui_diff_check, analyze_video) | Converting UI mockups to code, analyzing error screenshots, extracting text from images |
-| **Browser Automation** | `mcp-playwright`, `mcp-puppeteer` | Automated browser testing, web scraping, screenshot capture |
+| **Browser Automation** | `playwright`, `puppeteer`, `mcp-playwright`, `mcp-puppeteer` | Automated browser testing, web scraping, screenshot capture, E2E test creation |
+| **Web Scraping** | `firecrawl` | Advanced web scraping, structured data extraction from websites |
 | **Web Search (duplicate)** | `web-search-prime_webSearchPrime` | Alternative web search (websearch_exa is enabled) |
 
 ### What You CAN Use
@@ -29,8 +30,19 @@
 - All file system tools (read, write, edit, glob, grep, bash)
 - All LSP tools (when TypeScript LSP is installed)
 
-**REMEMBER**: If a task requires any disabled tool, **STOP IMMEDIATELY** and tell the user:
-> "This task requires [TOOL_NAME] which is currently disabled. Please enable it to proceed."
+### Tool Request Policy
+
+**You CAN and SHOULD suggest enabling disabled tools when:**
+- A task would be significantly easier/faster with a disabled tool
+- The tool is the best solution for the problem
+- You've verified no enabled tool can accomplish the task
+
+**How to request**:
+> "This task would benefit from [TOOL_NAME] which is currently disabled. [Brief explanation of why it's useful for this task]. Should I ask you to enable it?"
+
+**STOP IMMEDIATELY if**:
+- A task REQUIRES a disabled tool and there's no alternative
+- Tell the user: "This task requires [TOOL_NAME] which is currently disabled. Please enable it to proceed."
 
 ---
 
