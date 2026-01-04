@@ -6,25 +6,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export default React.createClass({
-	displayName: 'Portal',
-	portalElement: null, // eslint-disable-line react/sort-comp
-	componentDidMount () {
+export default class extends React.Component {
+    static displayName = 'Portal';
+    portalElement = null; // eslint-disable-line react/sort-comp
+
+    componentDidMount() {
 		const el = document.createElement('div');
 		document.body.appendChild(el);
 		this.portalElement = el;
 		this.componentDidUpdate();
-	},
-	componentWillUnmount () {
+	}
+
+    componentWillUnmount() {
 		document.body.removeChild(this.portalElement);
-	},
-	componentDidUpdate () {
+	}
+
+    componentDidUpdate() {
 		ReactDOM.render(<div {...this.props} />, this.portalElement);
-	},
-	getPortalDOMNode () {
+	}
+
+    getPortalDOMNode = () => {
 		return this.portalElement;
-	},
-	render () {
+	};
+
+    render() {
 		return null;
-	},
-});
+	}
+}

@@ -1,11 +1,14 @@
+import { FormInput } from '../../../admin/client/App/elemental';
+import Field from '../Field';
+
 /**
  * @fileoverview
  * This file defines the `MoneyField` component, which is used to render a
  * money field in the KeystoneJS Admin UI.
  */
-import { FormInput } from '../../../admin/client/App/elemental';
-import Field from '../Field';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 
 /**
  * The `MoneyField` component.

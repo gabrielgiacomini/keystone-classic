@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import moment from 'moment';
 import assign from 'object-assign';
@@ -53,37 +54,44 @@ function smoothScrollTop () {
 	}
 }
 
-var EditForm = React.createClass({
-	displayName: 'EditForm',
-	propTypes: {
-		data: React.PropTypes.object,
-		list: React.PropTypes.object,
-	},
-	getInitialState () {
-		var hasAsyncFields = !!this.props.list.columns.find(col => {
+class EditForm extends React.Component {
+    static displayName = 'EditForm';
+
+    static propTypes = {
+		data: PropTypes.object,
+		list: PropTypes.object,
+	};
+
+    constructor(props) {
+        super(props);
+        var hasAsyncFields = !!props.list.columns.find(col => {
 			if (col.field && col.field.type === 'relationship') {
-				var fieldData = this.props.data.fields[col.field.path];
+				var fieldData = props.data.fields[col.field.path];
 				return col.field.many ? fieldData.length > 0 : fieldData;
 			} else {
 				return false;
 			}
 		});
-		return {
-			values: assign({}, this.props.data.fields),
+
+        this.state = {
+			values: assign({}, props.data.fields),
 			confirmationDialog: null,
 			loading: hasAsyncFields,
 			hasLoaded: !hasAsyncFields,
 			lastValues: null, // used for resetting
-			focusFirstField: !this.props.list.nameField && !this.props.list.nameFieldIsFormHeader,
+			focusFirstField: !props.list.nameField && !props.list.nameFieldIsFormHeader,
 		};
-	},
-	componentDidMount () {
+    }
+
+    componentDidMount() {
 		this.__isMounted = true;
-	},
-	componentWillUnmount () {
+	}
+
+    componentWillUnmount() {
 		this.__isMounted = false;
-	},
-	getFieldProps (field) {
+	}
+
+    getFieldProps = (field) => {
 		const props = assign({}, field);
 		const alerts = this.state.alerts;
 		// Display validation errors inline
@@ -108,59 +116,65 @@ var EditForm = React.createClass({
 			}
 		}
 		return props;
-	},
+	};
 
-	registerAsyncField (fieldName) {
+    registerAsyncField = (fieldName) => {
 		this.__asyncFields = this.__asyncFields || {};
 		this.__asyncFields[fieldName] = this.__asyncFields[fieldName] || ASYNC_FIELD_LOADING;
-	},
+	};
 
-	onAsyncFieldValuesLoaded (fieldName) {
+    onAsyncFieldValuesLoaded = (fieldName) => {
 		this.__asyncFields[fieldName] = ASYNC_FIELD_LOADED;
 		var isLoadingComplete = Object.values(this.__asyncFields).filter(asyncStatus => asyncStatus !== ASYNC_FIELD_LOADED).length === 0;
 		this.setState({
 			loading: !isLoadingComplete,
 			hasLoaded: isLoadingComplete
 		});
-	},
+	};
 
-	handleChange (event) {
+    handleChange = (event) => {
 		const values = assign({}, this.state.values);
 
 		values[event.path] = event.value;
 		this.setState({ values });
-	},
+	};
 
-	toggleDeleteDialog () {
+    toggleDeleteDialog = () => {
 		this.setState({
 			deleteDialogIsOpen: !this.state.deleteDialogIsOpen,
 		});
-	},
-	toggleResetDialog () {
+	};
+
+    toggleResetDialog = () => {
 		this.setState({
 			resetDialogIsOpen: !this.state.resetDialogIsOpen,
 		});
-	},
-	handleReset () {
+	};
+
+    handleReset = () => {
 		this.setState({
 			values: assign({}, this.state.lastValues || this.props.data.fields),
 			resetDialogIsOpen: false,
 		});
-	},
-	handleDelete () {
+	};
+
+    handleDelete = () => {
 		const { data } = this.props;
 		this.props.dispatch(deleteItem(data.id, this.props.router));
-	},
-	handleKeyFocus () {
+	};
+
+    handleKeyFocus = () => {
 		const input = this.refs.keyOrIdInput;
 		input.select();
-	},
-	removeConfirmationDialog () {
+	};
+
+    removeConfirmationDialog = () => {
 		this.setState({
 			confirmationDialog: null,
 		});
-	},
-	updateItem () {
+	};
+
+    updateItem = () => {
 		const { data, list } = this.props;
 		const editForm = this.refs.editForm;
 
@@ -205,8 +219,9 @@ var EditForm = React.createClass({
 				});
 			}
 		});
-	},
-	renderKeyOrId () {
+	};
+
+    renderKeyOrId = () => {
 		var className = 'EditForm__key-or-id';
 		var list = this.props.list;
 
@@ -244,8 +259,9 @@ var EditForm = React.createClass({
 				</div>
 			);
 		}
-	},
-	renderNameField () {
+	};
+
+    renderNameField = () => {
 		var nameField = this.props.list.nameField;
 		var nameFieldIsFormHeader = this.props.list.nameFieldIsFormHeader;
 		var wrapNameField = field => (
@@ -271,8 +287,9 @@ var EditForm = React.createClass({
 				<h2>{this.props.data.name || '(no name)'}</h2>
 			);
 		}
-	},
-	renderFormElements () {
+	};
+
+    renderFormElements = () => {
 		var headings = 0;
 
 		return this.props.list.uiElements.map((el, index) => {
@@ -304,8 +321,9 @@ var EditForm = React.createClass({
 				return React.createElement(Fields[field.type], props);
 			}
 		}, this);
-	},
-	renderFooterBar () {
+	};
+
+    renderFooterBar = () => {
 		if (this.props.list.noedit && this.props.list.nodelete) {
 			return null;
 		}
@@ -354,8 +372,9 @@ var EditForm = React.createClass({
 				</div>
 			</FooterBar>
 		);
-	},
-	renderTrackingMeta () {
+	};
+
+    renderTrackingMeta = () => {
 		// TODO: These fields are visible now, so we don't want this. We may revisit
 		// it when we have more granular control over hiding fields in certain
 		// contexts, so I'm leaving this code here as a reference for now - JW
@@ -422,8 +441,9 @@ var EditForm = React.createClass({
 				{elements}
 			</div>
 		) : null;
-	},
-	render () {
+	};
+
+    render() {
 		return (
 			<form ref="editForm" className="EditForm-container" data-testid="edit-form">
 				{(this.state.alerts) ? <AlertMessages alerts={this.state.alerts} /> : null}
@@ -460,8 +480,8 @@ var EditForm = React.createClass({
 				</ConfirmationDialog>
 			</form>
 		);
-	},
-});
+	}
+}
 
 const styles = {
 	footerbar: {

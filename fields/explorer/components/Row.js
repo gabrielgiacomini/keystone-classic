@@ -4,7 +4,9 @@
  * KeystoneJS Field Types Explorer. It's a simple row component that can be
  * used with `Col` components to create a grid layout.
  */
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 
 /**
  * A row component for the explorer.
@@ -45,7 +47,7 @@ class ExplorerRow extends Component {
 			/>
 		);
 	}
-};
+}
 ExplorerRow.childContextTypes = {
 	isCollapsed: PropTypes.bool,
 };

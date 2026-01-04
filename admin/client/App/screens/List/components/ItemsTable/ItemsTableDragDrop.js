@@ -1,19 +1,22 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { Sortable } from './ItemsTableRow';
 import DropZone from './ItemsTableDragDropZone';
 
-var ItemsTableDragDrop = React.createClass({
-	displayName: 'ItemsTableDragDrop',
-	propTypes: {
-		columns: React.PropTypes.array,
-		id: React.PropTypes.any,
-		index: React.PropTypes.number,
-		items: React.PropTypes.object,
-		list: React.PropTypes.object,
-	},
-	render () {
+class ItemsTableDragDrop extends React.Component {
+    static displayName = 'ItemsTableDragDrop';
+
+    static propTypes = {
+		columns: PropTypes.array,
+		id: PropTypes.any,
+		index: PropTypes.number,
+		items: PropTypes.object,
+		list: PropTypes.object,
+	};
+
+    render() {
 		return (
 			<tbody >
 				{this.props.items.results.map((item, i) => {
@@ -30,7 +33,7 @@ var ItemsTableDragDrop = React.createClass({
 				<DropZone {...this.props} />
 			</tbody>
 		);
-	},
-});
+	}
+}
 
 export default DragDropContext(HTML5Backend)(ItemsTableDragDrop);

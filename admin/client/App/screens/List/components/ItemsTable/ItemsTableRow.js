@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 
@@ -14,20 +15,21 @@ import {
 	moveItem,
 } from '../../actions';
 
-const ItemsRow = React.createClass({
-	propTypes: {
-		columns: React.PropTypes.array,
-		id: React.PropTypes.any,
-		index: React.PropTypes.number,
-		items: React.PropTypes.object,
-		list: React.PropTypes.object,
+class ItemsRow extends React.Component {
+    static propTypes = {
+		columns: PropTypes.array,
+		id: PropTypes.any,
+		index: PropTypes.number,
+		items: PropTypes.object,
+		list: PropTypes.object,
 		// Injected by React DnD:
-		isDragging: React.PropTypes.bool, // eslint-disable-line react/sort-prop-types
-		connectDragSource: React.PropTypes.func, // eslint-disable-line react/sort-prop-types
-		connectDropTarget: React.PropTypes.func, // eslint-disable-line react/sort-prop-types
-		connectDragPreview: React.PropTypes.func, // eslint-disable-line react/sort-prop-types
-	},
-	renderRow (item) {
+		isDragging: PropTypes.bool, // eslint-disable-line react/sort-prop-types
+		connectDragSource: PropTypes.func, // eslint-disable-line react/sort-prop-types
+		connectDropTarget: PropTypes.func, // eslint-disable-line react/sort-prop-types
+		connectDragPreview: PropTypes.func, // eslint-disable-line react/sort-prop-types
+	};
+
+    renderRow = (item) => {
 		const itemId = item.id;
 		const rowClassname = classnames({
 			'ItemList__row--dragging': this.props.isDragging,
@@ -68,11 +70,12 @@ const ItemsRow = React.createClass({
 		} else {
 			return (addRow);
 		}
-	},
-	render () {
+	};
+
+    render() {
 		return this.renderRow(this.props.item);
-	},
-});
+	}
+}
 
 export default exports = ItemsRow;
 

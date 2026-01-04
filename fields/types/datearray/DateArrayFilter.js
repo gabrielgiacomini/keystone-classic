@@ -5,6 +5,8 @@
  *
  * It provides a date picker and a set of options for filtering by date.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import moment from 'moment';
@@ -32,16 +34,16 @@ const MODE_OPTIONS = [
  * DayPicker.
  * @returns {React.Element} The rendered component.
  */
-var DayPickerIndicator = React.createClass({
-	render () {
+class DayPickerIndicator extends React.Component {
+    render() {
 		return (
 			<span className="DayPicker-Indicator">
 				<span className="DayPicker-Indicator__border" />
 				<span className="DayPicker-Indicator__bg" />
 			</span>
 		);
-	},
-});
+	}
+}
 
 /**
  * Returns the default value for the filter.
@@ -61,63 +63,65 @@ function getDefaultValue () {
  * The `DateFilter` component.
  * @extends React.Component
  */
-var DateFilter = React.createClass({
-	displayName: 'DateFilter',
-	propTypes: {
-		filter: React.PropTypes.shape({
-			mode: React.PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
-			presence: React.PropTypes.string,
+class DateFilter extends React.Component {
+    static displayName = 'DateFilter';
+
+    static propTypes = {
+		filter: PropTypes.shape({
+			mode: PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
+			presence: PropTypes.string,
 		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			format: 'DD-MM-YYYY',
-			filter: getDefaultValue(),
-			value: moment().startOf('day').toDate(),
-		};
-	},
-	/**
+	};
+
+    static getDefaultValue = getDefaultValue;
+
+    static defaultProps = {
+        format: 'DD-MM-YYYY',
+        filter: getDefaultValue(),
+        value: moment().startOf('day').toDate(),
+    };
+
+    /**
 	 * Gets the initial state of the component.
 	 * @returns {Object} The initial state.
 	 */
-	getInitialState () {
-		return {
-			activeInputField: 'after',
-			month: new Date(), // The month to display in the calendar
-		};
-	},
-	componentDidMount () {
+    state = {
+        activeInputField: 'after',
+        month: new Date(), // The month to display in the calendar
+    };
+
+    componentDidMount() {
 		// focus the text input
 		if (this.props.filter.mode === 'between') {
 			findDOMNode(this.refs[this.state.activeInputField]).focus();
 		} else {
 			findDOMNode(this.refs.input).focus();
 		}
-	},
-	/**
+	}
+
+    /**
 	 * Updates the filter with a new value.
 	 * @param {Object} value The new value.
 	 */
-	updateFilter (value) {
+    updateFilter = (value) => {
 		this.props.onChange({ ...this.props.filter, ...value });
-	},
-	/**
+	};
+
+    /**
 	 * Selects a new presence for the filter.
 	 * @param {Object} e The event object.
 	 */
-	selectPresence (e) {
+    selectPresence = (e) => {
 		const presence = e.target.value;
 		this.updateFilter({ presence });
 		findDOMNode(this.refs.input).focus();
-	},
-	/**
+	};
+
+    /**
 	 * Selects a new mode for the filter.
 	 * @param {Object} e The event object.
 	 */
-	selectMode (e) {
+    selectMode = (e) => {
 		const mode = e.target.value;
 		this.updateFilter({ mode });
 		if (mode === 'between') {
@@ -125,12 +129,13 @@ var DateFilter = React.createClass({
 		} else {
 			findDOMNode(this.refs.input).focus();
 		}
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the value of the input.
 	 * @param {Object} e The event object.
 	 */
-	handleInputChange (e) {
+    handleInputChange = (e) => {
 		const { value } = e.target;
 		let { month } = this.state;
 		// Change the current month only if the value entered by the user is a valid
@@ -140,23 +145,25 @@ var DateFilter = React.createClass({
 		}
 		this.updateFilter({ value: value });
 		this.setState({ month }, this.showCurrentDate);
-	},
-	/**
+	};
+
+    /**
 	 * Sets the active input field.
 	 * @param {string} field The name of the field to set as active.
 	 */
-	setActiveField (field) {
+    setActiveField = (field) => {
 		this.setState({
 			activeInputField: field,
 		});
-	},
-	/**
+	};
+
+    /**
 	 * Switches between the two input fields in "between" mode.
 	 * @param {Object} e The event object.
 	 * @param {Date} day The day that was clicked.
 	 * @param {Object} modifiers The modifiers for the day.
 	 */
-	switchBetweenActiveInputFields (e, day, modifiers) {
+    switchBetweenActiveInputFields = (e, day, modifiers) => {
 		if (modifiers && modifiers.disabled) return;
 		const { activeInputField } = this.state;
 		const send = {};
@@ -169,28 +176,31 @@ var DateFilter = React.createClass({
 				findDOMNode(this.refs[newActiveField]).focus();
 			}
 		);
-	},
-	/**
+	};
+
+    /**
 	 * Selects a day in the date picker.
 	 * @param {Object} e The event object.
 	 * @param {Date} day The day that was clicked.
 	 * @param {Object} modifiers The modifiers for the day.
 	 */
-	selectDay (e, day, modifiers) {
+    selectDay = (e, day, modifiers) => {
 		if (modifiers && modifiers.disabled) return;
 		this.updateFilter({ value: day });
-	},
-	/**
+	};
+
+    /**
 	 * Shows the current date in the date picker.
 	 */
-	showCurrentDate () {
+    showCurrentDate = () => {
 		this.refs.daypicker.showMonth(this.state.month);
-	},
-	/**
+	};
+
+    /**
 	 * Renders the controls for the filter.
 	 * @returns {React.Element} The rendered controls.
 	 */
-	renderControls () {
+    renderControls = () => {
 		let controls;
 		const { field, filter } = this.props;
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];
@@ -250,12 +260,13 @@ var DateFilter = React.createClass({
 		}
 
 		return controls;
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const { filter } = this.props;
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];
 		const presence = PRESENCE_OPTIONS.filter(i => i.value === filter.presence)[0];
@@ -279,7 +290,7 @@ var DateFilter = React.createClass({
 				{this.renderControls()}
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default DateFilter;

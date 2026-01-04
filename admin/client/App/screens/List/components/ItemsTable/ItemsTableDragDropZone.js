@@ -4,19 +4,23 @@
  * - @mxstbr
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import DropZoneTarget from './ItemsTableDragDropZoneTarget';
 import classnames from 'classnames';
 
-var ItemsTableDragDropZone = React.createClass({
-	displayName: 'ItemsTableDragDropZone',
-	propTypes: {
-		columns: React.PropTypes.array,
-		connectDropTarget: React.PropTypes.func,
-		items: React.PropTypes.object,
-		list: React.PropTypes.object,
-	},
-	renderPageDrops () {
+class ItemsTableDragDropZone extends React.Component {
+    static displayName = 'ItemsTableDragDropZone';
+
+    static propTypes = {
+		columns: PropTypes.array,
+		connectDropTarget: PropTypes.func,
+		items: PropTypes.object,
+		list: PropTypes.object,
+	};
+
+    renderPageDrops = () => {
 		const { items, currentPage, pageSize } = this.props;
 
 		const totalPages = Math.ceil(items.count / pageSize);
@@ -57,10 +61,11 @@ var ItemsTableDragDropZone = React.createClass({
 				</td>
 			</tr>
 		);
-	},
-	render () {
+	};
+
+    render() {
 		return this.renderPageDrops();
-	},
-});
+	}
+}
 
 export default ItemsTableDragDropZone;

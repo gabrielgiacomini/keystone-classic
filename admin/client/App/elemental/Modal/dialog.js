@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { css } from 'glamor';
 import ScrollLock from '../ScrollLock';
 import Portal from '../Portal';
@@ -23,7 +24,7 @@ class ModalDialog extends Component {
 			onClose: this.props.onClose,
 		};
 	}
-	componentWillReceiveProps (nextProps) {
+	UNSAFE_componentWillReceiveProps (nextProps) {
 		if (!canUseDom) return;
 
 		// add event listeners
@@ -91,7 +92,7 @@ class ModalDialog extends Component {
 			</Portal>
 		);
 	}
-};
+}
 
 ModalDialog.propTypes = {
 	backdropClosesModal: PropTypes.bool,

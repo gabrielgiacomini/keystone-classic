@@ -5,6 +5,8 @@
  * item. This mainly renders the form to edit the item content in.
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { Center, Container, Spinner } from '../../elemental';
 import { connect } from 'react-redux';
@@ -27,17 +29,18 @@ import {
 	selectList,
 } from '../List/actions';
 
-var ItemView = React.createClass({
-	displayName: 'ItemView',
-	contextTypes: {
-		router: React.PropTypes.object.isRequired,
-	},
-	getInitialState () {
-		return {
-			createIsOpen: false,
-		};
-	},
-	componentDidMount () {
+class ItemView extends React.Component {
+    static displayName = 'ItemView';
+
+    static contextTypes = {
+		router: PropTypes.object.isRequired,
+	};
+
+    state = {
+        createIsOpen: false,
+    };
+
+    componentDidMount() {
 		// When we directly navigate to an item without coming from another client
 		// side routed page before, we need to select the list before initializing the item
 		// We also need to update when the list id has changed
@@ -45,36 +48,41 @@ var ItemView = React.createClass({
 			this.props.dispatch(selectList(this.props.params.listId));
 		}
 		this.initializeItem(this.props.params.itemId);
-	},
-	componentWillReceiveProps (nextProps) {
+	}
+
+    UNSAFE_componentWillReceiveProps(nextProps) {
 		// We've opened a new item from the client side routing, so initialize
 		// again with the new item id
 		if (nextProps.params.itemId !== this.props.params.itemId) {
 			this.props.dispatch(selectList(nextProps.params.listId));
 			this.initializeItem(nextProps.params.itemId);
 		}
-	},
-	// Initialize an item
-	initializeItem (itemId) {
+	}
+
+    // Initialize an item
+    initializeItem = (itemId) => {
 		this.props.dispatch(selectItem(itemId));
 		this.props.dispatch(loadItemData());
-	},
-	// Called when a new item is created
-	onCreate (item) {
+	};
+
+    // Called when a new item is created
+    onCreate = (item) => {
 		// Hide the create form
 		this.toggleCreateModal(false);
 		// Redirect to newly created item path
 		const list = this.props.currentList;
 		this.context.router.push(`${Keystone.adminPath}/${list.path}/${item.id}`);
-	},
-	// Open and close the create new item modal
-	toggleCreateModal (visible) {
+	};
+
+    // Open and close the create new item modal
+    toggleCreateModal = (visible) => {
 		this.setState({
 			createIsOpen: visible,
 		});
-	},
-	// Render this items relationships
-	renderRelationships () {
+	};
+
+    // Render this items relationships
+    renderRelationships = () => {
 		const { relationships } = this.props.currentList;
 		const keys = Object.keys(relationships);
 		if (!keys.length) return;
@@ -102,9 +110,10 @@ var ItemView = React.createClass({
 				</Container>
 			</div>
 		);
-	},
-	// Handle errors
-	handleError (error) {
+	};
+
+    // Handle errors
+    handleError = (error) => {
 		const detail = error.detail;
 		if (detail) {
 			// Item not found
@@ -141,8 +150,9 @@ var ItemView = React.createClass({
 				</Alert>
 			</Container>
 		);
-	},
-	render () {
+	};
+
+    render() {
 		// If we don't have any data yet, show the loading indicator
 		if (!this.props.ready) {
 			return (
@@ -181,8 +191,8 @@ var ItemView = React.createClass({
 				)}
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default connect((state) => ({
 	data: state.item.data,

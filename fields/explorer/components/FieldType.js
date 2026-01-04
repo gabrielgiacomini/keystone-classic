@@ -5,6 +5,8 @@
  * and a `FieldSpec` for each of the field's specs. It also handles the display
  * of the field's readme.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import Markdown from 'react-markdown';
 
@@ -16,35 +18,35 @@ import FieldSpec from './FieldSpec';
  * A component that renders a field type, including its specs and readme.
  * @extends React.Component
  */
-const ExplorerFieldType = React.createClass({
-	propTypes: {
-		FieldComponent: React.PropTypes.func.isRequired,
-		FilterComponent: React.PropTypes.func.isRequired,
-		params: React.PropTypes.object.isRequired,
-		readme: React.PropTypes.string,
-		spec: React.PropTypes.oneOfType([
-			React.PropTypes.object,
-			React.PropTypes.arrayOf(React.PropTypes.object),
+class ExplorerFieldType extends React.Component {
+    static propTypes = {
+		FieldComponent: PropTypes.func.isRequired,
+		FilterComponent: PropTypes.func.isRequired,
+		params: PropTypes.object.isRequired,
+		readme: PropTypes.string,
+		spec: PropTypes.oneOfType([
+			PropTypes.object,
+			PropTypes.arrayOf(PropTypes.object),
 		]).isRequired,
-		toggleSidebar: React.PropTypes.func.isRequired,
-		value: React.PropTypes.any,
-	},
-	/**
+		toggleSidebar: PropTypes.func.isRequired,
+		value: PropTypes.any,
+	};
+
+    /**
 	 * Gets the initial state of the component.
 	 * @returns {Object} The initial state.
 	 */
-	getInitialState () {
-		return {
-			readmeIsVisible: !!this.props.readme,
-			filter: this.props.FilterComponent.getDefaultValue(),
-			value: this.props.value,
-		};
-	},
-	/**
+    state = {
+        readmeIsVisible: !!this.props.readme,
+        filter: this.props.FilterComponent.getDefaultValue(),
+        value: this.props.value,
+    };
+
+    /**
 	 * Handles the component receiving new props.
 	 * @param {Object} newProps The new props.
 	 */
-	componentWillReceiveProps (newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) {
 		if (this.props.params.type === newProps.params.type) return;
 
 		this.setState({
@@ -54,39 +56,43 @@ const ExplorerFieldType = React.createClass({
 				: false,
 			value: newProps.value,
 		});
-	},
-	/**
+	}
+
+    /**
 	 * Handles a change in the field's value.
 	 * @param {Object} e The event object.
 	 */
-	onFieldChange (e) {
+    onFieldChange = (e) => {
 		var logValue = typeof e.value === 'string' ? `"${e.value}"` : e.value;
 		console.log(`${this.props.params.type} field value changed:`, logValue);
 		this.setState({
 			value: e.value,
 		});
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the filter's value.
 	 * @param {*} value The new filter value.
 	 */
-	onFilterChange (value) {
+    onFilterChange = (value) => {
 		console.log(`${this.props.params.type} filter value changed:`, value);
 		this.setState({
 			filter: value,
 		});
-	},
-	/**
+	};
+
+    /**
 	 * Toggles the visibility of the readme.
 	 */
-	toggleReadme () {
+    toggleReadme = () => {
 		this.setState({ readmeIsVisible: !this.state.readmeIsVisible });
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const { FieldComponent, FilterComponent, readme, toggleSidebar } = this.props;
 		const { readmeIsVisible } = this.state;
 		const specs = Array.isArray(this.props.spec) ? this.props.spec : [this.props.spec];
@@ -139,7 +145,7 @@ const ExplorerFieldType = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default ExplorerFieldType;

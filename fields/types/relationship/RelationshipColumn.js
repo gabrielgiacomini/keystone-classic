@@ -3,6 +3,8 @@
  * This file defines the `RelationshipColumn` component, which is used to render
  * the value of a `Relationship` field in a list view.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import ItemsTableCell from '../../components/ItemsTableCell';
 import ItemsTableValue from '../../components/ItemsTableValue';
@@ -18,18 +20,20 @@ const moreIndicatorStyle = {
  * The `RelationshipColumn` component.
  * @extends React.Component
  */
-var RelationshipColumn = React.createClass({
-	displayName: 'RelationshipColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
+class RelationshipColumn extends React.Component {
+    static displayName = 'RelationshipColumn';
+
+    static propTypes = {
+		col: PropTypes.object,
+		data: PropTypes.object,
+	};
+
+    /**
 	 * Renders the values of a many-to-many relationship.
 	 * @param {Array} value The array of related items.
 	 * @returns {React.Element} The rendered values.
 	 */
-	renderMany (value) {
+    renderMany = (value) => {
 		if (!value || !value.length) return;
 		const refList = this.props.col.field.refList;
 		const items = [];
@@ -52,13 +56,14 @@ var RelationshipColumn = React.createClass({
 				{items}
 			</ItemsTableValue>
 		);
-	},
-	/**
+	};
+
+    /**
 	 * Renders the value of a one-to-many relationship.
 	 * @param {Object} value The related item.
 	 * @returns {React.Element} The rendered value.
 	 */
-	renderValue (value) {
+    renderValue = (value) => {
 		if (!value) return;
 		const refList = this.props.col.field.refList;
 		return (
@@ -66,12 +71,13 @@ var RelationshipColumn = React.createClass({
 				{value.name}
 			</ItemsTableValue>
 		);
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const value = this.props.data.fields[this.props.col.path];
 		const many = this.props.col.field.many;
 		return (
@@ -79,7 +85,7 @@ var RelationshipColumn = React.createClass({
 				{many ? this.renderMany(value) : this.renderValue(value)}
 			</ItemsTableCell>
 		);
-	},
-});
+	}
+}
 
 export default RelationshipColumn;

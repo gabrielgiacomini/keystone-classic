@@ -38,27 +38,24 @@ function getDefaultValue () {
  * The `NumberFilter` component.
  * @extends React.Component
  */
-var NumberFilter = React.createClass({
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
+class NumberFilter extends React.Component {
+    static getDefaultValue = getDefaultValue;
 
-	componentDidMount () {
+    static defaultProps = {
+        filter: getDefaultValue(),
+    };
+
+    componentDidMount() {
 		// focus the text input
 		findDOMNode(this.refs.focusTarget).focus();
-	},
+	}
 
-	/**
+    /**
 	 * Returns a function that handles a change in the value of the filter.
 	 * @param {string} type The type of the value to handle.
 	 * @returns {function} The change handler.
 	 */
-	handleChangeBuilder (type) {
+    handleChangeBuilder = (type) => {
 		const self = this;
 		return function handleChange (e) {
 			const { filter, onChange } = self.props;
@@ -89,33 +86,35 @@ var NumberFilter = React.createClass({
 					});
 			}
 		};
-	},
-	/**
+	};
+
+    /**
 	 * Updates the filter with a new value.
 	 * @param {Object} changedProp The changed property.
 	 */
-	updateFilter (changedProp) {
+    updateFilter = (changedProp) => {
 		this.props.onChange({ ...this.props.filter, ...changedProp });
-	},
-	/**
+	};
+
+    /**
 	 * Selects a new mode for the filter.
 	 * @param {Object} e The event object.
 	 */
-	selectMode (e) {
+    selectMode = (e) => {
 		this.updateFilter({ mode: e.target.value });
 
 		// focus on next tick
 		setTimeout(() => {
 			findDOMNode(this.refs.focusTarget).focus();
 		}, 0);
-	},
+	};
 
-	/**
+    /**
 	 * Renders the controls for the filter.
 	 * @param {Object} mode The current mode of the filter.
 	 * @returns {React.Element} The rendered controls.
 	 */
-	renderControls (mode) {
+    renderControls = (mode) => {
 		let controls;
 		const { field } = this.props;
 		const placeholder = field.label + ' is ' + mode.label.toLowerCase() + '...';
@@ -152,13 +151,13 @@ var NumberFilter = React.createClass({
 		}
 
 		return controls;
-	},
+	};
 
-	/**
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const { filter } = this.props;
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];
 
@@ -174,8 +173,7 @@ var NumberFilter = React.createClass({
 				{this.renderControls(mode)}
 			</Form>
 		);
-	},
-
-});
+	}
+}
 
 export default NumberFilter;

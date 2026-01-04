@@ -3,23 +3,27 @@
  * version in use
  */
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import { css } from "glamor";
 import { Container } from "../../elemental";
 import theme from "../../../theme";
 
-var Footer = React.createClass({
-	displayName: "Footer",
-	propTypes: {
-		appversion: React.PropTypes.string,
-		backUrl: React.PropTypes.string,
-		brand: React.PropTypes.string,
-		user: React.PropTypes.object,
-		User: React.PropTypes.object, // eslint-disable-line react/sort-prop-types
-		version: React.PropTypes.string
-	},
-	// Render the user
-	renderUser() {
+class Footer extends React.Component {
+    static displayName = "Footer";
+
+    static propTypes = {
+		appversion: PropTypes.string,
+		backUrl: PropTypes.string,
+		brand: PropTypes.string,
+		user: PropTypes.object,
+		User: PropTypes.object, // eslint-disable-line react/sort-prop-types
+		version: PropTypes.string
+	};
+
+    // Render the user
+    renderUser = () => {
 		const { User, user } = this.props;
 		if (!user) return null;
 
@@ -36,8 +40,9 @@ var Footer = React.createClass({
 				<span>.</span>
 			</span>
 		);
-	},
-	render() {
+	};
+
+    render() {
 		const { backUrl, brand, appversion, version } = this.props;
 
 		return (
@@ -61,7 +66,7 @@ var Footer = React.createClass({
 			</footer>
 		);
 	}
-});
+}
 
 /* eslint quote-props: ["error", "as-needed"] */
 const linkHoverAndFocus = {

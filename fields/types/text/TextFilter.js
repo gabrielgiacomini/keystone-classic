@@ -6,6 +6,8 @@
  * It provides a set of options for filtering by text, and it supports
  * inverting the filter.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 
@@ -44,58 +46,61 @@ function getDefaultValue () {
  * The `TextFilter` component.
  * @extends React.Component
  */
-var TextFilter = React.createClass({
-	propTypes: {
-		filter: React.PropTypes.shape({
-			mode: React.PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
-			inverted: React.PropTypes.boolean,
-			value: React.PropTypes.string,
+class TextFilter extends React.Component {
+    static propTypes = {
+		filter: PropTypes.shape({
+			mode: PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
+			inverted: PropTypes.boolean,
+			value: PropTypes.string,
 		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
-	/**
+	};
+
+    static getDefaultValue = getDefaultValue;
+
+    static defaultProps = {
+        filter: getDefaultValue(),
+    };
+
+    /**
 	 * Updates the filter with a new value.
 	 * @param {Object} value The new value.
 	 */
-	updateFilter (value) {
+    updateFilter = (value) => {
 		this.props.onChange({ ...this.props.filter, ...value });
-	},
-	/**
+	};
+
+    /**
 	 * Selects a new mode for the filter.
 	 * @param {Object} e The event object.
 	 */
-	selectMode (e) {
+    selectMode = (e) => {
 		const mode = e.target.value;
 		this.updateFilter({ mode });
 		findDOMNode(this.refs.focusTarget).focus();
-	},
-	/**
+	};
+
+    /**
 	 * Toggles the inverted state of the filter.
 	 * @param {boolean} inverted The new inverted state.
 	 */
-	toggleInverted (inverted) {
+    toggleInverted = (inverted) => {
 		this.updateFilter({ inverted });
 		findDOMNode(this.refs.focusTarget).focus();
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the value of the filter.
 	 * @param {Object} e The event object.
 	 */
-	updateValue (e) {
+    updateValue = (e) => {
 		this.updateFilter({ value: e.target.value });
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const { field, filter } = this.props;
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];
 		const placeholder = field.label + ' ' + mode.label.toLowerCase() + '...';
@@ -126,7 +131,7 @@ var TextFilter = React.createClass({
 				/>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default TextFilter;

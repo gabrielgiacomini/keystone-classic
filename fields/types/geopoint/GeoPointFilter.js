@@ -3,6 +3,8 @@
  * This file defines the `GeoPointFilter` component, which is used to filter
  * `GeoPoint` fields in the KeystoneJS Admin UI.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 import {
@@ -36,75 +38,79 @@ function getDefaultValue () {
  * The `GeoPointFilter` component.
  * @extends React.Component
  */
-var TextFilter = React.createClass({
-	propTypes: {
-		filter: React.PropTypes.shape({
-			lat: React.PropTypes.number,
-			lon: React.PropTypes.number,
-			distance: React.PropTypes.shape({
-				mode: React.PropTypes.string,
-				value: React.PropTypes.number,
+class TextFilter extends React.Component {
+    static propTypes = {
+		filter: PropTypes.shape({
+			lat: PropTypes.number,
+			lon: PropTypes.number,
+			distance: PropTypes.shape({
+				mode: PropTypes.string,
+				value: PropTypes.number,
 			}),
 		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
-	/**
+	};
+
+    static getDefaultValue = getDefaultValue;
+
+    static defaultProps = {
+        filter: getDefaultValue(),
+    };
+
+    /**
 	 * Updates the filter with a new value.
 	 * @param {Object} value The new value.
 	 */
-	updateFilter (value) {
+    updateFilter = (value) => {
 		this.props.onChange({ ...this.props.filter, ...value });
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the latitude value.
 	 * @param {Object} evt The event object.
 	 */
-	changeLat (evt) {
+    changeLat = (evt) => {
 		this.updateFilter({ lat: evt.target.value });
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the longitude value.
 	 * @param {Object} evt The event object.
 	 */
-	changeLon (evt) {
+    changeLon = (evt) => {
 		this.updateFilter({ lon: evt.target.value });
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the distance value.
 	 * @param {Object} evt The event object.
 	 */
-	changeDistanceValue (evt) {
+    changeDistanceValue = (evt) => {
 		this.updateFilter({
 			distance: {
 				mode: this.props.filter.distance.mode,
 				value: evt.target.value,
 			},
 		});
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the distance mode.
 	 * @param {string} mode The new distance mode.
 	 */
-	changeDistanceMode (mode) {
+    changeDistanceMode = (mode) => {
 		this.updateFilter({
 			distance: {
 				mode,
 				value: this.props.filter.distance.value,
 			},
 		});
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const { filter } = this.props;
 		const distanceModeVerb = filter.distance.mode === 'max' ? 'Maximum' : 'Minimum';
 
@@ -156,7 +162,7 @@ var TextFilter = React.createClass({
 				/>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default TextFilter;

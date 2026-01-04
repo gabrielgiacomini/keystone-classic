@@ -1,3 +1,6 @@
+import _ from 'lodash';
+import async from 'async';
+
 /**
  * @fileoverview
  * This file defines the `RelationshipFilter` component, which is used to filter
@@ -6,8 +9,8 @@
  * It provides a search input to find related items, and it supports inverting
  * the filter.
  */
-import _ from 'lodash';
-import async from 'async';
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import xhr from 'xhr';
@@ -40,61 +43,62 @@ function getDefaultValue () {
  * The `RelationshipFilter` component.
  * @extends React.Component
  */
-var RelationshipFilter = React.createClass({
-	propTypes: {
-		field: React.PropTypes.object,
-		filter: React.PropTypes.shape({
-			inverted: React.PropTypes.bool,
-			value: React.PropTypes.array,
+class RelationshipFilter extends React.Component {
+    static propTypes = {
+		field: PropTypes.object,
+		filter: PropTypes.shape({
+			inverted: PropTypes.bool,
+			value: PropTypes.array,
 		}),
-		onHeightChange: React.PropTypes.func,
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
-	/**
+		onHeightChange: PropTypes.func,
+	};
+
+    static getDefaultValue = getDefaultValue;
+
+    static defaultProps = {
+        filter: getDefaultValue(),
+    };
+
+    /**
 	 * Gets the initial state of the component.
 	 * @returns {Object} The initial state.
 	 */
-	getInitialState () {
-		return {
-			searchIsLoading: false,
-			searchResults: [],
-			searchString: '',
-			selectedItems: [],
-			valueIsLoading: true,
-		};
-	},
-	componentDidMount () {
+    state = {
+        searchIsLoading: false,
+        searchResults: [],
+        searchString: '',
+        selectedItems: [],
+        valueIsLoading: true,
+    };
+
+    componentDidMount() {
 		this._itemsCache = {};
 		this.loadSearchResults(true);
-	},
-	/**
+	}
+
+    /**
 	 * Handles the component receiving new props.
 	 * @param {Object} nextProps The new props.
 	 */
-	componentWillReceiveProps (nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
 		if (nextProps.filter.value !== this.props.filter.value) {
 			this.populateValue(nextProps.filter.value);
 		}
-	},
-	/**
+	}
+
+    /**
 	 * Returns whether the component is loading.
 	 * @returns {boolean} Whether the component is loading.
 	 */
-	isLoading () {
+    isLoading = () => {
 		return this.state.searchIsLoading || this.state.valueIsLoading;
-	},
-	/**
+	};
+
+    /**
 	 * Populates the value of the filter.
 	 * @param {Array} value The value to populate.
 	 */
-	populateValue (value) {
+    populateValue = (value) => {
 		async.map(value, (id, next) => {
 			if (this._itemsCache[id]) return next(null, this._itemsCache[id]);
 			xhr({
@@ -117,19 +121,21 @@ var RelationshipFilter = React.createClass({
 				findDOMNode(this.refs.focusTarget).focus();
 			});
 		});
-	},
-	/**
+	};
+
+    /**
 	 * Caches an item.
 	 * @param {Object} item The item to cache.
 	 */
-	cacheItem (item) {
+    cacheItem = (item) => {
 		this._itemsCache[item.id] = item;
-	},
-	/**
+	};
+
+    /**
 	 * Builds the filters for the query.
 	 * @returns {string} The filter string.
 	 */
-	buildFilters () {
+    buildFilters = () => {
 		var filters = {};
 		_.forEach(this.props.field.filters, function (value, key) {
 			if (value[0] === ':') return;
@@ -142,12 +148,13 @@ var RelationshipFilter = React.createClass({
 		});
 
 		return parts.join('&');
-	},
-	/**
+	};
+
+    /**
 	 * Loads the search results.
 	 * @param {boolean} thenPopulateValue Whether to populate the value after loading the results.
 	 */
-	loadSearchResults (thenPopulateValue) {
+    loadSearchResults = (thenPopulateValue) => {
 		const searchString = this.state.searchString;
 		const filters = this.buildFilters();
 		xhr({
@@ -172,59 +179,66 @@ var RelationshipFilter = React.createClass({
 				searchResults: data.results,
 			}, this.updateHeight);
 		});
-	},
-	/**
+	};
+
+    /**
 	 * Updates the height of the component.
 	 */
-	updateHeight () {
+    updateHeight = () => {
 		if (this.props.onHeightChange) {
 			this.props.onHeightChange(this.refs.container.offsetHeight);
 		}
-	},
-	/**
+	};
+
+    /**
 	 * Toggles the inverted state of the filter.
 	 * @param {boolean} inverted The new inverted state.
 	 */
-	toggleInverted (inverted) {
+    toggleInverted = (inverted) => {
 		this.updateFilter({ inverted });
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the search input.
 	 * @param {Object} e The event object.
 	 */
-	updateSearch (e) {
+    updateSearch = (e) => {
 		this.setState({ searchString: e.target.value }, this.loadSearchResults);
-	},
-	/**
+	};
+
+    /**
 	 * Selects an item.
 	 * @param {Object} item The item to select.
 	 */
-	selectItem (item) {
+    selectItem = (item) => {
 		const value = this.props.filter.value.concat(item.id);
 		this.updateFilter({ value });
-	},
-	/**
+	};
+
+    /**
 	 * Removes an item from the filter.
 	 * @param {Object} item The item to remove.
 	 */
-	removeItem (item) {
+    removeItem = (item) => {
 		const value = this.props.filter.value.filter(i => { return i !== item.id; });
 		this.updateFilter({ value });
-	},
-	/**
+	};
+
+    /**
 	 * Updates the filter with a new value.
 	 * @param {Object} value The new value.
 	 */
-	updateFilter (value) {
+    updateFilter = (value) => {
 		this.props.onChange({ ...this.props.filter, ...value });
-	},
-	/**
+	};
+
+    /**
 	 * Renders a list of items.
 	 * @param {Array} items The items to render.
 	 * @param {boolean} selected Whether the items are selected.
 	 * @returns {React.Element} The rendered items.
 	 */
-	renderItems (items, selected) {
+    renderItems = (items, selected) => {
 		const itemIconHover = selected ? 'x' : 'check';
 
 		return items.map((item, i) => {
@@ -241,12 +255,13 @@ var RelationshipFilter = React.createClass({
 				/>
 			);
 		});
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const selectedItems = this.state.selectedItems;
 		const searchResults = this.state.searchResults.filter(i => {
 			return this.props.filter.value.indexOf(i.id) === -1;
@@ -274,7 +289,7 @@ var RelationshipFilter = React.createClass({
 				) : null}
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default RelationshipFilter;

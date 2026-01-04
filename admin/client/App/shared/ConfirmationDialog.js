@@ -2,7 +2,9 @@
  * Renders a confirmation dialog modal
  */
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import { Button, Modal } from '../elemental';
 
 function ConfirmationDialog ({
@@ -43,7 +45,7 @@ function ConfirmationDialog ({
 			</Modal.Footer>
 		</Modal.Dialog>
 	);
-};
+}
 ConfirmationDialog.propTypes = {
 	body: PropTypes.string,
 	cancelLabel: PropTypes.string,

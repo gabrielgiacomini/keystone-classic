@@ -3,6 +3,8 @@
  * List screen or the Item screen
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import assign from 'object-assign';
 import vkey from 'vkey';
@@ -11,56 +13,64 @@ import { Fields } from 'FieldTypes';
 import InvalidFieldType from './InvalidFieldType';
 import { Button, Form, Modal } from '../elemental';
 
-const CreateForm = React.createClass({
-	displayName: 'CreateForm',
-	propTypes: {
-		err: React.PropTypes.object,
-		isOpen: React.PropTypes.bool,
-		list: React.PropTypes.object,
-		onCancel: React.PropTypes.func,
-		onCreate: React.PropTypes.func,
-	},
-	getDefaultProps () {
-		return {
-			err: null,
-			isOpen: false,
-		};
-	},
-	getInitialState () {
-		// Set the field values to their default values when first rendering the
-		// form. (If they have a default value, that is)
-		var values = {};
-		Object.keys(this.props.list.fields).forEach(key => {
-			var field = this.props.list.fields[key];
+class CreateForm extends React.Component {
+    static displayName = 'CreateForm';
+
+    static propTypes = {
+		err: PropTypes.object,
+		isOpen: PropTypes.bool,
+		list: PropTypes.object,
+		onCancel: PropTypes.func,
+		onCreate: PropTypes.func,
+	};
+
+    static defaultProps = {
+        err: null,
+        isOpen: false,
+    };
+
+    constructor(props) {
+        super(props);
+        // Set the field values to their default values when first rendering the
+        // form. (If they have a default value, that is)
+        var values = {};
+        Object.keys(props.list.fields).forEach(key => {
+			var field = props.list.fields[key];
 			var FieldComponent = Fields[field.type];
 			values[field.path] = FieldComponent.getDefaultValue(field);
 		});
-		return {
+
+        this.state = {
 			values: values,
 			alerts: {},
 		};
-	},
-	componentDidMount () {
+    }
+
+    componentDidMount() {
 		document.body.addEventListener('keyup', this.handleKeyPress, false);
-	},
-	componentWillUnmount () {
+	}
+
+    componentWillUnmount() {
 		document.body.removeEventListener('keyup', this.handleKeyPress, false);
-	},
-	handleKeyPress (evt) {
+	}
+
+    handleKeyPress = (evt) => {
 		if (vkey[evt.keyCode] === '<escape>') {
 			this.props.onCancel();
 		}
-	},
-	// Handle input change events
-	handleChange (event) {
+	};
+
+    // Handle input change events
+    handleChange = (event) => {
 		var values = assign({}, this.state.values);
 		values[event.path] = event.value;
 		this.setState({
 			values: values,
 		});
-	},
-	// Set the props of a field
-	getFieldProps (field) {
+	};
+
+    // Set the props of a field
+    getFieldProps = (field) => {
 		var props = assign({}, field);
 		props.value = this.state.values[field.path];
 		props.values = this.state.values;
@@ -68,9 +78,10 @@ const CreateForm = React.createClass({
 		props.mode = 'create';
 		props.key = field.path;
 		return props;
-	},
-	// Create a new item when the form is submitted
-	submitForm (event) {
+	};
+
+    // Create a new item when the form is submitted
+    submitForm = (event) => {
 		event.preventDefault();
 		const createForm = event.target;
 		const formData = new FormData(createForm);
@@ -107,9 +118,10 @@ const CreateForm = React.createClass({
 				});
 			}
 		});
-	},
-	// Render the form itself
-	renderForm () {
+	};
+
+    // Render the form itself
+    renderForm = () => {
 		if (!this.props.isOpen) return;
 
 		var form = [];
@@ -176,8 +188,9 @@ const CreateForm = React.createClass({
 				</Modal.Footer>
 			</Form>
 		);
-	},
-	render () {
+	};
+
+    render() {
 		return (
 			<Modal.Dialog
 				isOpen={this.props.isOpen}
@@ -188,7 +201,7 @@ const CreateForm = React.createClass({
 				{this.renderForm()}
 			</Modal.Dialog>
 		);
-	},
-});
+	}
+}
 
 export default CreateForm;

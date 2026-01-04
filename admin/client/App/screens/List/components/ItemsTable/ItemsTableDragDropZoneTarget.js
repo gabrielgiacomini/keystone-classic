@@ -4,6 +4,8 @@
  * - @mxstbr
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { DropTarget } from 'react-dnd';
 
@@ -12,21 +14,24 @@ import { setCurrentPage } from '../../actions';
 let timeoutID = false;
 
 // drop target
-var ItemsTableDragDropZoneTarget = React.createClass({
-	displayName: 'ItemsTableDragDropZoneTarget',
-	propTypes: {
-		className: React.PropTypes.string,
-		connectDropTarget: React.PropTypes.func,
-		isOver: React.PropTypes.bool,
-		pageItems: React.PropTypes.string,
-	},
-	componentDidUpdate () {
+class ItemsTableDragDropZoneTarget extends React.Component {
+    static displayName = 'ItemsTableDragDropZoneTarget';
+
+    static propTypes = {
+		className: PropTypes.string,
+		connectDropTarget: PropTypes.func,
+		isOver: PropTypes.bool,
+		pageItems: PropTypes.string,
+	};
+
+    componentDidUpdate() {
 		if (timeoutID && !this.props.isOver) {
 			clearTimeout(timeoutID);
 			timeoutID = false;
 		}
-	},
-	render () {
+	}
+
+    render() {
 		const { pageItems, page, isOver, dispatch } = this.props;
 		let { className } = this.props;
 		if (isOver) {
@@ -41,8 +46,8 @@ var ItemsTableDragDropZoneTarget = React.createClass({
 			>
 				{pageItems}
 			</div>);
-	},
-});
+	}
+}
 
 /**
  * Implements drag target.

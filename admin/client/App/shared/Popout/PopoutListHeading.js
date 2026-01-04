@@ -2,24 +2,28 @@
  * Render a popout list heading
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import blacklist from 'blacklist';
 import classnames from 'classnames';
 
-var PopoutListHeading = React.createClass({
-	displayName: 'PopoutListHeading',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-	},
-	render () {
+class PopoutListHeading extends React.Component {
+    static displayName = 'PopoutListHeading';
+
+    static propTypes = {
+		children: PropTypes.node.isRequired,
+		className: PropTypes.string,
+	};
+
+    render() {
 		const className = classnames('PopoutList__heading', this.props.className);
 		const props = blacklist(this.props, 'className');
 
 		return (
 			<div className={className} {...props} />
 		);
-	},
-});
+	}
+}
 
 export default PopoutListHeading;

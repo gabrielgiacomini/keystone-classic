@@ -2,6 +2,8 @@
  * The mobile navigation, displayed on screens < 768px
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import Transition from 'react-addons-css-transition-group';
 
@@ -9,40 +11,45 @@ import MobileSectionItem from './SectionItem';
 
 const ESCAPE_KEY_CODE = 27;
 
-const MobileNavigation = React.createClass({
-	displayName: 'MobileNavigation',
-	propTypes: {
-		brand: React.PropTypes.string,
-		currentListKey: React.PropTypes.string,
-		currentSectionKey: React.PropTypes.string,
-		sections: React.PropTypes.array.isRequired,
-		signoutUrl: React.PropTypes.string,
-	},
-	getInitialState () {
-		return {
-			barIsVisible: false,
-		};
-	},
-	// Handle showing and hiding the menu based on the window size when
-	// resizing
-	componentDidMount () {
+class MobileNavigation extends React.Component {
+    static displayName = 'MobileNavigation';
+
+    static propTypes = {
+		brand: PropTypes.string,
+		currentListKey: PropTypes.string,
+		currentSectionKey: PropTypes.string,
+		sections: PropTypes.array.isRequired,
+		signoutUrl: PropTypes.string,
+	};
+
+    state = {
+        barIsVisible: false,
+    };
+
+    // Handle showing and hiding the menu based on the window size when
+    // resizing
+    componentDidMount() {
 		this.handleResize();
 		window.addEventListener('resize', this.handleResize);
-	},
-	componentWillUnmount () {
+	}
+
+    componentWillUnmount() {
 		window.removeEventListener('resize', this.handleResize);
-	},
-	handleResize () {
+	}
+
+    handleResize = () => {
 		this.setState({
 			barIsVisible: window.innerWidth < 768,
 		});
-	},
-	// Toggle the menu
-	toggleMenu () {
+	};
+
+    // Toggle the menu
+    toggleMenu = () => {
 		this[this.state.menuIsVisible ? 'hideMenu' : 'showMenu']();
-	},
-	// Show the menu
-	showMenu () {
+	};
+
+    // Show the menu
+    showMenu = () => {
 		this.setState({
 			menuIsVisible: true,
 		});
@@ -50,9 +57,10 @@ const MobileNavigation = React.createClass({
 		// Make the body unscrollable, so you can only scroll in the menu
 		document.body.style.overflow = 'hidden';
 		document.body.addEventListener('keyup', this.handleEscapeKey, false);
-	},
-	// Hide the menu
-	hideMenu () {
+	};
+
+    // Hide the menu
+    hideMenu = () => {
 		this.setState({
 			menuIsVisible: false,
 		});
@@ -60,14 +68,16 @@ const MobileNavigation = React.createClass({
 		// Make the body scrollable again
 		document.body.style.overflow = null;
 		document.body.removeEventListener('keyup', this.handleEscapeKey, false);
-	},
-	// If the escape key was pressed, hide the menu
-	handleEscapeKey (event) {
+	};
+
+    // If the escape key was pressed, hide the menu
+    handleEscapeKey = (event) => {
 		if (event.which === ESCAPE_KEY_CODE) {
 			this.hideMenu();
 		}
-	},
-	renderNavigation () {
+	};
+
+    renderNavigation = () => {
 		if (!this.props.sections || !this.props.sections.length) return null;
 
 		return this.props.sections.map((section) => {
@@ -89,15 +99,17 @@ const MobileNavigation = React.createClass({
 				</MobileSectionItem>
 			);
 		});
-	},
-	// Render a blockout
-	renderBlockout () {
+	};
+
+    // Render a blockout
+    renderBlockout = () => {
 		if (!this.state.menuIsVisible) return null;
 
 		return <div className="MobileNavigation__blockout" onClick={this.toggleMenu} />;
-	},
-	// Render the sidebar menu
-	renderMenu () {
+	};
+
+    // Render the sidebar menu
+    renderMenu = () => {
 		if (!this.state.menuIsVisible) return null;
 
 		return (
@@ -107,8 +119,9 @@ const MobileNavigation = React.createClass({
 				</div>
 			</nav>
 		);
-	},
-	render () {
+	};
+
+    render() {
 		if (!this.state.barIsVisible) return null;
 
 		return (
@@ -148,7 +161,7 @@ const MobileNavigation = React.createClass({
 				</Transition>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default MobileNavigation;

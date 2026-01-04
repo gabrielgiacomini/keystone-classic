@@ -8,7 +8,9 @@
  *
  * @see {@link http://localhost:8000}
  */
-import React, { Children, cloneElement, Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Children, cloneElement, Component } from 'react';
 import { Link, Router, Route, browserHistory, IndexRoute } from 'react-router';
 import ReactDOM from 'react-dom';
 import FieldType from './components/FieldType';
@@ -145,7 +147,7 @@ class App extends Component {
 			</div>
 		);
 	}
-};
+}
 
 /**
  * The home page component.

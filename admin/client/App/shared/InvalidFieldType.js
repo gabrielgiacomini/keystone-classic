@@ -2,6 +2,8 @@
  * Renders an "Invalid Field Type" error
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 const InvalidFieldType = function (props) {
@@ -13,8 +15,8 @@ const InvalidFieldType = function (props) {
 };
 
 InvalidFieldType.propTypes = {
-	path: React.PropTypes.string,
-	type: React.PropTypes.string,
+	path: PropTypes.string,
+	type: PropTypes.string,
 };
 
 export default InvalidFieldType;

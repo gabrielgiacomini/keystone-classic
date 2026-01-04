@@ -1,19 +1,21 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 
 /**
  * Displays information about a list and lets you create a new one.
  */
-var ListTile = React.createClass({
-	propTypes: {
-		count: React.PropTypes.string,
-		hideCreateButton: React.PropTypes.bool,
-		href: React.PropTypes.string,
-		label: React.PropTypes.string,
-		path: React.PropTypes.string,
-		spinner: React.PropTypes.object,
-	},
-	render () {
+class ListTile extends React.Component {
+    static propTypes = {
+		count: PropTypes.string,
+		hideCreateButton: PropTypes.bool,
+		href: PropTypes.string,
+		label: PropTypes.string,
+		path: PropTypes.string,
+		spinner: PropTypes.object,
+	};
+
+    render() {
 		var opts = {
 			'data-list-path': this.props.path,
 		};
@@ -37,7 +39,7 @@ var ListTile = React.createClass({
 				</span>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default ListTile;

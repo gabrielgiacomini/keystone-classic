@@ -1,3 +1,5 @@
+import Field from '../Field';
+
 /**
  * @fileoverview
  * This file defines the `NameField` component, which is used to render a name
@@ -5,8 +7,9 @@
  *
  * It provides two text inputs for the first and last name.
  */
-import Field from '../Field';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import {
 	FormInput,
 	Grid,

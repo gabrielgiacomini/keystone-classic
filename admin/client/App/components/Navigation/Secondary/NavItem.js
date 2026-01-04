@@ -2,20 +2,24 @@
  * A navigation item of the secondary navigation
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { Link } from 'react-router';
 
-const SecondaryNavItem = React.createClass({
-	displayName: 'SecondaryNavItem',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-		href: React.PropTypes.string.isRequired,
-		onClick: React.PropTypes.func,
-		path: React.PropTypes.string,
-		title: React.PropTypes.string,
-	},
-	render () {
+class SecondaryNavItem extends React.Component {
+    static displayName = 'SecondaryNavItem';
+
+    static propTypes = {
+		children: PropTypes.node.isRequired,
+		className: PropTypes.string,
+		href: PropTypes.string.isRequired,
+		onClick: PropTypes.func,
+		path: PropTypes.string,
+		title: PropTypes.string,
+	};
+
+    render() {
 		return (
 			<li className={this.props.className} data-list-path={this.props.path}>
 				<Link
@@ -28,7 +32,7 @@ const SecondaryNavItem = React.createClass({
 				</Link>
 			</li>
 		);
-	},
-});
+	}
+}
 
 export default SecondaryNavItem;

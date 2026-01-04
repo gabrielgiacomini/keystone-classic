@@ -2,39 +2,45 @@
  * Render a popout list item
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import blacklist from 'blacklist';
 import classnames from 'classnames';
 
-var PopoutListItem = React.createClass({
-	displayName: 'PopoutListItem',
-	propTypes: {
-		icon: React.PropTypes.string,
-		iconHover: React.PropTypes.string,
-		isSelected: React.PropTypes.bool,
-		label: React.PropTypes.string.isRequired,
-		onClick: React.PropTypes.func,
-	},
-	getInitialState () {
-		return {
-			hover: false,
-		};
-	},
-	hover () {
+class PopoutListItem extends React.Component {
+    static displayName = 'PopoutListItem';
+
+    static propTypes = {
+		icon: PropTypes.string,
+		iconHover: PropTypes.string,
+		isSelected: PropTypes.bool,
+		label: PropTypes.string.isRequired,
+		onClick: PropTypes.func,
+	};
+
+    state = {
+        hover: false,
+    };
+
+    hover = () => {
 		this.setState({ hover: true });
-	},
-	unhover () {
+	};
+
+    unhover = () => {
 		this.setState({ hover: false });
-	},
-	// Render an icon
-	renderIcon () {
+	};
+
+    // Render an icon
+    renderIcon = () => {
 		if (!this.props.icon) return null;
 		const icon = this.state.hover && this.props.iconHover ? this.props.iconHover : this.props.icon;
 		const iconClassname = classnames('PopoutList__item__icon octicon', ('octicon-' + icon));
 
 		return <span className={iconClassname} />;
-	},
-	render () {
+	};
+
+    render() {
 		const itemClassname = classnames('PopoutList__item', {
 			'is-selected': this.props.isSelected,
 		});
@@ -56,7 +62,7 @@ var PopoutListItem = React.createClass({
 				</span>
 			</button>
 		);
-	},
-});
+	}
+}
 
 export default PopoutListItem;

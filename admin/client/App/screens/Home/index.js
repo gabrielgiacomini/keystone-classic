@@ -14,19 +14,20 @@ import {
 	loadCounts,
 } from './actions';
 
-var HomeView = React.createClass({
-	displayName: 'HomeView',
-	getInitialState () {
-		return {
-			modalIsOpen: true,
-		};
-	},
-	// When everything is rendered, start loading the item counts of the lists
-	// from the API
-	componentDidMount () {
+class HomeView extends React.Component {
+    static displayName = 'HomeView';
+
+    state = {
+        modalIsOpen: true,
+    };
+
+    // When everything is rendered, start loading the item counts of the lists
+    // from the API
+    componentDidMount() {
 		this.props.dispatch(loadCounts());
-	},
-	getSpinner () {
+	}
+
+    getSpinner = () => {
 		if (this.props.counts && Object.keys(this.props.counts).length === 0
 			&& (this.props.error || this.props.loading)) {
 			return (
@@ -34,8 +35,9 @@ var HomeView = React.createClass({
 			);
 		}
 		return null;
-	},
-	render () {
+	};
+
+    render() {
 		const spinner = this.getSpinner();
 		return (
 			<Container data-screen-id="home">
@@ -86,8 +88,8 @@ var HomeView = React.createClass({
 				</div>
 			</Container>
 		);
-	},
-});
+	}
+}
 
 export {
 	HomeView,

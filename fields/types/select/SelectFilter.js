@@ -6,7 +6,9 @@
  * It provides a popout list of options to filter by, and it supports
  * inverting the filter.
  */
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import vkey from 'vkey';
 import {
 	Button,

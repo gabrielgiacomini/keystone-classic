@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { DropTarget, DragSource } from 'react-dnd';
 
 import { Columns } from 'FieldTypes';
@@ -37,7 +38,7 @@ class RelatedItemsListRow extends Component {
 RelatedItemsListRow.propTypes = {
 	columns: PropTypes.array.isRequired,
 	dispatch: PropTypes.func.isRequired,
-	dragNewSortOrder: React.PropTypes.number,
+	dragNewSortOrder: PropTypes.number,
 	index: PropTypes.number,
 	item: PropTypes.object.isRequired,
 	refList: PropTypes.object.isRequired,

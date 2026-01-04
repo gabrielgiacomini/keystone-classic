@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import classnames from 'classnames';
 
 import TableRow from './ItemsTableRow';
@@ -6,8 +7,8 @@ import DragDrop from './ItemsTableDragDrop';
 
 import { TABLE_CONTROL_COLUMN_WIDTH } from '../../../../../constants';
 
-const ItemsTable = React.createClass({
-	propTypes: {
+class ItemsTable extends React.Component {
+    static propTypes = {
 		checkedItems: PropTypes.object.isRequired,
 		columns: PropTypes.array.isRequired,
 		deleteTableItem: PropTypes.func.isRequired,
@@ -16,8 +17,9 @@ const ItemsTable = React.createClass({
 		list: PropTypes.object.isRequired,
 		manageMode: PropTypes.bool.isRequired,
 		rowAlert: PropTypes.object.isRequired,
-	},
-	renderCols () {
+	};
+
+    renderCols = () => {
 		let cols = this.props.columns.map(col => (
 			<col key={col.path} width={col.width} />
 		));
@@ -41,8 +43,9 @@ const ItemsTable = React.createClass({
 				{cols}
 			</colgroup>
 		);
-	},
-	renderHeaders () {
+	};
+
+    renderHeaders = () => {
 		let listControlCount = 0;
 
 		if (this.props.list.sortable) listControlCount++;
@@ -93,8 +96,9 @@ const ItemsTable = React.createClass({
 				</tr>
 			</thead>
 		);
-	},
-	render () {
+	};
+
+    render() {
 		const { items } = this.props;
 		if (!items.results.length) return null;
 
@@ -126,7 +130,7 @@ const ItemsTable = React.createClass({
 				</table>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default exports = ItemsTable;

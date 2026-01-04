@@ -1,6 +1,8 @@
 /* eslint quote-props: ["error", "as-needed"] */
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { css } from 'glamor';
 import { FormInput, Glyph, GlyphButton } from '../../../elemental';

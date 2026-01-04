@@ -5,7 +5,9 @@
  *
  * It provides a date picker and a set of options for filtering by date.
  */
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import { findDOMNode } from 'react-dom';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
@@ -64,74 +66,77 @@ function getDefaultValue () {
  * The `DateFilter` component.
  * @extends React.Component
  */
-var DateFilter = React.createClass({
-	displayName: 'DateFilter',
-	propTypes: {
+class DateFilter extends React.Component {
+    static displayName = 'DateFilter';
+
+    static propTypes = {
 		filter: PropTypes.shape({
 			mode: PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
 			inverted: PropTypes.boolean,
 		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			format: 'DD-MM-YYYY',
-			filter: getDefaultValue(),
-			value: moment().startOf('day').toDate(),
-		};
-	},
-	/**
+	};
+
+    static getDefaultValue = getDefaultValue;
+
+    static defaultProps = {
+        format: 'DD-MM-YYYY',
+        filter: getDefaultValue(),
+        value: moment().startOf('day').toDate(),
+    };
+
+    /**
 	 * Gets the initial state of the component.
 	 * @returns {Object} The initial state.
 	 */
-	getInitialState () {
-		return {
-			activeInputField: 'after',
-			month: new Date(), // The month to display in the calendar
-		};
-	},
-	componentDidMount () {
+    state = {
+        activeInputField: 'after',
+        month: new Date(), // The month to display in the calendar
+    };
+
+    componentDidMount() {
 		this.__isMounted = true;
-	},
-	componentWillUnmount () {
+	}
+
+    componentWillUnmount() {
 		this.__isMounted = false;
-	},
+	}
 
-	// ==============================
-	// METHODS
-	// ==============================
+    // ==============================
+    // METHODS
+    // ==============================
 
-	/**
+    /**
 	 * Updates the filter with a new value.
 	 * @param {Object} value The new value.
 	 */
-	updateFilter (value) {
+    updateFilter = (value) => {
 		this.props.onChange({ ...this.props.filter, ...value });
-	},
-	/**
+	};
+
+    /**
 	 * Toggles the inverted state of the filter.
 	 * @param {boolean} value The new inverted state.
 	 */
-	toggleInverted (value) {
+    toggleInverted = (value) => {
 		this.updateFilter({ inverted: value });
 		this.setFocus(this.props.filter.mode);
-	},
-	/**
+	};
+
+    /**
 	 * Selects a new mode for the filter.
 	 * @param {Object} e The event object.
 	 */
-	selectMode (e) {
+    selectMode = (e) => {
 		const mode = e.target.value;
 		this.updateFilter({ mode });
 		this.setFocus(mode);
-	},
-	/**
+	};
+
+    /**
 	 * Sets the focus to the correct input field.
 	 * @param {string} mode The current mode of the filter.
 	 */
-	setFocus (mode) {
+    setFocus = (mode) => {
 		// give the UI a moment to render
 		if (mode === 'between') {
 			setTimeout(() => {
@@ -142,12 +147,13 @@ var DateFilter = React.createClass({
 				this.refs.input.focus();
 			}, 50);
 		}
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the value of one of the input fields.
 	 * @param {Object} e The event object.
 	 */
-	handleInputChange (e) {
+    handleInputChange = (e) => {
 		// TODO @jedwatson
 		// Entering virtually any value will return an "Invalid date", so I'm
 		// temporarily disabling user entry. This entire component needs review.
@@ -161,23 +167,25 @@ var DateFilter = React.createClass({
 		// }
 		// this.updateFilter({ value: value });
 		// this.setState({ month }, this.showCurrentDate);
-	},
-	/**
+	};
+
+    /**
 	 * Sets the active input field.
 	 * @param {string} field The name of the field to set as active.
 	 */
-	setActiveField (field) {
+    setActiveField = (field) => {
 		this.setState({
 			activeInputField: field,
 		});
-	},
-	/**
+	};
+
+    /**
 	 * Switches between the two input fields in "between" mode.
 	 * @param {Object} e The event object.
 	 * @param {Date} day The day that was clicked.
 	 * @param {Object} modifiers The modifiers for the day.
 	 */
-	switchBetweenActiveInputFields (e, day, modifiers) {
+    switchBetweenActiveInputFields = (e, day, modifiers) => {
 		if (modifiers && modifiers.disabled) return;
 
 		const { activeInputField } = this.state;
@@ -193,36 +201,38 @@ var DateFilter = React.createClass({
 				findDOMNode(this.refs[newActiveField]).focus();
 			}
 		);
-	},
-	/**
+	};
+
+    /**
 	 * Selects a day in the date picker.
 	 * @param {Object} e The event object.
 	 * @param {Date} day The day that was clicked.
 	 * @param {Object} modifiers The modifiers for the day.
 	 */
-	selectDay (e, day, modifiers) {
+    selectDay = (e, day, modifiers) => {
 		if (modifiers && modifiers.disabled) return;
 		this.updateFilter({ value: day });
-	},
-	/**
+	};
+
+    /**
 	 * Shows the current date in the date picker.
 	 */
-	showCurrentDate () {
+    showCurrentDate = () => {
 		// give the UI a moment to render
 		setTimeout(() => {
 			this.refs.daypicker.showMonth(this.state.month);
 		}, 50);
-	},
+	};
 
-	// ==============================
-	// RENDERERS
-	// ==============================
+    // ==============================
+    // RENDERERS
+    // ==============================
 
-	/**
+    /**
 	 * Renders the toggle for inverting the filter.
 	 * @returns {React.Element} The rendered toggle.
 	 */
-	renderToggle () {
+    renderToggle = () => {
 		const { filter } = this.props;
 		return (
 			<div style={{ marginBottom: '1em' }}>
@@ -234,12 +244,13 @@ var DateFilter = React.createClass({
 				/>
 			</div>
 		);
-	},
-	/**
+	};
+
+    /**
 	 * Renders the controls for the filter.
 	 * @returns {React.Element} The rendered controls.
 	 */
-	renderControls () {
+    renderControls = () => {
 		let controls;
 		const { activeInputField } = this.state;
 		const { field, filter } = this.props;
@@ -316,12 +327,13 @@ var DateFilter = React.createClass({
 		}
 
 		return controls;
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const { filter } = this.props;
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];
 		return (
@@ -337,7 +349,7 @@ var DateFilter = React.createClass({
 				{this.renderControls()}
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default DateFilter;

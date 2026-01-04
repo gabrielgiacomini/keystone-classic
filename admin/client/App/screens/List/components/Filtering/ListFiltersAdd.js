@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import Transition
@@ -11,61 +12,69 @@ import ListHeaderButton from '../ListHeaderButton';
 
 import { setFilter } from '../../actions';
 
-var ListFiltersAdd = React.createClass({
-	displayName: 'ListFiltersAdd',
-	propTypes: {
-		maxHeight: React.PropTypes.number,
-	},
-	getDefaultProps () {
-		return {
-			maxHeight: 360,
-		};
-	},
-	getInitialState () {
-		return {
-			innerHeight: 0,
-			isOpen: false,
-			searchString: '',
-			selectedField: false,
-		};
-	},
-	updateSearch (e) {
+class ListFiltersAdd extends React.Component {
+    static displayName = 'ListFiltersAdd';
+
+    static propTypes = {
+		maxHeight: PropTypes.number,
+	};
+
+    static defaultProps = {
+        maxHeight: 360,
+    };
+
+    state = {
+        innerHeight: 0,
+        isOpen: false,
+        searchString: '',
+        selectedField: false,
+    };
+
+    updateSearch = (e) => {
 		this.setState({ searchString: e.target.value });
-	},
-	openPopout () {
+	};
+
+    openPopout = () => {
 		this.setState({ isOpen: true }, this.focusSearch);
-	},
-	closePopout () {
+	};
+
+    closePopout = () => {
 		this.setState({
 			innerHeight: 0,
 			isOpen: false,
 			searchString: '',
 			selectedField: false,
 		});
-	},
-	setPopoutHeight (height) {
+	};
+
+    setPopoutHeight = (height) => {
 		this.setState({ innerHeight: Math.min(this.props.maxHeight, height) });
-	},
-	navigateBack () {
+	};
+
+    navigateBack = () => {
 		this.setState({
 			selectedField: false,
 			searchString: '',
 			innerHeight: 0,
 		}, this.focusSearch);
-	},
-	focusSearch () {
+	};
+
+    focusSearch = () => {
 		findDOMNode(this.refs.search).focus();
-	},
-	selectField (field) {
+	};
+
+    selectField = (field) => {
 		this.setState({
 			selectedField: field,
 		});
-	},
-	applyFilter (value) {
+	};
+
+    applyFilter = (value) => {
 		this.props.dispatch(setFilter(this.state.selectedField.path, value));
 		this.closePopout();
-	},
-	renderList () {
+	};
+
+    renderList = () => {
 		const activeFilterFields = this.props.activeFilters.map(obj => obj.field);
 		const activeFilterPaths = activeFilterFields.map(obj => obj.path);
 		const { searchString } = this.state;
@@ -121,8 +130,9 @@ var ListFiltersAdd = React.createClass({
 				</Popout.Body>
 			</Popout.Pane>
 		);
-	},
-	renderForm () {
+	};
+
+    renderForm = () => {
 		return (
 			<Popout.Pane onLayout={this.setPopoutHeight} key="form">
 				<ListFiltersAddForm
@@ -137,8 +147,9 @@ var ListFiltersAdd = React.createClass({
 				/>
 			</Popout.Pane>
 		);
-	},
-	render () {
+	};
+
+    render() {
 		const { isOpen, selectedField } = this.state;
 		const popoutBodyStyle = this.state.innerHeight
 			? { height: this.state.innerHeight }
@@ -176,7 +187,7 @@ var ListFiltersAdd = React.createClass({
 				</Popout>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default ListFiltersAdd;

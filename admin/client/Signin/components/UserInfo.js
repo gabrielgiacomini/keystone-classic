@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Button } from '../../App/elemental';
 
 // TODO Figure out if we should change "Keystone" to "Admin area"

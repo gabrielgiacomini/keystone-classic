@@ -3,6 +3,8 @@
  * This file defines the `EmailColumn` component, which is used to render the
  * value of an `Email` field in a list view.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import ItemsTableCell from '../../components/ItemsTableCell';
 import ItemsTableValue from '../../components/ItemsTableValue';
@@ -11,17 +13,19 @@ import ItemsTableValue from '../../components/ItemsTableValue';
  * The `EmailColumn` component.
  * @extends React.Component
  */
-var EmailColumn = React.createClass({
-	displayName: 'EmailColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
+class EmailColumn extends React.Component {
+    static displayName = 'EmailColumn';
+
+    static propTypes = {
+		col: PropTypes.object,
+		data: PropTypes.object,
+	};
+
+    /**
 	 * Renders the value of the field.
 	 * @returns {React.Element} The rendered value.
 	 */
-	renderValue () {
+    renderValue = () => {
 		const value = this.props.data.fields[this.props.col.path];
 		if (!value) return;
 
@@ -30,18 +34,19 @@ var EmailColumn = React.createClass({
 				{value}
 			</ItemsTableValue>
 		);
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		return (
 			<ItemsTableCell>
 				{this.renderValue()}
 			</ItemsTableCell>
 		);
-	},
-});
+	}
+}
 
 export default EmailColumn;

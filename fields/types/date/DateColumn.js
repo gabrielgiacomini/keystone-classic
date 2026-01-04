@@ -3,6 +3,8 @@
  * This file defines the `DateColumn` component, which is used to render the
  * value of a `Date` or `Datetime` field in a list view.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import moment from 'moment';
 import ItemsTableCell from '../../components/ItemsTableCell';
@@ -12,41 +14,45 @@ import ItemsTableValue from '../../components/ItemsTableValue';
  * The `DateColumn` component.
  * @extends React.Component
  */
-var DateColumn = React.createClass({
-	displayName: 'DateColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-		linkTo: React.PropTypes.string,
-	},
-	/**
+class DateColumn extends React.Component {
+    static displayName = 'DateColumn';
+
+    static propTypes = {
+		col: PropTypes.object,
+		data: PropTypes.object,
+		linkTo: PropTypes.string,
+	};
+
+    /**
 	 * Converts a value to a moment object.
 	 * @param {*} value The value to convert.
 	 * @returns {moment} The moment object.
 	 */
-	toMoment (value) {
+    toMoment = (value) => {
 		if (this.props.col.field.isUTC) {
 			return moment.utc(value);
 		} else {
 			return moment(value);
 		}
-	},
-	/**
+	};
+
+    /**
 	 * Gets the value of the field.
 	 * @returns {string} The formatted value.
 	 */
-	getValue () {
+    getValue = () => {
 		const value = this.props.data.fields[this.props.col.path];
 		if (!value) return null;
 
 		const format = (this.props.col.type === 'datetime') ? 'MMMM Do YYYY, h:mm:ss a' : 'MMMM Do YYYY';
 		return this.toMoment(value).format(format);
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const value = this.getValue();
 		const empty = !value && this.props.linkTo ? true : false;
 		return (
@@ -56,7 +62,7 @@ var DateColumn = React.createClass({
 				</ItemsTableValue>
 			</ItemsTableCell>
 		);
-	},
-});
+	}
+}
 
 export default DateColumn;

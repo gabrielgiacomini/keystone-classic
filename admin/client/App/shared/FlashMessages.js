@@ -14,38 +14,44 @@
  * Instead of error, it can also be hilight, info, success or warning
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import _ from 'lodash';
 
 import FlashMessage from './FlashMessage';
 
-var FlashMessages = React.createClass({
-	displayName: 'FlashMessages',
-	propTypes: {
-		messages: React.PropTypes.oneOfType([
-			React.PropTypes.bool,
-			React.PropTypes.shape({
-				error: React.PropTypes.array,
-				hilight: React.PropTypes.array,
-				info: React.PropTypes.array,
-				success: React.PropTypes.array,
-				warning: React.PropTypes.array,
+class FlashMessages extends React.Component {
+    static displayName = 'FlashMessages';
+
+    static propTypes = {
+		messages: PropTypes.oneOfType([
+			PropTypes.bool,
+			PropTypes.shape({
+				error: PropTypes.array,
+				hilight: PropTypes.array,
+				info: PropTypes.array,
+				success: PropTypes.array,
+				warning: PropTypes.array,
 			}),
 		]),
-	},
-	// Render messages by their type
-	renderMessages (messages, type) {
+	};
+
+    // Render messages by their type
+    renderMessages = (messages, type) => {
 		if (!messages || !messages.length) return null;
 
 		return messages.map((message, i) => {
 			return <FlashMessage message={message} type={type} key={`i${i}`} />;
 		});
-	},
-	// Render the individual messages based on their type
-	renderTypes (types) {
+	};
+
+    // Render the individual messages based on their type
+    renderTypes = (types) => {
 		return Object.keys(types).map(type => this.renderMessages(types[type], type));
-	},
-	render () {
+	};
+
+    render() {
 		if (!this.props.messages) return null;
 
 		return (
@@ -53,7 +59,7 @@ var FlashMessages = React.createClass({
 				{_.isPlainObject(this.props.messages) && this.renderTypes(this.props.messages)}
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default FlashMessages;

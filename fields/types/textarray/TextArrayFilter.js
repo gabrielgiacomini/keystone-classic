@@ -6,6 +6,8 @@
  * It provides a set of options for filtering by text, and it supports
  * inverting the filter.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 
@@ -43,59 +45,62 @@ function getDefaultValue () {
  * The `TextArrayFilter` component.
  * @extends React.Component
  */
-var TextArrayFilter = React.createClass({
-	propTypes: {
-		filter: React.PropTypes.shape({
-			mode: React.PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
-			presence: React.PropTypes.oneOf(PRESENCE_OPTIONS.map(i => i.value)),
-			value: React.PropTypes.string,
+class TextArrayFilter extends React.Component {
+    static propTypes = {
+		filter: PropTypes.shape({
+			mode: PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
+			presence: PropTypes.oneOf(PRESENCE_OPTIONS.map(i => i.value)),
+			value: PropTypes.string,
 		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
-	/**
+	};
+
+    static getDefaultValue = getDefaultValue;
+
+    static defaultProps = {
+        filter: getDefaultValue(),
+    };
+
+    /**
 	 * Updates the filter with a new value.
 	 * @param {Object} value The new value.
 	 */
-	updateFilter (value) {
+    updateFilter = (value) => {
 		this.props.onChange({ ...this.props.filter, ...value });
-	},
-	/**
+	};
+
+    /**
 	 * Selects a new mode for the filter.
 	 * @param {Object} e The event object.
 	 */
-	selectMode (e) {
+    selectMode = (e) => {
 		const mode = e.target.value;
 		this.updateFilter({ mode });
 		findDOMNode(this.refs.focusTarget).focus();
-	},
-	/**
+	};
+
+    /**
 	 * Selects a new presence for the filter.
 	 * @param {Object} e The event object.
 	 */
-	selectPresence (e) {
+    selectPresence = (e) => {
 		const presence = e.target.value;
 		this.updateFilter({ presence });
 		findDOMNode(this.refs.focusTarget).focus();
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the value of the filter.
 	 * @param {Object} e The event object.
 	 */
-	updateValue (e) {
+    updateValue = (e) => {
 		this.updateFilter({ value: e.target.value });
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const { filter } = this.props;
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];
 		const presence = PRESENCE_OPTIONS.filter(i => i.value === filter.presence)[0];
@@ -127,7 +132,7 @@ var TextArrayFilter = React.createClass({
 				/>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default TextArrayFilter;

@@ -2,18 +2,22 @@
  * Render the body of a popout
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import blacklist from 'blacklist';
 import classnames from 'classnames';
 
-var PopoutBody = React.createClass({
-	displayName: 'PopoutBody',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-		scrollable: React.PropTypes.bool,
-	},
-	render () {
+class PopoutBody extends React.Component {
+    static displayName = 'PopoutBody';
+
+    static propTypes = {
+		children: PropTypes.node.isRequired,
+		className: PropTypes.string,
+		scrollable: PropTypes.bool,
+	};
+
+    render() {
 		const className = classnames('Popout__body', {
 			'Popout__scrollable-area': this.props.scrollable,
 		}, this.props.className);
@@ -22,7 +26,7 @@ var PopoutBody = React.createClass({
 		return (
 			<div className={className} {...props} />
 		);
-	},
-});
+	}
+}
 
 export default PopoutBody;

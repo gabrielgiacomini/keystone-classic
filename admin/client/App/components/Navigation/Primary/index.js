@@ -3,36 +3,42 @@
  * the home-, website- and signout buttons.
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { Container } from '../../../elemental';
 import PrimaryNavItem from './NavItem';
 
-var PrimaryNavigation = React.createClass({
-	displayName: 'PrimaryNavigation',
-	propTypes: {
-		brand: React.PropTypes.string,
-		currentSectionKey: React.PropTypes.string,
-		sections: React.PropTypes.array.isRequired,
-		signoutUrl: React.PropTypes.string,
-	},
-	getInitialState () {
-		return {};
-	},
-	// Handle resizing, hide this navigation on mobile (i.e. < 768px) screens
-	componentDidMount () {
+class PrimaryNavigation extends React.Component {
+    static displayName = 'PrimaryNavigation';
+
+    static propTypes = {
+		brand: PropTypes.string,
+		currentSectionKey: PropTypes.string,
+		sections: PropTypes.array.isRequired,
+		signoutUrl: PropTypes.string,
+	};
+
+    state = {};
+
+    // Handle resizing, hide this navigation on mobile (i.e. < 768px) screens
+    componentDidMount() {
 		this.handleResize();
 		window.addEventListener('resize', this.handleResize);
-	},
-	componentWillUnmount () {
+	}
+
+    componentWillUnmount() {
 		window.removeEventListener('resize', this.handleResize);
-	},
-	handleResize () {
+	}
+
+    handleResize = () => {
 		this.setState({
 			navIsVisible: window.innerWidth >= 768,
 		});
-	},
-	// Render the sign out button
-	renderSignout () {
+	};
+
+    // Render the sign out button
+    renderSignout = () => {
 		if (!this.props.signoutUrl) return null;
 
 		return (
@@ -44,9 +50,10 @@ var PrimaryNavigation = React.createClass({
 				<span className="octicon octicon-sign-out" />
 			</PrimaryNavItem>
 		);
-	},
-	// Render the back button
-	renderBackButton () {
+	};
+
+    // Render the back button
+    renderBackButton = () => {
 		if (!Keystone.backUrl) return null;
 
 		return (
@@ -58,17 +65,19 @@ var PrimaryNavigation = React.createClass({
 				<span className="octicon octicon-globe" />
 			</PrimaryNavItem>
 		);
-	},
-	// Render the link to the webpage
-	renderFrontLink () {
+	};
+
+    // Render the link to the webpage
+    renderFrontLink = () => {
 		return (
 			<ul className="app-nav app-nav--primary app-nav--right">
 				{this.renderBackButton()}
 				{this.renderSignout()}
 			</ul>
 		);
-	},
-	renderBrand () {
+	};
+
+    renderBrand = () => {
 		// TODO: support navbarLogo from keystone config
 
 		const { brand, currentSectionKey } = this.props;
@@ -84,9 +93,10 @@ var PrimaryNavigation = React.createClass({
 				<span className="octicon octicon-home" />
 			</PrimaryNavItem>
 		);
-	},
-	// Render the navigation
-	renderNavigation () {
+	};
+
+    // Render the navigation
+    renderNavigation = () => {
 		if (!this.props.sections || !this.props.sections.length) return null;
 
 		return this.props.sections.map((section) => {
@@ -109,8 +119,9 @@ var PrimaryNavigation = React.createClass({
 				</PrimaryNavItem>
 			);
 		});
-	},
-	render () {
+	};
+
+    render() {
 		if (!this.state.navIsVisible) return null;
 
 		return (
@@ -124,7 +135,7 @@ var PrimaryNavigation = React.createClass({
 				</Container>
 			</nav>
 		);
-	},
-});
+	}
+}
 
 export default PrimaryNavigation;

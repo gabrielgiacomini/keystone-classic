@@ -6,6 +6,8 @@
  * It provides a set of options for filtering by number, and it supports
  * inverting the filter.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 
@@ -44,36 +46,35 @@ function getDefaultValue () {
  * The `NumberArrayFilter` component.
  * @extends React.Component
  */
-var NumberArrayFilter = React.createClass({
-	propTypes: {
-		filter: React.PropTypes.shape({
-			mode: React.PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
-			presence: React.PropTypes.oneOf(PRESENCE_OPTIONS.map(i => i.value)),
-			value: React.PropTypes.oneOfType([
-				React.PropTypes.number,
-				React.PropTypes.string,
-				React.PropTypes.shape({
-					min: React.PropTypes.number,
-					max: React.PropTypes.number,
+class NumberArrayFilter extends React.Component {
+    static propTypes = {
+		filter: PropTypes.shape({
+			mode: PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
+			presence: PropTypes.oneOf(PRESENCE_OPTIONS.map(i => i.value)),
+			value: PropTypes.oneOfType([
+				PropTypes.number,
+				PropTypes.string,
+				PropTypes.shape({
+					min: PropTypes.number,
+					max: PropTypes.number,
 				}),
 			]),
 		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
-	/**
+	};
+
+    static getDefaultValue = getDefaultValue;
+
+    static defaultProps = {
+        filter: getDefaultValue(),
+    };
+
+    /**
 	 * Returns a function that handles a specific type of onChange events for
 	 * either 'minValue', 'maxValue' or simply 'value'
 	 * @param {string} type The type of the value to handle.
 	 * @returns {function} The change handler.
 	 */
-	handleValueChangeBuilder (type) {
+    handleValueChangeBuilder = (type) => {
 		var self = this;
 		return function (e) {
 			switch (type) {
@@ -100,39 +101,43 @@ var NumberArrayFilter = React.createClass({
 					break;
 			}
 		};
-	},
-	/**
+	};
+
+    /**
 	 * Updates the filter with a new value.
 	 * @param {Object} changedProp The changed property.
 	 */
-	updateFilter (changedProp) {
+    updateFilter = (changedProp) => {
 		this.props.onChange({ ...this.props.filter, ...changedProp });
-	},
-	/**
+	};
+
+    /**
 	 * Selects a new mode for the filter.
 	 * @param {Object} e The event object.
 	 */
-	selectMode (e) {
+    selectMode = (e) => {
 		const mode = e.target.value;
 		this.updateFilter({ mode });
 		findDOMNode(this.refs.focusTarget).focus();
-	},
-	/**
+	};
+
+    /**
 	 * Selects a new presence for the filter.
 	 * @param {Object} e The event object.
 	 */
-	selectPresence (e) {
+    selectPresence = (e) => {
 		const presence = e.target.value;
 		this.updateFilter({ presence });
 		findDOMNode(this.refs.focusTarget).focus();
-	},
-	/**
+	};
+
+    /**
 	 * Renders the controls for the filter.
 	 * @param {Object} presence The presence object.
 	 * @param {Object} mode The mode object.
 	 * @returns {React.Element} The rendered controls.
 	 */
-	renderControls (presence, mode) {
+    renderControls = (presence, mode) => {
 		let controls;
 		const placeholder = presence.label + ' is ' + mode.label.toLowerCase() + '...';
 
@@ -173,12 +178,13 @@ var NumberArrayFilter = React.createClass({
 		}
 
 		return controls;
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const { filter } = this.props;
 		// Get mode and presence based on their values with .filter
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];
@@ -203,8 +209,7 @@ var NumberArrayFilter = React.createClass({
 				{this.renderControls(presence, mode)}
 			</div>
 		);
-	},
-
-});
+	}
+}
 
 export default NumberArrayFilter;

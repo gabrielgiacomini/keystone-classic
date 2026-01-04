@@ -1,15 +1,18 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ItemsTableCell from '../../components/ItemsTableCell';
 import ItemsTableValue from '../../components/ItemsTableValue';
 
-var IdColumn = React.createClass({
-	displayName: 'IdColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-		list: React.PropTypes.object,
-	},
-	renderValue () {
+class IdColumn extends React.Component {
+    static displayName = 'IdColumn';
+
+    static propTypes = {
+		col: PropTypes.object,
+		data: PropTypes.object,
+		list: PropTypes.object,
+	};
+
+    renderValue = () => {
 		const value = this.props.data.id;
 		if (!value) return null;
 
@@ -18,14 +21,15 @@ var IdColumn = React.createClass({
 				{value}
 			</ItemsTableValue>
 		);
-	},
-	render () {
+	};
+
+    render() {
 		return (
 			<ItemsTableCell>
 				{this.renderValue()}
 			</ItemsTableCell>
 		);
-	},
-});
+	}
+}
 
 export default IdColumn;

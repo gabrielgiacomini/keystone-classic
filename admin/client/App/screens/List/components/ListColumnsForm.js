@@ -8,29 +8,31 @@ import ListHeaderButton from './ListHeaderButton';
 
 import { setActiveColumns } from '../actions';
 
-var ListColumnsForm = React.createClass({
-	displayName: 'ListColumnsForm',
-	getInitialState () {
-		return {
-			selectedColumns: {},
-			searchString: '',
-		};
-	},
-	getSelectedColumnsFromStore () {
+class ListColumnsForm extends React.Component {
+    static displayName = 'ListColumnsForm';
+
+    state = {
+        selectedColumns: {},
+        searchString: '',
+    };
+
+    getSelectedColumnsFromStore = () => {
 		var selectedColumns = {};
 		this.props.activeColumns.forEach(col => {
 			selectedColumns[col.path] = true;
 		});
 		return selectedColumns;
-	},
-	togglePopout (visible) {
+	};
+
+    togglePopout = (visible) => {
 		this.setState({
 			selectedColumns: this.getSelectedColumnsFromStore(),
 			isOpen: visible,
 			searchString: '',
 		});
-	},
-	toggleColumn (path, value) {
+	};
+
+    toggleColumn = (path, value) => {
 		const newColumns = assign({}, this.state.selectedColumns);
 
 		if (value) {
@@ -42,15 +44,18 @@ var ListColumnsForm = React.createClass({
 		this.setState({
 			selectedColumns: newColumns,
 		});
-	},
-	applyColumns () {
+	};
+
+    applyColumns = () => {
 		this.props.dispatch(setActiveColumns(Object.keys(this.state.selectedColumns)));
 		this.togglePopout(false);
-	},
-	updateSearch (e) {
+	};
+
+    updateSearch = (e) => {
 		this.setState({ searchString: e.target.value });
-	},
-	renderColumns () {
+	};
+
+    renderColumns = () => {
 		const availableColumns = this.props.availableColumns;
 		const { searchString } = this.state;
 		let filteredColumns = availableColumns;
@@ -79,8 +84,9 @@ var ListColumnsForm = React.createClass({
 					onClick={() => { this.toggleColumn(path, !selected); }} />
 			);
 		});
-	},
-	render () {
+	};
+
+    render() {
 		const formFieldStyles = {
 			borderBottom: '1px dashed rgba(0,0,0,0.1)',
 			marginBottom: '1em',
@@ -119,7 +125,7 @@ var ListColumnsForm = React.createClass({
 				</Popout>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default ListColumnsForm;

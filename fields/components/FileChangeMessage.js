@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { FormInput } from '../../admin/client/App/elemental';
 import { fade } from '../../admin/client/utils/color';
 import theme from '../../admin/client/theme';
@@ -23,7 +24,7 @@ function FileChangeMessage ({ style, color, ...props }) {
 			{...props}
 		/>
 	);
-};
+}
 
 FileChangeMessage.propTypes = {
 	color: PropTypes.oneOf(['danger', 'default', 'success']),

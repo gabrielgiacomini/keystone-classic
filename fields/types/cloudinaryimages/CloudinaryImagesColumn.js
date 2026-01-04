@@ -3,6 +3,8 @@
  * This file defines the `CloudinaryImagesColumn` component, which is used to
  * render the value of a `CloudinaryImages` field in a list view.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import CloudinaryImageSummary from '../../components/columns/CloudinaryImageSummary';
 import ItemsTableCell from '../../components/ItemsTableCell';
@@ -17,18 +19,20 @@ const moreIndicatorStyle = {
  * The `CloudinaryImagesColumn` component.
  * @extends React.Component
  */
-var CloudinaryImagesColumn = React.createClass({
-	displayName: 'CloudinaryImagesColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
+class CloudinaryImagesColumn extends React.Component {
+    static displayName = 'CloudinaryImagesColumn';
+
+    static propTypes = {
+		col: PropTypes.object,
+		data: PropTypes.object,
+	};
+
+    /**
 	 * Renders the values of a many-to-many relationship.
 	 * @param {Array} value The array of related items.
 	 * @returns {React.Element} The rendered values.
 	 */
-	renderMany (value) {
+    renderMany = (value) => {
 		if (!value || !value.length) return;
 		const items = [];
 		for (let i = 0; i < 3; i++) {
@@ -39,23 +43,25 @@ var CloudinaryImagesColumn = React.createClass({
 			items.push(<span key="more" style={moreIndicatorStyle}>[...{value.length - 3} more]</span>);
 		}
 		return items;
-	},
-	/**
+	};
+
+    /**
 	 * Renders the value of a one-to-many relationship.
 	 * @param {Object} value The related item.
 	 * @returns {React.Element} The rendered value.
 	 */
-	renderValue (value) {
+    renderValue = (value) => {
 		if (!value || !Object.keys(value).length) return;
 
 		return <CloudinaryImageSummary image={value} secure={this.props.col.field.secure} />;
 
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const value = this.props.data.fields[this.props.col.path];
 		const many = value.length > 1;
 
@@ -66,7 +72,7 @@ var CloudinaryImagesColumn = React.createClass({
 				</ItemsTableValue>
 			</ItemsTableCell>
 		);
-	},
-});
+	}
+}
 
 export default CloudinaryImagesColumn;

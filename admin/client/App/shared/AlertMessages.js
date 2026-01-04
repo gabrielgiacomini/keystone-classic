@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Alert } from '../elemental';
 
@@ -17,20 +18,21 @@ import { upcase } from '../../utils/string';
  *   based on their type. For example: validation errors should be displayed next
  *   to each invalid field and signin errors should promt the user to sign in.
  */
-var AlertMessages = React.createClass({
-	displayName: 'AlertMessages',
-	propTypes: {
-		alerts: React.PropTypes.shape({
-			error: React.PropTypes.Object,
-			success: React.PropTypes.Object,
+class AlertMessages extends React.Component {
+    static displayName = 'AlertMessages';
+
+    static propTypes = {
+		alerts: PropTypes.shape({
+			error: PropTypes.Object,
+			success: PropTypes.Object,
 		}),
-	},
-	getDefaultProps () {
-		return {
-			alerts: {},
-		};
-	},
-	renderValidationErrors () {
+	};
+
+    static defaultProps = {
+        alerts: {},
+    };
+
+    renderValidationErrors = () => {
 		let errors = this.props.alerts.error.detail;
 		if (errors.name === 'ValidationError') {
 			errors = errors.errors;
@@ -65,8 +67,9 @@ var AlertMessages = React.createClass({
 		}
 
 		return <Alert color="danger">{alertContent}</Alert>;
-	},
-	render () {
+	};
+
+    render() {
 		let { error, success } = this.props.alerts;
 
 		if (error) {
@@ -91,7 +94,7 @@ var AlertMessages = React.createClass({
 		}
 
 		return null; // No alerts, render nothing
-	},
-});
+	}
+}
 
 export default AlertMessages;

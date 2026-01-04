@@ -6,6 +6,8 @@
  * It provides a set of inputs for the different parts of a location, and it
  * supports inverting the filter.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 
@@ -40,55 +42,57 @@ function getDefaultValue () {
  * The `LocationFilter` component.
  * @extends React.Component
  */
-var TextFilter = React.createClass({
-	propTypes: {
-		filter: React.PropTypes.shape({
-			inverted: React.PropTypes.boolean,
-			street: React.PropTypes.string,
-			city: React.PropTypes.string,
-			state: React.PropTypes.string,
-			code: React.PropTypes.string,
-			country: React.PropTypes.string,
+class TextFilter extends React.Component {
+    static propTypes = {
+		filter: PropTypes.shape({
+			inverted: PropTypes.boolean,
+			street: PropTypes.string,
+			city: PropTypes.string,
+			state: PropTypes.string,
+			code: PropTypes.string,
+			country: PropTypes.string,
 		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
-	/**
+	};
+
+    static getDefaultValue = getDefaultValue;
+
+    static defaultProps = {
+        filter: getDefaultValue(),
+    };
+
+    /**
 	 * Updates the filter with a new value.
 	 * @param {string} key The key of the value to update.
 	 * @param {*} val The new value.
 	 */
-	updateFilter (key, val) {
+    updateFilter = (key, val) => {
 		const update = {};
 		update[key] = val;
 		this.props.onChange(Object.assign(this.props.filter, update));
-	},
-	/**
+	};
+
+    /**
 	 * Toggles the inverted state of the filter.
 	 * @param {boolean} value The new inverted state.
 	 */
-	toggleInverted (value) {
+    toggleInverted = (value) => {
 		this.updateFilter('inverted', value);
 		findDOMNode(this.refs.focusTarget).focus();
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the value of one of the filter fields.
 	 * @param {Object} e The event object.
 	 */
-	updateValue (e) {
+    updateValue = (e) => {
 		this.updateFilter(e.target.name, e.target.value);
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const { filter } = this.props;
 
 		return (
@@ -149,7 +153,7 @@ var TextFilter = React.createClass({
 				</Grid.Row>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default TextFilter;

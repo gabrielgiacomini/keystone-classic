@@ -1,10 +1,13 @@
+import Domify from 'react-domify';
+
 /**
  * @fileoverview
  * This file defines the `FieldSpec` component, which is used to render a single
  * field type in the KeystoneJS Field Types Explorer. It displays the field
  * itself, a Domify component to show the field's value, and a filter component.
  */
-import Domify from 'react-domify';
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { Form } from '../../../admin/client/App/elemental';
 
@@ -16,51 +19,53 @@ import Row from './Row';
  * and a filter.
  * @extends React.Component
  */
-const ExplorerFieldType = React.createClass({
-	propTypes: {
-		FieldComponent: React.PropTypes.func.isRequired,
-		FilterComponent: React.PropTypes.func.isRequired,
-		i: React.PropTypes.number,
-		readmeIsVisible: React.PropTypes.bool,
-		spec: React.PropTypes.object.isRequired,
-		value: React.PropTypes.any,
-	},
-	/**
+class ExplorerFieldType extends React.Component {
+    static propTypes = {
+		FieldComponent: PropTypes.func.isRequired,
+		FilterComponent: PropTypes.func.isRequired,
+		i: PropTypes.number,
+		readmeIsVisible: PropTypes.bool,
+		spec: PropTypes.object.isRequired,
+		value: PropTypes.any,
+	};
+
+    /**
 	 * Gets the initial state of the component.
 	 * @returns {Object} The initial state.
 	 */
-	getInitialState () {
-		return {
-			filter: this.props.FilterComponent.getDefaultValue(),
-			value: this.props.value,
-		};
-	},
-	/**
+    state = {
+        filter: this.props.FilterComponent.getDefaultValue(),
+        value: this.props.value,
+    };
+
+    /**
 	 * Handles a change in the field's value.
 	 * @param {Object} e The event object.
 	 */
-	onFieldChange (e) {
+    onFieldChange = (e) => {
 		var logValue = typeof e.value === 'string' ? `"${e.value}"` : e.value;
 		console.log(`${this.props.FieldComponent.type} field value changed:`, logValue);
 		this.setState({
 			value: e.value,
 		});
-	},
-	/**
+	};
+
+    /**
 	 * Handles a change in the filter's value.
 	 * @param {*} value The new filter value.
 	 */
-	onFilterChange (value) {
+    onFilterChange = (value) => {
 		console.log(`${this.props.FieldComponent.type} filter value changed:`, value);
 		this.setState({
 			filter: value,
 		});
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const { FieldComponent, FilterComponent, readmeIsVisible, spec } = this.props;
 		const className = this.props.i ? 'fx-page__field__bordered' : undefined;
 		return (
@@ -104,7 +109,7 @@ const ExplorerFieldType = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default ExplorerFieldType;

@@ -1,3 +1,5 @@
+import Field from '../Field';
+
 /**
  * @fileoverview
  * This file defines the `FileField` component, which is used to render a file
@@ -6,8 +8,9 @@
  * It provides a button to upload a file, and it displays the name of the
  * uploaded file. It also provides a button to remove the file.
  */
-import Field from '../Field';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import {
 	Button,
 	FormField,
@@ -76,7 +79,7 @@ export default Field.create({
 	 * Handles the component receiving new props.
 	 * @param {Object} nextProps The new props.
 	 */
-	componentWillUpdate (nextProps) {
+	UNSAFE_componentWillUpdate (nextProps) {
 		// Show the new filename when it's finished uploading
 		if (this.props.value.filename !== nextProps.value.filename) {
 			this.setState(buildInitialState(nextProps));

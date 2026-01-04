@@ -1,3 +1,7 @@
+import ArrayFieldMixin from '../../mixins/ArrayField';
+import DateInput from '../../components/DateInput';
+import Field from '../Field';
+
 /**
  * @fileoverview
  * This file defines the `DateArrayField` component, which is used to render a
@@ -6,9 +10,8 @@
  * It uses the `ArrayFieldMixin` to provide the core functionality for an
  * array field, and it provides a `DateInput` component to edit the dates.
  */
-import ArrayFieldMixin from '../../mixins/ArrayField';
-import DateInput from '../../components/DateInput';
-import Field from '../Field';
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import moment from 'moment';
 
@@ -28,8 +31,8 @@ export default Field.create({
 	mixins: [ArrayFieldMixin],
 
 	propTypes: {
-		formatString: React.PropTypes.string,
-		inputFormat: React.PropTypes.string,
+		formatString: PropTypes.string,
+		inputFormat: PropTypes.string,
 	},
 
 	/**

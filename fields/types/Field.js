@@ -12,6 +12,7 @@
 import classnames from 'classnames';
 import evalDependsOn from '../utils/evalDependsOn.js';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { findDOMNode } from 'react-dom';
 import { FormField, FormInput, FormNote } from '../../admin/client/App/elemental';
 import blacklist from 'blacklist';
@@ -175,7 +176,7 @@ export const Mixins = {
 		/**
 		 * Sets the initial collapsed state of the field.
 		 */
-		componentWillMount () {
+		UNSAFE_componentWillMount () {
 			this.setState({
 				isCollapsed: this.shouldCollapse(),
 			});
@@ -268,7 +269,7 @@ export const create = function (spec) {
 		field.mixins = field.mixins.concat(spec.mixins);
 	}
 
-	return React.createClass(field);
+	return createReactClass(field);
 
 };
 

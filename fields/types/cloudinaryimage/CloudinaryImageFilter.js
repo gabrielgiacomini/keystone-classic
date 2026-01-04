@@ -5,6 +5,8 @@
  *
  * It provides a segmented control to filter by whether an image is set or not.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 import { SegmentedControl } from '../../../admin/client/App/elemental';
@@ -28,32 +30,32 @@ function getDefaultValue () {
  * The `CloudinaryImageFilter` component.
  * @extends React.Component
  */
-var CloudinaryImageFilter = React.createClass({
-	propTypes: {
-		filter: React.PropTypes.shape({
-			exists: React.PropTypes.oneOf(OPTIONS.map(i => i.value)),
+class CloudinaryImageFilter extends React.Component {
+    static propTypes = {
+		filter: PropTypes.shape({
+			exists: PropTypes.oneOf(OPTIONS.map(i => i.value)),
 		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
-	/**
+	};
+
+    static getDefaultValue = getDefaultValue;
+
+    static defaultProps = {
+        filter: getDefaultValue(),
+    };
+
+    /**
 	 * Handles a change in the filter's value.
 	 * @param {boolean} value The new value.
 	 */
-	toggleExists (value) {
+    toggleExists = (value) => {
 		this.props.onChange({ exists: value });
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		const { filter } = this.props;
 
 		return (
@@ -64,7 +66,7 @@ var CloudinaryImageFilter = React.createClass({
 				value={filter.exists}
 			/>
 		);
-	},
-});
+	}
+}
 
 export default CloudinaryImageFilter;

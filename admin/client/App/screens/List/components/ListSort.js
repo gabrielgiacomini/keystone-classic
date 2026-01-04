@@ -1,63 +1,73 @@
 import { FormNote, FormField, FormInput } from '../../../elemental';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import vkey from 'vkey';
 
 import Kbd from '../../../shared/Kbd';
 import Popout from '../../../shared/Popout';
 import PopoutList from '../../../shared/Popout/PopoutList';
 
-var ListSort = React.createClass({
-	displayName: 'ListSort',
-	propTypes: {
+class ListSort extends React.Component {
+    static displayName = 'ListSort';
+
+    static propTypes = {
 		handleSortSelect: PropTypes.func.isRequired,
-	},
-	getInitialState () {
-		return {
-			altDown: false,
-			popoutIsOpen: false,
-			searchString: '',
-		};
-	},
-	componentDidMount () {
+	};
+
+    state = {
+        altDown: false,
+        popoutIsOpen: false,
+        searchString: '',
+    };
+
+    componentDidMount() {
 		document.body.addEventListener('keydown', this.handleKeyDown, false);
 		document.body.addEventListener('keyup', this.handleKeyUp, false);
-	},
-	componentWillUnmount () {
+	}
+
+    componentWillUnmount() {
 		document.body.removeEventListener('keydown', this.handleKeyDown);
 		document.body.removeEventListener('keyup', this.handleKeyUp);
-	},
-	handleKeyDown (e) {
+	}
+
+    handleKeyDown = (e) => {
 		if (vkey[e.keyCode] !== '<alt>') return;
 		this.setState({
 			altDown: true,
 		});
-	},
-	handleKeyUp (e) {
+	};
+
+    handleKeyUp = (e) => {
 		if (vkey[e.keyCode] !== '<alt>') return;
 		this.setState({
 			altDown: false,
 		});
-	},
-	handleSortSelect (path, inverted) {
+	};
+
+    handleSortSelect = (path, inverted) => {
 		if (this.state.altDown) inverted = true;
 		this.props.handleSortSelect(path, inverted);
 		this.closePopout();
-	},
-	openPopout () {
+	};
+
+    openPopout = () => {
 		this.setState({
 			popoutIsOpen: true,
 		});
-	},
-	closePopout () {
+	};
+
+    closePopout = () => {
 		this.setState({
 			popoutIsOpen: false,
 			searchString: '',
 		});
-	},
-	updateSearch (e) {
+	};
+
+    updateSearch = (e) => {
 		this.setState({ searchString: e.target.value });
-	},
-	renderSortOptions () {
+	};
+
+    renderSortOptions = () => {
 		// TODO: Handle multiple sort paths
 		const activeSortPath = this.props.activeSort.paths[0];
 		const availibleColumns = this.props.availableColumns;
@@ -91,8 +101,9 @@ var ListSort = React.createClass({
 					}} />
 			);
 		});
-	},
-	render () {
+	};
+
+    render() {
 		// TODO: Handle multiple sort paths
 		const activeSortPath = this.props.activeSort.paths[0];
 		const formFieldStyles = { borderBottom: '1px dashed rgba(0,0,0,0.1)', paddingBottom: '1em' };
@@ -132,7 +143,7 @@ var ListSort = React.createClass({
 				</Popout>
 			</span>
 		);
-	},
-});
+	}
+}
 
 export default ListSort;

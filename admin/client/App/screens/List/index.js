@@ -3,6 +3,8 @@
  * variety of information about the individual items in columns.
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 // import { findDOMNode } from 'react-dom'; // TODO re-implement focus when ready
 import numeral from 'numeral';
@@ -47,23 +49,23 @@ import {
 
 const ESC_KEY_CODE = 27;
 
-const ListView = React.createClass({
-	contextTypes: {
-		router: React.PropTypes.object.isRequired,
-	},
-	getInitialState () {
-		return {
-			confirmationDialog: {
-				isOpen: false,
-			},
-			checkedItems: {},
-			constrainTableWidth: true,
-			manageMode: false,
-			showCreateForm: false,
-			showUpdateForm: false,
-		};
-	},
-	componentWillMount () {
+class ListView extends React.Component {
+    static contextTypes = {
+		router: PropTypes.object.isRequired,
+	};
+
+    state = {
+        confirmationDialog: {
+            isOpen: false,
+        },
+        checkedItems: {},
+        constrainTableWidth: true,
+        manageMode: false,
+        showCreateForm: false,
+        showUpdateForm: false,
+    };
+
+    UNSAFE_componentWillMount() {
 		// When we directly navigate to a list without coming from another client
 		// side routed page before, we need to initialize the list and parse
 		// possibly specified query parameters
@@ -77,31 +79,34 @@ const ListView = React.createClass({
 			showCreateForm: (shouldOpenCreate && !isNoCreate) || Keystone.createFormErrors,
 		});
 
-	},
-	componentWillReceiveProps (nextProps) {
+	}
+
+    UNSAFE_componentWillReceiveProps(nextProps) {
 		// We've opened a new list from the client side routing, so initialize
 		// again with the new list id
 		const isReady = this.props.lists.ready && nextProps.lists.ready;
 		if (isReady && checkForQueryChange(nextProps, this.props)) {
 			this.props.dispatch(selectList(nextProps.params.listId));
 		}
-	},
-	componentWillUnmount () {
-		this.props.dispatch(clearCachedQuery());
-	},
+	}
 
-	// ==============================
-	// HEADER
-	// ==============================
-	// Called when a new item is created
-	onCreate (item) {
+    componentWillUnmount() {
+		this.props.dispatch(clearCachedQuery());
+	}
+
+    // ==============================
+    // HEADER
+    // ==============================
+    // Called when a new item is created
+    onCreate = (item) => {
 		// Hide the create form
 		this.toggleCreateModal(false);
 		// Redirect to newly created item path
 		const list = this.props.currentList;
 		this.context.router.push(`${Keystone.adminPath}/${list.path}/${item.id}`);
-	},
-	createAutocreate () {
+	};
+
+    createAutocreate = () => {
 		const list = this.props.currentList;
 		list.createItem(null, (err, data) => {
 			if (err) {
@@ -112,43 +117,51 @@ const ListView = React.createClass({
 				this.context.router.push(`${Keystone.adminPath}/${list.path}/${data.id}`);
 			}
 		});
-	},
-	updateSearch (e) {
+	};
+
+    updateSearch = (e) => {
 		this.props.dispatch(setActiveSearch(e.target.value));
-	},
-	handleSearchClear () {
+	};
+
+    handleSearchClear = () => {
 		this.props.dispatch(setActiveSearch(''));
 
 		// TODO re-implement focus when ready
 		// findDOMNode(this.refs.listSearchInput).focus();
-	},
-	handleSearchKey (e) {
+	};
+
+    handleSearchKey = (e) => {
 		// clear on esc
 		if (e.which === ESC_KEY_CODE) {
 			this.handleSearchClear();
 		}
-	},
-	handlePageSelect (i) {
+	};
+
+    handlePageSelect = (i) => {
 		// If the current page index is the same as the index we are intending to pass to redux, bail out.
 		if (i === this.props.lists.page.index) return;
 		return this.props.dispatch(setCurrentPage(i));
-	},
-	toggleManageMode (filter = !this.state.manageMode) {
+	};
+
+    toggleManageMode = (filter = !this.state.manageMode) => {
 		this.setState({
 			manageMode: filter,
 			checkedItems: {},
 		});
-	},
-	toggleUpdateModal (filter = !this.state.showUpdateForm) {
+	};
+
+    toggleUpdateModal = (filter = !this.state.showUpdateForm) => {
 		this.setState({
 			showUpdateForm: filter,
 		});
-	},
-	massUpdate () {
+	};
+
+    massUpdate = () => {
 		// TODO: Implement update multi-item
 		console.log('Update ALL the things!');
-	},
-	massDelete () {
+	};
+
+    massDelete = () => {
 		const { checkedItems } = this.state;
 		const list = this.props.currentList;
 		const itemCount = pluralize(checkedItems, ('* ' + list.singular.toLowerCase()), ('* ' + list.plural.toLowerCase()));
@@ -173,14 +186,16 @@ const ListView = React.createClass({
 				},
 			},
 		});
-	},
-	handleManagementSelect (selection) {
+	};
+
+    handleManagementSelect = (selection) => {
 		if (selection === 'all') this.checkAllItems();
 		if (selection === 'none') this.uncheckAllTableItems();
 		if (selection === 'visible') this.checkAllTableItems();
 		return false;
-	},
-	renderConfirmationDialog () {
+	};
+
+    renderConfirmationDialog = () => {
 		const props = this.state.confirmationDialog;
 		return (
 			<ConfirmationDialog
@@ -192,8 +207,9 @@ const ListView = React.createClass({
 				{props.body}
 			</ConfirmationDialog>
 		);
-	},
-	renderManagement () {
+	};
+
+    renderManagement = () => {
 		const { checkedItems, manageMode, selectAllItemsLoading } = this.state;
 		const { currentList } = this.props;
 
@@ -211,8 +227,9 @@ const ListView = React.createClass({
 				selectAllItemsLoading={selectAllItemsLoading}
 			/>
 		);
-	},
-	renderPagination () {
+	};
+
+    renderPagination = () => {
 		const items = this.props.items;
 		if (this.state.manageMode || !items.count) return;
 
@@ -232,8 +249,9 @@ const ListView = React.createClass({
 				limit={10}
 			/>
 		);
-	},
-	renderHeader () {
+	};
+
+    renderHeader = () => {
 		const items = this.props.items;
 		const { autocreate, nocreate, plural, singular } = this.props.currentList;
 
@@ -286,13 +304,13 @@ const ListView = React.createClass({
 				/>
 			</Container>
 		);
-	},
+	};
 
-	// ==============================
-	// TABLE
-	// ==============================
+    // ==============================
+    // TABLE
+    // ==============================
 
-	checkTableItem (item, e) {
+    checkTableItem = (item, e) => {
 		e.preventDefault();
 		const newCheckedItems = { ...this.state.checkedItems };
 		const itemId = item.id;
@@ -304,8 +322,9 @@ const ListView = React.createClass({
 		this.setState({
 			checkedItems: newCheckedItems,
 		});
-	},
-	checkAllTableItems () {
+	};
+
+    checkAllTableItems = () => {
 		const checkedItems = {};
 		this.props.items.results.forEach(item => {
 			checkedItems[item.id] = true;
@@ -313,8 +332,9 @@ const ListView = React.createClass({
 		this.setState({
 			checkedItems: checkedItems,
 		});
-	},
-	checkAllItems () {
+	};
+
+    checkAllItems = () => {
 		const checkedItems = { ...this.state.checkedItems };
 		// Just in case this API call takes a long time, we'll update the select all button with
 		// a spinner.
@@ -329,13 +349,15 @@ const ListView = React.createClass({
 				selectAllItemsLoading: false,
 			});
 		});
-	},
-	uncheckAllTableItems () {
+	};
+
+    uncheckAllTableItems = () => {
 		this.setState({
 			checkedItems: {},
 		});
-	},
-	deleteTableItem (item, e) {
+	};
+
+    deleteTableItem = (item, e) => {
 		if (e.altKey) {
 			this.props.dispatch(deleteItem(item.id));
 			return;
@@ -361,46 +383,53 @@ const ListView = React.createClass({
 				},
 			},
 		});
-	},
-	removeConfirmationDialog () {
+	};
+
+    removeConfirmationDialog = () => {
 		this.setState({
 			confirmationDialog: {
 				isOpen: false,
 			},
 		});
-	},
-	toggleTableWidth () {
+	};
+
+    toggleTableWidth = () => {
 		this.setState({
 			constrainTableWidth: !this.state.constrainTableWidth,
 		});
-	},
+	};
 
-	// ==============================
-	// COMMON
-	// ==============================
+    // ==============================
+    // COMMON
+    // ==============================
 
-	handleSortSelect (path, inverted) {
+    handleSortSelect = (path, inverted) => {
 		if (inverted) path = '-' + path;
 		this.props.dispatch(setActiveSort(path));
-	},
-	toggleCreateModal (visible) {
+	};
+
+    toggleCreateModal = (visible) => {
 		this.setState({
 			showCreateForm: visible,
 		});
-	},
-	openCreateModal () {
+	};
+
+    openCreateModal = () => {
 		this.toggleCreateModal(true);
-	},
-	closeCreateModal () {
+	};
+
+    closeCreateModal = () => {
 		this.toggleCreateModal(false);
-	},
-	showBlankState () {
+	};
+
+    showBlankState = () => {
 		return !this.props.loading
 				&& !this.props.items.results.length
 				&& !this.props.active.search
 				&& !this.props.active.filters.length;
-	},
-	renderBlankState () {
+	};
+
+    renderBlankState = () => {
 		const { currentList } = this.props;
 
 		if (!this.showBlankState()) return null;
@@ -430,8 +459,9 @@ const ListView = React.createClass({
 				</BlankState>
 			</Container>
 		);
-	},
-	renderActiveState () {
+	};
+
+    renderActiveState = () => {
 		if (this.showBlankState()) return null;
 
 		const containerStyle = {
@@ -489,8 +519,9 @@ const ListView = React.createClass({
 				</Container>
 			</div>
 		);
-	},
-	renderNoSearchResults () {
+	};
+
+    renderNoSearchResults = () => {
 		if (this.props.items.results.length) return null;
 		let matching = this.props.active.search;
 		if (this.props.active.filters.length) {
@@ -509,8 +540,9 @@ const ListView = React.createClass({
 				</h2>
 			</BlankState>
 		);
-	},
-	render () {
+	};
+
+    render() {
 		if (!this.props.ready) {
 			return (
 				<Center height="50vh" data-screen-id="list">
@@ -538,8 +570,8 @@ const ListView = React.createClass({
 				{this.renderConfirmationDialog()}
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default connect((state) => {
 	return {

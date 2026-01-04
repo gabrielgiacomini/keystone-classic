@@ -1,25 +1,25 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import blacklist from 'blacklist';
 import assign from 'object-assign';
 
-var FooterBar = React.createClass({
-	propTypes: {
-		style: React.PropTypes.object,
-	},
-	getDefaultProps () {
-		return {
-			style: {},
-		};
-	},
-	getInitialState () {
-		return {
-			position: 'relative',
-			width: 'auto',
-			height: 'auto',
-			top: 0,
-		};
-	},
-	componentDidMount () {
+class FooterBar extends React.Component {
+    static propTypes = {
+		style: PropTypes.object,
+	};
+
+    static defaultProps = {
+        style: {},
+    };
+
+    state = {
+        position: 'relative',
+        width: 'auto',
+        height: 'auto',
+        top: 0,
+    };
+
+    componentDidMount() {
 		// Bail in IE8 because React doesn't support the onScroll event in that browser
 		// Conveniently (!) IE8 doesn't have window.getComputedStyle which we also use here
 		if (!window.getComputedStyle) return;
@@ -33,18 +33,21 @@ var FooterBar = React.createClass({
 		window.addEventListener('scroll', this.recalcPosition, false);
 		window.addEventListener('resize', this.recalcPosition, false);
 		this.recalcPosition();
-	},
-	componentWillUnmount () {
+	}
+
+    componentWillUnmount() {
 		window.removeEventListener('scroll', this.recalcPosition, false);
 		window.removeEventListener('resize', this.recalcPosition, false);
-	},
-	getWindowSize () {
+	}
+
+    getWindowSize = () => {
 		return {
 			x: window.innerWidth,
 			y: window.innerHeight,
 		};
-	},
-	recalcPosition () {
+	};
+
+    recalcPosition = () => {
 		var wrapper = this.refs.wrapper;
 
 		this.footerSize.x = wrapper.offsetWidth;
@@ -80,8 +83,9 @@ var FooterBar = React.createClass({
 			newState.position = 'fixed';
 			this.setState(newState);
 		}
-	},
-	render () {
+	};
+
+    render() {
 		var wrapperStyle = {
 			height: this.state.height,
 			marginTop: 60,
@@ -99,7 +103,7 @@ var FooterBar = React.createClass({
 				<div ref="footer" style={footerStyle} {...footerProps}>{this.props.children}</div>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default FooterBar;

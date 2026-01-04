@@ -12,34 +12,36 @@ import Brand from "./components/Brand";
 import UserInfo from "./components/UserInfo";
 import LoginForm from "./components/LoginForm";
 
-var SigninView = React.createClass({
-	getInitialState() {
-		return {
-			email: "",
-			password: "",
-			isAnimating: false,
-			isInvalid: false,
-			invalidMessage: "",
-			signedOut: window.location.search === "?signedout"
-		};
-	},
-	componentDidMount() {
+class SigninView extends React.Component {
+    state = {
+        email: "",
+        password: "",
+        isAnimating: false,
+        isInvalid: false,
+        invalidMessage: "",
+        signedOut: window.location.search === "?signedout"
+    };
+
+    componentDidMount() {
 		// Focus the email field when we're mounted
 		if (this.refs.email) {
 			this.refs.email.select();
 		}
 		this.__isMounted = true;
-	},
-	componentWillUnmount() {
+	}
+
+    componentWillUnmount() {
 		this.__isMounted = false;
-	},
-	handleInputChange(e) {
+	}
+
+    handleInputChange = (e) => {
 		// Set the new state when the input changes
 		const newState = {};
 		newState[e.target.name] = e.target.value;
 		this.setState(newState);
-	},
-	handleSubmit(e) {
+	};
+
+    handleSubmit = (e) => {
 		e.preventDefault();
 		// If either password or mail are missing, show an error
 		if (!this.state.email || !this.state.password) {
@@ -79,22 +81,24 @@ var SigninView = React.createClass({
 				}
 			}
 		);
-	},
-	/**
+	};
+
+    /**
 	 * Display an error message
 	 *
 	 * @param  {String} message The message you want to show
 	 */
-	displayError(message) {
+    displayError = (message) => {
 		this.setState({
 			isAnimating: true,
 			isInvalid: true,
 			invalidMessage: message
 		});
 		setTimeout(this.finishAnimation, 750);
-	},
-	// Finish the animation and select the email field
-	finishAnimation() {
+	};
+
+    // Finish the animation and select the email field
+    finishAnimation = () => {
 		if (!this.__isMounted) return;
 		if (this.refs.email) {
 			this.refs.email.select();
@@ -102,8 +106,9 @@ var SigninView = React.createClass({
 		this.setState({
 			isAnimating: false
 		});
-	},
-	render() {
+	};
+
+    render() {
 		const boxClassname = classnames("auth-box", {
 			"auth-box--has-errors": this.state.isAnimating
 		});
@@ -153,6 +158,6 @@ var SigninView = React.createClass({
 			</div>
 		);
 	}
-});
+}
 
 export default SigninView;

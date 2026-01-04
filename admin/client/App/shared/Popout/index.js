@@ -4,6 +4,8 @@
  * (Popout/Footer), a Body (Popout/Body) and a Pan (Popout/Pane).
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import Portal from '../Portal';
 import Transition from 'react-addons-css-transition-group';
@@ -14,35 +16,37 @@ const SIZES = {
 	horizontalMargin: 20,
 };
 
-var Popout = React.createClass({
-	displayName: 'Popout',
-	propTypes: {
-		isOpen: React.PropTypes.bool,
-		onCancel: React.PropTypes.func,
-		onSubmit: React.PropTypes.func,
-		relativeToID: React.PropTypes.string.isRequired,
-		width: React.PropTypes.number,
-	},
-	getDefaultProps () {
-		return {
-			width: 320,
-		};
-	},
-	getInitialState () {
-		return {};
-	},
-	componentWillReceiveProps (nextProps) {
+class Popout extends React.Component {
+    static displayName = 'Popout';
+
+    static propTypes = {
+		isOpen: PropTypes.bool,
+		onCancel: PropTypes.func,
+		onSubmit: PropTypes.func,
+		relativeToID: PropTypes.string.isRequired,
+		width: PropTypes.number,
+	};
+
+    static defaultProps = {
+        width: 320,
+    };
+
+    state = {};
+
+    UNSAFE_componentWillReceiveProps(nextProps) {
 		if (!this.props.isOpen && nextProps.isOpen) {
 			window.addEventListener('resize', this.calculatePosition);
 			this.calculatePosition(nextProps.isOpen);
 		} else if (this.props.isOpen && !nextProps.isOpen) {
 			window.removeEventListener('resize', this.calculatePosition);
 		}
-	},
-	getPortalDOMNode () {
+	}
+
+    getPortalDOMNode = () => {
 		return this.refs.portal.getPortalDOMNode();
-	},
-	calculatePosition (isOpen) {
+	};
+
+    calculatePosition = (isOpen) => {
 		if (!isOpen) return;
 		let posNode = document.getElementById(this.props.relativeToID);
 
@@ -81,8 +85,9 @@ var Popout = React.createClass({
 				arrowLeftOffset: arrowLeftOffset,
 			});
 		}
-	},
-	renderPopout () {
+	};
+
+    renderPopout = () => {
 		if (!this.props.isOpen) return null;
 
 		const { width } = this.props;
@@ -100,12 +105,14 @@ var Popout = React.createClass({
 				</div>
 			</div>
 		);
-	},
-	renderBlockout () {
+	};
+
+    renderBlockout = () => {
 		if (!this.props.isOpen) return;
 		return <div className="blockout" onClick={this.props.onCancel} />;
-	},
-	render () {
+	};
+
+    render() {
 		return (
 			<Portal className="Popout-wrapper" ref="portal">
 				<Transition
@@ -118,8 +125,8 @@ var Popout = React.createClass({
 				{this.renderBlockout()}
 			</Portal>
 		);
-	},
-});
+	}
+}
 
 export default Popout;
 

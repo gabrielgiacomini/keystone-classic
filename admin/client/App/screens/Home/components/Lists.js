@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
@@ -34,12 +35,12 @@ export class Lists extends React.Component {
 }
 
 Lists.propTypes = {
-	counts: React.PropTypes.object.isRequired,
-	lists: React.PropTypes.oneOfType([
-		React.PropTypes.array,
-		React.PropTypes.object,
+	counts: PropTypes.object.isRequired,
+	lists: PropTypes.oneOfType([
+		PropTypes.array,
+		PropTypes.object,
 	]).isRequired,
-	spinner: React.PropTypes.node,
+	spinner: PropTypes.node,
 };
 
 export default connect((state) => {

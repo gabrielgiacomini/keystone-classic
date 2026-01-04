@@ -3,7 +3,9 @@
  * react-router "Link", if it has a "href" prop it'll render a simple "a" tag
  */
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import classnames from 'classnames';
 import { Link } from 'react-router';
 

@@ -2,6 +2,8 @@
  * The secondary navigation links to inidvidual lists of a section
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { Container } from '../../../elemental';
@@ -11,30 +13,34 @@ import {
 } from '../../../screens/List/actions/active';
 import SecondaryNavItem from './NavItem';
 
-var SecondaryNavigation = React.createClass({
-	displayName: 'SecondaryNavigation',
-	propTypes: {
-		currentListKey: React.PropTypes.string,
-		lists: React.PropTypes.array.isRequired,
-	},
-	getInitialState () {
-		return {};
-	},
-	// Handle resizing and hide this nav on mobile (i.e. < 768px) screens
-	componentDidMount () {
+class SecondaryNavigation extends React.Component {
+    static displayName = 'SecondaryNavigation';
+
+    static propTypes = {
+		currentListKey: PropTypes.string,
+		lists: PropTypes.array.isRequired,
+	};
+
+    state = {};
+
+    // Handle resizing and hide this nav on mobile (i.e. < 768px) screens
+    componentDidMount() {
 		this.handleResize();
 		window.addEventListener('resize', this.handleResize);
-	},
-	componentWillUnmount () {
+	}
+
+    componentWillUnmount() {
 		window.removeEventListener('resize', this.handleResize);
-	},
-	handleResize () {
+	}
+
+    handleResize = () => {
 		this.setState({
 			navIsVisible: this.props.lists && Object.keys(this.props.lists).length > 0 && window.innerWidth >= 768,
 		});
-	},
-	// Render the navigation
-	renderNavigation (lists) {
+	};
+
+    // Render the navigation
+    renderNavigation = (lists) => {
 		const navigation = Object.keys(lists).map((key) => {
 			const list = lists[key];
 			// Get the link and the classname
@@ -70,8 +76,9 @@ var SecondaryNavigation = React.createClass({
 				{navigation}
 			</ul>
 		);
-	},
-	render () {
+	};
+
+    render() {
 		if (!this.state.navIsVisible) return null;
 
 		return (
@@ -81,8 +88,8 @@ var SecondaryNavigation = React.createClass({
 				</Container>
 			</nav>
 		);
-	},
-});
+	}
+}
 
 export default connect((state) => {
 	return {

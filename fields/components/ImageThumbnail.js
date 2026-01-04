@@ -1,5 +1,6 @@
 import { css } from 'glamor';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Spinner } from '../../admin/client/App/elemental';
 import theme from '../../admin/client/theme';
 
@@ -32,7 +33,7 @@ function ImageThumbnail ({ children, className, component, mask, ...props }) {
 	props.children = [].concat(children, [maskUI]);
 
 	return React.createElement(component, props);
-};
+}
 
 ImageThumbnail.propTypes = {
 	component: PropTypes.oneOfType([

@@ -1,5 +1,6 @@
 import { css } from 'glamor';
-import React, { cloneElement, Children, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { cloneElement, Children } from 'react';
 
 // NOTE: only accepts InlineGroupSection as a single child
 

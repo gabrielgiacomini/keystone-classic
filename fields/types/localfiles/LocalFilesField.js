@@ -1,3 +1,7 @@
+import _ from 'lodash';
+import bytes from 'bytes';
+import Field from '../Field';
+
 /**
  * @fileoverview
  * This field type is deprecated and will be removed in a future version.
@@ -9,9 +13,8 @@ TODO: this file has been left as a reference for the new File type field.
 Some features here, including size formatting and icons, may be ported across.
 */
 
-import _ from 'lodash';
-import bytes from 'bytes';
-import Field from '../Field';
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { Button, FormField, FormInput, FormNote } from '../../../admin/client/App/elemental';
 
@@ -22,25 +25,25 @@ const ICON_EXTS = [
 	'wav', 'xls', 'xlsx', 'xml', 'yml', 'zip',
 ];
 
-var LocalFilesFieldItem = React.createClass({
-	propTypes: {
-		deleted: React.PropTypes.bool,
-		filename: React.PropTypes.string,
-		isQueued: React.PropTypes.bool,
-		size: React.PropTypes.number,
-		toggleDelete: React.PropTypes.func,
-	},
+class LocalFilesFieldItem extends React.Component {
+    static propTypes = {
+		deleted: PropTypes.bool,
+		filename: PropTypes.string,
+		isQueued: PropTypes.bool,
+		size: PropTypes.number,
+		toggleDelete: PropTypes.func,
+	};
 
-	renderActionButton () {
+    renderActionButton = () => {
 		if (!this.props.shouldRenderActionButton || this.props.isQueued) return null;
 
 		var buttonLabel = this.props.deleted ? 'Undo' : 'Remove';
 		var buttonType = this.props.deleted ? 'link' : 'link-cancel';
 
 		return <Button key="action-button" type={buttonType} onClick={this.props.toggleDelete}>{buttonLabel}</Button>;
-	},
+	};
 
-	render () {
+    render() {
 		const { filename } = this.props;
 		const ext = filename.split('.').pop();
 
@@ -65,9 +68,8 @@ var LocalFilesFieldItem = React.createClass({
 				{this.renderActionButton()}
 			</FormField>
 		);
-	},
-
-});
+	}
+}
 
 var tempId = 0;
 

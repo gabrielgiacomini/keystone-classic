@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import assign from 'object-assign';
 import Popout from '../../../shared/Popout';
 import PopoutList from '../../../shared/Popout/PopoutList';
@@ -11,46 +12,43 @@ const FORMAT_OPTIONS = [
 	{ label: 'JSON', value: 'json' },
 ];
 
-var ListDownloadForm = React.createClass({
-	propTypes: {
+class ListDownloadForm extends React.Component {
+    static propTypes = {
 		activeColumns: PropTypes.array,
 		dispatch: PropTypes.func.isRequired,
 		list: PropTypes.object,
-	},
-	getInitialState () {
-		return {
-			format: FORMAT_OPTIONS[0].value,
-			isOpen: false,
-			useCurrentColumns: true,
-			selectedColumns: this.getDefaultSelectedColumns(),
-		};
-	},
-	getDefaultSelectedColumns () {
+	};
+
+    getDefaultSelectedColumns = () => {
 		var selectedColumns = {};
 		this.props.activeColumns.forEach(col => {
 			selectedColumns[col.path] = true;
 		});
 		return selectedColumns;
-	},
-	getListUIElements () {
+	};
+
+    getListUIElements = () => {
 		return this.props.list.uiElements.map((el) => {
 			return el.type === 'field' ? {
 				type: 'field',
 				field: this.props.list.fields[el.field],
 			} : el;
 		});
-	},
-	allColumnsSelected () {
+	};
+
+    allColumnsSelected = () => {
 		const selectedColumns = Object.keys(this.state.selectedColumns).length;
 		const columnAmount = this.getListUIElements().filter((el) => el.type !== 'heading').length;
 		return selectedColumns === columnAmount;
-	},
-	togglePopout (visible) {
+	};
+
+    togglePopout = (visible) => {
 		this.setState({
 			isOpen: visible,
 		});
-	},
-	toggleColumn (column, value) {
+	};
+
+    toggleColumn = (column, value) => {
 		const newColumns = assign({}, this.state.selectedColumns);
 		if (value) {
 			newColumns[column] = value;
@@ -60,27 +58,31 @@ var ListDownloadForm = React.createClass({
 		this.setState({
 			selectedColumns: newColumns,
 		});
-	},
-	changeFormat (value) {
+	};
+
+    changeFormat = (value) => {
 		this.setState({
 			format: value,
 		});
-	},
-	toggleCurrentlySelectedColumns (e) {
+	};
+
+    toggleCurrentlySelectedColumns = (e) => {
 		const newState = {
 			useCurrentColumns: e.target.checked,
 			selectedColumns: this.getDefaultSelectedColumns(),
 		};
 		this.setState(newState);
-	},
-	clickSelectAll () {
+	};
+
+    clickSelectAll = () => {
 		if (this.allColumnsSelected()) {
 			this.selectNoColumns();
 		} else {
 			this.selectAllColumns();
 		}
-	},
-	selectAllColumns () {
+	};
+
+    selectAllColumns = () => {
 		const newColumns = {};
 		this.getListUIElements().map((el) => {
 			if (el.type !== 'heading') {
@@ -90,17 +92,20 @@ var ListDownloadForm = React.createClass({
 		this.setState({
 			selectedColumns: newColumns,
 		});
-	},
-	selectNoColumns () {
+	};
+
+    selectNoColumns = () => {
 		this.setState({
 			selectedColumns: {},
 		});
-	},
-	handleDownloadRequest () {
+	};
+
+    handleDownloadRequest = () => {
 		this.props.dispatch(downloadItems(this.state.format, Object.keys(this.state.selectedColumns)));
 		this.togglePopout(false);
-	},
-	renderColumnSelect () {
+	};
+
+    renderColumnSelect = () => {
 		if (this.state.useCurrentColumns) return null;
 
 		const possibleColumns = this.getListUIElements().map((el, i) => {
@@ -141,8 +146,16 @@ var ListDownloadForm = React.createClass({
 				</div>
 			</div>
 		);
-	},
-	render () {
+	};
+
+    state = {
+        format: FORMAT_OPTIONS[0].value,
+        isOpen: false,
+        useCurrentColumns: true,
+        selectedColumns: this.getDefaultSelectedColumns(),
+    };
+
+    render() {
 		const { useCurrentColumns } = this.state;
 
 		return (
@@ -187,7 +200,7 @@ var ListDownloadForm = React.createClass({
 				</Popout>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default ListDownloadForm;

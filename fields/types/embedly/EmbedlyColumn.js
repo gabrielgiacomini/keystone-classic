@@ -9,27 +9,28 @@ var React = require('react');
  * The `EmbedlyColumn` component.
  * @extends React.Component
  */
-var EmbedlyColumn = React.createClass({
-	/**
+class EmbedlyColumn extends React.Component {
+    /**
 	 * Renders the value of the field.
 	 * @returns {React.Element} The rendered value.
 	 */
-	renderValue: function () {
+    renderValue = () => {
 		var value = this.props.data.fields[this.props.col.path];
 		if (!value || !_.size(value)) return;
 		return <a href={value.url} target="_blank">{value.url}</a>;
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render: function () {
+    render() {
 		return (
 			<td>
 				<div className="ItemList__value">{this.renderValue()}</div>
 			</td>
 		);
-	},
-});
+	}
+}
 
 export default EmbedlyColumn;

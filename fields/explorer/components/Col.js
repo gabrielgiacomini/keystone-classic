@@ -4,7 +4,9 @@
  * KeystoneJS Field Types Explorer. It's a simple column component that can be
  * used within a `Row` to create a grid layout.
  */
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 
 /**
  * A column component for the explorer.

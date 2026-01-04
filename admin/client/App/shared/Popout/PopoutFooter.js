@@ -2,22 +2,26 @@
  * Render a footer for a popout
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 const BUTTON_BASE_CLASSNAME = 'Popout__footer__button Popout__footer__button--';
 
-const PopoutFooter = React.createClass({
-	displayName: 'PopoutFooter',
-	propTypes: {
-		children: React.PropTypes.node,
-		primaryButtonAction: React.PropTypes.func,
-		primaryButtonIsSubmit: React.PropTypes.bool,
-		primaryButtonLabel: React.PropTypes.string,
-		secondaryButtonAction: React.PropTypes.func,
-		secondaryButtonLabel: React.PropTypes.string,
-	},
-	// Render a primary button
-	renderPrimaryButton () {
+class PopoutFooter extends React.Component {
+    static displayName = 'PopoutFooter';
+
+    static propTypes = {
+		children: PropTypes.node,
+		primaryButtonAction: PropTypes.func,
+		primaryButtonIsSubmit: PropTypes.bool,
+		primaryButtonLabel: PropTypes.string,
+		secondaryButtonAction: PropTypes.func,
+		secondaryButtonLabel: PropTypes.string,
+	};
+
+    // Render a primary button
+    renderPrimaryButton = () => {
 		if (!this.props.primaryButtonLabel) return null;
 
 		return (
@@ -29,9 +33,10 @@ const PopoutFooter = React.createClass({
 				{this.props.primaryButtonLabel}
 			</button>
 		);
-	},
-	// Render a secondary button
-	renderSecondaryButton () {
+	};
+
+    // Render a secondary button
+    renderSecondaryButton = () => {
 		if (!this.props.secondaryButtonAction || !this.props.secondaryButtonLabel) return null;
 
 		return (
@@ -43,8 +48,9 @@ const PopoutFooter = React.createClass({
 				{this.props.secondaryButtonLabel}
 			</button>
 		);
-	},
-	render () {
+	};
+
+    render() {
 		return (
 			<div className="Popout__footer">
 				{this.renderPrimaryButton()}
@@ -52,7 +58,7 @@ const PopoutFooter = React.createClass({
 				{this.props.children}
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default PopoutFooter;

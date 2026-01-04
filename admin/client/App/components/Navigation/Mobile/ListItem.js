@@ -2,18 +2,22 @@
  * A list item of the mobile navigation
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { Link } from 'react-router';
 
-const MobileListItem = React.createClass({
-	displayName: 'MobileListItem',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-		href: React.PropTypes.string.isRequired,
-		onClick: React.PropTypes.func,
-	},
-	render () {
+class MobileListItem extends React.Component {
+    static displayName = 'MobileListItem';
+
+    static propTypes = {
+		children: PropTypes.node.isRequired,
+		className: PropTypes.string,
+		href: PropTypes.string.isRequired,
+		onClick: PropTypes.func,
+	};
+
+    render() {
 		return (
 			<Link
 				className={this.props.className}
@@ -24,7 +28,7 @@ const MobileListItem = React.createClass({
 				{this.props.children}
 			</Link>
 		);
-	},
-});
+	}
+}
 
 export default MobileListItem;

@@ -2,18 +2,22 @@
  * Render a header for a popout
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import Transition from 'react-addons-css-transition-group';
 
-const PopoutHeader = React.createClass({
-	displayName: 'PopoutHeader',
-	propTypes: {
-		leftAction: React.PropTypes.func,
-		leftIcon: React.PropTypes.string,
-		title: React.PropTypes.string.isRequired,
-		transitionDirection: React.PropTypes.oneOf(['next', 'prev']),
-	},
-	render () {
+class PopoutHeader extends React.Component {
+    static displayName = 'PopoutHeader';
+
+    static propTypes = {
+		leftAction: PropTypes.func,
+		leftIcon: PropTypes.string,
+		title: PropTypes.string.isRequired,
+		transitionDirection: PropTypes.oneOf(['next', 'prev']),
+	};
+
+    render() {
 		// If we have a left action and a left icon, render a header button
 		var headerButton = (this.props.leftAction && this.props.leftIcon) ? (
 			<button
@@ -51,7 +55,7 @@ const PopoutHeader = React.createClass({
 				</Transition>
 			</div>
 		);
-	},
-});
+	}
+}
 
 export default PopoutHeader;

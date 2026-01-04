@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const IMAGE_SIZE = 18;
@@ -32,13 +33,15 @@ const textStyle = {
 	verticalAlign: 'middle',
 };
 
-var CloudinaryImageSummary = React.createClass({
-	displayName: 'CloudinaryImageSummary',
-	propTypes: {
-		image: React.PropTypes.object.isRequired,
-		label: React.PropTypes.oneOf(['dimensions', 'publicId']),
-	},
-	renderLabel () {
+class CloudinaryImageSummary extends React.Component {
+    static displayName = 'CloudinaryImageSummary';
+
+    static propTypes = {
+		image: PropTypes.object.isRequired,
+		label: PropTypes.oneOf(['dimensions', 'publicId']),
+	};
+
+    renderLabel = () => {
 		if (!this.props.label) return;
 
 		const { label, image } = this.props;
@@ -55,14 +58,16 @@ var CloudinaryImageSummary = React.createClass({
 				{text}
 			</span>
 		);
-	},
-	renderImageThumbnail () {
+	};
+
+    renderImageThumbnail = () => {
 		if (!this.props.image) return;
 		const startingUrl = this.props.secure ? this.props.image.secure_url : this.props.image.url;
 		const url = startingUrl.replace(/image\/upload/, `image/upload/c_thumb,g_face,h_${IMAGE_SIZE},w_${IMAGE_SIZE}`);
 		return <img src={url} style={imageStyle} className="img-load" />;
-	},
-	render () {
+	};
+
+    render() {
 		return (
 			<span style={linkStyle}>
 				<span style={boxStyle}>
@@ -71,7 +76,7 @@ var CloudinaryImageSummary = React.createClass({
 				{this.renderLabel()}
 			</span>
 		);
-	},
-});
+	}
+}
 
 export default CloudinaryImageSummary;

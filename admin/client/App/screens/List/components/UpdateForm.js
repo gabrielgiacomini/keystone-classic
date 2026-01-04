@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Select from 'react-select';
 import { findDOMNode } from 'react-dom';
@@ -7,40 +8,44 @@ import InvalidFieldType from '../../../shared/InvalidFieldType';
 import { plural } from '../../../../utils/string';
 import { BlankState, Button, Form, Modal } from '../../../elemental';
 
-var UpdateForm = React.createClass({
-	displayName: 'UpdateForm',
-	propTypes: {
-		isOpen: React.PropTypes.bool,
-		itemIds: React.PropTypes.array,
-		list: React.PropTypes.object,
-		onCancel: React.PropTypes.func,
-	},
-	getDefaultProps () {
-		return {
-			isOpen: false,
-		};
-	},
-	getInitialState () {
-		return {
-			fields: [],
-		};
-	},
-	componentDidMount () {
+class UpdateForm extends React.Component {
+    static displayName = 'UpdateForm';
+
+    static propTypes = {
+		isOpen: PropTypes.bool,
+		itemIds: PropTypes.array,
+		list: PropTypes.object,
+		onCancel: PropTypes.func,
+	};
+
+    static defaultProps = {
+        isOpen: false,
+    };
+
+    state = {
+        fields: [],
+    };
+
+    componentDidMount() {
 		this.doFocus();
-	},
-	componentDidUpdate () {
+	}
+
+    componentDidUpdate() {
 		this.doFocus();
-	},
-	doFocus () {
+	}
+
+    doFocus = () => {
 		if (this.refs.focusTarget) {
 			findDOMNode(this.refs.focusTarget).focus();
 		}
-	},
-	getOptions () {
+	};
+
+    getOptions = () => {
 		const { fields } = this.props.list;
 		return Object.keys(fields).map(key => ({ value: fields[key].path, label: fields[key].label }));
-	},
-	getFieldProps (field) {
+	};
+
+    getFieldProps = (field) => {
 		var props = assign({}, field);
 		props.value = this.state.fields[field.path];
 		props.values = this.state.fields;
@@ -48,23 +53,26 @@ var UpdateForm = React.createClass({
 		props.mode = 'create';
 		props.key = field.path;
 		return props;
-	},
-	updateOptions (fields) {
+	};
+
+    updateOptions = (fields) => {
 		this.setState({
 			fields: fields,
 		}, this.doFocus);
-	},
-	handleChange (value) {
+	};
+
+    handleChange = (value) => {
 		console.log('handleChange:', value);
-	},
-	handleClose () {
+	};
+
+    handleClose = () => {
 		this.setState({
 			fields: [],
 		});
 		this.props.onCancel();
-	},
+	};
 
-	renderFields () {
+    renderFields = () => {
 		const { list } = this.props;
 		const { fields } = this.state;
 		const formFields = [];
@@ -96,8 +104,9 @@ var UpdateForm = React.createClass({
 				{fieldsUI}
 			</div>
 		);
-	},
-	renderForm () {
+	};
+
+    renderForm = () => {
 		const { itemIds, list } = this.props;
 		const itemCount = plural(itemIds, ('* ' + list.singular), ('* ' + list.plural));
 		const formAction = `${Keystone.adminPath}/${list.path}`;
@@ -126,14 +135,15 @@ var UpdateForm = React.createClass({
 				</Modal.Footer>
 			</Form>
 		);
-	},
-	render () {
+	};
+
+    render() {
 		return (
 			<Modal.Dialog isOpen={this.props.isOpen} onClose={this.handleClose} backdropClosesModal>
 				{this.renderForm()}
 			</Modal.Dialog>
 		);
-	},
-});
+	}
+}
 
 export default UpdateForm;

@@ -3,6 +3,8 @@
  * This file defines the `LocationColumn` component, which is used to render
  * the value of a `Location` field in a list view.
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import ItemsTableCell from '../../components/ItemsTableCell';
 import ItemsTableValue from '../../components/ItemsTableValue';
@@ -13,17 +15,19 @@ const SUB_FIELDS = ['street1', 'suburb', 'state', 'postcode', 'country'];
  * The `LocationColumn` component.
  * @extends React.Component
  */
-var LocationColumn = React.createClass({
-	displayName: 'LocationColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
+class LocationColumn extends React.Component {
+    static displayName = 'LocationColumn';
+
+    static propTypes = {
+		col: PropTypes.object,
+		data: PropTypes.object,
+	};
+
+    /**
 	 * Renders the value of the field.
 	 * @returns {React.Element} The rendered value.
 	 */
-	renderValue () {
+    renderValue = () => {
 		const value = this.props.data.fields[this.props.col.path];
 		if (!value || !Object.keys(value).length) return null;
 
@@ -39,18 +43,19 @@ var LocationColumn = React.createClass({
 				{output.join(', ')}
 			</ItemsTableValue>
 		);
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+    render() {
 		return (
 			<ItemsTableCell>
 				{this.renderValue()}
 			</ItemsTableCell>
 		);
-	},
-});
+	}
+}
 
 export default LocationColumn;

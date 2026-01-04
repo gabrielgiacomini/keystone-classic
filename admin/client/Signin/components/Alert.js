@@ -3,6 +3,8 @@
  * the signedOut prop to true to show the standard signed out message
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { Alert } from '../../App/elemental';
 
@@ -18,9 +20,9 @@ const AlertView = function (props) {
 };
 
 AlertView.propTypes = {
-	invalidMessage: React.PropTypes.string,
-	isInvalid: React.PropTypes.bool,
-	signedOut: React.PropTypes.bool,
+	invalidMessage: PropTypes.string,
+	isInvalid: PropTypes.bool,
+	signedOut: PropTypes.bool,
 };
 
 export default AlertView;

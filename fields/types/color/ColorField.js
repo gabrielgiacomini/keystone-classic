@@ -1,3 +1,7 @@
+import { SketchPicker } from 'react-color';
+import { css } from 'glamor';
+import Field from '../Field';
+
 /**
  * @fileoverview
  * This file defines the `ColorField` component, which is used to render a
@@ -5,9 +9,8 @@
  *
  * It provides a color picker and a swatch to display the selected color.
  */
-import { SketchPicker } from 'react-color';
-import { css } from 'glamor';
-import Field from '../Field';
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	Button,
@@ -29,9 +32,9 @@ const ColorField = Field.create({
 		type: 'Color',
 	},
 	propTypes: {
-		onChange: React.PropTypes.func,
-		path: React.PropTypes.string,
-		value: React.PropTypes.string,
+		onChange: PropTypes.func,
+		path: PropTypes.string,
+		value: PropTypes.string,
 	},
 
 	/**

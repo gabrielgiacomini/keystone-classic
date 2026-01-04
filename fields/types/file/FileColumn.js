@@ -12,21 +12,22 @@ import ItemsTableValue from '../../components/ItemsTableValue';
  * The `FileColumn` component.
  * @extends React.Component
  */
-var LocalFileColumn = React.createClass({
-	/**
+class LocalFileColumn extends React.Component {
+    /**
 	 * Renders the value of the field.
 	 * @returns {string} The name of the file.
 	 */
-	renderValue: function () {
+    renderValue = () => {
 		var value = this.props.data.fields[this.props.col.path];
 		if (!value || !value.filename) return;
 		return value.filename;
-	},
-	/**
+	};
+
+    /**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render: function () {
+    render() {
 		var value = this.props.data.fields[this.props.col.path];
 		var href = value && value.url ? value.url : null;
 		var label = value && value.filename ? value.filename : null;
@@ -35,7 +36,7 @@ var LocalFileColumn = React.createClass({
 				<ItemsTableValue>{label}</ItemsTableValue>
 			</ItemsTableCell>
 		);
-	},
-});
+	}
+}
 
 export default LocalFileColumn;

@@ -2,7 +2,9 @@
  * The login form of the signin screen
  */
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import { Button, Form, FormField, FormInput } from '../../App/elemental';
 
 const LoginForm = ({

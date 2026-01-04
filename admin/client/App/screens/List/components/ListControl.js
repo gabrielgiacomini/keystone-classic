@@ -1,13 +1,15 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 
-var ListControl = React.createClass({
-	propTypes: {
-		dragSource: React.PropTypes.func,
-		onClick: React.PropTypes.func,
-		type: React.PropTypes.oneOf(['check', 'delete', 'sortable']).isRequired,
-	},
-	renderControl () {
+class ListControl extends React.Component {
+    static propTypes = {
+		dragSource: PropTypes.func,
+		onClick: PropTypes.func,
+		type: PropTypes.oneOf(['check', 'delete', 'sortable']).isRequired,
+	};
+
+    renderControl = () => {
 		var icon = 'octicon octicon-';
 		var className = classnames('ItemList__control ItemList__control--' + this.props.type, {
 			'is-active': this.props.active,
@@ -34,8 +36,9 @@ var ListControl = React.createClass({
 		} else {
 			return renderButton;
 		}
-	},
-	render () {
+	};
+
+    render() {
 		var className = 'ItemList__col--control ItemList__col--' + this.props.type;
 
 		return (
@@ -43,7 +46,7 @@ var ListControl = React.createClass({
 				{this.renderControl()}
 			</td>
 		);
-	},
-});
+	}
+}
 
 export default ListControl;
