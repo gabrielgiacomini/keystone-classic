@@ -28,7 +28,10 @@ keystone-classic/
 │   ├── client/       # React + Redux frontend
 │   └── server/       # Express API routes
 ├── server/           # Server middleware (18 modules)
-└── test/             # Mocha + Nightwatch tests
+└── test/             # Mocha unit tests + Playwright E2E tests
+    ├── unit/         # Mocha unit tests
+    ├── e2e/          # E2E server and models
+    └── e2e-playwright/ # Playwright tests (167 tests)
 ```
 
 ## WHERE TO LOOK
@@ -87,15 +90,52 @@ npm run build-dev       # Browserify bundle (dev)
 npm run watch           # Lint on file changes
 npm run fields-explorer # Field types explorer
 
-# Testing
+# Unit Testing
 npm test                # Unit + admin tests
 npm run test-unit       # Unit tests only
-npm run test-e2e        # E2E with Nightwatch
+
+# E2E Testing (Playwright)
+MONGO_PORT=27020 npm run test-e2e-server  # Start E2E server (terminal 1)
+npm run test-playwright                    # Run all E2E tests (terminal 2)
+npm run test-playwright:headed             # Run with browser visible
+npm run test-playwright:ui                 # Interactive UI mode
+npm run test-playwright:debug              # Debug mode
 
 # Production
 npm run build           # Minified bundle
 npm run lint            # ESLint check
 ```
+
+## REFACTORING WORKFLOW
+
+When modifying the framework, use E2E tests to catch regressions:
+
+```bash
+# 1. Start E2E server (keep running)
+MONGO_PORT=27020 npm run test-e2e-server
+
+# 2. Run tests before changes
+npm run test-playwright
+
+# 3. Make incremental changes, run affected tests
+npx playwright test field-types.spec.ts --headed
+
+# 4. Run full suite before committing
+npm run test-playwright
+```
+
+### Test Coverage by Area
+
+| Area | Test Command |
+|------|--------------|
+| Authentication | `npx playwright test signin` |
+| Navigation | `npx playwright test app-navigation home-dashboard` |
+| List Operations | `npx playwright test list-view filters bulk-operations` |
+| Item CRUD | `npx playwright test item-crud` |
+| Field Types | `npx playwright test field-types field-crud-workflow` |
+| Bug Fixes | `npx playwright test bug-regressions` |
+
+See `test/e2e-playwright/AGENTS.md` for detailed testing guide.
 
 ## ARCHITECTURE DECISIONS
 
