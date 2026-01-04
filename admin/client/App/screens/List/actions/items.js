@@ -7,6 +7,7 @@ import {
 import { NETWORK_ERROR_RETRY_DELAY } from '../../../../constants';
 export function loadItems (options = {}) {
 	return (dispatch, getState) => {
+		console.log('[ACTION] loadItems called');
 		let currentLoadCounter = getState().lists.loadCounter + 1;
 
 		dispatch({
@@ -19,6 +20,7 @@ export function loadItems (options = {}) {
 		// Hold a reference to the currentList in state.
 		const currentList = state.lists.currentList;
 
+		console.log('[ACTION] loadItems calling API');
 		currentList.loadItems({
 			search: state.active.search,
 			filters: state.active.filters,
@@ -26,6 +28,7 @@ export function loadItems (options = {}) {
 			columns: state.active.columns,
 			page: state.lists.page,
 		}, (err, items) => {
+			console.log('[ACTION] loadItems callback, err:', err, 'items:', items ? items.results.length : 'null');
 
 			// Create a new state snapshot and compare the current active list id
 			// to the id of the currentList referenced above.
@@ -33,8 +36,14 @@ export function loadItems (options = {}) {
 			// If these are not the same, then it means that this is not the latest fetch request.
 			// BAIL OUT!
 
-			if (getState().active.id !== currentList.id) return;
-			if (getState().lists.loadCounter > currentLoadCounter) return;
+			if (getState().active.id !== currentList.id) {
+				console.log('[ACTION] loadItems bail out: active.id mismatch');
+				return;
+			}
+			if (getState().lists.loadCounter > currentLoadCounter) {
+				console.log('[ACTION] loadItems bail out: loadCounter mismatch');
+				return;
+			}
 			if (items) {
 
 				// if (page.index !== drag.page && drag.item) {
@@ -85,6 +94,7 @@ export function downloadItems (format, columns) {
 }
 
 export function itemsLoaded (items) {
+	console.log('[ACTION] itemsLoaded dispatching ITEMS_LOADED');
 	return {
 		type: ITEMS_LOADED,
 		items,

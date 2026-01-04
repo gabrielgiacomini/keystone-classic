@@ -96,6 +96,7 @@ module.exports = function (opts) {
 
 		b.transform(babelify.configure({
 			presets: ['@babel/preset-env', '@babel/preset-react'],
+			plugins: ['add-module-exports'],
 		}));
 		b.exclude('FieldTypes');
 		packages.forEach(function (i) {

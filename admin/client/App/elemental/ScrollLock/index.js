@@ -5,7 +5,7 @@ export default class ScrollLock extends Component {
 		super();
 		this.lockCount = 0;
 	}
-	UNSAFE_componentWillMount () {
+	componentWillMount () {
 		if (typeof window === 'undefined') return;
 
 		this.lockCount++;

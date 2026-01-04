@@ -115,6 +115,7 @@
     "@types/mongoose": "^5.11.97",
     "@vitejs/plugin-react": "^5.1.2",
     "5to6-codemod": "^1.8.0",
+    "babel-plugin-add-module-exports": "^1.0.4",
     "browserify-middleware": "^8.1.1",
     "codeclimate-test-reporter": "^0.5.1",
     "connect-mongo": "^2.0.3",

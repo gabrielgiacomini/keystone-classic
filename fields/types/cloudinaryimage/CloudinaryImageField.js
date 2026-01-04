@@ -68,14 +68,14 @@ export default Field.create({
 	getInitialState () {
 		return buildInitialState(this.props);
 	},
-	UNSAFE_componentWillReceiveProps (nextProps) {
+	componentWillReceiveProps (nextProps) {
 		// console.log('CloudinaryImageField nextProps:', nextProps);
 	},
 	/**
 	 * Handles the component receiving new props.
 	 * @param {Object} nextProps The new props.
 	 */
-	UNSAFE_componentWillUpdate (nextProps) {
+	componentWillUpdate (nextProps) {
 		// Reset the action state when the value changes
 		// TODO: We should add a check for a new item ID in the store
 		if (this.props.value.public_id !== nextProps.value.public_id) {

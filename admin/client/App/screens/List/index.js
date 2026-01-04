@@ -65,11 +65,10 @@ class ListView extends React.Component {
         showUpdateForm: false,
     };
 
-    UNSAFE_componentWillMount() {
+    componentWillMount() {
 		// When we directly navigate to a list without coming from another client
 		// side routed page before, we need to initialize the list and parse
 		// possibly specified query parameters
-
 		this.props.dispatch(selectList(this.props.params.listId));
 
 		const isNoCreate = this.props.lists.data[this.props.params.listId].nocreate;
@@ -78,10 +77,9 @@ class ListView extends React.Component {
 		this.setState({
 			showCreateForm: (shouldOpenCreate && !isNoCreate) || Keystone.createFormErrors,
 		});
-
 	}
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {
 		// We've opened a new list from the client side routing, so initialize
 		// again with the new list id
 		const isReady = this.props.lists.ready && nextProps.lists.ready;

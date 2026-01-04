@@ -33,7 +33,7 @@ class Popout extends React.Component {
 
     state = {};
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {
 		if (!this.props.isOpen && nextProps.isOpen) {
 			window.addEventListener('resize', this.calculatePosition);
 			this.calculatePosition(nextProps.isOpen);
@@ -128,11 +128,15 @@ class Popout extends React.Component {
 	}
 }
 
-export default Popout;
-
 // expose the child to the top level export
-export const Header = require('./PopoutHeader');
+import PopoutHeader from './PopoutHeader';
+import PopoutBody from './PopoutBody';
+import PopoutFooter from './PopoutFooter';
+import PopoutPane from './PopoutPane';
 
-export const Body = require('./PopoutBody');
-export const Footer = require('./PopoutFooter');
-export const Pane = require('./PopoutPane');
+Popout.Header = PopoutHeader;
+Popout.Body = PopoutBody;
+Popout.Footer = PopoutFooter;
+Popout.Pane = PopoutPane;
+
+export default Popout;

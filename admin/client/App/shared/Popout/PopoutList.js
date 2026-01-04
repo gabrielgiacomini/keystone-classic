@@ -26,9 +26,11 @@ class PopoutList extends React.Component {
 	}
 }
 
-export default PopoutList;
-
 // expose the child to the top level export
-export const Item = require('./PopoutListItem');
+import PopoutListItem from './PopoutListItem';
+import PopoutListHeading from './PopoutListHeading';
 
-export const Heading = require('./PopoutListHeading');
+PopoutList.Item = PopoutListItem;
+PopoutList.Heading = PopoutListHeading;
+
+export default PopoutList;

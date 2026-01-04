@@ -24,7 +24,7 @@ class ModalDialog extends Component {
 			onClose: this.props.onClose,
 		};
 	}
-	UNSAFE_componentWillReceiveProps (nextProps) {
+	componentWillReceiveProps (nextProps) {
 		if (!canUseDom) return;
 
 		// add event listeners

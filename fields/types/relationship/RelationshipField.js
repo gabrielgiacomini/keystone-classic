@@ -73,7 +73,7 @@ export default Field.create({
 	 * Handles the component receiving new props.
 	 * @param {Object} nextProps The new props.
 	 */
-	UNSAFE_componentWillReceiveProps (nextProps) {
+	componentWillReceiveProps (nextProps) {
 		if (nextProps.value === this.props.value || nextProps.many && compareValues(this.props.value, nextProps.value)) return;
 		this.loadValue(nextProps.value);
 	},

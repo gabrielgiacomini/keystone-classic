@@ -51,7 +51,7 @@ RelatedItemsListRow.propTypes = {
 	connectDragPreview: PropTypes.func, // eslint-disable-line react/sort-prop-types
 };
 
-export default exports = RelatedItemsListRow;
+export default RelatedItemsListRow;
 
 // Expose Sortable
 

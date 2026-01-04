@@ -14,11 +14,14 @@ import { setActiveList } from './active';
  */
 export function selectList (id) {
 	return (dispatch, getState) => {
+		console.log('[ACTION] selectList called with id:', id);
 		dispatch({
 			type: SELECT_LIST,
 			id,
 		});
+		console.log('[ACTION] dispatching setActiveList');
 		dispatch(setActiveList(getState().lists.data[id], id));
+		console.log('[ACTION] setActiveList dispatched');
 	};
 }
 

@@ -36,6 +36,7 @@ export function setActiveColumns (columns) {
 }
 
 export function setActiveList (list, id) {
+	console.log('[ACTION] setActiveList creating action with type:', SET_ACTIVE_LIST);
 	return {
 		type: SET_ACTIVE_LIST,
 		list,

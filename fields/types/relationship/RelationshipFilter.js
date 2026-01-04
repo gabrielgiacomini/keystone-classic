@@ -80,7 +80,7 @@ class RelationshipFilter extends React.Component {
 	 * Handles the component receiving new props.
 	 * @param {Object} nextProps The new props.
 	 */
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {
 		if (nextProps.filter.value !== this.props.filter.value) {
 			this.populateValue(nextProps.filter.value);
 		}

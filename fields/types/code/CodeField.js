@@ -73,7 +73,7 @@ export default Field.create({
 	 * Handles the component receiving new props.
 	 * @param {Object} nextProps The new props.
 	 */
-	UNSAFE_componentWillReceiveProps (nextProps) {
+	componentWillReceiveProps (nextProps) {
 		if (this.codeMirror && this._currentCodemirrorValue !== nextProps.value) {
 			this.codeMirror.setValue(nextProps.value);
 		}

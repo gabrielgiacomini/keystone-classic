@@ -77,7 +77,7 @@ class ItemsRow extends React.Component {
 	}
 }
 
-export default exports = ItemsRow;
+export default ItemsRow;
 
 // Expose Sortable
 

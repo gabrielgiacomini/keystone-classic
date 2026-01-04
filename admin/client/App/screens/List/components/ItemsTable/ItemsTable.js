@@ -133,4 +133,4 @@ class ItemsTable extends React.Component {
 	}
 }
 
-export default exports = ItemsTable;
+export default ItemsTable;

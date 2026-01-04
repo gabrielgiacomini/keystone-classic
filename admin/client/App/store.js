@@ -11,7 +11,6 @@ import homeReducer from './screens/Home/reducer';
 
 import rootSaga from './sagas';
 
-
 // Combine the reducers to one state
 const reducers = combineReducers({
 	lists: listsReducer,

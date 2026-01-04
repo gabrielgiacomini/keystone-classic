@@ -6,11 +6,78 @@
 
 ---
 
+## Session Handoff (2026-01-04)
+
+### Completed This Session
+
+| Task | Commit/Status | Notes |
+|------|---------------|-------|
+| ESM Conversion | `8e4373a7` | ~230 client files converted from CommonJS to ESM |
+| React Codemods | `6ed2e922` | createClass → ES6 classes, PropTypes → prop-types package |
+| ESM/CJS Interop Fix | **UNCOMMITTED** | Added `babel-plugin-add-module-exports` |
+| E2E Validation | ✅ 167/167 pass | All tests green |
+
+### Pending Tasks Before Next Phase
+
+1. **Commit current changes:**
+   ```bash
+   cd /Users/giaco/Projects/keystone-classic
+   git add -A && git commit -m "Fix ESM/CJS interop with babel-plugin-add-module-exports"
+   ```
+
+2. **Update Node version:**
+   ```bash
+   echo "24.11.1" > .nvmrc
+   nvm install 24.11.1
+   nvm use
+   npm install --legacy-peer-deps
+   ```
+
+### Uncommitted Changes
+
+**Files modified:**
+- `.babelrc` - Added `add-module-exports` plugin
+- `admin/server/middleware/browserify.js` - Added plugin to babelify config
+- `package.json` / `package-lock.json` - Added `babel-plugin-add-module-exports`
+- `ItemsTableRow.js`, `ItemsTable.js`, `RelatedItemsListRow.js` - Fixed `export default exports = X` → `export default X`
+- `Popout/index.js`, `Popout/PopoutList.js` - Fixed ESM/CJS mixing
+- Various files - Removed debug console.log statements
+- Several field components - Reverted `UNSAFE_componentWillMount` → `componentWillMount` (React 15 doesn't support UNSAFE_ prefix)
+
+### Key Technical Discovery
+
+**Problem**: After React codemods, List views showed "Loading..." forever despite data loading correctly.
+
+**Root Cause**: Babel's `@babel/preset-env` transforms `export default X` to `module.exports = { default: X, __esModule: true }`. Without `babel-plugin-add-module-exports`, imports received the wrapper object instead of the actual component.
+
+**Symptom**: `Columns['text']` was `{default: TextColumn, __esModule: true}` instead of `TextColumn`, causing `React.createElement` to fail.
+
+**Solution**: Install and configure `babel-plugin-add-module-exports` in both `.babelrc` and `admin/server/middleware/browserify.js`.
+
+### Quick Start for Next Session
+
+```bash
+# 1. Start E2E server
+cd /Users/giaco/Projects/keystone-classic
+MONGO_PORT=27020 KEYSTONE_DEV=true npm run test-e2e-server
+
+# 2. Access Admin UI
+open http://localhost:3000/keystone/
+# Login: user@test.e2e / test
+
+# 3. Run E2E tests
+npm run test-playwright
+```
+
+---
+
 ## Current State
 
 | Layer | Current | Target | Status |
 |-------|---------|--------|--------|
-| Build System | Browserify + Babelify | Vite | 🔄 In Progress |
+| Module System | ESM (converted) | ESM | ✅ Done |
+| React Components | ES6 Classes (converted) | Functional + Hooks | ✅ Codemods applied |
+| Build System | Browserify + Babelify | Vite | 🔄 Next Up |
 | JavaScript | ES6 with Babel | TypeScript | ⏳ Pending |
 | React | 15.4.2 (2016) | 18.x | ⏳ Pending |
 | State Management | Redux + Redux-Saga | TBD | ⏳ Pending |
@@ -19,7 +86,30 @@
 
 ---
 
-## Phase 1: Build System Migration (CURRENT)
+## Pre-Migration Work (COMPLETED)
+
+### ESM Conversion (Commit `8e4373a7`)
+- Converted ~230 client-side files from CommonJS to ESM
+- Pattern: `module.exports = X` → `export default X`
+- Pattern: `const X = require('x')` → `import X from 'x'`
+
+### React Codemods (Commit `6ed2e922`)
+- **createClass → ES6 classes**: 83 files converted using `react-codemod`
+- **PropTypes migration**: 147 files, `React.PropTypes` → `import PropTypes from 'prop-types'`
+- **Lifecycle methods**: 17 files had `UNSAFE_` prefix added, then reverted (React 15 incompatible)
+
+### ESM/CJS Interop Fix (Uncommitted)
+- Installed `babel-plugin-add-module-exports`
+- Fixed broken exports in:
+  - `admin/client/App/screens/List/components/ItemsTable/ItemsTableRow.js`
+  - `admin/client/App/screens/List/components/ItemsTable/ItemsTable.js`
+  - `admin/client/App/screens/Item/components/RelatedItemsList/RelatedItemsListRow.js`
+  - `admin/client/App/shared/Popout/index.js`
+  - `admin/client/App/shared/Popout/PopoutList.js`
+
+---
+
+## Phase 1: Build System Migration (NEXT)
 
 **Objective**: Replace Browserify with Vite without changing runtime behavior.
 
@@ -30,10 +120,32 @@
 - Better error messages
 - Modern ecosystem
 
+### Current Browserify Setup
+
+**Entry Points:**
+- `admin/client/App/index.js` - Main admin app
+- `admin/client/Signin/index.js` - Signin page (separate bundle)
+- `admin/client/packages.js` - Vendor bundle (react, redux, etc.)
+
+**Key Config (admin/server/middleware/browserify.js):**
+```javascript
+b.transform(babelify.configure({
+  presets: ['@babel/preset-env', '@babel/preset-react'],
+  plugins: ['add-module-exports'],
+}));
+b.exclude('FieldTypes');  // Aliased separately
+packages.forEach(pkg => b.exclude(pkg));  // External vendor bundle
+```
+
+**Global Shims (package.json browserify-shim):**
+- `tinymce` → global `tinymce`
+- `codemirror` → global `CodeMirror`
+- `jquery` → global `jQuery`
+
 ### Steps
 
 #### 1.1 Analyze Current Build
-- [ ] Document Browserify configuration
+- [x] Document Browserify configuration (see above)
 - [ ] Identify all entry points (App, Signin, packages)
 - [ ] Map browserify-shim globals
 - [ ] List all transforms (babelify, brfs)
@@ -86,23 +198,28 @@
 
 **Objective**: Upgrade from React 15 to React 18.
 
-### Challenges
-- `React.createClass` removed in React 16 (42 files use it)
+### Pre-work Completed
+- ✅ `React.createClass` → ES6 classes (83 files)
+- ✅ `React.PropTypes` → `prop-types` package (147 files)
+- ⚠️ Lifecycle methods still use old names (`componentWillMount`, etc.) - React 15 doesn't support `UNSAFE_` prefix
+
+### Remaining Challenges
 - `react-addons-css-transition-group` deprecated
 - New root API (`createRoot` vs `render`)
 - Strict Mode changes
+- Some dependencies may be incompatible
 
 ### Steps
 
 #### 3.1 Preparation
-- [ ] Install `create-react-class` polyfill
-- [ ] Audit all React 15-specific APIs
+- [ ] Audit remaining React 15-specific APIs
 - [ ] List incompatible dependencies
+- [ ] Test with `create-react-class` polyfill if needed
 
 #### 3.2 Upgrade to React 16 (Intermediate)
 - [ ] Update react, react-dom to 16.x
-- [ ] Fix createClass usages
-- [ ] Update lifecycle methods (componentWillMount, etc.)
+- [ ] Add `UNSAFE_` prefix to lifecycle methods (now supported)
+- [ ] Fix any remaining createClass usages
 - [ ] Run E2E tests
 
 #### 3.3 Upgrade to React 18
@@ -290,17 +407,32 @@ fields/types/{name}/
 
 ---
 
-## Current Focus
+## Quick Reference
 
-### NOW: Phase 1 - Build System Migration
-
-See detailed progress in this file and git commits.
-
+### Validate Current State
 ```bash
-# Validate current state
+npm run test-playwright
+```
+
+### Development Workflow
+```bash
+# Terminal 1: Start E2E server
+MONGO_PORT=27020 KEYSTONE_DEV=true npm run test-e2e-server
+
+# Terminal 2: Run tests
 npm run test-playwright
 
-# Development workflow
-MONGO_PORT=27020 npm run test-e2e-server  # Terminal 1
-npm run test-playwright                    # Terminal 2
+# Access Admin UI
+open http://localhost:3000/keystone/
+# Login: user@test.e2e / test
 ```
+
+### Key Files
+| Purpose | Location |
+|---------|----------|
+| Browserify config | `admin/server/middleware/browserify.js` |
+| Babel config | `.babelrc` |
+| Field types registry | `admin/client/FieldTypes.js` |
+| Redux store | `admin/client/App/store.js` |
+| E2E tests | `test/e2e-playwright/tests/` |
+| Agent docs | `AGENTS.md`, `admin/AGENTS.md`, `fields/AGENTS.md` |
