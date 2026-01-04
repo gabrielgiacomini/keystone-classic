@@ -6,7 +6,7 @@
 // Needed for ES6 generators (redux-saga) to work
 import '@babel/polyfill';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -25,7 +25,8 @@ const history = syncHistoryWithStore(browserHistory, store);
 import { listsByKey } from '../utils/lists';
 Keystone.User = listsByKey[Keystone.userList];
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('react-root'));
+root.render(
 	<Provider store={store}>
 		<Router history={history}>
 			<Route path={Keystone.adminPath} component={App}>
@@ -34,6 +35,5 @@ ReactDOM.render(
 				<Route path=":listId/:itemId" component={Item} />
 			</Route>
 		</Router>
-	</Provider>,
-	document.getElementById('react-root')
+	</Provider>
 );

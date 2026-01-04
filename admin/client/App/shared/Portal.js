@@ -4,25 +4,32 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 export default class extends React.Component {
     static displayName = 'Portal';
     portalElement = null; // eslint-disable-line react/sort-comp
+    root = null;
 
     componentDidMount() {
 		const el = document.createElement('div');
 		document.body.appendChild(el);
 		this.portalElement = el;
+		this.root = createRoot(el);
 		this.componentDidUpdate();
 	}
 
     componentWillUnmount() {
+		if (this.root) {
+			this.root.unmount();
+		}
 		document.body.removeChild(this.portalElement);
 	}
 
     componentDidUpdate() {
-		ReactDOM.render(<div {...this.props} />, this.portalElement);
+		if (this.root) {
+			this.root.render(<div {...this.props} />);
+		}
 	}
 
     getPortalDOMNode = () => {
