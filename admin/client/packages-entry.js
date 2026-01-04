@@ -3,6 +3,18 @@ import async from 'async';
 import blacklist from 'blacklist';
 import classnames from 'classnames';
 import displayName from 'display-name';
+import PropTypes from 'prop-types';
+import React from 'react';
+
+// Shim for React 15 -> 16 compatibility
+// elemental and other legacy packages expect React.PropTypes
+if (!React.PropTypes) {
+	React.PropTypes = PropTypes;
+}
+if (!React.createClass) {
+	React.createClass = require('create-react-class');
+}
+
 import elemental from 'elemental';
 import expressionMatch from 'expression-match';
 import i from 'i';
@@ -13,6 +25,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import qs from 'qs';
 import reactAddonsCssTransitionGroup from 'react-addons-css-transition-group';
+import * as reactTransitionGroup from 'react-transition-group';
 import reactColor from 'react-color';
 import reactDayPicker from 'react-day-picker';
 import reactDndHtml5Backend from 'react-dnd-html5-backend';
@@ -23,7 +36,7 @@ import reactRedux from 'react-redux';
 import reactRouterRedux from 'react-router-redux';
 import reactRouter from 'react-router';
 import reactSelect from 'react-select';
-import React from 'react';
+import createReactClass from 'create-react-class';
 import reduxSaga from 'redux-saga';
 import reduxThunk from 'redux-thunk';
 import redux from 'redux';
@@ -35,8 +48,10 @@ window.__keystoneModules = {
 	'async': async,
 	'blacklist': blacklist,
 	'classnames': classnames,
+	'create-react-class': createReactClass,
 	'display-name': displayName,
 	'elemental': elemental,
+	'prop-types': PropTypes,
 	'expression-match': expressionMatch,
 	'i': i,
 	'list-to-array': listToArray,
@@ -46,6 +61,7 @@ window.__keystoneModules = {
 	'numeral': numeral,
 	'qs': qs,
 	'react-addons-css-transition-group': reactAddonsCssTransitionGroup,
+	'react-transition-group': reactTransitionGroup,
 	'react-color': reactColor,
 	'react-day-picker': reactDayPicker,
 	'react-dnd-html5-backend': reactDndHtml5Backend,

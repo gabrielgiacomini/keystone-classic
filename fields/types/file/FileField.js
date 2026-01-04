@@ -79,7 +79,7 @@ export default Field.create({
 	 * Handles the component receiving new props.
 	 * @param {Object} nextProps The new props.
 	 */
-	componentWillUpdate (nextProps) {
+	UNSAFE_componentWillUpdate (nextProps) {
 		// Show the new filename when it's finished uploading
 		if (this.props.value.filename !== nextProps.value.filename) {
 			this.setState(buildInitialState(nextProps));

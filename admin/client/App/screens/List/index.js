@@ -65,7 +65,7 @@ class ListView extends React.Component {
         showUpdateForm: false,
     };
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
 		// When we directly navigate to a list without coming from another client
 		// side routed page before, we need to initialize the list and parse
 		// possibly specified query parameters
@@ -79,7 +79,7 @@ class ListView extends React.Component {
 		});
 	}
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
 		// We've opened a new list from the client side routing, so initialize
 		// again with the new list id
 		const isReady = this.props.lists.ready && nextProps.lists.ready;

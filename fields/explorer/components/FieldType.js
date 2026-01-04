@@ -46,7 +46,7 @@ class ExplorerFieldType extends React.Component {
 	 * Handles the component receiving new props.
 	 * @param {Object} newProps The new props.
 	 */
-    componentWillReceiveProps(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) {
 		if (this.props.params.type === newProps.params.type) return;
 
 		this.setState({

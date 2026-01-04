@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import Portal from '../Portal';
-import Transition from 'react-addons-css-transition-group';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const SIZES = {
 	arrowHeight: 12,
@@ -33,7 +33,7 @@ class Popout extends React.Component {
 
     state = {};
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
 		if (!this.props.isOpen && nextProps.isOpen) {
 			window.addEventListener('resize', this.calculatePosition);
 			this.calculatePosition(nextProps.isOpen);
@@ -115,13 +115,16 @@ class Popout extends React.Component {
     render() {
 		return (
 			<Portal className="Popout-wrapper" ref="portal">
-				<Transition
-					transitionEnterTimeout={200}
-					transitionLeaveTimeout={200}
-					transitionName="Popout"
-				>
-					{this.renderPopout()}
-				</Transition>
+				<TransitionGroup>
+					{this.props.isOpen && (
+						<CSSTransition
+							timeout={200}
+							classNames="Popout"
+						>
+							{this.renderPopout()}
+						</CSSTransition>
+					)}
+				</TransitionGroup>
 				{this.renderBlockout()}
 			</Portal>
 		);

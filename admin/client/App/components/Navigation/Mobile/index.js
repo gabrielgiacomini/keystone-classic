@@ -5,7 +5,7 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
-import Transition from 'react-addons-css-transition-group';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import MobileSectionItem from './SectionItem';
 
@@ -103,15 +103,11 @@ class MobileNavigation extends React.Component {
 
     // Render a blockout
     renderBlockout = () => {
-		if (!this.state.menuIsVisible) return null;
-
 		return <div className="MobileNavigation__blockout" onClick={this.toggleMenu} />;
 	};
 
     // Render the sidebar menu
     renderMenu = () => {
-		if (!this.state.menuIsVisible) return null;
-
 		return (
 			<nav className="MobileNavigation__menu">
 				<div className="MobileNavigation__sections">
@@ -145,20 +141,26 @@ class MobileNavigation extends React.Component {
 					</a>
 				</div>
 				<div className="MobileNavigation__bar--placeholder" />
-				<Transition
-					transitionName="MobileNavigation__menu"
-					transitionEnterTimeout={260}
-					transitionLeaveTimeout={200}
-				>
-					{this.renderMenu()}
-				</Transition>
-				<Transition
-					transitionName="react-transitiongroup-fade"
-					transitionEnterTimeout={0}
-					transitionLeaveTimeout={0}
-				>
-					{this.renderBlockout()}
-				</Transition>
+				<TransitionGroup>
+					{this.state.menuIsVisible && (
+						<CSSTransition
+							classNames="MobileNavigation__menu"
+							timeout={{ enter: 260, exit: 200 }}
+						>
+							{this.renderMenu()}
+						</CSSTransition>
+					)}
+				</TransitionGroup>
+				<TransitionGroup>
+					{this.state.menuIsVisible && (
+						<CSSTransition
+							classNames="react-transitiongroup-fade"
+							timeout={0}
+						>
+							{this.renderBlockout()}
+						</CSSTransition>
+					)}
+				</TransitionGroup>
 			</div>
 		);
 	}

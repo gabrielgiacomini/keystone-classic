@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import Transition from 'react-addons-css-transition-group';
+import React, { Component, Children } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { render } from 'react-dom';
 import PassContext from '../PassContext';
 
@@ -17,25 +17,31 @@ export default class Portal extends Component {
 		this.componentDidUpdate();
 	}
 	componentDidUpdate () {
-		// Animate fade on mount/unmount
 		const duration = 200;
 		const styles = `
 				.fade-enter { opacity: 0.01; }
-				.fade-enter.fade-enter-active { opacity: 1; transition: opacity ${duration}ms; }
-				.fade-leave { opacity: 1; }
-				.fade-leave.fade-leave-active { opacity: 0.01; transition: opacity ${duration}ms; }
+				.fade-enter-active { opacity: 1; transition: opacity ${duration}ms; }
+				.fade-exit { opacity: 1; }
+				.fade-exit-active { opacity: 0.01; transition: opacity ${duration}ms; }
 		`;
+		const { children, className, ...rest } = this.props;
 		render(
 			<PassContext context={this.context}>
-				<div>
+				<div className={className}>
 					<style>{styles}</style>
-					<Transition
-						component="div"
-						transitionName="fade"
-						transitionEnterTimeout={duration}
-						transitionLeaveTimeout={duration}
-						{...this.props}
-					/>
+					<TransitionGroup component="div" {...rest}>
+						{Children.map(children, (child, index) => 
+							child ? (
+								<CSSTransition
+									key={child.key || index}
+									classNames="fade"
+									timeout={duration}
+								>
+									{child}
+								</CSSTransition>
+							) : null
+						)}
+					</TransitionGroup>
 				</div>
 			</PassContext>,
 			this.portalElement

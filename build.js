@@ -18,16 +18,16 @@
 
 var browserify = require('browserify');
 var packages = require('./admin/client/packages');
+var path = require('path');
 
-// Configure Browserify with debugging enabled in non-production environments.
 var b = browserify({
 	debug: process.env.NODE_ENV !== 'production',
 });
 
-// Require all the specified packages.
 packages.forEach(function (i) {
 	b.require(i);
 });
 
-// Bundle the packages and pipe the output to stdout.
+b.add(path.resolve(__dirname, './admin/client/react-compat-shim.js'));
+
 b.bundle().pipe(process.stdout);

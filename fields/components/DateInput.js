@@ -44,7 +44,7 @@ export default class extends React.Component {
 		this.showCurrentMonth();
 	}
 
-    componentWillReceiveProps(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.value === this.props.value) return;
 		this.setState({
 			month: moment(newProps.value, this.props.format).toDate(),

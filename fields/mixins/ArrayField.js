@@ -58,7 +58,7 @@ export default {
 	 * Handles the component receiving new props.
 	 * @param {Object} nextProps The new props.
 	 */
-	componentWillReceiveProps: function (nextProps) {
+	UNSAFE_componentWillReceiveProps: function (nextProps) {
 		if (nextProps.value.join('|') !== reduceValues(this.state.values).join('|')) {
 			this.setState({
 				values: nextProps.value.map(newItem),

@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import Transition
-	from 'react-addons-css-transition-group';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import classnames from 'classnames';
 import ListFiltersAddForm from './ListFiltersAddForm';
 import Popout from '../../../../shared/Popout';
@@ -60,7 +59,14 @@ class ListFiltersAdd extends React.Component {
 	};
 
     focusSearch = () => {
-		findDOMNode(this.refs.search).focus();
+		requestAnimationFrame(() => {
+			if (this.refs.search) {
+				const node = findDOMNode(this.refs.search);
+				if (node && node.focus) {
+					node.focus();
+				}
+			}
+		});
 	};
 
     selectField = (field) => {
@@ -169,21 +175,24 @@ class ListFiltersAdd extends React.Component {
 					onClick={isOpen ? this.closePopout : this.openPopout}
 				/>
 				<Popout isOpen={isOpen} onCancel={this.closePopout} relativeToID="listHeaderFilterButton">
-					<Popout.Header
-						leftAction={selectedField ? this.navigateBack : null}
-						leftIcon={selectedField ? 'chevron-left' : null}
-						title={selectedField ? selectedField.label : 'Filter'}
-						transitionDirection={selectedField ? 'next' : 'prev'} />
-					<Transition
+				<Popout.Header
+					leftAction={selectedField ? this.navigateBack : null}
+					leftIcon={selectedField ? 'chevron-left' : null}
+					title={selectedField ? selectedField.label : 'Filter'}
+					transitionDirection={selectedField ? 'next' : 'prev'} />
+					<TransitionGroup
 						className={popoutPanesClassname}
 						component="div"
 						style={popoutBodyStyle}
-						transitionName={selectedField ? 'Popout__pane-next' : 'Popout__pane-prev'}
-						transitionEnterTimeout={360}
-						transitionLeaveTimeout={360}
 					>
-						{selectedField ? this.renderForm() : this.renderList()}
-					</Transition>
+						<CSSTransition
+							key={selectedField ? 'form' : 'list'}
+							classNames={selectedField ? 'Popout__pane-next' : 'Popout__pane-prev'}
+							timeout={360}
+						>
+							{selectedField ? this.renderForm() : this.renderList()}
+						</CSSTransition>
+					</TransitionGroup>
 				</Popout>
 			</div>
 		);

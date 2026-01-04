@@ -176,7 +176,7 @@ export const Mixins = {
 		/**
 		 * Sets the initial collapsed state of the field.
 		 */
-		componentWillMount () {
+		UNSAFE_componentWillMount () {
 			this.setState({
 				isCollapsed: this.shouldCollapse(),
 			});

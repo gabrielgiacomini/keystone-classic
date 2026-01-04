@@ -50,7 +50,7 @@ class ItemView extends React.Component {
 		this.initializeItem(this.props.params.itemId);
 	}
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
 		// We've opened a new item from the client side routing, so initialize
 		// again with the new item id
 		if (nextProps.params.itemId !== this.props.params.itemId) {
