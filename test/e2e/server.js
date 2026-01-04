@@ -6,21 +6,13 @@ var request = require("superagent");
 var moment = require("moment");
 var mongoose = require("mongoose");
 var path = require("path");
-var keystoneNightwatchE2e = require("./keystone-nightwatch");
 
-// Set app-specific env for nightwatch session
-process.env.KNE_TEST_PATHS = "test/e2e/adminUI/tests";
-process.env.KNE_EXCLUDE_TEST_PATHS =
-	"test/e2e/adminUI/tests/group006Fields/commonFieldTestUtils.js,test/e2e/adminUI/tests/group999FixMe/*";
-
-// determine the mongo uri and database name
 var dbName = "/e2e" + (process.env.KEYSTONEJS_PORT || 3000);
 var mongoHost = process.env.MONGO_HOST || "localhost";
 var mongoPort = process.env.MONGO_PORT || "27017";
 var mongoUri =
 	process.env.MONGO_URI || ("mongodb://" + mongoHost + ":" + mongoPort + dbName);
 
-// Function that drops the test database before starting testing
 function dropTestDatabase(done) {
 	console.log(
 		[moment().format("HH:mm:ss:SSS")] +
@@ -60,7 +52,6 @@ function dropTestDatabase(done) {
 	);
 }
 
-// Function that checks if keystone is ready before starting testing
 function checkKeystoneReady(done) {
 	async.retry(
 		{
@@ -99,20 +90,11 @@ function checkKeystoneReady(done) {
 	);
 }
 
-// Function that starts the e2e common framework
-function runE2E(options, done) {
-	console.log([moment().format("HH:mm:ss:SSS")] + " e2e: starting tests...");
-
-	keystoneNightwatchE2e.startE2E(options, done);
-}
-
-// Function that starts keystone
 function runKeystone(cb) {
 	console.log(
 		[moment().format("HH:mm:ss:SSS")] + " e2e: starting KeystoneJS..."
 	);
 
-	// initialize keystone
 	keystone.init({
 		name: "e2e",
 		brand: "e2e",
@@ -138,13 +120,10 @@ function runKeystone(cb) {
 		"cloudinary config": "cloudinary://api_key:api_secret@cloud_name",
 	});
 
-	// import app models
 	keystone.import("models");
 
-	// setup any custom routes
 	keystone.set("routes", require("./routes"));
 
-	// setup application adminui navigation
 	keystone.set("nav", {
 		access: ["users"],
 		fields: [
@@ -192,7 +171,7 @@ function runKeystone(cb) {
 		onMount: function () {
 			console.log(
 				[moment().format("HH:mm:ss:SSS")] +
-					" e2e: KeystoneJS mounted Successfuly"
+					" e2e: KeystoneJS mounted Successfully"
 			);
 		},
 		onStart: function () {
@@ -205,9 +184,7 @@ function runKeystone(cb) {
 	});
 }
 
-// Function that bootstraps the e2e test service
 function start() {
-	var runTests = process.argv.indexOf("--notest") === -1;
 	var dropDB = process.argv.indexOf("--nodrop") === -1;
 
 	async.series(
@@ -227,35 +204,13 @@ function start() {
 			function (cb) {
 				checkKeystoneReady(cb);
 			},
-
-			function (cb) {
-				if (runTests) {
-					runE2E(
-						{
-							keystone: keystone,
-						},
-						cb
-					);
-				} else {
-					cb();
-				}
-			},
 		],
 		function (err) {
-			var exitProcess = false;
-			var exitCode = 0;
 			if (err) {
 				console.error([moment().format("HH:mm:ss:SSS")] + " e2e: " + err);
-				exitProcess = true;
-				exitCode = 1;
+				process.exit(1);
 			}
-			if (runTests) {
-				exitProcess = true;
-			}
-			if (exitProcess) {
-				console.error([moment().format("HH:mm:ss:SSS")] + " e2e: exiting");
-				process.exit(exitCode);
-			}
+			console.log([moment().format("HH:mm:ss:SSS")] + " e2e: Server ready for Playwright tests");
 		}
 	);
 }
