@@ -786,6 +786,17 @@ export interface KeystoneList<
 }
 
 /**
+ * Function shape accepted by Mongoose's dynamic schema method registry.
+ *
+ * @remarks Mongoose stores arbitrary instance methods and types that registry
+ * with `any[]` arguments. Keep Keystone's `this` context typed while preserving
+ * assignability for methods with narrower, optional parameters.
+ */
+export type KeystoneSchemaMethod<T extends KeystoneDocument = KeystoneDocument> = {
+	bivarianceHack(this: T, ...args: any[]): unknown;
+}['bivarianceHack'];
+
+/**
  * Represents a Keystone-specific Mongoose schema with typed method support.
  * Extends `mongoose.Schema` to provide proper `this` context typing for schema methods.
  *
@@ -808,5 +819,5 @@ export interface KeystoneListSchema<
 	T extends KeystoneDocument = KeystoneDocument
 > extends MongooseSchema<T> {
 	/** Schema methods with properly typed `this` context. */
-	methods: Record<string, (this: T, ...args: unknown[]) => unknown>;
+	methods: Record<string, KeystoneSchemaMethod<T>>;
 }

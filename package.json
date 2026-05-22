@@ -138,7 +138,6 @@
     "marked": "^12.0.2",
     "mime-types": "^2.1.24",
     "moment": "^2.30.1",
-    "mongoose": "^7.8.9",
     "morgan": "^1.10.1",
     "multer": "^2.1.1",
     "numeral": "^2.0.6",
@@ -167,7 +166,8 @@
     "zxcvbn": "^4.4.2"
   },
   "peerDependencies": {
-    "cloudinary": "^2.0.0"
+    "cloudinary": "^2.0.0",
+    "mongoose": ">=5.13.0 <8"
   },
   "peerDependenciesMeta": {
     "cloudinary": {
@@ -231,6 +231,7 @@
     "keystone-email": "^1.1.0",
     "keystone-utils": "^0.4.0",
     "mocha": "^11.7.5",
+    "mongoose": "^7.8.9",
     "react-dom18": "npm:react-dom@^18.3.1",
     "react-engine": "^4.5.1",
     "react-hook-form": "^7.75.0",

@@ -357,6 +357,12 @@ declare const legacyDocumentList: KeystoneList<LegacyDocument>;
 legacyDocumentList.schema.methods.computeLegacyName = function (this: LegacyDocument) {
 	return this.legacyName;
 };
+legacyDocumentList.schema.methods.computeLegacyLabel = function (
+	this: LegacyDocument,
+	options?: { prefix?: string },
+) {
+	return `${options?.prefix ?? ''}${this.legacyName}`;
+};
 const legacyDocumentModel = legacyDocumentList.model;
 void legacyDocumentModel.findOne({ legacyName: 'Legacy' }).exec().then((legacyDocument) => {
 	if (!legacyDocument) return;
