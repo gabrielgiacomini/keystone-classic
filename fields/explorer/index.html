@@ -14,7 +14,6 @@
 	<body>
 		<div id="explorer"></div>
 		<script src="/js/lib/jquery/jquery-1.10.2.min.js"></script>
-		<script src="/js/lib/tinymce/tinymce.min.js"></script>
 		<script src="/js/lib/jqueryfileupload/vendor/jquery.ui.widget.js"></script>
 		<script src="/js/lib/jqueryfileupload/jquery.iframe-transport.js"></script>
 		<script src="/js/lib/jqueryfileupload/jquery.fileupload.js"></script>
@@ -23,7 +22,7 @@
 		<script type='text/javascript'>
 			$.cloudinary.config({"api_key":"333779167276662","cloud_name":"keystone-demo","private_cdn":false});
 			var Keystone = {
-				adminPath: '',
+				adminLegacyPath: '',
 				wysiwyg: {},
 			};
 			Keystone.cloudinary = {

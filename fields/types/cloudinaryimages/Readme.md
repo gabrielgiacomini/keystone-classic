@@ -1,4 +1,10 @@
-# CloudinaryImages Field
+This field type has been merged. See `fields/types/cloudinary/Readme.md` for the current documentation. Use `Types.Cloudinary` with `multiple: true`.
+
+---
+
+# CloudinaryImages Field (deprecated)
+
+> **Deprecated.** Use `Types.Cloudinary` with `multiple: true` instead. This alias emits a `KS_DEPRECATED` warning and will be removed in v6.
 
 `Array` — Displayed as a series of images, and an upload field in the Admin UI.
 

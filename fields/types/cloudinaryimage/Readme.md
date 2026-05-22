@@ -1,4 +1,10 @@
-# CloudinaryImage Field
+This field type has been merged. See `fields/types/cloudinary/Readme.md` for the current documentation. Use `Types.Cloudinary` with `multiple: false` (the default).
+
+---
+
+# CloudinaryImage Field (deprecated)
+
+> **Deprecated.** Use `Types.Cloudinary` instead. This alias emits a `KS_DEPRECATED` warning and will be removed in v6.
 
 Stores an `Object` in the model.
 
@@ -6,7 +12,7 @@ Displayed as an image upload field in the Admin UI.
 
 Automatically manages images stored in [Cloudinary](http://cloudinary.com/), including uploading, resizing and deleting.
 
-See the [Cloudinary configuration documentation](http://keystonejs.com/docs/configuration#services-cloudinary) for details on how to set up Cloudinary in KeystoneJS.
+See the [Cloudinary configuration documentation](http://v4.keystonejs.com/docs/configuration#services-cloudinary) for details on how to set up Cloudinary in KeystoneJS.
 
 ## Example
 
@@ -19,7 +25,7 @@ See the [Cloudinary configuration documentation](http://keystonejs.com/docs/conf
 `generateFilename` `function; default: random filename`
 
 Method to generate a public_id in Cloudinary for the uploaded file. Gets passed the `file` data, the attempt number and the callback to call with the filename. Note: Cloudinary supported file extensions will automatically be removed from returned filename.
-  - See [`keystone-storage-namefunctions`](http://npm.im/keystone-storage-namefunctions) for additional filename generators, including content hash filename and original filename. See its source for more information on how to write your own.
+  - Keystone includes filename generators on `keystone.Storage`, including content hash filename and original filename. See `lib/storage/nameFunctions` for more information on how to write your own.
 
 ```js
 { type: Types.CloudinaryImage, generateFilename: function(file, attemptNumber, callback) {
