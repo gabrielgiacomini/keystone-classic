@@ -1,0 +1,73 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": [
+      "ES2020",
+      "DOM"
+    ],
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "noUncheckedIndexedAccess": true,
+    "sourceMap": true,
+    "rootDir": ".",
+    "strict": true,
+    "types": [
+      "node",
+      "mocha"
+    ],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true
+  },
+  "include": [
+    "build.ts",
+    "eslint.config.ts",
+    "index.mts",
+    "lib/**/*",
+    "server/**/*",
+    "fields/**/*",
+    "admin/server/**/*",
+    "scripts/**/*",
+    "test/**/*",
+    "types/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "admin/client-legacy/**",
+    "admin/public-legacy/**",
+    "coverage",
+    "bundles",
+    "fields/**/*Field.js",
+    "fields/**/*Column.js",
+    "fields/**/*Filter.js",
+    "fields/**/*Field.mjs",
+    "fields/**/*Column.mjs",
+    "fields/**/*Filter.mjs",
+    "fields/types/Field.mjs",
+    "fields/types/**/test/explorer.mjs",
+    "fields/types/cloudinaryimages/CloudinaryImagesThumbnail.mjs",
+    "fields/types/color/transparent-swatch.mjs",
+    "fields/types/color/colored-swatch.mjs",
+    "fields/types/markdown/lib/bootstrap-markdown.mjs",
+    "fields/components/**",
+    "fields/explorer/**",
+    "fields/mixins/**",
+    "test/public-types/**",
+    "test/e2e/**",
+    "e2e-api/**",
+    "e2e-ui/**",
+    "**/*.bak",
+    "**/*.bak.ts"
+  ]
+}

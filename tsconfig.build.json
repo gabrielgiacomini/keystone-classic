@@ -1,0 +1,49 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": false,
+    "allowImportingTsExtensions": false
+  },
+  "include": [
+    "index.mts",
+    "lib/**/*.mts",
+    "server/**/*.mts",
+    "admin/server/**/*.mts",
+    "fields/types/**/*.mts",
+    "fields/types/**/*Field.mjs",
+    "fields/types/**/*Column.mjs",
+    "fields/types/**/*Filter.mjs",
+    "fields/types/Field.mjs",
+    "fields/types/cloudinaryimages/CloudinaryImagesThumbnail.mjs",
+    "fields/types/color/transparent-swatch.mjs",
+    "fields/types/color/colored-swatch.mjs",
+    "fields/types/markdown/lib/bootstrap-markdown.mjs",
+    "fields/components/**/*.mjs",
+    "fields/mixins/**/*.mjs",
+    "fields/utils/**/*.mts",
+    "types/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "admin/client-legacy/**",
+    "admin/public-legacy/**",
+    "coverage",
+    "bundles",
+    "fields/**/*Field.js",
+    "fields/**/*Column.js",
+    "fields/**/*Filter.js",
+    "fields/explorer/**",
+    "test/e2e/**",
+    "e2e-api/**",
+    "playwright.config.mts",
+    "**/*.bak",
+    "**/*.bak.ts"
+  ]
+}

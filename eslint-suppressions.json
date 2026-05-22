@@ -1,0 +1,772 @@
+{
+  "admin/server/api/cloudinary.mts": {
+    "jsdoc/require-param": {
+      "count": 6
+    }
+  },
+  "admin/server/api/counts.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/api/download.mts": {
+    "jsdoc/require-param": {
+      "count": 3
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "admin/server/api/file.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/api/item/get.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/api/item/sortOrder.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/api/item/update.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/api/list/applyRelationshipPopulate.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "admin/server/api/list/create.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/api/list/delete.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/api/list/download.mts": {
+    "jsdoc/require-param": {
+      "count": 3
+    }
+  },
+  "admin/server/api/list/downloadLimit.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 4
+    }
+  },
+  "admin/server/api/list/get.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/api/list/update.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/api/meta.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/api/s3.mts": {
+    "jsdoc/require-param": {
+      "count": 8
+    },
+    "jsdoc/require-returns": {
+      "count": 3
+    }
+  },
+  "admin/server/api/session/get.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/api/session/signin.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "admin/server/api/session/signinSecurity.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 6
+    }
+  },
+  "admin/server/api/session/signout.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "admin/server/app/createAdminApiRouter.mts": {
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "admin/server/app/createAdminLegacyCompatRouter.mts": {
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "admin/server/app/createAdminLegacyRouter.mts": {
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "admin/server/app/createAdminLegacyStaticRouter.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "admin/server/app/createAdminNextStaticRouter.mts": {
+    "jsdoc/require-param": {
+      "count": 4
+    },
+    "jsdoc/require-returns": {
+      "count": 3
+    }
+  },
+  "admin/server/app/createHealthchecksHandler.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "admin/server/middleware/apiError.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "admin/server/middleware/initList.mts": {
+    "jsdoc/require-param": {
+      "count": 3
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "admin/server/middleware/logError.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "admin/server/routes-legacy/index.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/routes-legacy/signin.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "admin/server/routes-legacy/signout.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "fields/types/Type.mts": {
+    "jsdoc/require-returns": {
+      "count": 8
+    }
+  },
+  "fields/types/boolean/BooleanType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "fields/types/cloudinary/CloudinaryType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "fields/types/cloudinaryimage/CloudinaryImageType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "fields/types/cloudinaryimages/CloudinaryImagesType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "fields/types/code/CodeType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "fields/types/date/DateType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 10
+    }
+  },
+  "fields/types/datearray/DateArrayType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 8
+    }
+  },
+  "fields/types/datetime/DatetimeType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 7
+    },
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "fields/types/file/FileType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 10
+    }
+  },
+  "fields/types/html/HtmlType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "fields/types/key/KeyType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "fields/types/localfile/LocalFileType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 13
+    }
+  },
+  "fields/types/localfiles/LocalFilesType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 11
+    }
+  },
+  "fields/types/location/LocationType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 13
+    }
+  },
+  "fields/types/markdown/MarkdownType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 9
+    }
+  },
+  "fields/types/money/MoneyType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 3
+    }
+  },
+  "fields/types/name/NameType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "fields/types/number/NumberType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 8
+    }
+  },
+  "fields/types/numberarray/NumberArrayType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 8
+    }
+  },
+  "fields/types/password/PasswordType.mts": {
+    "jsdoc/require-returns": {
+      "count": 3
+    }
+  },
+  "fields/types/relationship/RelationshipType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 12
+    },
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "fields/types/select/SelectType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 10
+    }
+  },
+  "fields/types/textarea/TextareaType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 3
+    }
+  },
+  "fields/types/textarray/TextArrayType.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 8
+    }
+  },
+  "lib/cloudinaryClient.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/adminSurfacePathUtils.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 12
+    }
+  },
+  "lib/core/closeDatabaseConnection.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/createKeystoneHash.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/createRouter.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/getOrphanedLists.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/hooks.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 4
+    }
+  },
+  "lib/core/importer.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/init.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/initExpressApp.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/initExpressSession.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 2
+    }
+  },
+  "lib/core/initExpressSessionAsync.mts": {
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "lib/core/initNav.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/list.mts": {
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "lib/core/openDatabaseConnection.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/options.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 4
+    }
+  },
+  "lib/core/populateRelated.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/redirect.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/core/start.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 4
+    }
+  },
+  "lib/core/wrapHTMLError.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/add.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/addFiltersToQuery.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/addSearchToQuery.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/apiForGet.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/automap.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/buildSearchTextIndex.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/declaresTextIndex.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/ensureTextIndex.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/expandColumns.mts": {
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "lib/list/expandPaths.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/expandSort.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/field.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/getAdminURL.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/getCSVData.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/getData.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/getDocumentName.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/getOptions.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/getPages.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/getUniqueValue.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/isReserved.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/listToArray.mts": {
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "lib/list/map.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/processFilters.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/register.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/relationship.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/selectColumns.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    }
+  },
+  "lib/list/set.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/underscoreMethod.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/list/updateItem.mts": {
+    "jsdoc/require-param": {
+      "count": 4
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "lib/middleware/api.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/middleware/cors.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/middleware/language.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/middleware/less.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/path.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/safeRequire.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/schemaPlugins/history.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/schemaPlugins/methods/populateRelated.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/schemaPlugins/track.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/security/csrf.mts": {
+    "jsdoc/require-param": {
+      "count": 7
+    },
+    "jsdoc/require-returns": {
+      "count": 6
+    }
+  },
+  "lib/security/escapeValueForExcel.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/security/frameGuard.mts": {
+    "jsdoc/require-param": {
+      "count": 1
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "lib/security/ipRangeRestrict.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "lib/security/uploadPolicy.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 4
+    }
+  },
+  "lib/storage/index.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 4
+    }
+  },
+  "lib/uploads.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 2
+    }
+  },
+  "lib/utils/csvUnparse.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "lib/utils/displayName.mts": {
+    "jsdoc/require-param": {
+      "count": 2
+    },
+    "jsdoc/require-returns": {
+      "count": 1
+    }
+  },
+  "lib/view.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/bindBodyParser.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/bindIPRestrictions.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/bindLessMiddleware.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/bindRedirectsHandler.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/bindSassMiddleware.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/bindSessionMiddleware.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/bindStaticMiddleware.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/createApp.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/initLetsEncrypt.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/initSslRedirect.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/initTrustProxy.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/initViewLocals.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/startHTTPServer.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  },
+  "server/startSocketServer.mts": {
+    "jsdoc/require-jsdoc": {
+      "count": 1
+    }
+  }
+}
