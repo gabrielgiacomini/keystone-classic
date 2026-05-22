@@ -1,0 +1,4 @@
+services:
+  mongo:
+    volumes:
+      - ./.mongo-data:/data/db

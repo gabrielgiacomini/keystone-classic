@@ -1,4 +1,12 @@
 # End-2-End Functional Testing
+
+> Historical-only quarantine (2026-05-11): this directory contains the legacy
+> Nightwatch/Selenium e2e harness retained as migration reference material.
+> It is not wired to `package.json`, CI, or the supported verification flow.
+> Current e2e coverage lives in `e2e-api/` and `e2e-ui/` and runs through
+> Playwright (`npm run test:e2e-api`, `npm run test:e2e-ui`,
+> `npm run test:e2e-ui:fields`, and `npm run admin-parity`).
+
 This is an overview of the end-2-end UI/functional testing for keystone.  UI/functional tests ensure
 regression coverage of all aspects of a real keystone application.  The tests use a real keystone
 application with as much available configuration as possible.  Please note that this is not a
@@ -61,6 +69,10 @@ from keystone's root directory:
             test/e2e/drivers/chrome/linux32/chromedriver, if you are on a linux 32-bit system
             test/e2e/drivers/chrome/mac32/chromedriver, if you are on a mac system
             test/e2e/drivers/chrome/win32/chromedriver, if you are on a windows system
+
+           Alternatively, set the environment variable `KNE_CHROMEDRIVER_PATH` (or `CHROMEDRIVER_PATH`) to
+           point directly at the chromedriver binary. The end-to-end harness will also respect `KNE_DRIVER_ROOT`
+           if you prefer to keep driver binaries in a different directory tree.
 
           For browser compatibility, see http://www.seleniumhq.org/about/platforms.jsp#browsers
 

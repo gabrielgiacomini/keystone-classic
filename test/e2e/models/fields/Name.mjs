@@ -1,0 +1,34 @@
+import keystone from '../../../../index.mjs';
+const Types = keystone.Field.Types;
+
+const Name = new keystone.List('Name', {
+	autokey: {
+		path: 'key', 
+		from: 'name', 
+		unique: true,
+	},
+	track: true,
+});
+
+Name.add({
+	name: {
+		type: String, 
+		initial: true, 
+		required: true, 
+		index: true,
+	},
+	fieldA: {
+		type: Types.Name, 
+		initial: true, 
+		index: true,
+	},
+	fieldB: {
+		type: Types.Name, 
+		index: true,
+	},
+});
+
+Name.defaultColumns = 'name, fieldA, fieldB';
+Name.register();
+
+export default Name;

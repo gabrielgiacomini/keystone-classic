@@ -1,0 +1,32 @@
+import keystone from '../../../../index.mjs';
+const Types = keystone.Field.Types;
+
+const Html = new keystone.List('Html', {
+	autokey: {
+		path: 'key',
+		from: 'name',
+		unique: true,
+	},
+	track: true,
+});
+
+Html.add({
+	name: {
+		type: String,
+		initial: true,
+		required: true,
+		index: true,
+	},
+	fieldA: {
+		type: Types.Html,
+		initial: true,
+	},
+	fieldB: {
+		type: Types.Html,
+	},
+});
+
+Html.defaultColumns = 'name, fieldA, fieldB';
+Html.register();
+
+export default Html;
