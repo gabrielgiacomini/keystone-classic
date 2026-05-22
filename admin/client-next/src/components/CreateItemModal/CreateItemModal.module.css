@@ -1,0 +1,116 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 60px 16px;
+  overflow-y: auto;
+}
+
+.modal {
+  background: var(--ks-surface);
+  border-radius: var(--ks-radius);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  outline: none;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--ks-gray-10);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--ks-text);
+}
+
+.closeBtn {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--ks-text-muted);
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.closeBtn:hover {
+  color: var(--ks-text);
+  background: var(--ks-gray-05);
+}
+
+.body {
+  padding: 20px;
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--ks-gray-10);
+}
+
+.submitBtn {
+  background: linear-gradient(to bottom, #5ec461 0%, #34c240 100%);
+  border: 1px solid #2ca335;
+  border-radius: var(--ks-radius);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  color: var(--ks-surface);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 2.3em;
+  padding: 0 1em;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.submitBtn:hover {
+  background: linear-gradient(to bottom, #6acd6d 0%, #38ce46 100%);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancelLink {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--ks-text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.cancelLink:hover {
+  color: var(--ks-text);
+  text-decoration: underline;
+}
+
+.errorMsg {
+  color: var(--ks-danger);
+  font-size: 0.9rem;
+  margin: 0 0 12px;
+}

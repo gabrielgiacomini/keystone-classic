@@ -1,0 +1,185 @@
+/* ============================================================================
+   InverseRelationshipPanel — matches legacy .Relationship / RelatedItemsList
+   ============================================================================ */
+
+.panel {
+  border-top: 1px solid var(--ks-gray-10);
+  margin-top: 28px;
+  padding-top: 20px;
+}
+
+/* Header row: title link on the left, "Add Item" on the right */
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.panelTitle {
+  color: var(--ks-text);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.panelTitleLink {
+  color: var(--ks-text);
+  text-decoration: none;
+}
+
+.panelTitleLink:hover {
+  color: var(--ks-primary);
+  text-decoration: underline;
+}
+
+/* "Add Item" button — small secondary style */
+.addBtn {
+  background: linear-gradient(to bottom, #fafafa 0%, #eaeaea 100%);
+  border: 1px solid;
+  border-color: #cccccc #bfbfbf #b3b3b3;
+  border-radius: var(--ks-radius);
+  color: var(--ks-text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 2em;
+  padding: 0 0.8em;
+  text-shadow: 0 1px 0 white;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.addBtn:hover {
+  background: linear-gradient(to bottom, #ffffff 0%, #eeeeee 100%);
+  border-color: #c2c2c2 #c2c2c2 #b8b8b8;
+  color: var(--ks-text);
+  text-decoration: none;
+}
+
+/* Table */
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.th {
+  border-bottom: 1px solid var(--ks-gray-10);
+  color: var(--ks-text-light);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 6px 12px 6px 0;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.thAction {
+  width: 50px;
+}
+
+.tr {
+  border-bottom: 1px solid var(--ks-gray-05);
+}
+
+.tr:hover {
+  background: var(--ks-gray-05);
+}
+
+.td {
+  color: var(--ks-text);
+  overflow: hidden;
+  padding: 8px 12px 8px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 280px;
+}
+
+.tdAction {
+  padding: 8px 0;
+  text-align: right;
+  width: 50px;
+}
+
+/* First column link */
+.itemLink {
+  color: var(--ks-primary);
+  text-decoration: none;
+}
+
+.itemLink:hover {
+  text-decoration: underline;
+}
+
+/* Edit link in action column */
+.editLink {
+  color: var(--ks-text-light);
+  font-size: 0.82rem;
+  text-decoration: none;
+}
+
+.editLink:hover {
+  color: var(--ks-primary);
+  text-decoration: underline;
+}
+
+/* Pagination row */
+.pagination {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+
+.pageBtn {
+  background: none;
+  border: 1px solid var(--ks-gray-20);
+  border-radius: var(--ks-radius);
+  color: var(--ks-primary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.82rem;
+  padding: 3px 10px;
+  line-height: 1.6;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background: var(--ks-gray-05);
+}
+
+.pageBtn:disabled {
+  color: var(--ks-text-light);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pageInfo {
+  color: var(--ks-text-light);
+}
+
+/* States */
+.loading,
+.empty,
+.error {
+  color: var(--ks-text-light);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 8px 0;
+  padding: 4px 0;
+}
+
+.error {
+  color: var(--ks-danger);
+}

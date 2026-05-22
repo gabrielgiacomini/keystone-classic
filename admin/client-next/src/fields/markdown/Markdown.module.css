@@ -1,0 +1,166 @@
+/* Markdown field: editor + preview pane. */
+
+.wrapper {
+  width: 100%;
+}
+
+/* Tab bar — shown when split-pane is NOT active (narrow viewports). */
+.tabBar {
+  display: flex;
+  border-bottom: 1px solid var(--color-border, #d0d5dd);
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .tabBar {
+    display: none;
+  }
+}
+
+.tabButton {
+  padding: 0.375rem 0.875rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #667085);
+  margin-bottom: -1px;
+}
+
+.tabButton:hover {
+  color: var(--color-text, #101828);
+}
+
+.tabButtonActive {
+  color: var(--color-text, #101828);
+  border-bottom-color: var(--color-primary, #7f56d9);
+  font-weight: 500;
+}
+
+/* Split-pane layout for wide viewports. */
+.splitPane {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .splitPane {
+    display: block;
+  }
+}
+
+.editorPane,
+.previewPane {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Mobile: tab-driven visibility. */
+.hiddenOnMobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hiddenOnMobile {
+    display: block;
+  }
+}
+
+/* The raw textarea. */
+.textarea {
+  font-family: monospace;
+  width: 100%;
+  min-height: 8rem;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+/* Preview container label. */
+.previewLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted, #667085);
+  margin-bottom: 0.25rem;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .previewLabel {
+    display: block;
+  }
+}
+
+/* Preview rendered HTML. */
+.preview {
+  min-height: 8rem;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border, #d0d5dd);
+  border-radius: 4px;
+  overflow-y: auto;
+  background: var(--color-surface, #fff);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  box-sizing: border-box;
+  word-break: break-word;
+}
+
+.preview h1,
+.preview h2,
+.preview h3,
+.preview h4,
+.preview h5,
+.preview h6 {
+  margin-top: 0.75em;
+  margin-bottom: 0.25em;
+  font-weight: 600;
+}
+
+.preview p {
+  margin: 0.5em 0;
+}
+
+.preview code {
+  background: var(--color-code-bg, #f4f4f5);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.85em;
+}
+
+.preview pre {
+  background: var(--color-code-bg, #f4f4f5);
+  padding: 0.75em;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 0.85em;
+}
+
+.preview blockquote {
+  border-left: 3px solid var(--color-border, #d0d5dd);
+  margin: 0.5em 0;
+  padding-left: 0.75em;
+  color: var(--color-text-muted, #667085);
+}
+
+.preview ul,
+.preview ol {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.preview a {
+  color: var(--color-primary, #7f56d9);
+}
+
+.previewEmpty {
+  color: var(--color-text-muted, #667085);
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+.errorList {
+  margin-top: 0.25rem;
+}

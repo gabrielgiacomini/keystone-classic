@@ -1,0 +1,193 @@
+/* Top-level shell: header + main + footer in a column, body fills remaining */
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Centered, responsive container — mirrors elemental Container defaults
+   (max-width 1170px, gutter 20px) and Bootstrap-3-ish breakpoints. */
+.container {
+  margin: 0 auto;
+  max-width: 1170px;
+  padding: 0 20px;
+  width: 100%;
+}
+
+@media (max-width: 1199px) {
+  .container {
+    max-width: 970px;
+  }
+}
+
+@media (max-width: 991px) {
+  .container {
+    max-width: 750px;
+  }
+}
+
+@media (max-width: 767px) {
+  .container {
+    max-width: none;
+  }
+}
+
+/* Primary navigation
+   ------------------------------ */
+
+.nav {
+  background: var(--ks-primary);
+  color: #ffffff;
+  padding: 0.5em 0;
+}
+
+.navContainer {
+  margin: 0 auto;
+  max-width: 1170px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+@media (max-width: 1199px) {
+  .navContainer {
+    max-width: 970px;
+  }
+}
+
+@media (max-width: 991px) {
+  .navContainer {
+    max-width: 750px;
+  }
+}
+
+@media (max-width: 767px) {
+  .navContainer {
+    max-width: none;
+  }
+}
+
+.navList {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.navListRight {
+  justify-content: flex-end;
+}
+
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* 1px vertical pipe between adjacent siblings */
+.navItem + .navItem::before {
+  background-color: rgba(255, 255, 255, 0.4);
+  content: " ";
+  height: 1em;
+  left: 0;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  z-index: 1;
+}
+
+.navLink {
+  align-items: center;
+  border-radius: 0.3em;
+  color: inherit;
+  display: inline-flex;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0.75em 1.5em;
+  text-decoration: none;
+  transition: background-color 180ms, color 180ms;
+  white-space: nowrap;
+}
+
+.navLink:hover,
+.navLink:focus {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: inherit;
+  outline: none;
+  text-decoration: none;
+}
+
+.navLink:active,
+.navLink[aria-current='page'] {
+  background-color: rgba(0, 0, 0, 0.12);
+  color: inherit;
+}
+
+/* Brand (home icon): transparent on hover, flush left */
+.navBrand {
+  padding-left: 0;
+}
+
+.navBrand:hover,
+.navBrand:focus {
+  background-color: transparent;
+}
+
+.navLink svg {
+  display: block;
+}
+
+/* Main body
+   ------------------------------ */
+
+.body {
+  flex-grow: 1;
+  padding: 30px 0;
+  background: var(--ks-body-bg);
+}
+
+/* Footer
+   ------------------------------ */
+
+.footer {
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);
+  color: var(--ks-text-light);
+  font-size: 0.85rem;
+  padding: 40px 0 30px;
+  text-align: center;
+}
+
+.footerLink {
+  color: var(--ks-text-muted);
+  text-decoration: none;
+}
+
+.footerLink:hover,
+.footerLink:focus {
+  color: var(--ks-text-muted);
+  outline: none;
+}
+
+/* Mobile (<= 480px) — let the nav stack rather than overflow */
+@media (max-width: 480px) {
+  .navContainer {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .navListRight {
+    justify-content: flex-start;
+  }
+
+  .navLink {
+    padding: 0.6em 1em;
+  }
+}

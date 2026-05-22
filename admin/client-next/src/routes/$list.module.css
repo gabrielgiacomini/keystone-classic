@@ -1,0 +1,793 @@
+/* ============================================================================
+   List view — legacy parity
+   ========================================================================== */
+
+/* Secondary navbar (breadcrumb-style row above title) */
+.secondaryNavbar {
+  background: var(--ks-surface);
+  border-bottom: 1px solid var(--ks-gray-10);
+  margin: -30px 0 24px;
+  /* Negate Layout's body padding-top so the bar sits flush with the navbar */
+  padding: 10px 0;
+  font-size: 0.85rem;
+  color: var(--ks-text-light);
+}
+
+/* When the secondary navbar lives inside the Layout's max-1170 container we
+   stretch it visually to full width by using negative margin tricks. */
+.secondaryNavbar::before {
+  content: '';
+}
+
+.crumb {
+  color: var(--ks-text-light);
+}
+
+/* Content container — toggles between constrained (default) and full width */
+.contentContainer {
+  max-width: 100%;
+  margin: 0 auto;
+  transition: max-width 160ms ease-out;
+}
+
+.contentExpanded {
+  max-width: 100%;
+}
+
+/* Title — large heading "5 Posts" */
+.title {
+  font-size: 1.75rem;
+  font-weight: 300;
+  margin: 0 0 18px;
+  color: var(--ks-text);
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 2.4rem;
+}
+
+.titleSpinner {
+  display: inline-flex;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.searchWrap {
+  flex: 1 1 240px;
+  position: relative;
+  min-width: 200px;
+}
+
+.searchInput {
+  width: 100%;
+  padding-right: 2.2em;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 2.2em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ks-text-light);
+  pointer-events: none;
+}
+
+.toolbarActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ============================================================================
+   Buttons — match legacy elemental Button (neutral gray with success variant)
+   ========================================================================== */
+
+.btn {
+  appearance: none;
+  background: linear-gradient(to bottom, #fafafa 0%, #eaeaea 100%);
+  border: 1px solid;
+  border-color: #cccccc #bfbfbf #b3b3b3;
+  border-radius: var(--ks-radius);
+  color: var(--ks-text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 2.3em;
+  padding: 0 1em;
+  text-shadow: 0 1px 0 white;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: linear-gradient(to bottom, #ffffff 0%, #eeeeee 100%);
+  border-color: #c2c2c2 #c2c2c2 #b8b8b8;
+  color: var(--ks-text);
+  text-decoration: none;
+}
+
+.btn:focus {
+  border-color: var(--ks-primary);
+  box-shadow: 0 0 0 3px var(--ks-focus-ring);
+  outline: 0;
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.btnActive {
+  background: #e6e6e6;
+  border-color: #b3b3b3;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btnDropdown {
+  padding-right: 0.6em;
+}
+
+.btnIcon {
+  padding: 0 0.6em;
+}
+
+.btnSuccess {
+  background: linear-gradient(to bottom, #43cc4e 0%, #2ead39 100%);
+  border-color: #2ca537 #259330 #208128;
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  margin-left: 4px;
+}
+
+.btnSuccess:hover {
+  background: linear-gradient(to bottom, #50d65a 0%, #2ca537 100%);
+  border-color: #259330 #208128 #1c7423;
+  color: #ffffff;
+}
+
+.btnPrimary {
+  background: linear-gradient(to bottom, #1f93e6 0%, #1380d2 100%);
+  border-color: #1276c2 #1170b9 #0e63a3;
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.btnPrimary:hover {
+  background: linear-gradient(to bottom, #2a9deb 0%, #1276c2 100%);
+  border-color: #1170b9 #0e63a3 #0c5a93;
+  color: #ffffff;
+}
+
+.btnNote {
+  color: #999;
+  font-weight: normal;
+  margin-left: 4px;
+}
+
+/* Dropdown
+   ------------------------------ */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownMenu {
+  position: absolute;
+  z-index: 1000;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 280px;
+  background: var(--ks-surface);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: var(--ks-radius);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  padding: 0;
+}
+
+.dropdownPane {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownPaneHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ks-gray-10);
+  font-size: 0.95rem;
+}
+
+.dropdownBack {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--ks-text-muted);
+  padding: 0 4px;
+}
+
+.dropdownBody {
+  padding: 12px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.dropdownFooter {
+  border-top: 1px solid var(--ks-gray-10);
+  padding: 8px 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.dropdownSearch {
+  width: 100%;
+  margin-bottom: 0.75em;
+}
+
+.dropdownFormRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dropdownLabel {
+  font-size: 0.85rem;
+  color: var(--ks-text-muted);
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--ks-gray-20);
+  border-radius: var(--ks-radius);
+  overflow: hidden;
+}
+
+.segmentedBtn {
+  background: linear-gradient(to bottom, #fafafa 0%, #eaeaea 100%);
+  border: none;
+  cursor: pointer;
+  padding: 0.5em 1em;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.segmentedBtn + .segmentedBtn {
+  border-left: 1px solid var(--ks-gray-20);
+}
+
+.segmentedBtnActive {
+  background: var(--ks-primary);
+  color: #ffffff;
+}
+
+.popoutList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.popoutItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 0;
+  font: inherit;
+  color: var(--ks-text);
+  text-align: left;
+  gap: 8px;
+}
+
+.popoutItem:hover {
+  background: var(--ks-gray-05);
+}
+
+.popoutItemActive {
+  color: var(--ks-primary);
+}
+
+.popoutItemArrow {
+  margin-left: auto;
+  color: var(--ks-text-light);
+}
+
+.popoutCheck {
+  display: inline-block;
+  width: 14px;
+  text-align: center;
+  color: var(--ks-primary);
+}
+
+.popoutEmpty {
+  color: var(--ks-text-light);
+  padding: 8px 0;
+  font-style: italic;
+  font-size: 0.9rem;
+  list-style: none;
+}
+
+/* Field filter control (in dropdown) */
+.filterControl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filterControl input,
+.filterControl select {
+  width: 100%;
+}
+
+/* Active filter chips row */
+.filtersRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 14px;
+  align-items: center;
+}
+
+.filterChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--ks-gray-05);
+  border: 1px solid var(--ks-gray-10);
+  border-radius: 999px;
+  padding: 2px 10px 2px 10px;
+  font-size: 0.85rem;
+  color: var(--ks-text);
+}
+
+.filterChip strong {
+  font-weight: 500;
+  color: var(--ks-text-muted);
+}
+
+.filterChipValue {
+  color: var(--ks-text);
+}
+
+.filterChipClose {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 2px 2px 4px;
+  color: var(--ks-text-light);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterChipClose:hover {
+  color: var(--ks-danger);
+}
+
+.filterChipClear {
+  background: none;
+  border: none;
+  color: var(--ks-text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px 6px;
+}
+
+.filterChipClear:hover {
+  color: var(--ks-text);
+  text-decoration: underline;
+}
+
+/* Management bar */
+.managementBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  min-height: 35px;
+  flex-wrap: wrap;
+}
+
+.managementLeft {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.managementRight {
+  display: inline-flex;
+  align-items: center;
+}
+
+.linkDelete {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  color: var(--ks-text-light);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: normal;
+  padding: 0 1em;
+  line-height: 2.3em;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.linkDelete:hover {
+  background: linear-gradient(to bottom, #df5757 0%, #c33333 100%);
+  border: 1px solid #a92a2a;
+  color: #ffffff;
+  border-radius: var(--ks-radius);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.linkDelete:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.selectedCount {
+  color: var(--ks-text-muted);
+  display: inline-block;
+  line-height: 2.4em;
+  margin-left: 4px;
+  font-size: 0.9rem;
+}
+
+.showingText {
+  color: var(--ks-text-muted);
+  font-size: 0.9rem;
+}
+
+/* Table */
+.tableWrapper {
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  line-height: 1;
+  font-size: 0.9rem;
+}
+
+.colControl {
+  width: 16px;
+}
+
+.colId {
+  width: 180px;
+}
+
+.thControl {
+  padding: 6px 4px;
+  text-align: left;
+  border-bottom: 1px solid var(--ks-gray-10);
+}
+
+.table th {
+  padding: 6px 8px;
+  text-align: left;
+  background: #fafafa;
+  border-bottom: 1px solid var(--ks-gray-10);
+  font-weight: 500;
+  color: #666666;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.thStatic {
+  display: inline-block;
+  color: inherit;
+}
+
+.thSort {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  font: inherit;
+  padding: 0;
+  text-align: left;
+}
+
+.thSort:hover {
+  color: var(--ks-text);
+}
+
+.thSort:hover .thSortIcon::before,
+.thSort:hover .thSortIcon::after {
+  opacity: 1;
+}
+
+.thSortAsc,
+.thSortDesc {
+  color: var(--ks-text);
+}
+
+.thSortAsc .thSortIcon::before,
+.thSortDesc .thSortIcon::after,
+.thSortAsc .thSortIcon,
+.thSortDesc .thSortIcon {
+  opacity: 1;
+}
+
+.thSortIcon {
+  display: inline-block;
+  width: 0.6em;
+  height: 0.85em;
+  margin-left: 0.4em;
+  position: relative;
+  vertical-align: middle;
+  opacity: 0.35;
+}
+
+.thSortIcon::before,
+.thSortIcon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  opacity: 0.5;
+}
+
+.thSortIcon::before {
+  top: 0;
+  border-bottom: 4px solid currentColor;
+}
+
+.thSortIcon::after {
+  bottom: 0;
+  border-top: 4px solid currentColor;
+}
+
+.thSortAsc .thSortIcon::after {
+  opacity: 0.4;
+}
+.thSortAsc .thSortIcon::before {
+  opacity: 1;
+}
+.thSortDesc .thSortIcon::before {
+  opacity: 0.4;
+}
+.thSortDesc .thSortIcon::after {
+  opacity: 1;
+}
+
+/* Rows */
+.row {
+  cursor: default;
+}
+
+.row:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.rowSelected {
+  background: rgba(19, 133, 229, 0.06);
+}
+
+.rowSelected > td:first-child {
+  box-shadow: -2px 0 0 var(--ks-primary);
+}
+
+.rowManage {
+  color: var(--ks-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.rowManage:hover {
+  color: var(--ks-text);
+}
+
+.rowManage a {
+  color: inherit;
+  pointer-events: none;
+}
+
+.table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #f0f0f0;
+  color: var(--ks-text);
+  vertical-align: middle;
+}
+
+.tdControl {
+  padding: 8px 4px !important;
+  width: 16px;
+  color: var(--ks-text-light);
+}
+
+.tdId {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+.idLink {
+  color: var(--ks-text-light);
+  text-decoration: none;
+}
+
+.idLink:hover {
+  color: var(--ks-primary);
+}
+
+.idLink code {
+  font-family: inherit;
+}
+
+.cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cellLink {
+  color: var(--ks-primary);
+  text-decoration: none;
+}
+
+.cellLink:hover {
+  text-decoration: underline;
+}
+
+.btnTrash {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--ks-text-light);
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnTrash:hover {
+  color: var(--ks-danger);
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  min-height: 0;
+  padding: 0;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.empty {
+  text-align: center;
+  color: var(--ks-text-light);
+  padding: 32px;
+  font-style: italic;
+}
+
+.loadingRow {
+  text-align: center;
+  padding: 48px;
+}
+
+/* Spinner — minimal CSS spinner */
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ks-gray-10);
+  border-top-color: var(--ks-text-muted);
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pagination */
+.paginationRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 16px 0 40px;
+}
+
+.pageBtn {
+  appearance: none;
+  background: linear-gradient(to bottom, #fafafa 0%, #eaeaea 100%);
+  border: 1px solid #cccccc;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0.55em 0.85em;
+  color: var(--ks-text);
+  margin-left: -1px;
+}
+
+.pageBtn:first-child {
+  border-top-left-radius: var(--ks-radius);
+  border-bottom-left-radius: var(--ks-radius);
+  margin-left: 0;
+}
+
+.pageBtn:last-child {
+  border-top-right-radius: var(--ks-radius);
+  border-bottom-right-radius: var(--ks-radius);
+}
+
+.pageBtn:hover:not(:disabled) {
+  background: #eeeeee;
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageBtnActive {
+  background: var(--ks-primary);
+  border-color: var(--ks-primary);
+  color: #ffffff;
+  position: relative;
+  z-index: 1;
+}
+
+.pageBtnActive:hover {
+  background: var(--ks-primary-hover);
+}
+
+.pageEllipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cccccc;
+  background: var(--ks-surface);
+  padding: 0.55em 0.85em;
+  font-size: 0.9rem;
+  margin-left: -1px;
+  color: var(--ks-text-light);
+}
+
+.error {
+  color: var(--ks-danger);
+}

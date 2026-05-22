@@ -1,0 +1,104 @@
+.heading {
+  border-bottom: 1px solid #e6e6e6;
+  color: var(--ks-text);
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin: 0 0 24px;
+  padding-bottom: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: var(--ks-surface);
+  border: 1px solid var(--ks-gray-15);
+  border-radius: var(--ks-radius);
+  box-shadow: var(--ks-shadow-subtle);
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  padding: 0;
+  transition: box-shadow 80ms linear;
+}
+
+.card:hover {
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.075), 0 0 0 1px rgba(19, 133, 229, 0.5);
+}
+
+.tileLink {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 15px;
+  padding-right: 54px;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+.tileLink:hover,
+.tileLink:focus {
+  text-decoration: none;
+  outline: none;
+}
+
+.cardTitle {
+  color: var(--ks-primary);
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 0.05em;
+  margin-bottom: 0.2em;
+  transition: border-color 80ms linear;
+}
+
+.tileLink:hover .cardTitle {
+  border-bottom-color: rgba(19, 133, 229, 0.5);
+}
+
+.cardCount {
+  color: var(--ks-text-muted);
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
+.createButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4em;
+  height: 2.4em;
+  background: var(--ks-gray-05);
+  border: 1px solid var(--ks-gray-15);
+  border-radius: var(--ks-radius);
+  color: var(--ks-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 80ms linear, color 80ms linear, border-color 80ms linear;
+}
+
+.createButton:hover,
+.createButton:focus {
+  background: var(--ks-gray-10);
+  border-color: var(--ks-gray-20);
+  color: var(--ks-text);
+  outline: none;
+  text-decoration: none;
+}
+
+.createButton:active {
+  background: var(--ks-gray-15);
+}

@@ -1,0 +1,407 @@
+/* ============================================================================
+   Item edit view — legacy parity
+   ============================================================================ */
+
+/* Secondary navbar (breadcrumb-style row above title) — matches list view */
+.secondaryNavbar {
+  background: var(--ks-surface);
+  border-bottom: 1px solid var(--ks-gray-10);
+  margin: -30px 0 24px;
+  padding: 10px 0;
+  font-size: 0.85rem;
+  color: var(--ks-text-light);
+}
+
+.crumb {
+  color: var(--ks-text-light);
+}
+
+.crumbLink {
+  color: var(--ks-text-light);
+  text-decoration: none;
+}
+
+.crumbLink:hover {
+  color: var(--ks-text);
+  text-decoration: underline;
+}
+
+/* Top toolbar — back link + search on the left, create button on the right */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.toolbarLeft,
+.toolbarRight {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Anchor / button used in the toolbar — matches legacy elemental Button */
+.btn {
+  appearance: none;
+  background: linear-gradient(to bottom, #fafafa 0%, #eaeaea 100%);
+  border: 1px solid;
+  border-color: #cccccc #bfbfbf #b3b3b3;
+  border-radius: var(--ks-radius);
+  color: var(--ks-text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 2.3em;
+  padding: 0 1em;
+  text-shadow: 0 1px 0 white;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: linear-gradient(to bottom, #ffffff 0%, #eeeeee 100%);
+  border-color: #c2c2c2 #c2c2c2 #b8b8b8;
+  color: var(--ks-text);
+  text-decoration: none;
+}
+
+.btn:focus {
+  border-color: var(--ks-primary);
+  box-shadow: 0 0 0 3px var(--ks-focus-ring);
+  outline: 0;
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.btnSuccess {
+  background: linear-gradient(to bottom, #43cc4e 0%, #2ead39 100%);
+  border-color: #2ca537 #259330 #208128;
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  margin-left: 4px;
+}
+
+.btnSuccess:hover {
+  background: linear-gradient(to bottom, #50d65a 0%, #2ca537 100%);
+  border-color: #259330 #208128 #1c7423;
+  color: #ffffff;
+}
+
+/* The back link in the toolbar — borderless link styling */
+.backLink {
+  background: none;
+  border: 0;
+  color: var(--ks-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: inherit;
+  padding: 0 0.6em 0 0;
+  text-decoration: none;
+  line-height: 2.3em;
+  font-size: 0.95rem;
+}
+
+.backLink:hover {
+  color: var(--ks-primary-hover);
+  text-decoration: underline;
+}
+
+/* Search dropdown in the toolbar */
+.searchWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.searchToggle {
+  background: none;
+  border: 0;
+  color: var(--ks-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: inherit;
+  padding: 0 0.6em;
+  line-height: 2.3em;
+  font-size: 0.95rem;
+}
+
+.searchToggle:hover {
+  color: var(--ks-primary-hover);
+  text-decoration: underline;
+}
+
+.searchActive {
+  display: inline-flex;
+  align-items: center;
+  background: var(--ks-surface);
+  border: 1px solid var(--ks-gray-20);
+  border-radius: var(--ks-radius);
+  padding: 0 4px 0 0.5em;
+  gap: 0;
+}
+
+.searchInput {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  min-height: 2.2em !important;
+  padding: 0 0.4em !important;
+  width: 220px;
+}
+
+.searchInput:focus {
+  outline: none;
+  box-shadow: none !important;
+}
+
+.searchResults {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 260px;
+  background: var(--ks-surface);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: var(--ks-radius);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.searchResultItem {
+  display: block;
+  width: 100%;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 8px 12px;
+  font: inherit;
+  text-align: left;
+  color: var(--ks-text);
+  text-decoration: none;
+}
+
+.searchResultItem:hover {
+  background: var(--ks-gray-05);
+}
+
+.searchEmpty {
+  padding: 10px 12px;
+  color: var(--ks-text-light);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+/* Item heading block */
+.headingBlock {
+  margin: 0 0 20px;
+}
+
+/* Header row — "Edit X" title alongside a "+ New X" button */
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.heading {
+  color: var(--ks-text);
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.newBtn {
+  background: linear-gradient(to bottom, #5ec461 0%, #34c240 100%);
+  border: 1px solid #2ca335;
+  border-radius: var(--ks-radius);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  color: var(--ks-surface);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 2.1em;
+  padding: 0 0.9em;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.newBtn:hover {
+  background: linear-gradient(to bottom, #6acd6d 0%, #38ce46 100%);
+}
+
+.idHeading {
+  color: var(--ks-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.2;
+  word-break: break-all;
+}
+
+.idSubtitle {
+  color: var(--ks-text-light);
+  font-size: 0.9rem;
+  margin: 4px 0 0;
+}
+
+/* Form */
+.form {
+  background: transparent;
+  padding: 0;
+  max-width: 100%;
+}
+
+/* Section headings (legacy: <h3 class="form-heading">) */
+.formHeading {
+  border-top: 1px solid var(--ks-gray-10);
+  color: var(--ks-text);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 28px 0 16px;
+  padding-top: 20px;
+}
+
+/* Inline field error rendered below a field */
+.fieldError {
+  color: var(--ks-danger);
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+/* Footer bar at bottom of form */
+.footerBar {
+  background: #f5f5f5;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.04);
+  margin-top: 28px;
+  padding: 18px 0;
+}
+
+.footerInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footerLeft {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footerRight {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Primary save button */
+.saveBtn {
+  background: var(--ks-primary);
+  border: 0;
+  border-radius: var(--ks-radius);
+  color: #ffffff;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 400;
+  padding: 8px 16px;
+  line-height: 1.2;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: var(--ks-primary-hover);
+}
+
+.saveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Small text-link buttons in the footer (reset, delete) */
+.linkBtn {
+  background: none;
+  border: 0;
+  color: var(--ks-text-light);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0 0.6em;
+  line-height: 2.3em;
+}
+
+.linkBtn:hover {
+  color: var(--ks-text);
+  text-decoration: underline;
+}
+
+.linkBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.linkDelete {
+  color: var(--ks-text-light);
+}
+
+.linkDelete:hover {
+  color: var(--ks-danger);
+  text-decoration: underline;
+}
+
+/* Save / error messages */
+.successMsg {
+  color: var(--ks-success);
+  font-size: 0.9rem;
+  margin: 0 8px;
+}
+
+.errorMsg {
+  color: var(--ks-danger);
+  font-size: 0.9rem;
+  margin: 0 8px;
+}
+
+.error {
+  color: var(--ks-danger);
+}
+
+/* Loading state */
+.loading {
+  color: var(--ks-text-light);
+  padding: 48px 0;
+  text-align: center;
+}
+
+/* Relationships section — container for all inverse relationship panels */
+.relationshipsSection {
+  border-top: 2px solid var(--ks-gray-10);
+  margin-top: 40px;
+  padding-top: 24px;
+}
+
+.relationshipsSectionTitle {
+  color: var(--ks-text);
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 0 0 4px;
+}

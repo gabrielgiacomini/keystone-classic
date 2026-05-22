@@ -1,6 +1,6 @@
 # Admin API
 
-The Admin APIs are used specifically by the Admin UI but may also be used by applications if they require no modifications.
+The Admin APIs are used by both admin UIs and may also be used by applications if they require no modifications. By default they are mounted under `/keystone-api`; `/keystone/api` is a temporary migration alias while enabled.
 
 The plan is to move this API Functionality into a lower level in Keystone's core so that they are available through official Keystone APIs, and the Admin APIs become default implementations of the generic features.
 
@@ -23,7 +23,7 @@ Manages creating, destroying and validating KeystoneJS sessions (specifically, l
 ## Get
 
 ```
-GET /api/session
+GET /keystone-api/session
 ```
 
 Returns a single `user` property with either the currently logged in user, or `undefined`.
@@ -49,7 +49,7 @@ Returns a single `user` property with either the currently logged in user, or `u
 ## Sign In
 
 ```
-POST /api/session/signin
+POST /keystone-api/session/signin
 ```
 
 Signs in with the provided credentials. Returns the matched user, or error information.
@@ -110,7 +110,7 @@ If either `username` or `email` is not provided, or the login fails, HTTP `401` 
 ## Sign Out
 
 ```
-POST /api/session/signout
+POST /keystone-api/session/signout
 ```
 
 Signs the current user out (if any). Takes no data.
@@ -143,10 +143,10 @@ Manages creating, listing, updating and deleting items in a List.
 ## Create a new Item
 
 ```
-POST /api/{list}/create
+POST /keystone-api/{list}/create
 ```
 
-Creates a new item with the provided data. Successful calls return the data of the new item, similar to `GET /api/{list}/:id`. For example, creating a new user:
+Creates a new item with the provided data. Successful calls return the data of the new item, similar to `GET /keystone-api/{list}/:id`. For example, creating a new user:
 
 ```js
 {
@@ -275,7 +275,7 @@ Note that the error detail in this case is passed up directly from Mongoose.
 ## Get an Item
 
 ```
-GET /api/{list}/{id}
+GET /keystone-api/{list}/{id}
 ```
 
 Retrieves the data for an item by ID. For example, getting user `57961c4249b4a30ad983b33d` returns the following:
@@ -321,7 +321,7 @@ Any other error (e.g. database error) will return HTTP `500`:
 ## Get Items
 
 ```
-GET /api/{list}
+GET /keystone-api/{list}
 ```
 
 Loads items in the list. This endpoint is very flexible and has several features:
@@ -350,7 +350,7 @@ Loads items in the list. This endpoint is very flexible and has several features
 Search for users named "Jed" and return all data:
 
 ```
-GET /api/users?search=Jed
+GET /keystone-api/users?search=Jed
 ```
 
 ```js
@@ -374,7 +374,7 @@ GET /api/users?search=Jed
 Filter for all admins and return the company field, expanding relationships and only returning the first two results sorted by name, skipping the first 3, excluding the count:
 
 ```
-GET /api/users?count=false&fields=company&expandRelationshipFields=true&filters={isAdmin:true}&limit=2&skip=3&sort=name
+GET /keystone-api/users?count=false&fields=company&expandRelationshipFields=true&filters={isAdmin:true}&limit=2&skip=3&sort=name
 ```
 
 ```js
@@ -407,7 +407,7 @@ GET /api/users?count=false&fields=company&expandRelationshipFields=true&filters=
 Count all admins, excluding results:
 
 ```
-GET /api/users?filters={isAdmin:true}&results=false
+GET /keystone-api/users?filters={isAdmin:true}&results=false
 ```
 
 ```js
@@ -419,7 +419,7 @@ GET /api/users?filters={isAdmin:true}&results=false
 Find all companies, with just the basic data set (no fields):
 
 ```
-GET /api/companies?fields=false
+GET /keystone-api/companies?fields=false
 ```
 
 ```js
@@ -450,7 +450,7 @@ A database error executing the query will cause HTTP `500` to be sent, for examp
 ## Get List Counts
 
 ```
-GET /api/counts
+GET /keystone-api/counts
 ```
 
 Retrieves total item counts for all registered lists, by List Key:
@@ -480,9 +480,9 @@ A database error executing the query will cause HTTP `500` to be sent, for examp
 ## Delete Item(s)
 
 ```
-[1] POST /api/{list}/{id}/delete
-[2] POST /api/{list}/delete?ids=1,2,3
-[3] POST /api/{list}/delete
+[1] POST /keystone-api/{list}/{id}/delete
+[2] POST /keystone-api/{list}/delete?ids=1,2,3
+[3] POST /keystone-api/{list}/delete
 ```
 
 Deletes one or more items in a List. This endpoint supports [1] a single ID parameter in the URL, [2] a comma-delimited list of IDs in the query string, or [3] an array of IDs in the POST Body:

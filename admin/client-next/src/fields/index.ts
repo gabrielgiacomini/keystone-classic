@@ -1,0 +1,33 @@
+import { assertAllFieldsRegistered } from './registry.js';
+
+import './boolean/index.js';
+import './code/index.js';
+import './color/index.js';
+import './cloudinary/index.js';
+import './cloudinaryimage/index.js';
+import './cloudinaryimages/index.js';
+import './date/index.js';
+import './datearray/index.js';
+import './datetime/index.js';
+import './email/index.js';
+import './file/index.js';
+import './geopoint/index.js';
+import './html/index.js';
+import './key/index.js';
+import './localfile/index.js';
+import './localfiles/index.js';
+import './location/index.js';
+import './markdown/index.js';
+import './money/index.js';
+import './name/index.js';
+import './number/index.js';
+import './numberarray/index.js';
+import './password/index.js';
+import './relationship/index.js';
+import './select/index.js';
+import './text/index.js';
+import './textarray/index.js';
+import './textarea/index.js';
+import './url/index.js';
+
+assertAllFieldsRegistered();

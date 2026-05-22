@@ -1,0 +1,20 @@
+.editor {
+  font-family: monospace;
+  width: 100%;
+  min-height: 8rem;
+  /* CodeMirror mounts its own DOM; no resize handle needed here. */
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 3px;
+  overflow: auto;
+}
+
+/* Ensure CodeMirror editor fills the container */
+.editor :global(.cm-editor) {
+  min-height: 8rem;
+  height: 100%;
+}
+
+.editor :global(.cm-scroller) {
+  font-family: monospace;
+  min-height: 8rem;
+}

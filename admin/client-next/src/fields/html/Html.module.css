@@ -1,0 +1,121 @@
+.editorWrapper {
+  border: 1px solid var(--ks-gray-20);
+  border-radius: var(--ks-radius);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  background: var(--ks-surface);
+  overflow: hidden;
+}
+
+.editorWrapper:focus-within {
+  border-color: var(--ks-primary);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px var(--ks-focus-ring);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--ks-gray-10);
+  background: var(--ks-gray-05);
+}
+
+.toolbarBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.4rem;
+  border: 1px solid transparent;
+  border-radius: var(--ks-radius);
+  background: transparent;
+  color: var(--ks-text);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+  white-space: nowrap;
+}
+
+.toolbarBtn:hover {
+  background: var(--ks-gray-15);
+  border-color: var(--ks-gray-20);
+}
+
+.toolbarBtn.active {
+  background: var(--ks-primary);
+  border-color: var(--ks-primary);
+  color: #fff;
+}
+
+.toolbarBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.toolbarSep {
+  width: 1px;
+  background: var(--ks-gray-20);
+  margin: 4px 4px;
+  align-self: stretch;
+}
+
+.editorContent {
+  min-height: 10rem;
+  padding: 0.6rem 0.75rem;
+  outline: none;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ks-text);
+}
+
+/* ProseMirror resets */
+.editorContent :global(.ProseMirror) {
+  outline: none;
+  min-height: 10rem;
+}
+
+.editorContent :global(.ProseMirror p) {
+  margin: 0 0 0.5em;
+}
+
+.editorContent :global(.ProseMirror h1),
+.editorContent :global(.ProseMirror h2),
+.editorContent :global(.ProseMirror h3) {
+  margin: 0.75em 0 0.4em;
+  line-height: 1.25;
+}
+
+.editorContent :global(.ProseMirror ul),
+.editorContent :global(.ProseMirror ol) {
+  margin: 0 0 0.5em;
+  padding-left: 1.5em;
+}
+
+.editorContent :global(.ProseMirror blockquote) {
+  border-left: 3px solid var(--ks-gray-20);
+  margin: 0.5em 0;
+  padding-left: 1em;
+  color: var(--ks-text-muted);
+}
+
+.editorContent :global(.ProseMirror a) {
+  color: var(--ks-primary);
+}
+
+.editorContent :global(.ProseMirror img) {
+  max-width: 100%;
+  height: auto;
+}
+
+.loadingPlaceholder {
+  min-height: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ks-text-muted);
+  font-size: 0.875rem;
+}
