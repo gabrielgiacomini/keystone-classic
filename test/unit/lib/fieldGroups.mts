@@ -3,8 +3,13 @@ import sinon from 'sinon';
 
 import {
 	addFieldGroups,
+	addFieldGroupsToKeystoneList,
 	flattenFieldGroups,
+	transformFieldGroupsToFields,
 	type KeystoneFieldGroup,
+	type KeystoneFieldGroupsConstraint,
+	type KeystoneFieldGroupsDocumentConstraint,
+	type KeystoneFieldGroupsToFields,
 	type KeystoneFieldGroupList,
 } from '../../../lib/fieldGroups.mts';
 
@@ -26,6 +31,12 @@ const groups = [
 		},
 	},
 ] as const satisfies readonly KeystoneFieldGroup[];
+type GroupDocumentFields = {
+	title: string;
+	status?: string;
+};
+const constrainedGroups: KeystoneFieldGroupsConstraint<KeystoneFieldGroupsToFields<typeof groups>> = groups;
+const documentConstrainedGroups: KeystoneFieldGroupsDocumentConstraint<GroupDocumentFields> = groups;
 
 describe('fieldGroups', function () {
 	describe('flattenFieldGroups', function () {
@@ -37,6 +48,12 @@ describe('fieldGroups', function () {
 				},
 				status: { type: String, default: 'draft' },
 			});
+		});
+
+		it('keeps the cloom-style flatten alias as a thin wrapper', function () {
+			expect(transformFieldGroupsToFields(groups)).to.deep.equal(flattenFieldGroups(groups));
+			expect(constrainedGroups).to.equal(groups);
+			expect(documentConstrainedGroups).to.equal(groups);
 		});
 	});
 
@@ -61,6 +78,17 @@ describe('fieldGroups', function () {
 			addFieldGroups(list, groups);
 
 			expect(add.secondCall.args).to.deep.equal([groups[1].fields]);
+		});
+
+		it('keeps the cloom-style add alias as a thin wrapper', function () {
+			const add = sinon.stub();
+			const list = { add } as unknown as KeystoneFieldGroupList;
+
+			const result = addFieldGroupsToKeystoneList(list, groups);
+
+			expect(result).to.equal(list);
+			sinon.assert.calledTwice(add);
+			expect(add.firstCall.args[0]).to.deep.equal({ heading: 'Content' });
 		});
 	});
 });

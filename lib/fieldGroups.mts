@@ -48,9 +48,40 @@ export interface KeystoneFieldGroupList {
 /**
  * Converts a readonly field-group tuple to the combined field map type it
  * represents.
+ *
+ * @template TGroups - Field-group tuple to flatten at the type level.
+ */
+export type KeystoneFieldGroupsToFields<TGroups extends readonly KeystoneFieldGroup[]> =
+	UnionToIntersection<FieldGroupFieldsUnion<TGroups>>;
+
+/**
+ * Compatibility alias for {@link KeystoneFieldGroupsToFields}.
+ *
+ * @template TGroups - Field-group tuple to flatten at the type level.
  */
 export type FieldGroupsToFields<TGroups extends readonly KeystoneFieldGroup[]> =
-	UnionToIntersection<FieldGroupFieldsUnion<TGroups>>;
+	KeystoneFieldGroupsToFields<TGroups>;
+
+/**
+ * Optional constraint marker for consumers that want a field-group collection
+ * to be associated with a known flat Keystone field map.
+ *
+ * @template TFields - Flat field map represented by the grouped definitions.
+ */
+export type KeystoneFieldGroupsConstraint<TFields extends FieldMap> = readonly KeystoneFieldGroup[] & {
+	readonly __fieldsConstraint?: TFields;
+};
+
+/**
+ * Optional constraint marker for consumers that want a field-group collection
+ * to be associated with a document/value shape instead of a Keystone field map.
+ *
+ * @template TDocumentFields - Document/value fields represented by the grouped definitions.
+ */
+export type KeystoneFieldGroupsDocumentConstraint<TDocumentFields extends object> =
+	readonly KeystoneFieldGroup[] & {
+		readonly __documentFieldsConstraint?: TDocumentFields;
+	};
 
 /**
  * Flattens grouped field definitions into a single field map.
@@ -63,14 +94,26 @@ export type FieldGroupsToFields<TGroups extends readonly KeystoneFieldGroup[]> =
  */
 export function flattenFieldGroups<TGroups extends readonly KeystoneFieldGroup[]>(
 	fieldGroups: TGroups,
-): FieldGroupsToFields<TGroups> {
+): KeystoneFieldGroupsToFields<TGroups> {
 	let fields: FieldMap = {};
 
 	for (const group of fieldGroups) {
 		fields = { ...fields, ...group.fields };
 	}
 
-	return fields as FieldGroupsToFields<TGroups>;
+	return fields as KeystoneFieldGroupsToFields<TGroups>;
+}
+
+/**
+ * Cloom-style alias for {@link flattenFieldGroups}.
+ *
+ * @param fieldGroups - Field groups to flatten.
+ * @returns A combined field map suitable for typed field inference.
+ */
+export function transformFieldGroupsToFields<TGroups extends readonly KeystoneFieldGroup[]>(
+	fieldGroups: TGroups,
+): KeystoneFieldGroupsToFields<TGroups> {
+	return flattenFieldGroups(fieldGroups);
 }
 
 /**
@@ -97,4 +140,18 @@ export function addFieldGroups<TList extends KeystoneFieldGroupList>(
 	}
 
 	return list;
+}
+
+/**
+ * Cloom-style alias for {@link addFieldGroups}.
+ *
+ * @param list - Keystone list receiving the grouped fields.
+ * @param fieldGroups - Field groups to register.
+ * @returns The original list for fluent setup chains.
+ */
+export function addFieldGroupsToKeystoneList<TList extends KeystoneFieldGroupList>(
+	list: TList,
+	fieldGroups: readonly KeystoneFieldGroup[],
+): TList {
+	return addFieldGroups(list, fieldGroups);
 }

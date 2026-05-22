@@ -2,8 +2,12 @@ import { type Request } from 'express';
 import mongoose from 'mongoose';
 import keystone, {
 	addFieldGroups,
+	addFieldGroupsToKeystoneList,
+	addSchemaMethods,
+	addSchemaMethodsToKeystoneList,
 	flattenFieldGroups,
 	Keystone,
+	transformFieldGroupsToFields,
 	type KeystoneGlobalOptions,
 	Types,
 	type DocumentFor,
@@ -13,6 +17,9 @@ import keystone, {
 	type FileValue,
 	type Filters,
 	type KeystoneFieldGroup,
+	type KeystoneFieldGroupsConstraint,
+	type KeystoneFieldGroupsDocumentConstraint,
+	type KeystoneFieldGroupsToFields,
 	type KeystoneFieldOptionsForBooleanType,
 	type KeystoneFieldOptionsForCloudinaryType,
 	type KeystoneFieldOptionsForCodeType,
@@ -32,8 +39,14 @@ import keystone, {
 	type KeystoneFieldOptionsForTextType,
 	type KeystoneFieldOptionsForTextArrayType,
 	type KeystoneDocument,
+	type KeystoneInstanceFirstSchemaMethod,
+	type KeystoneInstanceMethodsToSchemaMethods,
 	type KeystoneList,
+	type KeystoneListSchema,
 	type KeystoneListOptions,
+	type KeystoneOptionalSchemaMethods,
+	type KeystoneSchemaMethod,
+	type KeystoneSchemaMethodRegistrationList,
 	type KeystoneUtils,
 	type KeystoneFileStorage,
 	type KeystoneFieldSelectableOption,
@@ -233,7 +246,18 @@ const groupedPostFieldGroups = [
 	},
 ] as const satisfies readonly KeystoneFieldGroup[];
 type GroupedPostFields = FieldGroupsToFields<typeof groupedPostFieldGroups>;
+type KeystoneGroupedPostFields = KeystoneFieldGroupsToFields<typeof groupedPostFieldGroups>;
+type ExampleDocumentFields = {
+	title: string;
+	status?: string;
+};
+const groupedPostConstraint: KeystoneFieldGroupsConstraint<KeystoneGroupedPostFields> = groupedPostFieldGroups;
+const groupedPostDocumentConstraint: KeystoneFieldGroupsDocumentConstraint<ExampleDocumentFields> =
+	groupedPostFieldGroups;
 const groupedPostFields: GroupedPostFields = flattenFieldGroups(groupedPostFieldGroups);
+const groupedPostFieldsFromAlias: KeystoneGroupedPostFields = transformFieldGroupsToFields(groupedPostFieldGroups);
+const groupedPostFieldsFromSingletonFlatten: KeystoneGroupedPostFields = keystone.flattenFieldGroups(groupedPostFieldGroups);
+const groupedPostFieldsFromSingleton: KeystoneGroupedPostFields = keystone.transformFieldGroupsToFields(groupedPostFieldGroups);
 const groupedPostHeadline: FieldValueFor<GroupedPostFields['headline']> = 'Grouped launch';
 
 const textFilter: KSAdminUiFilterForTextField = { mode: 'contains', value: 'Launch' };
@@ -354,6 +378,52 @@ const listOptions: KeystoneListOptions = {
 
 type LegacyDocument = KeystoneDocument<{ legacyName: string }>;
 declare const legacyDocumentList: KeystoneList<LegacyDocument>;
+type LegacyInstanceMethods = {
+	buildLegacyName: KeystoneInstanceFirstSchemaMethod<LegacyDocument, [], string>;
+	buildLegacyLabel: KeystoneInstanceFirstSchemaMethod<LegacyDocument, [options?: { prefix?: string }], string>;
+	matchesLegacyName: KeystoneInstanceFirstSchemaMethod<LegacyDocument, [expected: string], boolean>;
+};
+const legacyInstanceMethods = {
+	buildLegacyName(instance: LegacyDocument) {
+		return instance.legacyName;
+	},
+	buildLegacyLabel(instance: LegacyDocument, options?: { prefix?: string }) {
+		return `${options?.prefix ?? ''}${instance.legacyName}`;
+	},
+	matchesLegacyName(instance: LegacyDocument, expected: string) {
+		return instance.legacyName === expected;
+	},
+} satisfies LegacyInstanceMethods;
+type LegacySchemaMethods = KeystoneInstanceMethodsToSchemaMethods<typeof legacyInstanceMethods>;
+const optionalLegacySchemaMethods: KeystoneOptionalSchemaMethods<typeof legacyInstanceMethods> = {};
+const transformedLegacyLabel: LegacySchemaMethods['buildLegacyLabel'] = function (
+	this: LegacyDocument,
+	options?: { prefix?: string },
+) {
+	return `${options?.prefix ?? ''}${this.legacyName}`;
+};
+const legacySchemaMethodRegistrationList: KeystoneSchemaMethodRegistrationList<LegacyDocument> = legacyDocumentList;
+const legacyListSchema: KeystoneListSchema<LegacyDocument> = legacyDocumentList.schema;
+const legacySchemaMethod: KeystoneSchemaMethod<LegacyDocument> = function (this: LegacyDocument) {
+	return this.legacyName;
+};
+legacyListSchema.methods.readLegacyName = legacySchemaMethod;
+addSchemaMethods(legacySchemaMethodRegistrationList, legacyInstanceMethods);
+addSchemaMethodsToKeystoneList(legacyDocumentList, {
+	buildLegacyUpperName(instance: LegacyDocument) {
+		return instance.legacyName.toUpperCase();
+	},
+});
+keystone.addSchemaMethods(legacyDocumentList, {
+	buildLegacyLowerName(instance: LegacyDocument) {
+		return instance.legacyName.toLowerCase();
+	},
+});
+keystone.addSchemaMethodsToKeystoneList(legacyDocumentList, {
+	buildLegacyPrefixedName(instance: LegacyDocument, prefix: string) {
+		return `${prefix}${instance.legacyName}`;
+	},
+});
 legacyDocumentList.schema.methods.computeLegacyName = function (this: LegacyDocument) {
 	return this.legacyName;
 };
@@ -375,6 +445,8 @@ void legacyDocumentModel.findOne({ legacyName: 'Legacy' }).exec().then((legacyDo
 const Post = new keystone.List('Post', listOptions);
 const LegacyPost = new keystone.List<LegacyDocument>('LegacyPost', listOptions);
 const GroupedPost = new keystone.List('GroupedPost', listOptions);
+const GroupedPostAlias = new keystone.List('GroupedPostAlias', listOptions);
+const GroupedPostSingleton = new keystone.List('GroupedPostSingleton', listOptions);
 Post.add({
 	title: { ...textOptions, type: registry.Text },
 	status: { ...selectOptions, type: registry.Select },
@@ -397,6 +469,8 @@ Post.add({
 });
 Post.register();
 addFieldGroups(GroupedPost, groupedPostFieldGroups).register();
+addFieldGroupsToKeystoneList(GroupedPostAlias, groupedPostFieldGroups).register();
+keystone.addFieldGroupsToKeystoneList(GroupedPostSingleton, groupedPostFieldGroups).register();
 
 const postList = keystone.list('Post');
 const userList = keystone.list('User');
@@ -459,9 +533,21 @@ void postList;
 void userList;
 void legacyDocumentList;
 void legacyDocumentModel;
+void legacySchemaMethodRegistrationList;
+void legacyListSchema;
+void legacySchemaMethod;
+void optionalLegacySchemaMethods;
+void transformedLegacyLabel;
+void groupedPostConstraint;
+void groupedPostDocumentConstraint;
 void groupedPostFields;
+void groupedPostFieldsFromAlias;
+void groupedPostFieldsFromSingletonFlatten;
+void groupedPostFieldsFromSingleton;
 void groupedPostHeadline;
 void LegacyPost;
+void GroupedPostAlias;
+void GroupedPostSingleton;
 void requestKeystone;
 void requestList;
 void requestUserId;

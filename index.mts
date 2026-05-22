@@ -59,6 +59,16 @@ import type { Content } from './lib/content/index.mjs';
 import csrf from './lib/security/csrf.mjs';
 import session from './lib/session.mjs';
 import updates from './lib/updates.mjs';
+import {
+	addFieldGroups,
+	addFieldGroupsToKeystoneList,
+	flattenFieldGroups,
+	transformFieldGroupsToFields,
+} from './lib/fieldGroups.mjs';
+import {
+	addSchemaMethods,
+	addSchemaMethodsToKeystoneList,
+} from './lib/schemaMethods.mjs';
 
 import type { Callback } from './types/keystone-callbacks.js';
 import type { KeystoneOptions } from './lib/core/options-types.js';
@@ -199,6 +209,18 @@ export interface Keystone extends Hookable {
 	content: Content;
 	/** Legacy Keystone utility helpers exposed as `keystone.utils`. */
 	utils: KeystoneUtils;
+	/** Flatten grouped Keystone field definitions into a field map. */
+	flattenFieldGroups: typeof flattenFieldGroups;
+	/** Cloom-style alias for `flattenFieldGroups`. */
+	transformFieldGroupsToFields: typeof transformFieldGroupsToFields;
+	/** Add grouped field definitions to a Keystone list. */
+	addFieldGroups: typeof addFieldGroups;
+	/** Cloom-style alias for `addFieldGroups`. */
+	addFieldGroupsToKeystoneList: typeof addFieldGroupsToKeystoneList;
+	/** Add instance-first methods to a Keystone list schema. */
+	addSchemaMethods: typeof addSchemaMethods;
+	/** Cloom-style alias for `addSchemaMethods`. */
+	addSchemaMethodsToKeystoneList: typeof addSchemaMethodsToKeystoneList;
 
 	// ---- runtime-initialised properties ----
 	/** The Express application. Assigned by createApp() once the server starts. */
@@ -246,6 +268,12 @@ export class Keystone extends EventEmitter {
 	security!: { csrf: typeof csrf };
 	utils!: KeystoneUtils;
 	session!: KeystoneSessionModule;
+	flattenFieldGroups!: typeof flattenFieldGroups;
+	transformFieldGroupsToFields!: typeof transformFieldGroupsToFields;
+	addFieldGroups!: typeof addFieldGroups;
+	addFieldGroupsToKeystoneList!: typeof addFieldGroupsToKeystoneList;
+	addSchemaMethods!: typeof addSchemaMethods;
+	addSchemaMethodsToKeystoneList!: typeof addSchemaMethodsToKeystoneList;
 
 	constructor () {
 		super();
@@ -436,6 +464,12 @@ keystone.View = View;
 keystone.content = content;
 keystone.security = { csrf: csrf };
 keystone.utils = utils;
+keystone.flattenFieldGroups = flattenFieldGroups;
+keystone.transformFieldGroupsToFields = transformFieldGroupsToFields;
+keystone.addFieldGroups = addFieldGroups;
+keystone.addFieldGroupsToKeystoneList = addFieldGroupsToKeystoneList;
+keystone.addSchemaMethods = addSchemaMethods;
+keystone.addSchemaMethodsToKeystoneList = addSchemaMethodsToKeystoneList;
 
 /**
  * Imports all `.mjs` / `.js` / `.json` modules under a directory path.
@@ -480,7 +514,13 @@ keystone.session = session;
 /** Named export for the field-type registry. Consumers can `import { Types } from 'keystone'`. */
 export const Types: FieldTypesMap = FieldTypes;
 
-export { addFieldGroups, flattenFieldGroups } from './lib/fieldGroups.mjs';
+export {
+	addFieldGroups,
+	addFieldGroupsToKeystoneList,
+	flattenFieldGroups,
+	transformFieldGroupsToFields,
+};
+export { addSchemaMethods, addSchemaMethodsToKeystoneList };
 
 export default keystone;
 
@@ -496,6 +536,7 @@ export type {
 	KeystoneListOptions,
 	KeystoneListMappings,
 	KeystoneListSchema,
+	KeystoneSchemaMethod,
 	KeystoneGroupFields,
 	KeystoneGroupHeading,
 	KSAdminUiElementField,
@@ -507,7 +548,21 @@ export type {
 } from './lib/list.mjs';
 
 export type { FieldInstanceFor, FieldValueFor, DocumentFor, Filters } from './fields/types/FieldSpec.mjs';
-export type { KeystoneFieldGroup, KeystoneFieldGroupList, FieldGroupsToFields } from './lib/fieldGroups.mjs';
+export type {
+	FieldGroupsToFields,
+	KeystoneFieldGroup,
+	KeystoneFieldGroupList,
+	KeystoneFieldGroupsConstraint,
+	KeystoneFieldGroupsDocumentConstraint,
+	KeystoneFieldGroupsToFields,
+} from './lib/fieldGroups.mjs';
+
+export type {
+	KeystoneInstanceFirstSchemaMethod,
+	KeystoneInstanceMethodsToSchemaMethods,
+	KeystoneOptionalSchemaMethods,
+	KeystoneSchemaMethodRegistrationList,
+} from './lib/schemaMethods.mjs';
 
 export type {
 	KSAdminUiFilterForTextField,
