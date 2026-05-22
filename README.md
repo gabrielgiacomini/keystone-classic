@@ -1,49 +1,62 @@
 # ![KeystoneJS](http://v3.keystonejs.com/images/logo.svg)
 
-[![Build Status](https://travis-ci.org/keystonejs/keystone.svg?branch=master)](https://travis-ci.org/keystonejs/keystone)
+> **This is a modernization fork of Keystone v4.** It is not the upstream
+> [keystonejs/keystone-classic](https://github.com/keystonejs/keystone-classic)
+> repository. See [CHANGELOG.md](CHANGELOG.md) for the public change summary.
 
-- [About Keystone](#about)
+- [About Keystone](#about-keystone)
 - [Getting Started](#getting-started)
-- [Community](#community)
-- [Contributing](#contributing)
+- [Project Status](#project-status)
 - [License](#license)
 
 ## About Keystone
 
-[KeystoneJS](http://keystonejs.com) is a powerful Node.js content management system and web app framework built on the [Express](https://expressjs.com/) web framework and [Mongoose ODM](http://mongoosejs.com). Keystone makes it easy to create sophisticated web sites and apps, and comes with a beautiful auto-generated Admin UI.
+[KeystoneJS](http://v4.keystonejs.com) is a powerful Node.js content management system and web app framework built on the [Express](https://expressjs.com/) web framework and [Mongoose ODM](http://mongoosejs.com). Keystone makes it easy to create sophisticated web sites and apps, and comes with a beautiful auto-generated Admin UI.
 
-Check out our [demo site](http://demo.keystonejs.com) to see it in action.
+This fork currently modernizes Keystone v4 to:
+
+- **ESM-first package output** — server, field, and admin-server sources are native ESM; `package.json` carries `"type": "module"`; package exports include CJS compatibility shims for the main entry points
+- **TypeScript build and declarations** — TypeScript sources and generated package declarations are emitted under `dist/`; `strict` and `noUncheckedIndexedAccess` are enabled
+- **Mongoose 7** — upgraded from Mongoose 5, with compatibility work for hooks, queries, and legacy list APIs
+- **Mocha 11 + chai** — test runner and assertion library modernized
+- **Node 20+** — `engines: { "node": ">=20.19.0" }`
+- **Admin next rewrite** (in progress) — admin next client in `admin/client-next/` (Vite, React 18, TanStack Router/Query, react-hook-form, zod); runs side-by-side with admin legacy via `keystone.set('admin ui', false | 'legacy' | 'next' | 'both')`; both clients use the standalone admin API at `/keystone-api`
 
 ### Documentation
 
-For Keystone v4 documentation and guides, see [keystonejs.com](https://keystonejs.com).
+For upstream Keystone v4 documentation and guides, see [v4.keystonejs.com](https://v4.keystonejs.com).
 
-For Keystone v0.3 documentation, see [v3.keystonejs.com](https://v3.keystonejs.com).
+For upstream Keystone v0.3 documentation, see [v3.keystonejs.com](https://v3.keystonejs.com).
 
 ## Getting Started
 
-This section provides a short intro to Keystone. Check out the [Getting Started Guide](https://keystonejs.com/getting-started) in the Keystone documentation for a more comprehensive introduction.
+This section provides a short intro to Keystone. The upstream Keystone Classic docs remain the best reference for the original v4 API.
+
+### Requirements
+
+Node.js `>=20.19.0` and MongoDB are required.
 
 ### Installation
 
-The easiest way to get started with Keystone is to use the Yeoman generator:
+This fork is currently consumed from Git or from a local checkout unless/until it is published under a package name you control:
 
 ```bash
-$ npm install -g generator-keystone
-$ yo keystone
+npm install github:gabrielgiacomini/keystone-classic
 ```
 
-Answer the questions, and the generator will create a new project based on the options you select, and install the required packages from **npm**.
+Then import and configure it:
 
-Alternatively, to include Keystone in an existing project or start from scratch (without Yeoman), specify `keystone: "4.0.0"` in the `dependencies` array of your `package.json` file, and run `npm install` from your terminal.
+```javascript
+import keystone from 'keystone';
+```
 
-Then read through the [Documentation](https://keystonejs.com/documentation) and the [Example Projects](http://v3.keystonejs.com/examples) to understand how to use it.
+Read through the [upstream v4 documentation](https://v4.keystonejs.com) to understand the original API surface. Some internals and build/runtime requirements differ in this fork.
 
 ### Configuration
 
 Config variables can be passed in an object to the `keystone.init` method, or can be set any time before `keystone.start` is called using `keystone.set(key, value)`. This allows for a more flexible order of execution. For example, if you refer to Lists in your routes you can set the routes after configuring your Lists.
 
-See the [KeystoneJS configuration documentation](https://keystonejs.com/documentation/configuration) for details and examples of the available options.
+See the [upstream KeystoneJS configuration documentation](https://v4.keystonejs.com/documentation/configuration) for the original option model.
 
 ### Database field types
 
@@ -51,36 +64,39 @@ Keystone builds on the basic data types provided by MongoDB and allows you to ea
 
 You get helper methods on your models for dealing with each field type easily (such as formatting a date or number, resizing an image, getting an array of the available options for a select field, or using Google's Places API to improve addresses) as well as a beautiful, responsive admin UI to edit your data with.
 
-See the [KeystoneJS database documentation](https://keystonejs.com/documentation/database) for details and examples of the various field types, as well as how to set up and use database models in your application.
+See the [upstream KeystoneJS database documentation](https://v4.keystonejs.com/documentation/database) for the original field type and model concepts.
+
+### Core Files
+
+- **`index.mts` / `dist/index.mjs`**: The source and emitted package entry point for the KeystoneJS framework. It initializes a new Keystone instance, configures it with default settings, and extends it with the core functionality required to run a Keystone application. It also exposes the major components of the framework such as `List`, `Field`, and `View`. The exported `keystone` object is a singleton instance of the `Keystone` class, which is the main interface for developers to interact with the framework.
+
+  **Usage**:
+  ```javascript
+  import keystone from 'keystone';
+  ```
+
+- **`scripts/build-legacy-admin-bundles.ts`**: This script builds the prebuilt admin legacy browser bundles shipped in `admin/public-legacy/js/` and copied to `dist/admin/public-legacy/js/`. Browserify remains dev tooling for this build and for explicit runtime-bundler opt-in cases, but normal production installs serve the prebuilt `admin.js`, `fields.js`, `signin.js`, and `packages.js` files without Browserify in the production dependency graph.
+
+  **Usage**:
+  ```bash
+  npm run build
+  ```
 
 ### Running KeystoneJS in Production
 
-When you deploy your KeystoneJS app to production, be sure to set your `ENV` environment variable to `production`.
+When you deploy your KeystoneJS app to production, set `NODE_ENV=production`.
 
-You can do this by setting `NODE_ENV=production` in your `.env` file, which gets handled by [dotenv](https://github.com/motdotla/dotenv).
+You can do this in your environment or in a `.env` file loaded by your application.
 
 Setting your environment enables certain features (including template caching, simpler error reporting, and HTML minification) that are important in production but annoying in development.
 
-## Community
+## Project Status
 
-We have a friendly, growing community and welcome everyone to get involved:
+This repository is a maintained modernization fork, not the official Keystone project. Public history is intentionally curated from upstream Keystone Classic `v4.1.1` plus a small set of migration commits.
 
-- Follow [@KeystoneJS](https://twitter.com/KeystoneJS) on twitter for news and announcements.
-- Ask technical questions on [Stack Overflow](http://stackoverflow.com/questions/tagged/keystone.js) and tag them `keystonejs.`
-- Report bugs and feature suggestions on our GitHub [issue tracker](https://github.com/keystonejs/keystone/issues).
-- Join the [KeystoneJS Slack](https://launchpass.com/keystonejs) for general discussion with the Keystone community and contributors.
+Use the upstream Keystone Classic documentation for historical behavior, and this repository's source, tests, and [CHANGELOG.md](CHANGELOG.md) for fork-specific behavior.
 
-We love to hear feedback about Keystone and the projects you're using it for. Ping us at [@KeystoneJS](https://twitter.com/KeystoneJS) on Twitter.
-
-### Contributing
-
-If you can, please contribute by reporting issues, discussing ideas, helping answer questions from other developers, or submitting pull requests with patches and new features. We do our best to respond to all issues and pull requests, and make patch releases to npm regularly.
-
-If you're going to contribute code, please follow our [coding standards](https://github.com/keystonejs/keystone/wiki/Coding-Standards) and read our [Contributing Guide](https://github.com/keystonejs/keystone/blob/master/CONTRIBUTING.md).
-
-### Related Projects
-
-If you are using KeystoneJS in any projects we encourage you to add to our [Related Projects Page](https://github.com/keystonejs/keystone/wiki/Related-Projects). This is also the place to find generators and other projects that bundle KeystoneJS.
+Issues and pull requests should be opened against this fork if they concern the TypeScript modernization, package build, admin-next work, or compatibility tests.
 
 ### Thanks
 

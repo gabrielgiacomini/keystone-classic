@@ -17,7 +17,7 @@ You can temporarily disable updates from running in development by setting a `__
 Updates are only run once, and each completed update is logged in an `app_updates` collection in your database.
 
 **Update Script Example**
-Creates a new admin User
+Creates a admin next User
 
 ```javascript
 var keystone = require('keystone');

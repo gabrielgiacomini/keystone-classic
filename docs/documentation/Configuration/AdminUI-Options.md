@@ -5,6 +5,7 @@ The following options control some ui options for the Admin backend:
 <h4 data-primitive-type="Boolean"><code>wysiwyg images</code></h4>
 
 Adds an image button which enables including images from other URLS in your WYSIWYG Editor.
+Legacy WYSIWYG support is optional; install a compatible `tinymce` package in the application if you need the bundled legacy admin rich-text editor. Without `tinymce`, HTML fields render as plain textareas.
 
 <h4 data-primitive-type="Boolean"><code>wysiwyg cloudinary images</code></h4>
 

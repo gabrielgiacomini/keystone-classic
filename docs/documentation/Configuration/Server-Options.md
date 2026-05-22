@@ -62,7 +62,7 @@ When this option is set, any requests to a **.css** or **.min.css** file will fi
 
 <h4 data-primitive-type="Object"><code>less options</code></h4>
 
-Optional config options that will be passed to the `less` middleware; see [github.com/emberfeather/less.js-middleware](https://github.com/emberfeather/less.js-middleware) for more information.
+Optional config options that will be passed to `less.render()` when Keystone compiles matching `.less` files.
 
 <h4 data-primitive-type="String|Array"><code>sass</code></h4>
 
@@ -70,11 +70,11 @@ If you want Keystone to automatically compile **.sass** files into **.css** file
 
 When this option is set, any requests to a **.css** or **.min.css** file will first check for a **.sass** file with the same name, and if one is found, the css file will be generated.
 
-> Note that enabling this option requires you to have specified the `node-sass` package as a dependency in your project's `package.json` file; it is not automatically included with Keystone.
+> Note that enabling this option requires you to have specified the `node-sass-middleware` package as a dependency in your project's `package.json` file; it is not automatically included with Keystone.
 
 <h4 data-primitive-type="Object"><code>sass options</code></h4>
 
-Optional config options that will be passed to the `sass` middleware; see [github.com/sass/node-sass](https://github.com/sass/node-sass) for more information.
+Optional config options that will be passed to `node-sass-middleware`; see [github.com/sass/node-sass-middleware](https://github.com/sass/node-sass-middleware) for more information.
 
 <h4 data-primitive-type="String"><code>favicon</code></h4>
 
@@ -133,6 +133,30 @@ The path to your SSL Certificate. Should be either absolute or relative to `proc
 
 The path to your SSL CA Bundle. Should be either absolute or relative to `process.cwd()` (which is usually your project root).
 
+<h4 data-primitive-type="String"><code>ssl pfx</code></h4>
+
+The path to your SSL PFX/PKCS12 file. Should be either absolute or relative to `process.cwd()` (which is usually your project root).
+
+<h4 data-primitive-type="String"><code>ssl key data</code></h4>
+
+Inline PEM-encoded SSL private key data. When present, this value is passed directly to Node's HTTPS server instead of reading `ssl key` from disk.
+
+<h4 data-primitive-type="String"><code>ssl cert data</code></h4>
+
+Inline PEM-encoded SSL certificate data. When present, this value is passed directly to Node's HTTPS server instead of reading `ssl cert` from disk.
+
+<h4 data-primitive-type="String"><code>ssl ca data</code></h4>
+
+Inline PEM-encoded SSL CA bundle data. When present, this value is passed directly to Node's HTTPS server instead of reading `ssl ca` from disk.
+
+<h4 data-primitive-type="String"><code>ssl pfx data</code></h4>
+
+Inline SSL PFX/PKCS12 data. When present, this value is passed directly to Node's HTTPS server instead of reading `ssl pfx` from disk.
+
+<h4 data-primitive-type="String"><code>ssl passphrase</code></h4>
+
+The passphrase for an encrypted SSL private key or PFX bundle.
+
 <h4 data-primitive-type="Number"><code>ssl port</code></h4>
 
 The port to start the SSL Server on. Defaults to `3001`.
@@ -147,23 +171,19 @@ The ip address to listen for request on. Defaults to `process.env.SSL_IP` or the
 
 <h4 data-primitive-type="Object"><code>letsencrypt</code></h4>
 
-A configuration object used with `letsencrypt-express` to configure automatic SSL certificate registration (properties of this object can be found below).
+A configuration object used with `greenlock-express` to configure automatic SSL certificate registration (properties of this object can be found below).
 
 <h4 data-primitive-type="String"><code>letsencrypt.email</code></h4>
 
-The email address to register as an admin email with letsencrypt. (Corresponds to the letsencrypt-express `email` property).
+The email address to register as an admin email with letsencrypt. (Corresponds to the greenlock-express `email` property).
 
 <h4 data-primitive-type="String|Array"><code>letsencrypt.domains</code></h4>
 
-The domain(s) to register under the letsencrypt certificate. (Corresponds to the letsencrypt-express `approveDomains` property).
-
-<h4 data-primitive-type="Boolean"><code>letsencrypt.register</code></h4>
-
-Whether to automatically register/ renew the letsencrypt certificate.
+The domain(s) to register under the letsencrypt certificate. (Corresponds to the greenlock-express `approveDomains` property).
 
 <h4 data-primitive-type="Boolean"><code>letsencrypt.tos</code></h4>
 
-Whether or not you agree to the [Terms of Service](https://letsencrypt.org/repository/). (Corresponds to the letsencrypt-express `agreeTos` attribute).
+Whether or not you agree to the [Terms of Service](https://letsencrypt.org/repository/). (Corresponds to the greenlock-express `agreeTos` attribute).
 
 <h4 data-primitive-type="Boolean"><code>letsencrypt.production</code></h4>
 

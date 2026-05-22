@@ -57,6 +57,10 @@ keystone.set('nav', {
 
 Allow you to choose a custom field delimiter to be used for CSV export instead of the default comma.
 
+<h4 data-primitive-type="Number"><code>download limit</code></h4>
+
+Maximum number of items that an Admin UI list download may export before Keystone returns a 413 response. Applies to CSV and JSON list downloads. Defaults to `50000`.
+
 <h4 data-primitive-type="Object"><code>app</code></h4>
 
 Instance of Express to be used instead of the default instance.

@@ -1,0 +1,205 @@
+# Admin Parity Soak Runbook
+
+This runbook covers the remaining external P4 gate: requiring the `admin-parity`
+GitHub Actions check on `main` and proving that it stays green for 14 days.
+
+## Current Verified State
+
+Last checked from this workspace:
+
+- `npm run admin-parity:protect:status` exited non-zero during the
+  2026-05-12T03:13:48Z refresh. Repository
+  `gabrielgiacomini/keystone4-ts` is private, branch `main` is not protected,
+  and no active required-check source requires `admin-parity`.
+- `npm run admin-parity:soak` exited non-zero during the
+  2026-05-12T03:28:04Z refresh because the branch-rules API returned the same
+  private-repo 403 and branch `main` is not protected. The verifier now fails
+  fast before workflow/job history scans when the required-check source cannot
+  be verified.
+- The last full workflow-history scan before fail-fast hardening, at
+  2026-05-12T03:02:16Z, found one in-window failed `admin-parity` job, only 1
+  of the required 14 green days, and missing green UTC days for 2026-04-29
+  through 2026-05-10 plus 2026-05-12. The failed job is run `25667193476`, job
+  `75342652937`:
+  `https://github.com/gabrielgiacomini/keystone4-ts/actions/runs/25667193476/job/75342652937`.
+- The local Playwright webServer memory mitigation is in place, and the local
+  `npm run admin-parity` wrapper passed after that hardening. The remaining
+  work is the owner-controlled GitHub branch-protection/ruleset required-check
+  setting and the clean 14-day soak.
+
+## Preconditions
+
+- The CI workflow in `.github/workflows/ci.yml` is present on `main`.
+- The workflow contains the `admin-parity` job and the daily schedule.
+- `gh auth status` succeeds for an account with admin access to the repository.
+- Classic branch protection or active branch rulesets with required status
+  checks are available for the repository. For this private repository, earlier
+  GitHub API attempts returned `403 Upgrade to GitHub Pro or make this
+  repository public to enable this feature`; choose one of those account/repo
+  changes only with explicit owner approval.
+
+## Owner Handoff Checklist
+
+1. Run `npm run admin-parity:protect:status` and confirm whether `main`
+   already has a required-check source for `admin-parity`.
+2. If GitHub rejects branch protection/rulesets for a private repository, stop and have
+   the repository owner choose the account/repository change first. Do not make
+   a repository public or change billing without explicit owner approval.
+3. Enable a required status-check rule through the GitHub Branches/Rulesets UI
+   or, after reviewing the dry run, apply classic branch protection with
+   `npm run admin-parity:protect -- --apply`.
+4. Re-run `npm run admin-parity:protect:status`; it must exit 0 before the
+   soak can start.
+5. Let the scheduled `admin-parity` job run cleanly for the full 14-day window.
+   `npm run admin-parity:soak` is the local verifier for that window.
+6. After the soak verifier passes, run `npm run admin-parity:final` from a
+   fresh checkout and update the roadmap/audit evidence.
+
+## Enable The Required Check
+
+### GitHub UI
+
+1. Open GitHub repository settings.
+2. Go to Branches or Rulesets.
+3. Create or edit a branch protection rule or active ruleset for `main`.
+4. Enable required status checks.
+5. Require the `admin-parity` check.
+6. Save the rule.
+
+### GitHub CLI
+
+Owners can print the exact branch-protection API call and JSON body without
+changing GitHub:
+
+```sh
+npm run admin-parity:protect
+```
+
+The dry run should print a `gh api --method PUT
+repos/gabrielgiacomini/keystone4-ts/branches/main/protection --input -`
+command whose JSON body includes:
+
+```json
+{
+  "required_status_checks": {
+    "contexts": ["admin-parity"],
+    "strict": true
+  }
+}
+```
+
+Owners can also read the current GitHub state without changing anything:
+
+```sh
+npm run admin-parity:protect:status
+```
+
+The status and soak verifiers accept either classic branch protection or active
+branch rulesets that apply to `main` and require `admin-parity`.
+
+For branch-protection helper options:
+
+```sh
+npm run admin-parity:protect -- --help
+```
+
+Once classic branch protection is available for the repository and the owner is
+ready to apply the change:
+
+```sh
+npm run admin-parity:protect -- --apply
+```
+
+The helper uses GitHub's `PUT /branches/{branch}/protection` endpoint. If the
+branch is already protected, it refuses to apply unless `--force` is passed,
+because that endpoint can replace existing protection settings.
+
+If GitHub returns `403 Upgrade to GitHub Pro or make this repository public to
+enable this feature`, stop and resolve the account/repository setting first.
+
+Verify the required-check source:
+
+```sh
+npm run admin-parity:protect:status
+```
+
+Expected result:
+
+```text
+admin-parity required check ready for gabrielgiacomini/keystone4-ts@main
+```
+
+For classic branch protection specifically, the raw GitHub branch endpoint can
+also be inspected:
+
+```sh
+gh api repos/gabrielgiacomini/keystone4-ts/branches/main \
+  --jq '{protected:.protected,required_status_checks:.protection.required_status_checks}'
+```
+
+Expected classic branch-protection result:
+
+```json
+{
+  "protected": true,
+  "required_status_checks": {
+    "contexts": ["admin-parity"]
+  }
+}
+```
+
+GitHub may report classic required checks in `checks` instead of `contexts`.
+Active branch rulesets may not appear in that branch-protection payload, so use
+`npm run admin-parity:protect:status` as the source of truth for either path.
+
+## Monitor The Soak
+
+The workflow runs `admin-parity` on every push/PR/manual dispatch and once per
+day from the scheduled CI event. During the soak, do not skip, quarantine, or
+rename the check.
+
+Run the verifier at any time:
+
+```sh
+npm run admin-parity:soak
+```
+
+For verifier environment overrides:
+
+```sh
+npm run admin-parity:soak -- --help
+```
+
+The verifier checks both conditions:
+
+- `main` has classic branch protection or an active branch ruleset requiring
+  `admin-parity`.
+- The last 14 days contain at least 14 green `admin-parity` days and no failed
+  `admin-parity` jobs.
+
+If a run turns red, fix the root cause on `main`; the 14-day window must become
+clean again before P4 can be marked complete.
+
+## Completion Gate
+
+P4-30 can be closed only after all commands below pass from a fresh checkout:
+
+```sh
+npm run admin-parity:final
+```
+
+To inspect the exact command order without running the e2e suites:
+
+```sh
+npm run admin-parity:final -- --dry-run
+```
+
+For final-gate options:
+
+```sh
+npm run admin-parity:final -- --help
+```
+
+Then update the roadmap status for P4-30 and the completion audit with the
+successful command output and the final required-check evidence from
+`npm run admin-parity:protect:status`.

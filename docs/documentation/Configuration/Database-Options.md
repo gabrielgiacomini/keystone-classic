@@ -31,6 +31,14 @@ The encryption key to use for your cookies. Passed to Express's cookie parser.
 
 It's a really good idea to set this to a long, random string.
 
+<h4 data-primitive-type="Boolean"><code>cookie signin</code></h4>
+
+Whether Keystone should set the long-lived `keystone.uid` remember-me cookie after sign-in. Defaults to `true` in development and `false` otherwise.
+
+<h4 data-primitive-type="Object"><code>cookie signin options</code></h4>
+
+Options for the `keystone.uid` remember-me cookie. By default Keystone marks this cookie as signed, HTTP-only, `secure: true`, and `sameSite: 'strict'`. For local HTTP-only development, set `secure: false` explicitly; production deployments should keep the default `secure: true`.
+
 <h4 data-primitive-type="String|Function"><code>session store</code></h4>
 
 Set this to mongo to use your MongoDB database to persist session data.
@@ -112,6 +120,14 @@ A `href` to bounce visitors to when they fail the default auth check (e.g. not s
 <h4 data-primitive-type="String"><code>signin redirect</code></h4>
 
 A `href` to bounce visitors to after they successfully sign in via the built-in signin route. Defaults to `/keystone`.
+
+<h4 data-primitive-type="Object|Boolean"><code>signin rate limit</code></h4>
+
+Limits POST attempts to the Admin API signin endpoint by request IP. Enabled by default with `{ windowMs: 900000, max: 100 }`. Set to `false` to disable, or pass `{ windowMs, max }` to tune the rolling window and maximum attempts.
+
+<h4 data-primitive-type="Object|Boolean"><code>signin lockout</code></h4>
+
+Locks an email credential after repeated failed signin attempts. Enabled by default with `{ windowMs: 900000, maxFailures: 5, durationMs: 900000 }`. Set to `false` to disable, or pass `{ windowMs, maxFailures, durationMs }` to tune the failure window and lock duration.
 
 <h4 data-primitive-type="String"><code>signout url</code></h4>
 

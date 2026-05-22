@@ -314,7 +314,7 @@ Now, for the template our route will `render`. The render method looks in the `v
 
 The generator has several options, however we are going to use Pug. To learn more about Pug, visit [pugjs.org](https://pugjs.org).
 
-Pug comes with some great features to simplify templates - including using layouts that define regions. We're going to use a layout called `../templates/layouts/base.pug`, which is included on the first line of the file above:
+Pug comes with some great features to simplify templates - including using layouts that define regions. We're going to use a layout called `../templates-legacy/layouts/base.pug`, which is included on the first line of the file above:
 
 **templates/layouts/base.pug**
 
@@ -346,7 +346,7 @@ html
 
       block content
 
-    #footer Powered by <a href='http://keystonejs.com', target='_blank'>KeystoneJS</a>.
+    #footer Powered by <a href='http://v4.keystonejs.com', target='_blank'>KeystoneJS</a>.
 
   block js
 ```
