@@ -1,0 +1,100 @@
+import type { FieldMap } from '../fields/types/FieldSpec.mjs';
+
+type UnionToIntersection<T> = (T extends unknown ? (value: T) => void : never) extends (
+	value: infer TIntersection,
+) => void
+	? TIntersection
+	: never;
+
+type FieldGroupFieldsUnion<TGroups extends readonly KeystoneFieldGroup[]> =
+	TGroups[number] extends { fields: infer TFields }
+		? TFields extends FieldMap
+			? TFields
+			: never
+		: never;
+
+/**
+ * A logical group of Keystone fields with optional Admin UI heading metadata.
+ *
+ * `dependsOn` and additional metadata keys are preserved on the group object for
+ * consumer-side Admin UI logic. Keystone's helper only reads `heading` and
+ * `fields` when adding grouped fields to a list.
+ */
+export interface KeystoneFieldGroup<TFields extends FieldMap = FieldMap> {
+	/** Optional heading rendered before this group in the legacy Admin UI form. */
+	heading?: string;
+	/** Optional consumer metadata for conditional group visibility. */
+	dependsOn?: Record<string, readonly unknown[] | undefined>;
+	/** Field definitions registered by this group. */
+	fields: TFields;
+	/** Additional consumer metadata carried alongside the field group. */
+	[metadataKey: string]: unknown;
+}
+
+/**
+ * Minimal Keystone list shape needed to register field groups.
+ *
+ * This keeps `addFieldGroups` compatible with both document-generic lists and
+ * field-inferred lists while still requiring Keystone's legacy `list.add`
+ * field-map and heading forms.
+ */
+export interface KeystoneFieldGroupList {
+	/** Register a heading section followed by its field map. */
+	add(options: { heading: string }, fields: FieldMap): unknown;
+	/** Register a plain field map. */
+	add(fields: FieldMap): unknown;
+}
+
+/**
+ * Converts a readonly field-group tuple to the combined field map type it
+ * represents.
+ */
+export type FieldGroupsToFields<TGroups extends readonly KeystoneFieldGroup[]> =
+	UnionToIntersection<FieldGroupFieldsUnion<TGroups>>;
+
+/**
+ * Flattens grouped field definitions into a single field map.
+ *
+ * Later groups override earlier groups at runtime when they define the same
+ * field path, matching normal object-spread semantics.
+ *
+ * @param fieldGroups - Field groups to flatten.
+ * @returns A combined field map suitable for typed field inference.
+ */
+export function flattenFieldGroups<TGroups extends readonly KeystoneFieldGroup[]>(
+	fieldGroups: TGroups,
+): FieldGroupsToFields<TGroups> {
+	let fields: FieldMap = {};
+
+	for (const group of fieldGroups) {
+		fields = { ...fields, ...group.fields };
+	}
+
+	return fields as FieldGroupsToFields<TGroups>;
+}
+
+/**
+ * Adds grouped field definitions to a Keystone list.
+ *
+ * Groups with `heading` are registered as `list.add({ heading }, fields)`,
+ * preserving the legacy Admin UI section behavior. Groups without `heading`
+ * are registered as plain `list.add(fields)`.
+ *
+ * @param list - Keystone list receiving the grouped fields.
+ * @param fieldGroups - Field groups to register.
+ * @returns The original list for fluent setup chains.
+ */
+export function addFieldGroups<TList extends KeystoneFieldGroupList>(
+	list: TList,
+	fieldGroups: readonly KeystoneFieldGroup[],
+): TList {
+	for (const group of fieldGroups) {
+		if (group.heading) {
+			list.add({ heading: group.heading }, group.fields);
+		} else {
+			list.add(group.fields);
+		}
+	}
+
+	return list;
+}
