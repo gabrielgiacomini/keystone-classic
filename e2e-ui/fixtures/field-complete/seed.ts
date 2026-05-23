@@ -39,6 +39,7 @@ export async function seedFieldCompleteData (keystone: KeystoneLike): Promise<Se
 	const Venue = keystone.list('Venue');
 	const Event = keystone.list('Event');
 	const Product = keystone.list('Product');
+	const SortableItem = keystone.list('SortableItem');
 	const RelationshipTarget = keystone.list('RelationshipTarget');
 	const ManyRelationship = keystone.list('ManyRelationship');
 	const NoDefaultColumn = keystone.list('NoDefaultColumn');
@@ -176,6 +177,14 @@ export async function seedFieldCompleteData (keystone: KeystoneLike): Promise<Se
 	});
 	await product.save();
 
+	for (let i = 1; i <= 5; i++) {
+		const sortableItem = new SortableItem.model({
+			fixtureKey: `sortable-item-${i}`,
+			name: `Sortable Item ${String(i).padStart(2, '0')}`,
+		});
+		await sortableItem.save();
+	}
+
 	const relationshipTarget = new RelationshipTarget.model({
 		fixtureKey: 'relationship-target-alpha',
 		name: 'Relationship Target Alpha',
@@ -219,6 +228,7 @@ export async function seedFieldCompleteData (keystone: KeystoneLike): Promise<Se
 		venueId: String(venue._id),
 		eventId: String(event._id),
 		productId: String(product._id),
+		sortableItemIds: 'seeded',
 		relationshipTargetId: String(relationshipTarget._id),
 		manyRelationshipId: String(manyRelationship._id),
 		noDefaultColumnId: String(noDefaultColumn._id),

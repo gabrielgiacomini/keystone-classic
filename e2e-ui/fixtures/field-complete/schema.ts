@@ -175,6 +175,19 @@ export function defineFieldCompleteLists (keystoneInput: unknown): void {
 	Product.defaultColumns = 'name, sku, status, price, inventoryCount, swatchColor, tags, ratingHistory, manualUrl, relatedArticles';
 	Product.register();
 
+	const SortableItem = createList(keystone, 'SortableItem', {
+		label: 'Sortable Items',
+		singular: 'Sortable Item',
+		plural: 'Sortable Items',
+		sortable: true,
+		searchFields: 'name',
+	});
+	SortableItem.add(addFixtureKey(Types, {
+		name: { type: Types.Text, initial: true, required: true, index: true },
+	}));
+	SortableItem.defaultColumns = 'name';
+	SortableItem.register();
+
 	const RelationshipTarget = createList(keystone, 'RelationshipTarget', {
 		map: { name: 'name' },
 		searchFields: 'name',
@@ -265,7 +278,7 @@ export function defineFieldCompleteLists (keystoneInput: unknown): void {
 		People: ['users'],
 		Content: ['articles', 'media-assets'],
 		Places: ['venues', 'events'],
-		Commerce: ['products'],
+		Commerce: ['products', 'sortable-items'],
 		Regression: [
 			'relationship-targets',
 			'many-relationships',
