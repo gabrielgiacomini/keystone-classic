@@ -90,7 +90,7 @@ export interface FieldOptionsBase {
 	label?: string;
 	note?: string;
 	size?: FieldSize;
-	initial?: boolean;
+	initial?: boolean | string | number;
 	required?: boolean | (() => boolean);
 	col?: boolean;
 	noedit?: boolean;
