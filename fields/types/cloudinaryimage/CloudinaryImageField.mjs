@@ -22,6 +22,12 @@ const SUPPORTED_REGEX = new RegExp(/^image\/|application\/pdf|application\/posts
 
 let uploadInc = 1000;
 
+function getStoredImageSource (value, secure) {
+	const source = secure ? value.secure_url : value.url;
+	if (!source || /^https?:\/\/res\.cloudinary\.com\//.test(source)) return null;
+	return source;
+}
+
 /**
  * Returns the initial state of the component.
  * @param {object} props The component's props.
@@ -132,7 +138,7 @@ export default Field.create({
 		if (this.hasLocal()) {
 			src = this.state.dataUri;
 		} else if (this.hasExisting()) {
-			src = cloudinaryResize(this.props.value.public_id, {
+			src = getStoredImageSource(this.props.value, this.props.secure) || cloudinaryResize(this.props.value.public_id, {
 				crop: 'fit',
 				height: height,
 				format: 'jpg',

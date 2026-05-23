@@ -27,9 +27,22 @@ const cloudinaryMock = cloudinarySdk as unknown as {
 	};
 };
 
+function fixtureImageDataUrl (publicId: string, width: number, height: number): string {
+	const label = publicId.split('/').pop() ?? publicId;
+	const svg = [
+		`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+		'<rect width="100%" height="100%" fill="#e8f1fb"/>',
+		'<rect x="0" y="0" width="100%" height="100%" fill="none" stroke="#2f80ed" stroke-width="12"/>',
+		`<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.max(24, Math.floor(width / 18))}" fill="#1f2937">${label}</text>`,
+		'</svg>',
+	].join('');
+	return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
 cloudinaryMock.uploader.upload = async function (_file: unknown, optionsOrCallback?: unknown, callback?: unknown): Promise<unknown> {
 	uploadCounter += 1;
 	const publicId = `field-complete/upload-${uploadCounter}`;
+	const url = fixtureImageDataUrl(publicId, 64, 64);
 	const done = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
 	const response = {
 		public_id: publicId,
@@ -37,8 +50,8 @@ cloudinaryMock.uploader.upload = async function (_file: unknown, optionsOrCallba
 		signature: `sig-${uploadCounter}`,
 		format: 'png',
 		resource_type: 'image',
-		url: `http://res.cloudinary.test/${publicId}.png`,
-		secure_url: `https://res.cloudinary.test/${publicId}.png`,
+		url,
+		secure_url: url,
 		width: 64,
 		height: 64,
 	};
@@ -56,13 +69,14 @@ cloudinaryMock.uploader.destroy = async function (_publicId: unknown, optionsOrC
 cloudinaryMock.api.resource = async function (publicId: unknown, optionsOrCallback?: unknown, callback?: unknown): Promise<unknown> {
 	const done = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
 	const publicIdString = String(publicId);
+	const url = fixtureImageDataUrl(publicIdString, 64, 64);
 	const response = {
 		public_id: publicId,
 		version: 1,
 		format: 'png',
 		resource_type: 'image',
-		url: `http://res.cloudinary.test/${publicIdString}.png`,
-		secure_url: `https://res.cloudinary.test/${publicIdString}.png`,
+		url,
+		secure_url: url,
 		width: 64,
 		height: 64,
 	};

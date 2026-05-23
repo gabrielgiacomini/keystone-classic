@@ -20,17 +20,30 @@ function objectIdText(value: unknown): string {
 	return value instanceof Types.ObjectId ? value.toString() : String(value ?? '');
 }
 
+function fixtureImageDataUrl(publicId: string, width: number, height: number): string {
+	const label = publicId.split('/').pop() ?? publicId;
+	const svg = [
+		`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+		'<rect width="100%" height="100%" fill="#e8f1fb"/>',
+		'<rect x="0" y="0" width="100%" height="100%" fill="none" stroke="#2f80ed" stroke-width="12"/>',
+		`<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.max(24, Math.floor(width / 18))}" fill="#1f2937">${label}</text>`,
+		'</svg>',
+	].join('');
+	return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
 function cloudinaryImage(publicId: string, width = 1200, height = 800): Record<string, unknown> {
+	const fixtureUrl = fixtureImageDataUrl(publicId, width, height);
 	return {
 		public_id: publicId,
 		version: 1,
 		signature: `sig-${publicId}`,
 		format: 'jpg',
 		resource_type: 'image',
-		url: `http://res.cloudinary.test/${publicId}.jpg`,
+		url: fixtureUrl,
 		width,
 		height,
-		secure_url: `https://res.cloudinary.test/${publicId}.jpg`,
+		secure_url: fixtureUrl,
 	};
 }
 

@@ -25,6 +25,12 @@ const RESIZE_DEFAULTS = {
 
 let uploadInc = 1000;
 
+function getStoredImageSource (value, secure) {
+	const source = secure ? value.secure_url : value.url;
+	if (!source || /^https?:\/\/res\.cloudinary\.com\//.test(source)) return null;
+	return source;
+}
+
 /**
  * The `CloudinaryImagesField` component.
  * @augments Field
@@ -63,14 +69,15 @@ export default Field.create({
 	buildInitialState (props) {
 		const uploadFieldPath = `CloudinaryImages-${props.path}-${++uploadInc}`;
 		const thumbnails = props.value ? props.value.map((img, index) => {
+			const storedImageSource = getStoredImageSource(img, props.secure);
 			return this.getThumbnail({
 				value: img,
-				imageSourceSmall: cloudinaryResize(img.public_id, {
+				imageSourceSmall: storedImageSource || cloudinaryResize(img.public_id, {
 					...RESIZE_DEFAULTS,
 					height: 90,
 					secure: props.secure,
 				}),
-				imageSourceLarge: cloudinaryResize(img.public_id, {
+				imageSourceLarge: storedImageSource || cloudinaryResize(img.public_id, {
 					...RESIZE_DEFAULTS,
 					height: 600,
 					width: 900,
@@ -295,7 +302,7 @@ export default Field.create({
 		if (!value || !value.length) return;
 
 		const images = value.map(image => ({
-			src: cloudinaryResize(image.public_id, {
+			src: getStoredImageSource(image, secure) || cloudinaryResize(image.public_id, {
 				...RESIZE_DEFAULTS,
 				height: 600,
 				width: 900,

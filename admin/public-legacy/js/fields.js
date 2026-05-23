@@ -12292,6 +12292,11 @@ const SUPPORTED_TYPES = [
 ];
 const SUPPORTED_REGEX = new RegExp(/^image\/|application\/pdf|application\/postscript/g);
 let uploadInc = 1000;
+function getStoredImageSource(value, secure) {
+    const source = secure ? value.secure_url : value.url;
+    if (!source || /^https?:\/\/res\.cloudinary\.com\//.test(source)) return null;
+    return source;
+}
 /**
  * Returns the initial state of the component.
  * @param {object} props The component's props.
@@ -12384,7 +12389,7 @@ const _default = _Field.default.create({
         if (this.hasLocal()) {
             src = this.state.dataUri;
         } else if (this.hasExisting()) {
-            src = (0, _cloudinaryResize.default)(this.props.value.public_id, {
+            src = getStoredImageSource(this.props.value, this.props.secure) || (0, _cloudinaryResize.default)(this.props.value.public_id, {
                 crop: 'fit',
                 height: height,
                 format: 'jpg',
@@ -12943,6 +12948,11 @@ const RESIZE_DEFAULTS = {
     format: 'jpg'
 };
 let uploadInc = 1000;
+function getStoredImageSource(value, secure) {
+    const source = secure ? value.secure_url : value.url;
+    if (!source || /^https?:\/\/res\.cloudinary\.com\//.test(source)) return null;
+    return source;
+}
 const _default = _Field.default.create({
     displayName: 'CloudinaryImagesField',
     statics: {
@@ -12974,13 +12984,14 @@ const _default = _Field.default.create({
 	 */ buildInitialState (props) {
         const uploadFieldPath = `CloudinaryImages-${props.path}-${++uploadInc}`;
         const thumbnails = props.value ? props.value.map((img, index)=>{
+            const storedImageSource = getStoredImageSource(img, props.secure);
             return this.getThumbnail({
                 value: img,
-                imageSourceSmall: (0, _cloudinaryResize.default)(img.public_id, _object_spread_props(_object_spread({}, RESIZE_DEFAULTS), {
+                imageSourceSmall: storedImageSource || (0, _cloudinaryResize.default)(img.public_id, _object_spread_props(_object_spread({}, RESIZE_DEFAULTS), {
                     height: 90,
                     secure: props.secure
                 })),
-                imageSourceLarge: (0, _cloudinaryResize.default)(img.public_id, _object_spread_props(_object_spread({}, RESIZE_DEFAULTS), {
+                imageSourceLarge: storedImageSource || (0, _cloudinaryResize.default)(img.public_id, _object_spread_props(_object_spread({}, RESIZE_DEFAULTS), {
                     height: 600,
                     width: 900,
                     secure: props.secure
@@ -13178,7 +13189,7 @@ const _default = _Field.default.create({
         const { value, secure } = this.props;
         if (!value || !value.length) return;
         const images = value.map((image)=>({
-                src: (0, _cloudinaryResize.default)(image.public_id, _object_spread_props(_object_spread({}, RESIZE_DEFAULTS), {
+                src: getStoredImageSource(image, secure) || (0, _cloudinaryResize.default)(image.public_id, _object_spread_props(_object_spread({}, RESIZE_DEFAULTS), {
                     height: 600,
                     width: 900,
                     secure
