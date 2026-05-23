@@ -6,9 +6,9 @@ type UnionToIntersection<T> = (T extends unknown ? (value: T) => void : never) e
 	? TIntersection
 	: never;
 
-type FieldGroupFieldsUnion<TGroups extends readonly KeystoneFieldGroup[]> =
+type FieldGroupFieldsUnion<TGroups extends readonly KeystoneFieldGroup<object>[]> =
 	TGroups[number] extends { fields: infer TFields }
-		? TFields extends FieldMap
+		? TFields extends object
 			? TFields
 			: never
 		: never;
@@ -20,7 +20,7 @@ type FieldGroupFieldsUnion<TGroups extends readonly KeystoneFieldGroup[]> =
  * consumer-side Admin UI logic. Keystone's helper only reads `heading` and
  * `fields` when adding grouped fields to a list.
  */
-export interface KeystoneFieldGroup<TFields extends FieldMap = FieldMap> {
+export interface KeystoneFieldGroup<TFields extends object = FieldMap> {
 	/** Optional heading rendered before this group in the legacy Admin UI form. */
 	heading?: string;
 	/** Optional consumer metadata for conditional group visibility. */
@@ -51,7 +51,7 @@ export interface KeystoneFieldGroupList {
  *
  * @template TGroups - Field-group tuple to flatten at the type level.
  */
-export type KeystoneFieldGroupsToFields<TGroups extends readonly KeystoneFieldGroup[]> =
+export type KeystoneFieldGroupsToFields<TGroups extends readonly KeystoneFieldGroup<object>[]> =
 	UnionToIntersection<FieldGroupFieldsUnion<TGroups>>;
 
 /**
@@ -59,7 +59,7 @@ export type KeystoneFieldGroupsToFields<TGroups extends readonly KeystoneFieldGr
  *
  * @template TGroups - Field-group tuple to flatten at the type level.
  */
-export type FieldGroupsToFields<TGroups extends readonly KeystoneFieldGroup[]> =
+export type FieldGroupsToFields<TGroups extends readonly KeystoneFieldGroup<object>[]> =
 	KeystoneFieldGroupsToFields<TGroups>;
 
 /**
@@ -79,7 +79,7 @@ export type KeystoneFieldGroupsConstraint<TFields extends FieldMap> = readonly K
  * @template TDocumentFields - Document/value fields represented by the grouped definitions.
  */
 export type KeystoneFieldGroupsDocumentConstraint<TDocumentFields extends object> =
-	readonly KeystoneFieldGroup[] & {
+	readonly KeystoneFieldGroup<object>[] & {
 		readonly __documentFieldsConstraint?: TDocumentFields;
 	};
 
@@ -92,10 +92,10 @@ export type KeystoneFieldGroupsDocumentConstraint<TDocumentFields extends object
  * @param fieldGroups - Field groups to flatten.
  * @returns A combined field map suitable for typed field inference.
  */
-export function flattenFieldGroups<TGroups extends readonly KeystoneFieldGroup[]>(
+export function flattenFieldGroups<TGroups extends readonly KeystoneFieldGroup<object>[]>(
 	fieldGroups: TGroups,
 ): KeystoneFieldGroupsToFields<TGroups> {
-	let fields: FieldMap = {};
+	let fields: object = {};
 
 	for (const group of fieldGroups) {
 		fields = { ...fields, ...group.fields };
@@ -110,7 +110,7 @@ export function flattenFieldGroups<TGroups extends readonly KeystoneFieldGroup[]
  * @param fieldGroups - Field groups to flatten.
  * @returns A combined field map suitable for typed field inference.
  */
-export function transformFieldGroupsToFields<TGroups extends readonly KeystoneFieldGroup[]>(
+export function transformFieldGroupsToFields<TGroups extends readonly KeystoneFieldGroup<object>[]>(
 	fieldGroups: TGroups,
 ): KeystoneFieldGroupsToFields<TGroups> {
 	return flattenFieldGroups(fieldGroups);
@@ -129,13 +129,15 @@ export function transformFieldGroupsToFields<TGroups extends readonly KeystoneFi
  */
 export function addFieldGroups<TList extends KeystoneFieldGroupList>(
 	list: TList,
-	fieldGroups: readonly KeystoneFieldGroup[],
+	fieldGroups: readonly KeystoneFieldGroup<object>[],
 ): TList {
 	for (const group of fieldGroups) {
+		const fields = group.fields as FieldMap;
+
 		if (group.heading) {
-			list.add({ heading: group.heading }, group.fields);
+			list.add({ heading: group.heading }, fields);
 		} else {
-			list.add(group.fields);
+			list.add(fields);
 		}
 	}
 
@@ -151,7 +153,7 @@ export function addFieldGroups<TList extends KeystoneFieldGroupList>(
  */
 export function addFieldGroupsToKeystoneList<TList extends KeystoneFieldGroupList>(
 	list: TList,
-	fieldGroups: readonly KeystoneFieldGroup[],
+	fieldGroups: readonly KeystoneFieldGroup<object>[],
 ): TList {
 	return addFieldGroups(list, fieldGroups);
 }
