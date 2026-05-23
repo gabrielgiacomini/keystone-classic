@@ -20,7 +20,7 @@ export default class ScrollLock extends Component {
 	 * on `document.body` to prevent page scrolling. No-ops in non-browser
 	 * environments.
 	 */
-	componentWillMount () {
+	UNSAFE_componentWillMount () {
 		if (typeof window === 'undefined') return;
 
 		this.lockCount++;

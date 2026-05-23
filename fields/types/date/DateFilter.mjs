@@ -5,7 +5,9 @@
  *
  * It provides a date picker and a set of options for filtering by date.
  */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
@@ -65,12 +67,12 @@ function getDefaultValue () {
  * The `DateFilter` component.
  * @augments React.Component
  */
-const DateFilter = React.createClass({
+const DateFilter = createReactClass({
 	displayName: 'DateFilter',
 	propTypes: {
 		filter: PropTypes.shape({
 			mode: PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
-			inverted: PropTypes.boolean,
+			inverted: PropTypes.bool,
 		}),
 	},
 	statics: {
@@ -178,7 +180,7 @@ const DateFilter = React.createClass({
 	 * @param {Date} day The day that was clicked.
 	 * @param {object} modifiers The modifiers for the day.
 	 */
-	switchBetweenActiveInputFields (e, day, modifiers) {
+	switchBetweenActiveInputFields (day, modifiers) {
 		if (modifiers && modifiers.disabled) return;
 
 		const { activeInputField } = this.state;
@@ -201,7 +203,7 @@ const DateFilter = React.createClass({
 	 * @param {Date} day The day that was clicked.
 	 * @param {object} modifiers The modifiers for the day.
 	 */
-	selectDay (e, day, modifiers) {
+	selectDay (day, modifiers) {
 		if (modifiers && modifiers.disabled) return;
 		this.updateFilter({ value: day });
 	},

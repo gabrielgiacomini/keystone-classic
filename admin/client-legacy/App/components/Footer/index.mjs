@@ -4,19 +4,21 @@
  */
 
 import React from "react";
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { css } from "glamor";
 import { Container } from "../../elemental/index.mjs";
 import theme from "../../../theme.mjs";
 
-const Footer = React.createClass({
+const Footer = createReactClass({
 	displayName: "Footer",
 	propTypes: {
-		appversion: React.PropTypes.string,
-		backUrl: React.PropTypes.string,
-		brand: React.PropTypes.string,
-		user: React.PropTypes.object,
-		User: React.PropTypes.object,
-		version: React.PropTypes.string
+		appversion: PropTypes.string,
+		backUrl: PropTypes.string,
+		brand: PropTypes.string,
+		user: PropTypes.object,
+		User: PropTypes.object,
+		version: PropTypes.string
 	},
 	// Render the user
 	renderUser() {

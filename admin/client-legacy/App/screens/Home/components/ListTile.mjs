@@ -1,17 +1,19 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
 /**
  * Displays information about a list and lets you create a new one.
  */
-const ListTile = React.createClass({
+const ListTile = createReactClass({
 	propTypes: {
-		count: React.PropTypes.string,
-		hideCreateButton: React.PropTypes.bool,
-		href: React.PropTypes.string,
-		label: React.PropTypes.string,
-		path: React.PropTypes.string,
-		spinner: React.PropTypes.object,
+		count: PropTypes.string,
+		hideCreateButton: PropTypes.bool,
+		href: PropTypes.string,
+		label: PropTypes.string,
+		path: PropTypes.string,
+		spinner: PropTypes.object,
 	},
 	render () {
 		const opts = {

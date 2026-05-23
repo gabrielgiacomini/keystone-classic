@@ -72,7 +72,7 @@ app.get('/js/explorer.js', browserify('./fields/explorer/index.mjs', {
 
 // Serve stylesheet and static assets
 // import.meta.resolve returns a file:// URL; convert to a filesystem path.
-const elementalPath = path.join(path.dirname(fileURLToPath(import.meta.resolve('elemental'))), '..');
+const elementalPath = path.resolve('./admin/client-legacy/vendor/elemental');
 const reactSelectPath = path.join(path.dirname(fileURLToPath(import.meta.resolve('react-select'))), '..');
 const lessOptions = {
 	render: {

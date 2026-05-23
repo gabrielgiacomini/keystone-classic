@@ -3,8 +3,9 @@
  * @see https://github.com/keystonejs/keystone/wiki/File-Fields-Upgrade-Guide
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
 
-const LocalFilesColumn = React.createClass({
+const LocalFilesColumn = createReactClass({
 	renderValue: function () {
 		const value = this.props.data.fields[this.props.col.path];
 		if (value.length === 0) return '';

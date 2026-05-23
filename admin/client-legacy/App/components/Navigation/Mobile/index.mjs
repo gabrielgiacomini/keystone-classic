@@ -3,20 +3,22 @@
  */
 
 import React from 'react';
-import Transition from 'react-addons-css-transition-group';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+import Transition from 'react-transition-group/CSSTransitionGroup';
 
 import MobileSectionItem from './SectionItem.mjs';
 
 const ESCAPE_KEY_CODE = 27;
 
-const MobileNavigation = React.createClass({
+const MobileNavigation = createReactClass({
 	displayName: 'MobileNavigation',
 	propTypes: {
-		brand: React.PropTypes.string,
-		currentListKey: React.PropTypes.string,
-		currentSectionKey: React.PropTypes.string,
-		sections: React.PropTypes.array.isRequired,
-		signoutUrl: React.PropTypes.string,
+		brand: PropTypes.string,
+		currentListKey: PropTypes.string,
+		currentSectionKey: PropTypes.string,
+		sections: PropTypes.array.isRequired,
+		signoutUrl: PropTypes.string,
 	},
 	getInitialState () {
 		return {

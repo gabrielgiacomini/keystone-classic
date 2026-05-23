@@ -6,6 +6,8 @@
  * of the field's readme.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import Markdown from 'react-markdown';
 
 import Col from './Col.mjs';
@@ -16,18 +18,18 @@ import FieldSpec from './FieldSpec.mjs';
  * A component that renders a field type, including its specs and readme.
  * @augments React.Component
  */
-const ExplorerFieldType = React.createClass({
+const ExplorerFieldType = createReactClass({
 	propTypes: {
-		FieldComponent: React.PropTypes.func.isRequired,
-		FilterComponent: React.PropTypes.func.isRequired,
-		params: React.PropTypes.object.isRequired,
-		readme: React.PropTypes.string,
-		spec: React.PropTypes.oneOfType([
-			React.PropTypes.object,
-			React.PropTypes.arrayOf(React.PropTypes.object),
+		FieldComponent: PropTypes.func.isRequired,
+		FilterComponent: PropTypes.func.isRequired,
+		params: PropTypes.object.isRequired,
+		readme: PropTypes.string,
+		spec: PropTypes.oneOfType([
+			PropTypes.object,
+			PropTypes.arrayOf(PropTypes.object),
 		]).isRequired,
-		toggleSidebar: React.PropTypes.func.isRequired,
-		value: React.PropTypes.any,
+		toggleSidebar: PropTypes.func.isRequired,
+		value: PropTypes.any,
 	},
 	/**
 	 * Gets the initial state of the component.
@@ -44,7 +46,7 @@ const ExplorerFieldType = React.createClass({
 	 * Handles the component receiving new props.
 	 * @param {object} newProps The new props.
 	 */
-	componentWillReceiveProps (newProps) {
+	UNSAFE_componentWillReceiveProps (newProps) {
 		if (this.props.params.type === newProps.params.type) return;
 
 		this.setState({

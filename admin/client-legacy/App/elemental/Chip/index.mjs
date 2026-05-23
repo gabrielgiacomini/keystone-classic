@@ -1,5 +1,6 @@
 import { css } from 'glamor';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import classes from './styles.mjs';
 import colors from './colors.mjs';
 
@@ -62,9 +63,9 @@ function Chip ({
 Chip.propTypes = {
 	color: PropTypes.oneOf(Object.keys(colors)).isRequired,
 	inverted: PropTypes.bool,
-	label: React.PropTypes.string.isRequired,
-	onClear: React.PropTypes.func,
-	onClick: React.PropTypes.func,
+	label: PropTypes.string.isRequired,
+	onClear: PropTypes.func,
+	onClick: PropTypes.func,
 };
 Chip.defaultProps = {
 	color: 'default',

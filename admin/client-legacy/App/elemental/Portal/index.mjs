@@ -1,8 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import Transition from 'react-addons-css-transition-group';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { render } from 'react-dom';
 import PassContext from '../PassContext/index.mjs';
-
 
 /**
  * A React component that renders its children into a detached DOM node appended
@@ -33,26 +32,9 @@ export default class Portal extends Component {
 	 * @returns {void}
 	 */
 	componentDidUpdate () {
-		// Animate fade on mount/unmount
-		const duration = 200;
-		const styles = `
-				.fade-enter { opacity: 0.01; }
-				.fade-enter.fade-enter-active { opacity: 1; transition: opacity ${duration}ms; }
-				.fade-leave { opacity: 1; }
-				.fade-leave.fade-leave-active { opacity: 0.01; transition: opacity ${duration}ms; }
-		`;
 		render(
 			<PassContext context={this.context}>
-				<div>
-					<style>{styles}</style>
-					<Transition
-						component="div"
-						transitionName="fade"
-						transitionEnterTimeout={duration}
-						transitionLeaveTimeout={duration}
-						{...this.props}
-					/>
-				</div>
+				<div>{this.props.children}</div>
 			</PassContext>,
 			this.portalElement
 		);

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { css } from 'glamor';
 import Button from '../Button/index.mjs';
 import Spinner from '../Spinner/index.mjs';

@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import Popout from '../../../shared/Popout/index.mjs';
 import PopoutList from '../../../shared/Popout/PopoutList.mjs';
 import ListHeaderButton from './ListHeaderButton.mjs';
@@ -10,7 +12,7 @@ const FORMAT_OPTIONS = [
 	{ label: 'JSON', value: 'json' },
 ];
 
-const ListDownloadForm = React.createClass({
+const ListDownloadForm = createReactClass({
 	propTypes: {
 		activeColumns: PropTypes.array,
 		dispatch: PropTypes.func.isRequired,

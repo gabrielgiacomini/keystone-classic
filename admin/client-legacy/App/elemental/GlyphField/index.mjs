@@ -1,6 +1,7 @@
 /* eslint quote-props: ["error", "as-needed"] */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Field from '../FormField/index.mjs';
 import Glyph from '../Glyph/index.mjs';
 

@@ -76,6 +76,7 @@ async function buildPackagesBundle() {
 	const b = browserify({
 		debug: !production,
 	});
+	b.transform(swcify);
 	packageNames.forEach((packageName) => {
 		b.require(browserifyAliases[packageName] ?? packageName, { expose: packageName });
 	});

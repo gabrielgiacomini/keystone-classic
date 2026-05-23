@@ -10,6 +10,7 @@ import DateInput from '../../components/DateInput.mjs';
 import Field from '../Field.mjs';
 import moment from 'moment';
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
 	Button,
 	FormInput,
@@ -34,14 +35,14 @@ export default Field.create({
 		type: 'Date',
 	},
 	propTypes: {
-		formatString: React.PropTypes.string,
-		inputFormat: React.PropTypes.string,
-		label: React.PropTypes.string,
-		note: React.PropTypes.string,
-		onChange: React.PropTypes.func,
-		path: React.PropTypes.string,
-		todayButton: React.PropTypes.bool,
-		value: React.PropTypes.string,
+		formatString: PropTypes.string,
+		inputFormat: PropTypes.string,
+		label: PropTypes.string,
+		note: PropTypes.string,
+		onChange: PropTypes.func,
+		path: PropTypes.string,
+		todayButton: PropTypes.bool,
+		value: PropTypes.string,
 	},
 
 	/**

@@ -3,7 +3,8 @@
  * This file defines the `CloudinaryImagesThumbnail` component, which is used to
  * render a thumbnail for a Cloudinary image.
  */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Button } from '../../../admin/client-legacy/App/elemental';
 import ImageThumbnail from '../../components/ImageThumbnail';
 

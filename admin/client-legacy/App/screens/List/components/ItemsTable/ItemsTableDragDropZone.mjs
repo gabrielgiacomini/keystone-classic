@@ -5,16 +5,18 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import DropZoneTarget from './ItemsTableDragDropZoneTarget.mjs';
 import classnames from 'classnames';
 
-const ItemsTableDragDropZone = React.createClass({
+const ItemsTableDragDropZone = createReactClass({
 	displayName: 'ItemsTableDragDropZone',
 	propTypes: {
-		columns: React.PropTypes.array,
-		connectDropTarget: React.PropTypes.func,
-		items: React.PropTypes.object,
-		list: React.PropTypes.object,
+		columns: PropTypes.array,
+		connectDropTarget: PropTypes.func,
+		items: PropTypes.object,
+		list: PropTypes.object,
 	},
 	renderPageDrops () {
 		const { items, currentPage, pageSize } = this.props;

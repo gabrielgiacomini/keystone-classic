@@ -4,6 +4,8 @@
  * the value of a `Location` field in a list view.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 
@@ -13,11 +15,11 @@ const SUB_FIELDS = ['street1', 'suburb', 'state', 'postcode', 'country'];
  * The `LocationColumn` component.
  * @augments React.Component
  */
-const LocationColumn = React.createClass({
+const LocationColumn = createReactClass({
 	displayName: 'LocationColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
+		col: PropTypes.object,
+		data: PropTypes.object,
 	},
 	/**
 	 * Renders the value of the field.

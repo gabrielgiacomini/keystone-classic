@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Link } from 'react-router';
 
@@ -59,8 +60,8 @@ function ItemsTableValue ({
 
 ItemsTableValue.propTypes = {
 	component: PropTypes.oneOfType([
-		React.PropTypes.string,
-		React.PropTypes.func,
+		PropTypes.string,
+		PropTypes.func,
 	]),
 	empty: PropTypes.bool,
 	exterior: PropTypes.bool, // FIXME this should be "external" e.g. an external link

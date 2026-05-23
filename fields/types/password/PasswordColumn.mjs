@@ -6,6 +6,8 @@
  * It displays '********' if a password is set, and an empty string otherwise.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 
@@ -13,11 +15,11 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `PasswordColumn` component.
  * @augments React.Component
  */
-const PasswordColumn = React.createClass({
+const PasswordColumn = createReactClass({
 	displayName: 'PasswordColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
+		col: PropTypes.object,
+		data: PropTypes.object,
 	},
 	/**
 	 * Renders the value of the field.

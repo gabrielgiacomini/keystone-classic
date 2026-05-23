@@ -7,6 +7,7 @@
  * inverting the filter.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { findDOMNode } from 'react-dom';
 import {
 	Form,
@@ -38,7 +39,7 @@ function getDefaultValue () {
  * The `NumberFilter` component.
  * @augments React.Component
  */
-const NumberFilter = React.createClass({
+const NumberFilter = createReactClass({
 	statics: {
 		getDefaultValue: getDefaultValue,
 	},

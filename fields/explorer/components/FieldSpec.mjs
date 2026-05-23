@@ -4,26 +4,38 @@
  * field type in the KeystoneJS Field Types Explorer. It displays the field
  * itself, a Domify component to show the field's value, and a filter component.
  */
-import Domify from 'react-domify';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Form } from '../../../admin/client-legacy/App/elemental';
 
 import Col from './Col.mjs';
 import Row from './Row.mjs';
+
+function ValuePreview ({ className, value }) {
+	return (
+		<pre className={className}>{JSON.stringify(value, null, 2)}</pre>
+	);
+}
+
+ValuePreview.propTypes = {
+	className: PropTypes.string,
+	value: PropTypes.any,
+};
 
 /**
  * A component that renders a field spec, including the field itself, its value,
  * and a filter.
  * @augments React.Component
  */
-const ExplorerFieldType = React.createClass({
+const ExplorerFieldType = createReactClass({
 	propTypes: {
-		FieldComponent: React.PropTypes.func.isRequired,
-		FilterComponent: React.PropTypes.func.isRequired,
-		i: React.PropTypes.number,
-		readmeIsVisible: React.PropTypes.bool,
-		spec: React.PropTypes.object.isRequired,
-		value: React.PropTypes.any,
+		FieldComponent: PropTypes.func.isRequired,
+		FilterComponent: PropTypes.func.isRequired,
+		i: PropTypes.number,
+		readmeIsVisible: PropTypes.bool,
+		spec: PropTypes.object.isRequired,
+		value: PropTypes.any,
 	},
 	/**
 	 * Gets the initial state of the component.
@@ -75,7 +87,7 @@ const ExplorerFieldType = React.createClass({
 							/>
 						</Col>
 						<Col>
-							<Domify
+							<ValuePreview
 								className="Domify"
 								value={{ value: this.state.value }}
 							/>
@@ -94,7 +106,7 @@ const ExplorerFieldType = React.createClass({
 						</Col>
 						<Col>
 							<div style={{ marginLeft: 30 }}>
-								<Domify
+								<ValuePreview
 									className="Domify"
 									value={this.state.filter}
 								/>

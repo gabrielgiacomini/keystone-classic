@@ -1,13 +1,15 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 
-const IdColumn = React.createClass({
+const IdColumn = createReactClass({
 	displayName: 'IdColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-		list: React.PropTypes.object,
+		col: PropTypes.object,
+		data: PropTypes.object,
+		list: PropTypes.object,
 	},
 	renderValue () {
 		const value = this.props.data.id;

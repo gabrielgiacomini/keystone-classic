@@ -6,7 +6,8 @@
  * It provides a popout list of options to filter by, and it supports
  * inverting the filter.
  */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
 	Button,
 	FormField,
@@ -272,11 +273,10 @@ class SelectFilter extends Component {
 	}
 };
 
-
 SelectFilter.propTypes = {
 	field: PropTypes.object,
 	filter: PropTypes.shape({
-		inverted: PropTypes.boolean,
+		inverted: PropTypes.bool,
 		value: PropTypes.array,
 	}),
 };

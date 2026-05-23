@@ -1,17 +1,19 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { Sortable } from './ItemsTableRow.mjs';
 import DropZone from './ItemsTableDragDropZone.mjs';
 
-const ItemsTableDragDrop = React.createClass({
+const ItemsTableDragDrop = createReactClass({
 	displayName: 'ItemsTableDragDrop',
 	propTypes: {
-		columns: React.PropTypes.array,
-		id: React.PropTypes.any,
-		index: React.PropTypes.number,
-		items: React.PropTypes.object,
-		list: React.PropTypes.object,
+		columns: PropTypes.array,
+		id: PropTypes.any,
+		index: PropTypes.number,
+		items: PropTypes.object,
+		list: PropTypes.object,
 	},
 	render () {
 		return (

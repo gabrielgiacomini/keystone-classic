@@ -6,6 +6,8 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Center, Container, Spinner } from '../../elemental/index.mjs';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -27,10 +29,10 @@ import {
 	selectList,
 } from '../List/actions/index.mjs';
 
-const ItemView = React.createClass({
+const ItemView = createReactClass({
 	displayName: 'ItemView',
 	contextTypes: {
-		router: React.PropTypes.object.isRequired,
+		router: PropTypes.object.isRequired,
 	},
 	getInitialState () {
 		return {
@@ -46,7 +48,7 @@ const ItemView = React.createClass({
 		}
 		this.initializeItem(this.props.params.itemId);
 	},
-	componentWillReceiveProps (nextProps) {
+	UNSAFE_componentWillReceiveProps (nextProps) {
 		// We've opened a new item from the client side routing, so initialize
 		// again with the new item id
 		if (nextProps.params.itemId !== this.props.params.itemId) {

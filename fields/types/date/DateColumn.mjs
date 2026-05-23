@@ -4,6 +4,8 @@
  * value of a `Date` or `Datetime` field in a list view.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
@@ -12,12 +14,12 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `DateColumn` component.
  * @augments React.Component
  */
-const DateColumn = React.createClass({
+const DateColumn = createReactClass({
 	displayName: 'DateColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-		linkTo: React.PropTypes.string,
+		col: PropTypes.object,
+		data: PropTypes.object,
+		linkTo: PropTypes.string,
 	},
 	/**
 	 * Converts a value to a moment object.

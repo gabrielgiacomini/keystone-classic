@@ -36,6 +36,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _colors = /*#__PURE__*/ _interop_require_default(require("./colors.mjs"));
 function _define_property(obj, key, value) {
@@ -205,10 +206,10 @@ const cloneWithClassnames = (c)=>{
     }));
 }
 Alert.propTypes = {
-    color: _react.PropTypes.oneOf(Object.keys(_colors.default)).isRequired,
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    color: _proptypes.default.oneOf(Object.keys(_colors.default)).isRequired,
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ])
 };
 Alert.defaultProps = {
@@ -216,7 +217,7 @@ Alert.defaultProps = {
 };
 const _default = Alert;
 
-},{"./colors.mjs":1,"./styles.mjs":3,"glamor":undefined,"react":undefined}],3:[function(require,module,exports){
+},{"./colors.mjs":1,"./styles.mjs":3,"glamor":undefined,"prop-types":210,"react":undefined}],3:[function(require,module,exports){
 // ==============================
 // Alert
 // ==============================
@@ -327,53 +328,13 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -437,11 +398,11 @@ function _object_without_properties_loose(source, excluded) {
     }, heading), children);
 }
 BlankState.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]).isRequired,
-    heading: _react.PropTypes.string
+    heading: _proptypes.default.string
 };
 BlankState.defaultProps = {
     component: 'div'
@@ -466,7 +427,7 @@ BlankState.defaultProps = {
 };
 const _default = BlankState;
 
-},{"../../../theme.mjs":80,"glamor":undefined,"react":undefined}],5:[function(require,module,exports){
+},{"../../../theme.mjs":80,"glamor":undefined,"prop-types":210,"react":undefined}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -479,7 +440,13 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_wildcard(require("./styles.mjs"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
     var cacheBabelInterop = new WeakMap();
@@ -635,21 +602,21 @@ const BUTTON_COLORS = [
     }
 }
 Button.propTypes = {
-    active: _react.PropTypes.bool,
-    block: _react.PropTypes.bool,
-    color: _react.PropTypes.oneOf(BUTTON_COLORS),
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    active: _proptypes.default.bool,
+    block: _proptypes.default.bool,
+    color: _proptypes.default.oneOf(BUTTON_COLORS),
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]),
-    cssStyles: _react.PropTypes.arrayOf(_react.PropTypes.shape({
-        _definition: _react.PropTypes.object,
-        _name: _react.PropTypes.string
+    cssStyles: _proptypes.default.arrayOf(_proptypes.default.shape({
+        _definition: _proptypes.default.object,
+        _name: _proptypes.default.string
     })),
-    disabled: _react.PropTypes.bool,
-    href: _react.PropTypes.string,
-    size: _react.PropTypes.oneOf(BUTTON_SIZES),
-    variant: _react.PropTypes.oneOf(BUTTON_VARIANTS)
+    disabled: _proptypes.default.bool,
+    href: _proptypes.default.string,
+    size: _proptypes.default.oneOf(BUTTON_SIZES),
+    variant: _proptypes.default.oneOf(BUTTON_VARIANTS)
 };
 Button.defaultProps = {
     cssStyles: [],
@@ -658,7 +625,7 @@ Button.defaultProps = {
 };
 const _default = Button;
 
-},{"./styles.mjs":6,"glamor":undefined,"react":undefined}],6:[function(require,module,exports){
+},{"./styles.mjs":6,"glamor":undefined,"prop-types":210,"react":undefined}],6:[function(require,module,exports){
 // ==============================
 // Button
 // ==============================
@@ -1001,7 +968,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _define_property(obj, key, value) {
@@ -1021,47 +989,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -1140,13 +1067,13 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 Center.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]),
-    height: _react.PropTypes.oneOfType([
-        _react.PropTypes.number,
-        _react.PropTypes.string
+    height: _proptypes.default.oneOfType([
+        _proptypes.default.number,
+        _proptypes.default.string
     ])
 };
 Center.defaultProps = {
@@ -1155,7 +1082,7 @@ Center.defaultProps = {
 };
 const _default = Center;
 
-},{"./styles.mjs":8,"glamor":undefined,"react":undefined}],8:[function(require,module,exports){
+},{"./styles.mjs":8,"glamor":undefined,"prop-types":210,"react":undefined}],8:[function(require,module,exports){
 // ==============================
 // Center
 // ==============================
@@ -1306,54 +1233,14 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _colors = /*#__PURE__*/ _interop_require_default(require("./colors.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -1430,18 +1317,18 @@ function _object_without_properties_loose(source, excluded) {
     }, "×"));
 }
 Chip.propTypes = {
-    color: _react.PropTypes.oneOf(Object.keys(_colors.default)).isRequired,
-    inverted: _react.PropTypes.bool,
-    label: _react.default.PropTypes.string.isRequired,
-    onClear: _react.default.PropTypes.func,
-    onClick: _react.default.PropTypes.func
+    color: _proptypes.default.oneOf(Object.keys(_colors.default)).isRequired,
+    inverted: _proptypes.default.bool,
+    label: _proptypes.default.string.isRequired,
+    onClear: _proptypes.default.func,
+    onClick: _proptypes.default.func
 };
 Chip.defaultProps = {
     color: 'default'
 };
 const _default = Chip;
 
-},{"./colors.mjs":9,"./styles.mjs":11,"glamor":undefined,"react":undefined}],11:[function(require,module,exports){
+},{"./colors.mjs":9,"./styles.mjs":11,"glamor":undefined,"prop-types":210,"react":undefined}],11:[function(require,module,exports){
 // ==============================
 // Alert
 // ==============================
@@ -1580,54 +1467,14 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _sizes = /*#__PURE__*/ _interop_require_default(require("./sizes.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -1686,12 +1533,12 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 Container.propTypes = {
-    clearFloatingChildren: _react.PropTypes.bool,
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    clearFloatingChildren: _proptypes.default.bool,
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]).isRequired,
-    width: _react.PropTypes.oneOf(Object.keys(_sizes.default)).isRequired
+    width: _proptypes.default.oneOf(Object.keys(_sizes.default)).isRequired
 };
 Container.defaultProps = {
     component: 'div',
@@ -1699,7 +1546,7 @@ Container.defaultProps = {
 };
 const _default = Container;
 
-},{"./sizes.mjs":13,"./styles.mjs":14,"glamor":undefined,"react":undefined}],13:[function(require,module,exports){
+},{"./sizes.mjs":13,"./styles.mjs":14,"glamor":undefined,"prop-types":210,"react":undefined}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -1913,6 +1760,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -2028,23 +1876,23 @@ function _object_without_properties_loose(source, excluded) {
     }
 }
 Form.childContextTypes = {
-    formLayout: _react.PropTypes.oneOf([
+    formLayout: _proptypes.default.oneOf([
         'basic',
         'horizontal',
         'inline'
     ]),
-    labelWidth: _react.PropTypes.oneOfType([
-        _react.PropTypes.number,
-        _react.PropTypes.string
+    labelWidth: _proptypes.default.oneOfType([
+        _proptypes.default.number,
+        _proptypes.default.string
     ])
 };
 Form.propTypes = {
-    children: _react.PropTypes.node.isRequired,
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.string,
-        _react.PropTypes.func
+    children: _proptypes.default.node.isRequired,
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.string,
+        _proptypes.default.func
     ]),
-    layout: _react.PropTypes.oneOf([
+    layout: _proptypes.default.oneOf([
         'basic',
         'horizontal',
         'inline'
@@ -2056,7 +1904,7 @@ Form.defaultProps = {
 };
 const _default = Form;
 
-},{"./styles.mjs":17,"glamor":undefined,"react":undefined}],17:[function(require,module,exports){
+},{"./styles.mjs":17,"glamor":undefined,"prop-types":210,"react":undefined}],17:[function(require,module,exports){
 // ==============================
 // Form
 // ==============================
@@ -2087,6 +1935,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../FormLabel/index.mjs"));
 function _define_property(obj, key, value) {
@@ -2283,40 +2132,40 @@ function _object_without_properties_loose(source, excluded) {
     }
 }
 const stylesShape = {
-    _definition: _react.PropTypes.object,
-    _name: _react.PropTypes.string
+    _definition: _proptypes.default.object,
+    _name: _proptypes.default.string
 };
 FormField.contextTypes = {
-    formLayout: _react.PropTypes.oneOf([
+    formLayout: _proptypes.default.oneOf([
         'basic',
         'horizontal',
         'inline'
     ]),
-    labelWidth: _react.PropTypes.oneOfType([
-        _react.PropTypes.number,
-        _react.PropTypes.string
+    labelWidth: _proptypes.default.oneOfType([
+        _proptypes.default.number,
+        _proptypes.default.string
     ])
 };
 FormField.childContextTypes = {
-    formFieldId: _react.PropTypes.string
+    formFieldId: _proptypes.default.string
 };
 FormField.propTypes = {
-    children: _react.PropTypes.node,
-    cropLabel: _react.PropTypes.bool,
-    cssStyles: _react.PropTypes.oneOfType([
-        _react.PropTypes.arrayOf(_react.PropTypes.shape(stylesShape)),
-        _react.PropTypes.shape(stylesShape)
+    children: _proptypes.default.node,
+    cropLabel: _proptypes.default.bool,
+    cssStyles: _proptypes.default.oneOfType([
+        _proptypes.default.arrayOf(_proptypes.default.shape(stylesShape)),
+        _proptypes.default.shape(stylesShape)
     ]),
-    htmlFor: _react.default.PropTypes.string,
-    label: _react.default.PropTypes.string,
-    offsetAbsentLabel: _react.default.PropTypes.bool
+    htmlFor: _proptypes.default.string,
+    label: _proptypes.default.string,
+    offsetAbsentLabel: _proptypes.default.bool
 };
 function generateId() {
     return Math.random().toString(36).slice(2, 11);
 }
 const _default = FormField;
 
-},{"../FormLabel/index.mjs":23,"./styles.mjs":19,"glamor":undefined,"react":undefined}],19:[function(require,module,exports){
+},{"../FormLabel/index.mjs":23,"./styles.mjs":19,"glamor":undefined,"prop-types":210,"react":undefined}],19:[function(require,module,exports){
 // ==============================
 // Form Field
 // ==============================
@@ -2381,6 +2230,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _concatClassnames = /*#__PURE__*/ _interop_require_default(require("../../../utils/concatClassnames.mjs"));
@@ -2547,37 +2397,37 @@ function _object_without_properties_loose(source, excluded) {
     }
 }
 const stylesShape = {
-    _definition: _react.PropTypes.object,
-    _name: _react.PropTypes.string
+    _definition: _proptypes.default.object,
+    _name: _proptypes.default.string
 };
 FormInput.propTypes = {
-    cssStyles: _react.PropTypes.oneOfType([
-        _react.PropTypes.arrayOf(_react.PropTypes.shape(stylesShape)),
-        _react.PropTypes.shape(stylesShape)
+    cssStyles: _proptypes.default.oneOfType([
+        _proptypes.default.arrayOf(_proptypes.default.shape(stylesShape)),
+        _proptypes.default.shape(stylesShape)
     ]),
-    multiline: _react.PropTypes.bool,
-    size: _react.PropTypes.oneOf([
+    multiline: _proptypes.default.bool,
+    size: _proptypes.default.oneOf([
         'default',
         'small',
         'large'
     ]),
-    type: _react.PropTypes.string
+    type: _proptypes.default.string
 };
 FormInput.defaultProps = {
     size: 'default',
     type: 'text'
 };
 FormInput.contextTypes = {
-    formLayout: _react.PropTypes.oneOf([
+    formLayout: _proptypes.default.oneOf([
         'basic',
         'horizontal',
         'inline'
     ]),
-    formFieldId: _react.PropTypes.string
+    formFieldId: _proptypes.default.string
 };
 const _default = FormInput;
 
-},{"../../../utils/concatClassnames.mjs":86,"./noedit.mjs":21,"./styles.mjs":22,"glamor":undefined,"react":undefined}],21:[function(require,module,exports){
+},{"../../../utils/concatClassnames.mjs":86,"./noedit.mjs":21,"./styles.mjs":22,"glamor":undefined,"prop-types":210,"react":undefined}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -2588,7 +2438,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 const _color = require("../../../utils/color.mjs");
@@ -2596,47 +2447,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -2700,11 +2510,11 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 FormInputNoedit.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.string,
-        _react.PropTypes.func
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.string,
+        _proptypes.default.func
     ]),
-    cropText: _react.PropTypes.bool
+    cropText: _proptypes.default.bool
 };
 FormInputNoedit.defaultProps = {
     component: 'span'
@@ -2758,7 +2568,7 @@ const classes = {
 };
 const _default = FormInputNoedit;
 
-},{"../../../theme.mjs":80,"../../../utils/color.mjs":84,"glamor":undefined,"react":undefined}],22:[function(require,module,exports){
+},{"../../../theme.mjs":80,"../../../utils/color.mjs":84,"glamor":undefined,"prop-types":210,"react":undefined}],22:[function(require,module,exports){
 // ==============================
 // Form Input
 // ==============================
@@ -2830,7 +2640,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -2849,47 +2660,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -2981,38 +2751,38 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 const stylesShape = {
-    _definition: _react.PropTypes.object,
-    _name: _react.PropTypes.string
+    _definition: _proptypes.default.object,
+    _name: _proptypes.default.string
 };
 FormLabel.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.string,
-        _react.PropTypes.func
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.string,
+        _proptypes.default.func
     ]),
-    cropText: _react.PropTypes.bool,
-    cssStyles: _react.PropTypes.oneOfType([
-        _react.PropTypes.arrayOf(_react.PropTypes.shape(stylesShape)),
-        _react.PropTypes.shape(stylesShape)
+    cropText: _proptypes.default.bool,
+    cssStyles: _proptypes.default.oneOfType([
+        _proptypes.default.arrayOf(_proptypes.default.shape(stylesShape)),
+        _proptypes.default.shape(stylesShape)
     ])
 };
 FormLabel.defaultProps = {
     component: 'label'
 };
 FormLabel.contextTypes = {
-    formLayout: _react.PropTypes.oneOf([
+    formLayout: _proptypes.default.oneOf([
         'basic',
         'horizontal',
         'inline'
     ]),
-    formFieldId: _react.PropTypes.string,
-    labelWidth: _react.PropTypes.oneOfType([
-        _react.PropTypes.number,
-        _react.PropTypes.string
+    formFieldId: _proptypes.default.string,
+    labelWidth: _proptypes.default.oneOfType([
+        _proptypes.default.number,
+        _proptypes.default.string
     ])
 };
 const _default = FormLabel;
 
-},{"./styles.mjs":24,"glamor":undefined,"react":undefined}],24:[function(require,module,exports){
+},{"./styles.mjs":24,"glamor":undefined,"prop-types":210,"react":undefined}],24:[function(require,module,exports){
 // ==============================
 // Form Label
 // ==============================
@@ -3070,7 +2840,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _define_property(obj, key, value) {
@@ -3090,47 +2861,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -3238,18 +2968,18 @@ function _object_without_properties_loose(source, excluded) {
     })) : /*#__PURE__*/ _react.default.createElement(Component, props, children);
 }
 FormNote.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]),
-    html: _react.PropTypes.string
+    html: _proptypes.default.string
 };
 FormNote.defaultProps = {
     component: 'div'
 };
 const _default = FormNote;
 
-},{"./styles.mjs":26,"glamor":undefined,"react":undefined}],26:[function(require,module,exports){
+},{"./styles.mjs":26,"glamor":undefined,"prop-types":210,"react":undefined}],26:[function(require,module,exports){
 // ==============================
 // Form Note
 // ==============================
@@ -3290,6 +3020,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -3411,22 +3142,22 @@ function _object_without_properties_loose(source, excluded) {
     }
 }
 FormSelect.contextTypes = {
-    formFieldId: _react.PropTypes.string
+    formFieldId: _proptypes.default.string
 };
 FormSelect.propTypes = {
-    onChange: _react.PropTypes.func.isRequired,
-    options: _react.default.PropTypes.arrayOf(_react.default.PropTypes.shape({
-        label: _react.default.PropTypes.string,
-        value: _react.default.PropTypes.string
+    onChange: _proptypes.default.func.isRequired,
+    options: _proptypes.default.arrayOf(_proptypes.default.shape({
+        label: _proptypes.default.string,
+        value: _proptypes.default.string
     })),
-    value: _react.PropTypes.oneOfType([
-        _react.PropTypes.number,
-        _react.PropTypes.string
+    value: _proptypes.default.oneOfType([
+        _proptypes.default.number,
+        _proptypes.default.string
     ])
 };
 const _default = FormSelect;
 
-},{"./styles.mjs":28,"glamor":undefined,"react":undefined}],28:[function(require,module,exports){
+},{"./styles.mjs":28,"glamor":undefined,"prop-types":210,"react":undefined}],28:[function(require,module,exports){
 // ==============================
 // Form Select
 // ==============================
@@ -3554,7 +3285,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _octicons = /*#__PURE__*/ _interop_require_default(require("./octicons.mjs"));
 const _colors = /*#__PURE__*/ _interop_require_default(require("./colors.mjs"));
 const _sizes = /*#__PURE__*/ _interop_require_default(require("./sizes.mjs"));
@@ -3576,47 +3308,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -3710,16 +3401,16 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 Glyph.propTypes = {
-    color: _react.PropTypes.oneOfType([
-        _react.PropTypes.oneOf(Object.keys(_colors.default)),
-        _react.PropTypes.string
+    color: _proptypes.default.oneOfType([
+        _proptypes.default.oneOf(Object.keys(_colors.default)),
+        _proptypes.default.string
     ]),
-    cssStyles: _react.PropTypes.shape({
-        _definition: _react.PropTypes.object,
-        _name: _react.PropTypes.string
+    cssStyles: _proptypes.default.shape({
+        _definition: _proptypes.default.object,
+        _name: _proptypes.default.string
     }),
-    name: _react.PropTypes.oneOf(Object.keys(_octicons.default)).isRequired,
-    size: _react.PropTypes.oneOf(Object.keys(_sizes.default))
+    name: _proptypes.default.oneOf(Object.keys(_octicons.default)).isRequired,
+    size: _proptypes.default.oneOf(Object.keys(_sizes.default))
 };
 Glyph.defaultProps = {
     component: 'i',
@@ -3728,7 +3419,7 @@ Glyph.defaultProps = {
 };
 const _default = Glyph;
 
-},{"./colors.mjs":29,"./octicons.mjs":31,"./sizes.mjs":32,"./styles.mjs":33,"glamor":undefined,"react":undefined}],31:[function(require,module,exports){
+},{"./colors.mjs":29,"./octicons.mjs":31,"./sizes.mjs":32,"./styles.mjs":33,"glamor":undefined,"prop-types":210,"react":undefined}],31:[function(require,module,exports){
 /* eslint quote-props: ["error", "as-needed"] */ "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -4034,7 +3725,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../Button/index.mjs"));
 const _index1 = /*#__PURE__*/ _interop_require_default(require("../Glyph/index.mjs"));
 function _define_property(obj, key, value) {
@@ -4054,47 +3746,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -4191,11 +3842,11 @@ function _object_without_properties_loose(source, excluded) {
 // prop type validation will occur within the Glyph component, no need to
 // duplicate, just pass it through.
 GlyphButton.propTypes = {
-    glyph: _react.PropTypes.string,
-    glyphColor: _react.PropTypes.string,
-    glyphSize: _react.PropTypes.string,
-    glyphStyle: _react.PropTypes.object,
-    position: _react.PropTypes.oneOf([
+    glyph: _proptypes.default.string,
+    glyphColor: _proptypes.default.string,
+    glyphSize: _proptypes.default.string,
+    glyphStyle: _proptypes.default.object,
+    position: _proptypes.default.oneOf([
         'default',
         'left',
         'right'
@@ -4214,7 +3865,7 @@ const classes = {
 };
 const _default = GlyphButton;
 
-},{"../Button/index.mjs":5,"../Glyph/index.mjs":30,"react":undefined}],35:[function(require,module,exports){
+},{"../Button/index.mjs":5,"../Glyph/index.mjs":30,"prop-types":210,"react":undefined}],35:[function(require,module,exports){
 /* eslint quote-props: ["error", "as-needed"] */ "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -4225,7 +3876,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../FormField/index.mjs"));
 const _index1 = /*#__PURE__*/ _interop_require_default(require("../Glyph/index.mjs"));
 function _define_property(obj, key, value) {
@@ -4245,47 +3897,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -4375,10 +3986,10 @@ function _object_without_properties_loose(source, excluded) {
 // prop type validation will occur within the Glyph component, no need to
 // duplicate, just pass it through.
 GlyphField.propTypes = {
-    glyph: _react.PropTypes.string,
-    glyphColor: _react.PropTypes.string,
-    glyphSize: _react.PropTypes.string,
-    position: _react.PropTypes.oneOf([
+    glyph: _proptypes.default.string,
+    glyphColor: _proptypes.default.string,
+    glyphSize: _proptypes.default.string,
+    position: _proptypes.default.oneOf([
         'left',
         'right'
     ])
@@ -4399,7 +4010,7 @@ const classes = {
 };
 const _default = GlyphField;
 
-},{"../FormField/index.mjs":18,"../Glyph/index.mjs":30,"react":undefined}],36:[function(require,module,exports){
+},{"../FormField/index.mjs":18,"../Glyph/index.mjs":30,"prop-types":210,"react":undefined}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -4444,7 +4055,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _define_property(obj, key, value) {
@@ -4464,47 +4076,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -4553,18 +4124,18 @@ const GridCol = (props, context)=>{
     }, props.children);
 };
 GridCol.contextTypes = {
-    gutter: _react.PropTypes.number,
-    large: _react.PropTypes.string,
-    medium: _react.PropTypes.string,
-    small: _react.PropTypes.string,
-    xsmall: _react.PropTypes.string
+    gutter: _proptypes.default.number,
+    large: _proptypes.default.string,
+    medium: _proptypes.default.string,
+    small: _proptypes.default.string,
+    xsmall: _proptypes.default.string
 };
 GridCol.propTypes = {
-    gutter: _react.PropTypes.number,
-    large: _react.PropTypes.string,
-    medium: _react.PropTypes.string,
-    small: _react.PropTypes.string,
-    xsmall: _react.PropTypes.string
+    gutter: _proptypes.default.number,
+    large: _proptypes.default.string,
+    medium: _proptypes.default.string,
+    small: _proptypes.default.string,
+    xsmall: _proptypes.default.string
 };
 const classes = _object_spread({}, prepareWidths('xsmall', WIDTHS), prepareWidths('small', WIDTHS), prepareWidths('medium', WIDTHS), prepareWidths('large', WIDTHS));
 function prepareWidths(prefix, obj) {
@@ -4608,7 +4179,7 @@ function prepareWidths(prefix, obj) {
 }
 const _default = GridCol;
 
-},{"../../../theme.mjs":80,"glamor":undefined,"react":undefined}],38:[function(require,module,exports){
+},{"../../../theme.mjs":80,"glamor":undefined,"prop-types":210,"react":undefined}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -4620,7 +4191,13 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
     var cacheBabelInterop = new WeakMap();
@@ -4697,18 +4274,18 @@ function _interop_require_wildcard(obj, nodeInterop) {
     }
 }
 GridRow.childContextTypes = {
-    gutter: _react.PropTypes.number,
-    xsmall: _react.PropTypes.string,
-    small: _react.PropTypes.string,
-    medium: _react.PropTypes.string,
-    large: _react.PropTypes.string
+    gutter: _proptypes.default.number,
+    xsmall: _proptypes.default.string,
+    small: _proptypes.default.string,
+    medium: _proptypes.default.string,
+    large: _proptypes.default.string
 };
 GridRow.propTypes = {
-    gutter: _react.PropTypes.number,
-    large: _react.PropTypes.string,
-    medium: _react.PropTypes.string,
-    small: _react.PropTypes.string,
-    xsmall: _react.PropTypes.string
+    gutter: _proptypes.default.number,
+    large: _proptypes.default.string,
+    medium: _proptypes.default.string,
+    small: _proptypes.default.string,
+    xsmall: _proptypes.default.string
 };
 GridRow.defaultProps = {
     gutter: 0,
@@ -4722,7 +4299,7 @@ const classes = {
 };
 const _default = GridRow;
 
-},{"glamor":undefined,"react":undefined}],39:[function(require,module,exports){
+},{"glamor":undefined,"prop-types":210,"react":undefined}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -4735,6 +4312,12 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
     var cacheBabelInterop = new WeakMap();
@@ -4869,15 +4452,15 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 InlineGroup.propTypes = {
-    block: _react.PropTypes.bool,
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    block: _proptypes.default.bool,
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]),
-    contiguous: _react.PropTypes.bool,
-    cssStyles: _react.PropTypes.shape({
-        _definition: _react.PropTypes.object,
-        _name: _react.PropTypes.string
+    contiguous: _proptypes.default.bool,
+    cssStyles: _proptypes.default.shape({
+        _definition: _proptypes.default.object,
+        _name: _proptypes.default.string
     })
 };
 InlineGroup.defaultProps = {
@@ -4893,7 +4476,7 @@ const classes = {
 };
 const _default = InlineGroup;
 
-},{"glamor":undefined,"react":undefined}],40:[function(require,module,exports){
+},{"glamor":undefined,"prop-types":210,"react":undefined}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -4906,6 +4489,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -5059,11 +4643,11 @@ function _object_without_properties_loose(source, excluded) {
     }, props), children);
 }
 InlineGroupSection.propTypes = {
-    active: _react.PropTypes.bool,
-    children: _react.PropTypes.element.isRequired,
-    contiguous: _react.PropTypes.bool,
-    grow: _react.PropTypes.bool,
-    position: _react.PropTypes.oneOf([
+    active: _proptypes.default.bool,
+    children: _proptypes.default.element.isRequired,
+    contiguous: _proptypes.default.bool,
+    grow: _proptypes.default.bool,
+    position: _proptypes.default.oneOf([
         'first',
         'last',
         'middle',
@@ -5072,7 +4656,7 @@ InlineGroupSection.propTypes = {
 };
 const _default = InlineGroupSection;
 
-},{"./styles.mjs":41,"glamor":undefined,"react":undefined}],41:[function(require,module,exports){
+},{"./styles.mjs":41,"glamor":undefined,"prop-types":210,"react":undefined}],41:[function(require,module,exports){
 // ==============================
 // Inline Group: Section
 // ==============================
@@ -5143,7 +4727,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -5162,47 +4747,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -5311,16 +4855,16 @@ function _object_without_properties_loose(source, excluded) {
     }, label));
 }
 LabelledControl.propTypes = {
-    inline: _react.PropTypes.bool,
-    title: _react.PropTypes.string,
-    type: _react.PropTypes.oneOf([
+    inline: _proptypes.default.bool,
+    title: _proptypes.default.string,
+    type: _proptypes.default.oneOf([
         'checkbox',
         'radio'
     ]).isRequired
 };
 const _default = LabelledControl;
 
-},{"./styles.mjs":43,"glamor":undefined,"react":undefined}],43:[function(require,module,exports){
+},{"./styles.mjs":43,"glamor":undefined,"prop-types":210,"react":undefined}],43:[function(require,module,exports){
 // ==============================
 // Alert
 // ==============================
@@ -5366,7 +4910,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _index = /*#__PURE__*/ _interop_require_default(require("../Button/index.mjs"));
 const _index1 = /*#__PURE__*/ _interop_require_default(require("../Spinner/index.mjs"));
@@ -5375,47 +4920,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -5491,7 +4995,7 @@ function _object_without_properties_loose(source, excluded) {
     }, spinner), children);
 }
 LoadingButton.propTypes = {
-    loading: _react.PropTypes.bool
+    loading: _proptypes.default.bool
 };
 LoadingButton.defaultProps = {
     loading: false
@@ -5507,7 +5011,7 @@ const classes = {
 };
 const _default = LoadingButton;
 
-},{"../../../theme.mjs":80,"../Button/index.mjs":5,"../Spinner/index.mjs":61,"glamor":undefined,"react":undefined}],45:[function(require,module,exports){
+},{"../../../theme.mjs":80,"../Button/index.mjs":5,"../Spinner/index.mjs":61,"glamor":undefined,"prop-types":210,"react":undefined}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -5628,6 +5132,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _index = /*#__PURE__*/ _interop_require_default(require("../ScrollLock/index.mjs"));
 const _index1 = /*#__PURE__*/ _interop_require_default(require("../Portal/index.mjs"));
@@ -5695,7 +5200,7 @@ const canUseDom = !!(typeof window !== 'undefined' && window.document && window.
 	 * Adds or removes the global `keydown` listener when `isOpen` or
 	 * `enableKeyboardInput` changes in the incoming props.
 	 * @param {object} nextProps - The incoming props before the update is applied.
-	 */ componentWillReceiveProps(nextProps) {
+	 */ UNSAFE_componentWillReceiveProps(nextProps) {
         if (!canUseDom) return;
         // add event listeners
         if (nextProps.isOpen && nextProps.enableKeyboardInput) {
@@ -5748,8 +5253,8 @@ const canUseDom = !!(typeof window !== 'undefined' && window.document && window.
             className: (0, _glamor.css)(classes.container),
             key: "open",
             ref: "container",
-            onClick: !!backdropClosesModal && this.handleBackdropClick,
-            onTouchEnd: !!backdropClosesModal && this.handleBackdropClick
+            onClick: backdropClosesModal ? this.handleBackdropClick : undefined,
+            onTouchEnd: backdropClosesModal ? this.handleBackdropClick : undefined
         }, /*#__PURE__*/ _react.default.createElement("div", {
             className: (0, _glamor.css)(classes.dialog),
             style: {
@@ -5774,19 +5279,19 @@ const canUseDom = !!(typeof window !== 'undefined' && window.document && window.
     }
 }
 ModalDialog.propTypes = {
-    backdropClosesModal: _react.PropTypes.bool,
-    enableKeyboardInput: _react.PropTypes.bool,
-    isOpen: _react.PropTypes.bool,
-    onClose: _react.PropTypes.func.isRequired,
-    'data-confirm-dialog': _react.PropTypes.bool,
-    width: _react.PropTypes.number
+    backdropClosesModal: _proptypes.default.bool,
+    enableKeyboardInput: _proptypes.default.bool,
+    isOpen: _proptypes.default.bool,
+    onClose: _proptypes.default.func.isRequired,
+    'data-confirm-dialog': _proptypes.default.bool,
+    width: _proptypes.default.number
 };
 ModalDialog.defaultProps = {
     enableKeyboardInput: true,
     width: 768
 };
 ModalDialog.childContextTypes = {
-    onClose: _react.PropTypes.func.isRequired
+    onClose: _proptypes.default.func.isRequired
 };
 const classes = {
     container: {
@@ -5816,7 +5321,7 @@ const classes = {
 };
 const _default = ModalDialog;
 
-},{"../../../theme.mjs":80,"../Portal/index.mjs":53,"../ScrollLock/index.mjs":56,"glamor":undefined,"react":undefined}],47:[function(require,module,exports){
+},{"../../../theme.mjs":80,"../Portal/index.mjs":53,"../ScrollLock/index.mjs":56,"glamor":undefined,"prop-types":210,"react":undefined}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -5827,7 +5332,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _define_property(obj, key, value) {
@@ -5847,47 +5353,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -5983,15 +5448,15 @@ function _object_without_properties_loose(source, excluded) {
     }));
 }
 ModalFooter.propTypes = {
-    align: _react.PropTypes.oneOf([
+    align: _proptypes.default.oneOf([
         'center',
         'left',
         'right'
     ]),
-    children: _react.PropTypes.node,
-    onClose: _react.PropTypes.func,
-    showCloseButton: _react.PropTypes.bool,
-    text: _react.PropTypes.string
+    children: _proptypes.default.node,
+    onClose: _proptypes.default.func,
+    showCloseButton: _proptypes.default.bool,
+    text: _proptypes.default.string
 };
 ModalFooter.defaultProps = {
     align: 'left'
@@ -6018,7 +5483,7 @@ const classes = {
 };
 const _default = ModalFooter;
 
-},{"../../../theme.mjs":80,"glamor":undefined,"react":undefined}],48:[function(require,module,exports){
+},{"../../../theme.mjs":80,"glamor":undefined,"prop-types":210,"react":undefined}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6029,7 +5494,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _index = /*#__PURE__*/ _interop_require_default(require("../GlyphButton/index.mjs"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
@@ -6050,47 +5516,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -6213,13 +5638,13 @@ function _object_without_properties_loose(source, excluded) {
     }));
 }
 ModalHeader.propTypes = {
-    children: _react.PropTypes.node,
-    onClose: _react.PropTypes.func,
-    showCloseButton: _react.PropTypes.bool,
-    text: _react.PropTypes.string
+    children: _proptypes.default.node,
+    onClose: _proptypes.default.func,
+    showCloseButton: _proptypes.default.bool,
+    text: _proptypes.default.string
 };
 ModalHeader.contextTypes = {
-    onClose: _react.PropTypes.func.isRequired
+    onClose: _proptypes.default.func.isRequired
 };
 const classes = {
     header: {
@@ -6246,7 +5671,7 @@ const classes = {
 };
 const _default = ModalHeader;
 
-},{"../../../theme.mjs":80,"../GlyphButton/index.mjs":34,"glamor":undefined,"react":undefined}],49:[function(require,module,exports){
+},{"../../../theme.mjs":80,"../GlyphButton/index.mjs":34,"glamor":undefined,"prop-types":210,"react":undefined}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6303,6 +5728,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _page = /*#__PURE__*/ _interop_require_default(require("./page.mjs"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _interop_require_default(obj) {
@@ -6465,19 +5891,19 @@ const classes = {
     }
 };
 Pagination.propTypes = {
-    className: _react.PropTypes.string,
-    currentPage: _react.PropTypes.number.isRequired,
-    limit: _react.PropTypes.number,
-    onPageSelect: _react.PropTypes.func,
-    pageSize: _react.PropTypes.number.isRequired,
-    plural: _react.PropTypes.string,
-    singular: _react.PropTypes.string,
-    style: _react.PropTypes.object,
-    total: _react.PropTypes.number.isRequired
+    className: _proptypes.default.string,
+    currentPage: _proptypes.default.number.isRequired,
+    limit: _proptypes.default.number,
+    onPageSelect: _proptypes.default.func,
+    pageSize: _proptypes.default.number.isRequired,
+    plural: _proptypes.default.string,
+    singular: _proptypes.default.string,
+    style: _proptypes.default.object,
+    total: _proptypes.default.number.isRequired
 };
 const _default = Pagination;
 
-},{"../../../theme.mjs":80,"./page.mjs":51,"glamor":undefined,"react":undefined}],51:[function(require,module,exports){
+},{"../../../theme.mjs":80,"./page.mjs":51,"glamor":undefined,"prop-types":210,"react":undefined}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6489,7 +5915,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -6508,47 +5935,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -6646,9 +6032,9 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement("button", props);
 }
 Page.propTypes = {
-    disabled: _react.PropTypes.bool,
-    onClick: _react.PropTypes.func.isRequired,
-    selected: _react.PropTypes.bool
+    disabled: _proptypes.default.bool,
+    onClick: _proptypes.default.func.isRequired,
+    selected: _proptypes.default.bool
 };
 /* eslint quote-props: ["error", "as-needed"] */ const selectedStyle = {
     backgroundColor: _theme.default.pagination.selected.background,
@@ -6696,7 +6082,7 @@ const classes = {
 };
 const _default = Page;
 
-},{"../../../theme.mjs":80,"glamor":undefined,"react":undefined}],52:[function(require,module,exports){
+},{"../../../theme.mjs":80,"glamor":undefined,"prop-types":210,"react":undefined}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6708,6 +6094,12 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
     var cacheBabelInterop = new WeakMap();
@@ -6772,14 +6164,14 @@ function _interop_require_wildcard(obj, nodeInterop) {
     }
 }
 PassContext.propTypes = {
-    context: _react.PropTypes.object.isRequired
+    context: _proptypes.default.object.isRequired
 };
 PassContext.childContextTypes = {
-    onClose: _react.PropTypes.func
+    onClose: _proptypes.default.func
 };
 const _default = PassContext;
 
-},{"react":undefined}],53:[function(require,module,exports){
+},{"prop-types":210,"react":undefined}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6791,22 +6183,9 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
-const _reactaddonscsstransitiongroup = /*#__PURE__*/ _interop_require_default(require("react-addons-css-transition-group"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _index = /*#__PURE__*/ _interop_require_default(require("../PassContext/index.mjs"));
-function _define_property(obj, key, value) {
-    if (key in obj) {
-        Object.defineProperty(obj, key, {
-            value: value,
-            enumerable: true,
-            configurable: true,
-            writable: true
-        });
-    } else {
-        obj[key] = value;
-    }
-    return obj;
-}
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -6853,21 +6232,6 @@ function _interop_require_wildcard(obj, nodeInterop) {
     }
     return newObj;
 }
-function _object_spread(target) {
-    for(var i = 1; i < arguments.length; i++){
-        var source = arguments[i] != null ? arguments[i] : {};
-        var ownKeys = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-            ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-                return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-            }));
-        }
-        ownKeys.forEach(function(key) {
-            _define_property(target, key, source[key]);
-        });
-    }
-    return target;
-}
 class Portal extends _react.Component {
     /**
 	 * Creates a new div, appends it to document.body, stores a reference in
@@ -6884,22 +6248,9 @@ class Portal extends _react.Component {
 	 * in a CSS fade transition group with a 200 ms enter/leave duration.
 	 * @returns {void}
 	 */ componentDidUpdate() {
-        // Animate fade on mount/unmount
-        const duration = 200;
-        const styles = `
-				.fade-enter { opacity: 0.01; }
-				.fade-enter.fade-enter-active { opacity: 1; transition: opacity ${duration}ms; }
-				.fade-leave { opacity: 1; }
-				.fade-leave.fade-leave-active { opacity: 0.01; transition: opacity ${duration}ms; }
-		`;
         (0, _reactdom.render)(/*#__PURE__*/ _react.default.createElement(_index.default, {
             context: this.context
-        }, /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("style", null, styles), /*#__PURE__*/ _react.default.createElement(_reactaddonscsstransitiongroup.default, _object_spread({
-            component: "div",
-            transitionName: "fade",
-            transitionEnterTimeout: duration,
-            transitionLeaveTimeout: duration
-        }, this.props)))), this.portalElement);
+        }, /*#__PURE__*/ _react.default.createElement("div", null, this.props.children)), this.portalElement);
     }
     /**
 	 * Removes the portal's div from document.body when the component unmounts.
@@ -6922,10 +6273,10 @@ class Portal extends _react.Component {
     }
 }
 Portal.contextTypes = {
-    onClose: _react.PropTypes.func
+    onClose: _proptypes.default.func
 };
 
-},{"../PassContext/index.mjs":52,"react":undefined,"react-addons-css-transition-group":undefined,"react-dom":undefined}],54:[function(require,module,exports){
+},{"../PassContext/index.mjs":52,"prop-types":210,"react":undefined,"react-dom":undefined}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6937,6 +6288,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -7107,21 +6459,21 @@ const canUseDOM = !!(typeof window !== 'undefined' && window.document && window.
     }
 }
 ResponsiveText.propTypes = {
-    hiddenLG: _react.PropTypes.string,
-    hiddenMD: _react.PropTypes.string,
-    hiddenSM: _react.PropTypes.string,
-    hiddenXS: _react.PropTypes.string,
-    visibleLG: _react.PropTypes.string,
-    visibleMD: _react.PropTypes.string,
-    visibleSM: _react.PropTypes.string,
-    visibleXS: _react.PropTypes.string
+    hiddenLG: _proptypes.default.string,
+    hiddenMD: _proptypes.default.string,
+    hiddenSM: _proptypes.default.string,
+    hiddenXS: _proptypes.default.string,
+    visibleLG: _proptypes.default.string,
+    visibleMD: _proptypes.default.string,
+    visibleSM: _proptypes.default.string,
+    visibleXS: _proptypes.default.string
 };
 ResponsiveText.defaultProps = {
     component: 'span'
 };
 const _default = ResponsiveText;
 
-},{"../../../theme.mjs":80,"react":undefined}],55:[function(require,module,exports){
+},{"../../../theme.mjs":80,"prop-types":210,"react":undefined}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -7223,7 +6575,7 @@ class ScrollLock extends _react.Component {
 	 * right-padding equal to the scrollbar width and sets `overflow-y: hidden`
 	 * on `document.body` to prevent page scrolling. No-ops in non-browser
 	 * environments.
-	 */ componentWillMount() {
+	 */ UNSAFE_componentWillMount() {
         if (typeof window === 'undefined') return;
         this.lockCount++;
         if (this.lockCount > 1) return;
@@ -7307,7 +6659,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _colors = /*#__PURE__*/ _interop_require_default(require("./colors.mjs"));
@@ -7315,47 +6668,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -7434,29 +6746,29 @@ function _object_without_properties_loose(source, excluded) {
     }));
 }
 const valuePropShape = [
-    _react.PropTypes.bool,
-    _react.PropTypes.number,
-    _react.PropTypes.string
+    _proptypes.default.bool,
+    _proptypes.default.number,
+    _proptypes.default.string
 ];
 SegmentedControl.propTypes = {
-    color: _react.PropTypes.oneOf(Object.keys(_colors.default)),
-    cropText: _react.PropTypes.bool,
-    equalWidthSegments: _react.PropTypes.bool,
-    inline: _react.PropTypes.bool,
-    onChange: _react.PropTypes.func.isRequired,
-    options: _react.PropTypes.arrayOf(_react.PropTypes.shape({
-        disabled: _react.PropTypes.bool,
-        label: _react.PropTypes.string,
-        value: _react.PropTypes.oneOfType(valuePropShape)
+    color: _proptypes.default.oneOf(Object.keys(_colors.default)),
+    cropText: _proptypes.default.bool,
+    equalWidthSegments: _proptypes.default.bool,
+    inline: _proptypes.default.bool,
+    onChange: _proptypes.default.func.isRequired,
+    options: _proptypes.default.arrayOf(_proptypes.default.shape({
+        disabled: _proptypes.default.bool,
+        label: _proptypes.default.string,
+        value: _proptypes.default.oneOfType(valuePropShape)
     })).isRequired,
-    value: _react.PropTypes.oneOfType(valuePropShape)
+    value: _proptypes.default.oneOfType(valuePropShape)
 };
 SegmentedControl.defaultProps = {
     color: 'default'
 };
 const _default = SegmentedControl;
 
-},{"./colors.mjs":57,"./styles.mjs":59,"glamor":undefined,"react":undefined}],59:[function(require,module,exports){
+},{"./colors.mjs":57,"./styles.mjs":59,"glamor":undefined,"prop-types":210,"react":undefined}],59:[function(require,module,exports){
 // ==============================
 // Segmented Control
 // ==============================
@@ -7598,7 +6910,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../ScreenReaderOnly/index.mjs"));
@@ -7608,47 +6921,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -7709,8 +6981,8 @@ function _object_without_properties_loose(source, excluded) {
     }), /*#__PURE__*/ _react.default.createElement(_index.default, null, "Loading..."));
 }
 Spinner.propTypes = {
-    color: _react.PropTypes.oneOf(_colors.default),
-    size: _react.PropTypes.oneOf(_sizes.default)
+    color: _proptypes.default.oneOf(_colors.default),
+    size: _proptypes.default.oneOf(_sizes.default)
 };
 Spinner.defaultProps = {
     size: 'medium',
@@ -7718,7 +6990,7 @@ Spinner.defaultProps = {
 };
 const _default = Spinner;
 
-},{"../ScreenReaderOnly/index.mjs":55,"./colors.mjs":60,"./sizes.mjs":62,"./styles.mjs":63,"glamor":undefined,"react":undefined}],62:[function(require,module,exports){
+},{"../ScreenReaderOnly/index.mjs":55,"./colors.mjs":60,"./sizes.mjs":62,"./styles.mjs":63,"glamor":undefined,"prop-types":210,"react":undefined}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8031,6 +7303,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = require("../elemental/index.mjs");
 const _string = require("../../utils/string.mjs");
 function _interop_require_default(obj) {
@@ -8051,12 +7325,12 @@ function _interop_require_default(obj) {
  *   Eventually success and error responses should be handled individually
  *   based on their type. For example: validation errors should be displayed next
  *   to each invalid field and signin errors should promt the user to sign in.
- */ const AlertMessages = _react.default.createClass({
+ */ const AlertMessages = (0, _createreactclass.default)({
     displayName: 'AlertMessages',
     propTypes: {
-        alerts: _react.default.PropTypes.shape({
-            error: _react.default.PropTypes.Object,
-            success: _react.default.PropTypes.Object
+        alerts: _proptypes.default.shape({
+            error: _proptypes.default.object,
+            success: _proptypes.default.object
         })
     },
     getDefaultProps () {
@@ -8066,6 +7340,11 @@ function _interop_require_default(obj) {
     },
     renderValidationErrors () {
         let errors = this.props.alerts.error.detail;
+        if (!errors) {
+            return /*#__PURE__*/ _react.default.createElement(_index.Alert, {
+                color: "danger"
+            }, (0, _string.upcase)(this.props.alerts.error.error));
+        }
         if (errors.name === 'ValidationError') {
             errors = errors.errors;
         }
@@ -8123,7 +7402,7 @@ function _interop_require_default(obj) {
 });
 const _default = AlertMessages;
 
-},{"../../utils/string.mjs":89,"../elemental/index.mjs":64,"react":undefined}],67:[function(require,module,exports){
+},{"../../utils/string.mjs":89,"../elemental/index.mjs":64,"create-react-class":204,"prop-types":210,"react":undefined}],67:[function(require,module,exports){
 /**
  * The form that's visible when "Create <ItemName>" is clicked on either the
  * List screen or the Item screen
@@ -8138,6 +7417,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _AlertMessages = /*#__PURE__*/ _interop_require_default(require("./AlertMessages.mjs"));
 const _FieldTypes = require("FieldTypes");
 const _InvalidFieldType = /*#__PURE__*/ _interop_require_default(require("./InvalidFieldType.mjs"));
@@ -8147,14 +7428,14 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const CreateForm = _react.default.createClass({
+const CreateForm = (0, _createreactclass.default)({
     displayName: 'CreateForm',
     propTypes: {
-        err: _react.default.PropTypes.object,
-        isOpen: _react.default.PropTypes.bool,
-        list: _react.default.PropTypes.object,
-        onCancel: _react.default.PropTypes.func,
-        onCreate: _react.default.PropTypes.func
+        err: _proptypes.default.object,
+        isOpen: _proptypes.default.bool,
+        list: _proptypes.default.object,
+        onCancel: _proptypes.default.func,
+        onCreate: _proptypes.default.func
     },
     getDefaultProps () {
         return {
@@ -8309,13 +7590,13 @@ const CreateForm = _react.default.createClass({
         return /*#__PURE__*/ _react.default.createElement(_index.Modal.Dialog, {
             isOpen: this.props.isOpen,
             onClose: this.props.onCancel,
-            backdropClosesModal: true
+            backdropClosesModal: false
         }, this.renderForm());
     }
 });
 const _default = CreateForm;
 
-},{"../elemental/index.mjs":64,"./AlertMessages.mjs":66,"./InvalidFieldType.mjs":68,"FieldTypes":"FieldTypes","react":undefined}],68:[function(require,module,exports){
+},{"../elemental/index.mjs":64,"./AlertMessages.mjs":66,"./InvalidFieldType.mjs":68,"FieldTypes":"FieldTypes","create-react-class":204,"prop-types":210,"react":undefined}],68:[function(require,module,exports){
 /**
  * Renders an "Invalid Field Type" error
  */ "use strict";
@@ -8329,6 +7610,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -8340,12 +7622,12 @@ const InvalidFieldType = function(props) {
     }, "Invalid field type ", /*#__PURE__*/ _react.default.createElement("strong", null, props.type), " at path ", /*#__PURE__*/ _react.default.createElement("strong", null, props.path));
 };
 InvalidFieldType.propTypes = {
-    path: _react.default.PropTypes.string,
-    type: _react.default.PropTypes.string
+    path: _proptypes.default.string,
+    type: _proptypes.default.string
 };
 const _default = InvalidFieldType;
 
-},{"react":undefined}],69:[function(require,module,exports){
+},{"prop-types":210,"react":undefined}],69:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8454,6 +7736,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -8524,12 +7808,12 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const PopoutBody = _react.default.createClass({
+const PopoutBody = (0, _createreactclass.default)({
     displayName: 'PopoutBody',
     propTypes: {
-        children: _react.default.PropTypes.node.isRequired,
-        className: _react.default.PropTypes.string,
-        scrollable: _react.default.PropTypes.bool
+        children: _proptypes.default.node.isRequired,
+        className: _proptypes.default.string,
+        scrollable: _proptypes.default.bool
     },
     render () {
         const className = (0, _classnames.default)('Popout__body', {
@@ -8546,7 +7830,7 @@ const PopoutBody = _react.default.createClass({
 });
 const _default = PopoutBody;
 
-},{"classnames":undefined,"react":undefined}],71:[function(require,module,exports){
+},{"classnames":undefined,"create-react-class":204,"prop-types":210,"react":undefined}],71:[function(require,module,exports){
 /**
  * Render a footer for a popout
  */ "use strict";
@@ -8560,21 +7844,23 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
 const BUTTON_BASE_CLASSNAME = 'Popout__footer__button Popout__footer__button--';
-const PopoutFooter = _react.default.createClass({
+const PopoutFooter = (0, _createreactclass.default)({
     displayName: 'PopoutFooter',
     propTypes: {
-        children: _react.default.PropTypes.node,
-        primaryButtonAction: _react.default.PropTypes.func,
-        primaryButtonIsSubmit: _react.default.PropTypes.bool,
-        primaryButtonLabel: _react.default.PropTypes.string,
-        secondaryButtonAction: _react.default.PropTypes.func,
-        secondaryButtonLabel: _react.default.PropTypes.string
+        children: _proptypes.default.node,
+        primaryButtonAction: _proptypes.default.func,
+        primaryButtonIsSubmit: _proptypes.default.bool,
+        primaryButtonLabel: _proptypes.default.string,
+        secondaryButtonAction: _proptypes.default.func,
+        secondaryButtonLabel: _proptypes.default.string
     },
     // Render a primary button
     renderPrimaryButton () {
@@ -8602,7 +7888,7 @@ const PopoutFooter = _react.default.createClass({
 });
 const _default = PopoutFooter;
 
-},{"react":undefined}],72:[function(require,module,exports){
+},{"create-react-class":204,"prop-types":210,"react":undefined}],72:[function(require,module,exports){
 /**
  * Render a header for a popout
  */ "use strict";
@@ -8616,19 +7902,21 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
-const _reactaddonscsstransitiongroup = /*#__PURE__*/ _interop_require_default(require("react-addons-css-transition-group"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
+const _CSSTransitionGroup = /*#__PURE__*/ _interop_require_default(require("react-transition-group/CSSTransitionGroup"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-const PopoutHeader = _react.default.createClass({
+const PopoutHeader = (0, _createreactclass.default)({
     displayName: 'PopoutHeader',
     propTypes: {
-        leftAction: _react.default.PropTypes.func,
-        leftIcon: _react.default.PropTypes.string,
-        title: _react.default.PropTypes.string.isRequired,
-        transitionDirection: _react.default.PropTypes.oneOf([
+        leftAction: _proptypes.default.func,
+        leftIcon: _proptypes.default.string,
+        title: _proptypes.default.string.isRequired,
+        transitionDirection: _proptypes.default.oneOf([
             'next',
             'prev'
         ])
@@ -8648,11 +7936,11 @@ const PopoutHeader = _react.default.createClass({
         }, this.props.title) : null;
         return /*#__PURE__*/ _react.default.createElement("div", {
             className: "Popout__header"
-        }, /*#__PURE__*/ _react.default.createElement(_reactaddonscsstransitiongroup.default, {
+        }, /*#__PURE__*/ _react.default.createElement(_CSSTransitionGroup.default, {
             transitionName: "Popout__header__button",
             transitionEnterTimeout: 200,
             transitionLeaveTimeout: 200
-        }, headerButton), /*#__PURE__*/ _react.default.createElement(_reactaddonscsstransitiongroup.default, {
+        }, headerButton), /*#__PURE__*/ _react.default.createElement(_CSSTransitionGroup.default, {
             transitionName: 'Popout__pane-' + this.props.transitionDirection,
             transitionEnterTimeout: 360,
             transitionLeaveTimeout: 360
@@ -8661,7 +7949,7 @@ const PopoutHeader = _react.default.createClass({
 });
 const _default = PopoutHeader;
 
-},{"react":undefined,"react-addons-css-transition-group":undefined}],73:[function(require,module,exports){
+},{"create-react-class":204,"prop-types":210,"react":undefined,"react-transition-group/CSSTransitionGroup":undefined}],73:[function(require,module,exports){
 /**
  * Render a popout list heading
  */ "use strict";
@@ -8675,6 +7963,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -8745,11 +8035,11 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const PopoutListHeading = _react.default.createClass({
+const PopoutListHeading = (0, _createreactclass.default)({
     displayName: 'PopoutListHeading',
     propTypes: {
-        children: _react.default.PropTypes.node.isRequired,
-        className: _react.default.PropTypes.string
+        children: _proptypes.default.node.isRequired,
+        className: _proptypes.default.string
     },
     render () {
         const className = (0, _classnames.default)('PopoutList__heading', this.props.className);
@@ -8763,7 +8053,7 @@ const PopoutListHeading = _react.default.createClass({
 });
 const _default = PopoutListHeading;
 
-},{"classnames":undefined,"react":undefined}],74:[function(require,module,exports){
+},{"classnames":undefined,"create-react-class":204,"prop-types":210,"react":undefined}],74:[function(require,module,exports){
 /**
  * Render a popout list item
  */ "use strict";
@@ -8777,6 +8067,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -8847,14 +8139,14 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const PopoutListItem = _react.default.createClass({
+const PopoutListItem = (0, _createreactclass.default)({
     displayName: 'PopoutListItem',
     propTypes: {
-        icon: _react.default.PropTypes.string,
-        iconHover: _react.default.PropTypes.string,
-        isSelected: _react.default.PropTypes.bool,
-        label: _react.default.PropTypes.string.isRequired,
-        onClick: _react.default.PropTypes.func
+        icon: _proptypes.default.string,
+        iconHover: _proptypes.default.string,
+        isSelected: _proptypes.default.bool,
+        label: _proptypes.default.string.isRequired,
+        onClick: _proptypes.default.func
     },
     getInitialState () {
         return {
@@ -8906,7 +8198,7 @@ const PopoutListItem = _react.default.createClass({
 });
 const _default = PopoutListItem;
 
-},{"classnames":undefined,"react":undefined}],75:[function(require,module,exports){
+},{"classnames":undefined,"create-react-class":204,"prop-types":210,"react":undefined}],75:[function(require,module,exports){
 /**
  * Render a popout list. Can also use PopoutListItem and PopoutListHeading
  */ "use strict";
@@ -8931,6 +8223,8 @@ _export(exports, {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 const _PopoutListItem = /*#__PURE__*/ _interop_require_default(require("./PopoutListItem.mjs"));
 const _PopoutListHeading = /*#__PURE__*/ _interop_require_default(require("./PopoutListHeading.mjs"));
@@ -9003,11 +8297,11 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const PopoutList = _react.default.createClass({
+const PopoutList = (0, _createreactclass.default)({
     displayName: 'PopoutList',
     propTypes: {
-        children: _react.default.PropTypes.node.isRequired,
-        className: _react.default.PropTypes.string
+        children: _proptypes.default.node.isRequired,
+        className: _proptypes.default.string
     },
     render () {
         const className = (0, _classnames.default)('PopoutList', this.props.className);
@@ -9023,7 +8317,7 @@ PopoutList.Item = _PopoutListItem.default;
 PopoutList.Heading = _PopoutListHeading.default;
 const _default = PopoutList;
 
-},{"./PopoutListHeading.mjs":73,"./PopoutListItem.mjs":74,"classnames":undefined,"react":undefined}],76:[function(require,module,exports){
+},{"./PopoutListHeading.mjs":73,"./PopoutListItem.mjs":74,"classnames":undefined,"create-react-class":204,"prop-types":210,"react":undefined}],76:[function(require,module,exports){
 /**
  * Render a popout pane, calls props.onLayout when the component mounts
  */ "use strict";
@@ -9037,6 +8331,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -9107,12 +8403,12 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const PopoutPane = _react.default.createClass({
+const PopoutPane = (0, _createreactclass.default)({
     displayName: 'PopoutPane',
     propTypes: {
-        children: _react.default.PropTypes.node.isRequired,
-        className: _react.default.PropTypes.string,
-        onLayout: _react.default.PropTypes.func
+        children: _proptypes.default.node.isRequired,
+        className: _proptypes.default.string,
+        onLayout: _proptypes.default.func
     },
     getDefaultProps () {
         return {
@@ -9136,7 +8432,7 @@ const PopoutPane = _react.default.createClass({
 });
 const _default = PopoutPane;
 
-},{"classnames":undefined,"react":undefined}],77:[function(require,module,exports){
+},{"classnames":undefined,"create-react-class":204,"prop-types":210,"react":undefined}],77:[function(require,module,exports){
 /**
  * A Popout component.
  * One can also add a Header (Popout/Header), a Footer
@@ -9169,8 +8465,10 @@ _export(exports, {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _Portal = /*#__PURE__*/ _interop_require_default(require("../Portal.mjs"));
-const _reactaddonscsstransitiongroup = /*#__PURE__*/ _interop_require_default(require("react-addons-css-transition-group"));
+const _CSSTransitionGroup = /*#__PURE__*/ _interop_require_default(require("react-transition-group/CSSTransitionGroup"));
 const _PopoutHeader = /*#__PURE__*/ _interop_require_default(require("./PopoutHeader.mjs"));
 const _PopoutBody = /*#__PURE__*/ _interop_require_default(require("./PopoutBody.mjs"));
 const _PopoutFooter = /*#__PURE__*/ _interop_require_default(require("./PopoutFooter.mjs"));
@@ -9185,14 +8483,14 @@ const SIZES = {
     arrowWidth: 16,
     horizontalMargin: 20
 };
-const Popout = _react.default.createClass({
+const Popout = (0, _createreactclass.default)({
     displayName: 'Popout',
     propTypes: {
-        isOpen: _react.default.PropTypes.bool,
-        onCancel: _react.default.PropTypes.func,
-        onSubmit: _react.default.PropTypes.func,
-        relativeToID: _react.default.PropTypes.string.isRequired,
-        width: _react.default.PropTypes.number
+        isOpen: _proptypes.default.bool,
+        onCancel: _proptypes.default.func,
+        onSubmit: _proptypes.default.func,
+        relativeToID: _proptypes.default.string.isRequired,
+        width: _proptypes.default.number
     },
     getDefaultProps () {
         return {
@@ -9202,7 +8500,7 @@ const Popout = _react.default.createClass({
     getInitialState () {
         return {};
     },
-    componentWillReceiveProps (nextProps) {
+    UNSAFE_componentWillReceiveProps (nextProps) {
         if (!this.props.isOpen && nextProps.isOpen) {
             window.addEventListener('resize', this.calculatePosition);
             this.calculatePosition(nextProps.isOpen);
@@ -9276,7 +8574,7 @@ const Popout = _react.default.createClass({
         return /*#__PURE__*/ _react.default.createElement(_Portal.default, {
             className: "Popout-wrapper",
             ref: "portal"
-        }, /*#__PURE__*/ _react.default.createElement(_reactaddonscsstransitiongroup.default, {
+        }, /*#__PURE__*/ _react.default.createElement(_CSSTransitionGroup.default, {
             transitionEnterTimeout: 200,
             transitionLeaveTimeout: 200,
             transitionName: "Popout"
@@ -9289,7 +8587,7 @@ Popout.Footer = _PopoutFooter.default;
 Popout.Pane = _PopoutPane.default;
 const _default = Popout;
 
-},{"../Portal.mjs":78,"./PopoutBody.mjs":70,"./PopoutFooter.mjs":71,"./PopoutHeader.mjs":72,"./PopoutPane.mjs":76,"react":undefined,"react-addons-css-transition-group":undefined}],78:[function(require,module,exports){
+},{"../Portal.mjs":78,"./PopoutBody.mjs":70,"./PopoutFooter.mjs":71,"./PopoutHeader.mjs":72,"./PopoutPane.mjs":76,"create-react-class":204,"prop-types":210,"react":undefined,"react-transition-group/CSSTransitionGroup":undefined}],78:[function(require,module,exports){
 /**
  * Used by the Popout component and the Lightbox component of the fields for
  * popouts. Renders a non-react DOM node.
@@ -9304,13 +8602,14 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
 const _reactdom = /*#__PURE__*/ _interop_require_default(require("react-dom"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-const _default = _react.default.createClass({
+const _default = (0, _createreactclass.default)({
     displayName: 'Portal',
     portalElement: null,
     componentDidMount () {
@@ -9333,7 +8632,7 @@ const _default = _react.default.createClass({
     }
 });
 
-},{"react":undefined,"react-dom":undefined}],79:[function(require,module,exports){
+},{"create-react-class":204,"react":undefined,"react-dom":undefined}],79:[function(require,module,exports){
 /**
  * Constants
  */ // breakpoints
@@ -10528,6 +9827,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 const _color = require("../../admin/client-legacy/utils/color");
 const _constants = /*#__PURE__*/ _interop_require_default(require("../../admin/client-legacy/constants"));
@@ -10572,13 +9873,13 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const Checkbox = _react.default.createClass({
+const Checkbox = (0, _createreactclass.default)({
     displayName: 'Checkbox',
     propTypes: {
-        checked: _react.default.PropTypes.bool,
-        component: _react.default.PropTypes.node,
-        onChange: _react.default.PropTypes.func,
-        readonly: _react.default.PropTypes.bool
+        checked: _proptypes.default.bool,
+        component: _proptypes.default.node,
+        onChange: _proptypes.default.func,
+        readonly: _proptypes.default.bool
     },
     getDefaultProps () {
         return {
@@ -10719,7 +10020,7 @@ const Checkbox = _react.default.createClass({
 });
 const _default = Checkbox;
 
-},{"../../admin/client-legacy/constants":79,"../../admin/client-legacy/utils/color":85,"classnames":undefined,"react":undefined}],91:[function(require,module,exports){
+},{"../../admin/client-legacy/constants":79,"../../admin/client-legacy/utils/color":85,"classnames":undefined,"create-react-class":204,"prop-types":210,"react":undefined}],91:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -10842,6 +10143,8 @@ Object.defineProperty(exports, "default", {
 const _moment = /*#__PURE__*/ _interop_require_default(require("moment"));
 const _reactdaypicker = /*#__PURE__*/ _interop_require_default(require("react-day-picker"));
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _Popout = /*#__PURE__*/ _interop_require_default(require("../../admin/client-legacy/App/shared/Popout"));
 const _elemental = require("../../admin/client-legacy/App/elemental");
@@ -10851,14 +10154,14 @@ function _interop_require_default(obj) {
     };
 }
 let lastId = 0;
-const _default = _react.default.createClass({
+const _default = (0, _createreactclass.default)({
     displayName: 'DateInput',
     propTypes: {
-        format: _react.default.PropTypes.string,
-        name: _react.default.PropTypes.string,
-        onChange: _react.default.PropTypes.func.isRequired,
-        path: _react.default.PropTypes.string,
-        value: _react.default.PropTypes.string
+        format: _proptypes.default.string,
+        name: _proptypes.default.string,
+        onChange: _proptypes.default.func.isRequired,
+        path: _proptypes.default.string,
+        value: _proptypes.default.string
     },
     getDefaultProps () {
         return {
@@ -10882,7 +10185,7 @@ const _default = _react.default.createClass({
     componentDidMount () {
         this.showCurrentMonth();
     },
-    componentWillReceiveProps: function(newProps) {
+    UNSAFE_componentWillReceiveProps: function(newProps) {
         if (newProps.value === this.props.value) return;
         this.setState({
             month: (0, _moment.default)(newProps.value, this.props.format).toDate(),
@@ -10915,7 +10218,7 @@ const _default = _react.default.createClass({
             }
         }
     },
-    handleDaySelect (e, date, modifiers) {
+    handleDaySelect (date, modifiers) {
         if (modifiers && modifiers.disabled) return;
         const value = (0, _moment.default)(date).format(this.props.format);
         this.props.onChange({
@@ -10988,7 +10291,7 @@ const _default = _react.default.createClass({
     }
 });
 
-},{"../../admin/client-legacy/App/elemental":65,"../../admin/client-legacy/App/shared/Popout":77,"moment":undefined,"react":undefined,"react-day-picker":undefined,"react-dom":undefined}],93:[function(require,module,exports){
+},{"../../admin/client-legacy/App/elemental":65,"../../admin/client-legacy/App/shared/Popout":77,"create-react-class":204,"moment":undefined,"prop-types":210,"react":undefined,"react-day-picker":undefined,"react-dom":undefined}],93:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -10999,7 +10302,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../admin/client-legacy/App/elemental");
 const _color = require("../../admin/client-legacy/utils/color");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../admin/client-legacy/theme"));
@@ -11020,47 +10324,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -11144,7 +10407,7 @@ function _object_without_properties_loose(source, excluded) {
     }, props));
 }
 FileChangeMessage.propTypes = {
-    color: _react.PropTypes.oneOf([
+    color: _proptypes.default.oneOf([
         'danger',
         'default',
         'success'
@@ -11155,7 +10418,7 @@ FileChangeMessage.defaultProps = {
 };
 const _default = FileChangeMessage;
 
-},{"../../admin/client-legacy/App/elemental":65,"../../admin/client-legacy/theme":81,"../../admin/client-legacy/utils/color":85,"react":undefined}],94:[function(require,module,exports){
+},{"../../admin/client-legacy/App/elemental":65,"../../admin/client-legacy/theme":81,"../../admin/client-legacy/utils/color":85,"prop-types":210,"react":undefined}],94:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -11167,6 +10430,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 function _define_property(obj, key, value) {
     if (key in obj) {
         Object.defineProperty(obj, key, {
@@ -11179,6 +10443,11 @@ function _define_property(obj, key, value) {
         obj[key] = value;
     }
     return obj;
+}
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
 }
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
@@ -11371,11 +10640,11 @@ function _object_without_properties_loose(source, excluded) {
     }
 }
 HiddenFileInput.propTypes = {
-    onChange: _react.PropTypes.func.isRequired
+    onChange: _proptypes.default.func.isRequired
 };
 const _default = HiddenFileInput;
 
-},{"react":undefined}],95:[function(require,module,exports){
+},{"prop-types":210,"react":undefined}],95:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -11387,7 +10656,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../admin/client-legacy/App/elemental");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../admin/client-legacy/theme"));
 function _define_property(obj, key, value) {
@@ -11407,47 +10677,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -11569,11 +10798,11 @@ const ICON_MAP = {
     return /*#__PURE__*/ _react.default.createElement(component, props);
 }
 ImageThumbnail.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.string,
-        _react.PropTypes.func
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.string,
+        _proptypes.default.func
     ]),
-    mask: _react.PropTypes.oneOf([
+    mask: _proptypes.default.oneOf([
         'loading',
         'remove',
         'upload'
@@ -11624,7 +10853,7 @@ const classes = {
 };
 const _default = ImageThumbnail;
 
-},{"../../admin/client-legacy/App/elemental":65,"../../admin/client-legacy/theme":81,"glamor":undefined,"react":undefined}],96:[function(require,module,exports){
+},{"../../admin/client-legacy/App/elemental":65,"../../admin/client-legacy/theme":81,"glamor":undefined,"prop-types":210,"react":undefined}],96:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -11637,7 +10866,8 @@ Object.defineProperty(exports, "default"
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../admin/client-legacy/App/elemental");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../admin/client-legacy/theme"));
 function _define_property(obj, key, value) {
@@ -11657,47 +10887,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -11819,11 +11008,11 @@ const ICON_MAP = {
     return /*#__PURE__*/ _react.default.createElement(component, props);
 }
 ImageThumbnail.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.string,
-        _react.PropTypes.func
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.string,
+        _proptypes.default.func
     ]),
-    mask: _react.PropTypes.oneOf([
+    mask: _proptypes.default.oneOf([
         'loading',
         'remove',
         'upload'
@@ -11874,7 +11063,7 @@ const classes = {
 };
 const _default = ImageThumbnail;
 
-},{"../../admin/client-legacy/App/elemental":65,"../../admin/client-legacy/theme":81,"glamor":undefined,"react":undefined}],97:[function(require,module,exports){
+},{"../../admin/client-legacy/App/elemental":65,"../../admin/client-legacy/theme":81,"glamor":undefined,"prop-types":210,"react":undefined}],97:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -11956,54 +11145,14 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 const _reactrouter = require("react-router");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -12091,18 +11240,18 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 ItemsTableValue.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.default.PropTypes.string,
-        _react.default.PropTypes.func
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.string,
+        _proptypes.default.func
     ]),
-    empty: _react.PropTypes.bool,
-    exterior: _react.PropTypes.bool,
-    field: _react.PropTypes.string,
-    href: _react.PropTypes.string,
-    interior: _react.PropTypes.bool,
-    padded: _react.PropTypes.bool,
-    to: _react.PropTypes.string,
-    truncate: _react.PropTypes.bool
+    empty: _proptypes.default.bool,
+    exterior: _proptypes.default.bool,
+    field: _proptypes.default.string,
+    href: _proptypes.default.string,
+    interior: _proptypes.default.bool,
+    padded: _proptypes.default.bool,
+    to: _proptypes.default.string,
+    truncate: _proptypes.default.bool
 };
 ItemsTableValue.defaultProps = {
     component: 'div',
@@ -12110,7 +11259,7 @@ ItemsTableValue.defaultProps = {
 };
 const _default = ItemsTableValue;
 
-},{"classnames":undefined,"react":undefined,"react-router":undefined}],99:[function(require,module,exports){
+},{"classnames":undefined,"prop-types":210,"react":undefined,"react-router":undefined}],99:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -12211,6 +11360,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -12218,11 +11369,11 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const ArrayColumn = _react.default.createClass({
+const ArrayColumn = (0, _createreactclass.default)({
     displayName: 'ArrayColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     renderValue () {
         const value = this.props.data.fields[this.props.col.path];
@@ -12237,7 +11388,7 @@ const ArrayColumn = _react.default.createClass({
 });
 const _default = ArrayColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],101:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],101:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -12249,6 +11400,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -12283,11 +11436,11 @@ const textStyle = {
     marginLeft: 8,
     verticalAlign: 'middle'
 };
-const CloudinaryImageSummary = _react.default.createClass({
+const CloudinaryImageSummary = (0, _createreactclass.default)({
     displayName: 'CloudinaryImageSummary',
     propTypes: {
-        image: _react.default.PropTypes.object.isRequired,
-        label: _react.default.PropTypes.oneOf([
+        image: _proptypes.default.object.isRequired,
+        label: _proptypes.default.oneOf([
             'dimensions',
             'publicId'
         ])
@@ -12325,7 +11478,7 @@ const CloudinaryImageSummary = _react.default.createClass({
 });
 const _default = CloudinaryImageSummary;
 
-},{"react":undefined}],102:[function(require,module,exports){
+},{"create-react-class":204,"prop-types":210,"react":undefined}],102:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -12337,6 +11490,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -12344,12 +11499,12 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const IdColumn = _react.default.createClass({
+const IdColumn = (0, _createreactclass.default)({
     displayName: 'IdColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object,
-        list: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object,
+        list: _proptypes.default.object
     },
     renderValue () {
         const value = this.props.data.id;
@@ -12368,7 +11523,7 @@ const IdColumn = _react.default.createClass({
 });
 const _default = IdColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],103:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],103:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -12380,6 +11535,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -12387,10 +11544,10 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const InvalidColumn = _react.default.createClass({
+const InvalidColumn = (0, _createreactclass.default)({
     displayName: 'InvalidColumn',
     propTypes: {
-        col: _react.default.PropTypes.object
+        col: _proptypes.default.object
     },
     renderValue () {
         return /*#__PURE__*/ _react.default.createElement(_ItemsTableValue.default, {
@@ -12403,7 +11560,7 @@ const InvalidColumn = _react.default.createClass({
 });
 const _default = InvalidColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],104:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],104:[function(require,module,exports){
 /**
  * @file
  * This file defines the `ArrayField` mixin, which is used to create field
@@ -12429,7 +11586,7 @@ Object.defineProperty(exports, /**
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
 const _reactdom = require("react-dom");
-const _elemental = require("elemental");
+const _elemental = require("../../admin/client-legacy/App/elemental");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -12467,7 +11624,7 @@ const _default = {
     /**
      * Handles the component receiving new props.
      * @param {object} nextProps The new props.
-     */ componentWillReceiveProps: function(nextProps) {
+     */ UNSAFE_componentWillReceiveProps: function(nextProps) {
         if (nextProps.value.join('|') !== reduceValues(this.state.values).join('|')) {
             this.setState({
                 values: nextProps.value.map(newItem)
@@ -12592,7 +11749,7 @@ const _default = {
     }
 };
 
-},{"elemental":undefined,"react":undefined,"react-dom":undefined}],105:[function(require,module,exports){
+},{"../../admin/client-legacy/App/elemental":65,"react":undefined,"react-dom":undefined}],105:[function(require,module,exports){
 /**
  * @file
  * This file defines the `Field` component, which is the base class for all
@@ -12630,6 +11787,7 @@ _export(exports, {
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 const _evalDependsOn = /*#__PURE__*/ _interop_require_default(require("../utils/evalDependsOn.mjs"));
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
 const _reactdom = require("react-dom");
 const _elemental = require("../../admin/client-legacy/App/elemental");
 const _CollapsedFieldLabel = /*#__PURE__*/ _interop_require_default(require("../components/CollapsedFieldLabel.mjs"));
@@ -12855,7 +12013,7 @@ const Mixins = {
     Collapse: {
         /**
 		 * Sets the initial collapsed state of the field.
-		 */ componentWillMount () {
+		 */ UNSAFE_componentWillMount () {
             this.setState({
                 isCollapsed: this.shouldCollapse()
             });
@@ -12935,7 +12093,7 @@ function create(spec) {
     if (Array.isArray(spec.mixins)) {
         field.mixins = field.mixins.concat(spec.mixins);
     }
-    return _react.default.createClass(field);
+    return (0, _createreactclass.default)(field);
 }
 const _default = {
     Base,
@@ -12943,7 +12101,7 @@ const _default = {
     create
 };
 
-},{"../../admin/client-legacy/App/elemental":65,"../components/CollapsedFieldLabel.mjs":91,"../utils/evalDependsOn.mjs":198,"classnames":undefined,"react":undefined,"react-dom":undefined}],106:[function(require,module,exports){
+},{"../../admin/client-legacy/App/elemental":65,"../components/CollapsedFieldLabel.mjs":91,"../utils/evalDependsOn.mjs":198,"classnames":undefined,"create-react-class":204,"react":undefined,"react-dom":undefined}],106:[function(require,module,exports){
 /**
  * @file
  * This file defines the `BooleanColumn` component, which is used to render the
@@ -12959,6 +12117,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _Checkbox = /*#__PURE__*/ _interop_require_default(require("../../components/Checkbox.mjs"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
@@ -12970,11 +12130,11 @@ function _interop_require_default(obj) {
 /**
  * The `BooleanColumn` component.
  * @augments React.Component
- */ const BooleanColumn = _react.default.createClass({
+ */ const BooleanColumn = (0, _createreactclass.default)({
     displayName: 'BooleanColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the value of the field.
@@ -12997,7 +12157,7 @@ function _interop_require_default(obj) {
 });
 const _default = BooleanColumn;
 
-},{"../../components/Checkbox.mjs":90,"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],107:[function(require,module,exports){
+},{"../../components/Checkbox.mjs":90,"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],107:[function(require,module,exports){
 /**
  * @file
  * This file defines the `BooleanField` component, which is used to render a
@@ -13018,6 +12178,7 @@ Object.defineProperty(exports, /**
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _Field = /*#__PURE__*/ _interop_require_default(require("../Field.mjs"));
 const _Checkbox = /*#__PURE__*/ _interop_require_default(require("../../components/Checkbox.mjs"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
@@ -13033,11 +12194,11 @@ const _default = _Field.default.create({
         type: 'Boolean'
     },
     propTypes: {
-        indent: _react.default.PropTypes.bool,
-        label: _react.default.PropTypes.string,
-        onChange: _react.default.PropTypes.func.isRequired,
-        path: _react.default.PropTypes.string.isRequired,
-        value: _react.default.PropTypes.bool
+        indent: _proptypes.default.bool,
+        label: _proptypes.default.string,
+        onChange: _proptypes.default.func.isRequired,
+        path: _proptypes.default.string.isRequired,
+        value: _proptypes.default.bool
     },
     /**
 	 * Handles a change in the value of the field.
@@ -13086,7 +12247,7 @@ const _default = _Field.default.create({
     }
 });
 
-},{"../../../admin/client-legacy/App/elemental":65,"../../components/Checkbox.mjs":90,"../Field.mjs":105,"react":undefined}],108:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../../components/Checkbox.mjs":90,"../Field.mjs":105,"prop-types":210,"react":undefined}],108:[function(require,module,exports){
 /**
  * @file
  * This file defines the `BooleanFilter` component, which is used to filter
@@ -13105,6 +12266,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -13132,10 +12295,10 @@ const VALUE_OPTIONS = [
 /**
  * The `BooleanFilter` component.
  * @augments React.Component
- */ const BooleanFilter = _react.default.createClass({
+ */ const BooleanFilter = (0, _createreactclass.default)({
     propTypes: {
-        filter: _react.default.PropTypes.shape({
-            value: _react.default.PropTypes.bool
+        filter: _proptypes.default.shape({
+            value: _proptypes.default.bool
         })
     },
     statics: {
@@ -13169,7 +12332,7 @@ const VALUE_OPTIONS = [
 });
 const _default = BooleanFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"react":undefined}],109:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"create-react-class":204,"prop-types":210,"react":undefined}],109:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -13256,6 +12419,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _CloudinaryImageSummary = /*#__PURE__*/ _interop_require_default(require("../../components/columns/CloudinaryImageSummary.mjs"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
@@ -13267,11 +12432,11 @@ function _interop_require_default(obj) {
 /**
  * The `CloudinaryImageColumn` component.
  * @augments React.Component
- */ const CloudinaryImageColumn = _react.default.createClass({
+ */ const CloudinaryImageColumn = (0, _createreactclass.default)({
     displayName: 'CloudinaryImageColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the value of the field, or nothing if the field has no value.
@@ -13296,7 +12461,7 @@ function _interop_require_default(obj) {
 });
 const _default = CloudinaryImageColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"../../components/columns/CloudinaryImageSummary.mjs":101,"react":undefined}],113:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"../../components/columns/CloudinaryImageSummary.mjs":101,"create-react-class":204,"prop-types":210,"react":undefined}],113:[function(require,module,exports){
 /**
  * @file
  * This file defines the `CloudinaryImageField` component, which is used to
@@ -13317,7 +12482,8 @@ Object.defineProperty(exports, /**
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _Field = /*#__PURE__*/ _interop_require_default(require("../Field.mjs"));
 const _cloudinaryResize = /*#__PURE__*/ _interop_require_default(require("../../../admin/client-legacy/utils/cloudinaryResize"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
@@ -13329,47 +12495,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 const SUPPORTED_TYPES = [
     'image/*',
@@ -13389,20 +12514,20 @@ let uploadInc = 1000;
     });
 const _default = _Field.default.create({
     propTypes: {
-        collapse: _react.PropTypes.bool,
-        label: _react.PropTypes.string,
-        note: _react.PropTypes.string,
-        path: _react.PropTypes.string.isRequired,
-        value: _react.PropTypes.shape({
-            format: _react.PropTypes.string,
-            height: _react.PropTypes.number,
-            public_id: _react.PropTypes.string,
-            resource_type: _react.PropTypes.string,
-            secure_url: _react.PropTypes.string,
-            signature: _react.PropTypes.string,
-            url: _react.PropTypes.string,
-            version: _react.PropTypes.number,
-            width: _react.PropTypes.number
+        collapse: _proptypes.default.bool,
+        label: _proptypes.default.string,
+        note: _proptypes.default.string,
+        path: _proptypes.default.string.isRequired,
+        value: _proptypes.default.shape({
+            format: _proptypes.default.string,
+            height: _proptypes.default.number,
+            public_id: _proptypes.default.string,
+            resource_type: _proptypes.default.string,
+            secure_url: _proptypes.default.string,
+            signature: _proptypes.default.string,
+            url: _proptypes.default.string,
+            version: _proptypes.default.number,
+            width: _proptypes.default.number
         })
     },
     displayName: 'CloudinaryImageField',
@@ -13416,13 +12541,13 @@ const _default = _Field.default.create({
 	 */ getInitialState () {
         return buildInitialState(this.props);
     },
-    componentWillReceiveProps (nextProps) {
+    UNSAFE_componentWillReceiveProps (nextProps) {
     // console.log('CloudinaryImageField nextProps:', nextProps);
     },
     /**
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
-	 */ componentWillUpdate (nextProps) {
+	 */ UNSAFE_componentWillUpdate (nextProps) {
         // Reset the action state when the value changes
         // TODO: We should add a check for a new item ID in the store
         if (this.props.value.public_id !== nextProps.value.public_id) {
@@ -13719,7 +12844,7 @@ const _default = _Field.default.create({
     }
 });
 
-},{"../../../admin/client-legacy/App/elemental":65,"../../../admin/client-legacy/utils/cloudinaryResize":83,"../../components/FileChangeMessage.mjs":93,"../../components/HiddenFileInput.mjs":94,"../../components/ImageThumbnail.mjs":95,"../Field.mjs":105,"react":undefined,"react-images":undefined}],114:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../../../admin/client-legacy/utils/cloudinaryResize":83,"../../components/FileChangeMessage.mjs":93,"../../components/HiddenFileInput.mjs":94,"../../components/ImageThumbnail.mjs":95,"../Field.mjs":105,"prop-types":210,"react":undefined,"react-images":undefined}],114:[function(require,module,exports){
 /**
  * @file
  * This file defines the `CloudinaryImageFilter` component, which is used to
@@ -13737,6 +12862,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -13764,10 +12891,10 @@ const OPTIONS = [
 /**
  * The `CloudinaryImageFilter` component.
  * @augments React.Component
- */ const CloudinaryImageFilter = _react.default.createClass({
+ */ const CloudinaryImageFilter = (0, _createreactclass.default)({
     propTypes: {
-        filter: _react.default.PropTypes.shape({
-            exists: _react.default.PropTypes.oneOf(OPTIONS.map((i)=>i.value))
+        filter: _proptypes.default.shape({
+            exists: _proptypes.default.oneOf(OPTIONS.map((i)=>i.value))
         })
     },
     statics: {
@@ -13802,7 +12929,7 @@ const OPTIONS = [
 });
 const _default = CloudinaryImageFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"react":undefined}],115:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"create-react-class":204,"prop-types":210,"react":undefined}],115:[function(require,module,exports){
 /**
  * @file
  * This file defines the `CloudinaryImagesColumn` component, which is used to
@@ -13818,6 +12945,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _CloudinaryImageSummary = /*#__PURE__*/ _interop_require_default(require("../../components/columns/CloudinaryImageSummary.mjs"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
@@ -13833,11 +12962,11 @@ const moreIndicatorStyle = {
 /**
  * The `CloudinaryImagesColumn` component.
  * @augments React.Component
- */ const CloudinaryImagesColumn = _react.default.createClass({
+ */ const CloudinaryImagesColumn = (0, _createreactclass.default)({
     displayName: 'CloudinaryImagesColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the values of a many-to-many relationship.
@@ -13886,7 +13015,7 @@ const moreIndicatorStyle = {
 });
 const _default = CloudinaryImagesColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"../../components/columns/CloudinaryImageSummary.mjs":101,"react":undefined}],116:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"../../components/columns/CloudinaryImageSummary.mjs":101,"create-react-class":204,"prop-types":210,"react":undefined}],116:[function(require,module,exports){
 /**
  * @file
  * This file defines the `CloudinaryImagesField` component, which is used to
@@ -14040,7 +13169,7 @@ const _default = _Field.default.create({
     /**
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
-	 */ componentWillUpdate (nextProps) {
+	 */ UNSAFE_componentWillUpdate (nextProps) {
         // Reset the thumbnails and upload ID when the item value changes
         // TODO: We should add a check for a new item ID in the store
         const value = _lodash.default.map(this.props.value, 'public_id').join();
@@ -14363,54 +13492,14 @@ Object.defineProperty(exports, "default"
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 const _ImageThumbnail = /*#__PURE__*/ _interop_require_default(require("../../components/ImageThumbnail"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -14511,17 +13600,17 @@ function _object_without_properties_loose(source, excluded) {
     })), actionButton, input);
 }
 CloudinaryImagesThumbnail.propTypes = {
-    imageSourceLarge: _react.PropTypes.string,
-    imageSourceSmall: _react.PropTypes.string.isRequired,
-    isDeleted: _react.PropTypes.bool,
-    isQueued: _react.PropTypes.bool,
-    openLightbox: _react.PropTypes.func.isRequired,
-    shouldRenderActionButton: _react.PropTypes.bool,
-    toggleDelete: _react.PropTypes.func.isRequired
+    imageSourceLarge: _proptypes.default.string,
+    imageSourceSmall: _proptypes.default.string.isRequired,
+    isDeleted: _proptypes.default.bool,
+    isQueued: _proptypes.default.bool,
+    openLightbox: _proptypes.default.func.isRequired,
+    shouldRenderActionButton: _proptypes.default.bool,
+    toggleDelete: _proptypes.default.func.isRequired
 };
 const _default = CloudinaryImagesThumbnail;
 
-},{"../../../admin/client-legacy/App/elemental":65,"../../components/ImageThumbnail":96,"react":undefined}],119:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../../components/ImageThumbnail":96,"prop-types":210,"react":undefined}],119:[function(require,module,exports){
 /**
  * @file
  * This file re-exports the `TextColumn` component, which is used to render
@@ -14622,7 +13711,7 @@ const _default = _Field.default.create({
     /**
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
-	 */ componentWillReceiveProps (nextProps) {
+	 */ UNSAFE_componentWillReceiveProps (nextProps) {
         if (this.codeMirror && this._currentCodemirrorValue !== nextProps.value) {
             this.codeMirror.setValue(nextProps.value);
         }
@@ -14725,6 +13814,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -14735,11 +13826,11 @@ function _interop_require_default(obj) {
 /**
  * The `ColorColumn` component.
  * @augments React.Component
- */ const ColorColumn = _react.default.createClass({
+ */ const ColorColumn = (0, _createreactclass.default)({
     displayName: 'ColorColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the value of the field.
@@ -14781,7 +13872,7 @@ function _interop_require_default(obj) {
 });
 const _default = ColorColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],123:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],123:[function(require,module,exports){
 /**
  * @file
  * This file defines the `ColorField` component, which is used to render a
@@ -14802,6 +13893,7 @@ const _reactcolor = require("react-color");
 const _glamor = require("glamor");
 const _Field = /*#__PURE__*/ _interop_require_default(require("../Field.mjs"));
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 const _transparentswatch = /*#__PURE__*/ _interop_require_default(require("./transparent-swatch.mjs"));
 const _coloredswatch = /*#__PURE__*/ _interop_require_default(require("./colored-swatch.mjs"));
@@ -14820,9 +13912,9 @@ function _interop_require_default(obj) {
         type: 'Color'
     },
     propTypes: {
-        onChange: _react.default.PropTypes.func,
-        path: _react.default.PropTypes.string,
-        value: _react.default.PropTypes.string
+        onChange: _proptypes.default.func,
+        path: _proptypes.default.string,
+        value: _proptypes.default.string
     },
     /**
 	 * Gets the initial state of the component.
@@ -14962,7 +14054,7 @@ function _interop_require_default(obj) {
 };
 const _default = ColorField;
 
-},{"../../../admin/client-legacy/App/elemental":65,"../../../admin/client-legacy/theme":81,"../Field.mjs":105,"./colored-swatch.mjs":125,"./transparent-swatch.mjs":126,"glamor":undefined,"react":undefined,"react-color":undefined}],124:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../../../admin/client-legacy/theme":81,"../Field.mjs":105,"./colored-swatch.mjs":125,"./transparent-swatch.mjs":126,"glamor":undefined,"prop-types":210,"react":undefined,"react-color":undefined}],124:[function(require,module,exports){
 /**
  * @file
  * This file re-exports the `TextFilter` component, which is used to filter
@@ -15042,6 +14134,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _moment = /*#__PURE__*/ _interop_require_default(require("moment"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
@@ -15053,12 +14147,12 @@ function _interop_require_default(obj) {
 /**
  * The `DateColumn` component.
  * @augments React.Component
- */ const DateColumn = _react.default.createClass({
+ */ const DateColumn = (0, _createreactclass.default)({
     displayName: 'DateColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object,
-        linkTo: _react.default.PropTypes.string
+        col: _proptypes.default.object,
+        data: _proptypes.default.object,
+        linkTo: _proptypes.default.string
     },
     /**
 	 * Converts a value to a moment object.
@@ -15095,7 +14189,7 @@ function _interop_require_default(obj) {
 });
 const _default = DateColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"moment":undefined,"react":undefined}],128:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"moment":undefined,"prop-types":210,"react":undefined}],128:[function(require,module,exports){
 /**
  * @file
  * This file defines the `DateField` component, which is used to render a date
@@ -15120,6 +14214,7 @@ const _DateInput = /*#__PURE__*/ _interop_require_default(require("../../compone
 const _Field = /*#__PURE__*/ _interop_require_default(require("../Field.mjs"));
 const _moment = /*#__PURE__*/ _interop_require_default(require("moment"));
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -15136,14 +14231,14 @@ const _default = _Field.default.create({
         type: 'Date'
     },
     propTypes: {
-        formatString: _react.default.PropTypes.string,
-        inputFormat: _react.default.PropTypes.string,
-        label: _react.default.PropTypes.string,
-        note: _react.default.PropTypes.string,
-        onChange: _react.default.PropTypes.func,
-        path: _react.default.PropTypes.string,
-        todayButton: _react.default.PropTypes.bool,
-        value: _react.default.PropTypes.string
+        formatString: _proptypes.default.string,
+        inputFormat: _proptypes.default.string,
+        label: _proptypes.default.string,
+        note: _proptypes.default.string,
+        onChange: _proptypes.default.func,
+        path: _proptypes.default.string,
+        todayButton: _proptypes.default.bool,
+        value: _proptypes.default.string
     },
     /**
 	 * Gets the default props for the component.
@@ -15224,7 +14319,7 @@ const _default = _Field.default.create({
     }
 });
 
-},{"../../../admin/client-legacy/App/elemental":65,"../../components/DateInput.mjs":92,"../Field.mjs":105,"moment":undefined,"react":undefined}],129:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../../components/DateInput.mjs":92,"../Field.mjs":105,"moment":undefined,"prop-types":210,"react":undefined}],129:[function(require,module,exports){
 /**
  * @file
  * This file defines the `DateFilter` component, which is used to filter `Date`
@@ -15241,7 +14336,9 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _moment = /*#__PURE__*/ _interop_require_default(require("moment"));
 const _reactdaypicker = /*#__PURE__*/ _interop_require_default(require("react-day-picker"));
@@ -15263,47 +14360,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -15382,12 +14438,12 @@ const MODE_OPTIONS = [
 /**
  * The `DateFilter` component.
  * @augments React.Component
- */ const DateFilter = _react.default.createClass({
+ */ const DateFilter = (0, _createreactclass.default)({
     displayName: 'DateFilter',
     propTypes: {
-        filter: _react.PropTypes.shape({
-            mode: _react.PropTypes.oneOf(MODE_OPTIONS.map((i)=>i.value)),
-            inverted: _react.PropTypes.boolean
+        filter: _proptypes.default.shape({
+            mode: _proptypes.default.oneOf(MODE_OPTIONS.map((i)=>i.value)),
+            inverted: _proptypes.default.bool
         })
     },
     statics: {
@@ -15488,7 +14544,7 @@ const MODE_OPTIONS = [
 	 * @param {object} e The event object.
 	 * @param {Date} day The day that was clicked.
 	 * @param {object} modifiers The modifiers for the day.
-	 */ switchBetweenActiveInputFields (e, day, modifiers) {
+	 */ switchBetweenActiveInputFields (day, modifiers) {
         if (modifiers && modifiers.disabled) return;
         const { activeInputField } = this.state;
         const send = {};
@@ -15506,7 +14562,7 @@ const MODE_OPTIONS = [
 	 * @param {object} e The event object.
 	 * @param {Date} day The day that was clicked.
 	 * @param {object} modifiers The modifiers for the day.
-	 */ selectDay (e, day, modifiers) {
+	 */ selectDay (day, modifiers) {
         if (modifiers && modifiers.disabled) return;
         this.updateFilter({
             value: day
@@ -15630,7 +14686,7 @@ const MODE_OPTIONS = [
 });
 const _default = DateFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"moment":undefined,"react":undefined,"react-day-picker":undefined,"react-dom":undefined}],130:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"create-react-class":204,"moment":undefined,"prop-types":210,"react":undefined,"react-day-picker":undefined,"react-dom":undefined}],130:[function(require,module,exports){
 /**
  * @file
  * This file re-exports the `ArrayColumn` component, which is used to render
@@ -15677,6 +14733,7 @@ const _ArrayField = /*#__PURE__*/ _interop_require_default(require("../../mixins
 const _DateInput = /*#__PURE__*/ _interop_require_default(require("../../components/DateInput.mjs"));
 const _Field = /*#__PURE__*/ _interop_require_default(require("../Field.mjs"));
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _moment = /*#__PURE__*/ _interop_require_default(require("moment"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -15694,8 +14751,8 @@ const _default = _Field.default.create({
         _ArrayField.default
     ],
     propTypes: {
-        formatString: _react.default.PropTypes.string,
-        inputFormat: _react.default.PropTypes.string
+        formatString: _proptypes.default.string,
+        inputFormat: _proptypes.default.string
     },
     /**
 	 * Gets the default props for the component.
@@ -15734,7 +14791,7 @@ const _default = _Field.default.create({
     }
 });
 
-},{"../../components/DateInput.mjs":92,"../../mixins/ArrayField.mjs":104,"../Field.mjs":105,"moment":undefined,"react":undefined}],132:[function(require,module,exports){
+},{"../../components/DateInput.mjs":92,"../../mixins/ArrayField.mjs":104,"../Field.mjs":105,"moment":undefined,"prop-types":210,"react":undefined}],132:[function(require,module,exports){
 /**
  * @file
  * This file defines the `DateArrayFilter` component, which is used to filter
@@ -15752,6 +14809,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _moment = /*#__PURE__*/ _interop_require_default(require("moment"));
 const _reactdaypicker = /*#__PURE__*/ _interop_require_default(require("react-day-picker"));
@@ -15821,7 +14880,7 @@ const MODE_OPTIONS = [
  * A component that renders an indicator for the active input field in the
  * DayPicker.
  * @returns {React.Element} The rendered component.
- */ const DayPickerIndicator = _react.default.createClass({
+ */ const DayPickerIndicator = (0, _createreactclass.default)({
     render () {
         return /*#__PURE__*/ _react.default.createElement("span", {
             className: "DayPicker-Indicator"
@@ -15848,12 +14907,12 @@ const MODE_OPTIONS = [
 /**
  * The `DateFilter` component.
  * @augments React.Component
- */ const DateFilter = _react.default.createClass({
+ */ const DateFilter = (0, _createreactclass.default)({
     displayName: 'DateFilter',
     propTypes: {
-        filter: _react.default.PropTypes.shape({
-            mode: _react.default.PropTypes.oneOf(MODE_OPTIONS.map((i)=>i.value)),
-            presence: _react.default.PropTypes.string
+        filter: _proptypes.default.shape({
+            mode: _proptypes.default.oneOf(MODE_OPTIONS.map((i)=>i.value)),
+            presence: _proptypes.default.string
         })
     },
     statics: {
@@ -15946,7 +15005,7 @@ const MODE_OPTIONS = [
 	 * @param {object} e The event object.
 	 * @param {Date} day The day that was clicked.
 	 * @param {object} modifiers The modifiers for the day.
-	 */ switchBetweenActiveInputFields (e, day, modifiers) {
+	 */ switchBetweenActiveInputFields (day, modifiers) {
         if (modifiers && modifiers.disabled) return;
         const { activeInputField } = this.state;
         const send = {};
@@ -15964,7 +15023,7 @@ const MODE_OPTIONS = [
 	 * @param {object} e The event object.
 	 * @param {Date} day The day that was clicked.
 	 * @param {object} modifiers The modifiers for the day.
-	 */ selectDay (e, day, modifiers) {
+	 */ selectDay (day, modifiers) {
         if (modifiers && modifiers.disabled) return;
         this.updateFilter({
             value: day
@@ -16070,7 +15129,7 @@ const MODE_OPTIONS = [
 });
 const _default = DateFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"moment":undefined,"react":undefined,"react-day-picker":undefined,"react-dom":undefined}],133:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"create-react-class":204,"moment":undefined,"prop-types":210,"react":undefined,"react-day-picker":undefined,"react-dom":undefined}],133:[function(require,module,exports){
 /**
  * @file
  * This file re-exports the `DateColumn` component, which is used to render
@@ -16327,6 +15386,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -16337,11 +15398,11 @@ function _interop_require_default(obj) {
 /**
  * The `EmailColumn` component.
  * @augments React.Component
- */ const EmailColumn = _react.default.createClass({
+ */ const EmailColumn = (0, _createreactclass.default)({
     displayName: 'EmailColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the value of the field as a mailto link, or nothing if the field has no value.
@@ -16365,7 +15426,7 @@ function _interop_require_default(obj) {
 });
 const _default = EmailColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],137:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],137:[function(require,module,exports){
 /**
  * @file
  * This file defines the `EmailField` component, which is used to render an
@@ -16388,59 +15449,19 @@ Object.defineProperty(exports, /*
     }
 });
 const _Field = /*#__PURE__*/ _interop_require_default(require("../Field.mjs"));
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
-}
 const _default = _Field.default.create({
     displayName: 'EmailField',
     propTypes: {
-        path: _react.PropTypes.string.isRequired,
-        value: _react.PropTypes.string
+        path: _proptypes.default.string.isRequired,
+        value: _proptypes.default.string
     },
     statics: {
         type: 'Email'
@@ -16472,7 +15493,7 @@ const _default = _Field.default.create({
     }
 });
 
-},{"../../../admin/client-legacy/App/elemental":65,"../Field.mjs":105,"react":undefined}],138:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../Field.mjs":105,"prop-types":210,"react":undefined}],138:[function(require,module,exports){
 /**
  * @file
  * This file re-exports the `TextFilter` component, which is used to filter
@@ -16510,6 +15531,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -16520,7 +15542,7 @@ function _interop_require_default(obj) {
 /**
  * The `FileColumn` component.
  * @augments React.Component
- */ const LocalFileColumn = _react.default.createClass({
+ */ const LocalFileColumn = (0, _createreactclass.default)({
     /**
 	 * Returns the filename of the file, or undefined if no file is present.
 	 * @returns {string|undefined} The name of the file, or undefined if not set.
@@ -16547,7 +15569,7 @@ function _interop_require_default(obj) {
 });
 const _default = LocalFileColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],140:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"react":undefined}],140:[function(require,module,exports){
 /**
  * @file
  * This file defines the `FileField` component, which is used to render a file
@@ -16569,7 +15591,8 @@ Object.defineProperty(exports, /**
     }
 });
 const _Field = /*#__PURE__*/ _interop_require_default(require("../Field.mjs"));
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 const _FileChangeMessage = /*#__PURE__*/ _interop_require_default(require("../../components/FileChangeMessage.mjs"));
 const _HiddenFileInput = /*#__PURE__*/ _interop_require_default(require("../../components/HiddenFileInput.mjs"));
@@ -16578,47 +15601,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 let uploadInc = 1000;
 /**
@@ -16633,14 +15615,14 @@ let uploadInc = 1000;
     });
 const _default = _Field.default.create({
     propTypes: {
-        autoCleanup: _react.PropTypes.bool,
-        collapse: _react.PropTypes.bool,
-        label: _react.PropTypes.string,
-        note: _react.PropTypes.string,
-        path: _react.PropTypes.string.isRequired,
-        thumb: _react.PropTypes.bool,
-        value: _react.PropTypes.shape({
-            filename: _react.PropTypes.string
+        autoCleanup: _proptypes.default.bool,
+        collapse: _proptypes.default.bool,
+        label: _proptypes.default.string,
+        note: _proptypes.default.string,
+        path: _proptypes.default.string.isRequired,
+        thumb: _proptypes.default.bool,
+        value: _proptypes.default.shape({
+            filename: _proptypes.default.string
         })
     },
     statics: {
@@ -16662,7 +15644,7 @@ const _default = _Field.default.create({
     /**
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
-	 */ componentWillUpdate (nextProps) {
+	 */ UNSAFE_componentWillUpdate (nextProps) {
         // Show the new filename when it's finished uploading
         if (this.props.value.filename !== nextProps.value.filename) {
             this.setState(buildInitialState(nextProps));
@@ -16879,7 +15861,7 @@ const _default = _Field.default.create({
     }
 });
 
-},{"../../../admin/client-legacy/App/elemental":65,"../../components/FileChangeMessage.mjs":93,"../../components/HiddenFileInput.mjs":94,"../../components/ImageThumbnail.mjs":95,"../Field.mjs":105,"react":undefined}],141:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../../components/FileChangeMessage.mjs":93,"../../components/HiddenFileInput.mjs":94,"../../components/ImageThumbnail.mjs":95,"../Field.mjs":105,"prop-types":210,"react":undefined}],141:[function(require,module,exports){
 /**
  * @file
  * This file re-exports the `CloudinaryImageFilter` component, which is used to
@@ -16917,6 +15899,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -16927,11 +15911,11 @@ function _interop_require_default(obj) {
 /**
  * The `GeoPointColumn` component.
  * @augments React.Component
- */ const GeoPointColumn = _react.default.createClass({
+ */ const GeoPointColumn = (0, _createreactclass.default)({
     displayName: 'GeoPointColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the value of the field.
@@ -16955,7 +15939,7 @@ function _interop_require_default(obj) {
 });
 const _default = GeoPointColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],143:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],143:[function(require,module,exports){
 /**
  * @file
  * This file defines the `GeoPointField` component, which is used to render
@@ -17073,6 +16057,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -17133,14 +16119,14 @@ const DISTANCE_OPTIONS = [
 /**
  * The `GeoPointFilter` component.
  * @augments React.Component
- */ const TextFilter = _react.default.createClass({
+ */ const TextFilter = (0, _createreactclass.default)({
     propTypes: {
-        filter: _react.default.PropTypes.shape({
-            lat: _react.default.PropTypes.number,
-            lon: _react.default.PropTypes.number,
-            distance: _react.default.PropTypes.shape({
-                mode: _react.default.PropTypes.string,
-                value: _react.default.PropTypes.number
+        filter: _proptypes.default.shape({
+            lat: _proptypes.default.number,
+            lon: _proptypes.default.number,
+            distance: _proptypes.default.shape({
+                mode: _proptypes.default.string,
+                value: _proptypes.default.number
             })
         })
     },
@@ -17243,7 +16229,7 @@ const DISTANCE_OPTIONS = [
 });
 const _default = TextFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"react":undefined}],145:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"create-react-class":204,"prop-types":210,"react":undefined}],145:[function(require,module,exports){
 /**
  * @file
  * This file re-exports the `TextColumn` component, which is used to render
@@ -17393,7 +16379,7 @@ const _default = _Field.default.create({
     /**
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
-	 */ componentWillReceiveProps (nextProps) {
+	 */ UNSAFE_componentWillReceiveProps (nextProps) {
         if (this.editor && this._currentValue !== nextProps.value) {
             this.editor.setContent(nextProps.value);
         }
@@ -17686,12 +16672,13 @@ Object.defineProperty(exports, "default"
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-const LocalFilesColumn = _react.default.createClass({
+const LocalFilesColumn = (0, _createreactclass.default)({
     renderValue: function() {
         const value = this.props.data.fields[this.props.col.path];
         if (value.length === 0) return '';
@@ -17709,7 +16696,7 @@ const LocalFilesColumn = _react.default.createClass({
 });
 const _default = LocalFilesColumn;
 
-},{"react":undefined}],155:[function(require,module,exports){
+},{"create-react-class":204,"react":undefined}],155:[function(require,module,exports){
 /**
  * @file This field type is deprecated and will be removed in a future version.
  * @see https://github.com/keystonejs/keystone/wiki/File-Fields-Upgrade-Guide
@@ -17731,6 +16718,8 @@ const _lodash = /*#__PURE__*/ _interop_require_default(require("lodash"));
 const _bytes = /*#__PURE__*/ _interop_require_default(require("bytes"));
 const _Field = /*#__PURE__*/ _interop_require_default(require("../Field.mjs"));
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -17828,13 +16817,13 @@ const ICON_EXTS = [
     'yml',
     'zip'
 ];
-const LocalFilesFieldItem = _react.default.createClass({
+const LocalFilesFieldItem = (0, _createreactclass.default)({
     propTypes: {
-        deleted: _react.default.PropTypes.bool,
-        filename: _react.default.PropTypes.string,
-        isQueued: _react.default.PropTypes.bool,
-        size: _react.default.PropTypes.number,
-        toggleDelete: _react.default.PropTypes.func
+        deleted: _proptypes.default.bool,
+        filename: _proptypes.default.string,
+        isQueued: _proptypes.default.bool,
+        size: _proptypes.default.number,
+        toggleDelete: _proptypes.default.func
     },
     renderActionButton () {
         if (!this.props.shouldRenderActionButton || this.props.isQueued) return null;
@@ -18028,7 +17017,7 @@ const _default = _Field.default.create({
     }
 });
 
-},{"../../../admin/client-legacy/App/elemental":65,"../Field.mjs":105,"bytes":201,"lodash":undefined,"react":undefined}],156:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../Field.mjs":105,"bytes":201,"create-react-class":204,"lodash":undefined,"prop-types":210,"react":undefined}],156:[function(require,module,exports){
 /**
  * @file This field type is deprecated and will be removed in a future version.
  * @see https://github.com/keystonejs/keystone/wiki/File-Fields-Upgrade-Guide
@@ -18066,6 +17055,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -18083,11 +17074,11 @@ const SUB_FIELDS = [
 /**
  * The `LocationColumn` component.
  * @augments React.Component
- */ const LocationColumn = _react.default.createClass({
+ */ const LocationColumn = (0, _createreactclass.default)({
     displayName: 'LocationColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the value of the field.
@@ -18115,7 +17106,7 @@ const SUB_FIELDS = [
 });
 const _default = LocationColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],158:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],158:[function(require,module,exports){
 /**
  * @file
  * This file defines the `LocationField` component, which is used to render a
@@ -18220,7 +17211,7 @@ const _default = _Field.default.create({
     },
     /**
 	 * Sets the initial collapsed state of the fields.
-	 */ componentWillMount () {
+	 */ UNSAFE_componentWillMount () {
         const { value = [] } = this.props;
         const collapsedFields = {};
         _lodash.default.forEach([
@@ -18524,6 +17515,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _interop_require_default(obj) {
@@ -18557,15 +17550,15 @@ const INVERTED_OPTIONS = [
 /**
  * The `LocationFilter` component.
  * @augments React.Component
- */ const TextFilter = _react.default.createClass({
+ */ const TextFilter = (0, _createreactclass.default)({
     propTypes: {
-        filter: _react.default.PropTypes.shape({
-            inverted: _react.default.PropTypes.boolean,
-            street: _react.default.PropTypes.string,
-            city: _react.default.PropTypes.string,
-            state: _react.default.PropTypes.string,
-            code: _react.default.PropTypes.string,
-            country: _react.default.PropTypes.string
+        filter: _proptypes.default.shape({
+            inverted: _proptypes.default.bool,
+            street: _proptypes.default.string,
+            city: _proptypes.default.string,
+            state: _proptypes.default.string,
+            code: _proptypes.default.string,
+            country: _proptypes.default.string
         })
     },
     statics: {
@@ -18663,7 +17656,7 @@ const INVERTED_OPTIONS = [
 });
 const _default = TextFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"react":undefined,"react-dom":undefined}],160:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"create-react-class":204,"prop-types":210,"react":undefined,"react-dom":undefined}],160:[function(require,module,exports){
 /**
  * @file
  * This file defines the `MarkdownColumn` component, which is used to render the
@@ -18679,6 +17672,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -18689,11 +17684,11 @@ function _interop_require_default(obj) {
 /**
  * The `MarkdownColumn` component.
  * @augments React.Component
- */ const MarkdownColumn = _react.default.createClass({
+ */ const MarkdownColumn = (0, _createreactclass.default)({
     displayName: 'MarkdownColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the value of the field.
@@ -18713,7 +17708,7 @@ function _interop_require_default(obj) {
 });
 const _default = MarkdownColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],161:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],161:[function(require,module,exports){
 (function (global){(function (){
 /**
  * @file
@@ -20053,61 +19048,21 @@ Object.defineProperty(exports, /**
 });
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 const _Field = /*#__PURE__*/ _interop_require_default(require("../Field.mjs"));
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
-}
 const _default = _Field.default.create({
     displayName: 'MoneyField',
     propTypes: {
-        onChange: _react.PropTypes.func.isRequired,
-        path: _react.PropTypes.string.isRequired,
-        value: _react.PropTypes.oneOfType([
-            _react.PropTypes.string,
-            _react.PropTypes.number
+        onChange: _proptypes.default.func.isRequired,
+        path: _proptypes.default.string.isRequired,
+        value: _proptypes.default.oneOfType([
+            _proptypes.default.string,
+            _proptypes.default.number
         ])
     },
     statics: {
@@ -20138,7 +19093,7 @@ const _default = _Field.default.create({
     }
 });
 
-},{"../../../admin/client-legacy/App/elemental":65,"../Field.mjs":105,"react":undefined}],166:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../Field.mjs":105,"prop-types":210,"react":undefined}],166:[function(require,module,exports){
 /**
  * @file
  * This file re-exports the `NumberFilter` component, which is used to filter
@@ -20176,6 +19131,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 const _displayName = /*#__PURE__*/ _interop_require_default(require("../../../lib/utils/displayName.mjs"));
@@ -20187,12 +19144,12 @@ function _interop_require_default(obj) {
 /**
  * The `NameColumn` component.
  * @augments React.Component
- */ const NameColumn = _react.default.createClass({
+ */ const NameColumn = (0, _createreactclass.default)({
     displayName: 'NameColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object,
-        linkTo: _react.default.PropTypes.string
+        col: _proptypes.default.object,
+        data: _proptypes.default.object,
+        linkTo: _proptypes.default.string
     },
     /**
 	 * Renders the value of the field.
@@ -20219,7 +19176,7 @@ function _interop_require_default(obj) {
 });
 const _default = NameColumn;
 
-},{"../../../lib/utils/displayName.mjs":200,"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],168:[function(require,module,exports){
+},{"../../../lib/utils/displayName.mjs":200,"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],168:[function(require,module,exports){
 /**
  * @file
  * This file defines the `NameField` component, which is used to render a name
@@ -20240,7 +19197,8 @@ Object.defineProperty(exports, /**
     }
 });
 const _Field = /*#__PURE__*/ _interop_require_default(require("../Field.mjs"));
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -20259,47 +19217,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -20341,8 +19258,8 @@ function _object_spread_props(target, source) {
     return target;
 }
 const NAME_SHAPE = {
-    first: _react.PropTypes.string,
-    last: _react.PropTypes.string
+    first: _proptypes.default.string,
+    last: _proptypes.default.string
 };
 const _default = _Field.default.create({
     displayName: 'NameField',
@@ -20354,10 +19271,10 @@ const _default = _Field.default.create({
             })
     },
     propTypes: {
-        onChange: _react.PropTypes.func.isRequired,
-        path: _react.PropTypes.string.isRequired,
-        paths: _react.PropTypes.shape(NAME_SHAPE).isRequired,
-        value: _react.PropTypes.shape(NAME_SHAPE).isRequired
+        onChange: _proptypes.default.func.isRequired,
+        path: _proptypes.default.string.isRequired,
+        paths: _proptypes.default.shape(NAME_SHAPE).isRequired,
+        value: _proptypes.default.shape(NAME_SHAPE).isRequired
     },
     /**
 	 * Handles a change in the value of one of the name fields.
@@ -20430,7 +19347,7 @@ const _default = _Field.default.create({
     }
 });
 
-},{"../../../admin/client-legacy/App/elemental":65,"../Field.mjs":105,"react":undefined}],169:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../Field.mjs":105,"prop-types":210,"react":undefined}],169:[function(require,module,exports){
 /**
  * @file
  * This file re-exports the `TextFilter` component, which is used to filter
@@ -20468,6 +19385,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _numeral = /*#__PURE__*/ _interop_require_default(require("numeral"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
@@ -20479,11 +19398,11 @@ function _interop_require_default(obj) {
 /**
  * The `NumberColumn` component.
  * @augments React.Component
- */ const NumberColumn = _react.default.createClass({
+ */ const NumberColumn = (0, _createreactclass.default)({
     displayName: 'NumberColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the value of the field.
@@ -20505,7 +19424,7 @@ function _interop_require_default(obj) {
 });
 const _default = NumberColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"numeral":undefined,"react":undefined}],171:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"numeral":undefined,"prop-types":210,"react":undefined}],171:[function(require,module,exports){
 /**
  * @file
  * This file defines the `NumberField` component, which is used to render a
@@ -20581,6 +19500,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
 const _reactdom = require("react-dom");
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _define_property(obj, key, value) {
@@ -20646,7 +19566,7 @@ const MODE_OPTIONS = [
 /**
  * The `NumberFilter` component.
  * @augments React.Component
- */ const NumberFilter = _react.default.createClass({
+ */ const NumberFilter = (0, _createreactclass.default)({
     statics: {
         getDefaultValue: getDefaultValue
     },
@@ -20762,7 +19682,7 @@ const MODE_OPTIONS = [
 });
 const _default = NumberFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"react":undefined,"react-dom":undefined}],173:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"create-react-class":204,"react":undefined,"react-dom":undefined}],173:[function(require,module,exports){
 /**
  * @file
  * This file re-exports the `ArrayColumn` component, which is used to render
@@ -20849,6 +19769,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _define_property(obj, key, value) {
@@ -20925,17 +19847,17 @@ const PRESENCE_OPTIONS = [
 /**
  * The `NumberArrayFilter` component.
  * @augments React.Component
- */ const NumberArrayFilter = _react.default.createClass({
+ */ const NumberArrayFilter = (0, _createreactclass.default)({
     propTypes: {
-        filter: _react.default.PropTypes.shape({
-            mode: _react.default.PropTypes.oneOf(MODE_OPTIONS.map((i)=>i.value)),
-            presence: _react.default.PropTypes.oneOf(PRESENCE_OPTIONS.map((i)=>i.value)),
-            value: _react.default.PropTypes.oneOfType([
-                _react.default.PropTypes.number,
-                _react.default.PropTypes.string,
-                _react.default.PropTypes.shape({
-                    min: _react.default.PropTypes.number,
-                    max: _react.default.PropTypes.number
+        filter: _proptypes.default.shape({
+            mode: _proptypes.default.oneOf(MODE_OPTIONS.map((i)=>i.value)),
+            presence: _proptypes.default.oneOf(PRESENCE_OPTIONS.map((i)=>i.value)),
+            value: _proptypes.default.oneOfType([
+                _proptypes.default.number,
+                _proptypes.default.string,
+                _proptypes.default.shape({
+                    min: _proptypes.default.number,
+                    max: _proptypes.default.number
                 })
             ])
         })
@@ -21066,7 +19988,7 @@ const PRESENCE_OPTIONS = [
 });
 const _default = NumberArrayFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"react":undefined,"react-dom":undefined}],176:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"create-react-class":204,"prop-types":210,"react":undefined,"react-dom":undefined}],176:[function(require,module,exports){
 /**
  * @file
  * This file defines the `PasswordColumn` component, which is used to render
@@ -21084,6 +20006,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -21094,11 +20018,11 @@ function _interop_require_default(obj) {
 /**
  * The `PasswordColumn` component.
  * @augments React.Component
- */ const PasswordColumn = _react.default.createClass({
+ */ const PasswordColumn = (0, _createreactclass.default)({
     displayName: 'PasswordColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the value of the field.
@@ -21118,7 +20042,7 @@ function _interop_require_default(obj) {
 });
 const _default = PasswordColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],177:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],177:[function(require,module,exports){
 /**
  * @file
  * This file defines the `PasswordField` component, which is used to render a
@@ -21260,6 +20184,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -21287,10 +20213,10 @@ const EXISTS_OPTIONS = [
 /**
  * The `PasswordFilter` component.
  * @augments React.Component
- */ const PasswordFilter = _react.default.createClass({
+ */ const PasswordFilter = (0, _createreactclass.default)({
     propTypes: {
-        filter: _react.default.PropTypes.shape({
-            exists: _react.default.PropTypes.oneOf(EXISTS_OPTIONS.map((i)=>i.value))
+        filter: _proptypes.default.shape({
+            exists: _proptypes.default.oneOf(EXISTS_OPTIONS.map((i)=>i.value))
         })
     },
     statics: {
@@ -21325,7 +20251,7 @@ const EXISTS_OPTIONS = [
 });
 const _default = PasswordFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"react":undefined}],179:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"create-react-class":204,"prop-types":210,"react":undefined}],179:[function(require,module,exports){
 /**
  * @file
  * This file defines the `RelationshipColumn` component, which is used to render
@@ -21341,6 +20267,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -21357,11 +20285,11 @@ const moreIndicatorStyle = {
 /**
  * The `RelationshipColumn` component.
  * @augments React.Component
- */ const RelationshipColumn = _react.default.createClass({
+ */ const RelationshipColumn = (0, _createreactclass.default)({
     displayName: 'RelationshipColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the values of a many-to-many relationship.
@@ -21420,7 +20348,7 @@ const moreIndicatorStyle = {
 });
 const _default = RelationshipColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],180:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],180:[function(require,module,exports){
 /**
  * @file
  * This file defines the `RelationshipField` component, which is used to render
@@ -21500,7 +20428,7 @@ const _default = _Field.default.create({
     /**
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
-	 */ componentWillReceiveProps (nextProps) {
+	 */ UNSAFE_componentWillReceiveProps (nextProps) {
         if (nextProps.value === this.props.value || nextProps.many && compareValues(this.props.value, nextProps.value)) return;
         this.loadValue(nextProps.value);
     },
@@ -21758,6 +20686,8 @@ Object.defineProperty(exports, "default", {
 });
 const _lodash = /*#__PURE__*/ _interop_require_default(require("lodash"));
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _xhr = /*#__PURE__*/ _interop_require_default(require("xhr"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
@@ -21820,14 +20750,14 @@ function getAdminApiPath() {
 /**
  * The `RelationshipFilter` component.
  * @augments React.Component
- */ const RelationshipFilter = _react.default.createClass({
+ */ const RelationshipFilter = (0, _createreactclass.default)({
     propTypes: {
-        field: _react.default.PropTypes.object,
-        filter: _react.default.PropTypes.shape({
-            inverted: _react.default.PropTypes.bool,
-            value: _react.default.PropTypes.array
+        field: _proptypes.default.object,
+        filter: _proptypes.default.shape({
+            inverted: _proptypes.default.bool,
+            value: _proptypes.default.array
         }),
-        onHeightChange: _react.default.PropTypes.func
+        onHeightChange: _proptypes.default.func
     },
     statics: {
         getDefaultValue: getDefaultValue
@@ -21856,7 +20786,7 @@ function getAdminApiPath() {
     /**
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
-	 */ componentWillReceiveProps (nextProps) {
+	 */ UNSAFE_componentWillReceiveProps (nextProps) {
         if (nextProps.filter.value !== this.props.filter.value) {
             this.populateValue(nextProps.filter.value);
         }
@@ -22051,7 +20981,7 @@ function getAdminApiPath() {
 });
 const _default = RelationshipFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"../../../admin/client-legacy/App/shared/Popout/PopoutList":75,"lodash":undefined,"react":undefined,"react-dom":undefined,"xhr":undefined}],182:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../../../admin/client-legacy/App/shared/Popout/PopoutList":75,"create-react-class":204,"lodash":undefined,"prop-types":210,"react":undefined,"react-dom":undefined,"xhr":undefined}],182:[function(require,module,exports){
 /**
  * @file
  * This file defines the `SelectColumn` component, which is used to render the
@@ -22067,6 +20997,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -22077,12 +21009,12 @@ function _interop_require_default(obj) {
 /**
  * The `SelectColumn` component.
  * @augments React.Component
- */ const SelectColumn = _react.default.createClass({
+ */ const SelectColumn = (0, _createreactclass.default)({
     displayName: 'SelectColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object,
-        linkTo: _react.default.PropTypes.string
+        col: _proptypes.default.object,
+        data: _proptypes.default.object,
+        linkTo: _proptypes.default.string
     },
     /**
 	 * Renders the value of the field.
@@ -22107,7 +21039,7 @@ function _interop_require_default(obj) {
 });
 const _default = SelectColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],183:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],183:[function(require,module,exports){
 /**
  * @file
  * This file defines the `SelectField` component, which is used to render a
@@ -22217,6 +21149,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 const _PopoutList = /*#__PURE__*/ _interop_require_default(require("../../../admin/client-legacy/App/shared/Popout/PopoutList"));
 const _Kbd = /*#__PURE__*/ _interop_require_default(require("../../../admin/client-legacy/App/shared/Kbd"));
@@ -22526,10 +21459,10 @@ const INVERTED_OPTIONS = [
     }
 }
 SelectFilter.propTypes = {
-    field: _react.PropTypes.object,
-    filter: _react.PropTypes.shape({
-        inverted: _react.PropTypes.boolean,
-        value: _react.PropTypes.array
+    field: _proptypes.default.object,
+    filter: _proptypes.default.shape({
+        inverted: _proptypes.default.bool,
+        value: _proptypes.default.array
     })
 };
 SelectFilter.getDefaultValue = getDefaultValue;
@@ -22538,7 +21471,7 @@ SelectFilter.defaultProps = {
 };
 const _default = SelectFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"../../../admin/client-legacy/App/shared/Kbd":69,"../../../admin/client-legacy/App/shared/Popout/PopoutList":75,"../../utils/bindFunctions.mjs":197,"react":undefined}],185:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"../../../admin/client-legacy/App/shared/Kbd":69,"../../../admin/client-legacy/App/shared/Popout/PopoutList":75,"../../utils/bindFunctions.mjs":197,"prop-types":210,"react":undefined}],185:[function(require,module,exports){
 /**
  * @file
  * This file defines the `TextColumn` component, which is used to render the
@@ -22554,6 +21487,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -22564,12 +21499,12 @@ function _interop_require_default(obj) {
 /**
  * The `TextColumn` component.
  * @augments React.Component
- */ const TextColumn = _react.default.createClass({
+ */ const TextColumn = (0, _createreactclass.default)({
     displayName: 'TextColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object,
-        linkTo: _react.default.PropTypes.string
+        col: _proptypes.default.object,
+        data: _proptypes.default.object,
+        linkTo: _proptypes.default.string
     },
     /**
 	 * Renders the value of the field.
@@ -22601,7 +21536,7 @@ function _interop_require_default(obj) {
 });
 const _default = TextColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],186:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],186:[function(require,module,exports){
 /**
  * @file
  * This file defines the `TextField` component, which is used to render a text
@@ -22651,6 +21586,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _define_property(obj, key, value) {
@@ -22727,12 +21664,12 @@ const MODE_OPTIONS = [
 /**
  * The `TextFilter` component.
  * @augments React.Component
- */ const TextFilter = _react.default.createClass({
+ */ const TextFilter = (0, _createreactclass.default)({
     propTypes: {
-        filter: _react.default.PropTypes.shape({
-            mode: _react.default.PropTypes.oneOf(MODE_OPTIONS.map((i)=>i.value)),
-            inverted: _react.default.PropTypes.boolean,
-            value: _react.default.PropTypes.string
+        filter: _proptypes.default.shape({
+            mode: _proptypes.default.oneOf(MODE_OPTIONS.map((i)=>i.value)),
+            inverted: _proptypes.default.bool,
+            value: _proptypes.default.string
         })
     },
     statics: {
@@ -22804,7 +21741,7 @@ const MODE_OPTIONS = [
 });
 const _default = TextFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"react":undefined,"react-dom":undefined}],188:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"create-react-class":204,"prop-types":210,"react":undefined,"react-dom":undefined}],188:[function(require,module,exports){
 /**
  * @file
  * This file re-exports the `TextColumn` component, which is used to render
@@ -23022,6 +21959,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _elemental = require("../../../admin/client-legacy/App/elemental");
 function _define_property(obj, key, value) {
@@ -23098,12 +22037,12 @@ const PRESENCE_OPTIONS = [
 /**
  * The `TextArrayFilter` component.
  * @augments React.Component
- */ const TextArrayFilter = _react.default.createClass({
+ */ const TextArrayFilter = (0, _createreactclass.default)({
     propTypes: {
-        filter: _react.default.PropTypes.shape({
-            mode: _react.default.PropTypes.oneOf(MODE_OPTIONS.map((i)=>i.value)),
-            presence: _react.default.PropTypes.oneOf(PRESENCE_OPTIONS.map((i)=>i.value)),
-            value: _react.default.PropTypes.string
+        filter: _proptypes.default.shape({
+            mode: _proptypes.default.oneOf(MODE_OPTIONS.map((i)=>i.value)),
+            presence: _proptypes.default.oneOf(PRESENCE_OPTIONS.map((i)=>i.value)),
+            value: _proptypes.default.string
         })
     },
     statics: {
@@ -23177,7 +22116,7 @@ const PRESENCE_OPTIONS = [
 });
 const _default = TextArrayFilter;
 
-},{"../../../admin/client-legacy/App/elemental":65,"react":undefined,"react-dom":undefined}],194:[function(require,module,exports){
+},{"../../../admin/client-legacy/App/elemental":65,"create-react-class":204,"prop-types":210,"react":undefined,"react-dom":undefined}],194:[function(require,module,exports){
 /**
  * @file
  * This file defines the `UrlColumn` component, which is used to render the
@@ -23193,6 +22132,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableCell = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableCell.mjs"));
 const _ItemsTableValue = /*#__PURE__*/ _interop_require_default(require("../../components/ItemsTableValue.mjs"));
 function _interop_require_default(obj) {
@@ -23203,11 +22144,11 @@ function _interop_require_default(obj) {
 /**
  * The `UrlColumn` component.
  * @augments React.Component
- */ const UrlColumn = _react.default.createClass({
+ */ const UrlColumn = (0, _createreactclass.default)({
     displayName: 'UrlColumn',
     propTypes: {
-        col: _react.default.PropTypes.object,
-        data: _react.default.PropTypes.object
+        col: _proptypes.default.object,
+        data: _proptypes.default.object
     },
     /**
 	 * Renders the value of the field, or nothing if the field has no value.
@@ -23238,7 +22179,7 @@ function _interop_require_default(obj) {
 });
 const _default = UrlColumn;
 
-},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"react":undefined}],195:[function(require,module,exports){
+},{"../../components/ItemsTableCell.mjs":97,"../../components/ItemsTableValue.mjs":98,"create-react-class":204,"prop-types":210,"react":undefined}],195:[function(require,module,exports){
 /**
  * @file
  * This file defines the `UrlField` component, which is used to render a URL
@@ -23615,7 +22556,2354 @@ function parse(val) {
 var e={fetch_format:"f",crop:"c",effect:"e",flags:"fl",gravity:"g",height:"h",radius:"r",quality:"q",width:"w",dpr:"dpr"};module.exports=function(o,r){if(void 0===r&&(r={}),!r.cloud_name)throw Error("options.cloud_name required");var t=r.secure?"https":"http",i=r.source||"upload",n=Object.keys(r).map(function(o){var t=e[o];if(t)return t+"_"+r[o]}).filter(Boolean).join(","),a=r.version&&"v"+r.version;return[t+"://res.cloudinary.com",encodeURIComponent(r.cloud_name),"image",i,n,a,o].filter(Boolean).join("/")};
 
 
-},{}],"FieldTypes":[function(require,module,exports){
+},{}],203:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+'use strict';
+
+var _assign = require('object-assign');
+
+// -- Inlined from fbjs --
+
+var emptyObject = {};
+
+if ("production" !== 'production') {
+  Object.freeze(emptyObject);
+}
+
+var validateFormat = function validateFormat(format) {};
+
+if ("production" !== 'production') {
+  validateFormat = function validateFormat(format) {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  };
+}
+
+function _invariant(condition, format, a, b, c, d, e, f) {
+  validateFormat(format);
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(format.replace(/%s/g, function () {
+        return args[argIndex++];
+      }));
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+}
+
+var warning = function(){};
+
+if ("production" !== 'production') {
+  var printWarning = function printWarning(format) {
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    var argIndex = 0;
+    var message = 'Warning: ' + format.replace(/%s/g, function () {
+      return args[argIndex++];
+    });
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+
+  warning = function warning(condition, format) {
+    if (format === undefined) {
+      throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+    }
+
+    if (format.indexOf('Failed Composite propType: ') === 0) {
+      return; // Ignore CompositeComponent proptype check.
+    }
+
+    if (!condition) {
+      for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+        args[_key2 - 2] = arguments[_key2];
+      }
+
+      printWarning.apply(undefined, [format].concat(args));
+    }
+  };
+}
+
+// /-- Inlined from fbjs --
+
+var MIXINS_KEY = 'mixins';
+
+// Helper function to allow the creation of anonymous functions which do not
+// have .name set to the name of the variable being assigned to.
+function identity(fn) {
+  return fn;
+}
+
+var ReactPropTypeLocationNames;
+if ("production" !== 'production') {
+  ReactPropTypeLocationNames = {
+    prop: 'prop',
+    context: 'context',
+    childContext: 'child context'
+  };
+} else {
+  ReactPropTypeLocationNames = {};
+}
+
+function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
+  /**
+   * Policies that describe methods in `ReactClassInterface`.
+   */
+
+  var injectedMixins = [];
+
+  /**
+   * Composite components are higher-level components that compose other composite
+   * or host components.
+   *
+   * To create a new type of `ReactClass`, pass a specification of
+   * your new class to `React.createClass`. The only requirement of your class
+   * specification is that you implement a `render` method.
+   *
+   *   var MyComponent = React.createClass({
+   *     render: function() {
+   *       return <div>Hello World</div>;
+   *     }
+   *   });
+   *
+   * The class specification supports a specific protocol of methods that have
+   * special meaning (e.g. `render`). See `ReactClassInterface` for
+   * more the comprehensive protocol. Any other properties and methods in the
+   * class specification will be available on the prototype.
+   *
+   * @interface ReactClassInterface
+   * @internal
+   */
+  var ReactClassInterface = {
+    /**
+     * An array of Mixin objects to include when defining your component.
+     *
+     * @type {array}
+     * @optional
+     */
+    mixins: 'DEFINE_MANY',
+
+    /**
+     * An object containing properties and methods that should be defined on
+     * the component's constructor instead of its prototype (static methods).
+     *
+     * @type {object}
+     * @optional
+     */
+    statics: 'DEFINE_MANY',
+
+    /**
+     * Definition of prop types for this component.
+     *
+     * @type {object}
+     * @optional
+     */
+    propTypes: 'DEFINE_MANY',
+
+    /**
+     * Definition of context types for this component.
+     *
+     * @type {object}
+     * @optional
+     */
+    contextTypes: 'DEFINE_MANY',
+
+    /**
+     * Definition of context types this component sets for its children.
+     *
+     * @type {object}
+     * @optional
+     */
+    childContextTypes: 'DEFINE_MANY',
+
+    // ==== Definition methods ====
+
+    /**
+     * Invoked when the component is mounted. Values in the mapping will be set on
+     * `this.props` if that prop is not specified (i.e. using an `in` check).
+     *
+     * This method is invoked before `getInitialState` and therefore cannot rely
+     * on `this.state` or use `this.setState`.
+     *
+     * @return {object}
+     * @optional
+     */
+    getDefaultProps: 'DEFINE_MANY_MERGED',
+
+    /**
+     * Invoked once before the component is mounted. The return value will be used
+     * as the initial value of `this.state`.
+     *
+     *   getInitialState: function() {
+     *     return {
+     *       isOn: false,
+     *       fooBaz: new BazFoo()
+     *     }
+     *   }
+     *
+     * @return {object}
+     * @optional
+     */
+    getInitialState: 'DEFINE_MANY_MERGED',
+
+    /**
+     * @return {object}
+     * @optional
+     */
+    getChildContext: 'DEFINE_MANY_MERGED',
+
+    /**
+     * Uses props from `this.props` and state from `this.state` to render the
+     * structure of the component.
+     *
+     * No guarantees are made about when or how often this method is invoked, so
+     * it must not have side effects.
+     *
+     *   render: function() {
+     *     var name = this.props.name;
+     *     return <div>Hello, {name}!</div>;
+     *   }
+     *
+     * @return {ReactComponent}
+     * @required
+     */
+    render: 'DEFINE_ONCE',
+
+    // ==== Delegate methods ====
+
+    /**
+     * Invoked when the component is initially created and about to be mounted.
+     * This may have side effects, but any external subscriptions or data created
+     * by this method must be cleaned up in `componentWillUnmount`.
+     *
+     * @optional
+     */
+    componentWillMount: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component has been mounted and has a DOM representation.
+     * However, there is no guarantee that the DOM node is in the document.
+     *
+     * Use this as an opportunity to operate on the DOM when the component has
+     * been mounted (initialized and rendered) for the first time.
+     *
+     * @param {DOMElement} rootNode DOM element representing the component.
+     * @optional
+     */
+    componentDidMount: 'DEFINE_MANY',
+
+    /**
+     * Invoked before the component receives new props.
+     *
+     * Use this as an opportunity to react to a prop transition by updating the
+     * state using `this.setState`. Current props are accessed via `this.props`.
+     *
+     *   componentWillReceiveProps: function(nextProps, nextContext) {
+     *     this.setState({
+     *       likesIncreasing: nextProps.likeCount > this.props.likeCount
+     *     });
+     *   }
+     *
+     * NOTE: There is no equivalent `componentWillReceiveState`. An incoming prop
+     * transition may cause a state change, but the opposite is not true. If you
+     * need it, you are probably looking for `componentWillUpdate`.
+     *
+     * @param {object} nextProps
+     * @optional
+     */
+    componentWillReceiveProps: 'DEFINE_MANY',
+
+    /**
+     * Invoked while deciding if the component should be updated as a result of
+     * receiving new props, state and/or context.
+     *
+     * Use this as an opportunity to `return false` when you're certain that the
+     * transition to the new props/state/context will not require a component
+     * update.
+     *
+     *   shouldComponentUpdate: function(nextProps, nextState, nextContext) {
+     *     return !equal(nextProps, this.props) ||
+     *       !equal(nextState, this.state) ||
+     *       !equal(nextContext, this.context);
+     *   }
+     *
+     * @param {object} nextProps
+     * @param {?object} nextState
+     * @param {?object} nextContext
+     * @return {boolean} True if the component should update.
+     * @optional
+     */
+    shouldComponentUpdate: 'DEFINE_ONCE',
+
+    /**
+     * Invoked when the component is about to update due to a transition from
+     * `this.props`, `this.state` and `this.context` to `nextProps`, `nextState`
+     * and `nextContext`.
+     *
+     * Use this as an opportunity to perform preparation before an update occurs.
+     *
+     * NOTE: You **cannot** use `this.setState()` in this method.
+     *
+     * @param {object} nextProps
+     * @param {?object} nextState
+     * @param {?object} nextContext
+     * @param {ReactReconcileTransaction} transaction
+     * @optional
+     */
+    componentWillUpdate: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component's DOM representation has been updated.
+     *
+     * Use this as an opportunity to operate on the DOM when the component has
+     * been updated.
+     *
+     * @param {object} prevProps
+     * @param {?object} prevState
+     * @param {?object} prevContext
+     * @param {DOMElement} rootNode DOM element representing the component.
+     * @optional
+     */
+    componentDidUpdate: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component is about to be removed from its parent and have
+     * its DOM representation destroyed.
+     *
+     * Use this as an opportunity to deallocate any external resources.
+     *
+     * NOTE: There is no `componentDidUnmount` since your component will have been
+     * destroyed by that point.
+     *
+     * @optional
+     */
+    componentWillUnmount: 'DEFINE_MANY',
+
+    /**
+     * Replacement for (deprecated) `componentWillMount`.
+     *
+     * @optional
+     */
+    UNSAFE_componentWillMount: 'DEFINE_MANY',
+
+    /**
+     * Replacement for (deprecated) `componentWillReceiveProps`.
+     *
+     * @optional
+     */
+    UNSAFE_componentWillReceiveProps: 'DEFINE_MANY',
+
+    /**
+     * Replacement for (deprecated) `componentWillUpdate`.
+     *
+     * @optional
+     */
+    UNSAFE_componentWillUpdate: 'DEFINE_MANY',
+
+    // ==== Advanced methods ====
+
+    /**
+     * Updates the component's currently mounted DOM representation.
+     *
+     * By default, this implements React's rendering and reconciliation algorithm.
+     * Sophisticated clients may wish to override this.
+     *
+     * @param {ReactReconcileTransaction} transaction
+     * @internal
+     * @overridable
+     */
+    updateComponent: 'OVERRIDE_BASE'
+  };
+
+  /**
+   * Similar to ReactClassInterface but for static methods.
+   */
+  var ReactClassStaticInterface = {
+    /**
+     * This method is invoked after a component is instantiated and when it
+     * receives new props. Return an object to update state in response to
+     * prop changes. Return null to indicate no change to state.
+     *
+     * If an object is returned, its keys will be merged into the existing state.
+     *
+     * @return {object || null}
+     * @optional
+     */
+    getDerivedStateFromProps: 'DEFINE_MANY_MERGED'
+  };
+
+  /**
+   * Mapping from class specification keys to special processing functions.
+   *
+   * Although these are declared like instance properties in the specification
+   * when defining classes using `React.createClass`, they are actually static
+   * and are accessible on the constructor instead of the prototype. Despite
+   * being static, they must be defined outside of the "statics" key under
+   * which all other static methods are defined.
+   */
+  var RESERVED_SPEC_KEYS = {
+    displayName: function(Constructor, displayName) {
+      Constructor.displayName = displayName;
+    },
+    mixins: function(Constructor, mixins) {
+      if (mixins) {
+        for (var i = 0; i < mixins.length; i++) {
+          mixSpecIntoComponent(Constructor, mixins[i]);
+        }
+      }
+    },
+    childContextTypes: function(Constructor, childContextTypes) {
+      if ("production" !== 'production') {
+        validateTypeDef(Constructor, childContextTypes, 'childContext');
+      }
+      Constructor.childContextTypes = _assign(
+        {},
+        Constructor.childContextTypes,
+        childContextTypes
+      );
+    },
+    contextTypes: function(Constructor, contextTypes) {
+      if ("production" !== 'production') {
+        validateTypeDef(Constructor, contextTypes, 'context');
+      }
+      Constructor.contextTypes = _assign(
+        {},
+        Constructor.contextTypes,
+        contextTypes
+      );
+    },
+    /**
+     * Special case getDefaultProps which should move into statics but requires
+     * automatic merging.
+     */
+    getDefaultProps: function(Constructor, getDefaultProps) {
+      if (Constructor.getDefaultProps) {
+        Constructor.getDefaultProps = createMergedResultFunction(
+          Constructor.getDefaultProps,
+          getDefaultProps
+        );
+      } else {
+        Constructor.getDefaultProps = getDefaultProps;
+      }
+    },
+    propTypes: function(Constructor, propTypes) {
+      if ("production" !== 'production') {
+        validateTypeDef(Constructor, propTypes, 'prop');
+      }
+      Constructor.propTypes = _assign({}, Constructor.propTypes, propTypes);
+    },
+    statics: function(Constructor, statics) {
+      mixStaticSpecIntoComponent(Constructor, statics);
+    },
+    autobind: function() {}
+  };
+
+  function validateTypeDef(Constructor, typeDef, location) {
+    for (var propName in typeDef) {
+      if (typeDef.hasOwnProperty(propName)) {
+        // use a warning instead of an _invariant so components
+        // don't show up in prod but only in __DEV__
+        if ("production" !== 'production') {
+          warning(
+            typeof typeDef[propName] === 'function',
+            '%s: %s type `%s` is invalid; it must be a function, usually from ' +
+              'React.PropTypes.',
+            Constructor.displayName || 'ReactClass',
+            ReactPropTypeLocationNames[location],
+            propName
+          );
+        }
+      }
+    }
+  }
+
+  function validateMethodOverride(isAlreadyDefined, name) {
+    var specPolicy = ReactClassInterface.hasOwnProperty(name)
+      ? ReactClassInterface[name]
+      : null;
+
+    // Disallow overriding of base class methods unless explicitly allowed.
+    if (ReactClassMixin.hasOwnProperty(name)) {
+      _invariant(
+        specPolicy === 'OVERRIDE_BASE',
+        'ReactClassInterface: You are attempting to override ' +
+          '`%s` from your class specification. Ensure that your method names ' +
+          'do not overlap with React methods.',
+        name
+      );
+    }
+
+    // Disallow defining methods more than once unless explicitly allowed.
+    if (isAlreadyDefined) {
+      _invariant(
+        specPolicy === 'DEFINE_MANY' || specPolicy === 'DEFINE_MANY_MERGED',
+        'ReactClassInterface: You are attempting to define ' +
+          '`%s` on your component more than once. This conflict may be due ' +
+          'to a mixin.',
+        name
+      );
+    }
+  }
+
+  /**
+   * Mixin helper which handles policy validation and reserved
+   * specification keys when building React classes.
+   */
+  function mixSpecIntoComponent(Constructor, spec) {
+    if (!spec) {
+      if ("production" !== 'production') {
+        var typeofSpec = typeof spec;
+        var isMixinValid = typeofSpec === 'object' && spec !== null;
+
+        if ("production" !== 'production') {
+          warning(
+            isMixinValid,
+            "%s: You're attempting to include a mixin that is either null " +
+              'or not an object. Check the mixins included by the component, ' +
+              'as well as any mixins they include themselves. ' +
+              'Expected object but got %s.',
+            Constructor.displayName || 'ReactClass',
+            spec === null ? null : typeofSpec
+          );
+        }
+      }
+
+      return;
+    }
+
+    _invariant(
+      typeof spec !== 'function',
+      "ReactClass: You're attempting to " +
+        'use a component class or function as a mixin. Instead, just use a ' +
+        'regular object.'
+    );
+    _invariant(
+      !isValidElement(spec),
+      "ReactClass: You're attempting to " +
+        'use a component as a mixin. Instead, just use a regular object.'
+    );
+
+    var proto = Constructor.prototype;
+    var autoBindPairs = proto.__reactAutoBindPairs;
+
+    // By handling mixins before any other properties, we ensure the same
+    // chaining order is applied to methods with DEFINE_MANY policy, whether
+    // mixins are listed before or after these methods in the spec.
+    if (spec.hasOwnProperty(MIXINS_KEY)) {
+      RESERVED_SPEC_KEYS.mixins(Constructor, spec.mixins);
+    }
+
+    for (var name in spec) {
+      if (!spec.hasOwnProperty(name)) {
+        continue;
+      }
+
+      if (name === MIXINS_KEY) {
+        // We have already handled mixins in a special case above.
+        continue;
+      }
+
+      var property = spec[name];
+      var isAlreadyDefined = proto.hasOwnProperty(name);
+      validateMethodOverride(isAlreadyDefined, name);
+
+      if (RESERVED_SPEC_KEYS.hasOwnProperty(name)) {
+        RESERVED_SPEC_KEYS[name](Constructor, property);
+      } else {
+        // Setup methods on prototype:
+        // The following member methods should not be automatically bound:
+        // 1. Expected ReactClass methods (in the "interface").
+        // 2. Overridden methods (that were mixed in).
+        var isReactClassMethod = ReactClassInterface.hasOwnProperty(name);
+        var isFunction = typeof property === 'function';
+        var shouldAutoBind =
+          isFunction &&
+          !isReactClassMethod &&
+          !isAlreadyDefined &&
+          spec.autobind !== false;
+
+        if (shouldAutoBind) {
+          autoBindPairs.push(name, property);
+          proto[name] = property;
+        } else {
+          if (isAlreadyDefined) {
+            var specPolicy = ReactClassInterface[name];
+
+            // These cases should already be caught by validateMethodOverride.
+            _invariant(
+              isReactClassMethod &&
+                (specPolicy === 'DEFINE_MANY_MERGED' ||
+                  specPolicy === 'DEFINE_MANY'),
+              'ReactClass: Unexpected spec policy %s for key %s ' +
+                'when mixing in component specs.',
+              specPolicy,
+              name
+            );
+
+            // For methods which are defined more than once, call the existing
+            // methods before calling the new property, merging if appropriate.
+            if (specPolicy === 'DEFINE_MANY_MERGED') {
+              proto[name] = createMergedResultFunction(proto[name], property);
+            } else if (specPolicy === 'DEFINE_MANY') {
+              proto[name] = createChainedFunction(proto[name], property);
+            }
+          } else {
+            proto[name] = property;
+            if ("production" !== 'production') {
+              // Add verbose displayName to the function, which helps when looking
+              // at profiling tools.
+              if (typeof property === 'function' && spec.displayName) {
+                proto[name].displayName = spec.displayName + '_' + name;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function mixStaticSpecIntoComponent(Constructor, statics) {
+    if (!statics) {
+      return;
+    }
+
+    for (var name in statics) {
+      var property = statics[name];
+      if (!statics.hasOwnProperty(name)) {
+        continue;
+      }
+
+      var isReserved = name in RESERVED_SPEC_KEYS;
+      _invariant(
+        !isReserved,
+        'ReactClass: You are attempting to define a reserved ' +
+          'property, `%s`, that shouldn\'t be on the "statics" key. Define it ' +
+          'as an instance property instead; it will still be accessible on the ' +
+          'constructor.',
+        name
+      );
+
+      var isAlreadyDefined = name in Constructor;
+      if (isAlreadyDefined) {
+        var specPolicy = ReactClassStaticInterface.hasOwnProperty(name)
+          ? ReactClassStaticInterface[name]
+          : null;
+
+        _invariant(
+          specPolicy === 'DEFINE_MANY_MERGED',
+          'ReactClass: You are attempting to define ' +
+            '`%s` on your component more than once. This conflict may be ' +
+            'due to a mixin.',
+          name
+        );
+
+        Constructor[name] = createMergedResultFunction(Constructor[name], property);
+
+        return;
+      }
+
+      Constructor[name] = property;
+    }
+  }
+
+  /**
+   * Merge two objects, but throw if both contain the same key.
+   *
+   * @param {object} one The first object, which is mutated.
+   * @param {object} two The second object
+   * @return {object} one after it has been mutated to contain everything in two.
+   */
+  function mergeIntoWithNoDuplicateKeys(one, two) {
+    _invariant(
+      one && two && typeof one === 'object' && typeof two === 'object',
+      'mergeIntoWithNoDuplicateKeys(): Cannot merge non-objects.'
+    );
+
+    for (var key in two) {
+      if (two.hasOwnProperty(key)) {
+        _invariant(
+          one[key] === undefined,
+          'mergeIntoWithNoDuplicateKeys(): ' +
+            'Tried to merge two objects with the same key: `%s`. This conflict ' +
+            'may be due to a mixin; in particular, this may be caused by two ' +
+            'getInitialState() or getDefaultProps() methods returning objects ' +
+            'with clashing keys.',
+          key
+        );
+        one[key] = two[key];
+      }
+    }
+    return one;
+  }
+
+  /**
+   * Creates a function that invokes two functions and merges their return values.
+   *
+   * @param {function} one Function to invoke first.
+   * @param {function} two Function to invoke second.
+   * @return {function} Function that invokes the two argument functions.
+   * @private
+   */
+  function createMergedResultFunction(one, two) {
+    return function mergedResult() {
+      var a = one.apply(this, arguments);
+      var b = two.apply(this, arguments);
+      if (a == null) {
+        return b;
+      } else if (b == null) {
+        return a;
+      }
+      var c = {};
+      mergeIntoWithNoDuplicateKeys(c, a);
+      mergeIntoWithNoDuplicateKeys(c, b);
+      return c;
+    };
+  }
+
+  /**
+   * Creates a function that invokes two functions and ignores their return vales.
+   *
+   * @param {function} one Function to invoke first.
+   * @param {function} two Function to invoke second.
+   * @return {function} Function that invokes the two argument functions.
+   * @private
+   */
+  function createChainedFunction(one, two) {
+    return function chainedFunction() {
+      one.apply(this, arguments);
+      two.apply(this, arguments);
+    };
+  }
+
+  /**
+   * Binds a method to the component.
+   *
+   * @param {object} component Component whose method is going to be bound.
+   * @param {function} method Method to be bound.
+   * @return {function} The bound method.
+   */
+  function bindAutoBindMethod(component, method) {
+    var boundMethod = method.bind(component);
+    if ("production" !== 'production') {
+      boundMethod.__reactBoundContext = component;
+      boundMethod.__reactBoundMethod = method;
+      boundMethod.__reactBoundArguments = null;
+      var componentName = component.constructor.displayName;
+      var _bind = boundMethod.bind;
+      boundMethod.bind = function(newThis) {
+        for (
+          var _len = arguments.length,
+            args = Array(_len > 1 ? _len - 1 : 0),
+            _key = 1;
+          _key < _len;
+          _key++
+        ) {
+          args[_key - 1] = arguments[_key];
+        }
+
+        // User is trying to bind() an autobound method; we effectively will
+        // ignore the value of "this" that the user is trying to use, so
+        // let's warn.
+        if (newThis !== component && newThis !== null) {
+          if ("production" !== 'production') {
+            warning(
+              false,
+              'bind(): React component methods may only be bound to the ' +
+                'component instance. See %s',
+              componentName
+            );
+          }
+        } else if (!args.length) {
+          if ("production" !== 'production') {
+            warning(
+              false,
+              'bind(): You are binding a component method to the component. ' +
+                'React does this for you automatically in a high-performance ' +
+                'way, so you can safely remove this call. See %s',
+              componentName
+            );
+          }
+          return boundMethod;
+        }
+        var reboundMethod = _bind.apply(boundMethod, arguments);
+        reboundMethod.__reactBoundContext = component;
+        reboundMethod.__reactBoundMethod = method;
+        reboundMethod.__reactBoundArguments = args;
+        return reboundMethod;
+      };
+    }
+    return boundMethod;
+  }
+
+  /**
+   * Binds all auto-bound methods in a component.
+   *
+   * @param {object} component Component whose method is going to be bound.
+   */
+  function bindAutoBindMethods(component) {
+    var pairs = component.__reactAutoBindPairs;
+    for (var i = 0; i < pairs.length; i += 2) {
+      var autoBindKey = pairs[i];
+      var method = pairs[i + 1];
+      component[autoBindKey] = bindAutoBindMethod(component, method);
+    }
+  }
+
+  var IsMountedPreMixin = {
+    componentDidMount: function() {
+      this.__isMounted = true;
+    }
+  };
+
+  var IsMountedPostMixin = {
+    componentWillUnmount: function() {
+      this.__isMounted = false;
+    }
+  };
+
+  /**
+   * Add more to the ReactClass base class. These are all legacy features and
+   * therefore not already part of the modern ReactComponent.
+   */
+  var ReactClassMixin = {
+    /**
+     * TODO: This will be deprecated because state should always keep a consistent
+     * type signature and the only use case for this, is to avoid that.
+     */
+    replaceState: function(newState, callback) {
+      this.updater.enqueueReplaceState(this, newState, callback);
+    },
+
+    /**
+     * Checks whether or not this composite component is mounted.
+     * @return {boolean} True if mounted, false otherwise.
+     * @protected
+     * @final
+     */
+    isMounted: function() {
+      if ("production" !== 'production') {
+        warning(
+          this.__didWarnIsMounted,
+          '%s: isMounted is deprecated. Instead, make sure to clean up ' +
+            'subscriptions and pending requests in componentWillUnmount to ' +
+            'prevent memory leaks.',
+          (this.constructor && this.constructor.displayName) ||
+            this.name ||
+            'Component'
+        );
+        this.__didWarnIsMounted = true;
+      }
+      return !!this.__isMounted;
+    }
+  };
+
+  var ReactClassComponent = function() {};
+  _assign(
+    ReactClassComponent.prototype,
+    ReactComponent.prototype,
+    ReactClassMixin
+  );
+
+  /**
+   * Creates a composite component class given a class specification.
+   * See https://facebook.github.io/react/docs/top-level-api.html#react.createclass
+   *
+   * @param {object} spec Class specification (which must define `render`).
+   * @return {function} Component constructor function.
+   * @public
+   */
+  function createClass(spec) {
+    // To keep our warnings more understandable, we'll use a little hack here to
+    // ensure that Constructor.name !== 'Constructor'. This makes sure we don't
+    // unnecessarily identify a class without displayName as 'Constructor'.
+    var Constructor = identity(function(props, context, updater) {
+      // This constructor gets overridden by mocks. The argument is used
+      // by mocks to assert on what gets mounted.
+
+      if ("production" !== 'production') {
+        warning(
+          this instanceof Constructor,
+          'Something is calling a React component directly. Use a factory or ' +
+            'JSX instead. See: https://fb.me/react-legacyfactory'
+        );
+      }
+
+      // Wire up auto-binding
+      if (this.__reactAutoBindPairs.length) {
+        bindAutoBindMethods(this);
+      }
+
+      this.props = props;
+      this.context = context;
+      this.refs = emptyObject;
+      this.updater = updater || ReactNoopUpdateQueue;
+
+      this.state = null;
+
+      // ReactClasses doesn't have constructors. Instead, they use the
+      // getInitialState and componentWillMount methods for initialization.
+
+      var initialState = this.getInitialState ? this.getInitialState() : null;
+      if ("production" !== 'production') {
+        // We allow auto-mocks to proceed as if they're returning null.
+        if (
+          initialState === undefined &&
+          this.getInitialState._isMockFunction
+        ) {
+          // This is probably bad practice. Consider warning here and
+          // deprecating this convenience.
+          initialState = null;
+        }
+      }
+      _invariant(
+        typeof initialState === 'object' && !Array.isArray(initialState),
+        '%s.getInitialState(): must return an object or null',
+        Constructor.displayName || 'ReactCompositeComponent'
+      );
+
+      this.state = initialState;
+    });
+    Constructor.prototype = new ReactClassComponent();
+    Constructor.prototype.constructor = Constructor;
+    Constructor.prototype.__reactAutoBindPairs = [];
+
+    injectedMixins.forEach(mixSpecIntoComponent.bind(null, Constructor));
+
+    mixSpecIntoComponent(Constructor, IsMountedPreMixin);
+    mixSpecIntoComponent(Constructor, spec);
+    mixSpecIntoComponent(Constructor, IsMountedPostMixin);
+
+    // Initialize the defaultProps property after all mixins have been merged.
+    if (Constructor.getDefaultProps) {
+      Constructor.defaultProps = Constructor.getDefaultProps();
+    }
+
+    if ("production" !== 'production') {
+      // This is a tag to indicate that the use of these method names is ok,
+      // since it's used with createClass. If it's not, then it's likely a
+      // mistake so we'll warn you to use the static property, property
+      // initializer or constructor respectively.
+      if (Constructor.getDefaultProps) {
+        Constructor.getDefaultProps.isReactClassApproved = {};
+      }
+      if (Constructor.prototype.getInitialState) {
+        Constructor.prototype.getInitialState.isReactClassApproved = {};
+      }
+    }
+
+    _invariant(
+      Constructor.prototype.render,
+      'createClass(...): Class specification must implement a `render` method.'
+    );
+
+    if ("production" !== 'production') {
+      warning(
+        !Constructor.prototype.componentShouldUpdate,
+        '%s has a method called ' +
+          'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' +
+          'The name is phrased as a question because the function is ' +
+          'expected to return a value.',
+        spec.displayName || 'A component'
+      );
+      warning(
+        !Constructor.prototype.componentWillRecieveProps,
+        '%s has a method called ' +
+          'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?',
+        spec.displayName || 'A component'
+      );
+      warning(
+        !Constructor.prototype.UNSAFE_componentWillRecieveProps,
+        '%s has a method called UNSAFE_componentWillRecieveProps(). ' +
+          'Did you mean UNSAFE_componentWillReceiveProps()?',
+        spec.displayName || 'A component'
+      );
+    }
+
+    // Reduce time spent doing lookups by setting these on the prototype.
+    for (var methodName in ReactClassInterface) {
+      if (!Constructor.prototype[methodName]) {
+        Constructor.prototype[methodName] = null;
+      }
+    }
+
+    return Constructor;
+  }
+
+  return createClass;
+}
+
+module.exports = factory;
+
+},{"object-assign":205}],204:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+'use strict';
+
+var React = require('react');
+var factory = require('./factory');
+
+if (typeof React === 'undefined') {
+  throw Error(
+    'create-react-class could not find the React object. If you are using script tags, ' +
+      'make sure that React is being loaded before create-react-class.'
+  );
+}
+
+// Hack to grab NoopUpdateQueue from isomorphic React
+var ReactNoopUpdateQueue = new React.Component().updater;
+
+module.exports = factory(
+  React.Component,
+  React.isValidElement,
+  ReactNoopUpdateQueue
+);
+
+},{"./factory":203,"react":undefined}],205:[function(require,module,exports){
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+'use strict';
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+},{}],206:[function(require,module,exports){
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],207:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';
+
+var printWarning = function() {};
+
+if ("production" !== 'production') {
+  var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
+  var loggedTypeFailures = {};
+  var has = require('./lib/has');
+
+  printWarning = function(text) {
+    var message = 'Warning: ' + text;
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) { /**/ }
+  };
+}
+
+/**
+ * Assert that the values match with the type specs.
+ * Error messages are memorized and will only be shown once.
+ *
+ * @param {object} typeSpecs Map of name to a ReactPropType
+ * @param {object} values Runtime values that need to be type-checked
+ * @param {string} location e.g. "prop", "context", "child context"
+ * @param {string} componentName Name of the component for error messages.
+ * @param {?Function} getStack Returns the component stack.
+ * @private
+ */
+function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+  if ("production" !== 'production') {
+    for (var typeSpecName in typeSpecs) {
+      if (has(typeSpecs, typeSpecName)) {
+        var error;
+        // Prop type validation may throw. In case they do, we don't want to
+        // fail the render phase where it didn't fail before. So we log it.
+        // After these have been cleaned up, we'll let them throw.
+        try {
+          // This is intentionally an invariant that gets caught. It's the same
+          // behavior as without this statement except with a better message.
+          if (typeof typeSpecs[typeSpecName] !== 'function') {
+            var err = Error(
+              (componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' +
+              'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.' +
+              'This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.'
+            );
+            err.name = 'Invariant Violation';
+            throw err;
+          }
+          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+        } catch (ex) {
+          error = ex;
+        }
+        if (error && !(error instanceof Error)) {
+          printWarning(
+            (componentName || 'React class') + ': type specification of ' +
+            location + ' `' + typeSpecName + '` is invalid; the type checker ' +
+            'function must return `null` or an `Error` but returned a ' + typeof error + '. ' +
+            'You may have forgotten to pass an argument to the type checker ' +
+            'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
+            'shape all require an argument).'
+          );
+        }
+        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+          // Only monitor this failure once because there tends to be a lot of the
+          // same error.
+          loggedTypeFailures[error.message] = true;
+
+          var stack = getStack ? getStack() : '';
+
+          printWarning(
+            'Failed ' + location + ' type: ' + error.message + (stack != null ? stack : '')
+          );
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Resets warning cache when testing.
+ *
+ * @private
+ */
+checkPropTypes.resetWarningCache = function() {
+  if ("production" !== 'production') {
+    loggedTypeFailures = {};
+  }
+}
+
+module.exports = checkPropTypes;
+
+},{"./lib/ReactPropTypesSecret":211,"./lib/has":212}],208:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';
+
+var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
+
+function emptyFunction() {}
+function emptyFunctionWithReset() {}
+emptyFunctionWithReset.resetWarningCache = emptyFunction;
+
+module.exports = function() {
+  function shim(props, propName, componentName, location, propFullName, secret) {
+    if (secret === ReactPropTypesSecret) {
+      // It is still safe when called from React.
+      return;
+    }
+    var err = new Error(
+      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+      'Use PropTypes.checkPropTypes() to call them. ' +
+      'Read more at http://fb.me/use-check-prop-types'
+    );
+    err.name = 'Invariant Violation';
+    throw err;
+  };
+  shim.isRequired = shim;
+  function getShim() {
+    return shim;
+  };
+  // Important!
+  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+  var ReactPropTypes = {
+    array: shim,
+    bigint: shim,
+    bool: shim,
+    func: shim,
+    number: shim,
+    object: shim,
+    string: shim,
+    symbol: shim,
+
+    any: shim,
+    arrayOf: getShim,
+    element: shim,
+    elementType: shim,
+    instanceOf: getShim,
+    node: shim,
+    objectOf: getShim,
+    oneOf: getShim,
+    oneOfType: getShim,
+    shape: getShim,
+    exact: getShim,
+
+    checkPropTypes: emptyFunctionWithReset,
+    resetWarningCache: emptyFunction
+  };
+
+  ReactPropTypes.PropTypes = ReactPropTypes;
+
+  return ReactPropTypes;
+};
+
+},{"./lib/ReactPropTypesSecret":211}],209:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';
+
+var ReactIs = require('react-is');
+var assign = require('object-assign');
+
+var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
+var has = require('./lib/has');
+var checkPropTypes = require('./checkPropTypes');
+
+var printWarning = function() {};
+
+if ("production" !== 'production') {
+  printWarning = function(text) {
+    var message = 'Warning: ' + text;
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+}
+
+function emptyFunctionThatReturnsNull() {
+  return null;
+}
+
+module.exports = function(isValidElement, throwOnDirectAccess) {
+  /* global Symbol */
+  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
+  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
+
+  /**
+   * Returns the iterator method function contained on the iterable object.
+   *
+   * Be sure to invoke the function with the iterable as context:
+   *
+   *     var iteratorFn = getIteratorFn(myIterable);
+   *     if (iteratorFn) {
+   *       var iterator = iteratorFn.call(myIterable);
+   *       ...
+   *     }
+   *
+   * @param {?object} maybeIterable
+   * @return {?function}
+   */
+  function getIteratorFn(maybeIterable) {
+    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
+    if (typeof iteratorFn === 'function') {
+      return iteratorFn;
+    }
+  }
+
+  /**
+   * Collection of methods that allow declaration and validation of props that are
+   * supplied to React components. Example usage:
+   *
+   *   var Props = require('ReactPropTypes');
+   *   var MyArticle = React.createClass({
+   *     propTypes: {
+   *       // An optional string prop named "description".
+   *       description: Props.string,
+   *
+   *       // A required enum prop named "category".
+   *       category: Props.oneOf(['News','Photos']).isRequired,
+   *
+   *       // A prop named "dialog" that requires an instance of Dialog.
+   *       dialog: Props.instanceOf(Dialog).isRequired
+   *     },
+   *     render: function() { ... }
+   *   });
+   *
+   * A more formal specification of how these methods are used:
+   *
+   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
+   *   decl := ReactPropTypes.{type}(.isRequired)?
+   *
+   * Each and every declaration produces a function with the same signature. This
+   * allows the creation of custom validation functions. For example:
+   *
+   *  var MyLink = React.createClass({
+   *    propTypes: {
+   *      // An optional string or URI prop named "href".
+   *      href: function(props, propName, componentName) {
+   *        var propValue = props[propName];
+   *        if (propValue != null && typeof propValue !== 'string' &&
+   *            !(propValue instanceof URI)) {
+   *          return new Error(
+   *            'Expected a string or an URI for ' + propName + ' in ' +
+   *            componentName
+   *          );
+   *        }
+   *      }
+   *    },
+   *    render: function() {...}
+   *  });
+   *
+   * @internal
+   */
+
+  var ANONYMOUS = '<<anonymous>>';
+
+  // Important!
+  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
+  var ReactPropTypes = {
+    array: createPrimitiveTypeChecker('array'),
+    bigint: createPrimitiveTypeChecker('bigint'),
+    bool: createPrimitiveTypeChecker('boolean'),
+    func: createPrimitiveTypeChecker('function'),
+    number: createPrimitiveTypeChecker('number'),
+    object: createPrimitiveTypeChecker('object'),
+    string: createPrimitiveTypeChecker('string'),
+    symbol: createPrimitiveTypeChecker('symbol'),
+
+    any: createAnyTypeChecker(),
+    arrayOf: createArrayOfTypeChecker,
+    element: createElementTypeChecker(),
+    elementType: createElementTypeTypeChecker(),
+    instanceOf: createInstanceTypeChecker,
+    node: createNodeChecker(),
+    objectOf: createObjectOfTypeChecker,
+    oneOf: createEnumTypeChecker,
+    oneOfType: createUnionTypeChecker,
+    shape: createShapeTypeChecker,
+    exact: createStrictShapeTypeChecker,
+  };
+
+  /**
+   * inlined Object.is polyfill to avoid requiring consumers ship their own
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+   */
+  /*eslint-disable no-self-compare*/
+  function is(x, y) {
+    // SameValue algorithm
+    if (x === y) {
+      // Steps 1-5, 7-10
+      // Steps 6.b-6.e: +0 != -0
+      return x !== 0 || 1 / x === 1 / y;
+    } else {
+      // Step 6.a: NaN == NaN
+      return x !== x && y !== y;
+    }
+  }
+  /*eslint-enable no-self-compare*/
+
+  /**
+   * We use an Error-like object for backward compatibility as people may call
+   * PropTypes directly and inspect their output. However, we don't use real
+   * Errors anymore. We don't inspect their stack anyway, and creating them
+   * is prohibitively expensive if they are created too often, such as what
+   * happens in oneOfType() for any type before the one that matched.
+   */
+  function PropTypeError(message, data) {
+    this.message = message;
+    this.data = data && typeof data === 'object' ? data: {};
+    this.stack = '';
+  }
+  // Make `instanceof Error` still work for returned errors.
+  PropTypeError.prototype = Error.prototype;
+
+  function createChainableTypeChecker(validate) {
+    if ("production" !== 'production') {
+      var manualPropTypeCallCache = {};
+      var manualPropTypeWarningCount = 0;
+    }
+    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
+      componentName = componentName || ANONYMOUS;
+      propFullName = propFullName || propName;
+
+      if (secret !== ReactPropTypesSecret) {
+        if (throwOnDirectAccess) {
+          // New behavior only for users of `prop-types` package
+          var err = new Error(
+            'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+            'Use `PropTypes.checkPropTypes()` to call them. ' +
+            'Read more at http://fb.me/use-check-prop-types'
+          );
+          err.name = 'Invariant Violation';
+          throw err;
+        } else if ("production" !== 'production' && typeof console !== 'undefined') {
+          // Old behavior for people using React.PropTypes
+          var cacheKey = componentName + ':' + propName;
+          if (
+            !manualPropTypeCallCache[cacheKey] &&
+            // Avoid spamming the console because they are often not actionable except for lib authors
+            manualPropTypeWarningCount < 3
+          ) {
+            printWarning(
+              'You are manually calling a React.PropTypes validation ' +
+              'function for the `' + propFullName + '` prop on `' + componentName + '`. This is deprecated ' +
+              'and will throw in the standalone `prop-types` package. ' +
+              'You may be seeing this warning due to a third-party PropTypes ' +
+              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.'
+            );
+            manualPropTypeCallCache[cacheKey] = true;
+            manualPropTypeWarningCount++;
+          }
+        }
+      }
+      if (props[propName] == null) {
+        if (isRequired) {
+          if (props[propName] === null) {
+            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
+          }
+          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
+        }
+        return null;
+      } else {
+        return validate(props, propName, componentName, location, propFullName);
+      }
+    }
+
+    var chainedCheckType = checkType.bind(null, false);
+    chainedCheckType.isRequired = checkType.bind(null, true);
+
+    return chainedCheckType;
+  }
+
+  function createPrimitiveTypeChecker(expectedType) {
+    function validate(props, propName, componentName, location, propFullName, secret) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== expectedType) {
+        // `propValue` being instance of, say, date/regexp, pass the 'object'
+        // check, but we can offer a more precise error message here rather than
+        // 'of type `object`'.
+        var preciseType = getPreciseType(propValue);
+
+        return new PropTypeError(
+          'Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'),
+          {expectedType: expectedType}
+        );
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createAnyTypeChecker() {
+    return createChainableTypeChecker(emptyFunctionThatReturnsNull);
+  }
+
+  function createArrayOfTypeChecker(typeChecker) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (typeof typeChecker !== 'function') {
+        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
+      }
+      var propValue = props[propName];
+      if (!Array.isArray(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
+      }
+      for (var i = 0; i < propValue.length; i++) {
+        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
+        if (error instanceof Error) {
+          return error;
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createElementTypeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      if (!isValidElement(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createElementTypeTypeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      if (!ReactIs.isValidElementType(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement type.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createInstanceTypeChecker(expectedClass) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (!(props[propName] instanceof expectedClass)) {
+        var expectedClassName = expectedClass.name || ANONYMOUS;
+        var actualClassName = getClassName(props[propName]);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createEnumTypeChecker(expectedValues) {
+    if (!Array.isArray(expectedValues)) {
+      if ("production" !== 'production') {
+        if (arguments.length > 1) {
+          printWarning(
+            'Invalid arguments supplied to oneOf, expected an array, got ' + arguments.length + ' arguments. ' +
+            'A common mistake is to write oneOf(x, y, z) instead of oneOf([x, y, z]).'
+          );
+        } else {
+          printWarning('Invalid argument supplied to oneOf, expected an array.');
+        }
+      }
+      return emptyFunctionThatReturnsNull;
+    }
+
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      for (var i = 0; i < expectedValues.length; i++) {
+        if (is(propValue, expectedValues[i])) {
+          return null;
+        }
+      }
+
+      var valuesString = JSON.stringify(expectedValues, function replacer(key, value) {
+        var type = getPreciseType(value);
+        if (type === 'symbol') {
+          return String(value);
+        }
+        return value;
+      });
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + String(propValue) + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createObjectOfTypeChecker(typeChecker) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (typeof typeChecker !== 'function') {
+        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
+      }
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
+      }
+      for (var key in propValue) {
+        if (has(propValue, key)) {
+          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+          if (error instanceof Error) {
+            return error;
+          }
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createUnionTypeChecker(arrayOfTypeCheckers) {
+    if (!Array.isArray(arrayOfTypeCheckers)) {
+      "production" !== 'production' ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+      return emptyFunctionThatReturnsNull;
+    }
+
+    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+      var checker = arrayOfTypeCheckers[i];
+      if (typeof checker !== 'function') {
+        printWarning(
+          'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
+          'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.'
+        );
+        return emptyFunctionThatReturnsNull;
+      }
+    }
+
+    function validate(props, propName, componentName, location, propFullName) {
+      var expectedTypes = [];
+      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+        var checker = arrayOfTypeCheckers[i];
+        var checkerResult = checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret);
+        if (checkerResult == null) {
+          return null;
+        }
+        if (checkerResult.data && has(checkerResult.data, 'expectedType')) {
+          expectedTypes.push(checkerResult.data.expectedType);
+        }
+      }
+      var expectedTypesMessage = (expectedTypes.length > 0) ? ', expected one of type [' + expectedTypes.join(', ') + ']': '';
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`' + expectedTypesMessage + '.'));
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createNodeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (!isNode(props[propName])) {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function invalidValidatorError(componentName, location, propFullName, key, type) {
+    return new PropTypeError(
+      (componentName || 'React class') + ': ' + location + ' type `' + propFullName + '.' + key + '` is invalid; ' +
+      'it must be a function, usually from the `prop-types` package, but received `' + type + '`.'
+    );
+  }
+
+  function createShapeTypeChecker(shapeTypes) {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+      }
+      for (var key in shapeTypes) {
+        var checker = shapeTypes[key];
+        if (typeof checker !== 'function') {
+          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
+        }
+        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+        if (error) {
+          return error;
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createStrictShapeTypeChecker(shapeTypes) {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+      }
+      // We need to check all keys in case some are required but missing from props.
+      var allKeys = assign({}, props[propName], shapeTypes);
+      for (var key in allKeys) {
+        var checker = shapeTypes[key];
+        if (has(shapeTypes, key) && typeof checker !== 'function') {
+          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
+        }
+        if (!checker) {
+          return new PropTypeError(
+            'Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' +
+            '\nBad object: ' + JSON.stringify(props[propName], null, '  ') +
+            '\nValid keys: ' + JSON.stringify(Object.keys(shapeTypes), null, '  ')
+          );
+        }
+        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+        if (error) {
+          return error;
+        }
+      }
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function isNode(propValue) {
+    switch (typeof propValue) {
+      case 'number':
+      case 'string':
+      case 'undefined':
+        return true;
+      case 'boolean':
+        return !propValue;
+      case 'object':
+        if (Array.isArray(propValue)) {
+          return propValue.every(isNode);
+        }
+        if (propValue === null || isValidElement(propValue)) {
+          return true;
+        }
+
+        var iteratorFn = getIteratorFn(propValue);
+        if (iteratorFn) {
+          var iterator = iteratorFn.call(propValue);
+          var step;
+          if (iteratorFn !== propValue.entries) {
+            while (!(step = iterator.next()).done) {
+              if (!isNode(step.value)) {
+                return false;
+              }
+            }
+          } else {
+            // Iterator will provide entry [k,v] tuples rather than values.
+            while (!(step = iterator.next()).done) {
+              var entry = step.value;
+              if (entry) {
+                if (!isNode(entry[1])) {
+                  return false;
+                }
+              }
+            }
+          }
+        } else {
+          return false;
+        }
+
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  function isSymbol(propType, propValue) {
+    // Native Symbol.
+    if (propType === 'symbol') {
+      return true;
+    }
+
+    // falsy value can't be a Symbol
+    if (!propValue) {
+      return false;
+    }
+
+    // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
+    if (propValue['@@toStringTag'] === 'Symbol') {
+      return true;
+    }
+
+    // Fallback for non-spec compliant Symbols which are polyfilled.
+    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // Equivalent of `typeof` but with special handling for array and regexp.
+  function getPropType(propValue) {
+    var propType = typeof propValue;
+    if (Array.isArray(propValue)) {
+      return 'array';
+    }
+    if (propValue instanceof RegExp) {
+      // Old webkits (at least until Android 4.0) return 'function' rather than
+      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
+      // passes PropTypes.object.
+      return 'object';
+    }
+    if (isSymbol(propType, propValue)) {
+      return 'symbol';
+    }
+    return propType;
+  }
+
+  // This handles more types than `getPropType`. Only used for error messages.
+  // See `createPrimitiveTypeChecker`.
+  function getPreciseType(propValue) {
+    if (typeof propValue === 'undefined' || propValue === null) {
+      return '' + propValue;
+    }
+    var propType = getPropType(propValue);
+    if (propType === 'object') {
+      if (propValue instanceof Date) {
+        return 'date';
+      } else if (propValue instanceof RegExp) {
+        return 'regexp';
+      }
+    }
+    return propType;
+  }
+
+  // Returns a string that is postfixed to a warning about an invalid type.
+  // For example, "undefined" or "of type array"
+  function getPostfixForTypeWarning(value) {
+    var type = getPreciseType(value);
+    switch (type) {
+      case 'array':
+      case 'object':
+        return 'an ' + type;
+      case 'boolean':
+      case 'date':
+      case 'regexp':
+        return 'a ' + type;
+      default:
+        return type;
+    }
+  }
+
+  // Returns class name of the object, if any.
+  function getClassName(propValue) {
+    if (!propValue.constructor || !propValue.constructor.name) {
+      return ANONYMOUS;
+    }
+    return propValue.constructor.name;
+  }
+
+  ReactPropTypes.checkPropTypes = checkPropTypes;
+  ReactPropTypes.resetWarningCache = checkPropTypes.resetWarningCache;
+  ReactPropTypes.PropTypes = ReactPropTypes;
+
+  return ReactPropTypes;
+};
+
+},{"./checkPropTypes":207,"./lib/ReactPropTypesSecret":211,"./lib/has":212,"object-assign":205,"react-is":215}],210:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+if ("production" !== 'production') {
+  var ReactIs = require('react-is');
+
+  // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+  var throwOnDirectAccess = true;
+  module.exports = require('./factoryWithTypeCheckers')(ReactIs.isElement, throwOnDirectAccess);
+} else {
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  module.exports = require('./factoryWithThrowingShims')();
+}
+
+},{"./factoryWithThrowingShims":208,"./factoryWithTypeCheckers":209,"react-is":215}],211:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';
+
+var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+module.exports = ReactPropTypesSecret;
+
+},{}],212:[function(require,module,exports){
+module.exports = Function.call.bind(Object.prototype.hasOwnProperty);
+
+},{}],213:[function(require,module,exports){
+(function (process){(function (){
+/** @license React v16.13.1
+ * react-is.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';
+
+
+
+if (process.env.NODE_ENV !== "production") {
+  (function() {
+'use strict';
+
+// The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+// nor polyfill, then a plain number is used for performance.
+var hasSymbol = typeof Symbol === 'function' && Symbol.for;
+var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
+var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
+var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
+var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
+var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
+var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
+var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
+// (unstable) APIs that have been removed. Can we remove the symbols?
+
+var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
+var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
+var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
+var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
+var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
+var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for('react.block') : 0xead9;
+var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
+var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
+var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
+
+function isValidElementType(type) {
+  return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
+  type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
+}
+
+function typeOf(object) {
+  if (typeof object === 'object' && object !== null) {
+    var $$typeof = object.$$typeof;
+
+    switch ($$typeof) {
+      case REACT_ELEMENT_TYPE:
+        var type = object.type;
+
+        switch (type) {
+          case REACT_ASYNC_MODE_TYPE:
+          case REACT_CONCURRENT_MODE_TYPE:
+          case REACT_FRAGMENT_TYPE:
+          case REACT_PROFILER_TYPE:
+          case REACT_STRICT_MODE_TYPE:
+          case REACT_SUSPENSE_TYPE:
+            return type;
+
+          default:
+            var $$typeofType = type && type.$$typeof;
+
+            switch ($$typeofType) {
+              case REACT_CONTEXT_TYPE:
+              case REACT_FORWARD_REF_TYPE:
+              case REACT_LAZY_TYPE:
+              case REACT_MEMO_TYPE:
+              case REACT_PROVIDER_TYPE:
+                return $$typeofType;
+
+              default:
+                return $$typeof;
+            }
+
+        }
+
+      case REACT_PORTAL_TYPE:
+        return $$typeof;
+    }
+  }
+
+  return undefined;
+} // AsyncMode is deprecated along with isAsyncMode
+
+var AsyncMode = REACT_ASYNC_MODE_TYPE;
+var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
+var ContextConsumer = REACT_CONTEXT_TYPE;
+var ContextProvider = REACT_PROVIDER_TYPE;
+var Element = REACT_ELEMENT_TYPE;
+var ForwardRef = REACT_FORWARD_REF_TYPE;
+var Fragment = REACT_FRAGMENT_TYPE;
+var Lazy = REACT_LAZY_TYPE;
+var Memo = REACT_MEMO_TYPE;
+var Portal = REACT_PORTAL_TYPE;
+var Profiler = REACT_PROFILER_TYPE;
+var StrictMode = REACT_STRICT_MODE_TYPE;
+var Suspense = REACT_SUSPENSE_TYPE;
+var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
+
+function isAsyncMode(object) {
+  {
+    if (!hasWarnedAboutDeprecatedIsAsyncMode) {
+      hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
+
+      console['warn']('The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
+    }
+  }
+
+  return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
+}
+function isConcurrentMode(object) {
+  return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
+}
+function isContextConsumer(object) {
+  return typeOf(object) === REACT_CONTEXT_TYPE;
+}
+function isContextProvider(object) {
+  return typeOf(object) === REACT_PROVIDER_TYPE;
+}
+function isElement(object) {
+  return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+}
+function isForwardRef(object) {
+  return typeOf(object) === REACT_FORWARD_REF_TYPE;
+}
+function isFragment(object) {
+  return typeOf(object) === REACT_FRAGMENT_TYPE;
+}
+function isLazy(object) {
+  return typeOf(object) === REACT_LAZY_TYPE;
+}
+function isMemo(object) {
+  return typeOf(object) === REACT_MEMO_TYPE;
+}
+function isPortal(object) {
+  return typeOf(object) === REACT_PORTAL_TYPE;
+}
+function isProfiler(object) {
+  return typeOf(object) === REACT_PROFILER_TYPE;
+}
+function isStrictMode(object) {
+  return typeOf(object) === REACT_STRICT_MODE_TYPE;
+}
+function isSuspense(object) {
+  return typeOf(object) === REACT_SUSPENSE_TYPE;
+}
+
+exports.AsyncMode = AsyncMode;
+exports.ConcurrentMode = ConcurrentMode;
+exports.ContextConsumer = ContextConsumer;
+exports.ContextProvider = ContextProvider;
+exports.Element = Element;
+exports.ForwardRef = ForwardRef;
+exports.Fragment = Fragment;
+exports.Lazy = Lazy;
+exports.Memo = Memo;
+exports.Portal = Portal;
+exports.Profiler = Profiler;
+exports.StrictMode = StrictMode;
+exports.Suspense = Suspense;
+exports.isAsyncMode = isAsyncMode;
+exports.isConcurrentMode = isConcurrentMode;
+exports.isContextConsumer = isContextConsumer;
+exports.isContextProvider = isContextProvider;
+exports.isElement = isElement;
+exports.isForwardRef = isForwardRef;
+exports.isFragment = isFragment;
+exports.isLazy = isLazy;
+exports.isMemo = isMemo;
+exports.isPortal = isPortal;
+exports.isProfiler = isProfiler;
+exports.isStrictMode = isStrictMode;
+exports.isSuspense = isSuspense;
+exports.isValidElementType = isValidElementType;
+exports.typeOf = typeOf;
+  })();
+}
+
+}).call(this)}).call(this,require('_process'))
+},{"_process":206}],214:[function(require,module,exports){
+/** @license React v16.13.1
+ * react-is.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';var b="function"===typeof Symbol&&Symbol.for,c=b?Symbol.for("react.element"):60103,d=b?Symbol.for("react.portal"):60106,e=b?Symbol.for("react.fragment"):60107,f=b?Symbol.for("react.strict_mode"):60108,g=b?Symbol.for("react.profiler"):60114,h=b?Symbol.for("react.provider"):60109,k=b?Symbol.for("react.context"):60110,l=b?Symbol.for("react.async_mode"):60111,m=b?Symbol.for("react.concurrent_mode"):60111,n=b?Symbol.for("react.forward_ref"):60112,p=b?Symbol.for("react.suspense"):60113,q=b?
+Symbol.for("react.suspense_list"):60120,r=b?Symbol.for("react.memo"):60115,t=b?Symbol.for("react.lazy"):60116,v=b?Symbol.for("react.block"):60121,w=b?Symbol.for("react.fundamental"):60117,x=b?Symbol.for("react.responder"):60118,y=b?Symbol.for("react.scope"):60119;
+function z(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c:switch(a=a.type,a){case l:case m:case e:case g:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k:case n:case t:case r:case h:return a;default:return u}}case d:return u}}}function A(a){return z(a)===m}exports.AsyncMode=l;exports.ConcurrentMode=m;exports.ContextConsumer=k;exports.ContextProvider=h;exports.Element=c;exports.ForwardRef=n;exports.Fragment=e;exports.Lazy=t;exports.Memo=r;exports.Portal=d;
+exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isAsyncMode=function(a){return A(a)||z(a)===l};exports.isConcurrentMode=A;exports.isContextConsumer=function(a){return z(a)===k};exports.isContextProvider=function(a){return z(a)===h};exports.isElement=function(a){return"object"===typeof a&&null!==a&&a.$$typeof===c};exports.isForwardRef=function(a){return z(a)===n};exports.isFragment=function(a){return z(a)===e};exports.isLazy=function(a){return z(a)===t};
+exports.isMemo=function(a){return z(a)===r};exports.isPortal=function(a){return z(a)===d};exports.isProfiler=function(a){return z(a)===g};exports.isStrictMode=function(a){return z(a)===f};exports.isSuspense=function(a){return z(a)===p};
+exports.isValidElementType=function(a){return"string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||a===q||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n||a.$$typeof===w||a.$$typeof===x||a.$$typeof===y||a.$$typeof===v)};exports.typeOf=z;
+
+},{}],215:[function(require,module,exports){
+(function (process){(function (){
+'use strict';
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./cjs/react-is.production.min.js');
+} else {
+  module.exports = require('./cjs/react-is.development.js');
+}
+
+}).call(this)}).call(this,require('_process'))
+},{"./cjs/react-is.development.js":213,"./cjs/react-is.production.min.js":214,"_process":206}],"FieldTypes":[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true

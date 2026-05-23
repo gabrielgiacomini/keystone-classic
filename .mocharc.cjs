@@ -44,6 +44,7 @@ module.exports = {
 	'node-option': ['experimental-strip-types', 'no-warnings=ExperimentalWarning'],
 	timeout: 30000,
 	reporter: 'spec',
+	require: ['./test/enzyme.setup.cjs'],
 	recursive: true,
 	// Force process exit after tests complete. Several test helpers open
 	// long-lived resources (mongoose connection in getMongooseConnection.mjs,

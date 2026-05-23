@@ -3,17 +3,19 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
-const SecondaryNavItem = React.createClass({
+const SecondaryNavItem = createReactClass({
 	displayName: 'SecondaryNavItem',
 	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-		href: React.PropTypes.string.isRequired,
-		onClick: React.PropTypes.func,
-		path: React.PropTypes.string,
-		title: React.PropTypes.string,
+		children: PropTypes.node.isRequired,
+		className: PropTypes.string,
+		href: PropTypes.string.isRequired,
+		onClick: PropTypes.func,
+		path: PropTypes.string,
+		title: PropTypes.string,
 	},
 	render () {
 		return (

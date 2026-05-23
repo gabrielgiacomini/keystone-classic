@@ -1,4 +1,6 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { findDOMNode } from 'react-dom';
 import { Fields } from 'FieldTypes';
@@ -6,13 +8,13 @@ import InvalidFieldType from '../../../shared/InvalidFieldType.mjs';
 import { plural } from '../../../../utils/string.mjs';
 import { BlankState, Button, Form, Modal } from '../../../elemental/index.mjs';
 
-const UpdateForm = React.createClass({
+const UpdateForm = createReactClass({
 	displayName: 'UpdateForm',
 	propTypes: {
-		isOpen: React.PropTypes.bool,
-		itemIds: React.PropTypes.array,
-		list: React.PropTypes.object,
-		onCancel: React.PropTypes.func,
+		isOpen: PropTypes.bool,
+		itemIds: PropTypes.array,
+		list: PropTypes.object,
+		onCancel: PropTypes.func,
 	},
 	getDefaultProps () {
 		return {

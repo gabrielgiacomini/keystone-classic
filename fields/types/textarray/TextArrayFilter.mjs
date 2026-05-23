@@ -7,6 +7,8 @@
  * inverting the filter.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 
 import {
@@ -43,12 +45,12 @@ function getDefaultValue () {
  * The `TextArrayFilter` component.
  * @augments React.Component
  */
-const TextArrayFilter = React.createClass({
+const TextArrayFilter = createReactClass({
 	propTypes: {
-		filter: React.PropTypes.shape({
-			mode: React.PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
-			presence: React.PropTypes.oneOf(PRESENCE_OPTIONS.map(i => i.value)),
-			value: React.PropTypes.string,
+		filter: PropTypes.shape({
+			mode: PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
+			presence: PropTypes.oneOf(PRESENCE_OPTIONS.map(i => i.value)),
+			value: PropTypes.string,
 		}),
 	},
 	statics: {

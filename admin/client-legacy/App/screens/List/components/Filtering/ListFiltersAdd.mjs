@@ -1,7 +1,9 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import Transition
-	from 'react-addons-css-transition-group';
+	from 'react-transition-group/CSSTransitionGroup';
 import classnames from 'classnames';
 import ListFiltersAddForm from './ListFiltersAddForm.mjs';
 import Popout from '../../../../shared/Popout/index.mjs';
@@ -11,10 +13,10 @@ import ListHeaderButton from '../ListHeaderButton.mjs';
 
 import { setFilter } from '../../actions/index.mjs';
 
-const ListFiltersAdd = React.createClass({
+const ListFiltersAdd = createReactClass({
 	displayName: 'ListFiltersAdd',
 	propTypes: {
-		maxHeight: React.PropTypes.number,
+		maxHeight: PropTypes.number,
 	},
 	getDefaultProps () {
 		return {

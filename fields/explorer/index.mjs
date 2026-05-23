@@ -7,7 +7,8 @@
  * field types in KeystoneJS, and to interact with them in a live environment.
  * @see {@link http://localhost:8001}
  */
-import React, { Children, cloneElement, Component, PropTypes } from 'react';
+import React, { Children, cloneElement, Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link, Router, Route, browserHistory, IndexRoute } from 'react-router';
 import ReactDOM from 'react-dom';
 import FieldType from './components/FieldType.mjs';

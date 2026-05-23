@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Alert } from '../../App/elemental/index.mjs';
 
 const AlertView = function (props) {
@@ -18,9 +19,9 @@ const AlertView = function (props) {
 };
 
 AlertView.propTypes = {
-	invalidMessage: React.PropTypes.string,
-	isInvalid: React.PropTypes.bool,
-	signedOut: React.PropTypes.bool,
+	invalidMessage: PropTypes.string,
+	isInvalid: PropTypes.bool,
+	signedOut: PropTypes.bool,
 };
 
 export default AlertView;

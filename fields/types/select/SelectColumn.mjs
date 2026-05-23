@@ -4,6 +4,8 @@
  * value of a `Select` field in a list view.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 
@@ -11,12 +13,12 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `SelectColumn` component.
  * @augments React.Component
  */
-const SelectColumn = React.createClass({
+const SelectColumn = createReactClass({
 	displayName: 'SelectColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-		linkTo: React.PropTypes.string,
+		col: PropTypes.object,
+		data: PropTypes.object,
+		linkTo: PropTypes.string,
 	},
 	/**
 	 * Renders the value of the field.

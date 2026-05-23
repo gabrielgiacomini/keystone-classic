@@ -4,6 +4,8 @@
  * `GeoPoint` fields in the KeystoneJS Admin UI.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 import {
 	FormField,
@@ -36,14 +38,14 @@ function getDefaultValue () {
  * The `GeoPointFilter` component.
  * @augments React.Component
  */
-const TextFilter = React.createClass({
+const TextFilter = createReactClass({
 	propTypes: {
-		filter: React.PropTypes.shape({
-			lat: React.PropTypes.number,
-			lon: React.PropTypes.number,
-			distance: React.PropTypes.shape({
-				mode: React.PropTypes.string,
-				value: React.PropTypes.number,
+		filter: PropTypes.shape({
+			lat: PropTypes.number,
+			lon: PropTypes.number,
+			distance: PropTypes.shape({
+				mode: PropTypes.string,
+				value: PropTypes.number,
 			}),
 		}),
 	},

@@ -1,10 +1,12 @@
 import { FormNote, FormField, FormInput } from '../../../elemental/index.mjs';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import Kbd from '../../../shared/Kbd.mjs';
 import Popout from '../../../shared/Popout/index.mjs';
 import PopoutList from '../../../shared/Popout/PopoutList.mjs';
 
-const ListSort = React.createClass({
+const ListSort = createReactClass({
 	displayName: 'ListSort',
 	propTypes: {
 		handleSortSelect: PropTypes.func.isRequired,

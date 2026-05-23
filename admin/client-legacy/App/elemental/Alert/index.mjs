@@ -1,5 +1,6 @@
 import { css } from 'glamor';
-import React, { cloneElement, Children, PropTypes } from 'react';
+import React, { cloneElement, Children } from 'react';
+import PropTypes from 'prop-types';
 import classes from './styles.mjs';
 import colors from './colors.mjs';
 

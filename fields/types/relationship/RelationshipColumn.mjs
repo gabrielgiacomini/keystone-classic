@@ -4,6 +4,8 @@
  * the value of a `Relationship` field in a list view.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 
@@ -18,11 +20,11 @@ const moreIndicatorStyle = {
  * The `RelationshipColumn` component.
  * @augments React.Component
  */
-const RelationshipColumn = React.createClass({
+const RelationshipColumn = createReactClass({
 	displayName: 'RelationshipColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
+		col: PropTypes.object,
+		data: PropTypes.object,
 	},
 	/**
 	 * Renders the values of a many-to-many relationship.

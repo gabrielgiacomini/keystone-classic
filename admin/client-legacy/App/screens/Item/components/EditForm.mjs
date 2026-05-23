@@ -1,4 +1,6 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
 	Form,
@@ -52,11 +54,11 @@ function smoothScrollTop () {
 	}
 }
 
-const EditForm = React.createClass({
+const EditForm = createReactClass({
 	displayName: 'EditForm',
 	propTypes: {
-		data: React.PropTypes.object,
-		list: React.PropTypes.object,
+		data: PropTypes.object,
+		list: PropTypes.object,
 	},
 	getInitialState () {
 		const hasAsyncFields = !!this.props.list.columns.find(col => {

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { css } from 'glamor';
 import ScrollLock from '../ScrollLock/index.mjs';
 import Portal from '../Portal/index.mjs';
@@ -39,7 +40,7 @@ class ModalDialog extends Component {
 	 * `enableKeyboardInput` changes in the incoming props.
 	 * @param {object} nextProps - The incoming props before the update is applied.
 	 */
-	componentWillReceiveProps (nextProps) {
+	UNSAFE_componentWillReceiveProps (nextProps) {
 		if (!canUseDom) return;
 
 		// add event listeners
@@ -109,8 +110,8 @@ class ModalDialog extends Component {
 				className={css(classes.container)}
 				key="open"
 				ref="container"
-				onClick={!!backdropClosesModal && this.handleBackdropClick}
-				onTouchEnd={!!backdropClosesModal && this.handleBackdropClick}
+				onClick={backdropClosesModal ? this.handleBackdropClick : undefined}
+				onTouchEnd={backdropClosesModal ? this.handleBackdropClick : undefined}
 			>
 				<div
 					className={css(classes.dialog)}

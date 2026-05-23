@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import getRelatedIconClass from '../utils/getRelatedIconClass.mjs';
 
 /**
@@ -24,10 +25,10 @@ class Section extends React.Component {
 }
 
 Section.propTypes = {
-	children: React.PropTypes.element.isRequired,
-	icon: React.PropTypes.string,
-	id: React.PropTypes.string,
-	label: React.PropTypes.string.isRequired,
+	children: PropTypes.element.isRequired,
+	icon: PropTypes.string,
+	id: PropTypes.string,
+	label: PropTypes.string.isRequired,
 };
 
 export default Section;

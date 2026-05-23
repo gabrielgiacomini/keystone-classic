@@ -46,7 +46,7 @@ export default Field.create({
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
 	 */
-	componentWillUpdate (nextProps) {
+	UNSAFE_componentWillUpdate (nextProps) {
 		// Reset the thumbnails and upload ID when the item value changes
 		// TODO: We should add a check for a new item ID in the store
 		const value = _.map(this.props.value, 'public_id').join();

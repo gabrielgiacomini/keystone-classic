@@ -6,7 +6,8 @@
  * It provides two text inputs for the first and last name.
  */
 import Field from '../Field.mjs';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
 	FormInput,
 	Grid,

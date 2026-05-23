@@ -1,4 +1,6 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { Alert, BlankState, Center, Spinner } from '../../../../elemental/index.mjs';
 
@@ -8,15 +10,15 @@ import ListRow from './RelatedItemsListRow.mjs';
 import { loadRelationshipItemData } from '../../actions.mjs';
 import { TABLE_CONTROL_COLUMN_WIDTH } from '../../../../../constants.mjs';
 
-const RelatedItemsList = React.createClass({
+const RelatedItemsList = createReactClass({
 	propTypes: {
-		dispatch: React.PropTypes.func.isRequired,
-		dragNewSortOrder: React.PropTypes.number,
-		items: React.PropTypes.array,
-		list: React.PropTypes.object.isRequired,
-		refList: React.PropTypes.object.isRequired,
-		relatedItemId: React.PropTypes.string.isRequired,
-		relationship: React.PropTypes.object.isRequired,
+		dispatch: PropTypes.func.isRequired,
+		dragNewSortOrder: PropTypes.number,
+		items: PropTypes.array,
+		list: PropTypes.object.isRequired,
+		refList: PropTypes.object.isRequired,
+		relatedItemId: PropTypes.string.isRequired,
+		relationship: PropTypes.object.isRequired,
 	},
 	getInitialState () {
 		return {

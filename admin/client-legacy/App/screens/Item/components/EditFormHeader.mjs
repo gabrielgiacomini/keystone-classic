@@ -1,4 +1,6 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 
@@ -10,12 +12,12 @@ import { Link } from 'react-router';
 import Drilldown from './Drilldown.mjs';
 import { GlyphButton, ResponsiveText } from '../../../elemental/index.mjs';
 
-export const EditFormHeader = React.createClass({
+export const EditFormHeader = createReactClass({
 	displayName: 'EditFormHeader',
 	propTypes: {
-		data: React.PropTypes.object,
-		list: React.PropTypes.object,
-		toggleCreate: React.PropTypes.func,
+		data: PropTypes.object,
+		list: PropTypes.object,
+		toggleCreate: PropTypes.func,
 	},
 	getInitialState () {
 		return {

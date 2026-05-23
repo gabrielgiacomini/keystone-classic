@@ -1,5 +1,6 @@
 import { css } from 'glamor';
-import React, { cloneElement, PropTypes } from 'react';
+import React, { cloneElement } from 'react';
+import PropTypes from 'prop-types';
 import classes from './styles.mjs';
 
 // NOTE: Inline Group Section accepts a single child

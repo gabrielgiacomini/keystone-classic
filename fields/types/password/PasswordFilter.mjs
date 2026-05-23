@@ -7,6 +7,8 @@
  * not.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 import { SegmentedControl } from '../../../admin/client-legacy/App/elemental';
 
@@ -29,10 +31,10 @@ function getDefaultValue () {
  * The `PasswordFilter` component.
  * @augments React.Component
  */
-const PasswordFilter = React.createClass({
+const PasswordFilter = createReactClass({
 	propTypes: {
-		filter: React.PropTypes.shape({
-			exists: React.PropTypes.oneOf(EXISTS_OPTIONS.map(i => i.value)),
+		filter: PropTypes.shape({
+			exists: PropTypes.oneOf(EXISTS_OPTIONS.map(i => i.value)),
 		}),
 	},
 	statics: {

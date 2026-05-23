@@ -52,7 +52,7 @@ export default Field.create({
 	/**
 	 * Sets the initial collapsed state of the fields.
 	 */
-	componentWillMount () {
+	UNSAFE_componentWillMount () {
 		const { value = [] } = this.props;
 		const collapsedFields = {};
 		_.forEach(['number', 'name', 'street2', 'geo'], (i) => {

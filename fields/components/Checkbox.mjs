@@ -1,15 +1,17 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { darken, fade } from '../../admin/client-legacy/utils/color';
 import E from '../../admin/client-legacy/constants';
 
-const Checkbox = React.createClass({
+const Checkbox = createReactClass({
 	displayName: 'Checkbox',
 	propTypes: {
-		checked: React.PropTypes.bool,
-		component: React.PropTypes.node,
-		onChange: React.PropTypes.func,
-		readonly: React.PropTypes.bool,
+		checked: PropTypes.bool,
+		component: PropTypes.node,
+		onChange: PropTypes.func,
+		readonly: PropTypes.bool,
 	},
 	getDefaultProps () {
 		return {

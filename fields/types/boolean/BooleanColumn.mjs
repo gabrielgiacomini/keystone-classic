@@ -4,6 +4,8 @@
  * value of a `Boolean` field in a list view.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import Checkbox from '../../components/Checkbox.mjs';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
@@ -12,11 +14,11 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `BooleanColumn` component.
  * @augments React.Component
  */
-const BooleanColumn = React.createClass({
+const BooleanColumn = createReactClass({
 	displayName: 'BooleanColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
+		col: PropTypes.object,
+		data: PropTypes.object,
 	},
 	/**
 	 * Renders the value of the field.

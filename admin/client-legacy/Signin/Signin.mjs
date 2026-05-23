@@ -4,6 +4,7 @@
 
 import classnames from "classnames";
 import React from "react";
+import createReactClass from 'create-react-class';
 import xhr from "xhr";
 
 import Alert from "./components/Alert.mjs";
@@ -15,7 +16,7 @@ function getAdminApiPath() {
 	return Keystone.adminApiPath || `${Keystone.adminLegacyPath}/api`;
 }
 
-const SigninView = React.createClass({
+const SigninView = createReactClass({
 	getInitialState() {
 		return {
 			email: "",

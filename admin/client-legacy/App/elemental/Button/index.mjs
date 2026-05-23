@@ -1,5 +1,6 @@
 import { css } from 'glamor';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import * as styles from './styles.mjs';
 
 const commonClasses = styles.common;

@@ -4,6 +4,8 @@
  * value of an `Email` field in a list view.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 
@@ -11,11 +13,11 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `EmailColumn` component.
  * @augments React.Component
  */
-const EmailColumn = React.createClass({
+const EmailColumn = createReactClass({
 	displayName: 'EmailColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
+		col: PropTypes.object,
+		data: PropTypes.object,
 	},
 	/**
 	 * Renders the value of the field as a mailto link, or nothing if the field has no value.

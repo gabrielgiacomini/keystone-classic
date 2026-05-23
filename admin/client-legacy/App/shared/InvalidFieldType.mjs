@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const InvalidFieldType = function (props) {
 	return (
@@ -13,8 +14,8 @@ const InvalidFieldType = function (props) {
 };
 
 InvalidFieldType.propTypes = {
-	path: React.PropTypes.string,
-	type: React.PropTypes.string,
+	path: PropTypes.string,
+	type: PropTypes.string,
 };
 
 export default InvalidFieldType;

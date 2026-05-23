@@ -15,21 +15,23 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import FlashMessage from './FlashMessage.mjs';
 
-const FlashMessages = React.createClass({
+const FlashMessages = createReactClass({
 	displayName: 'FlashMessages',
 	propTypes: {
-		messages: React.PropTypes.oneOfType([
-			React.PropTypes.bool,
-			React.PropTypes.shape({
-				error: React.PropTypes.array,
-				hilight: React.PropTypes.array,
-				info: React.PropTypes.array,
-				success: React.PropTypes.array,
-				warning: React.PropTypes.array,
+		messages: PropTypes.oneOfType([
+			PropTypes.bool,
+			PropTypes.shape({
+				error: PropTypes.array,
+				hilight: PropTypes.array,
+				info: PropTypes.array,
+				success: PropTypes.array,
+				warning: PropTypes.array,
 			}),
 		]),
 	},

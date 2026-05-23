@@ -7,6 +7,8 @@
  * supports inverting the filter.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 
 import {
@@ -40,15 +42,15 @@ function getDefaultValue () {
  * The `LocationFilter` component.
  * @augments React.Component
  */
-const TextFilter = React.createClass({
+const TextFilter = createReactClass({
 	propTypes: {
-		filter: React.PropTypes.shape({
-			inverted: React.PropTypes.boolean,
-			street: React.PropTypes.string,
-			city: React.PropTypes.string,
-			state: React.PropTypes.string,
-			code: React.PropTypes.string,
-			country: React.PropTypes.string,
+		filter: PropTypes.shape({
+			inverted: PropTypes.bool,
+			street: PropTypes.string,
+			city: PropTypes.string,
+			state: PropTypes.string,
+			code: PropTypes.string,
+			country: PropTypes.string,
 		}),
 	},
 	statics: {

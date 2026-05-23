@@ -4,6 +4,8 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 // import { findDOMNode } from 'react-dom'; // TODO re-implement focus when ready
 import numeral from 'numeral';
 import { connect } from 'react-redux';
@@ -47,9 +49,9 @@ import {
 
 const ESC_KEY_CODE = 27;
 
-const ListView = React.createClass({
+const ListView = createReactClass({
 	contextTypes: {
-		router: React.PropTypes.object.isRequired,
+		router: PropTypes.object.isRequired,
 	},
 	getInitialState () {
 		return {
@@ -63,7 +65,7 @@ const ListView = React.createClass({
 			showUpdateForm: false,
 		};
 	},
-	componentWillMount () {
+	UNSAFE_componentWillMount () {
 		// When we directly navigate to a list without coming from another client
 		// side routed page before, we need to initialize the list and parse
 		// possibly specified query parameters
@@ -78,7 +80,7 @@ const ListView = React.createClass({
 		});
 
 	},
-	componentWillReceiveProps (nextProps) {
+	UNSAFE_componentWillReceiveProps (nextProps) {
 		// We've opened a new list from the client side routing, so initialize
 		// again with the new list id
 		const isReady = this.props.lists.ready && nextProps.lists.ready;
@@ -219,6 +221,7 @@ const ListView = React.createClass({
 		const list = this.props.currentList;
 		const currentPage = this.props.lists.page.index;
 		const pageSize = this.props.lists.page.size;
+		if (!pageSize) return null;
 
 		return (
 			<Pagination
@@ -236,6 +239,7 @@ const ListView = React.createClass({
 	renderHeader () {
 		const items = this.props.items;
 		const { autocreate, nocreate, plural, singular } = this.props.currentList;
+		const showingResultSubset = this.props.active.search || this.props.active.filters.length;
 
 		return (
 			<Container style={{ paddingTop: '2em' }}>
@@ -244,6 +248,7 @@ const ListView = React.createClass({
 					availableColumns={this.props.currentList.columns}
 					handleSortSelect={this.handleSortSelect}
 					title={`
+						${showingResultSubset ? 'Showing ' : ''}
 						${numeral(items.count).format()}
 						${pluralize(items.count, ' ' + singular, ' ' + plural)}
 					`}

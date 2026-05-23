@@ -1,13 +1,15 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-const ListControl = React.createClass({
+const ListControl = createReactClass({
 	propTypes: {
-		active: React.PropTypes.bool,
-		dragSource: React.PropTypes.func,
-		itemId: React.PropTypes.string,
-		onClick: React.PropTypes.func,
-		type: React.PropTypes.oneOf(['check', 'delete', 'sortable']).isRequired,
+		active: PropTypes.bool,
+		dragSource: PropTypes.func,
+		itemId: PropTypes.string,
+		onClick: PropTypes.func,
+		type: PropTypes.oneOf(['check', 'delete', 'sortable']).isRequired,
 	},
 	renderControl () {
 		let icon = 'octicon octicon-';

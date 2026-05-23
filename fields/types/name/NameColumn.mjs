@@ -4,6 +4,8 @@
  * value of a `Name` field in a list view.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 import displayName from '../../../lib/utils/displayName.mjs';
@@ -12,12 +14,12 @@ import displayName from '../../../lib/utils/displayName.mjs';
  * The `NameColumn` component.
  * @augments React.Component
  */
-const NameColumn = React.createClass({
+const NameColumn = createReactClass({
 	displayName: 'NameColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-		linkTo: React.PropTypes.string,
+		col: PropTypes.object,
+		data: PropTypes.object,
+		linkTo: PropTypes.string,
 	},
 	/**
 	 * Renders the value of the field.

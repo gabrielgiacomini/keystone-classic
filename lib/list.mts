@@ -793,7 +793,7 @@ export interface KeystoneList<
  * assignability for methods with narrower, optional parameters.
  */
 export type KeystoneSchemaMethod<T extends KeystoneDocument = KeystoneDocument> = {
-	bivarianceHack(this: T, ...args: any[]): unknown;
+	bivarianceHack(this: T, ...args: unknown[]): unknown;
 }['bivarianceHack'];
 
 /**

@@ -3,17 +3,19 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 import classnames from 'classnames';
 
-const PopoutListItem = React.createClass({
+const PopoutListItem = createReactClass({
 	displayName: 'PopoutListItem',
 	propTypes: {
-		icon: React.PropTypes.string,
-		iconHover: React.PropTypes.string,
-		isSelected: React.PropTypes.bool,
-		label: React.PropTypes.string.isRequired,
-		onClick: React.PropTypes.func,
+		icon: PropTypes.string,
+		iconHover: PropTypes.string,
+		isSelected: PropTypes.bool,
+		label: PropTypes.string.isRequired,
+		onClick: PropTypes.func,
 	},
 	getInitialState () {
 		return {

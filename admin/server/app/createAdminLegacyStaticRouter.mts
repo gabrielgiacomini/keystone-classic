@@ -105,7 +105,7 @@ export default function createAdminLegacyStaticRouter(keystone: Keystone): Expre
 		}),
 	};
 
-	const elementalPath = path.join(resolvePackageDir('elemental'), '..');
+	const elementalPath = path.resolve(__dirname + '/../../client-legacy/vendor/elemental');
 	const reactSelectPath = path.join(resolvePackageDir('react-select'), '..');
 	const keystoneTinymcePath = resolvePackageDir('keystone-tinymce');
 	const tinymcePath = resolveOptionalPackageDir('tinymce');

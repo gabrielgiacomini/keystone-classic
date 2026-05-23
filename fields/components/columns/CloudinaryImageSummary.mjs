@@ -1,4 +1,6 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 const IMAGE_SIZE = 18;
 
@@ -32,11 +34,11 @@ const textStyle = {
 	verticalAlign: 'middle',
 };
 
-const CloudinaryImageSummary = React.createClass({
+const CloudinaryImageSummary = createReactClass({
 	displayName: 'CloudinaryImageSummary',
 	propTypes: {
-		image: React.PropTypes.object.isRequired,
-		label: React.PropTypes.oneOf(['dimensions', 'publicId']),
+		image: PropTypes.object.isRequired,
+		label: PropTypes.oneOf(['dimensions', 'publicId']),
 	},
 	renderLabel () {
 		if (!this.props.label) return;

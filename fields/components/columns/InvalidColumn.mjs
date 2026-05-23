@@ -1,11 +1,13 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 
-const InvalidColumn = React.createClass({
+const InvalidColumn = createReactClass({
 	displayName: 'InvalidColumn',
 	propTypes: {
-		col: React.PropTypes.object,
+		col: PropTypes.object,
 	},
 	renderValue () {
 		return (

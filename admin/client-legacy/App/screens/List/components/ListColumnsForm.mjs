@@ -1,4 +1,5 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
 
 import Popout from '../../../shared/Popout/index.mjs';
 import PopoutList from '../../../shared/Popout/PopoutList.mjs';
@@ -7,7 +8,7 @@ import ListHeaderButton from './ListHeaderButton.mjs';
 
 import { setActiveColumns } from '../actions/index.mjs';
 
-const ListColumnsForm = React.createClass({
+const ListColumnsForm = createReactClass({
 	displayName: 'ListColumnsForm',
 	getInitialState () {
 		return {

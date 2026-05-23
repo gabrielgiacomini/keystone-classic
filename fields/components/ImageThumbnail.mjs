@@ -1,5 +1,6 @@
 import { css } from 'glamor';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Spinner } from '../../admin/client-legacy/App/elemental';
 import theme from '../../admin/client-legacy/theme';
 

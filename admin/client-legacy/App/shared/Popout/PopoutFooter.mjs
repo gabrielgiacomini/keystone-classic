@@ -3,18 +3,20 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 const BUTTON_BASE_CLASSNAME = 'Popout__footer__button Popout__footer__button--';
 
-const PopoutFooter = React.createClass({
+const PopoutFooter = createReactClass({
 	displayName: 'PopoutFooter',
 	propTypes: {
-		children: React.PropTypes.node,
-		primaryButtonAction: React.PropTypes.func,
-		primaryButtonIsSubmit: React.PropTypes.bool,
-		primaryButtonLabel: React.PropTypes.string,
-		secondaryButtonAction: React.PropTypes.func,
-		secondaryButtonLabel: React.PropTypes.string,
+		children: PropTypes.node,
+		primaryButtonAction: PropTypes.func,
+		primaryButtonIsSubmit: PropTypes.bool,
+		primaryButtonLabel: PropTypes.string,
+		secondaryButtonAction: PropTypes.func,
+		secondaryButtonLabel: PropTypes.string,
 	},
 	// Render a primary button
 	renderPrimaryButton () {

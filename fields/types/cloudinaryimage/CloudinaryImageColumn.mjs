@@ -4,6 +4,8 @@
  * render the value of a `CloudinaryImage` field in a list view.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import CloudinaryImageSummary from '../../components/columns/CloudinaryImageSummary.mjs';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
@@ -12,11 +14,11 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `CloudinaryImageColumn` component.
  * @augments React.Component
  */
-const CloudinaryImageColumn = React.createClass({
+const CloudinaryImageColumn = createReactClass({
 	displayName: 'CloudinaryImageColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
+		col: PropTypes.object,
+		data: PropTypes.object,
 	},
 	/**
 	 * Renders the value of the field, or nothing if the field has no value.

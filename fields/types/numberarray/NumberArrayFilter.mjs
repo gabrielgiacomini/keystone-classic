@@ -7,6 +7,8 @@
  * inverting the filter.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 
 import {
@@ -44,17 +46,17 @@ function getDefaultValue () {
  * The `NumberArrayFilter` component.
  * @augments React.Component
  */
-const NumberArrayFilter = React.createClass({
+const NumberArrayFilter = createReactClass({
 	propTypes: {
-		filter: React.PropTypes.shape({
-			mode: React.PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
-			presence: React.PropTypes.oneOf(PRESENCE_OPTIONS.map(i => i.value)),
-			value: React.PropTypes.oneOfType([
-				React.PropTypes.number,
-				React.PropTypes.string,
-				React.PropTypes.shape({
-					min: React.PropTypes.number,
-					max: React.PropTypes.number,
+		filter: PropTypes.shape({
+			mode: PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
+			presence: PropTypes.oneOf(PRESENCE_OPTIONS.map(i => i.value)),
+			value: PropTypes.oneOfType([
+				PropTypes.number,
+				PropTypes.string,
+				PropTypes.shape({
+					min: PropTypes.number,
+					max: PropTypes.number,
 				}),
 			]),
 		}),

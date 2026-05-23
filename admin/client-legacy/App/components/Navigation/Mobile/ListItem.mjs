@@ -3,15 +3,17 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
-const MobileListItem = React.createClass({
+const MobileListItem = createReactClass({
 	displayName: 'MobileListItem',
 	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-		href: React.PropTypes.string.isRequired,
-		onClick: React.PropTypes.func,
+		children: PropTypes.node.isRequired,
+		className: PropTypes.string,
+		href: PropTypes.string.isRequired,
+		onClick: PropTypes.func,
 	},
 	render () {
 		return (

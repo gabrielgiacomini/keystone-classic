@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import TableRow from './ItemsTableRow.mjs';
@@ -6,7 +8,7 @@ import DragDrop from './ItemsTableDragDrop.mjs';
 
 import { TABLE_CONTROL_COLUMN_WIDTH } from '../../../../../constants.mjs';
 
-const ItemsTable = React.createClass({
+const ItemsTable = createReactClass({
 	propTypes: {
 		checkedItems: PropTypes.object.isRequired,
 		columns: PropTypes.array.isRequired,

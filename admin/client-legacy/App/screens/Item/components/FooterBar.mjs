@@ -1,9 +1,10 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-
-const FooterBar = React.createClass({
+const FooterBar = createReactClass({
 	propTypes: {
-		style: React.PropTypes.object,
+		style: PropTypes.object,
 	},
 	getDefaultProps () {
 		return {

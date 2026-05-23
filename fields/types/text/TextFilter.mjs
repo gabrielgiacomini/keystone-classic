@@ -7,6 +7,8 @@
  * inverting the filter.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 
 import {
@@ -44,12 +46,12 @@ function getDefaultValue () {
  * The `TextFilter` component.
  * @augments React.Component
  */
-const TextFilter = React.createClass({
+const TextFilter = createReactClass({
 	propTypes: {
-		filter: React.PropTypes.shape({
-			mode: React.PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
-			inverted: React.PropTypes.boolean,
-			value: React.PropTypes.string,
+		filter: PropTypes.shape({
+			mode: PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
+			inverted: PropTypes.bool,
+			value: PropTypes.string,
 		}),
 	},
 	statics: {

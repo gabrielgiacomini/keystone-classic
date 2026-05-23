@@ -1,20 +1,22 @@
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import Popout from '../../admin/client-legacy/App/shared/Popout';
 import { FormInput } from '../../admin/client-legacy/App/elemental';
 
 let lastId = 0;
 
-export default React.createClass({
+export default createReactClass({
 	displayName: 'DateInput',
 	propTypes: {
-		format: React.PropTypes.string,
-		name: React.PropTypes.string,
-		onChange: React.PropTypes.func.isRequired,
-		path: React.PropTypes.string,
-		value: React.PropTypes.string,
+		format: PropTypes.string,
+		name: PropTypes.string,
+		onChange: PropTypes.func.isRequired,
+		path: PropTypes.string,
+		value: PropTypes.string,
 	},
 	getDefaultProps () {
 		return {
@@ -38,7 +40,7 @@ export default React.createClass({
 	componentDidMount () {
 		this.showCurrentMonth();
 	},
-	componentWillReceiveProps: function (newProps) {
+	UNSAFE_componentWillReceiveProps: function (newProps) {
 		if (newProps.value === this.props.value) return;
 		this.setState({
 			month: moment(newProps.value, this.props.format).toDate(),
@@ -67,7 +69,7 @@ export default React.createClass({
 			}
 		}
 	},
-	handleDaySelect (e, date, modifiers) {
+	handleDaySelect (date, modifiers) {
 		if (modifiers && modifiers.disabled) return;
 
 		const value = moment(date).format(this.props.format);

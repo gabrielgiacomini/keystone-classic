@@ -3,16 +3,18 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 import classnames from 'classnames';
 import PopoutListItem from './PopoutListItem.mjs';
 import PopoutListHeading from './PopoutListHeading.mjs';
 
-const PopoutList = React.createClass({
+const PopoutList = createReactClass({
 	displayName: 'PopoutList',
 	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
+		children: PropTypes.node.isRequired,
+		className: PropTypes.string,
 	},
 	render () {
 		const className = classnames('PopoutList', this.props.className);

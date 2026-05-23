@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { Sortable } from './RelatedItemsListRow.mjs';
@@ -22,8 +23,8 @@ class RelatedItemsListDragDrop extends Component {
 };
 RelatedItemsListDragDrop.propTypes = {
 	columns: PropTypes.array.isRequired,
-	dispatch: React.PropTypes.func.isRequired,
-	dragNewSortOrder: React.PropTypes.number,
+	dispatch: PropTypes.func.isRequired,
+	dragNewSortOrder: PropTypes.number,
 	items: PropTypes.array.isRequired,
 	list: PropTypes.object.isRequired,
 	refList: PropTypes.object.isRequired,

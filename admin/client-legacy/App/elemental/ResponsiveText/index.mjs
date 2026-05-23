@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import theme from '../../../theme.mjs';
 
 // Using window.innerWidth and state instead of CSS media breakpoints

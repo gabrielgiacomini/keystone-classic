@@ -1,5 +1,6 @@
 import { css } from 'glamor';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import theme from '../../../../theme.mjs';
 import { darken } from '../../../../utils/color.mjs';
 
@@ -38,7 +39,7 @@ function ListHeaderSearch ({
 				className={css(classes.icon, !!value.length && classes.iconWhenClear)}
 				data-search-input-field-clear-icon
 				disabled={!value.length}
-				onClick={value.length && handleClear}
+				onClick={value.length ? handleClear : undefined}
 				title="Clear search query"
 				type="button"
 			>

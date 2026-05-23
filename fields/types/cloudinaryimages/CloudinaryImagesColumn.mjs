@@ -4,6 +4,8 @@
  * render the value of a `CloudinaryImages` field in a list view.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import CloudinaryImageSummary from '../../components/columns/CloudinaryImageSummary.mjs';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
@@ -17,11 +19,11 @@ const moreIndicatorStyle = {
  * The `CloudinaryImagesColumn` component.
  * @augments React.Component
  */
-const CloudinaryImagesColumn = React.createClass({
+const CloudinaryImagesColumn = createReactClass({
 	displayName: 'CloudinaryImagesColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
+		col: PropTypes.object,
+		data: PropTypes.object,
 	},
 	/**
 	 * Renders the values of a many-to-many relationship.

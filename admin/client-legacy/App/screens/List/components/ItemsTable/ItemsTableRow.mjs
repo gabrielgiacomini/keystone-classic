@@ -1,4 +1,6 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import ListControl from '../ListControl.mjs';
@@ -14,18 +16,18 @@ import {
 	moveItem,
 } from '../../actions/index.mjs';
 
-const ItemsRow = React.createClass({
+const ItemsRow = createReactClass({
 	propTypes: {
-		columns: React.PropTypes.array,
-		id: React.PropTypes.any,
-		index: React.PropTypes.number,
-		items: React.PropTypes.object,
-		list: React.PropTypes.object,
+		columns: PropTypes.array,
+		id: PropTypes.any,
+		index: PropTypes.number,
+		items: PropTypes.object,
+		list: PropTypes.object,
 		// Injected by React DnD:
-		isDragging: React.PropTypes.bool,
-		connectDragSource: React.PropTypes.func,
-		connectDropTarget: React.PropTypes.func,
-		connectDragPreview: React.PropTypes.func,
+		isDragging: PropTypes.bool,
+		connectDragSource: PropTypes.func,
+		connectDropTarget: PropTypes.func,
+		connectDragPreview: PropTypes.func,
 	},
 	renderRow (item) {
 		const itemId = item.id;

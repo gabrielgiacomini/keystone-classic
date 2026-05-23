@@ -5,8 +5,10 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import Portal from '../Portal.mjs';
-import Transition from 'react-addons-css-transition-group';
+import Transition from 'react-transition-group/CSSTransitionGroup';
 import PopoutHeader from './PopoutHeader.mjs';
 import PopoutBody from './PopoutBody.mjs';
 import PopoutFooter from './PopoutFooter.mjs';
@@ -18,14 +20,14 @@ const SIZES = {
 	horizontalMargin: 20,
 };
 
-const Popout = React.createClass({
+const Popout = createReactClass({
 	displayName: 'Popout',
 	propTypes: {
-		isOpen: React.PropTypes.bool,
-		onCancel: React.PropTypes.func,
-		onSubmit: React.PropTypes.func,
-		relativeToID: React.PropTypes.string.isRequired,
-		width: React.PropTypes.number,
+		isOpen: PropTypes.bool,
+		onCancel: PropTypes.func,
+		onSubmit: PropTypes.func,
+		relativeToID: PropTypes.string.isRequired,
+		width: PropTypes.number,
 	},
 	getDefaultProps () {
 		return {
@@ -35,7 +37,7 @@ const Popout = React.createClass({
 	getInitialState () {
 		return {};
 	},
-	componentWillReceiveProps (nextProps) {
+	UNSAFE_componentWillReceiveProps (nextProps) {
 		if (!this.props.isOpen && nextProps.isOpen) {
 			window.addEventListener('resize', this.calculatePosition);
 			this.calculatePosition(nextProps.isOpen);

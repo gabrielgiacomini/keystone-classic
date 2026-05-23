@@ -8,6 +8,8 @@
  */
 import _ from 'lodash';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import xhr from 'xhr';
 
@@ -43,14 +45,14 @@ function getDefaultValue () {
  * The `RelationshipFilter` component.
  * @augments React.Component
  */
-const RelationshipFilter = React.createClass({
+const RelationshipFilter = createReactClass({
 	propTypes: {
-		field: React.PropTypes.object,
-		filter: React.PropTypes.shape({
-			inverted: React.PropTypes.bool,
-			value: React.PropTypes.array,
+		field: PropTypes.object,
+		filter: PropTypes.shape({
+			inverted: PropTypes.bool,
+			value: PropTypes.array,
 		}),
-		onHeightChange: React.PropTypes.func,
+		onHeightChange: PropTypes.func,
 	},
 	statics: {
 		getDefaultValue: getDefaultValue,
@@ -81,7 +83,7 @@ const RelationshipFilter = React.createClass({
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
 	 */
-	componentWillReceiveProps (nextProps) {
+	UNSAFE_componentWillReceiveProps (nextProps) {
 		if (nextProps.filter.value !== this.props.filter.value) {
 			this.populateValue(nextProps.filter.value);
 		}

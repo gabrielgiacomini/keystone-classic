@@ -10,7 +10,7 @@
  */
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import { Button, FormField, FormInput } from 'elemental';
+import { Button, FormField, FormInput } from '../../admin/client-legacy/App/elemental';
 
 let lastId = 0;
 const ENTER_KEYCODE = 13;
@@ -53,7 +53,7 @@ export default {
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
 	 */
-	componentWillReceiveProps: function (nextProps) {
+	UNSAFE_componentWillReceiveProps: function (nextProps) {
 		if (nextProps.value.join('|') !== reduceValues(this.state.values).join('|')) {
 			this.setState({
 				values: nextProps.value.map(newItem),

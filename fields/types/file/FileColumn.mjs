@@ -4,6 +4,7 @@
  * value of a `File` field in a list view.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
 
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
@@ -12,7 +13,7 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `FileColumn` component.
  * @augments React.Component
  */
-const LocalFileColumn = React.createClass({
+const LocalFileColumn = createReactClass({
 	/**
 	 * Returns the filename of the file, or undefined if no file is present.
 	 * @returns {string|undefined} The name of the file, or undefined if not set.

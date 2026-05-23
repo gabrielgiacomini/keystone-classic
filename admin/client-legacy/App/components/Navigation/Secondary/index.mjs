@@ -3,6 +3,8 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Container } from '../../../elemental/index.mjs';
 
@@ -11,11 +13,11 @@ import {
 } from '../../../screens/List/actions/active.mjs';
 import SecondaryNavItem from './NavItem.mjs';
 
-const SecondaryNavigation = React.createClass({
+const SecondaryNavigation = createReactClass({
 	displayName: 'SecondaryNavigation',
 	propTypes: {
-		currentListKey: React.PropTypes.string,
-		lists: React.PropTypes.array.isRequired,
+		currentListKey: PropTypes.string,
+		lists: PropTypes.array.isRequired,
 	},
 	getInitialState () {
 		return {};

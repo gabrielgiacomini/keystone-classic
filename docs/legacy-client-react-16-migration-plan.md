@@ -1062,6 +1062,34 @@ conflict cleanup still requires either:
 - a later root migration to React 18, or
 - dependency isolation for `admin/client-next`.
 
+## Migration Notes
+
+Implementation deviations from the starting plan:
+
+- `npm install` requires the legacy peer resolver while admin-next still shares
+  the root React install with React 18+ peer dependencies.
+- `react-addons-css-transition-group` is no longer a direct dependency or a
+  package-bundle exposure. Repo code imports
+  `react-transition-group/CSSTransitionGroup` directly.
+- `elemental` is no longer a direct dependency or a package-bundle exposure. Repo
+  code imports the local implementation directly, and the Elemental LESS sources
+  used by the legacy server and field explorer are vendored under
+  `admin/client-legacy/vendor/elemental/less`.
+- `react-domify` was replaced with a local `ValuePreview` renderer in the field
+  explorer instead of carrying another React 15-era renderer.
+- Enzyme is upgraded to Enzyme 3 with `enzyme-adapter-react-16`, and
+  `cheerio@1.0.0-rc.12` is pinned for Enzyme's CommonJS dependency shape.
+- `admin/client-legacy/App/elemental/Portal` no longer wraps portal children in
+  a transition group. This avoids React 16 instability around the legacy
+  transition group's string refs in modal flows.
+- A full `npm ls react react-dom --depth=2` still reports invalid peers from
+  admin-next packages (`@tanstack/react-query`, `@tanstack/react-router`,
+  `@tiptap/react`, and the `react-dom18` alias). This is the admin-next peer
+  conflict called out in Non-Goals, not a remaining legacy client blocker.
+- Browser e2e gates pass without uncaught legacy React errors. Remaining observed
+  warnings are non-browser Node warnings from the test harness and existing
+  Keystone deprecation warnings around Cloudinary field names.
+
 ## Commit Strategy
 
 Use small, reviewable commits:

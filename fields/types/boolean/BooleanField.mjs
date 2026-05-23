@@ -6,6 +6,7 @@
  * It provides a checkbox to toggle the value of the field.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import Field from '../Field.mjs';
 import Checkbox from '../../components/Checkbox.mjs';
 import { FormField } from '../../../admin/client-legacy/App/elemental';
@@ -22,11 +23,11 @@ export default Field.create({
 		type: 'Boolean',
 	},
 	propTypes: {
-		indent: React.PropTypes.bool,
-		label: React.PropTypes.string,
-		onChange: React.PropTypes.func.isRequired,
-		path: React.PropTypes.string.isRequired,
-		value: React.PropTypes.bool,
+		indent: PropTypes.bool,
+		label: PropTypes.string,
+		onChange: PropTypes.func.isRequired,
+		path: PropTypes.string.isRequired,
+		value: PropTypes.bool,
 	},
 
 	/**

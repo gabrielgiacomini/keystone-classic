@@ -100,6 +100,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _index = require("../../elemental/index.mjs");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
@@ -108,15 +110,15 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const Footer = _react.default.createClass({
+const Footer = (0, _createreactclass.default)({
     displayName: "Footer",
     propTypes: {
-        appversion: _react.default.PropTypes.string,
-        backUrl: _react.default.PropTypes.string,
-        brand: _react.default.PropTypes.string,
-        user: _react.default.PropTypes.object,
-        User: _react.default.PropTypes.object,
-        version: _react.default.PropTypes.string
+        appversion: _proptypes.default.string,
+        backUrl: _proptypes.default.string,
+        brand: _proptypes.default.string,
+        user: _proptypes.default.object,
+        User: _proptypes.default.object,
+        version: _proptypes.default.string
     },
     // Render the user
     renderUser () {
@@ -166,7 +168,7 @@ const classes = {
 };
 const _default = Footer;
 
-},{"../../../theme.mjs":150,"../../elemental/index.mjs":73,"glamor":undefined,"react":undefined}],3:[function(require,module,exports){
+},{"../../../theme.mjs":150,"../../elemental/index.mjs":73,"create-react-class":161,"glamor":undefined,"prop-types":258,"react":undefined}],3:[function(require,module,exports){
 /**
  * A list item of the mobile navigation
  */ "use strict";
@@ -180,19 +182,21 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactrouter = require("react-router");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-const MobileListItem = _react.default.createClass({
+const MobileListItem = (0, _createreactclass.default)({
     displayName: 'MobileListItem',
     propTypes: {
-        children: _react.default.PropTypes.node.isRequired,
-        className: _react.default.PropTypes.string,
-        href: _react.default.PropTypes.string.isRequired,
-        onClick: _react.default.PropTypes.func
+        children: _proptypes.default.node.isRequired,
+        className: _proptypes.default.string,
+        href: _proptypes.default.string.isRequired,
+        onClick: _proptypes.default.func
     },
     render () {
         return /*#__PURE__*/ _react.default.createElement(_reactrouter.Link, {
@@ -205,7 +209,7 @@ const MobileListItem = _react.default.createClass({
 });
 const _default = MobileListItem;
 
-},{"react":undefined,"react-router":undefined}],4:[function(require,module,exports){
+},{"create-react-class":161,"prop-types":258,"react":undefined,"react-router":undefined}],4:[function(require,module,exports){
 /**
  * A mobile section
  */ "use strict";
@@ -219,6 +223,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ListItem = /*#__PURE__*/ _interop_require_default(require("./ListItem.mjs"));
 const _reactrouter = require("react-router");
 function _interop_require_default(obj) {
@@ -226,14 +232,14 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const MobileSectionItem = _react.default.createClass({
+const MobileSectionItem = (0, _createreactclass.default)({
     displayName: 'MobileSectionItem',
     propTypes: {
-        children: _react.default.PropTypes.node.isRequired,
-        className: _react.default.PropTypes.string,
-        currentListKey: _react.default.PropTypes.string,
-        href: _react.default.PropTypes.string.isRequired,
-        lists: _react.default.PropTypes.array
+        children: _proptypes.default.node.isRequired,
+        className: _proptypes.default.string,
+        currentListKey: _proptypes.default.string,
+        href: _proptypes.default.string.isRequired,
+        lists: _proptypes.default.array
     },
     // Render the lists
     renderLists () {
@@ -266,7 +272,7 @@ const MobileSectionItem = _react.default.createClass({
 });
 const _default = MobileSectionItem;
 
-},{"./ListItem.mjs":3,"react":undefined,"react-router":undefined}],5:[function(require,module,exports){
+},{"./ListItem.mjs":3,"create-react-class":161,"prop-types":258,"react":undefined,"react-router":undefined}],5:[function(require,module,exports){
 /**
  * The mobile navigation, displayed on screens < 768px
  */ "use strict";
@@ -280,7 +286,9 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
-const _reactaddonscsstransitiongroup = /*#__PURE__*/ _interop_require_default(require("react-addons-css-transition-group"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
+const _CSSTransitionGroup = /*#__PURE__*/ _interop_require_default(require("react-transition-group/CSSTransitionGroup"));
 const _SectionItem = /*#__PURE__*/ _interop_require_default(require("./SectionItem.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -288,14 +296,14 @@ function _interop_require_default(obj) {
     };
 }
 const ESCAPE_KEY_CODE = 27;
-const MobileNavigation = _react.default.createClass({
+const MobileNavigation = (0, _createreactclass.default)({
     displayName: 'MobileNavigation',
     propTypes: {
-        brand: _react.default.PropTypes.string,
-        currentListKey: _react.default.PropTypes.string,
-        currentSectionKey: _react.default.PropTypes.string,
-        sections: _react.default.PropTypes.array.isRequired,
-        signoutUrl: _react.default.PropTypes.string
+        brand: _proptypes.default.string,
+        currentListKey: _proptypes.default.string,
+        currentSectionKey: _proptypes.default.string,
+        sections: _proptypes.default.array.isRequired,
+        signoutUrl: _proptypes.default.string
     },
     getInitialState () {
         return {
@@ -399,11 +407,11 @@ const MobileNavigation = _react.default.createClass({
             className: "MobileNavigation__bar__icon octicon octicon-sign-out"
         }))), /*#__PURE__*/ _react.default.createElement("div", {
             className: "MobileNavigation__bar--placeholder"
-        }), /*#__PURE__*/ _react.default.createElement(_reactaddonscsstransitiongroup.default, {
+        }), /*#__PURE__*/ _react.default.createElement(_CSSTransitionGroup.default, {
             transitionName: "MobileNavigation__menu",
             transitionEnterTimeout: 260,
             transitionLeaveTimeout: 200
-        }, this.renderMenu()), /*#__PURE__*/ _react.default.createElement(_reactaddonscsstransitiongroup.default, {
+        }, this.renderMenu()), /*#__PURE__*/ _react.default.createElement(_CSSTransitionGroup.default, {
             transitionName: "react-transitiongroup-fade",
             transitionEnterTimeout: 0,
             transitionLeaveTimeout: 0
@@ -412,7 +420,7 @@ const MobileNavigation = _react.default.createClass({
 });
 const _default = MobileNavigation;
 
-},{"./SectionItem.mjs":4,"react":undefined,"react-addons-css-transition-group":undefined}],6:[function(require,module,exports){
+},{"./SectionItem.mjs":4,"create-react-class":161,"prop-types":258,"react":undefined,"react-transition-group/CSSTransitionGroup":undefined}],6:[function(require,module,exports){
 /**
  * A item in the primary navigation. If it has a "to" prop it'll render a
  * react-router "Link", if it has a "href" prop it'll render a simple "a" tag
@@ -426,54 +434,14 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 const _reactrouter = require("react-router");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 const PrimaryNavItem = ({ children, className, href, label, listPath, title, to, active })=>{
     const itemClassName = (0, _classnames.default)('primary-navbar__item', className);
@@ -503,17 +471,17 @@ const PrimaryNavItem = ({ children, className, href, label, listPath, title, to,
 };
 PrimaryNavItem.displayName = 'PrimaryNavItem';
 PrimaryNavItem.propTypes = {
-    children: _react.PropTypes.node.isRequired,
-    className: _react.PropTypes.string,
-    href: _react.PropTypes.string,
-    label: _react.PropTypes.string,
-    listPath: _react.PropTypes.string,
-    title: _react.PropTypes.string,
-    to: _react.PropTypes.string
+    children: _proptypes.default.node.isRequired,
+    className: _proptypes.default.string,
+    href: _proptypes.default.string,
+    label: _proptypes.default.string,
+    listPath: _proptypes.default.string,
+    title: _proptypes.default.string,
+    to: _proptypes.default.string
 };
 const _default = PrimaryNavItem;
 
-},{"classnames":undefined,"react":undefined,"react-router":undefined}],7:[function(require,module,exports){
+},{"classnames":undefined,"prop-types":258,"react":undefined,"react-router":undefined}],7:[function(require,module,exports){
 /**
  * The primary (i.e. uppermost) navigation on desktop. Renders all sections and
  * the home-, website- and signout buttons.
@@ -528,6 +496,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = require("../../../elemental/index.mjs");
 const _NavItem = /*#__PURE__*/ _interop_require_default(require("./NavItem.mjs"));
 function _interop_require_default(obj) {
@@ -535,13 +505,13 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const PrimaryNavigation = _react.default.createClass({
+const PrimaryNavigation = (0, _createreactclass.default)({
     displayName: 'PrimaryNavigation',
     propTypes: {
-        brand: _react.default.PropTypes.string,
-        currentSectionKey: _react.default.PropTypes.string,
-        sections: _react.default.PropTypes.array.isRequired,
-        signoutUrl: _react.default.PropTypes.string
+        brand: _proptypes.default.string,
+        currentSectionKey: _proptypes.default.string,
+        sections: _proptypes.default.array.isRequired,
+        signoutUrl: _proptypes.default.string
     },
     getInitialState () {
         return {};
@@ -633,7 +603,7 @@ const PrimaryNavigation = _react.default.createClass({
 });
 const _default = PrimaryNavigation;
 
-},{"../../../elemental/index.mjs":73,"./NavItem.mjs":6,"react":undefined}],8:[function(require,module,exports){
+},{"../../../elemental/index.mjs":73,"./NavItem.mjs":6,"create-react-class":161,"prop-types":258,"react":undefined}],8:[function(require,module,exports){
 /**
  * A navigation item of the secondary navigation
  */ "use strict";
@@ -647,21 +617,23 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactrouter = require("react-router");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-const SecondaryNavItem = _react.default.createClass({
+const SecondaryNavItem = (0, _createreactclass.default)({
     displayName: 'SecondaryNavItem',
     propTypes: {
-        children: _react.default.PropTypes.node.isRequired,
-        className: _react.default.PropTypes.string,
-        href: _react.default.PropTypes.string.isRequired,
-        onClick: _react.default.PropTypes.func,
-        path: _react.default.PropTypes.string,
-        title: _react.default.PropTypes.string
+        children: _proptypes.default.node.isRequired,
+        className: _proptypes.default.string,
+        href: _proptypes.default.string.isRequired,
+        onClick: _proptypes.default.func,
+        path: _proptypes.default.string,
+        title: _proptypes.default.string
     },
     render () {
         return /*#__PURE__*/ _react.default.createElement("li", {
@@ -678,7 +650,7 @@ const SecondaryNavItem = _react.default.createClass({
 });
 const _default = SecondaryNavItem;
 
-},{"react":undefined,"react-router":undefined}],9:[function(require,module,exports){
+},{"create-react-class":161,"prop-types":258,"react":undefined,"react-router":undefined}],9:[function(require,module,exports){
 /**
  * The secondary navigation links to inidvidual lists of a section
  */ "use strict";
@@ -692,6 +664,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactredux = require("react-redux");
 const _index = require("../../../elemental/index.mjs");
 const _active = require("../../../screens/List/actions/active.mjs");
@@ -701,11 +675,11 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const SecondaryNavigation = _react.default.createClass({
+const SecondaryNavigation = (0, _createreactclass.default)({
     displayName: 'SecondaryNavigation',
     propTypes: {
-        currentListKey: _react.default.PropTypes.string,
-        lists: _react.default.PropTypes.array.isRequired
+        currentListKey: _proptypes.default.string,
+        lists: _proptypes.default.array.isRequired
     },
     getInitialState () {
         return {};
@@ -766,7 +740,7 @@ const _default = (0, _reactredux.connect)((state)=>{
     };
 })(SecondaryNavigation);
 
-},{"../../../elemental/index.mjs":73,"../../../screens/List/actions/active.mjs":104,"./NavItem.mjs":8,"react":undefined,"react-redux":undefined}],10:[function(require,module,exports){
+},{"../../../elemental/index.mjs":73,"../../../screens/List/actions/active.mjs":104,"./NavItem.mjs":8,"create-react-class":161,"prop-types":258,"react":undefined,"react-redux":undefined}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -804,6 +778,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _colors = /*#__PURE__*/ _interop_require_default(require("./colors.mjs"));
 function _define_property(obj, key, value) {
@@ -973,10 +948,10 @@ const cloneWithClassnames = (c)=>{
     }));
 }
 Alert.propTypes = {
-    color: _react.PropTypes.oneOf(Object.keys(_colors.default)).isRequired,
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    color: _proptypes.default.oneOf(Object.keys(_colors.default)).isRequired,
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ])
 };
 Alert.defaultProps = {
@@ -984,7 +959,7 @@ Alert.defaultProps = {
 };
 const _default = Alert;
 
-},{"./colors.mjs":10,"./styles.mjs":12,"glamor":undefined,"react":undefined}],12:[function(require,module,exports){
+},{"./colors.mjs":10,"./styles.mjs":12,"glamor":undefined,"prop-types":258,"react":undefined}],12:[function(require,module,exports){
 // ==============================
 // Alert
 // ==============================
@@ -1095,53 +1070,13 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -1205,11 +1140,11 @@ function _object_without_properties_loose(source, excluded) {
     }, heading), children);
 }
 BlankState.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]).isRequired,
-    heading: _react.PropTypes.string
+    heading: _proptypes.default.string
 };
 BlankState.defaultProps = {
     component: 'div'
@@ -1234,7 +1169,7 @@ BlankState.defaultProps = {
 };
 const _default = BlankState;
 
-},{"../../../theme.mjs":150,"glamor":undefined,"react":undefined}],14:[function(require,module,exports){
+},{"../../../theme.mjs":150,"glamor":undefined,"prop-types":258,"react":undefined}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -1247,7 +1182,13 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_wildcard(require("./styles.mjs"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
     var cacheBabelInterop = new WeakMap();
@@ -1403,21 +1344,21 @@ const BUTTON_COLORS = [
     }
 }
 Button.propTypes = {
-    active: _react.PropTypes.bool,
-    block: _react.PropTypes.bool,
-    color: _react.PropTypes.oneOf(BUTTON_COLORS),
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    active: _proptypes.default.bool,
+    block: _proptypes.default.bool,
+    color: _proptypes.default.oneOf(BUTTON_COLORS),
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]),
-    cssStyles: _react.PropTypes.arrayOf(_react.PropTypes.shape({
-        _definition: _react.PropTypes.object,
-        _name: _react.PropTypes.string
+    cssStyles: _proptypes.default.arrayOf(_proptypes.default.shape({
+        _definition: _proptypes.default.object,
+        _name: _proptypes.default.string
     })),
-    disabled: _react.PropTypes.bool,
-    href: _react.PropTypes.string,
-    size: _react.PropTypes.oneOf(BUTTON_SIZES),
-    variant: _react.PropTypes.oneOf(BUTTON_VARIANTS)
+    disabled: _proptypes.default.bool,
+    href: _proptypes.default.string,
+    size: _proptypes.default.oneOf(BUTTON_SIZES),
+    variant: _proptypes.default.oneOf(BUTTON_VARIANTS)
 };
 Button.defaultProps = {
     cssStyles: [],
@@ -1426,7 +1367,7 @@ Button.defaultProps = {
 };
 const _default = Button;
 
-},{"./styles.mjs":15,"glamor":undefined,"react":undefined}],15:[function(require,module,exports){
+},{"./styles.mjs":15,"glamor":undefined,"prop-types":258,"react":undefined}],15:[function(require,module,exports){
 // ==============================
 // Button
 // ==============================
@@ -1769,7 +1710,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _define_property(obj, key, value) {
@@ -1789,47 +1731,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -1908,13 +1809,13 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 Center.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]),
-    height: _react.PropTypes.oneOfType([
-        _react.PropTypes.number,
-        _react.PropTypes.string
+    height: _proptypes.default.oneOfType([
+        _proptypes.default.number,
+        _proptypes.default.string
     ])
 };
 Center.defaultProps = {
@@ -1923,7 +1824,7 @@ Center.defaultProps = {
 };
 const _default = Center;
 
-},{"./styles.mjs":17,"glamor":undefined,"react":undefined}],17:[function(require,module,exports){
+},{"./styles.mjs":17,"glamor":undefined,"prop-types":258,"react":undefined}],17:[function(require,module,exports){
 // ==============================
 // Center
 // ==============================
@@ -2074,54 +1975,14 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _colors = /*#__PURE__*/ _interop_require_default(require("./colors.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -2198,18 +2059,18 @@ function _object_without_properties_loose(source, excluded) {
     }, "×"));
 }
 Chip.propTypes = {
-    color: _react.PropTypes.oneOf(Object.keys(_colors.default)).isRequired,
-    inverted: _react.PropTypes.bool,
-    label: _react.default.PropTypes.string.isRequired,
-    onClear: _react.default.PropTypes.func,
-    onClick: _react.default.PropTypes.func
+    color: _proptypes.default.oneOf(Object.keys(_colors.default)).isRequired,
+    inverted: _proptypes.default.bool,
+    label: _proptypes.default.string.isRequired,
+    onClear: _proptypes.default.func,
+    onClick: _proptypes.default.func
 };
 Chip.defaultProps = {
     color: 'default'
 };
 const _default = Chip;
 
-},{"./colors.mjs":18,"./styles.mjs":20,"glamor":undefined,"react":undefined}],20:[function(require,module,exports){
+},{"./colors.mjs":18,"./styles.mjs":20,"glamor":undefined,"prop-types":258,"react":undefined}],20:[function(require,module,exports){
 // ==============================
 // Alert
 // ==============================
@@ -2348,54 +2209,14 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _sizes = /*#__PURE__*/ _interop_require_default(require("./sizes.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -2454,12 +2275,12 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 Container.propTypes = {
-    clearFloatingChildren: _react.PropTypes.bool,
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    clearFloatingChildren: _proptypes.default.bool,
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]).isRequired,
-    width: _react.PropTypes.oneOf(Object.keys(_sizes.default)).isRequired
+    width: _proptypes.default.oneOf(Object.keys(_sizes.default)).isRequired
 };
 Container.defaultProps = {
     component: 'div',
@@ -2467,7 +2288,7 @@ Container.defaultProps = {
 };
 const _default = Container;
 
-},{"./sizes.mjs":22,"./styles.mjs":23,"glamor":undefined,"react":undefined}],22:[function(require,module,exports){
+},{"./sizes.mjs":22,"./styles.mjs":23,"glamor":undefined,"prop-types":258,"react":undefined}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -2681,6 +2502,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -2796,23 +2618,23 @@ function _object_without_properties_loose(source, excluded) {
     }
 }
 Form.childContextTypes = {
-    formLayout: _react.PropTypes.oneOf([
+    formLayout: _proptypes.default.oneOf([
         'basic',
         'horizontal',
         'inline'
     ]),
-    labelWidth: _react.PropTypes.oneOfType([
-        _react.PropTypes.number,
-        _react.PropTypes.string
+    labelWidth: _proptypes.default.oneOfType([
+        _proptypes.default.number,
+        _proptypes.default.string
     ])
 };
 Form.propTypes = {
-    children: _react.PropTypes.node.isRequired,
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.string,
-        _react.PropTypes.func
+    children: _proptypes.default.node.isRequired,
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.string,
+        _proptypes.default.func
     ]),
-    layout: _react.PropTypes.oneOf([
+    layout: _proptypes.default.oneOf([
         'basic',
         'horizontal',
         'inline'
@@ -2824,7 +2646,7 @@ Form.defaultProps = {
 };
 const _default = Form;
 
-},{"./styles.mjs":26,"glamor":undefined,"react":undefined}],26:[function(require,module,exports){
+},{"./styles.mjs":26,"glamor":undefined,"prop-types":258,"react":undefined}],26:[function(require,module,exports){
 // ==============================
 // Form
 // ==============================
@@ -2855,6 +2677,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../FormLabel/index.mjs"));
 function _define_property(obj, key, value) {
@@ -3051,40 +2874,40 @@ function _object_without_properties_loose(source, excluded) {
     }
 }
 const stylesShape = {
-    _definition: _react.PropTypes.object,
-    _name: _react.PropTypes.string
+    _definition: _proptypes.default.object,
+    _name: _proptypes.default.string
 };
 FormField.contextTypes = {
-    formLayout: _react.PropTypes.oneOf([
+    formLayout: _proptypes.default.oneOf([
         'basic',
         'horizontal',
         'inline'
     ]),
-    labelWidth: _react.PropTypes.oneOfType([
-        _react.PropTypes.number,
-        _react.PropTypes.string
+    labelWidth: _proptypes.default.oneOfType([
+        _proptypes.default.number,
+        _proptypes.default.string
     ])
 };
 FormField.childContextTypes = {
-    formFieldId: _react.PropTypes.string
+    formFieldId: _proptypes.default.string
 };
 FormField.propTypes = {
-    children: _react.PropTypes.node,
-    cropLabel: _react.PropTypes.bool,
-    cssStyles: _react.PropTypes.oneOfType([
-        _react.PropTypes.arrayOf(_react.PropTypes.shape(stylesShape)),
-        _react.PropTypes.shape(stylesShape)
+    children: _proptypes.default.node,
+    cropLabel: _proptypes.default.bool,
+    cssStyles: _proptypes.default.oneOfType([
+        _proptypes.default.arrayOf(_proptypes.default.shape(stylesShape)),
+        _proptypes.default.shape(stylesShape)
     ]),
-    htmlFor: _react.default.PropTypes.string,
-    label: _react.default.PropTypes.string,
-    offsetAbsentLabel: _react.default.PropTypes.bool
+    htmlFor: _proptypes.default.string,
+    label: _proptypes.default.string,
+    offsetAbsentLabel: _proptypes.default.bool
 };
 function generateId() {
     return Math.random().toString(36).slice(2, 11);
 }
 const _default = FormField;
 
-},{"../FormLabel/index.mjs":32,"./styles.mjs":28,"glamor":undefined,"react":undefined}],28:[function(require,module,exports){
+},{"../FormLabel/index.mjs":32,"./styles.mjs":28,"glamor":undefined,"prop-types":258,"react":undefined}],28:[function(require,module,exports){
 // ==============================
 // Form Field
 // ==============================
@@ -3149,6 +2972,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _concatClassnames = /*#__PURE__*/ _interop_require_default(require("../../../utils/concatClassnames.mjs"));
@@ -3315,37 +3139,37 @@ function _object_without_properties_loose(source, excluded) {
     }
 }
 const stylesShape = {
-    _definition: _react.PropTypes.object,
-    _name: _react.PropTypes.string
+    _definition: _proptypes.default.object,
+    _name: _proptypes.default.string
 };
 FormInput.propTypes = {
-    cssStyles: _react.PropTypes.oneOfType([
-        _react.PropTypes.arrayOf(_react.PropTypes.shape(stylesShape)),
-        _react.PropTypes.shape(stylesShape)
+    cssStyles: _proptypes.default.oneOfType([
+        _proptypes.default.arrayOf(_proptypes.default.shape(stylesShape)),
+        _proptypes.default.shape(stylesShape)
     ]),
-    multiline: _react.PropTypes.bool,
-    size: _react.PropTypes.oneOf([
+    multiline: _proptypes.default.bool,
+    size: _proptypes.default.oneOf([
         'default',
         'small',
         'large'
     ]),
-    type: _react.PropTypes.string
+    type: _proptypes.default.string
 };
 FormInput.defaultProps = {
     size: 'default',
     type: 'text'
 };
 FormInput.contextTypes = {
-    formLayout: _react.PropTypes.oneOf([
+    formLayout: _proptypes.default.oneOf([
         'basic',
         'horizontal',
         'inline'
     ]),
-    formFieldId: _react.PropTypes.string
+    formFieldId: _proptypes.default.string
 };
 const _default = FormInput;
 
-},{"../../../utils/concatClassnames.mjs":153,"./noedit.mjs":30,"./styles.mjs":31,"glamor":undefined,"react":undefined}],30:[function(require,module,exports){
+},{"../../../utils/concatClassnames.mjs":153,"./noedit.mjs":30,"./styles.mjs":31,"glamor":undefined,"prop-types":258,"react":undefined}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -3356,7 +3180,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 const _color = require("../../../utils/color.mjs");
@@ -3364,47 +3189,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -3468,11 +3252,11 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 FormInputNoedit.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.string,
-        _react.PropTypes.func
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.string,
+        _proptypes.default.func
     ]),
-    cropText: _react.PropTypes.bool
+    cropText: _proptypes.default.bool
 };
 FormInputNoedit.defaultProps = {
     component: 'span'
@@ -3526,7 +3310,7 @@ const classes = {
 };
 const _default = FormInputNoedit;
 
-},{"../../../theme.mjs":150,"../../../utils/color.mjs":152,"glamor":undefined,"react":undefined}],31:[function(require,module,exports){
+},{"../../../theme.mjs":150,"../../../utils/color.mjs":152,"glamor":undefined,"prop-types":258,"react":undefined}],31:[function(require,module,exports){
 // ==============================
 // Form Input
 // ==============================
@@ -3598,7 +3382,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -3617,47 +3402,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -3749,38 +3493,38 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 const stylesShape = {
-    _definition: _react.PropTypes.object,
-    _name: _react.PropTypes.string
+    _definition: _proptypes.default.object,
+    _name: _proptypes.default.string
 };
 FormLabel.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.string,
-        _react.PropTypes.func
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.string,
+        _proptypes.default.func
     ]),
-    cropText: _react.PropTypes.bool,
-    cssStyles: _react.PropTypes.oneOfType([
-        _react.PropTypes.arrayOf(_react.PropTypes.shape(stylesShape)),
-        _react.PropTypes.shape(stylesShape)
+    cropText: _proptypes.default.bool,
+    cssStyles: _proptypes.default.oneOfType([
+        _proptypes.default.arrayOf(_proptypes.default.shape(stylesShape)),
+        _proptypes.default.shape(stylesShape)
     ])
 };
 FormLabel.defaultProps = {
     component: 'label'
 };
 FormLabel.contextTypes = {
-    formLayout: _react.PropTypes.oneOf([
+    formLayout: _proptypes.default.oneOf([
         'basic',
         'horizontal',
         'inline'
     ]),
-    formFieldId: _react.PropTypes.string,
-    labelWidth: _react.PropTypes.oneOfType([
-        _react.PropTypes.number,
-        _react.PropTypes.string
+    formFieldId: _proptypes.default.string,
+    labelWidth: _proptypes.default.oneOfType([
+        _proptypes.default.number,
+        _proptypes.default.string
     ])
 };
 const _default = FormLabel;
 
-},{"./styles.mjs":33,"glamor":undefined,"react":undefined}],33:[function(require,module,exports){
+},{"./styles.mjs":33,"glamor":undefined,"prop-types":258,"react":undefined}],33:[function(require,module,exports){
 // ==============================
 // Form Label
 // ==============================
@@ -3838,7 +3582,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _define_property(obj, key, value) {
@@ -3858,47 +3603,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -4006,18 +3710,18 @@ function _object_without_properties_loose(source, excluded) {
     })) : /*#__PURE__*/ _react.default.createElement(Component, props, children);
 }
 FormNote.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]),
-    html: _react.PropTypes.string
+    html: _proptypes.default.string
 };
 FormNote.defaultProps = {
     component: 'div'
 };
 const _default = FormNote;
 
-},{"./styles.mjs":35,"glamor":undefined,"react":undefined}],35:[function(require,module,exports){
+},{"./styles.mjs":35,"glamor":undefined,"prop-types":258,"react":undefined}],35:[function(require,module,exports){
 // ==============================
 // Form Note
 // ==============================
@@ -4058,6 +3762,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -4179,22 +3884,22 @@ function _object_without_properties_loose(source, excluded) {
     }
 }
 FormSelect.contextTypes = {
-    formFieldId: _react.PropTypes.string
+    formFieldId: _proptypes.default.string
 };
 FormSelect.propTypes = {
-    onChange: _react.PropTypes.func.isRequired,
-    options: _react.default.PropTypes.arrayOf(_react.default.PropTypes.shape({
-        label: _react.default.PropTypes.string,
-        value: _react.default.PropTypes.string
+    onChange: _proptypes.default.func.isRequired,
+    options: _proptypes.default.arrayOf(_proptypes.default.shape({
+        label: _proptypes.default.string,
+        value: _proptypes.default.string
     })),
-    value: _react.PropTypes.oneOfType([
-        _react.PropTypes.number,
-        _react.PropTypes.string
+    value: _proptypes.default.oneOfType([
+        _proptypes.default.number,
+        _proptypes.default.string
     ])
 };
 const _default = FormSelect;
 
-},{"./styles.mjs":37,"glamor":undefined,"react":undefined}],37:[function(require,module,exports){
+},{"./styles.mjs":37,"glamor":undefined,"prop-types":258,"react":undefined}],37:[function(require,module,exports){
 // ==============================
 // Form Select
 // ==============================
@@ -4322,7 +4027,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _octicons = /*#__PURE__*/ _interop_require_default(require("./octicons.mjs"));
 const _colors = /*#__PURE__*/ _interop_require_default(require("./colors.mjs"));
 const _sizes = /*#__PURE__*/ _interop_require_default(require("./sizes.mjs"));
@@ -4344,47 +4050,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -4478,16 +4143,16 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 Glyph.propTypes = {
-    color: _react.PropTypes.oneOfType([
-        _react.PropTypes.oneOf(Object.keys(_colors.default)),
-        _react.PropTypes.string
+    color: _proptypes.default.oneOfType([
+        _proptypes.default.oneOf(Object.keys(_colors.default)),
+        _proptypes.default.string
     ]),
-    cssStyles: _react.PropTypes.shape({
-        _definition: _react.PropTypes.object,
-        _name: _react.PropTypes.string
+    cssStyles: _proptypes.default.shape({
+        _definition: _proptypes.default.object,
+        _name: _proptypes.default.string
     }),
-    name: _react.PropTypes.oneOf(Object.keys(_octicons.default)).isRequired,
-    size: _react.PropTypes.oneOf(Object.keys(_sizes.default))
+    name: _proptypes.default.oneOf(Object.keys(_octicons.default)).isRequired,
+    size: _proptypes.default.oneOf(Object.keys(_sizes.default))
 };
 Glyph.defaultProps = {
     component: 'i',
@@ -4496,7 +4161,7 @@ Glyph.defaultProps = {
 };
 const _default = Glyph;
 
-},{"./colors.mjs":38,"./octicons.mjs":40,"./sizes.mjs":41,"./styles.mjs":42,"glamor":undefined,"react":undefined}],40:[function(require,module,exports){
+},{"./colors.mjs":38,"./octicons.mjs":40,"./sizes.mjs":41,"./styles.mjs":42,"glamor":undefined,"prop-types":258,"react":undefined}],40:[function(require,module,exports){
 /* eslint quote-props: ["error", "as-needed"] */ "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -4802,7 +4467,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../Button/index.mjs"));
 const _index1 = /*#__PURE__*/ _interop_require_default(require("../Glyph/index.mjs"));
 function _define_property(obj, key, value) {
@@ -4822,47 +4488,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -4959,11 +4584,11 @@ function _object_without_properties_loose(source, excluded) {
 // prop type validation will occur within the Glyph component, no need to
 // duplicate, just pass it through.
 GlyphButton.propTypes = {
-    glyph: _react.PropTypes.string,
-    glyphColor: _react.PropTypes.string,
-    glyphSize: _react.PropTypes.string,
-    glyphStyle: _react.PropTypes.object,
-    position: _react.PropTypes.oneOf([
+    glyph: _proptypes.default.string,
+    glyphColor: _proptypes.default.string,
+    glyphSize: _proptypes.default.string,
+    glyphStyle: _proptypes.default.object,
+    position: _proptypes.default.oneOf([
         'default',
         'left',
         'right'
@@ -4982,7 +4607,7 @@ const classes = {
 };
 const _default = GlyphButton;
 
-},{"../Button/index.mjs":14,"../Glyph/index.mjs":39,"react":undefined}],44:[function(require,module,exports){
+},{"../Button/index.mjs":14,"../Glyph/index.mjs":39,"prop-types":258,"react":undefined}],44:[function(require,module,exports){
 /* eslint quote-props: ["error", "as-needed"] */ "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -4993,7 +4618,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../FormField/index.mjs"));
 const _index1 = /*#__PURE__*/ _interop_require_default(require("../Glyph/index.mjs"));
 function _define_property(obj, key, value) {
@@ -5013,47 +4639,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -5143,10 +4728,10 @@ function _object_without_properties_loose(source, excluded) {
 // prop type validation will occur within the Glyph component, no need to
 // duplicate, just pass it through.
 GlyphField.propTypes = {
-    glyph: _react.PropTypes.string,
-    glyphColor: _react.PropTypes.string,
-    glyphSize: _react.PropTypes.string,
-    position: _react.PropTypes.oneOf([
+    glyph: _proptypes.default.string,
+    glyphColor: _proptypes.default.string,
+    glyphSize: _proptypes.default.string,
+    position: _proptypes.default.oneOf([
         'left',
         'right'
     ])
@@ -5167,7 +4752,7 @@ const classes = {
 };
 const _default = GlyphField;
 
-},{"../FormField/index.mjs":27,"../Glyph/index.mjs":39,"react":undefined}],45:[function(require,module,exports){
+},{"../FormField/index.mjs":27,"../Glyph/index.mjs":39,"prop-types":258,"react":undefined}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -5212,7 +4797,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _define_property(obj, key, value) {
@@ -5232,47 +4818,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -5321,18 +4866,18 @@ const GridCol = (props, context)=>{
     }, props.children);
 };
 GridCol.contextTypes = {
-    gutter: _react.PropTypes.number,
-    large: _react.PropTypes.string,
-    medium: _react.PropTypes.string,
-    small: _react.PropTypes.string,
-    xsmall: _react.PropTypes.string
+    gutter: _proptypes.default.number,
+    large: _proptypes.default.string,
+    medium: _proptypes.default.string,
+    small: _proptypes.default.string,
+    xsmall: _proptypes.default.string
 };
 GridCol.propTypes = {
-    gutter: _react.PropTypes.number,
-    large: _react.PropTypes.string,
-    medium: _react.PropTypes.string,
-    small: _react.PropTypes.string,
-    xsmall: _react.PropTypes.string
+    gutter: _proptypes.default.number,
+    large: _proptypes.default.string,
+    medium: _proptypes.default.string,
+    small: _proptypes.default.string,
+    xsmall: _proptypes.default.string
 };
 const classes = _object_spread({}, prepareWidths('xsmall', WIDTHS), prepareWidths('small', WIDTHS), prepareWidths('medium', WIDTHS), prepareWidths('large', WIDTHS));
 function prepareWidths(prefix, obj) {
@@ -5376,7 +4921,7 @@ function prepareWidths(prefix, obj) {
 }
 const _default = GridCol;
 
-},{"../../../theme.mjs":150,"glamor":undefined,"react":undefined}],47:[function(require,module,exports){
+},{"../../../theme.mjs":150,"glamor":undefined,"prop-types":258,"react":undefined}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -5388,7 +4933,13 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
     var cacheBabelInterop = new WeakMap();
@@ -5465,18 +5016,18 @@ function _interop_require_wildcard(obj, nodeInterop) {
     }
 }
 GridRow.childContextTypes = {
-    gutter: _react.PropTypes.number,
-    xsmall: _react.PropTypes.string,
-    small: _react.PropTypes.string,
-    medium: _react.PropTypes.string,
-    large: _react.PropTypes.string
+    gutter: _proptypes.default.number,
+    xsmall: _proptypes.default.string,
+    small: _proptypes.default.string,
+    medium: _proptypes.default.string,
+    large: _proptypes.default.string
 };
 GridRow.propTypes = {
-    gutter: _react.PropTypes.number,
-    large: _react.PropTypes.string,
-    medium: _react.PropTypes.string,
-    small: _react.PropTypes.string,
-    xsmall: _react.PropTypes.string
+    gutter: _proptypes.default.number,
+    large: _proptypes.default.string,
+    medium: _proptypes.default.string,
+    small: _proptypes.default.string,
+    xsmall: _proptypes.default.string
 };
 GridRow.defaultProps = {
     gutter: 0,
@@ -5490,7 +5041,7 @@ const classes = {
 };
 const _default = GridRow;
 
-},{"glamor":undefined,"react":undefined}],48:[function(require,module,exports){
+},{"glamor":undefined,"prop-types":258,"react":undefined}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -5503,6 +5054,12 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
     var cacheBabelInterop = new WeakMap();
@@ -5637,15 +5194,15 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement(Component, props);
 }
 InlineGroup.propTypes = {
-    block: _react.PropTypes.bool,
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    block: _proptypes.default.bool,
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]),
-    contiguous: _react.PropTypes.bool,
-    cssStyles: _react.PropTypes.shape({
-        _definition: _react.PropTypes.object,
-        _name: _react.PropTypes.string
+    contiguous: _proptypes.default.bool,
+    cssStyles: _proptypes.default.shape({
+        _definition: _proptypes.default.object,
+        _name: _proptypes.default.string
     })
 };
 InlineGroup.defaultProps = {
@@ -5661,7 +5218,7 @@ const classes = {
 };
 const _default = InlineGroup;
 
-},{"glamor":undefined,"react":undefined}],49:[function(require,module,exports){
+},{"glamor":undefined,"prop-types":258,"react":undefined}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -5674,6 +5231,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -5827,11 +5385,11 @@ function _object_without_properties_loose(source, excluded) {
     }, props), children);
 }
 InlineGroupSection.propTypes = {
-    active: _react.PropTypes.bool,
-    children: _react.PropTypes.element.isRequired,
-    contiguous: _react.PropTypes.bool,
-    grow: _react.PropTypes.bool,
-    position: _react.PropTypes.oneOf([
+    active: _proptypes.default.bool,
+    children: _proptypes.default.element.isRequired,
+    contiguous: _proptypes.default.bool,
+    grow: _proptypes.default.bool,
+    position: _proptypes.default.oneOf([
         'first',
         'last',
         'middle',
@@ -5840,7 +5398,7 @@ InlineGroupSection.propTypes = {
 };
 const _default = InlineGroupSection;
 
-},{"./styles.mjs":50,"glamor":undefined,"react":undefined}],50:[function(require,module,exports){
+},{"./styles.mjs":50,"glamor":undefined,"prop-types":258,"react":undefined}],50:[function(require,module,exports){
 // ==============================
 // Inline Group: Section
 // ==============================
@@ -5911,7 +5469,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -5930,47 +5489,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -6079,16 +5597,16 @@ function _object_without_properties_loose(source, excluded) {
     }, label));
 }
 LabelledControl.propTypes = {
-    inline: _react.PropTypes.bool,
-    title: _react.PropTypes.string,
-    type: _react.PropTypes.oneOf([
+    inline: _proptypes.default.bool,
+    title: _proptypes.default.string,
+    type: _proptypes.default.oneOf([
         'checkbox',
         'radio'
     ]).isRequired
 };
 const _default = LabelledControl;
 
-},{"./styles.mjs":52,"glamor":undefined,"react":undefined}],52:[function(require,module,exports){
+},{"./styles.mjs":52,"glamor":undefined,"prop-types":258,"react":undefined}],52:[function(require,module,exports){
 // ==============================
 // Alert
 // ==============================
@@ -6134,7 +5652,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _index = /*#__PURE__*/ _interop_require_default(require("../Button/index.mjs"));
 const _index1 = /*#__PURE__*/ _interop_require_default(require("../Spinner/index.mjs"));
@@ -6143,47 +5662,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -6259,7 +5737,7 @@ function _object_without_properties_loose(source, excluded) {
     }, spinner), children);
 }
 LoadingButton.propTypes = {
-    loading: _react.PropTypes.bool
+    loading: _proptypes.default.bool
 };
 LoadingButton.defaultProps = {
     loading: false
@@ -6275,7 +5753,7 @@ const classes = {
 };
 const _default = LoadingButton;
 
-},{"../../../theme.mjs":150,"../Button/index.mjs":14,"../Spinner/index.mjs":70,"glamor":undefined,"react":undefined}],54:[function(require,module,exports){
+},{"../../../theme.mjs":150,"../Button/index.mjs":14,"../Spinner/index.mjs":70,"glamor":undefined,"prop-types":258,"react":undefined}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6396,6 +5874,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _index = /*#__PURE__*/ _interop_require_default(require("../ScrollLock/index.mjs"));
 const _index1 = /*#__PURE__*/ _interop_require_default(require("../Portal/index.mjs"));
@@ -6463,7 +5942,7 @@ const canUseDom = !!(typeof window !== 'undefined' && window.document && window.
 	 * Adds or removes the global `keydown` listener when `isOpen` or
 	 * `enableKeyboardInput` changes in the incoming props.
 	 * @param {object} nextProps - The incoming props before the update is applied.
-	 */ componentWillReceiveProps(nextProps) {
+	 */ UNSAFE_componentWillReceiveProps(nextProps) {
         if (!canUseDom) return;
         // add event listeners
         if (nextProps.isOpen && nextProps.enableKeyboardInput) {
@@ -6516,8 +5995,8 @@ const canUseDom = !!(typeof window !== 'undefined' && window.document && window.
             className: (0, _glamor.css)(classes.container),
             key: "open",
             ref: "container",
-            onClick: !!backdropClosesModal && this.handleBackdropClick,
-            onTouchEnd: !!backdropClosesModal && this.handleBackdropClick
+            onClick: backdropClosesModal ? this.handleBackdropClick : undefined,
+            onTouchEnd: backdropClosesModal ? this.handleBackdropClick : undefined
         }, /*#__PURE__*/ _react.default.createElement("div", {
             className: (0, _glamor.css)(classes.dialog),
             style: {
@@ -6542,19 +6021,19 @@ const canUseDom = !!(typeof window !== 'undefined' && window.document && window.
     }
 }
 ModalDialog.propTypes = {
-    backdropClosesModal: _react.PropTypes.bool,
-    enableKeyboardInput: _react.PropTypes.bool,
-    isOpen: _react.PropTypes.bool,
-    onClose: _react.PropTypes.func.isRequired,
-    'data-confirm-dialog': _react.PropTypes.bool,
-    width: _react.PropTypes.number
+    backdropClosesModal: _proptypes.default.bool,
+    enableKeyboardInput: _proptypes.default.bool,
+    isOpen: _proptypes.default.bool,
+    onClose: _proptypes.default.func.isRequired,
+    'data-confirm-dialog': _proptypes.default.bool,
+    width: _proptypes.default.number
 };
 ModalDialog.defaultProps = {
     enableKeyboardInput: true,
     width: 768
 };
 ModalDialog.childContextTypes = {
-    onClose: _react.PropTypes.func.isRequired
+    onClose: _proptypes.default.func.isRequired
 };
 const classes = {
     container: {
@@ -6584,7 +6063,7 @@ const classes = {
 };
 const _default = ModalDialog;
 
-},{"../../../theme.mjs":150,"../Portal/index.mjs":62,"../ScrollLock/index.mjs":65,"glamor":undefined,"react":undefined}],56:[function(require,module,exports){
+},{"../../../theme.mjs":150,"../Portal/index.mjs":62,"../ScrollLock/index.mjs":65,"glamor":undefined,"prop-types":258,"react":undefined}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6595,7 +6074,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _define_property(obj, key, value) {
@@ -6615,47 +6095,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -6751,15 +6190,15 @@ function _object_without_properties_loose(source, excluded) {
     }));
 }
 ModalFooter.propTypes = {
-    align: _react.PropTypes.oneOf([
+    align: _proptypes.default.oneOf([
         'center',
         'left',
         'right'
     ]),
-    children: _react.PropTypes.node,
-    onClose: _react.PropTypes.func,
-    showCloseButton: _react.PropTypes.bool,
-    text: _react.PropTypes.string
+    children: _proptypes.default.node,
+    onClose: _proptypes.default.func,
+    showCloseButton: _proptypes.default.bool,
+    text: _proptypes.default.string
 };
 ModalFooter.defaultProps = {
     align: 'left'
@@ -6786,7 +6225,7 @@ const classes = {
 };
 const _default = ModalFooter;
 
-},{"../../../theme.mjs":150,"glamor":undefined,"react":undefined}],57:[function(require,module,exports){
+},{"../../../theme.mjs":150,"glamor":undefined,"prop-types":258,"react":undefined}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6797,7 +6236,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _index = /*#__PURE__*/ _interop_require_default(require("../GlyphButton/index.mjs"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
@@ -6818,47 +6258,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -6981,13 +6380,13 @@ function _object_without_properties_loose(source, excluded) {
     }));
 }
 ModalHeader.propTypes = {
-    children: _react.PropTypes.node,
-    onClose: _react.PropTypes.func,
-    showCloseButton: _react.PropTypes.bool,
-    text: _react.PropTypes.string
+    children: _proptypes.default.node,
+    onClose: _proptypes.default.func,
+    showCloseButton: _proptypes.default.bool,
+    text: _proptypes.default.string
 };
 ModalHeader.contextTypes = {
-    onClose: _react.PropTypes.func.isRequired
+    onClose: _proptypes.default.func.isRequired
 };
 const classes = {
     header: {
@@ -7014,7 +6413,7 @@ const classes = {
 };
 const _default = ModalHeader;
 
-},{"../../../theme.mjs":150,"../GlyphButton/index.mjs":43,"glamor":undefined,"react":undefined}],58:[function(require,module,exports){
+},{"../../../theme.mjs":150,"../GlyphButton/index.mjs":43,"glamor":undefined,"prop-types":258,"react":undefined}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -7071,6 +6470,7 @@ Object.defineProperty(exports, "default", {
 });
 const _glamor = require("glamor");
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _page = /*#__PURE__*/ _interop_require_default(require("./page.mjs"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _interop_require_default(obj) {
@@ -7233,19 +6633,19 @@ const classes = {
     }
 };
 Pagination.propTypes = {
-    className: _react.PropTypes.string,
-    currentPage: _react.PropTypes.number.isRequired,
-    limit: _react.PropTypes.number,
-    onPageSelect: _react.PropTypes.func,
-    pageSize: _react.PropTypes.number.isRequired,
-    plural: _react.PropTypes.string,
-    singular: _react.PropTypes.string,
-    style: _react.PropTypes.object,
-    total: _react.PropTypes.number.isRequired
+    className: _proptypes.default.string,
+    currentPage: _proptypes.default.number.isRequired,
+    limit: _proptypes.default.number,
+    onPageSelect: _proptypes.default.func,
+    pageSize: _proptypes.default.number.isRequired,
+    plural: _proptypes.default.string,
+    singular: _proptypes.default.string,
+    style: _proptypes.default.object,
+    total: _proptypes.default.number.isRequired
 };
 const _default = Pagination;
 
-},{"../../../theme.mjs":150,"./page.mjs":60,"glamor":undefined,"react":undefined}],60:[function(require,module,exports){
+},{"../../../theme.mjs":150,"./page.mjs":60,"glamor":undefined,"prop-types":258,"react":undefined}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -7257,7 +6657,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -7276,47 +6677,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -7414,9 +6774,9 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement("button", props);
 }
 Page.propTypes = {
-    disabled: _react.PropTypes.bool,
-    onClick: _react.PropTypes.func.isRequired,
-    selected: _react.PropTypes.bool
+    disabled: _proptypes.default.bool,
+    onClick: _proptypes.default.func.isRequired,
+    selected: _proptypes.default.bool
 };
 /* eslint quote-props: ["error", "as-needed"] */ const selectedStyle = {
     backgroundColor: _theme.default.pagination.selected.background,
@@ -7464,7 +6824,7 @@ const classes = {
 };
 const _default = Page;
 
-},{"../../../theme.mjs":150,"glamor":undefined,"react":undefined}],61:[function(require,module,exports){
+},{"../../../theme.mjs":150,"glamor":undefined,"prop-types":258,"react":undefined}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -7476,6 +6836,12 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
     var cacheBabelInterop = new WeakMap();
@@ -7540,14 +6906,14 @@ function _interop_require_wildcard(obj, nodeInterop) {
     }
 }
 PassContext.propTypes = {
-    context: _react.PropTypes.object.isRequired
+    context: _proptypes.default.object.isRequired
 };
 PassContext.childContextTypes = {
-    onClose: _react.PropTypes.func
+    onClose: _proptypes.default.func
 };
 const _default = PassContext;
 
-},{"react":undefined}],62:[function(require,module,exports){
+},{"prop-types":258,"react":undefined}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -7559,22 +6925,9 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
-const _reactaddonscsstransitiongroup = /*#__PURE__*/ _interop_require_default(require("react-addons-css-transition-group"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _index = /*#__PURE__*/ _interop_require_default(require("../PassContext/index.mjs"));
-function _define_property(obj, key, value) {
-    if (key in obj) {
-        Object.defineProperty(obj, key, {
-            value: value,
-            enumerable: true,
-            configurable: true,
-            writable: true
-        });
-    } else {
-        obj[key] = value;
-    }
-    return obj;
-}
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -7621,21 +6974,6 @@ function _interop_require_wildcard(obj, nodeInterop) {
     }
     return newObj;
 }
-function _object_spread(target) {
-    for(var i = 1; i < arguments.length; i++){
-        var source = arguments[i] != null ? arguments[i] : {};
-        var ownKeys = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-            ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-                return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-            }));
-        }
-        ownKeys.forEach(function(key) {
-            _define_property(target, key, source[key]);
-        });
-    }
-    return target;
-}
 class Portal extends _react.Component {
     /**
 	 * Creates a new div, appends it to document.body, stores a reference in
@@ -7652,22 +6990,9 @@ class Portal extends _react.Component {
 	 * in a CSS fade transition group with a 200 ms enter/leave duration.
 	 * @returns {void}
 	 */ componentDidUpdate() {
-        // Animate fade on mount/unmount
-        const duration = 200;
-        const styles = `
-				.fade-enter { opacity: 0.01; }
-				.fade-enter.fade-enter-active { opacity: 1; transition: opacity ${duration}ms; }
-				.fade-leave { opacity: 1; }
-				.fade-leave.fade-leave-active { opacity: 0.01; transition: opacity ${duration}ms; }
-		`;
         (0, _reactdom.render)(/*#__PURE__*/ _react.default.createElement(_index.default, {
             context: this.context
-        }, /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("style", null, styles), /*#__PURE__*/ _react.default.createElement(_reactaddonscsstransitiongroup.default, _object_spread({
-            component: "div",
-            transitionName: "fade",
-            transitionEnterTimeout: duration,
-            transitionLeaveTimeout: duration
-        }, this.props)))), this.portalElement);
+        }, /*#__PURE__*/ _react.default.createElement("div", null, this.props.children)), this.portalElement);
     }
     /**
 	 * Removes the portal's div from document.body when the component unmounts.
@@ -7690,10 +7015,10 @@ class Portal extends _react.Component {
     }
 }
 Portal.contextTypes = {
-    onClose: _react.PropTypes.func
+    onClose: _proptypes.default.func
 };
 
-},{"../PassContext/index.mjs":61,"react":undefined,"react-addons-css-transition-group":undefined,"react-dom":undefined}],63:[function(require,module,exports){
+},{"../PassContext/index.mjs":61,"prop-types":258,"react":undefined,"react-dom":undefined}],63:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -7705,6 +7030,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../theme.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -7875,21 +7201,21 @@ const canUseDOM = !!(typeof window !== 'undefined' && window.document && window.
     }
 }
 ResponsiveText.propTypes = {
-    hiddenLG: _react.PropTypes.string,
-    hiddenMD: _react.PropTypes.string,
-    hiddenSM: _react.PropTypes.string,
-    hiddenXS: _react.PropTypes.string,
-    visibleLG: _react.PropTypes.string,
-    visibleMD: _react.PropTypes.string,
-    visibleSM: _react.PropTypes.string,
-    visibleXS: _react.PropTypes.string
+    hiddenLG: _proptypes.default.string,
+    hiddenMD: _proptypes.default.string,
+    hiddenSM: _proptypes.default.string,
+    hiddenXS: _proptypes.default.string,
+    visibleLG: _proptypes.default.string,
+    visibleMD: _proptypes.default.string,
+    visibleSM: _proptypes.default.string,
+    visibleXS: _proptypes.default.string
 };
 ResponsiveText.defaultProps = {
     component: 'span'
 };
 const _default = ResponsiveText;
 
-},{"../../../theme.mjs":150,"react":undefined}],64:[function(require,module,exports){
+},{"../../../theme.mjs":150,"prop-types":258,"react":undefined}],64:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -7991,7 +7317,7 @@ class ScrollLock extends _react.Component {
 	 * right-padding equal to the scrollbar width and sets `overflow-y: hidden`
 	 * on `document.body` to prevent page scrolling. No-ops in non-browser
 	 * environments.
-	 */ componentWillMount() {
+	 */ UNSAFE_componentWillMount() {
         if (typeof window === 'undefined') return;
         this.lockCount++;
         if (this.lockCount > 1) return;
@@ -8075,7 +7401,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _colors = /*#__PURE__*/ _interop_require_default(require("./colors.mjs"));
@@ -8083,47 +7410,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -8202,29 +7488,29 @@ function _object_without_properties_loose(source, excluded) {
     }));
 }
 const valuePropShape = [
-    _react.PropTypes.bool,
-    _react.PropTypes.number,
-    _react.PropTypes.string
+    _proptypes.default.bool,
+    _proptypes.default.number,
+    _proptypes.default.string
 ];
 SegmentedControl.propTypes = {
-    color: _react.PropTypes.oneOf(Object.keys(_colors.default)),
-    cropText: _react.PropTypes.bool,
-    equalWidthSegments: _react.PropTypes.bool,
-    inline: _react.PropTypes.bool,
-    onChange: _react.PropTypes.func.isRequired,
-    options: _react.PropTypes.arrayOf(_react.PropTypes.shape({
-        disabled: _react.PropTypes.bool,
-        label: _react.PropTypes.string,
-        value: _react.PropTypes.oneOfType(valuePropShape)
+    color: _proptypes.default.oneOf(Object.keys(_colors.default)),
+    cropText: _proptypes.default.bool,
+    equalWidthSegments: _proptypes.default.bool,
+    inline: _proptypes.default.bool,
+    onChange: _proptypes.default.func.isRequired,
+    options: _proptypes.default.arrayOf(_proptypes.default.shape({
+        disabled: _proptypes.default.bool,
+        label: _proptypes.default.string,
+        value: _proptypes.default.oneOfType(valuePropShape)
     })).isRequired,
-    value: _react.PropTypes.oneOfType(valuePropShape)
+    value: _proptypes.default.oneOfType(valuePropShape)
 };
 SegmentedControl.defaultProps = {
     color: 'default'
 };
 const _default = SegmentedControl;
 
-},{"./colors.mjs":66,"./styles.mjs":68,"glamor":undefined,"react":undefined}],68:[function(require,module,exports){
+},{"./colors.mjs":66,"./styles.mjs":68,"glamor":undefined,"prop-types":258,"react":undefined}],68:[function(require,module,exports){
 // ==============================
 // Segmented Control
 // ==============================
@@ -8366,7 +7652,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _glamor = require("glamor");
 const _styles = /*#__PURE__*/ _interop_require_default(require("./styles.mjs"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../ScreenReaderOnly/index.mjs"));
@@ -8376,47 +7663,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -8477,8 +7723,8 @@ function _object_without_properties_loose(source, excluded) {
     }), /*#__PURE__*/ _react.default.createElement(_index.default, null, "Loading..."));
 }
 Spinner.propTypes = {
-    color: _react.PropTypes.oneOf(_colors.default),
-    size: _react.PropTypes.oneOf(_sizes.default)
+    color: _proptypes.default.oneOf(_colors.default),
+    size: _proptypes.default.oneOf(_sizes.default)
 };
 Spinner.defaultProps = {
     size: 'medium',
@@ -8486,7 +7732,7 @@ Spinner.defaultProps = {
 };
 const _default = Spinner;
 
-},{"../ScreenReaderOnly/index.mjs":64,"./colors.mjs":69,"./sizes.mjs":71,"./styles.mjs":72,"glamor":undefined,"react":undefined}],71:[function(require,module,exports){
+},{"../ScreenReaderOnly/index.mjs":64,"./colors.mjs":69,"./sizes.mjs":71,"./styles.mjs":72,"glamor":undefined,"prop-types":258,"react":undefined}],71:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8919,7 +8165,7 @@ function createFilterObject(path, value, currentListFields) {
     };
 }
 
-},{"lodash/isArray":238,"lodash/isObject":244,"lodash/isPlainObject":246}],76:[function(require,module,exports){
+},{"lodash/isArray":240,"lodash/isObject":246,"lodash/isPlainObject":248}],76:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -9114,7 +8360,7 @@ function* setActiveFilterSaga() {
 }
 const _default = rootSaga;
 
-},{"../parsers/index.mjs":76,"../screens/List/constants.mjs":128,"./queryParamsSagas.mjs":78,"redux-saga":undefined,"redux-saga/effects":252}],78:[function(require,module,exports){
+},{"../parsers/index.mjs":76,"../screens/List/constants.mjs":128,"./queryParamsSagas.mjs":78,"redux-saga":undefined,"redux-saga/effects":264}],78:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -9308,7 +8554,7 @@ function parseQueryParams(query, currentList) {
     };
 }
 
-},{"../../utils/queryParams.mjs":156,"../parsers/index.mjs":76,"../screens/List/actions/index.mjs":106,"../screens/List/constants.mjs":128,"lodash/isEqual":241,"react-router-redux":undefined,"redux-saga/effects":252}],79:[function(require,module,exports){
+},{"../../utils/queryParams.mjs":156,"../parsers/index.mjs":76,"../screens/List/actions/index.mjs":106,"../screens/List/constants.mjs":128,"lodash/isEqual":243,"react-router-redux":undefined,"redux-saga/effects":264}],79:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -9396,6 +8642,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactrouter = require("react-router");
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -9432,14 +8680,14 @@ function _object_spread(target) {
 }
 /**
  * Displays information about a list and lets you create a new one.
- */ const ListTile = _react.default.createClass({
+ */ const ListTile = (0, _createreactclass.default)({
     propTypes: {
-        count: _react.default.PropTypes.string,
-        hideCreateButton: _react.default.PropTypes.bool,
-        href: _react.default.PropTypes.string,
-        label: _react.default.PropTypes.string,
-        path: _react.default.PropTypes.string,
-        spinner: _react.default.PropTypes.object
+        count: _proptypes.default.string,
+        hideCreateButton: _proptypes.default.bool,
+        href: _proptypes.default.string,
+        label: _proptypes.default.string,
+        path: _proptypes.default.string,
+        spinner: _proptypes.default.object
     },
     render () {
         const opts = {
@@ -9471,7 +8719,7 @@ function _object_spread(target) {
 });
 const _default = ListTile;
 
-},{"react":undefined,"react-router":undefined}],81:[function(require,module,exports){
+},{"create-react-class":161,"prop-types":258,"react":undefined,"react-router":undefined}],81:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -9491,6 +8739,7 @@ _export(exports, {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _lodash = /*#__PURE__*/ _interop_require_default(require("lodash"));
 const _reactredux = require("react-redux");
 const _string = require("../../../../utils/string.mjs");
@@ -9527,12 +8776,12 @@ class Lists extends _react.default.Component {
     }
 }
 Lists.propTypes = {
-    counts: _react.default.PropTypes.object.isRequired,
-    lists: _react.default.PropTypes.oneOfType([
-        _react.default.PropTypes.array,
-        _react.default.PropTypes.object
+    counts: _proptypes.default.object.isRequired,
+    lists: _proptypes.default.oneOfType([
+        _proptypes.default.array,
+        _proptypes.default.object
     ]).isRequired,
-    spinner: _react.default.PropTypes.node
+    spinner: _proptypes.default.node
 };
 const _default = (0, _reactredux.connect)((state)=>{
     return {
@@ -9540,7 +8789,7 @@ const _default = (0, _reactredux.connect)((state)=>{
     };
 })(Lists);
 
-},{"../../../../utils/string.mjs":157,"./ListTile.mjs":80,"lodash":undefined,"react":undefined,"react-redux":undefined}],82:[function(require,module,exports){
+},{"../../../../utils/string.mjs":157,"./ListTile.mjs":80,"lodash":undefined,"prop-types":258,"react":undefined,"react-redux":undefined}],82:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -9552,6 +8801,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _getRelatedIconClass = /*#__PURE__*/ _interop_require_default(require("../utils/getRelatedIconClass.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -9577,14 +8827,14 @@ function _interop_require_default(obj) {
     }
 }
 Section.propTypes = {
-    children: _react.default.PropTypes.element.isRequired,
-    icon: _react.default.PropTypes.string,
-    id: _react.default.PropTypes.string,
-    label: _react.default.PropTypes.string.isRequired
+    children: _proptypes.default.element.isRequired,
+    icon: _proptypes.default.string,
+    id: _proptypes.default.string,
+    label: _proptypes.default.string.isRequired
 };
 const _default = Section;
 
-},{"../utils/getRelatedIconClass.mjs":86,"react":undefined}],83:[function(require,module,exports){
+},{"../utils/getRelatedIconClass.mjs":86,"prop-types":258,"react":undefined}],83:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -9633,6 +8883,7 @@ _export(exports, {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
 const _index = require("../../elemental/index.mjs");
 const _reactredux = require("react-redux");
 const _Lists = /*#__PURE__*/ _interop_require_default(require("./components/Lists.mjs"));
@@ -9644,7 +8895,7 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const HomeView = _react.default.createClass({
+const HomeView = (0, _createreactclass.default)({
     displayName: 'HomeView',
     getInitialState () {
         return {
@@ -9708,7 +8959,7 @@ const _default = (0, _reactredux.connect)((state)=>({
         error: state.home.error
     }))(HomeView);
 
-},{"../../elemental/index.mjs":73,"../../shared/AlertMessages.mjs":132,"./actions.mjs":79,"./components/Lists.mjs":81,"./components/Section.mjs":82,"react":undefined,"react-redux":undefined}],85:[function(require,module,exports){
+},{"../../elemental/index.mjs":73,"../../shared/AlertMessages.mjs":132,"./actions.mjs":79,"./components/Lists.mjs":81,"./components/Section.mjs":82,"create-react-class":161,"react":undefined,"react-redux":undefined}],85:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -10088,6 +9339,12 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function _getRequireWildcardCache(nodeInterop) {
     if (typeof WeakMap !== "function") return null;
     var cacheBabelInterop = new WeakMap();
@@ -10230,18 +9487,18 @@ const SUPPORTED_KEYS = [
     'Shift'
 ];
 AltText.propTypes = {
-    component: _react.PropTypes.oneOfType([
-        _react.PropTypes.func,
-        _react.PropTypes.string
+    component: _proptypes.default.oneOfType([
+        _proptypes.default.func,
+        _proptypes.default.string
     ]),
-    modified: _react.PropTypes.oneOfType([
-        _react.PropTypes.element,
-        _react.PropTypes.string
+    modified: _proptypes.default.oneOfType([
+        _proptypes.default.element,
+        _proptypes.default.string
     ]),
-    modifier: _react.PropTypes.oneOf(SUPPORTED_KEYS),
-    normal: _react.PropTypes.oneOfType([
-        _react.PropTypes.element,
-        _react.PropTypes.string
+    modifier: _proptypes.default.oneOf(SUPPORTED_KEYS),
+    normal: _proptypes.default.oneOfType([
+        _proptypes.default.element,
+        _proptypes.default.string
     ])
 };
 AltText.defaultProps = {
@@ -10250,7 +9507,7 @@ AltText.defaultProps = {
 };
 const _default = AltText;
 
-},{"react":undefined}],89:[function(require,module,exports){
+},{"prop-types":258,"react":undefined}],89:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -10262,53 +9519,13 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _DrilldownItem = /*#__PURE__*/ _interop_require_default(require("./DrilldownItem.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -10366,10 +9583,10 @@ function _object_without_properties_loose(source, excluded) {
         })));
 }
 Drilldown.propTypes = {
-    items: _react.PropTypes.arrayOf(_react.PropTypes.shape({
-        href: _react.PropTypes.string.isRequired,
-        label: _react.PropTypes.string.isRequired,
-        separate: _react.PropTypes.bool
+    items: _proptypes.default.arrayOf(_proptypes.default.shape({
+        href: _proptypes.default.string.isRequired,
+        label: _proptypes.default.string.isRequired,
+        separate: _proptypes.default.bool
     })).isRequired
 };
 const classes = {
@@ -10382,7 +9599,7 @@ const classes = {
 };
 const _default = Drilldown;
 
-},{"./DrilldownItem.mjs":90,"glamor":undefined,"react":undefined}],90:[function(require,module,exports){
+},{"./DrilldownItem.mjs":90,"glamor":undefined,"prop-types":258,"react":undefined}],90:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -10394,7 +9611,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactrouter = require("react-router");
 const _index = require("../../../elemental/index.mjs");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../../theme.mjs"));
@@ -10415,47 +9633,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -10543,12 +9720,12 @@ function _object_without_properties_loose(source, excluded) {
     }, separator));
 }
 DrilldownItem.propTypes = {
-    href: _react.PropTypes.string.isRequired,
-    label: _react.PropTypes.string.isRequired,
-    separate: _react.PropTypes.bool,
-    separator: _react.PropTypes.oneOfType([
-        _react.PropTypes.element,
-        _react.PropTypes.string
+    href: _proptypes.default.string.isRequired,
+    label: _proptypes.default.string.isRequired,
+    separate: _proptypes.default.bool,
+    separator: _proptypes.default.oneOfType([
+        _proptypes.default.element,
+        _proptypes.default.string
     ])
 };
 DrilldownItem.defaultProps = {
@@ -10571,7 +9748,7 @@ const classes = {
 };
 const _default = DrilldownItem;
 
-},{"../../../../theme.mjs":150,"../../../elemental/index.mjs":73,"glamor":undefined,"react":undefined,"react-router":undefined}],91:[function(require,module,exports){
+},{"../../../../theme.mjs":150,"../../../elemental/index.mjs":73,"glamor":undefined,"prop-types":258,"react":undefined,"react-router":undefined}],91:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -10583,6 +9760,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _moment = /*#__PURE__*/ _interop_require_default(require("moment"));
 const _index = require("../../../elemental/index.mjs");
 const _FieldTypes = require("FieldTypes");
@@ -10623,11 +9802,11 @@ function smoothScrollTop() {
         window.scrollTo(0, 0);
     }
 }
-const EditForm = _react.default.createClass({
+const EditForm = (0, _createreactclass.default)({
     displayName: 'EditForm',
     propTypes: {
-        data: _react.default.PropTypes.object,
-        list: _react.default.PropTypes.object
+        data: _proptypes.default.object,
+        list: _proptypes.default.object
     },
     getInitialState () {
         const hasAsyncFields = !!this.props.list.columns.find((col)=>{
@@ -11029,7 +10208,7 @@ const styles = {
 };
 const _default = EditForm;
 
-},{"../../../../theme.mjs":150,"../../../../utils/color.mjs":152,"../../../../utils/string.mjs":157,"../../../elemental/index.mjs":73,"../../../shared/AlertMessages.mjs":132,"../../../shared/ConfirmationDialog.mjs":133,"../../../shared/InvalidFieldType.mjs":137,"../actions.mjs":87,"../constants.mjs":101,"./AltText.mjs":88,"./FooterBar.mjs":94,"./FormHeading.mjs":95,"FieldTypes":undefined,"moment":undefined,"react":undefined}],92:[function(require,module,exports){
+},{"../../../../theme.mjs":150,"../../../../utils/color.mjs":152,"../../../../utils/string.mjs":157,"../../../elemental/index.mjs":73,"../../../shared/AlertMessages.mjs":132,"../../../shared/ConfirmationDialog.mjs":133,"../../../shared/InvalidFieldType.mjs":137,"../actions.mjs":87,"../constants.mjs":101,"./AltText.mjs":88,"./FooterBar.mjs":94,"./FormHeading.mjs":95,"FieldTypes":undefined,"create-react-class":161,"moment":undefined,"prop-types":258,"react":undefined}],92:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -11049,6 +10228,8 @@ _export(exports, {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _reactredux = require("react-redux");
 const _index = /*#__PURE__*/ _interop_require_default(require("./Toolbar/index.mjs"));
@@ -11090,12 +10271,12 @@ function _object_spread(target) {
     }
     return target;
 }
-const EditFormHeader = _react.default.createClass({
+const EditFormHeader = (0, _createreactclass.default)({
     displayName: 'EditFormHeader',
     propTypes: {
-        data: _react.default.PropTypes.object,
-        list: _react.default.PropTypes.object,
-        toggleCreate: _react.default.PropTypes.func
+        data: _proptypes.default.object,
+        list: _proptypes.default.object,
+        toggleCreate: _proptypes.default.func
     },
     getInitialState () {
         return {
@@ -11214,7 +10395,7 @@ const _default = (0, _reactredux.connect)((state)=>({
         listActivePage: state.lists.page.index
     }))(EditFormHeader);
 
-},{"../../../elemental/index.mjs":73,"./Drilldown.mjs":89,"./EditFormHeaderSearch.mjs":93,"./Toolbar/ToolbarSection.mjs":99,"./Toolbar/index.mjs":100,"react":undefined,"react-dom":undefined,"react-redux":undefined,"react-router":undefined}],93:[function(require,module,exports){
+},{"../../../elemental/index.mjs":73,"./Drilldown.mjs":89,"./EditFormHeaderSearch.mjs":93,"./Toolbar/ToolbarSection.mjs":99,"./Toolbar/index.mjs":100,"create-react-class":161,"prop-types":258,"react":undefined,"react-dom":undefined,"react-redux":undefined,"react-router":undefined}],93:[function(require,module,exports){
 /* eslint quote-props: ["error", "as-needed"] */ "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -11296,6 +10477,7 @@ Object.defineProperty(exports, "default" // Search
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _glamor = require("glamor");
 const _index = require("../../../elemental/index.mjs");
@@ -11481,8 +10663,8 @@ function _object_without_properties_loose(source, excluded) {
 // prop type validation will occur within the Glyph component, no need to
 // duplicate, just pass it through.
 EditFormHeaderSearch.propTypes = {
-    onChange: _react.PropTypes.func.isRequired,
-    value: _react.PropTypes.string
+    onChange: _proptypes.default.func.isRequired,
+    value: _proptypes.default.string
 };
 const classes = {
     wrapper: {
@@ -11513,7 +10695,7 @@ const classes = {
 };
 const _default = EditFormHeaderSearch;
 
-},{"../../../../theme.mjs":150,"../../../elemental/index.mjs":73,"glamor":undefined,"react":undefined,"react-dom":undefined}],94:[function(require,module,exports){
+},{"../../../../theme.mjs":150,"../../../elemental/index.mjs":73,"glamor":undefined,"prop-types":258,"react":undefined,"react-dom":undefined}],94:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -11525,6 +10707,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 function _define_property(obj, key, value) {
     if (key in obj) {
         Object.defineProperty(obj, key, {
@@ -11594,9 +10778,9 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const FooterBar = _react.default.createClass({
+const FooterBar = (0, _createreactclass.default)({
     propTypes: {
-        style: _react.default.PropTypes.object
+        style: _proptypes.default.object
     },
     getDefaultProps () {
         return {
@@ -11694,7 +10878,7 @@ const FooterBar = _react.default.createClass({
 });
 const _default = FooterBar;
 
-},{"react":undefined}],95:[function(require,module,exports){
+},{"create-react-class":161,"prop-types":258,"react":undefined}],95:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -11706,16 +10890,18 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _evalDependsOn = /*#__PURE__*/ _interop_require_default(require("../../../../../../fields/utils/evalDependsOn.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-const _default = _react.default.createClass({
+const _default = (0, _createreactclass.default)({
     displayName: 'FormHeading',
     propTypes: {
-        options: _react.default.PropTypes.object
+        options: _proptypes.default.object
     },
     render () {
         if (!(0, _evalDependsOn.default)(this.props.options.dependsOn, this.props.options.values)) {
@@ -11727,7 +10913,7 @@ const _default = _react.default.createClass({
     }
 });
 
-},{"../../../../../../fields/utils/evalDependsOn.mjs":158,"react":undefined}],96:[function(require,module,exports){
+},{"../../../../../../fields/utils/evalDependsOn.mjs":158,"create-react-class":161,"prop-types":258,"react":undefined}],96:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -11739,6 +10925,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactrouter = require("react-router");
 const _index = require("../../../../elemental/index.mjs");
 const _RelatedItemsListDragDrop = /*#__PURE__*/ _interop_require_default(require("./RelatedItemsListDragDrop.mjs"));
@@ -11778,15 +10966,15 @@ function _object_spread(target) {
     }
     return target;
 }
-const RelatedItemsList = _react.default.createClass({
+const RelatedItemsList = (0, _createreactclass.default)({
     propTypes: {
-        dispatch: _react.default.PropTypes.func.isRequired,
-        dragNewSortOrder: _react.default.PropTypes.number,
-        items: _react.default.PropTypes.array,
-        list: _react.default.PropTypes.object.isRequired,
-        refList: _react.default.PropTypes.object.isRequired,
-        relatedItemId: _react.default.PropTypes.string.isRequired,
-        relationship: _react.default.PropTypes.object.isRequired
+        dispatch: _proptypes.default.func.isRequired,
+        dragNewSortOrder: _proptypes.default.number,
+        items: _proptypes.default.array,
+        list: _proptypes.default.object.isRequired,
+        refList: _proptypes.default.object.isRequired,
+        relatedItemId: _proptypes.default.string.isRequired,
+        relationship: _proptypes.default.object.isRequired
     },
     getInitialState () {
         return {
@@ -11909,7 +11097,7 @@ const RelatedItemsList = _react.default.createClass({
 });
 const _default = RelatedItemsList;
 
-},{"../../../../../constants.mjs":149,"../../../../elemental/index.mjs":73,"../../actions.mjs":87,"./RelatedItemsListDragDrop.mjs":97,"./RelatedItemsListRow.mjs":98,"react":undefined,"react-router":undefined}],97:[function(require,module,exports){
+},{"../../../../../constants.mjs":149,"../../../../elemental/index.mjs":73,"../../actions.mjs":87,"./RelatedItemsListDragDrop.mjs":97,"./RelatedItemsListRow.mjs":98,"create-react-class":161,"prop-types":258,"react":undefined,"react-router":undefined}],97:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -11921,6 +11109,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdnd = require("react-dnd");
 const _reactdndhtml5backend = /*#__PURE__*/ _interop_require_default(require("react-dnd-html5-backend"));
 const _RelatedItemsListRow = require("./RelatedItemsListRow.mjs");
@@ -12011,18 +11200,18 @@ class RelatedItemsListDragDrop extends _react.Component {
     }
 }
 RelatedItemsListDragDrop.propTypes = {
-    columns: _react.PropTypes.array.isRequired,
-    dispatch: _react.default.PropTypes.func.isRequired,
-    dragNewSortOrder: _react.default.PropTypes.number,
-    items: _react.PropTypes.array.isRequired,
-    list: _react.PropTypes.object.isRequired,
-    refList: _react.PropTypes.object.isRequired,
-    relatedItemId: _react.PropTypes.string.isRequired,
-    relationship: _react.PropTypes.object.isRequired
+    columns: _proptypes.default.array.isRequired,
+    dispatch: _proptypes.default.func.isRequired,
+    dragNewSortOrder: _proptypes.default.number,
+    items: _proptypes.default.array.isRequired,
+    list: _proptypes.default.object.isRequired,
+    refList: _proptypes.default.object.isRequired,
+    relatedItemId: _proptypes.default.string.isRequired,
+    relationship: _proptypes.default.object.isRequired
 };
 const _default = (0, _reactdnd.DragDropContext)(_reactdndhtml5backend.default)(RelatedItemsListDragDrop);
 
-},{"./RelatedItemsListRow.mjs":98,"react":undefined,"react-dnd":undefined,"react-dnd-html5-backend":undefined}],98:[function(require,module,exports){
+},{"./RelatedItemsListRow.mjs":98,"prop-types":258,"react":undefined,"react-dnd":undefined,"react-dnd-html5-backend":undefined}],98:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -12042,6 +11231,7 @@ _export(exports, {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdnd = require("react-dnd");
 const _FieldTypes = require("FieldTypes");
 const _actions = require("../../actions.mjs");
@@ -12158,19 +11348,19 @@ function _object_spread(target) {
     }
 }
 RelatedItemsListRow.propTypes = {
-    columns: _react.PropTypes.array.isRequired,
-    dispatch: _react.PropTypes.func.isRequired,
-    dragNewSortOrder: _react.default.PropTypes.number,
-    index: _react.PropTypes.number,
-    item: _react.PropTypes.object.isRequired,
-    refList: _react.PropTypes.object.isRequired,
-    relatedItemId: _react.PropTypes.string.isRequired,
-    relationship: _react.PropTypes.object.isRequired,
+    columns: _proptypes.default.array.isRequired,
+    dispatch: _proptypes.default.func.isRequired,
+    dragNewSortOrder: _proptypes.default.number,
+    index: _proptypes.default.number,
+    item: _proptypes.default.object.isRequired,
+    refList: _proptypes.default.object.isRequired,
+    relatedItemId: _proptypes.default.string.isRequired,
+    relationship: _proptypes.default.object.isRequired,
     // Injected by React DnD:
-    isDragging: _react.PropTypes.bool,
-    connectDragSource: _react.PropTypes.func,
-    connectDropTarget: _react.PropTypes.func,
-    connectDragPreview: _react.PropTypes.func
+    isDragging: _proptypes.default.bool,
+    connectDragSource: _proptypes.default.func,
+    connectDropTarget: _proptypes.default.func,
+    connectDragPreview: _proptypes.default.func
 };
 const _default = RelatedItemsListRow;
 // Expose Sortable
@@ -12261,7 +11451,7 @@ const _default = RelatedItemsListRow;
 }
 const Sortable = (0, _reactdnd.DragSource)('item', dragItem, dragProps)((0, _reactdnd.DropTarget)('item', dropItem, dropProps)(RelatedItemsListRow));
 
-},{"../../../List/components/ListControl.mjs":119,"../../actions.mjs":87,"FieldTypes":undefined,"react":undefined,"react-dnd":undefined}],99:[function(require,module,exports){
+},{"../../../List/components/ListControl.mjs":119,"../../actions.mjs":87,"FieldTypes":undefined,"prop-types":258,"react":undefined,"react-dnd":undefined}],99:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -12272,53 +11462,13 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -12376,12 +11526,12 @@ function _object_without_properties_loose(source, excluded) {
     return /*#__PURE__*/ _react.default.createElement("div", props);
 }
 ToolbarSection.propTypes = {
-    left: _react.PropTypes.bool,
-    right: _react.PropTypes.bool
+    left: _proptypes.default.bool,
+    right: _proptypes.default.bool
 };
 const _default = ToolbarSection;
 
-},{"classnames":undefined,"react":undefined}],100:[function(require,module,exports){
+},{"classnames":undefined,"prop-types":258,"react":undefined}],100:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -12392,7 +11542,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 function _define_property(obj, key, value) {
     if (key in obj) {
         Object.defineProperty(obj, key, {
@@ -12406,46 +11557,10 @@ function _define_property(obj, key, value) {
     }
     return obj;
 }
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
     };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -12491,11 +11606,11 @@ const Toolbar = (props)=>/*#__PURE__*/ _react.default.createElement("div", _obje
     }));
 Toolbar.displayName = 'Toolbar';
 Toolbar.propTypes = {
-    children: _react.PropTypes.node.isRequired
+    children: _proptypes.default.node.isRequired
 };
 const _default = Toolbar;
 
-},{"react":undefined}],101:[function(require,module,exports){
+},{"prop-types":258,"react":undefined}],101:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -12562,6 +11677,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = require("../../elemental/index.mjs");
 const _reactredux = require("react-redux");
 const _reactrouter = require("react-router");
@@ -12578,10 +11695,10 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const ItemView = _react.default.createClass({
+const ItemView = (0, _createreactclass.default)({
     displayName: 'ItemView',
     contextTypes: {
-        router: _react.default.PropTypes.object.isRequired
+        router: _proptypes.default.object.isRequired
     },
     getInitialState () {
         return {
@@ -12597,7 +11714,7 @@ const ItemView = _react.default.createClass({
         }
         this.initializeItem(this.props.params.itemId);
     },
-    componentWillReceiveProps (nextProps) {
+    UNSAFE_componentWillReceiveProps (nextProps) {
         // We've opened a new item from the client side routing, so initialize
         // again with the new item id
         if (nextProps.params.itemId !== this.props.params.itemId) {
@@ -12719,7 +11836,7 @@ const _default = (0, _reactredux.connect)((state)=>({
         drag: state.item.drag
     }))(ItemView);
 
-},{"../../../utils/lists.mjs":155,"../../elemental/Alert/index.mjs":11,"../../elemental/index.mjs":73,"../../shared/CreateForm.mjs":134,"../List/actions/index.mjs":106,"./actions.mjs":87,"./components/EditForm.mjs":91,"./components/EditFormHeader.mjs":92,"./components/RelatedItemsList/RelatedItemsList.mjs":96,"react":undefined,"react-redux":undefined,"react-router":undefined}],103:[function(require,module,exports){
+},{"../../../utils/lists.mjs":155,"../../elemental/Alert/index.mjs":11,"../../elemental/index.mjs":73,"../../shared/CreateForm.mjs":134,"../List/actions/index.mjs":106,"./actions.mjs":87,"./components/EditForm.mjs":91,"./components/EditFormHeader.mjs":92,"./components/RelatedItemsList/RelatedItemsList.mjs":96,"create-react-class":161,"prop-types":258,"react":undefined,"react-redux":undefined,"react-router":undefined}],103:[function(require,module,exports){
 /**
  * Item reducer, handles the item data and loading
  */ "use strict";
@@ -13363,6 +12480,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _FieldTypes = require("FieldTypes");
 const _index = require("../../../../elemental/index.mjs");
 const _index1 = /*#__PURE__*/ _interop_require_default(require("../../../../shared/Popout/index.mjs"));
@@ -13504,15 +12622,15 @@ function _interop_require_wildcard(obj, nodeInterop) {
     }
 }
 Filter.propTypes = {
-    dispatch: _react.PropTypes.func.isRequired,
-    filter: _react.PropTypes.shape({
-        field: _react.PropTypes.object.isRequired,
-        value: _react.PropTypes.object.isRequired
+    dispatch: _proptypes.default.func.isRequired,
+    filter: _proptypes.default.shape({
+        field: _proptypes.default.object.isRequired,
+        value: _proptypes.default.object.isRequired
     }).isRequired
 };
 const _default = Filter;
 
-},{"../../../../elemental/index.mjs":73,"../../../../shared/Popout/index.mjs":146,"../../actions/index.mjs":106,"./getFilterLabel.mjs":112,"FieldTypes":undefined,"react":undefined}],109:[function(require,module,exports){
+},{"../../../../elemental/index.mjs":73,"../../../../shared/Popout/index.mjs":146,"../../actions/index.mjs":106,"./getFilterLabel.mjs":112,"FieldTypes":undefined,"prop-types":258,"react":undefined}],109:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -13523,7 +12641,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = require("../../../../elemental/index.mjs");
 const _Filter = /*#__PURE__*/ _interop_require_default(require("./Filter.mjs"));
 const _index1 = require("../../actions/index.mjs");
@@ -13531,47 +12650,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 const ListFilters = ({ dispatch, filters })=>{
     if (!filters.length) return /*#__PURE__*/ _react.default.createElement("div", null);
@@ -13601,12 +12679,12 @@ const ListFilters = ({ dispatch, filters })=>{
     }, currentFilters);
 };
 ListFilters.propTypes = {
-    dispatch: _react.PropTypes.func.isRequired,
-    filters: _react.PropTypes.array.isRequired
+    dispatch: _proptypes.default.func.isRequired,
+    filters: _proptypes.default.array.isRequired
 };
 const _default = ListFilters;
 
-},{"../../../../elemental/index.mjs":73,"../../actions/index.mjs":106,"./Filter.mjs":108,"react":undefined}],110:[function(require,module,exports){
+},{"../../../../elemental/index.mjs":73,"../../actions/index.mjs":106,"./Filter.mjs":108,"prop-types":258,"react":undefined}],110:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -13618,8 +12696,10 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
-const _reactaddonscsstransitiongroup = /*#__PURE__*/ _interop_require_default(require("react-addons-css-transition-group"));
+const _CSSTransitionGroup = /*#__PURE__*/ _interop_require_default(require("react-transition-group/CSSTransitionGroup"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 const _ListFiltersAddForm = /*#__PURE__*/ _interop_require_default(require("./ListFiltersAddForm.mjs"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../../../../shared/Popout/index.mjs"));
@@ -13632,10 +12712,10 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const ListFiltersAdd = _react.default.createClass({
+const ListFiltersAdd = (0, _createreactclass.default)({
     displayName: 'ListFiltersAdd',
     propTypes: {
-        maxHeight: _react.default.PropTypes.number
+        maxHeight: _proptypes.default.number
     },
     getDefaultProps () {
         return {
@@ -13773,7 +12853,7 @@ const ListFiltersAdd = _react.default.createClass({
             leftIcon: selectedField ? 'chevron-left' : null,
             title: selectedField ? selectedField.label : 'Filter',
             transitionDirection: selectedField ? 'next' : 'prev'
-        }), /*#__PURE__*/ _react.default.createElement(_reactaddonscsstransitiongroup.default, {
+        }), /*#__PURE__*/ _react.default.createElement(_CSSTransitionGroup.default, {
             className: popoutPanesClassname,
             component: "div",
             style: popoutBodyStyle,
@@ -13785,7 +12865,7 @@ const ListFiltersAdd = _react.default.createClass({
 });
 const _default = ListFiltersAdd;
 
-},{"../../../../elemental/index.mjs":73,"../../../../shared/Popout/PopoutList.mjs":142,"../../../../shared/Popout/index.mjs":146,"../../actions/index.mjs":106,"../ListHeaderButton.mjs":121,"./ListFiltersAddForm.mjs":111,"classnames":undefined,"react":undefined,"react-addons-css-transition-group":undefined,"react-dom":undefined}],111:[function(require,module,exports){
+},{"../../../../elemental/index.mjs":73,"../../../../shared/Popout/PopoutList.mjs":142,"../../../../shared/Popout/index.mjs":146,"../../actions/index.mjs":106,"../ListHeaderButton.mjs":121,"./ListFiltersAddForm.mjs":111,"classnames":undefined,"create-react-class":161,"prop-types":258,"react":undefined,"react-dom":undefined,"react-transition-group/CSSTransitionGroup":undefined}],111:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -13797,6 +12877,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdom = require("react-dom");
 const _index = /*#__PURE__*/ _interop_require_default(require("../../../../shared/Popout/index.mjs"));
 const _FieldTypes = require("FieldTypes");
@@ -13805,13 +12887,13 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const ListFiltersAddForm = _react.default.createClass({
+const ListFiltersAddForm = (0, _createreactclass.default)({
     propTypes: {
-        field: _react.default.PropTypes.object.isRequired,
-        maxHeight: _react.default.PropTypes.number,
-        onApply: _react.default.PropTypes.func,
-        onCancel: _react.default.PropTypes.func,
-        onHeightChange: _react.default.PropTypes.func
+        field: _proptypes.default.object.isRequired,
+        maxHeight: _proptypes.default.number,
+        onApply: _proptypes.default.func,
+        onCancel: _proptypes.default.func,
+        onHeightChange: _proptypes.default.func
     },
     getInitialState () {
         const filterComponent = _FieldTypes.Filters[this.props.field.type];
@@ -13877,7 +12959,7 @@ const ListFiltersAddForm = _react.default.createClass({
 });
 const _default = ListFiltersAddForm;
 
-},{"../../../../shared/Popout/index.mjs":146,"FieldTypes":undefined,"react":undefined,"react-dom":undefined}],112:[function(require,module,exports){
+},{"../../../../shared/Popout/index.mjs":146,"FieldTypes":undefined,"create-react-class":161,"prop-types":258,"react":undefined,"react-dom":undefined}],112:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -14058,7 +13140,9 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 const _ItemsTableRow = /*#__PURE__*/ _interop_require_default(require("./ItemsTableRow.mjs"));
 const _ItemsTableDragDrop = /*#__PURE__*/ _interop_require_default(require("./ItemsTableDragDrop.mjs"));
@@ -14081,47 +13165,6 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
-}
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
         var source = arguments[i] != null ? arguments[i] : {};
@@ -14137,16 +13180,16 @@ function _object_spread(target) {
     }
     return target;
 }
-const ItemsTable = _react.default.createClass({
+const ItemsTable = (0, _createreactclass.default)({
     propTypes: {
-        checkedItems: _react.PropTypes.object.isRequired,
-        columns: _react.PropTypes.array.isRequired,
-        deleteTableItem: _react.PropTypes.func.isRequired,
-        handleSortSelect: _react.PropTypes.func.isRequired,
-        items: _react.PropTypes.object.isRequired,
-        list: _react.PropTypes.object.isRequired,
-        manageMode: _react.PropTypes.bool.isRequired,
-        rowAlert: _react.PropTypes.object.isRequired
+        checkedItems: _proptypes.default.object.isRequired,
+        columns: _proptypes.default.array.isRequired,
+        deleteTableItem: _proptypes.default.func.isRequired,
+        handleSortSelect: _proptypes.default.func.isRequired,
+        items: _proptypes.default.object.isRequired,
+        list: _proptypes.default.object.isRequired,
+        manageMode: _proptypes.default.bool.isRequired,
+        rowAlert: _proptypes.default.object.isRequired
     },
     renderCols () {
         const cols = this.props.columns.map((col)=>/*#__PURE__*/ _react.default.createElement("col", {
@@ -14231,7 +13274,7 @@ const ItemsTable = _react.default.createClass({
 });
 const _default = ItemsTable;
 
-},{"../../../../../constants.mjs":149,"./ItemsTableDragDrop.mjs":114,"./ItemsTableRow.mjs":117,"classnames":undefined,"react":undefined}],114:[function(require,module,exports){
+},{"../../../../../constants.mjs":149,"./ItemsTableDragDrop.mjs":114,"./ItemsTableRow.mjs":117,"classnames":undefined,"create-react-class":161,"prop-types":258,"react":undefined}],114:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -14243,6 +13286,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdnd = require("react-dnd");
 const _reactdndhtml5backend = /*#__PURE__*/ _interop_require_default(require("react-dnd-html5-backend"));
 const _ItemsTableRow = require("./ItemsTableRow.mjs");
@@ -14280,14 +13325,14 @@ function _object_spread(target) {
     }
     return target;
 }
-const ItemsTableDragDrop = _react.default.createClass({
+const ItemsTableDragDrop = (0, _createreactclass.default)({
     displayName: 'ItemsTableDragDrop',
     propTypes: {
-        columns: _react.default.PropTypes.array,
-        id: _react.default.PropTypes.any,
-        index: _react.default.PropTypes.number,
-        items: _react.default.PropTypes.object,
-        list: _react.default.PropTypes.object
+        columns: _proptypes.default.array,
+        id: _proptypes.default.any,
+        index: _proptypes.default.number,
+        items: _proptypes.default.object,
+        list: _proptypes.default.object
     },
     render () {
         return /*#__PURE__*/ _react.default.createElement("tbody", null, this.props.items.results.map((item, i)=>{
@@ -14303,7 +13348,7 @@ const ItemsTableDragDrop = _react.default.createClass({
 });
 const _default = (0, _reactdnd.DragDropContext)(_reactdndhtml5backend.default)(ItemsTableDragDrop);
 
-},{"./ItemsTableDragDropZone.mjs":115,"./ItemsTableRow.mjs":117,"react":undefined,"react-dnd":undefined,"react-dnd-html5-backend":undefined}],115:[function(require,module,exports){
+},{"./ItemsTableDragDropZone.mjs":115,"./ItemsTableRow.mjs":117,"create-react-class":161,"prop-types":258,"react":undefined,"react-dnd":undefined,"react-dnd-html5-backend":undefined}],115:[function(require,module,exports){
 /**
  * THIS IS ORPHANED AND ISN'T RENDERED AT THE MOMENT
  * THIS WAS DONE TO FINISH THE REDUX INTEGRATION, WILL REWRITE SOON
@@ -14319,6 +13364,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _ItemsTableDragDropZoneTarget = /*#__PURE__*/ _interop_require_default(require("./ItemsTableDragDropZoneTarget.mjs"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 function _interop_require_default(obj) {
@@ -14326,13 +13373,13 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const ItemsTableDragDropZone = _react.default.createClass({
+const ItemsTableDragDropZone = (0, _createreactclass.default)({
     displayName: 'ItemsTableDragDropZone',
     propTypes: {
-        columns: _react.default.PropTypes.array,
-        connectDropTarget: _react.default.PropTypes.func,
-        items: _react.default.PropTypes.object,
-        list: _react.default.PropTypes.object
+        columns: _proptypes.default.array,
+        connectDropTarget: _proptypes.default.func,
+        items: _proptypes.default.object,
+        list: _proptypes.default.object
     },
     renderPageDrops () {
         const { items, currentPage, pageSize } = this.props;
@@ -14378,7 +13425,7 @@ const ItemsTableDragDropZone = _react.default.createClass({
 });
 const _default = ItemsTableDragDropZone;
 
-},{"./ItemsTableDragDropZoneTarget.mjs":116,"classnames":undefined,"react":undefined}],116:[function(require,module,exports){
+},{"./ItemsTableDragDropZoneTarget.mjs":116,"classnames":undefined,"create-react-class":161,"prop-types":258,"react":undefined}],116:[function(require,module,exports){
 /**
  * THIS IS ORPHANED AND ISN'T RENDERED AT THE MOMENT
  * THIS WAS DONE TO FINISH THE REDUX INTEGRATION, WILL REWRITE SOON
@@ -14394,6 +13441,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactdnd = require("react-dnd");
 const _index = require("../../actions/index.mjs");
 function _interop_require_default(obj) {
@@ -14403,13 +13452,13 @@ function _interop_require_default(obj) {
 }
 let timeoutID = false;
 // drop target
-const ItemsTableDragDropZoneTarget = _react.default.createClass({
+const ItemsTableDragDropZoneTarget = (0, _createreactclass.default)({
     displayName: 'ItemsTableDragDropZoneTarget',
     propTypes: {
-        className: _react.default.PropTypes.string,
-        connectDropTarget: _react.default.PropTypes.func,
-        isOver: _react.default.PropTypes.bool,
-        pageItems: _react.default.PropTypes.string
+        className: _proptypes.default.string,
+        connectDropTarget: _proptypes.default.func,
+        isOver: _proptypes.default.bool,
+        pageItems: _proptypes.default.string
     },
     componentDidUpdate () {
         if (timeoutID && !this.props.isOver) {
@@ -14461,7 +13510,7 @@ const ItemsTableDragDropZoneTarget = _react.default.createClass({
 }
 const _default = (0, _reactdnd.DropTarget)('item', dropTarget, dropProps)(ItemsTableDragDropZoneTarget);
 
-},{"../../actions/index.mjs":106,"react":undefined,"react-dnd":undefined}],117:[function(require,module,exports){
+},{"../../actions/index.mjs":106,"create-react-class":161,"prop-types":258,"react":undefined,"react-dnd":undefined}],117:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -14481,6 +13530,8 @@ _export(exports, {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 const _ListControl = /*#__PURE__*/ _interop_require_default(require("../ListControl.mjs"));
 const _FieldTypes = require("FieldTypes");
@@ -14519,18 +13570,18 @@ function _object_spread(target) {
     }
     return target;
 }
-const ItemsRow = _react.default.createClass({
+const ItemsRow = (0, _createreactclass.default)({
     propTypes: {
-        columns: _react.default.PropTypes.array,
-        id: _react.default.PropTypes.any,
-        index: _react.default.PropTypes.number,
-        items: _react.default.PropTypes.object,
-        list: _react.default.PropTypes.object,
+        columns: _proptypes.default.array,
+        id: _proptypes.default.any,
+        index: _proptypes.default.number,
+        items: _proptypes.default.object,
+        list: _proptypes.default.object,
         // Injected by React DnD:
-        isDragging: _react.default.PropTypes.bool,
-        connectDragSource: _react.default.PropTypes.func,
-        connectDropTarget: _react.default.PropTypes.func,
-        connectDragPreview: _react.default.PropTypes.func
+        isDragging: _proptypes.default.bool,
+        connectDragSource: _proptypes.default.func,
+        connectDropTarget: _proptypes.default.func,
+        connectDragPreview: _proptypes.default.func
     },
     renderRow (item) {
         const itemId = item.id;
@@ -14674,7 +13725,7 @@ function dropProps(connect) {
 }
 const Sortable = (0, _reactdnd.DragSource)('item', dragItem, dragProps)((0, _reactdnd.DropTarget)('item', dropItem, dropProps)(ItemsRow));
 
-},{"../../actions/index.mjs":106,"../ListControl.mjs":119,"FieldTypes":undefined,"classnames":undefined,"react":undefined,"react-dnd":undefined}],118:[function(require,module,exports){
+},{"../../actions/index.mjs":106,"../ListControl.mjs":119,"FieldTypes":undefined,"classnames":undefined,"create-react-class":161,"prop-types":258,"react":undefined,"react-dnd":undefined}],118:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -14686,6 +13737,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../../../shared/Popout/index.mjs"));
 const _PopoutList = /*#__PURE__*/ _interop_require_default(require("../../../shared/Popout/PopoutList.mjs"));
 const _index1 = require("../../../elemental/index.mjs");
@@ -14696,7 +13748,7 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const ListColumnsForm = _react.default.createClass({
+const ListColumnsForm = (0, _createreactclass.default)({
     displayName: 'ListColumnsForm',
     getInitialState () {
         return {
@@ -14802,7 +13854,7 @@ const ListColumnsForm = _react.default.createClass({
 });
 const _default = ListColumnsForm;
 
-},{"../../../elemental/index.mjs":73,"../../../shared/Popout/PopoutList.mjs":142,"../../../shared/Popout/index.mjs":146,"../actions/index.mjs":106,"./ListHeaderButton.mjs":121,"react":undefined}],119:[function(require,module,exports){
+},{"../../../elemental/index.mjs":73,"../../../shared/Popout/PopoutList.mjs":142,"../../../shared/Popout/index.mjs":146,"../actions/index.mjs":106,"./ListHeaderButton.mjs":121,"create-react-class":161,"react":undefined}],119:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -14814,6 +13866,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -14848,13 +13902,13 @@ function _object_spread(target) {
     }
     return target;
 }
-const ListControl = _react.default.createClass({
+const ListControl = (0, _createreactclass.default)({
     propTypes: {
-        active: _react.default.PropTypes.bool,
-        dragSource: _react.default.PropTypes.func,
-        itemId: _react.default.PropTypes.string,
-        onClick: _react.default.PropTypes.func,
-        type: _react.default.PropTypes.oneOf([
+        active: _proptypes.default.bool,
+        dragSource: _proptypes.default.func,
+        itemId: _proptypes.default.string,
+        onClick: _proptypes.default.func,
+        type: _proptypes.default.oneOf([
             'check',
             'delete',
             'sortable'
@@ -14911,7 +13965,7 @@ const ListControl = _react.default.createClass({
 });
 const _default = ListControl;
 
-},{"classnames":undefined,"react":undefined}],120:[function(require,module,exports){
+},{"classnames":undefined,"create-react-class":161,"prop-types":258,"react":undefined}],120:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -14922,7 +13976,9 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = /*#__PURE__*/ _interop_require_default(require("../../../shared/Popout/index.mjs"));
 const _PopoutList = /*#__PURE__*/ _interop_require_default(require("../../../shared/Popout/PopoutList.mjs"));
 const _ListHeaderButton = /*#__PURE__*/ _interop_require_default(require("./ListHeaderButton.mjs"));
@@ -14932,47 +13988,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 const FORMAT_OPTIONS = [
     {
@@ -14984,11 +13999,11 @@ const FORMAT_OPTIONS = [
         value: 'json'
     }
 ];
-const ListDownloadForm = _react.default.createClass({
+const ListDownloadForm = (0, _createreactclass.default)({
     propTypes: {
-        activeColumns: _react.PropTypes.array,
-        dispatch: _react.PropTypes.func.isRequired,
-        list: _react.PropTypes.object
+        activeColumns: _proptypes.default.array,
+        dispatch: _proptypes.default.func.isRequired,
+        list: _proptypes.default.object
     },
     getInitialState () {
         return {
@@ -15160,7 +14175,7 @@ const ListDownloadForm = _react.default.createClass({
 });
 const _default = ListDownloadForm;
 
-},{"../../../elemental/index.mjs":73,"../../../shared/Popout/PopoutList.mjs":142,"../../../shared/Popout/index.mjs":146,"../actions/index.mjs":106,"./ListHeaderButton.mjs":121,"react":undefined}],121:[function(require,module,exports){
+},{"../../../elemental/index.mjs":73,"../../../shared/Popout/PopoutList.mjs":142,"../../../shared/Popout/index.mjs":146,"../actions/index.mjs":106,"./ListHeaderButton.mjs":121,"create-react-class":161,"prop-types":258,"react":undefined}],121:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -15172,7 +14187,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = require("../../../elemental/index.mjs");
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -15187,46 +14203,10 @@ function _define_property(obj, key, value) {
     }
     return obj;
 }
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
     };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -15303,7 +14283,7 @@ function _object_without_properties_loose(source, excluded) {
     }, label));
 }
 ListHeaderButton.propTypes = {
-    glyph: _react.PropTypes.string.isRequired
+    glyph: _proptypes.default.string.isRequired
 };
 // show an icon on small screens where real estate is precious
 // otherwise render the label
@@ -15323,7 +14303,7 @@ const classes = {
 };
 const _default = ListHeaderButton;
 
-},{"../../../elemental/index.mjs":73,"glamor":undefined,"react":undefined}],122:[function(require,module,exports){
+},{"../../../elemental/index.mjs":73,"glamor":undefined,"prop-types":258,"react":undefined}],122:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -15335,7 +14315,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../../theme.mjs"));
 const _color = require("../../../../utils/color.mjs");
 const _index = require("../../../elemental/index.mjs");
@@ -15356,47 +14337,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -15504,7 +14444,7 @@ function _object_without_properties_loose(source, excluded) {
         className: (0, _glamor.css)(classes.icon, !!value.length && classes.iconWhenClear),
         "data-search-input-field-clear-icon": true,
         disabled: !value.length,
-        onClick: value.length && handleClear,
+        onClick: value.length ? handleClear : undefined,
         title: "Clear search query",
         type: "button"
     }, /*#__PURE__*/ _react.default.createElement(_index.Glyph, {
@@ -15512,11 +14452,11 @@ function _object_without_properties_loose(source, excluded) {
     })));
 }
 ListHeaderSearch.propTypes = {
-    focusInput: _react.PropTypes.bool,
-    handleChange: _react.PropTypes.func.isRequired,
-    handleClear: _react.PropTypes.func.isRequired,
-    handleKeyup: _react.PropTypes.func.isRequired,
-    value: _react.PropTypes.string
+    focusInput: _proptypes.default.bool,
+    handleChange: _proptypes.default.func.isRequired,
+    handleClear: _proptypes.default.func.isRequired,
+    handleKeyup: _proptypes.default.func.isRequired,
+    value: _proptypes.default.string
 };
 const clearHoverAndFocusStyles = {
     color: _theme.default.color.danger,
@@ -15549,7 +14489,7 @@ const classes = {
 };
 const _default = ListHeaderSearch;
 
-},{"../../../../theme.mjs":150,"../../../../utils/color.mjs":152,"../../../elemental/index.mjs":73,"glamor":undefined,"react":undefined}],123:[function(require,module,exports){
+},{"../../../../theme.mjs":150,"../../../../utils/color.mjs":152,"../../../elemental/index.mjs":73,"glamor":undefined,"prop-types":258,"react":undefined}],123:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -15561,7 +14501,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _glamor = require("glamor");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../../theme.mjs"));
 const _ListSort = /*#__PURE__*/ _interop_require_default(require("./ListSort.mjs"));
 function _define_property(obj, key, value) {
@@ -15581,47 +14522,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -15699,10 +14599,10 @@ function _object_without_properties_loose(source, excluded) {
     }));
 }
 ListHeaderTitle.propTypes = {
-    activeSort: _react.PropTypes.object,
-    availableColumns: _react.PropTypes.arrayOf(_react.PropTypes.object),
-    handleSortSelect: _react.PropTypes.func.isRequired,
-    title: _react.PropTypes.string
+    activeSort: _proptypes.default.object,
+    availableColumns: _proptypes.default.arrayOf(_proptypes.default.object),
+    handleSortSelect: _proptypes.default.func.isRequired,
+    title: _proptypes.default.string
 };
 const classes = {
     heading: {
@@ -15714,7 +14614,7 @@ const classes = {
 };
 const _default = ListHeaderTitle;
 
-},{"../../../../theme.mjs":150,"./ListSort.mjs":126,"glamor":undefined,"react":undefined}],124:[function(require,module,exports){
+},{"../../../../theme.mjs":150,"./ListSort.mjs":126,"glamor":undefined,"prop-types":258,"react":undefined}],124:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -15725,7 +14625,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = require("../../../elemental/index.mjs");
 const _theme = /*#__PURE__*/ _interop_require_default(require("../../../../theme.mjs"));
 const _ListColumnsForm = /*#__PURE__*/ _interop_require_default(require("./ListColumnsForm.mjs"));
@@ -15749,47 +14650,6 @@ function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -15966,21 +14826,21 @@ function CreateButton(_0) {
     }))))));
 }
 ListHeaderToolbar.propTypes = {
-    columnsActive: _react.PropTypes.array,
-    columnsAvailable: _react.PropTypes.array,
-    createIsAvailable: _react.PropTypes.bool,
-    createListName: _react.PropTypes.string,
-    createOnClick: _react.PropTypes.func.isRequired,
-    dispatch: _react.PropTypes.func.isRequired,
-    expandIsActive: _react.PropTypes.bool,
-    expandOnClick: _react.PropTypes.func.isRequired,
-    filtersActive: _react.PropTypes.array,
-    filtersAvailable: _react.PropTypes.array,
-    list: _react.PropTypes.object,
-    searchHandleChange: _react.PropTypes.func.isRequired,
-    searchHandleClear: _react.PropTypes.func.isRequired,
-    searchHandleKeyup: _react.PropTypes.func.isRequired,
-    searchValue: _react.PropTypes.string
+    columnsActive: _proptypes.default.array,
+    columnsAvailable: _proptypes.default.array,
+    createIsAvailable: _proptypes.default.bool,
+    createListName: _proptypes.default.string,
+    createOnClick: _proptypes.default.func.isRequired,
+    dispatch: _proptypes.default.func.isRequired,
+    expandIsActive: _proptypes.default.bool,
+    expandOnClick: _proptypes.default.func.isRequired,
+    filtersActive: _proptypes.default.array,
+    filtersAvailable: _proptypes.default.array,
+    list: _proptypes.default.object,
+    searchHandleChange: _proptypes.default.func.isRequired,
+    searchHandleClear: _proptypes.default.func.isRequired,
+    searchHandleKeyup: _proptypes.default.func.isRequired,
+    searchValue: _proptypes.default.string
 };
 const tabletGrowStyles = {
     [`@media (max-width: ${_theme.default.breakpoint.tabletPortraitMax})`]: {
@@ -16024,7 +14884,7 @@ const classes = {
 };
 const _default = ListHeaderToolbar;
 
-},{"../../../../theme.mjs":150,"../../../elemental/index.mjs":73,"./Filtering/ListFiltersAdd.mjs":110,"./ListColumnsForm.mjs":118,"./ListDownloadForm.mjs":120,"./ListHeaderSearch.mjs":122,"react":undefined}],125:[function(require,module,exports){
+},{"../../../../theme.mjs":150,"../../../elemental/index.mjs":73,"./Filtering/ListFiltersAdd.mjs":110,"./ListColumnsForm.mjs":118,"./ListDownloadForm.mjs":120,"./ListHeaderSearch.mjs":122,"prop-types":258,"react":undefined}],125:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -16035,48 +14895,13 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = require("../../../elemental/index.mjs");
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
     };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_without_properties(source, excluded) {
     if (source == null) return {};
@@ -16212,20 +15037,20 @@ function _object_without_properties_loose(source, excluded) {
     }, "Manage")), selectButtons, actionButtons, selectedCountText));
 }
 ListManagement.propTypes = {
-    checkedItems: _react.PropTypes.number,
-    handleDelete: _react.PropTypes.func.isRequired,
-    handleSelect: _react.PropTypes.func.isRequired,
-    handleToggle: _react.PropTypes.func.isRequired,
-    isOpen: _react.PropTypes.bool,
-    itemCount: _react.PropTypes.number,
-    itemsPerPage: _react.PropTypes.number,
-    nodelete: _react.PropTypes.bool,
-    noedit: _react.PropTypes.bool,
-    selectAllItemsLoading: _react.PropTypes.bool
+    checkedItems: _proptypes.default.number,
+    handleDelete: _proptypes.default.func.isRequired,
+    handleSelect: _proptypes.default.func.isRequired,
+    handleToggle: _proptypes.default.func.isRequired,
+    isOpen: _proptypes.default.bool,
+    itemCount: _proptypes.default.number,
+    itemsPerPage: _proptypes.default.number,
+    nodelete: _proptypes.default.bool,
+    noedit: _proptypes.default.bool,
+    selectAllItemsLoading: _proptypes.default.bool
 };
 const _default = ListManagement;
 
-},{"../../../elemental/index.mjs":73,"react":undefined}],126:[function(require,module,exports){
+},{"../../../elemental/index.mjs":73,"prop-types":258,"react":undefined}],126:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -16237,7 +15062,9 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _index = require("../../../elemental/index.mjs");
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _Kbd = /*#__PURE__*/ _interop_require_default(require("../../../shared/Kbd.mjs"));
 const _index1 = /*#__PURE__*/ _interop_require_default(require("../../../shared/Popout/index.mjs"));
 const _PopoutList = /*#__PURE__*/ _interop_require_default(require("../../../shared/Popout/PopoutList.mjs"));
@@ -16246,51 +15073,10 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
-}
-const ListSort = _react.default.createClass({
+const ListSort = (0, _createreactclass.default)({
     displayName: 'ListSort',
     propTypes: {
-        handleSortSelect: _react.PropTypes.func.isRequired
+        handleSortSelect: _proptypes.default.func.isRequired
     },
     getInitialState () {
         return {
@@ -16407,7 +15193,7 @@ const ListSort = _react.default.createClass({
 });
 const _default = ListSort;
 
-},{"../../../elemental/index.mjs":73,"../../../shared/Kbd.mjs":138,"../../../shared/Popout/PopoutList.mjs":142,"../../../shared/Popout/index.mjs":146,"react":undefined}],127:[function(require,module,exports){
+},{"../../../elemental/index.mjs":73,"../../../shared/Kbd.mjs":138,"../../../shared/Popout/PopoutList.mjs":142,"../../../shared/Popout/index.mjs":146,"create-react-class":161,"prop-types":258,"react":undefined}],127:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -16419,6 +15205,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _reactselect = /*#__PURE__*/ _interop_require_default(require("react-select"));
 const _reactdom = require("react-dom");
 const _FieldTypes = require("FieldTypes");
@@ -16430,13 +15218,13 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const UpdateForm = _react.default.createClass({
+const UpdateForm = (0, _createreactclass.default)({
     displayName: 'UpdateForm',
     propTypes: {
-        isOpen: _react.default.PropTypes.bool,
-        itemIds: _react.default.PropTypes.array,
-        list: _react.default.PropTypes.object,
-        onCancel: _react.default.PropTypes.func
+        isOpen: _proptypes.default.bool,
+        itemIds: _proptypes.default.array,
+        list: _proptypes.default.object,
+        onCancel: _proptypes.default.func
     },
     getDefaultProps () {
         return {
@@ -16562,7 +15350,7 @@ const UpdateForm = _react.default.createClass({
 });
 const _default = UpdateForm;
 
-},{"../../../../utils/string.mjs":157,"../../../elemental/index.mjs":73,"../../../shared/InvalidFieldType.mjs":137,"FieldTypes":undefined,"react":undefined,"react-dom":undefined,"react-select":undefined}],128:[function(require,module,exports){
+},{"../../../../utils/string.mjs":157,"../../../elemental/index.mjs":73,"../../../shared/InvalidFieldType.mjs":137,"FieldTypes":undefined,"create-react-class":161,"prop-types":258,"react":undefined,"react-dom":undefined,"react-select":undefined}],128:[function(require,module,exports){
 // General
 "use strict";
 Object.defineProperty(exports, "__esModule", {
@@ -16704,6 +15492,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _numeral = /*#__PURE__*/ _interop_require_default(require("numeral"));
 const _reactredux = require("react-redux");
 const _index = require("../../elemental/index.mjs");
@@ -16755,9 +15545,9 @@ function _object_spread(target) {
     return target;
 }
 const ESC_KEY_CODE = 27;
-const ListView = _react.default.createClass({
+const ListView = (0, _createreactclass.default)({
     contextTypes: {
-        router: _react.default.PropTypes.object.isRequired
+        router: _proptypes.default.object.isRequired
     },
     getInitialState () {
         return {
@@ -16771,7 +15561,7 @@ const ListView = _react.default.createClass({
             showUpdateForm: false
         };
     },
-    componentWillMount () {
+    UNSAFE_componentWillMount () {
         // When we directly navigate to a list without coming from another client
         // side routed page before, we need to initialize the list and parse
         // possibly specified query parameters
@@ -16782,7 +15572,7 @@ const ListView = _react.default.createClass({
             showCreateForm: shouldOpenCreate && !isNoCreate || Keystone.createFormErrors
         });
     },
-    componentWillReceiveProps (nextProps) {
+    UNSAFE_componentWillReceiveProps (nextProps) {
         // We've opened a new list from the client side routing, so initialize
         // again with the new list id
         const isReady = this.props.lists.ready && nextProps.lists.ready;
@@ -16905,6 +15695,7 @@ const ListView = _react.default.createClass({
         const list = this.props.currentList;
         const currentPage = this.props.lists.page.index;
         const pageSize = this.props.lists.page.size;
+        if (!pageSize) return null;
         return /*#__PURE__*/ _react.default.createElement(_index.Pagination, {
             currentPage: currentPage,
             onPageSelect: this.handlePageSelect,
@@ -16921,6 +15712,7 @@ const ListView = _react.default.createClass({
     renderHeader () {
         const items = this.props.items;
         const { autocreate, nocreate, plural, singular } = this.props.currentList;
+        const showingResultSubset = this.props.active.search || this.props.active.filters.length;
         return /*#__PURE__*/ _react.default.createElement(_index.Container, {
             style: {
                 paddingTop: '2em'
@@ -16930,6 +15722,7 @@ const ListView = _react.default.createClass({
             availableColumns: this.props.currentList.columns,
             handleSortSelect: this.handleSortSelect,
             title: `
+						${showingResultSubset ? 'Showing ' : ''}
 						${(0, _numeral.default)(items.count).format()}
 						${(0, _string.plural)(items.count, ' ' + singular, ' ' + plural)}
 					`
@@ -17203,7 +15996,7 @@ const _default = (0, _reactredux.connect)((state)=>{
     };
 })(ListView);
 
-},{"../../../utils/lists.mjs":155,"../../../utils/queryParams.mjs":156,"../../../utils/string.mjs":157,"../../elemental/index.mjs":73,"../../shared/ConfirmationDialog.mjs":133,"../../shared/CreateForm.mjs":134,"../../shared/FlashMessages.mjs":136,"../Item/actions.mjs":87,"./actions/index.mjs":106,"./components/Filtering/ListFilters.mjs":109,"./components/ItemsTable/ItemsTable.mjs":113,"./components/ListHeaderTitle.mjs":123,"./components/ListHeaderToolbar.mjs":124,"./components/ListManagement.mjs":125,"./components/UpdateForm.mjs":127,"numeral":undefined,"react":undefined,"react-redux":undefined}],130:[function(require,module,exports){
+},{"../../../utils/lists.mjs":155,"../../../utils/queryParams.mjs":156,"../../../utils/string.mjs":157,"../../elemental/index.mjs":73,"../../shared/ConfirmationDialog.mjs":133,"../../shared/CreateForm.mjs":134,"../../shared/FlashMessages.mjs":136,"../Item/actions.mjs":87,"./actions/index.mjs":106,"./components/Filtering/ListFilters.mjs":109,"./components/ItemsTable/ItemsTable.mjs":113,"./components/ListHeaderTitle.mjs":123,"./components/ListHeaderToolbar.mjs":124,"./components/ListManagement.mjs":125,"./components/UpdateForm.mjs":127,"create-react-class":161,"numeral":undefined,"prop-types":258,"react":undefined,"react-redux":undefined}],130:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -17580,6 +16373,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = require("../elemental/index.mjs");
 const _string = require("../../utils/string.mjs");
 function _interop_require_default(obj) {
@@ -17600,12 +16395,12 @@ function _interop_require_default(obj) {
  *   Eventually success and error responses should be handled individually
  *   based on their type. For example: validation errors should be displayed next
  *   to each invalid field and signin errors should promt the user to sign in.
- */ const AlertMessages = _react.default.createClass({
+ */ const AlertMessages = (0, _createreactclass.default)({
     displayName: 'AlertMessages',
     propTypes: {
-        alerts: _react.default.PropTypes.shape({
-            error: _react.default.PropTypes.Object,
-            success: _react.default.PropTypes.Object
+        alerts: _proptypes.default.shape({
+            error: _proptypes.default.object,
+            success: _proptypes.default.object
         })
     },
     getDefaultProps () {
@@ -17615,6 +16410,11 @@ function _interop_require_default(obj) {
     },
     renderValidationErrors () {
         let errors = this.props.alerts.error.detail;
+        if (!errors) {
+            return /*#__PURE__*/ _react.default.createElement(_index.Alert, {
+                color: "danger"
+            }, (0, _string.upcase)(this.props.alerts.error.error));
+        }
         if (errors.name === 'ValidationError') {
             errors = errors.errors;
         }
@@ -17672,7 +16472,7 @@ function _interop_require_default(obj) {
 });
 const _default = AlertMessages;
 
-},{"../../utils/string.mjs":157,"../elemental/index.mjs":73,"react":undefined}],133:[function(require,module,exports){
+},{"../../utils/string.mjs":157,"../elemental/index.mjs":73,"create-react-class":161,"prop-types":258,"react":undefined}],133:[function(require,module,exports){
 /**
  * Renders a confirmation dialog modal
  */ "use strict";
@@ -17685,7 +16485,8 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = require("../elemental/index.mjs");
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -17700,46 +16501,10 @@ function _define_property(obj, key, value) {
     }
     return obj;
 }
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
     };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
 function _object_spread(target) {
     for(var i = 1; i < arguments.length; i++){
@@ -17875,17 +16640,17 @@ function _object_without_properties_loose(source, excluded) {
     }, cancelLabel)));
 }
 ConfirmationDialog.propTypes = {
-    body: _react.PropTypes.string,
-    cancelLabel: _react.PropTypes.string,
-    confirmationLabel: _react.PropTypes.string,
-    confirmationType: _react.PropTypes.oneOf([
+    body: _proptypes.default.string,
+    cancelLabel: _proptypes.default.string,
+    confirmationLabel: _proptypes.default.string,
+    confirmationType: _proptypes.default.oneOf([
         'danger',
         'primary',
         'success',
         'warning'
     ]),
-    onCancel: _react.PropTypes.func,
-    onConfirmation: _react.PropTypes.func
+    onCancel: _proptypes.default.func,
+    onConfirmation: _proptypes.default.func
 };
 ConfirmationDialog.defaultProps = {
     cancelLabel: 'Cancel',
@@ -17895,7 +16660,7 @@ ConfirmationDialog.defaultProps = {
 };
 const _default = ConfirmationDialog;
 
-},{"../elemental/index.mjs":73,"react":undefined}],134:[function(require,module,exports){
+},{"../elemental/index.mjs":73,"prop-types":258,"react":undefined}],134:[function(require,module,exports){
 /**
  * The form that's visible when "Create <ItemName>" is clicked on either the
  * List screen or the Item screen
@@ -17910,6 +16675,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _AlertMessages = /*#__PURE__*/ _interop_require_default(require("./AlertMessages.mjs"));
 const _FieldTypes = require("FieldTypes");
 const _InvalidFieldType = /*#__PURE__*/ _interop_require_default(require("./InvalidFieldType.mjs"));
@@ -17919,14 +16686,14 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const CreateForm = _react.default.createClass({
+const CreateForm = (0, _createreactclass.default)({
     displayName: 'CreateForm',
     propTypes: {
-        err: _react.default.PropTypes.object,
-        isOpen: _react.default.PropTypes.bool,
-        list: _react.default.PropTypes.object,
-        onCancel: _react.default.PropTypes.func,
-        onCreate: _react.default.PropTypes.func
+        err: _proptypes.default.object,
+        isOpen: _proptypes.default.bool,
+        list: _proptypes.default.object,
+        onCancel: _proptypes.default.func,
+        onCreate: _proptypes.default.func
     },
     getDefaultProps () {
         return {
@@ -18081,13 +16848,13 @@ const CreateForm = _react.default.createClass({
         return /*#__PURE__*/ _react.default.createElement(_index.Modal.Dialog, {
             isOpen: this.props.isOpen,
             onClose: this.props.onCancel,
-            backdropClosesModal: true
+            backdropClosesModal: false
         }, this.renderForm());
     }
 });
 const _default = CreateForm;
 
-},{"../elemental/index.mjs":73,"./AlertMessages.mjs":132,"./InvalidFieldType.mjs":137,"FieldTypes":undefined,"react":undefined}],135:[function(require,module,exports){
+},{"../elemental/index.mjs":73,"./AlertMessages.mjs":132,"./InvalidFieldType.mjs":137,"FieldTypes":undefined,"create-react-class":161,"prop-types":258,"react":undefined}],135:[function(require,module,exports){
 /**
  * A single flash message component. Used by FlashMessages.js
  */ "use strict";
@@ -18100,56 +16867,22 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _index = require("../elemental/index.mjs");
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interop_require_wildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {
-        __proto__: null
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
     };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
-            }
-        }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
 }
-const FlashMessage = _react.default.createClass({
+const FlashMessage = (0, _createreactclass.default)({
     propTypes: {
-        message: _react.PropTypes.oneOfType([
-            _react.PropTypes.object,
-            _react.PropTypes.string
+        message: _proptypes.default.oneOfType([
+            _proptypes.default.object,
+            _proptypes.default.string
         ]).isRequired,
-        type: _react.PropTypes.string
+        type: _proptypes.default.string
     },
     // Render the message
     renderMessage (message) {
@@ -18180,7 +16913,7 @@ const FlashMessage = _react.default.createClass({
 });
 const _default = FlashMessage;
 
-},{"../elemental/index.mjs":73,"react":undefined}],136:[function(require,module,exports){
+},{"../elemental/index.mjs":73,"create-react-class":161,"prop-types":258,"react":undefined}],136:[function(require,module,exports){
 /**
  * Render a few flash messages, e.g. errors, success messages, warnings,...
  *
@@ -18206,6 +16939,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _lodash = /*#__PURE__*/ _interop_require_default(require("lodash"));
 const _FlashMessage = /*#__PURE__*/ _interop_require_default(require("./FlashMessage.mjs"));
 function _interop_require_default(obj) {
@@ -18213,17 +16948,17 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const FlashMessages = _react.default.createClass({
+const FlashMessages = (0, _createreactclass.default)({
     displayName: 'FlashMessages',
     propTypes: {
-        messages: _react.default.PropTypes.oneOfType([
-            _react.default.PropTypes.bool,
-            _react.default.PropTypes.shape({
-                error: _react.default.PropTypes.array,
-                hilight: _react.default.PropTypes.array,
-                info: _react.default.PropTypes.array,
-                success: _react.default.PropTypes.array,
-                warning: _react.default.PropTypes.array
+        messages: _proptypes.default.oneOfType([
+            _proptypes.default.bool,
+            _proptypes.default.shape({
+                error: _proptypes.default.array,
+                hilight: _proptypes.default.array,
+                info: _proptypes.default.array,
+                success: _proptypes.default.array,
+                warning: _proptypes.default.array
             })
         ])
     },
@@ -18251,7 +16986,7 @@ const FlashMessages = _react.default.createClass({
 });
 const _default = FlashMessages;
 
-},{"./FlashMessage.mjs":135,"lodash":undefined,"react":undefined}],137:[function(require,module,exports){
+},{"./FlashMessage.mjs":135,"create-react-class":161,"lodash":undefined,"prop-types":258,"react":undefined}],137:[function(require,module,exports){
 /**
  * Renders an "Invalid Field Type" error
  */ "use strict";
@@ -18265,6 +17000,7 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -18276,12 +17012,12 @@ const InvalidFieldType = function(props) {
     }, "Invalid field type ", /*#__PURE__*/ _react.default.createElement("strong", null, props.type), " at path ", /*#__PURE__*/ _react.default.createElement("strong", null, props.path));
 };
 InvalidFieldType.propTypes = {
-    path: _react.default.PropTypes.string,
-    type: _react.default.PropTypes.string
+    path: _proptypes.default.string,
+    type: _proptypes.default.string
 };
 const _default = InvalidFieldType;
 
-},{"react":undefined}],138:[function(require,module,exports){
+},{"prop-types":258,"react":undefined}],138:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -18390,6 +17126,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -18460,12 +17198,12 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const PopoutBody = _react.default.createClass({
+const PopoutBody = (0, _createreactclass.default)({
     displayName: 'PopoutBody',
     propTypes: {
-        children: _react.default.PropTypes.node.isRequired,
-        className: _react.default.PropTypes.string,
-        scrollable: _react.default.PropTypes.bool
+        children: _proptypes.default.node.isRequired,
+        className: _proptypes.default.string,
+        scrollable: _proptypes.default.bool
     },
     render () {
         const className = (0, _classnames.default)('Popout__body', {
@@ -18482,7 +17220,7 @@ const PopoutBody = _react.default.createClass({
 });
 const _default = PopoutBody;
 
-},{"classnames":undefined,"react":undefined}],140:[function(require,module,exports){
+},{"classnames":undefined,"create-react-class":161,"prop-types":258,"react":undefined}],140:[function(require,module,exports){
 /**
  * Render a footer for a popout
  */ "use strict";
@@ -18496,21 +17234,23 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
 const BUTTON_BASE_CLASSNAME = 'Popout__footer__button Popout__footer__button--';
-const PopoutFooter = _react.default.createClass({
+const PopoutFooter = (0, _createreactclass.default)({
     displayName: 'PopoutFooter',
     propTypes: {
-        children: _react.default.PropTypes.node,
-        primaryButtonAction: _react.default.PropTypes.func,
-        primaryButtonIsSubmit: _react.default.PropTypes.bool,
-        primaryButtonLabel: _react.default.PropTypes.string,
-        secondaryButtonAction: _react.default.PropTypes.func,
-        secondaryButtonLabel: _react.default.PropTypes.string
+        children: _proptypes.default.node,
+        primaryButtonAction: _proptypes.default.func,
+        primaryButtonIsSubmit: _proptypes.default.bool,
+        primaryButtonLabel: _proptypes.default.string,
+        secondaryButtonAction: _proptypes.default.func,
+        secondaryButtonLabel: _proptypes.default.string
     },
     // Render a primary button
     renderPrimaryButton () {
@@ -18538,7 +17278,7 @@ const PopoutFooter = _react.default.createClass({
 });
 const _default = PopoutFooter;
 
-},{"react":undefined}],141:[function(require,module,exports){
+},{"create-react-class":161,"prop-types":258,"react":undefined}],141:[function(require,module,exports){
 /**
  * Render a header for a popout
  */ "use strict";
@@ -18552,19 +17292,21 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
-const _reactaddonscsstransitiongroup = /*#__PURE__*/ _interop_require_default(require("react-addons-css-transition-group"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
+const _CSSTransitionGroup = /*#__PURE__*/ _interop_require_default(require("react-transition-group/CSSTransitionGroup"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-const PopoutHeader = _react.default.createClass({
+const PopoutHeader = (0, _createreactclass.default)({
     displayName: 'PopoutHeader',
     propTypes: {
-        leftAction: _react.default.PropTypes.func,
-        leftIcon: _react.default.PropTypes.string,
-        title: _react.default.PropTypes.string.isRequired,
-        transitionDirection: _react.default.PropTypes.oneOf([
+        leftAction: _proptypes.default.func,
+        leftIcon: _proptypes.default.string,
+        title: _proptypes.default.string.isRequired,
+        transitionDirection: _proptypes.default.oneOf([
             'next',
             'prev'
         ])
@@ -18584,11 +17326,11 @@ const PopoutHeader = _react.default.createClass({
         }, this.props.title) : null;
         return /*#__PURE__*/ _react.default.createElement("div", {
             className: "Popout__header"
-        }, /*#__PURE__*/ _react.default.createElement(_reactaddonscsstransitiongroup.default, {
+        }, /*#__PURE__*/ _react.default.createElement(_CSSTransitionGroup.default, {
             transitionName: "Popout__header__button",
             transitionEnterTimeout: 200,
             transitionLeaveTimeout: 200
-        }, headerButton), /*#__PURE__*/ _react.default.createElement(_reactaddonscsstransitiongroup.default, {
+        }, headerButton), /*#__PURE__*/ _react.default.createElement(_CSSTransitionGroup.default, {
             transitionName: 'Popout__pane-' + this.props.transitionDirection,
             transitionEnterTimeout: 360,
             transitionLeaveTimeout: 360
@@ -18597,7 +17339,7 @@ const PopoutHeader = _react.default.createClass({
 });
 const _default = PopoutHeader;
 
-},{"react":undefined,"react-addons-css-transition-group":undefined}],142:[function(require,module,exports){
+},{"create-react-class":161,"prop-types":258,"react":undefined,"react-transition-group/CSSTransitionGroup":undefined}],142:[function(require,module,exports){
 /**
  * Render a popout list. Can also use PopoutListItem and PopoutListHeading
  */ "use strict";
@@ -18622,6 +17364,8 @@ _export(exports, {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 const _PopoutListItem = /*#__PURE__*/ _interop_require_default(require("./PopoutListItem.mjs"));
 const _PopoutListHeading = /*#__PURE__*/ _interop_require_default(require("./PopoutListHeading.mjs"));
@@ -18694,11 +17438,11 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const PopoutList = _react.default.createClass({
+const PopoutList = (0, _createreactclass.default)({
     displayName: 'PopoutList',
     propTypes: {
-        children: _react.default.PropTypes.node.isRequired,
-        className: _react.default.PropTypes.string
+        children: _proptypes.default.node.isRequired,
+        className: _proptypes.default.string
     },
     render () {
         const className = (0, _classnames.default)('PopoutList', this.props.className);
@@ -18714,7 +17458,7 @@ PopoutList.Item = _PopoutListItem.default;
 PopoutList.Heading = _PopoutListHeading.default;
 const _default = PopoutList;
 
-},{"./PopoutListHeading.mjs":143,"./PopoutListItem.mjs":144,"classnames":undefined,"react":undefined}],143:[function(require,module,exports){
+},{"./PopoutListHeading.mjs":143,"./PopoutListItem.mjs":144,"classnames":undefined,"create-react-class":161,"prop-types":258,"react":undefined}],143:[function(require,module,exports){
 /**
  * Render a popout list heading
  */ "use strict";
@@ -18728,6 +17472,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -18798,11 +17544,11 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const PopoutListHeading = _react.default.createClass({
+const PopoutListHeading = (0, _createreactclass.default)({
     displayName: 'PopoutListHeading',
     propTypes: {
-        children: _react.default.PropTypes.node.isRequired,
-        className: _react.default.PropTypes.string
+        children: _proptypes.default.node.isRequired,
+        className: _proptypes.default.string
     },
     render () {
         const className = (0, _classnames.default)('PopoutList__heading', this.props.className);
@@ -18816,7 +17562,7 @@ const PopoutListHeading = _react.default.createClass({
 });
 const _default = PopoutListHeading;
 
-},{"classnames":undefined,"react":undefined}],144:[function(require,module,exports){
+},{"classnames":undefined,"create-react-class":161,"prop-types":258,"react":undefined}],144:[function(require,module,exports){
 /**
  * Render a popout list item
  */ "use strict";
@@ -18830,6 +17576,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -18900,14 +17648,14 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const PopoutListItem = _react.default.createClass({
+const PopoutListItem = (0, _createreactclass.default)({
     displayName: 'PopoutListItem',
     propTypes: {
-        icon: _react.default.PropTypes.string,
-        iconHover: _react.default.PropTypes.string,
-        isSelected: _react.default.PropTypes.bool,
-        label: _react.default.PropTypes.string.isRequired,
-        onClick: _react.default.PropTypes.func
+        icon: _proptypes.default.string,
+        iconHover: _proptypes.default.string,
+        isSelected: _proptypes.default.bool,
+        label: _proptypes.default.string.isRequired,
+        onClick: _proptypes.default.func
     },
     getInitialState () {
         return {
@@ -18959,7 +17707,7 @@ const PopoutListItem = _react.default.createClass({
 });
 const _default = PopoutListItem;
 
-},{"classnames":undefined,"react":undefined}],145:[function(require,module,exports){
+},{"classnames":undefined,"create-react-class":161,"prop-types":258,"react":undefined}],145:[function(require,module,exports){
 /**
  * Render a popout pane, calls props.onLayout when the component mounts
  */ "use strict";
@@ -18973,6 +17721,8 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _classnames = /*#__PURE__*/ _interop_require_default(require("classnames"));
 function _define_property(obj, key, value) {
     if (key in obj) {
@@ -19043,12 +17793,12 @@ function _object_without_properties_loose(source, excluded) {
     }
     return target;
 }
-const PopoutPane = _react.default.createClass({
+const PopoutPane = (0, _createreactclass.default)({
     displayName: 'PopoutPane',
     propTypes: {
-        children: _react.default.PropTypes.node.isRequired,
-        className: _react.default.PropTypes.string,
-        onLayout: _react.default.PropTypes.func
+        children: _proptypes.default.node.isRequired,
+        className: _proptypes.default.string,
+        onLayout: _proptypes.default.func
     },
     getDefaultProps () {
         return {
@@ -19072,7 +17822,7 @@ const PopoutPane = _react.default.createClass({
 });
 const _default = PopoutPane;
 
-},{"classnames":undefined,"react":undefined}],146:[function(require,module,exports){
+},{"classnames":undefined,"create-react-class":161,"prop-types":258,"react":undefined}],146:[function(require,module,exports){
 /**
  * A Popout component.
  * One can also add a Header (Popout/Header), a Footer
@@ -19105,8 +17855,10 @@ _export(exports, {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
+const _proptypes = /*#__PURE__*/ _interop_require_default(require("prop-types"));
 const _Portal = /*#__PURE__*/ _interop_require_default(require("../Portal.mjs"));
-const _reactaddonscsstransitiongroup = /*#__PURE__*/ _interop_require_default(require("react-addons-css-transition-group"));
+const _CSSTransitionGroup = /*#__PURE__*/ _interop_require_default(require("react-transition-group/CSSTransitionGroup"));
 const _PopoutHeader = /*#__PURE__*/ _interop_require_default(require("./PopoutHeader.mjs"));
 const _PopoutBody = /*#__PURE__*/ _interop_require_default(require("./PopoutBody.mjs"));
 const _PopoutFooter = /*#__PURE__*/ _interop_require_default(require("./PopoutFooter.mjs"));
@@ -19121,14 +17873,14 @@ const SIZES = {
     arrowWidth: 16,
     horizontalMargin: 20
 };
-const Popout = _react.default.createClass({
+const Popout = (0, _createreactclass.default)({
     displayName: 'Popout',
     propTypes: {
-        isOpen: _react.default.PropTypes.bool,
-        onCancel: _react.default.PropTypes.func,
-        onSubmit: _react.default.PropTypes.func,
-        relativeToID: _react.default.PropTypes.string.isRequired,
-        width: _react.default.PropTypes.number
+        isOpen: _proptypes.default.bool,
+        onCancel: _proptypes.default.func,
+        onSubmit: _proptypes.default.func,
+        relativeToID: _proptypes.default.string.isRequired,
+        width: _proptypes.default.number
     },
     getDefaultProps () {
         return {
@@ -19138,7 +17890,7 @@ const Popout = _react.default.createClass({
     getInitialState () {
         return {};
     },
-    componentWillReceiveProps (nextProps) {
+    UNSAFE_componentWillReceiveProps (nextProps) {
         if (!this.props.isOpen && nextProps.isOpen) {
             window.addEventListener('resize', this.calculatePosition);
             this.calculatePosition(nextProps.isOpen);
@@ -19212,7 +17964,7 @@ const Popout = _react.default.createClass({
         return /*#__PURE__*/ _react.default.createElement(_Portal.default, {
             className: "Popout-wrapper",
             ref: "portal"
-        }, /*#__PURE__*/ _react.default.createElement(_reactaddonscsstransitiongroup.default, {
+        }, /*#__PURE__*/ _react.default.createElement(_CSSTransitionGroup.default, {
             transitionEnterTimeout: 200,
             transitionLeaveTimeout: 200,
             transitionName: "Popout"
@@ -19225,7 +17977,7 @@ Popout.Footer = _PopoutFooter.default;
 Popout.Pane = _PopoutPane.default;
 const _default = Popout;
 
-},{"../Portal.mjs":147,"./PopoutBody.mjs":139,"./PopoutFooter.mjs":140,"./PopoutHeader.mjs":141,"./PopoutPane.mjs":145,"react":undefined,"react-addons-css-transition-group":undefined}],147:[function(require,module,exports){
+},{"../Portal.mjs":147,"./PopoutBody.mjs":139,"./PopoutFooter.mjs":140,"./PopoutHeader.mjs":141,"./PopoutPane.mjs":145,"create-react-class":161,"prop-types":258,"react":undefined,"react-transition-group/CSSTransitionGroup":undefined}],147:[function(require,module,exports){
 /**
  * Used by the Popout component and the Lightbox component of the fields for
  * popouts. Renders a non-react DOM node.
@@ -19240,13 +17992,14 @@ Object.defineProperty(exports, "default", {
     }
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
 const _reactdom = /*#__PURE__*/ _interop_require_default(require("react-dom"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-const _default = _react.default.createClass({
+const _default = (0, _createreactclass.default)({
     displayName: 'Portal',
     portalElement: null,
     componentDidMount () {
@@ -19269,7 +18022,7 @@ const _default = _react.default.createClass({
     }
 });
 
-},{"react":undefined,"react-dom":undefined}],148:[function(require,module,exports){
+},{"create-react-class":161,"react":undefined,"react-dom":undefined}],148:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -20496,7 +19249,7 @@ function parametizeFilters(filterArray) {
     });
 }
 
-},{"lodash/isEqual":241}],157:[function(require,module,exports){
+},{"lodash/isEqual":243}],157:[function(require,module,exports){
 /**
  * A few helper methods for strings
  */ "use strict";
@@ -20615,6 +19368,1040 @@ function listToArray(str) {
 }
 
 },{}],160:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+'use strict';
+
+var _assign = require('object-assign');
+
+// -- Inlined from fbjs --
+
+var emptyObject = {};
+
+if ("production" !== 'production') {
+  Object.freeze(emptyObject);
+}
+
+var validateFormat = function validateFormat(format) {};
+
+if ("production" !== 'production') {
+  validateFormat = function validateFormat(format) {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  };
+}
+
+function _invariant(condition, format, a, b, c, d, e, f) {
+  validateFormat(format);
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(format.replace(/%s/g, function () {
+        return args[argIndex++];
+      }));
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+}
+
+var warning = function(){};
+
+if ("production" !== 'production') {
+  var printWarning = function printWarning(format) {
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    var argIndex = 0;
+    var message = 'Warning: ' + format.replace(/%s/g, function () {
+      return args[argIndex++];
+    });
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+
+  warning = function warning(condition, format) {
+    if (format === undefined) {
+      throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+    }
+
+    if (format.indexOf('Failed Composite propType: ') === 0) {
+      return; // Ignore CompositeComponent proptype check.
+    }
+
+    if (!condition) {
+      for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+        args[_key2 - 2] = arguments[_key2];
+      }
+
+      printWarning.apply(undefined, [format].concat(args));
+    }
+  };
+}
+
+// /-- Inlined from fbjs --
+
+var MIXINS_KEY = 'mixins';
+
+// Helper function to allow the creation of anonymous functions which do not
+// have .name set to the name of the variable being assigned to.
+function identity(fn) {
+  return fn;
+}
+
+var ReactPropTypeLocationNames;
+if ("production" !== 'production') {
+  ReactPropTypeLocationNames = {
+    prop: 'prop',
+    context: 'context',
+    childContext: 'child context'
+  };
+} else {
+  ReactPropTypeLocationNames = {};
+}
+
+function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
+  /**
+   * Policies that describe methods in `ReactClassInterface`.
+   */
+
+  var injectedMixins = [];
+
+  /**
+   * Composite components are higher-level components that compose other composite
+   * or host components.
+   *
+   * To create a new type of `ReactClass`, pass a specification of
+   * your new class to `React.createClass`. The only requirement of your class
+   * specification is that you implement a `render` method.
+   *
+   *   var MyComponent = React.createClass({
+   *     render: function() {
+   *       return <div>Hello World</div>;
+   *     }
+   *   });
+   *
+   * The class specification supports a specific protocol of methods that have
+   * special meaning (e.g. `render`). See `ReactClassInterface` for
+   * more the comprehensive protocol. Any other properties and methods in the
+   * class specification will be available on the prototype.
+   *
+   * @interface ReactClassInterface
+   * @internal
+   */
+  var ReactClassInterface = {
+    /**
+     * An array of Mixin objects to include when defining your component.
+     *
+     * @type {array}
+     * @optional
+     */
+    mixins: 'DEFINE_MANY',
+
+    /**
+     * An object containing properties and methods that should be defined on
+     * the component's constructor instead of its prototype (static methods).
+     *
+     * @type {object}
+     * @optional
+     */
+    statics: 'DEFINE_MANY',
+
+    /**
+     * Definition of prop types for this component.
+     *
+     * @type {object}
+     * @optional
+     */
+    propTypes: 'DEFINE_MANY',
+
+    /**
+     * Definition of context types for this component.
+     *
+     * @type {object}
+     * @optional
+     */
+    contextTypes: 'DEFINE_MANY',
+
+    /**
+     * Definition of context types this component sets for its children.
+     *
+     * @type {object}
+     * @optional
+     */
+    childContextTypes: 'DEFINE_MANY',
+
+    // ==== Definition methods ====
+
+    /**
+     * Invoked when the component is mounted. Values in the mapping will be set on
+     * `this.props` if that prop is not specified (i.e. using an `in` check).
+     *
+     * This method is invoked before `getInitialState` and therefore cannot rely
+     * on `this.state` or use `this.setState`.
+     *
+     * @return {object}
+     * @optional
+     */
+    getDefaultProps: 'DEFINE_MANY_MERGED',
+
+    /**
+     * Invoked once before the component is mounted. The return value will be used
+     * as the initial value of `this.state`.
+     *
+     *   getInitialState: function() {
+     *     return {
+     *       isOn: false,
+     *       fooBaz: new BazFoo()
+     *     }
+     *   }
+     *
+     * @return {object}
+     * @optional
+     */
+    getInitialState: 'DEFINE_MANY_MERGED',
+
+    /**
+     * @return {object}
+     * @optional
+     */
+    getChildContext: 'DEFINE_MANY_MERGED',
+
+    /**
+     * Uses props from `this.props` and state from `this.state` to render the
+     * structure of the component.
+     *
+     * No guarantees are made about when or how often this method is invoked, so
+     * it must not have side effects.
+     *
+     *   render: function() {
+     *     var name = this.props.name;
+     *     return <div>Hello, {name}!</div>;
+     *   }
+     *
+     * @return {ReactComponent}
+     * @required
+     */
+    render: 'DEFINE_ONCE',
+
+    // ==== Delegate methods ====
+
+    /**
+     * Invoked when the component is initially created and about to be mounted.
+     * This may have side effects, but any external subscriptions or data created
+     * by this method must be cleaned up in `componentWillUnmount`.
+     *
+     * @optional
+     */
+    componentWillMount: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component has been mounted and has a DOM representation.
+     * However, there is no guarantee that the DOM node is in the document.
+     *
+     * Use this as an opportunity to operate on the DOM when the component has
+     * been mounted (initialized and rendered) for the first time.
+     *
+     * @param {DOMElement} rootNode DOM element representing the component.
+     * @optional
+     */
+    componentDidMount: 'DEFINE_MANY',
+
+    /**
+     * Invoked before the component receives new props.
+     *
+     * Use this as an opportunity to react to a prop transition by updating the
+     * state using `this.setState`. Current props are accessed via `this.props`.
+     *
+     *   componentWillReceiveProps: function(nextProps, nextContext) {
+     *     this.setState({
+     *       likesIncreasing: nextProps.likeCount > this.props.likeCount
+     *     });
+     *   }
+     *
+     * NOTE: There is no equivalent `componentWillReceiveState`. An incoming prop
+     * transition may cause a state change, but the opposite is not true. If you
+     * need it, you are probably looking for `componentWillUpdate`.
+     *
+     * @param {object} nextProps
+     * @optional
+     */
+    componentWillReceiveProps: 'DEFINE_MANY',
+
+    /**
+     * Invoked while deciding if the component should be updated as a result of
+     * receiving new props, state and/or context.
+     *
+     * Use this as an opportunity to `return false` when you're certain that the
+     * transition to the new props/state/context will not require a component
+     * update.
+     *
+     *   shouldComponentUpdate: function(nextProps, nextState, nextContext) {
+     *     return !equal(nextProps, this.props) ||
+     *       !equal(nextState, this.state) ||
+     *       !equal(nextContext, this.context);
+     *   }
+     *
+     * @param {object} nextProps
+     * @param {?object} nextState
+     * @param {?object} nextContext
+     * @return {boolean} True if the component should update.
+     * @optional
+     */
+    shouldComponentUpdate: 'DEFINE_ONCE',
+
+    /**
+     * Invoked when the component is about to update due to a transition from
+     * `this.props`, `this.state` and `this.context` to `nextProps`, `nextState`
+     * and `nextContext`.
+     *
+     * Use this as an opportunity to perform preparation before an update occurs.
+     *
+     * NOTE: You **cannot** use `this.setState()` in this method.
+     *
+     * @param {object} nextProps
+     * @param {?object} nextState
+     * @param {?object} nextContext
+     * @param {ReactReconcileTransaction} transaction
+     * @optional
+     */
+    componentWillUpdate: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component's DOM representation has been updated.
+     *
+     * Use this as an opportunity to operate on the DOM when the component has
+     * been updated.
+     *
+     * @param {object} prevProps
+     * @param {?object} prevState
+     * @param {?object} prevContext
+     * @param {DOMElement} rootNode DOM element representing the component.
+     * @optional
+     */
+    componentDidUpdate: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component is about to be removed from its parent and have
+     * its DOM representation destroyed.
+     *
+     * Use this as an opportunity to deallocate any external resources.
+     *
+     * NOTE: There is no `componentDidUnmount` since your component will have been
+     * destroyed by that point.
+     *
+     * @optional
+     */
+    componentWillUnmount: 'DEFINE_MANY',
+
+    /**
+     * Replacement for (deprecated) `componentWillMount`.
+     *
+     * @optional
+     */
+    UNSAFE_componentWillMount: 'DEFINE_MANY',
+
+    /**
+     * Replacement for (deprecated) `componentWillReceiveProps`.
+     *
+     * @optional
+     */
+    UNSAFE_componentWillReceiveProps: 'DEFINE_MANY',
+
+    /**
+     * Replacement for (deprecated) `componentWillUpdate`.
+     *
+     * @optional
+     */
+    UNSAFE_componentWillUpdate: 'DEFINE_MANY',
+
+    // ==== Advanced methods ====
+
+    /**
+     * Updates the component's currently mounted DOM representation.
+     *
+     * By default, this implements React's rendering and reconciliation algorithm.
+     * Sophisticated clients may wish to override this.
+     *
+     * @param {ReactReconcileTransaction} transaction
+     * @internal
+     * @overridable
+     */
+    updateComponent: 'OVERRIDE_BASE'
+  };
+
+  /**
+   * Similar to ReactClassInterface but for static methods.
+   */
+  var ReactClassStaticInterface = {
+    /**
+     * This method is invoked after a component is instantiated and when it
+     * receives new props. Return an object to update state in response to
+     * prop changes. Return null to indicate no change to state.
+     *
+     * If an object is returned, its keys will be merged into the existing state.
+     *
+     * @return {object || null}
+     * @optional
+     */
+    getDerivedStateFromProps: 'DEFINE_MANY_MERGED'
+  };
+
+  /**
+   * Mapping from class specification keys to special processing functions.
+   *
+   * Although these are declared like instance properties in the specification
+   * when defining classes using `React.createClass`, they are actually static
+   * and are accessible on the constructor instead of the prototype. Despite
+   * being static, they must be defined outside of the "statics" key under
+   * which all other static methods are defined.
+   */
+  var RESERVED_SPEC_KEYS = {
+    displayName: function(Constructor, displayName) {
+      Constructor.displayName = displayName;
+    },
+    mixins: function(Constructor, mixins) {
+      if (mixins) {
+        for (var i = 0; i < mixins.length; i++) {
+          mixSpecIntoComponent(Constructor, mixins[i]);
+        }
+      }
+    },
+    childContextTypes: function(Constructor, childContextTypes) {
+      if ("production" !== 'production') {
+        validateTypeDef(Constructor, childContextTypes, 'childContext');
+      }
+      Constructor.childContextTypes = _assign(
+        {},
+        Constructor.childContextTypes,
+        childContextTypes
+      );
+    },
+    contextTypes: function(Constructor, contextTypes) {
+      if ("production" !== 'production') {
+        validateTypeDef(Constructor, contextTypes, 'context');
+      }
+      Constructor.contextTypes = _assign(
+        {},
+        Constructor.contextTypes,
+        contextTypes
+      );
+    },
+    /**
+     * Special case getDefaultProps which should move into statics but requires
+     * automatic merging.
+     */
+    getDefaultProps: function(Constructor, getDefaultProps) {
+      if (Constructor.getDefaultProps) {
+        Constructor.getDefaultProps = createMergedResultFunction(
+          Constructor.getDefaultProps,
+          getDefaultProps
+        );
+      } else {
+        Constructor.getDefaultProps = getDefaultProps;
+      }
+    },
+    propTypes: function(Constructor, propTypes) {
+      if ("production" !== 'production') {
+        validateTypeDef(Constructor, propTypes, 'prop');
+      }
+      Constructor.propTypes = _assign({}, Constructor.propTypes, propTypes);
+    },
+    statics: function(Constructor, statics) {
+      mixStaticSpecIntoComponent(Constructor, statics);
+    },
+    autobind: function() {}
+  };
+
+  function validateTypeDef(Constructor, typeDef, location) {
+    for (var propName in typeDef) {
+      if (typeDef.hasOwnProperty(propName)) {
+        // use a warning instead of an _invariant so components
+        // don't show up in prod but only in __DEV__
+        if ("production" !== 'production') {
+          warning(
+            typeof typeDef[propName] === 'function',
+            '%s: %s type `%s` is invalid; it must be a function, usually from ' +
+              'React.PropTypes.',
+            Constructor.displayName || 'ReactClass',
+            ReactPropTypeLocationNames[location],
+            propName
+          );
+        }
+      }
+    }
+  }
+
+  function validateMethodOverride(isAlreadyDefined, name) {
+    var specPolicy = ReactClassInterface.hasOwnProperty(name)
+      ? ReactClassInterface[name]
+      : null;
+
+    // Disallow overriding of base class methods unless explicitly allowed.
+    if (ReactClassMixin.hasOwnProperty(name)) {
+      _invariant(
+        specPolicy === 'OVERRIDE_BASE',
+        'ReactClassInterface: You are attempting to override ' +
+          '`%s` from your class specification. Ensure that your method names ' +
+          'do not overlap with React methods.',
+        name
+      );
+    }
+
+    // Disallow defining methods more than once unless explicitly allowed.
+    if (isAlreadyDefined) {
+      _invariant(
+        specPolicy === 'DEFINE_MANY' || specPolicy === 'DEFINE_MANY_MERGED',
+        'ReactClassInterface: You are attempting to define ' +
+          '`%s` on your component more than once. This conflict may be due ' +
+          'to a mixin.',
+        name
+      );
+    }
+  }
+
+  /**
+   * Mixin helper which handles policy validation and reserved
+   * specification keys when building React classes.
+   */
+  function mixSpecIntoComponent(Constructor, spec) {
+    if (!spec) {
+      if ("production" !== 'production') {
+        var typeofSpec = typeof spec;
+        var isMixinValid = typeofSpec === 'object' && spec !== null;
+
+        if ("production" !== 'production') {
+          warning(
+            isMixinValid,
+            "%s: You're attempting to include a mixin that is either null " +
+              'or not an object. Check the mixins included by the component, ' +
+              'as well as any mixins they include themselves. ' +
+              'Expected object but got %s.',
+            Constructor.displayName || 'ReactClass',
+            spec === null ? null : typeofSpec
+          );
+        }
+      }
+
+      return;
+    }
+
+    _invariant(
+      typeof spec !== 'function',
+      "ReactClass: You're attempting to " +
+        'use a component class or function as a mixin. Instead, just use a ' +
+        'regular object.'
+    );
+    _invariant(
+      !isValidElement(spec),
+      "ReactClass: You're attempting to " +
+        'use a component as a mixin. Instead, just use a regular object.'
+    );
+
+    var proto = Constructor.prototype;
+    var autoBindPairs = proto.__reactAutoBindPairs;
+
+    // By handling mixins before any other properties, we ensure the same
+    // chaining order is applied to methods with DEFINE_MANY policy, whether
+    // mixins are listed before or after these methods in the spec.
+    if (spec.hasOwnProperty(MIXINS_KEY)) {
+      RESERVED_SPEC_KEYS.mixins(Constructor, spec.mixins);
+    }
+
+    for (var name in spec) {
+      if (!spec.hasOwnProperty(name)) {
+        continue;
+      }
+
+      if (name === MIXINS_KEY) {
+        // We have already handled mixins in a special case above.
+        continue;
+      }
+
+      var property = spec[name];
+      var isAlreadyDefined = proto.hasOwnProperty(name);
+      validateMethodOverride(isAlreadyDefined, name);
+
+      if (RESERVED_SPEC_KEYS.hasOwnProperty(name)) {
+        RESERVED_SPEC_KEYS[name](Constructor, property);
+      } else {
+        // Setup methods on prototype:
+        // The following member methods should not be automatically bound:
+        // 1. Expected ReactClass methods (in the "interface").
+        // 2. Overridden methods (that were mixed in).
+        var isReactClassMethod = ReactClassInterface.hasOwnProperty(name);
+        var isFunction = typeof property === 'function';
+        var shouldAutoBind =
+          isFunction &&
+          !isReactClassMethod &&
+          !isAlreadyDefined &&
+          spec.autobind !== false;
+
+        if (shouldAutoBind) {
+          autoBindPairs.push(name, property);
+          proto[name] = property;
+        } else {
+          if (isAlreadyDefined) {
+            var specPolicy = ReactClassInterface[name];
+
+            // These cases should already be caught by validateMethodOverride.
+            _invariant(
+              isReactClassMethod &&
+                (specPolicy === 'DEFINE_MANY_MERGED' ||
+                  specPolicy === 'DEFINE_MANY'),
+              'ReactClass: Unexpected spec policy %s for key %s ' +
+                'when mixing in component specs.',
+              specPolicy,
+              name
+            );
+
+            // For methods which are defined more than once, call the existing
+            // methods before calling the new property, merging if appropriate.
+            if (specPolicy === 'DEFINE_MANY_MERGED') {
+              proto[name] = createMergedResultFunction(proto[name], property);
+            } else if (specPolicy === 'DEFINE_MANY') {
+              proto[name] = createChainedFunction(proto[name], property);
+            }
+          } else {
+            proto[name] = property;
+            if ("production" !== 'production') {
+              // Add verbose displayName to the function, which helps when looking
+              // at profiling tools.
+              if (typeof property === 'function' && spec.displayName) {
+                proto[name].displayName = spec.displayName + '_' + name;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function mixStaticSpecIntoComponent(Constructor, statics) {
+    if (!statics) {
+      return;
+    }
+
+    for (var name in statics) {
+      var property = statics[name];
+      if (!statics.hasOwnProperty(name)) {
+        continue;
+      }
+
+      var isReserved = name in RESERVED_SPEC_KEYS;
+      _invariant(
+        !isReserved,
+        'ReactClass: You are attempting to define a reserved ' +
+          'property, `%s`, that shouldn\'t be on the "statics" key. Define it ' +
+          'as an instance property instead; it will still be accessible on the ' +
+          'constructor.',
+        name
+      );
+
+      var isAlreadyDefined = name in Constructor;
+      if (isAlreadyDefined) {
+        var specPolicy = ReactClassStaticInterface.hasOwnProperty(name)
+          ? ReactClassStaticInterface[name]
+          : null;
+
+        _invariant(
+          specPolicy === 'DEFINE_MANY_MERGED',
+          'ReactClass: You are attempting to define ' +
+            '`%s` on your component more than once. This conflict may be ' +
+            'due to a mixin.',
+          name
+        );
+
+        Constructor[name] = createMergedResultFunction(Constructor[name], property);
+
+        return;
+      }
+
+      Constructor[name] = property;
+    }
+  }
+
+  /**
+   * Merge two objects, but throw if both contain the same key.
+   *
+   * @param {object} one The first object, which is mutated.
+   * @param {object} two The second object
+   * @return {object} one after it has been mutated to contain everything in two.
+   */
+  function mergeIntoWithNoDuplicateKeys(one, two) {
+    _invariant(
+      one && two && typeof one === 'object' && typeof two === 'object',
+      'mergeIntoWithNoDuplicateKeys(): Cannot merge non-objects.'
+    );
+
+    for (var key in two) {
+      if (two.hasOwnProperty(key)) {
+        _invariant(
+          one[key] === undefined,
+          'mergeIntoWithNoDuplicateKeys(): ' +
+            'Tried to merge two objects with the same key: `%s`. This conflict ' +
+            'may be due to a mixin; in particular, this may be caused by two ' +
+            'getInitialState() or getDefaultProps() methods returning objects ' +
+            'with clashing keys.',
+          key
+        );
+        one[key] = two[key];
+      }
+    }
+    return one;
+  }
+
+  /**
+   * Creates a function that invokes two functions and merges their return values.
+   *
+   * @param {function} one Function to invoke first.
+   * @param {function} two Function to invoke second.
+   * @return {function} Function that invokes the two argument functions.
+   * @private
+   */
+  function createMergedResultFunction(one, two) {
+    return function mergedResult() {
+      var a = one.apply(this, arguments);
+      var b = two.apply(this, arguments);
+      if (a == null) {
+        return b;
+      } else if (b == null) {
+        return a;
+      }
+      var c = {};
+      mergeIntoWithNoDuplicateKeys(c, a);
+      mergeIntoWithNoDuplicateKeys(c, b);
+      return c;
+    };
+  }
+
+  /**
+   * Creates a function that invokes two functions and ignores their return vales.
+   *
+   * @param {function} one Function to invoke first.
+   * @param {function} two Function to invoke second.
+   * @return {function} Function that invokes the two argument functions.
+   * @private
+   */
+  function createChainedFunction(one, two) {
+    return function chainedFunction() {
+      one.apply(this, arguments);
+      two.apply(this, arguments);
+    };
+  }
+
+  /**
+   * Binds a method to the component.
+   *
+   * @param {object} component Component whose method is going to be bound.
+   * @param {function} method Method to be bound.
+   * @return {function} The bound method.
+   */
+  function bindAutoBindMethod(component, method) {
+    var boundMethod = method.bind(component);
+    if ("production" !== 'production') {
+      boundMethod.__reactBoundContext = component;
+      boundMethod.__reactBoundMethod = method;
+      boundMethod.__reactBoundArguments = null;
+      var componentName = component.constructor.displayName;
+      var _bind = boundMethod.bind;
+      boundMethod.bind = function(newThis) {
+        for (
+          var _len = arguments.length,
+            args = Array(_len > 1 ? _len - 1 : 0),
+            _key = 1;
+          _key < _len;
+          _key++
+        ) {
+          args[_key - 1] = arguments[_key];
+        }
+
+        // User is trying to bind() an autobound method; we effectively will
+        // ignore the value of "this" that the user is trying to use, so
+        // let's warn.
+        if (newThis !== component && newThis !== null) {
+          if ("production" !== 'production') {
+            warning(
+              false,
+              'bind(): React component methods may only be bound to the ' +
+                'component instance. See %s',
+              componentName
+            );
+          }
+        } else if (!args.length) {
+          if ("production" !== 'production') {
+            warning(
+              false,
+              'bind(): You are binding a component method to the component. ' +
+                'React does this for you automatically in a high-performance ' +
+                'way, so you can safely remove this call. See %s',
+              componentName
+            );
+          }
+          return boundMethod;
+        }
+        var reboundMethod = _bind.apply(boundMethod, arguments);
+        reboundMethod.__reactBoundContext = component;
+        reboundMethod.__reactBoundMethod = method;
+        reboundMethod.__reactBoundArguments = args;
+        return reboundMethod;
+      };
+    }
+    return boundMethod;
+  }
+
+  /**
+   * Binds all auto-bound methods in a component.
+   *
+   * @param {object} component Component whose method is going to be bound.
+   */
+  function bindAutoBindMethods(component) {
+    var pairs = component.__reactAutoBindPairs;
+    for (var i = 0; i < pairs.length; i += 2) {
+      var autoBindKey = pairs[i];
+      var method = pairs[i + 1];
+      component[autoBindKey] = bindAutoBindMethod(component, method);
+    }
+  }
+
+  var IsMountedPreMixin = {
+    componentDidMount: function() {
+      this.__isMounted = true;
+    }
+  };
+
+  var IsMountedPostMixin = {
+    componentWillUnmount: function() {
+      this.__isMounted = false;
+    }
+  };
+
+  /**
+   * Add more to the ReactClass base class. These are all legacy features and
+   * therefore not already part of the modern ReactComponent.
+   */
+  var ReactClassMixin = {
+    /**
+     * TODO: This will be deprecated because state should always keep a consistent
+     * type signature and the only use case for this, is to avoid that.
+     */
+    replaceState: function(newState, callback) {
+      this.updater.enqueueReplaceState(this, newState, callback);
+    },
+
+    /**
+     * Checks whether or not this composite component is mounted.
+     * @return {boolean} True if mounted, false otherwise.
+     * @protected
+     * @final
+     */
+    isMounted: function() {
+      if ("production" !== 'production') {
+        warning(
+          this.__didWarnIsMounted,
+          '%s: isMounted is deprecated. Instead, make sure to clean up ' +
+            'subscriptions and pending requests in componentWillUnmount to ' +
+            'prevent memory leaks.',
+          (this.constructor && this.constructor.displayName) ||
+            this.name ||
+            'Component'
+        );
+        this.__didWarnIsMounted = true;
+      }
+      return !!this.__isMounted;
+    }
+  };
+
+  var ReactClassComponent = function() {};
+  _assign(
+    ReactClassComponent.prototype,
+    ReactComponent.prototype,
+    ReactClassMixin
+  );
+
+  /**
+   * Creates a composite component class given a class specification.
+   * See https://facebook.github.io/react/docs/top-level-api.html#react.createclass
+   *
+   * @param {object} spec Class specification (which must define `render`).
+   * @return {function} Component constructor function.
+   * @public
+   */
+  function createClass(spec) {
+    // To keep our warnings more understandable, we'll use a little hack here to
+    // ensure that Constructor.name !== 'Constructor'. This makes sure we don't
+    // unnecessarily identify a class without displayName as 'Constructor'.
+    var Constructor = identity(function(props, context, updater) {
+      // This constructor gets overridden by mocks. The argument is used
+      // by mocks to assert on what gets mounted.
+
+      if ("production" !== 'production') {
+        warning(
+          this instanceof Constructor,
+          'Something is calling a React component directly. Use a factory or ' +
+            'JSX instead. See: https://fb.me/react-legacyfactory'
+        );
+      }
+
+      // Wire up auto-binding
+      if (this.__reactAutoBindPairs.length) {
+        bindAutoBindMethods(this);
+      }
+
+      this.props = props;
+      this.context = context;
+      this.refs = emptyObject;
+      this.updater = updater || ReactNoopUpdateQueue;
+
+      this.state = null;
+
+      // ReactClasses doesn't have constructors. Instead, they use the
+      // getInitialState and componentWillMount methods for initialization.
+
+      var initialState = this.getInitialState ? this.getInitialState() : null;
+      if ("production" !== 'production') {
+        // We allow auto-mocks to proceed as if they're returning null.
+        if (
+          initialState === undefined &&
+          this.getInitialState._isMockFunction
+        ) {
+          // This is probably bad practice. Consider warning here and
+          // deprecating this convenience.
+          initialState = null;
+        }
+      }
+      _invariant(
+        typeof initialState === 'object' && !Array.isArray(initialState),
+        '%s.getInitialState(): must return an object or null',
+        Constructor.displayName || 'ReactCompositeComponent'
+      );
+
+      this.state = initialState;
+    });
+    Constructor.prototype = new ReactClassComponent();
+    Constructor.prototype.constructor = Constructor;
+    Constructor.prototype.__reactAutoBindPairs = [];
+
+    injectedMixins.forEach(mixSpecIntoComponent.bind(null, Constructor));
+
+    mixSpecIntoComponent(Constructor, IsMountedPreMixin);
+    mixSpecIntoComponent(Constructor, spec);
+    mixSpecIntoComponent(Constructor, IsMountedPostMixin);
+
+    // Initialize the defaultProps property after all mixins have been merged.
+    if (Constructor.getDefaultProps) {
+      Constructor.defaultProps = Constructor.getDefaultProps();
+    }
+
+    if ("production" !== 'production') {
+      // This is a tag to indicate that the use of these method names is ok,
+      // since it's used with createClass. If it's not, then it's likely a
+      // mistake so we'll warn you to use the static property, property
+      // initializer or constructor respectively.
+      if (Constructor.getDefaultProps) {
+        Constructor.getDefaultProps.isReactClassApproved = {};
+      }
+      if (Constructor.prototype.getInitialState) {
+        Constructor.prototype.getInitialState.isReactClassApproved = {};
+      }
+    }
+
+    _invariant(
+      Constructor.prototype.render,
+      'createClass(...): Class specification must implement a `render` method.'
+    );
+
+    if ("production" !== 'production') {
+      warning(
+        !Constructor.prototype.componentShouldUpdate,
+        '%s has a method called ' +
+          'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' +
+          'The name is phrased as a question because the function is ' +
+          'expected to return a value.',
+        spec.displayName || 'A component'
+      );
+      warning(
+        !Constructor.prototype.componentWillRecieveProps,
+        '%s has a method called ' +
+          'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?',
+        spec.displayName || 'A component'
+      );
+      warning(
+        !Constructor.prototype.UNSAFE_componentWillRecieveProps,
+        '%s has a method called UNSAFE_componentWillRecieveProps(). ' +
+          'Did you mean UNSAFE_componentWillReceiveProps()?',
+        spec.displayName || 'A component'
+      );
+    }
+
+    // Reduce time spent doing lookups by setting these on the prototype.
+    for (var methodName in ReactClassInterface) {
+      if (!Constructor.prototype[methodName]) {
+        Constructor.prototype[methodName] = null;
+      }
+    }
+
+    return Constructor;
+  }
+
+  return createClass;
+}
+
+module.exports = factory;
+
+},{"object-assign":253}],161:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+'use strict';
+
+var React = require('react');
+var factory = require('./factory');
+
+if (typeof React === 'undefined') {
+  throw Error(
+    'create-react-class could not find the React object. If you are using script tags, ' +
+      'make sure that React is being loaded before create-react-class.'
+  );
+}
+
+// Hack to grab NoopUpdateQueue from isomorphic React
+var ReactNoopUpdateQueue = new React.Component().updater;
+
+module.exports = factory(
+  React.Component,
+  React.isValidElement,
+  ReactNoopUpdateQueue
+);
+
+},{"./factory":160,"react":undefined}],162:[function(require,module,exports){
 var getNative = require('./_getNative'),
     root = require('./_root');
 
@@ -20623,7 +20410,7 @@ var DataView = getNative(root, 'DataView');
 
 module.exports = DataView;
 
-},{"./_getNative":195,"./_root":226}],161:[function(require,module,exports){
+},{"./_getNative":197,"./_root":228}],163:[function(require,module,exports){
 var hashClear = require('./_hashClear'),
     hashDelete = require('./_hashDelete'),
     hashGet = require('./_hashGet'),
@@ -20657,7 +20444,7 @@ Hash.prototype.set = hashSet;
 
 module.exports = Hash;
 
-},{"./_hashClear":201,"./_hashDelete":202,"./_hashGet":203,"./_hashHas":204,"./_hashSet":205}],162:[function(require,module,exports){
+},{"./_hashClear":203,"./_hashDelete":204,"./_hashGet":205,"./_hashHas":206,"./_hashSet":207}],164:[function(require,module,exports){
 var listCacheClear = require('./_listCacheClear'),
     listCacheDelete = require('./_listCacheDelete'),
     listCacheGet = require('./_listCacheGet'),
@@ -20691,7 +20478,7 @@ ListCache.prototype.set = listCacheSet;
 
 module.exports = ListCache;
 
-},{"./_listCacheClear":210,"./_listCacheDelete":211,"./_listCacheGet":212,"./_listCacheHas":213,"./_listCacheSet":214}],163:[function(require,module,exports){
+},{"./_listCacheClear":212,"./_listCacheDelete":213,"./_listCacheGet":214,"./_listCacheHas":215,"./_listCacheSet":216}],165:[function(require,module,exports){
 var getNative = require('./_getNative'),
     root = require('./_root');
 
@@ -20700,7 +20487,7 @@ var Map = getNative(root, 'Map');
 
 module.exports = Map;
 
-},{"./_getNative":195,"./_root":226}],164:[function(require,module,exports){
+},{"./_getNative":197,"./_root":228}],166:[function(require,module,exports){
 var mapCacheClear = require('./_mapCacheClear'),
     mapCacheDelete = require('./_mapCacheDelete'),
     mapCacheGet = require('./_mapCacheGet'),
@@ -20734,7 +20521,7 @@ MapCache.prototype.set = mapCacheSet;
 
 module.exports = MapCache;
 
-},{"./_mapCacheClear":215,"./_mapCacheDelete":216,"./_mapCacheGet":217,"./_mapCacheHas":218,"./_mapCacheSet":219}],165:[function(require,module,exports){
+},{"./_mapCacheClear":217,"./_mapCacheDelete":218,"./_mapCacheGet":219,"./_mapCacheHas":220,"./_mapCacheSet":221}],167:[function(require,module,exports){
 var getNative = require('./_getNative'),
     root = require('./_root');
 
@@ -20743,7 +20530,7 @@ var Promise = getNative(root, 'Promise');
 
 module.exports = Promise;
 
-},{"./_getNative":195,"./_root":226}],166:[function(require,module,exports){
+},{"./_getNative":197,"./_root":228}],168:[function(require,module,exports){
 var getNative = require('./_getNative'),
     root = require('./_root');
 
@@ -20752,7 +20539,7 @@ var Set = getNative(root, 'Set');
 
 module.exports = Set;
 
-},{"./_getNative":195,"./_root":226}],167:[function(require,module,exports){
+},{"./_getNative":197,"./_root":228}],169:[function(require,module,exports){
 var MapCache = require('./_MapCache'),
     setCacheAdd = require('./_setCacheAdd'),
     setCacheHas = require('./_setCacheHas');
@@ -20781,7 +20568,7 @@ SetCache.prototype.has = setCacheHas;
 
 module.exports = SetCache;
 
-},{"./_MapCache":164,"./_setCacheAdd":227,"./_setCacheHas":228}],168:[function(require,module,exports){
+},{"./_MapCache":166,"./_setCacheAdd":229,"./_setCacheHas":230}],170:[function(require,module,exports){
 var ListCache = require('./_ListCache'),
     stackClear = require('./_stackClear'),
     stackDelete = require('./_stackDelete'),
@@ -20810,7 +20597,7 @@ Stack.prototype.set = stackSet;
 
 module.exports = Stack;
 
-},{"./_ListCache":162,"./_stackClear":230,"./_stackDelete":231,"./_stackGet":232,"./_stackHas":233,"./_stackSet":234}],169:[function(require,module,exports){
+},{"./_ListCache":164,"./_stackClear":232,"./_stackDelete":233,"./_stackGet":234,"./_stackHas":235,"./_stackSet":236}],171:[function(require,module,exports){
 var root = require('./_root');
 
 /** Built-in value references. */
@@ -20818,7 +20605,7 @@ var Symbol = root.Symbol;
 
 module.exports = Symbol;
 
-},{"./_root":226}],170:[function(require,module,exports){
+},{"./_root":228}],172:[function(require,module,exports){
 var root = require('./_root');
 
 /** Built-in value references. */
@@ -20826,7 +20613,7 @@ var Uint8Array = root.Uint8Array;
 
 module.exports = Uint8Array;
 
-},{"./_root":226}],171:[function(require,module,exports){
+},{"./_root":228}],173:[function(require,module,exports){
 var getNative = require('./_getNative'),
     root = require('./_root');
 
@@ -20835,7 +20622,7 @@ var WeakMap = getNative(root, 'WeakMap');
 
 module.exports = WeakMap;
 
-},{"./_getNative":195,"./_root":226}],172:[function(require,module,exports){
+},{"./_getNative":197,"./_root":228}],174:[function(require,module,exports){
 /**
  * A specialized version of `_.filter` for arrays without support for
  * iteratee shorthands.
@@ -20862,7 +20649,7 @@ function arrayFilter(array, predicate) {
 
 module.exports = arrayFilter;
 
-},{}],173:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 var baseTimes = require('./_baseTimes'),
     isArguments = require('./isArguments'),
     isArray = require('./isArray'),
@@ -20913,7 +20700,7 @@ function arrayLikeKeys(value, inherited) {
 
 module.exports = arrayLikeKeys;
 
-},{"./_baseTimes":185,"./_isIndex":206,"./isArguments":237,"./isArray":238,"./isBuffer":240,"./isTypedArray":247}],174:[function(require,module,exports){
+},{"./_baseTimes":187,"./_isIndex":208,"./isArguments":239,"./isArray":240,"./isBuffer":242,"./isTypedArray":249}],176:[function(require,module,exports){
 /**
  * Appends the elements of `values` to `array`.
  *
@@ -20935,7 +20722,7 @@ function arrayPush(array, values) {
 
 module.exports = arrayPush;
 
-},{}],175:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 /**
  * A specialized version of `_.some` for arrays without support for iteratee
  * shorthands.
@@ -20960,7 +20747,7 @@ function arraySome(array, predicate) {
 
 module.exports = arraySome;
 
-},{}],176:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 var eq = require('./eq');
 
 /**
@@ -20983,7 +20770,7 @@ function assocIndexOf(array, key) {
 
 module.exports = assocIndexOf;
 
-},{"./eq":236}],177:[function(require,module,exports){
+},{"./eq":238}],179:[function(require,module,exports){
 var arrayPush = require('./_arrayPush'),
     isArray = require('./isArray');
 
@@ -21005,7 +20792,7 @@ function baseGetAllKeys(object, keysFunc, symbolsFunc) {
 
 module.exports = baseGetAllKeys;
 
-},{"./_arrayPush":174,"./isArray":238}],178:[function(require,module,exports){
+},{"./_arrayPush":176,"./isArray":240}],180:[function(require,module,exports){
 var Symbol = require('./_Symbol'),
     getRawTag = require('./_getRawTag'),
     objectToString = require('./_objectToString');
@@ -21035,7 +20822,7 @@ function baseGetTag(value) {
 
 module.exports = baseGetTag;
 
-},{"./_Symbol":169,"./_getRawTag":197,"./_objectToString":224}],179:[function(require,module,exports){
+},{"./_Symbol":171,"./_getRawTag":199,"./_objectToString":226}],181:[function(require,module,exports){
 var baseGetTag = require('./_baseGetTag'),
     isObjectLike = require('./isObjectLike');
 
@@ -21055,7 +20842,7 @@ function baseIsArguments(value) {
 
 module.exports = baseIsArguments;
 
-},{"./_baseGetTag":178,"./isObjectLike":245}],180:[function(require,module,exports){
+},{"./_baseGetTag":180,"./isObjectLike":247}],182:[function(require,module,exports){
 var baseIsEqualDeep = require('./_baseIsEqualDeep'),
     isObjectLike = require('./isObjectLike');
 
@@ -21085,7 +20872,7 @@ function baseIsEqual(value, other, bitmask, customizer, stack) {
 
 module.exports = baseIsEqual;
 
-},{"./_baseIsEqualDeep":181,"./isObjectLike":245}],181:[function(require,module,exports){
+},{"./_baseIsEqualDeep":183,"./isObjectLike":247}],183:[function(require,module,exports){
 var Stack = require('./_Stack'),
     equalArrays = require('./_equalArrays'),
     equalByTag = require('./_equalByTag'),
@@ -21170,7 +20957,7 @@ function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
 
 module.exports = baseIsEqualDeep;
 
-},{"./_Stack":168,"./_equalArrays":189,"./_equalByTag":190,"./_equalObjects":191,"./_getTag":199,"./isArray":238,"./isBuffer":240,"./isTypedArray":247}],182:[function(require,module,exports){
+},{"./_Stack":170,"./_equalArrays":191,"./_equalByTag":192,"./_equalObjects":193,"./_getTag":201,"./isArray":240,"./isBuffer":242,"./isTypedArray":249}],184:[function(require,module,exports){
 var isFunction = require('./isFunction'),
     isMasked = require('./_isMasked'),
     isObject = require('./isObject'),
@@ -21219,7 +21006,7 @@ function baseIsNative(value) {
 
 module.exports = baseIsNative;
 
-},{"./_isMasked":208,"./_toSource":235,"./isFunction":242,"./isObject":244}],183:[function(require,module,exports){
+},{"./_isMasked":210,"./_toSource":237,"./isFunction":244,"./isObject":246}],185:[function(require,module,exports){
 var baseGetTag = require('./_baseGetTag'),
     isLength = require('./isLength'),
     isObjectLike = require('./isObjectLike');
@@ -21281,7 +21068,7 @@ function baseIsTypedArray(value) {
 
 module.exports = baseIsTypedArray;
 
-},{"./_baseGetTag":178,"./isLength":243,"./isObjectLike":245}],184:[function(require,module,exports){
+},{"./_baseGetTag":180,"./isLength":245,"./isObjectLike":247}],186:[function(require,module,exports){
 var isPrototype = require('./_isPrototype'),
     nativeKeys = require('./_nativeKeys');
 
@@ -21313,7 +21100,7 @@ function baseKeys(object) {
 
 module.exports = baseKeys;
 
-},{"./_isPrototype":209,"./_nativeKeys":222}],185:[function(require,module,exports){
+},{"./_isPrototype":211,"./_nativeKeys":224}],187:[function(require,module,exports){
 /**
  * The base implementation of `_.times` without support for iteratee shorthands
  * or max array length checks.
@@ -21335,7 +21122,7 @@ function baseTimes(n, iteratee) {
 
 module.exports = baseTimes;
 
-},{}],186:[function(require,module,exports){
+},{}],188:[function(require,module,exports){
 /**
  * The base implementation of `_.unary` without support for storing metadata.
  *
@@ -21351,7 +21138,7 @@ function baseUnary(func) {
 
 module.exports = baseUnary;
 
-},{}],187:[function(require,module,exports){
+},{}],189:[function(require,module,exports){
 /**
  * Checks if a `cache` value for `key` exists.
  *
@@ -21366,7 +21153,7 @@ function cacheHas(cache, key) {
 
 module.exports = cacheHas;
 
-},{}],188:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 var root = require('./_root');
 
 /** Used to detect overreaching core-js shims. */
@@ -21374,7 +21161,7 @@ var coreJsData = root['__core-js_shared__'];
 
 module.exports = coreJsData;
 
-},{"./_root":226}],189:[function(require,module,exports){
+},{"./_root":228}],191:[function(require,module,exports){
 var SetCache = require('./_SetCache'),
     arraySome = require('./_arraySome'),
     cacheHas = require('./_cacheHas');
@@ -21460,7 +21247,7 @@ function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
 
 module.exports = equalArrays;
 
-},{"./_SetCache":167,"./_arraySome":175,"./_cacheHas":187}],190:[function(require,module,exports){
+},{"./_SetCache":169,"./_arraySome":177,"./_cacheHas":189}],192:[function(require,module,exports){
 var Symbol = require('./_Symbol'),
     Uint8Array = require('./_Uint8Array'),
     eq = require('./eq'),
@@ -21574,7 +21361,7 @@ function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
 
 module.exports = equalByTag;
 
-},{"./_Symbol":169,"./_Uint8Array":170,"./_equalArrays":189,"./_mapToArray":220,"./_setToArray":229,"./eq":236}],191:[function(require,module,exports){
+},{"./_Symbol":171,"./_Uint8Array":172,"./_equalArrays":191,"./_mapToArray":222,"./_setToArray":231,"./eq":238}],193:[function(require,module,exports){
 var getAllKeys = require('./_getAllKeys');
 
 /** Used to compose bitmasks for value comparisons. */
@@ -21666,7 +21453,7 @@ function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
 
 module.exports = equalObjects;
 
-},{"./_getAllKeys":193}],192:[function(require,module,exports){
+},{"./_getAllKeys":195}],194:[function(require,module,exports){
 (function (global){(function (){
 /** Detect free variable `global` from Node.js. */
 var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
@@ -21674,7 +21461,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 module.exports = freeGlobal;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],193:[function(require,module,exports){
+},{}],195:[function(require,module,exports){
 var baseGetAllKeys = require('./_baseGetAllKeys'),
     getSymbols = require('./_getSymbols'),
     keys = require('./keys');
@@ -21692,7 +21479,7 @@ function getAllKeys(object) {
 
 module.exports = getAllKeys;
 
-},{"./_baseGetAllKeys":177,"./_getSymbols":198,"./keys":248}],194:[function(require,module,exports){
+},{"./_baseGetAllKeys":179,"./_getSymbols":200,"./keys":250}],196:[function(require,module,exports){
 var isKeyable = require('./_isKeyable');
 
 /**
@@ -21712,7 +21499,7 @@ function getMapData(map, key) {
 
 module.exports = getMapData;
 
-},{"./_isKeyable":207}],195:[function(require,module,exports){
+},{"./_isKeyable":209}],197:[function(require,module,exports){
 var baseIsNative = require('./_baseIsNative'),
     getValue = require('./_getValue');
 
@@ -21731,7 +21518,7 @@ function getNative(object, key) {
 
 module.exports = getNative;
 
-},{"./_baseIsNative":182,"./_getValue":200}],196:[function(require,module,exports){
+},{"./_baseIsNative":184,"./_getValue":202}],198:[function(require,module,exports){
 var overArg = require('./_overArg');
 
 /** Built-in value references. */
@@ -21739,7 +21526,7 @@ var getPrototype = overArg(Object.getPrototypeOf, Object);
 
 module.exports = getPrototype;
 
-},{"./_overArg":225}],197:[function(require,module,exports){
+},{"./_overArg":227}],199:[function(require,module,exports){
 var Symbol = require('./_Symbol');
 
 /** Used for built-in method references. */
@@ -21787,7 +21574,7 @@ function getRawTag(value) {
 
 module.exports = getRawTag;
 
-},{"./_Symbol":169}],198:[function(require,module,exports){
+},{"./_Symbol":171}],200:[function(require,module,exports){
 var arrayFilter = require('./_arrayFilter'),
     stubArray = require('./stubArray');
 
@@ -21819,7 +21606,7 @@ var getSymbols = !nativeGetSymbols ? stubArray : function(object) {
 
 module.exports = getSymbols;
 
-},{"./_arrayFilter":172,"./stubArray":249}],199:[function(require,module,exports){
+},{"./_arrayFilter":174,"./stubArray":251}],201:[function(require,module,exports){
 var DataView = require('./_DataView'),
     Map = require('./_Map'),
     Promise = require('./_Promise'),
@@ -21879,7 +21666,7 @@ if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
 
 module.exports = getTag;
 
-},{"./_DataView":160,"./_Map":163,"./_Promise":165,"./_Set":166,"./_WeakMap":171,"./_baseGetTag":178,"./_toSource":235}],200:[function(require,module,exports){
+},{"./_DataView":162,"./_Map":165,"./_Promise":167,"./_Set":168,"./_WeakMap":173,"./_baseGetTag":180,"./_toSource":237}],202:[function(require,module,exports){
 /**
  * Gets the value at `key` of `object`.
  *
@@ -21894,7 +21681,7 @@ function getValue(object, key) {
 
 module.exports = getValue;
 
-},{}],201:[function(require,module,exports){
+},{}],203:[function(require,module,exports){
 var nativeCreate = require('./_nativeCreate');
 
 /**
@@ -21911,7 +21698,7 @@ function hashClear() {
 
 module.exports = hashClear;
 
-},{"./_nativeCreate":221}],202:[function(require,module,exports){
+},{"./_nativeCreate":223}],204:[function(require,module,exports){
 /**
  * Removes `key` and its value from the hash.
  *
@@ -21930,7 +21717,7 @@ function hashDelete(key) {
 
 module.exports = hashDelete;
 
-},{}],203:[function(require,module,exports){
+},{}],205:[function(require,module,exports){
 var nativeCreate = require('./_nativeCreate');
 
 /** Used to stand-in for `undefined` hash values. */
@@ -21962,7 +21749,7 @@ function hashGet(key) {
 
 module.exports = hashGet;
 
-},{"./_nativeCreate":221}],204:[function(require,module,exports){
+},{"./_nativeCreate":223}],206:[function(require,module,exports){
 var nativeCreate = require('./_nativeCreate');
 
 /** Used for built-in method references. */
@@ -21987,7 +21774,7 @@ function hashHas(key) {
 
 module.exports = hashHas;
 
-},{"./_nativeCreate":221}],205:[function(require,module,exports){
+},{"./_nativeCreate":223}],207:[function(require,module,exports){
 var nativeCreate = require('./_nativeCreate');
 
 /** Used to stand-in for `undefined` hash values. */
@@ -22012,7 +21799,7 @@ function hashSet(key, value) {
 
 module.exports = hashSet;
 
-},{"./_nativeCreate":221}],206:[function(require,module,exports){
+},{"./_nativeCreate":223}],208:[function(require,module,exports){
 /** Used as references for various `Number` constants. */
 var MAX_SAFE_INTEGER = 9007199254740991;
 
@@ -22039,7 +21826,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],207:[function(require,module,exports){
+},{}],209:[function(require,module,exports){
 /**
  * Checks if `value` is suitable for use as unique object key.
  *
@@ -22056,7 +21843,7 @@ function isKeyable(value) {
 
 module.exports = isKeyable;
 
-},{}],208:[function(require,module,exports){
+},{}],210:[function(require,module,exports){
 var coreJsData = require('./_coreJsData');
 
 /** Used to detect methods masquerading as native. */
@@ -22078,7 +21865,7 @@ function isMasked(func) {
 
 module.exports = isMasked;
 
-},{"./_coreJsData":188}],209:[function(require,module,exports){
+},{"./_coreJsData":190}],211:[function(require,module,exports){
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 
@@ -22098,7 +21885,7 @@ function isPrototype(value) {
 
 module.exports = isPrototype;
 
-},{}],210:[function(require,module,exports){
+},{}],212:[function(require,module,exports){
 /**
  * Removes all key-value entries from the list cache.
  *
@@ -22113,7 +21900,7 @@ function listCacheClear() {
 
 module.exports = listCacheClear;
 
-},{}],211:[function(require,module,exports){
+},{}],213:[function(require,module,exports){
 var assocIndexOf = require('./_assocIndexOf');
 
 /** Used for built-in method references. */
@@ -22150,7 +21937,7 @@ function listCacheDelete(key) {
 
 module.exports = listCacheDelete;
 
-},{"./_assocIndexOf":176}],212:[function(require,module,exports){
+},{"./_assocIndexOf":178}],214:[function(require,module,exports){
 var assocIndexOf = require('./_assocIndexOf');
 
 /**
@@ -22171,7 +21958,7 @@ function listCacheGet(key) {
 
 module.exports = listCacheGet;
 
-},{"./_assocIndexOf":176}],213:[function(require,module,exports){
+},{"./_assocIndexOf":178}],215:[function(require,module,exports){
 var assocIndexOf = require('./_assocIndexOf');
 
 /**
@@ -22189,7 +21976,7 @@ function listCacheHas(key) {
 
 module.exports = listCacheHas;
 
-},{"./_assocIndexOf":176}],214:[function(require,module,exports){
+},{"./_assocIndexOf":178}],216:[function(require,module,exports){
 var assocIndexOf = require('./_assocIndexOf');
 
 /**
@@ -22217,7 +22004,7 @@ function listCacheSet(key, value) {
 
 module.exports = listCacheSet;
 
-},{"./_assocIndexOf":176}],215:[function(require,module,exports){
+},{"./_assocIndexOf":178}],217:[function(require,module,exports){
 var Hash = require('./_Hash'),
     ListCache = require('./_ListCache'),
     Map = require('./_Map');
@@ -22240,7 +22027,7 @@ function mapCacheClear() {
 
 module.exports = mapCacheClear;
 
-},{"./_Hash":161,"./_ListCache":162,"./_Map":163}],216:[function(require,module,exports){
+},{"./_Hash":163,"./_ListCache":164,"./_Map":165}],218:[function(require,module,exports){
 var getMapData = require('./_getMapData');
 
 /**
@@ -22260,7 +22047,7 @@ function mapCacheDelete(key) {
 
 module.exports = mapCacheDelete;
 
-},{"./_getMapData":194}],217:[function(require,module,exports){
+},{"./_getMapData":196}],219:[function(require,module,exports){
 var getMapData = require('./_getMapData');
 
 /**
@@ -22278,7 +22065,7 @@ function mapCacheGet(key) {
 
 module.exports = mapCacheGet;
 
-},{"./_getMapData":194}],218:[function(require,module,exports){
+},{"./_getMapData":196}],220:[function(require,module,exports){
 var getMapData = require('./_getMapData');
 
 /**
@@ -22296,7 +22083,7 @@ function mapCacheHas(key) {
 
 module.exports = mapCacheHas;
 
-},{"./_getMapData":194}],219:[function(require,module,exports){
+},{"./_getMapData":196}],221:[function(require,module,exports){
 var getMapData = require('./_getMapData');
 
 /**
@@ -22320,7 +22107,7 @@ function mapCacheSet(key, value) {
 
 module.exports = mapCacheSet;
 
-},{"./_getMapData":194}],220:[function(require,module,exports){
+},{"./_getMapData":196}],222:[function(require,module,exports){
 /**
  * Converts `map` to its key-value pairs.
  *
@@ -22340,7 +22127,7 @@ function mapToArray(map) {
 
 module.exports = mapToArray;
 
-},{}],221:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 var getNative = require('./_getNative');
 
 /* Built-in method references that are verified to be native. */
@@ -22348,7 +22135,7 @@ var nativeCreate = getNative(Object, 'create');
 
 module.exports = nativeCreate;
 
-},{"./_getNative":195}],222:[function(require,module,exports){
+},{"./_getNative":197}],224:[function(require,module,exports){
 var overArg = require('./_overArg');
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -22356,7 +22143,7 @@ var nativeKeys = overArg(Object.keys, Object);
 
 module.exports = nativeKeys;
 
-},{"./_overArg":225}],223:[function(require,module,exports){
+},{"./_overArg":227}],225:[function(require,module,exports){
 var freeGlobal = require('./_freeGlobal');
 
 /** Detect free variable `exports`. */
@@ -22388,7 +22175,7 @@ var nodeUtil = (function() {
 
 module.exports = nodeUtil;
 
-},{"./_freeGlobal":192}],224:[function(require,module,exports){
+},{"./_freeGlobal":194}],226:[function(require,module,exports){
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 
@@ -22412,7 +22199,7 @@ function objectToString(value) {
 
 module.exports = objectToString;
 
-},{}],225:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
 /**
  * Creates a unary function that invokes `func` with its argument transformed.
  *
@@ -22429,7 +22216,7 @@ function overArg(func, transform) {
 
 module.exports = overArg;
 
-},{}],226:[function(require,module,exports){
+},{}],228:[function(require,module,exports){
 var freeGlobal = require('./_freeGlobal');
 
 /** Detect free variable `self`. */
@@ -22440,7 +22227,7 @@ var root = freeGlobal || freeSelf || Function('return this')();
 
 module.exports = root;
 
-},{"./_freeGlobal":192}],227:[function(require,module,exports){
+},{"./_freeGlobal":194}],229:[function(require,module,exports){
 /** Used to stand-in for `undefined` hash values. */
 var HASH_UNDEFINED = '__lodash_hash_undefined__';
 
@@ -22461,7 +22248,7 @@ function setCacheAdd(value) {
 
 module.exports = setCacheAdd;
 
-},{}],228:[function(require,module,exports){
+},{}],230:[function(require,module,exports){
 /**
  * Checks if `value` is in the array cache.
  *
@@ -22477,7 +22264,7 @@ function setCacheHas(value) {
 
 module.exports = setCacheHas;
 
-},{}],229:[function(require,module,exports){
+},{}],231:[function(require,module,exports){
 /**
  * Converts `set` to an array of its values.
  *
@@ -22497,7 +22284,7 @@ function setToArray(set) {
 
 module.exports = setToArray;
 
-},{}],230:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 var ListCache = require('./_ListCache');
 
 /**
@@ -22514,7 +22301,7 @@ function stackClear() {
 
 module.exports = stackClear;
 
-},{"./_ListCache":162}],231:[function(require,module,exports){
+},{"./_ListCache":164}],233:[function(require,module,exports){
 /**
  * Removes `key` and its value from the stack.
  *
@@ -22534,7 +22321,7 @@ function stackDelete(key) {
 
 module.exports = stackDelete;
 
-},{}],232:[function(require,module,exports){
+},{}],234:[function(require,module,exports){
 /**
  * Gets the stack value for `key`.
  *
@@ -22550,7 +22337,7 @@ function stackGet(key) {
 
 module.exports = stackGet;
 
-},{}],233:[function(require,module,exports){
+},{}],235:[function(require,module,exports){
 /**
  * Checks if a stack value for `key` exists.
  *
@@ -22566,7 +22353,7 @@ function stackHas(key) {
 
 module.exports = stackHas;
 
-},{}],234:[function(require,module,exports){
+},{}],236:[function(require,module,exports){
 var ListCache = require('./_ListCache'),
     Map = require('./_Map'),
     MapCache = require('./_MapCache');
@@ -22602,7 +22389,7 @@ function stackSet(key, value) {
 
 module.exports = stackSet;
 
-},{"./_ListCache":162,"./_Map":163,"./_MapCache":164}],235:[function(require,module,exports){
+},{"./_ListCache":164,"./_Map":165,"./_MapCache":166}],237:[function(require,module,exports){
 /** Used for built-in method references. */
 var funcProto = Function.prototype;
 
@@ -22630,7 +22417,7 @@ function toSource(func) {
 
 module.exports = toSource;
 
-},{}],236:[function(require,module,exports){
+},{}],238:[function(require,module,exports){
 /**
  * Performs a
  * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
@@ -22669,7 +22456,7 @@ function eq(value, other) {
 
 module.exports = eq;
 
-},{}],237:[function(require,module,exports){
+},{}],239:[function(require,module,exports){
 var baseIsArguments = require('./_baseIsArguments'),
     isObjectLike = require('./isObjectLike');
 
@@ -22707,7 +22494,7 @@ var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsAr
 
 module.exports = isArguments;
 
-},{"./_baseIsArguments":179,"./isObjectLike":245}],238:[function(require,module,exports){
+},{"./_baseIsArguments":181,"./isObjectLike":247}],240:[function(require,module,exports){
 /**
  * Checks if `value` is classified as an `Array` object.
  *
@@ -22735,7 +22522,7 @@ var isArray = Array.isArray;
 
 module.exports = isArray;
 
-},{}],239:[function(require,module,exports){
+},{}],241:[function(require,module,exports){
 var isFunction = require('./isFunction'),
     isLength = require('./isLength');
 
@@ -22770,7 +22557,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./isFunction":242,"./isLength":243}],240:[function(require,module,exports){
+},{"./isFunction":244,"./isLength":245}],242:[function(require,module,exports){
 var root = require('./_root'),
     stubFalse = require('./stubFalse');
 
@@ -22810,7 +22597,7 @@ var isBuffer = nativeIsBuffer || stubFalse;
 
 module.exports = isBuffer;
 
-},{"./_root":226,"./stubFalse":250}],241:[function(require,module,exports){
+},{"./_root":228,"./stubFalse":252}],243:[function(require,module,exports){
 var baseIsEqual = require('./_baseIsEqual');
 
 /**
@@ -22847,7 +22634,7 @@ function isEqual(value, other) {
 
 module.exports = isEqual;
 
-},{"./_baseIsEqual":180}],242:[function(require,module,exports){
+},{"./_baseIsEqual":182}],244:[function(require,module,exports){
 var baseGetTag = require('./_baseGetTag'),
     isObject = require('./isObject');
 
@@ -22886,7 +22673,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./_baseGetTag":178,"./isObject":244}],243:[function(require,module,exports){
+},{"./_baseGetTag":180,"./isObject":246}],245:[function(require,module,exports){
 /** Used as references for various `Number` constants. */
 var MAX_SAFE_INTEGER = 9007199254740991;
 
@@ -22923,7 +22710,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],244:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 /**
  * Checks if `value` is the
  * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
@@ -22956,7 +22743,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],245:[function(require,module,exports){
+},{}],247:[function(require,module,exports){
 /**
  * Checks if `value` is object-like. A value is object-like if it's not `null`
  * and has a `typeof` result of "object".
@@ -22987,7 +22774,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],246:[function(require,module,exports){
+},{}],248:[function(require,module,exports){
 var baseGetTag = require('./_baseGetTag'),
     getPrototype = require('./_getPrototype'),
     isObjectLike = require('./isObjectLike');
@@ -23051,7 +22838,7 @@ function isPlainObject(value) {
 
 module.exports = isPlainObject;
 
-},{"./_baseGetTag":178,"./_getPrototype":196,"./isObjectLike":245}],247:[function(require,module,exports){
+},{"./_baseGetTag":180,"./_getPrototype":198,"./isObjectLike":247}],249:[function(require,module,exports){
 var baseIsTypedArray = require('./_baseIsTypedArray'),
     baseUnary = require('./_baseUnary'),
     nodeUtil = require('./_nodeUtil');
@@ -23080,7 +22867,7 @@ var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedA
 
 module.exports = isTypedArray;
 
-},{"./_baseIsTypedArray":183,"./_baseUnary":186,"./_nodeUtil":223}],248:[function(require,module,exports){
+},{"./_baseIsTypedArray":185,"./_baseUnary":188,"./_nodeUtil":225}],250:[function(require,module,exports){
 var arrayLikeKeys = require('./_arrayLikeKeys'),
     baseKeys = require('./_baseKeys'),
     isArrayLike = require('./isArrayLike');
@@ -23119,7 +22906,7 @@ function keys(object) {
 
 module.exports = keys;
 
-},{"./_arrayLikeKeys":173,"./_baseKeys":184,"./isArrayLike":239}],249:[function(require,module,exports){
+},{"./_arrayLikeKeys":175,"./_baseKeys":186,"./isArrayLike":241}],251:[function(require,module,exports){
 /**
  * This method returns a new empty array.
  *
@@ -23144,7 +22931,7 @@ function stubArray() {
 
 module.exports = stubArray;
 
-},{}],250:[function(require,module,exports){
+},{}],252:[function(require,module,exports){
 /**
  * This method returns `false`.
  *
@@ -23164,7 +22951,99 @@ function stubFalse() {
 
 module.exports = stubFalse;
 
-},{}],251:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+'use strict';
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+},{}],254:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -23350,7 +23229,1042 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],252:[function(require,module,exports){
+},{}],255:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';
+
+var printWarning = function() {};
+
+if ("production" !== 'production') {
+  var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
+  var loggedTypeFailures = {};
+  var has = require('./lib/has');
+
+  printWarning = function(text) {
+    var message = 'Warning: ' + text;
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) { /**/ }
+  };
+}
+
+/**
+ * Assert that the values match with the type specs.
+ * Error messages are memorized and will only be shown once.
+ *
+ * @param {object} typeSpecs Map of name to a ReactPropType
+ * @param {object} values Runtime values that need to be type-checked
+ * @param {string} location e.g. "prop", "context", "child context"
+ * @param {string} componentName Name of the component for error messages.
+ * @param {?Function} getStack Returns the component stack.
+ * @private
+ */
+function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+  if ("production" !== 'production') {
+    for (var typeSpecName in typeSpecs) {
+      if (has(typeSpecs, typeSpecName)) {
+        var error;
+        // Prop type validation may throw. In case they do, we don't want to
+        // fail the render phase where it didn't fail before. So we log it.
+        // After these have been cleaned up, we'll let them throw.
+        try {
+          // This is intentionally an invariant that gets caught. It's the same
+          // behavior as without this statement except with a better message.
+          if (typeof typeSpecs[typeSpecName] !== 'function') {
+            var err = Error(
+              (componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' +
+              'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.' +
+              'This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.'
+            );
+            err.name = 'Invariant Violation';
+            throw err;
+          }
+          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+        } catch (ex) {
+          error = ex;
+        }
+        if (error && !(error instanceof Error)) {
+          printWarning(
+            (componentName || 'React class') + ': type specification of ' +
+            location + ' `' + typeSpecName + '` is invalid; the type checker ' +
+            'function must return `null` or an `Error` but returned a ' + typeof error + '. ' +
+            'You may have forgotten to pass an argument to the type checker ' +
+            'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
+            'shape all require an argument).'
+          );
+        }
+        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+          // Only monitor this failure once because there tends to be a lot of the
+          // same error.
+          loggedTypeFailures[error.message] = true;
+
+          var stack = getStack ? getStack() : '';
+
+          printWarning(
+            'Failed ' + location + ' type: ' + error.message + (stack != null ? stack : '')
+          );
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Resets warning cache when testing.
+ *
+ * @private
+ */
+checkPropTypes.resetWarningCache = function() {
+  if ("production" !== 'production') {
+    loggedTypeFailures = {};
+  }
+}
+
+module.exports = checkPropTypes;
+
+},{"./lib/ReactPropTypesSecret":259,"./lib/has":260}],256:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';
+
+var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
+
+function emptyFunction() {}
+function emptyFunctionWithReset() {}
+emptyFunctionWithReset.resetWarningCache = emptyFunction;
+
+module.exports = function() {
+  function shim(props, propName, componentName, location, propFullName, secret) {
+    if (secret === ReactPropTypesSecret) {
+      // It is still safe when called from React.
+      return;
+    }
+    var err = new Error(
+      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+      'Use PropTypes.checkPropTypes() to call them. ' +
+      'Read more at http://fb.me/use-check-prop-types'
+    );
+    err.name = 'Invariant Violation';
+    throw err;
+  };
+  shim.isRequired = shim;
+  function getShim() {
+    return shim;
+  };
+  // Important!
+  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+  var ReactPropTypes = {
+    array: shim,
+    bigint: shim,
+    bool: shim,
+    func: shim,
+    number: shim,
+    object: shim,
+    string: shim,
+    symbol: shim,
+
+    any: shim,
+    arrayOf: getShim,
+    element: shim,
+    elementType: shim,
+    instanceOf: getShim,
+    node: shim,
+    objectOf: getShim,
+    oneOf: getShim,
+    oneOfType: getShim,
+    shape: getShim,
+    exact: getShim,
+
+    checkPropTypes: emptyFunctionWithReset,
+    resetWarningCache: emptyFunction
+  };
+
+  ReactPropTypes.PropTypes = ReactPropTypes;
+
+  return ReactPropTypes;
+};
+
+},{"./lib/ReactPropTypesSecret":259}],257:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';
+
+var ReactIs = require('react-is');
+var assign = require('object-assign');
+
+var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
+var has = require('./lib/has');
+var checkPropTypes = require('./checkPropTypes');
+
+var printWarning = function() {};
+
+if ("production" !== 'production') {
+  printWarning = function(text) {
+    var message = 'Warning: ' + text;
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+}
+
+function emptyFunctionThatReturnsNull() {
+  return null;
+}
+
+module.exports = function(isValidElement, throwOnDirectAccess) {
+  /* global Symbol */
+  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
+  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
+
+  /**
+   * Returns the iterator method function contained on the iterable object.
+   *
+   * Be sure to invoke the function with the iterable as context:
+   *
+   *     var iteratorFn = getIteratorFn(myIterable);
+   *     if (iteratorFn) {
+   *       var iterator = iteratorFn.call(myIterable);
+   *       ...
+   *     }
+   *
+   * @param {?object} maybeIterable
+   * @return {?function}
+   */
+  function getIteratorFn(maybeIterable) {
+    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
+    if (typeof iteratorFn === 'function') {
+      return iteratorFn;
+    }
+  }
+
+  /**
+   * Collection of methods that allow declaration and validation of props that are
+   * supplied to React components. Example usage:
+   *
+   *   var Props = require('ReactPropTypes');
+   *   var MyArticle = React.createClass({
+   *     propTypes: {
+   *       // An optional string prop named "description".
+   *       description: Props.string,
+   *
+   *       // A required enum prop named "category".
+   *       category: Props.oneOf(['News','Photos']).isRequired,
+   *
+   *       // A prop named "dialog" that requires an instance of Dialog.
+   *       dialog: Props.instanceOf(Dialog).isRequired
+   *     },
+   *     render: function() { ... }
+   *   });
+   *
+   * A more formal specification of how these methods are used:
+   *
+   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
+   *   decl := ReactPropTypes.{type}(.isRequired)?
+   *
+   * Each and every declaration produces a function with the same signature. This
+   * allows the creation of custom validation functions. For example:
+   *
+   *  var MyLink = React.createClass({
+   *    propTypes: {
+   *      // An optional string or URI prop named "href".
+   *      href: function(props, propName, componentName) {
+   *        var propValue = props[propName];
+   *        if (propValue != null && typeof propValue !== 'string' &&
+   *            !(propValue instanceof URI)) {
+   *          return new Error(
+   *            'Expected a string or an URI for ' + propName + ' in ' +
+   *            componentName
+   *          );
+   *        }
+   *      }
+   *    },
+   *    render: function() {...}
+   *  });
+   *
+   * @internal
+   */
+
+  var ANONYMOUS = '<<anonymous>>';
+
+  // Important!
+  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
+  var ReactPropTypes = {
+    array: createPrimitiveTypeChecker('array'),
+    bigint: createPrimitiveTypeChecker('bigint'),
+    bool: createPrimitiveTypeChecker('boolean'),
+    func: createPrimitiveTypeChecker('function'),
+    number: createPrimitiveTypeChecker('number'),
+    object: createPrimitiveTypeChecker('object'),
+    string: createPrimitiveTypeChecker('string'),
+    symbol: createPrimitiveTypeChecker('symbol'),
+
+    any: createAnyTypeChecker(),
+    arrayOf: createArrayOfTypeChecker,
+    element: createElementTypeChecker(),
+    elementType: createElementTypeTypeChecker(),
+    instanceOf: createInstanceTypeChecker,
+    node: createNodeChecker(),
+    objectOf: createObjectOfTypeChecker,
+    oneOf: createEnumTypeChecker,
+    oneOfType: createUnionTypeChecker,
+    shape: createShapeTypeChecker,
+    exact: createStrictShapeTypeChecker,
+  };
+
+  /**
+   * inlined Object.is polyfill to avoid requiring consumers ship their own
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+   */
+  /*eslint-disable no-self-compare*/
+  function is(x, y) {
+    // SameValue algorithm
+    if (x === y) {
+      // Steps 1-5, 7-10
+      // Steps 6.b-6.e: +0 != -0
+      return x !== 0 || 1 / x === 1 / y;
+    } else {
+      // Step 6.a: NaN == NaN
+      return x !== x && y !== y;
+    }
+  }
+  /*eslint-enable no-self-compare*/
+
+  /**
+   * We use an Error-like object for backward compatibility as people may call
+   * PropTypes directly and inspect their output. However, we don't use real
+   * Errors anymore. We don't inspect their stack anyway, and creating them
+   * is prohibitively expensive if they are created too often, such as what
+   * happens in oneOfType() for any type before the one that matched.
+   */
+  function PropTypeError(message, data) {
+    this.message = message;
+    this.data = data && typeof data === 'object' ? data: {};
+    this.stack = '';
+  }
+  // Make `instanceof Error` still work for returned errors.
+  PropTypeError.prototype = Error.prototype;
+
+  function createChainableTypeChecker(validate) {
+    if ("production" !== 'production') {
+      var manualPropTypeCallCache = {};
+      var manualPropTypeWarningCount = 0;
+    }
+    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
+      componentName = componentName || ANONYMOUS;
+      propFullName = propFullName || propName;
+
+      if (secret !== ReactPropTypesSecret) {
+        if (throwOnDirectAccess) {
+          // New behavior only for users of `prop-types` package
+          var err = new Error(
+            'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+            'Use `PropTypes.checkPropTypes()` to call them. ' +
+            'Read more at http://fb.me/use-check-prop-types'
+          );
+          err.name = 'Invariant Violation';
+          throw err;
+        } else if ("production" !== 'production' && typeof console !== 'undefined') {
+          // Old behavior for people using React.PropTypes
+          var cacheKey = componentName + ':' + propName;
+          if (
+            !manualPropTypeCallCache[cacheKey] &&
+            // Avoid spamming the console because they are often not actionable except for lib authors
+            manualPropTypeWarningCount < 3
+          ) {
+            printWarning(
+              'You are manually calling a React.PropTypes validation ' +
+              'function for the `' + propFullName + '` prop on `' + componentName + '`. This is deprecated ' +
+              'and will throw in the standalone `prop-types` package. ' +
+              'You may be seeing this warning due to a third-party PropTypes ' +
+              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.'
+            );
+            manualPropTypeCallCache[cacheKey] = true;
+            manualPropTypeWarningCount++;
+          }
+        }
+      }
+      if (props[propName] == null) {
+        if (isRequired) {
+          if (props[propName] === null) {
+            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
+          }
+          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
+        }
+        return null;
+      } else {
+        return validate(props, propName, componentName, location, propFullName);
+      }
+    }
+
+    var chainedCheckType = checkType.bind(null, false);
+    chainedCheckType.isRequired = checkType.bind(null, true);
+
+    return chainedCheckType;
+  }
+
+  function createPrimitiveTypeChecker(expectedType) {
+    function validate(props, propName, componentName, location, propFullName, secret) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== expectedType) {
+        // `propValue` being instance of, say, date/regexp, pass the 'object'
+        // check, but we can offer a more precise error message here rather than
+        // 'of type `object`'.
+        var preciseType = getPreciseType(propValue);
+
+        return new PropTypeError(
+          'Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'),
+          {expectedType: expectedType}
+        );
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createAnyTypeChecker() {
+    return createChainableTypeChecker(emptyFunctionThatReturnsNull);
+  }
+
+  function createArrayOfTypeChecker(typeChecker) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (typeof typeChecker !== 'function') {
+        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
+      }
+      var propValue = props[propName];
+      if (!Array.isArray(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
+      }
+      for (var i = 0; i < propValue.length; i++) {
+        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
+        if (error instanceof Error) {
+          return error;
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createElementTypeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      if (!isValidElement(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createElementTypeTypeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      if (!ReactIs.isValidElementType(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement type.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createInstanceTypeChecker(expectedClass) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (!(props[propName] instanceof expectedClass)) {
+        var expectedClassName = expectedClass.name || ANONYMOUS;
+        var actualClassName = getClassName(props[propName]);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createEnumTypeChecker(expectedValues) {
+    if (!Array.isArray(expectedValues)) {
+      if ("production" !== 'production') {
+        if (arguments.length > 1) {
+          printWarning(
+            'Invalid arguments supplied to oneOf, expected an array, got ' + arguments.length + ' arguments. ' +
+            'A common mistake is to write oneOf(x, y, z) instead of oneOf([x, y, z]).'
+          );
+        } else {
+          printWarning('Invalid argument supplied to oneOf, expected an array.');
+        }
+      }
+      return emptyFunctionThatReturnsNull;
+    }
+
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      for (var i = 0; i < expectedValues.length; i++) {
+        if (is(propValue, expectedValues[i])) {
+          return null;
+        }
+      }
+
+      var valuesString = JSON.stringify(expectedValues, function replacer(key, value) {
+        var type = getPreciseType(value);
+        if (type === 'symbol') {
+          return String(value);
+        }
+        return value;
+      });
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + String(propValue) + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createObjectOfTypeChecker(typeChecker) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (typeof typeChecker !== 'function') {
+        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
+      }
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
+      }
+      for (var key in propValue) {
+        if (has(propValue, key)) {
+          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+          if (error instanceof Error) {
+            return error;
+          }
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createUnionTypeChecker(arrayOfTypeCheckers) {
+    if (!Array.isArray(arrayOfTypeCheckers)) {
+      "production" !== 'production' ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+      return emptyFunctionThatReturnsNull;
+    }
+
+    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+      var checker = arrayOfTypeCheckers[i];
+      if (typeof checker !== 'function') {
+        printWarning(
+          'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
+          'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.'
+        );
+        return emptyFunctionThatReturnsNull;
+      }
+    }
+
+    function validate(props, propName, componentName, location, propFullName) {
+      var expectedTypes = [];
+      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+        var checker = arrayOfTypeCheckers[i];
+        var checkerResult = checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret);
+        if (checkerResult == null) {
+          return null;
+        }
+        if (checkerResult.data && has(checkerResult.data, 'expectedType')) {
+          expectedTypes.push(checkerResult.data.expectedType);
+        }
+      }
+      var expectedTypesMessage = (expectedTypes.length > 0) ? ', expected one of type [' + expectedTypes.join(', ') + ']': '';
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`' + expectedTypesMessage + '.'));
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createNodeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (!isNode(props[propName])) {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function invalidValidatorError(componentName, location, propFullName, key, type) {
+    return new PropTypeError(
+      (componentName || 'React class') + ': ' + location + ' type `' + propFullName + '.' + key + '` is invalid; ' +
+      'it must be a function, usually from the `prop-types` package, but received `' + type + '`.'
+    );
+  }
+
+  function createShapeTypeChecker(shapeTypes) {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+      }
+      for (var key in shapeTypes) {
+        var checker = shapeTypes[key];
+        if (typeof checker !== 'function') {
+          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
+        }
+        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+        if (error) {
+          return error;
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createStrictShapeTypeChecker(shapeTypes) {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+      }
+      // We need to check all keys in case some are required but missing from props.
+      var allKeys = assign({}, props[propName], shapeTypes);
+      for (var key in allKeys) {
+        var checker = shapeTypes[key];
+        if (has(shapeTypes, key) && typeof checker !== 'function') {
+          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
+        }
+        if (!checker) {
+          return new PropTypeError(
+            'Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' +
+            '\nBad object: ' + JSON.stringify(props[propName], null, '  ') +
+            '\nValid keys: ' + JSON.stringify(Object.keys(shapeTypes), null, '  ')
+          );
+        }
+        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+        if (error) {
+          return error;
+        }
+      }
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function isNode(propValue) {
+    switch (typeof propValue) {
+      case 'number':
+      case 'string':
+      case 'undefined':
+        return true;
+      case 'boolean':
+        return !propValue;
+      case 'object':
+        if (Array.isArray(propValue)) {
+          return propValue.every(isNode);
+        }
+        if (propValue === null || isValidElement(propValue)) {
+          return true;
+        }
+
+        var iteratorFn = getIteratorFn(propValue);
+        if (iteratorFn) {
+          var iterator = iteratorFn.call(propValue);
+          var step;
+          if (iteratorFn !== propValue.entries) {
+            while (!(step = iterator.next()).done) {
+              if (!isNode(step.value)) {
+                return false;
+              }
+            }
+          } else {
+            // Iterator will provide entry [k,v] tuples rather than values.
+            while (!(step = iterator.next()).done) {
+              var entry = step.value;
+              if (entry) {
+                if (!isNode(entry[1])) {
+                  return false;
+                }
+              }
+            }
+          }
+        } else {
+          return false;
+        }
+
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  function isSymbol(propType, propValue) {
+    // Native Symbol.
+    if (propType === 'symbol') {
+      return true;
+    }
+
+    // falsy value can't be a Symbol
+    if (!propValue) {
+      return false;
+    }
+
+    // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
+    if (propValue['@@toStringTag'] === 'Symbol') {
+      return true;
+    }
+
+    // Fallback for non-spec compliant Symbols which are polyfilled.
+    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // Equivalent of `typeof` but with special handling for array and regexp.
+  function getPropType(propValue) {
+    var propType = typeof propValue;
+    if (Array.isArray(propValue)) {
+      return 'array';
+    }
+    if (propValue instanceof RegExp) {
+      // Old webkits (at least until Android 4.0) return 'function' rather than
+      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
+      // passes PropTypes.object.
+      return 'object';
+    }
+    if (isSymbol(propType, propValue)) {
+      return 'symbol';
+    }
+    return propType;
+  }
+
+  // This handles more types than `getPropType`. Only used for error messages.
+  // See `createPrimitiveTypeChecker`.
+  function getPreciseType(propValue) {
+    if (typeof propValue === 'undefined' || propValue === null) {
+      return '' + propValue;
+    }
+    var propType = getPropType(propValue);
+    if (propType === 'object') {
+      if (propValue instanceof Date) {
+        return 'date';
+      } else if (propValue instanceof RegExp) {
+        return 'regexp';
+      }
+    }
+    return propType;
+  }
+
+  // Returns a string that is postfixed to a warning about an invalid type.
+  // For example, "undefined" or "of type array"
+  function getPostfixForTypeWarning(value) {
+    var type = getPreciseType(value);
+    switch (type) {
+      case 'array':
+      case 'object':
+        return 'an ' + type;
+      case 'boolean':
+      case 'date':
+      case 'regexp':
+        return 'a ' + type;
+      default:
+        return type;
+    }
+  }
+
+  // Returns class name of the object, if any.
+  function getClassName(propValue) {
+    if (!propValue.constructor || !propValue.constructor.name) {
+      return ANONYMOUS;
+    }
+    return propValue.constructor.name;
+  }
+
+  ReactPropTypes.checkPropTypes = checkPropTypes;
+  ReactPropTypes.resetWarningCache = checkPropTypes.resetWarningCache;
+  ReactPropTypes.PropTypes = ReactPropTypes;
+
+  return ReactPropTypes;
+};
+
+},{"./checkPropTypes":255,"./lib/ReactPropTypesSecret":259,"./lib/has":260,"object-assign":253,"react-is":263}],258:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+if ("production" !== 'production') {
+  var ReactIs = require('react-is');
+
+  // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+  var throwOnDirectAccess = true;
+  module.exports = require('./factoryWithTypeCheckers')(ReactIs.isElement, throwOnDirectAccess);
+} else {
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  module.exports = require('./factoryWithThrowingShims')();
+}
+
+},{"./factoryWithThrowingShims":256,"./factoryWithTypeCheckers":257,"react-is":263}],259:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';
+
+var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+module.exports = ReactPropTypesSecret;
+
+},{}],260:[function(require,module,exports){
+module.exports = Function.call.bind(Object.prototype.hasOwnProperty);
+
+},{}],261:[function(require,module,exports){
+(function (process){(function (){
+/** @license React v16.13.1
+ * react-is.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';
+
+
+
+if (process.env.NODE_ENV !== "production") {
+  (function() {
+'use strict';
+
+// The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+// nor polyfill, then a plain number is used for performance.
+var hasSymbol = typeof Symbol === 'function' && Symbol.for;
+var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
+var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
+var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
+var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
+var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
+var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
+var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
+// (unstable) APIs that have been removed. Can we remove the symbols?
+
+var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
+var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
+var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
+var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
+var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
+var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for('react.block') : 0xead9;
+var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
+var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
+var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
+
+function isValidElementType(type) {
+  return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
+  type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
+}
+
+function typeOf(object) {
+  if (typeof object === 'object' && object !== null) {
+    var $$typeof = object.$$typeof;
+
+    switch ($$typeof) {
+      case REACT_ELEMENT_TYPE:
+        var type = object.type;
+
+        switch (type) {
+          case REACT_ASYNC_MODE_TYPE:
+          case REACT_CONCURRENT_MODE_TYPE:
+          case REACT_FRAGMENT_TYPE:
+          case REACT_PROFILER_TYPE:
+          case REACT_STRICT_MODE_TYPE:
+          case REACT_SUSPENSE_TYPE:
+            return type;
+
+          default:
+            var $$typeofType = type && type.$$typeof;
+
+            switch ($$typeofType) {
+              case REACT_CONTEXT_TYPE:
+              case REACT_FORWARD_REF_TYPE:
+              case REACT_LAZY_TYPE:
+              case REACT_MEMO_TYPE:
+              case REACT_PROVIDER_TYPE:
+                return $$typeofType;
+
+              default:
+                return $$typeof;
+            }
+
+        }
+
+      case REACT_PORTAL_TYPE:
+        return $$typeof;
+    }
+  }
+
+  return undefined;
+} // AsyncMode is deprecated along with isAsyncMode
+
+var AsyncMode = REACT_ASYNC_MODE_TYPE;
+var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
+var ContextConsumer = REACT_CONTEXT_TYPE;
+var ContextProvider = REACT_PROVIDER_TYPE;
+var Element = REACT_ELEMENT_TYPE;
+var ForwardRef = REACT_FORWARD_REF_TYPE;
+var Fragment = REACT_FRAGMENT_TYPE;
+var Lazy = REACT_LAZY_TYPE;
+var Memo = REACT_MEMO_TYPE;
+var Portal = REACT_PORTAL_TYPE;
+var Profiler = REACT_PROFILER_TYPE;
+var StrictMode = REACT_STRICT_MODE_TYPE;
+var Suspense = REACT_SUSPENSE_TYPE;
+var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
+
+function isAsyncMode(object) {
+  {
+    if (!hasWarnedAboutDeprecatedIsAsyncMode) {
+      hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
+
+      console['warn']('The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
+    }
+  }
+
+  return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
+}
+function isConcurrentMode(object) {
+  return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
+}
+function isContextConsumer(object) {
+  return typeOf(object) === REACT_CONTEXT_TYPE;
+}
+function isContextProvider(object) {
+  return typeOf(object) === REACT_PROVIDER_TYPE;
+}
+function isElement(object) {
+  return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+}
+function isForwardRef(object) {
+  return typeOf(object) === REACT_FORWARD_REF_TYPE;
+}
+function isFragment(object) {
+  return typeOf(object) === REACT_FRAGMENT_TYPE;
+}
+function isLazy(object) {
+  return typeOf(object) === REACT_LAZY_TYPE;
+}
+function isMemo(object) {
+  return typeOf(object) === REACT_MEMO_TYPE;
+}
+function isPortal(object) {
+  return typeOf(object) === REACT_PORTAL_TYPE;
+}
+function isProfiler(object) {
+  return typeOf(object) === REACT_PROFILER_TYPE;
+}
+function isStrictMode(object) {
+  return typeOf(object) === REACT_STRICT_MODE_TYPE;
+}
+function isSuspense(object) {
+  return typeOf(object) === REACT_SUSPENSE_TYPE;
+}
+
+exports.AsyncMode = AsyncMode;
+exports.ConcurrentMode = ConcurrentMode;
+exports.ContextConsumer = ContextConsumer;
+exports.ContextProvider = ContextProvider;
+exports.Element = Element;
+exports.ForwardRef = ForwardRef;
+exports.Fragment = Fragment;
+exports.Lazy = Lazy;
+exports.Memo = Memo;
+exports.Portal = Portal;
+exports.Profiler = Profiler;
+exports.StrictMode = StrictMode;
+exports.Suspense = Suspense;
+exports.isAsyncMode = isAsyncMode;
+exports.isConcurrentMode = isConcurrentMode;
+exports.isContextConsumer = isContextConsumer;
+exports.isContextProvider = isContextProvider;
+exports.isElement = isElement;
+exports.isForwardRef = isForwardRef;
+exports.isFragment = isFragment;
+exports.isLazy = isLazy;
+exports.isMemo = isMemo;
+exports.isPortal = isPortal;
+exports.isProfiler = isProfiler;
+exports.isStrictMode = isStrictMode;
+exports.isSuspense = isSuspense;
+exports.isValidElementType = isValidElementType;
+exports.typeOf = typeOf;
+  })();
+}
+
+}).call(this)}).call(this,require('_process'))
+},{"_process":254}],262:[function(require,module,exports){
+/** @license React v16.13.1
+ * react-is.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+'use strict';var b="function"===typeof Symbol&&Symbol.for,c=b?Symbol.for("react.element"):60103,d=b?Symbol.for("react.portal"):60106,e=b?Symbol.for("react.fragment"):60107,f=b?Symbol.for("react.strict_mode"):60108,g=b?Symbol.for("react.profiler"):60114,h=b?Symbol.for("react.provider"):60109,k=b?Symbol.for("react.context"):60110,l=b?Symbol.for("react.async_mode"):60111,m=b?Symbol.for("react.concurrent_mode"):60111,n=b?Symbol.for("react.forward_ref"):60112,p=b?Symbol.for("react.suspense"):60113,q=b?
+Symbol.for("react.suspense_list"):60120,r=b?Symbol.for("react.memo"):60115,t=b?Symbol.for("react.lazy"):60116,v=b?Symbol.for("react.block"):60121,w=b?Symbol.for("react.fundamental"):60117,x=b?Symbol.for("react.responder"):60118,y=b?Symbol.for("react.scope"):60119;
+function z(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c:switch(a=a.type,a){case l:case m:case e:case g:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k:case n:case t:case r:case h:return a;default:return u}}case d:return u}}}function A(a){return z(a)===m}exports.AsyncMode=l;exports.ConcurrentMode=m;exports.ContextConsumer=k;exports.ContextProvider=h;exports.Element=c;exports.ForwardRef=n;exports.Fragment=e;exports.Lazy=t;exports.Memo=r;exports.Portal=d;
+exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isAsyncMode=function(a){return A(a)||z(a)===l};exports.isConcurrentMode=A;exports.isContextConsumer=function(a){return z(a)===k};exports.isContextProvider=function(a){return z(a)===h};exports.isElement=function(a){return"object"===typeof a&&null!==a&&a.$$typeof===c};exports.isForwardRef=function(a){return z(a)===n};exports.isFragment=function(a){return z(a)===e};exports.isLazy=function(a){return z(a)===t};
+exports.isMemo=function(a){return z(a)===r};exports.isPortal=function(a){return z(a)===d};exports.isProfiler=function(a){return z(a)===g};exports.isStrictMode=function(a){return z(a)===f};exports.isSuspense=function(a){return z(a)===p};
+exports.isValidElementType=function(a){return"string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||a===q||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n||a.$$typeof===w||a.$$typeof===x||a.$$typeof===y||a.$$typeof===v)};exports.typeOf=z;
+
+},{}],263:[function(require,module,exports){
+(function (process){(function (){
+'use strict';
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./cjs/react-is.production.min.js');
+} else {
+  module.exports = require('./cjs/react-is.development.js');
+}
+
+}).call(this)}).call(this,require('_process'))
+},{"./cjs/react-is.development.js":261,"./cjs/react-is.production.min.js":262,"_process":254}],264:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -23483,7 +24397,7 @@ Object.defineProperty(exports, 'throttle', {
     return _io.throttle;
   }
 });
-},{"./internal/io":255}],253:[function(require,module,exports){
+},{"./internal/io":267}],265:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -23591,7 +24505,7 @@ var buffers = exports.buffers = {
     return ringBuffer(initialSize, ON_OVERFLOW_EXPAND);
   }
 };
-},{"./utils":262}],254:[function(require,module,exports){
+},{"./utils":274}],266:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -23806,7 +24720,7 @@ function stdChannel(subscribe) {
   });
 }
 }).call(this)}).call(this,require('_process'))
-},{"./buffers":253,"./scheduler":261,"./utils":262,"_process":251}],255:[function(require,module,exports){
+},{"./buffers":265,"./scheduler":273,"./utils":274,"_process":254}],267:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24100,7 +25014,7 @@ var asEffect = exports.asEffect = {
   getContext: createAsEffectType(GET_CONTEXT),
   setContext: createAsEffectType(SET_CONTEXT)
 };
-},{"./sagaHelpers":257,"./utils":262}],256:[function(require,module,exports){
+},{"./sagaHelpers":269,"./utils":274}],268:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24157,7 +25071,7 @@ function fsmIterator(fsm, q0) {
     return next(null, error);
   }, name, true);
 }
-},{"../utils":262}],257:[function(require,module,exports){
+},{"../utils":274}],269:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24193,7 +25107,7 @@ exports.throttle = throttle;
 exports.takeEveryHelper = _takeEvery2.default;
 exports.takeLatestHelper = _takeLatest2.default;
 exports.throttleHelper = _throttle2.default;
-},{"../utils":262,"./takeEvery":258,"./takeLatest":259,"./throttle":260}],258:[function(require,module,exports){
+},{"../utils":274,"./takeEvery":270,"./takeLatest":271,"./throttle":272}],270:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24233,7 +25147,7 @@ function takeEvery(patternOrChannel, worker) {
     }
   }, 'q1', 'takeEvery(' + (0, _fsmIterator.safeName)(patternOrChannel) + ', ' + worker.name + ')');
 }
-},{"../channel":254,"../io":255,"./fsmIterator":256}],259:[function(require,module,exports){
+},{"../channel":266,"../io":267,"./fsmIterator":268}],271:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24283,7 +25197,7 @@ function takeLatest(patternOrChannel, worker) {
     }
   }, 'q1', 'takeLatest(' + (0, _fsmIterator.safeName)(patternOrChannel) + ', ' + worker.name + ')');
 }
-},{"../channel":254,"../io":255,"./fsmIterator":256}],260:[function(require,module,exports){
+},{"../channel":266,"../io":267,"./fsmIterator":268}],272:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24342,7 +25256,7 @@ function throttle(delayLength, pattern, worker) {
     }
   }, 'q1', 'throttle(' + (0, _fsmIterator.safeName)(pattern) + ', ' + worker.name + ')');
 }
-},{"../buffers":253,"../channel":254,"../io":255,"../utils":262,"./fsmIterator":256}],261:[function(require,module,exports){
+},{"../buffers":265,"../channel":266,"../io":267,"../utils":274,"./fsmIterator":268}],273:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -24411,7 +25325,7 @@ function flush() {
     exec(task);
   }
 }
-},{}],262:[function(require,module,exports){
+},{}],274:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -24711,4 +25625,4 @@ var cloneableGenerator = exports.cloneableGenerator = function cloneableGenerato
   };
 };
 }).call(this)}).call(this,require('_process'))
-},{"_process":251}]},{},[74]);
+},{"_process":254}]},{},[74]);

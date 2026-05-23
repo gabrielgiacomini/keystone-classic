@@ -2,7 +2,6 @@
 // import { shallow } from 'enzyme';
 // import demand from 'must';
 // import CreateForm from '../CreateForm';
-// import { Modal, Form } from 'elemental';
 //
 // describe('<CreateForm />', () => {
 // 	beforeEach(() => {

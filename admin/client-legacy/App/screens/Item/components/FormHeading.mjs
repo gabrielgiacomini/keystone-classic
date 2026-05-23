@@ -1,10 +1,12 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import evalDependsOn from '../../../../../../fields/utils/evalDependsOn.mjs';
 
-export default React.createClass({
+export default createReactClass({
 	displayName: 'FormHeading',
 	propTypes: {
-		options: React.PropTypes.object,
+		options: PropTypes.object,
 	},
 	render () {
 		if (!evalDependsOn(this.props.options.dependsOn, this.props.options.values)) {

@@ -2,7 +2,8 @@
  * The login form of the signin screen
  */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Form, FormField, FormInput } from '../../App/elemental/index.mjs';
 
 const LoginForm = ({
@@ -47,6 +48,5 @@ LoginForm.propTypes = {
 	isAnimating: PropTypes.bool,
 	password: PropTypes.string,
 };
-
 
 export default LoginForm;

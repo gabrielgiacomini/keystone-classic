@@ -4,19 +4,21 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import AlertMessages from './AlertMessages.mjs';
 import { Fields } from 'FieldTypes';
 import InvalidFieldType from './InvalidFieldType.mjs';
 import { Button, Form, Modal } from '../elemental/index.mjs';
 
-const CreateForm = React.createClass({
+const CreateForm = createReactClass({
 	displayName: 'CreateForm',
 	propTypes: {
-		err: React.PropTypes.object,
-		isOpen: React.PropTypes.bool,
-		list: React.PropTypes.object,
-		onCancel: React.PropTypes.func,
-		onCreate: React.PropTypes.func,
+		err: PropTypes.object,
+		isOpen: PropTypes.bool,
+		list: PropTypes.object,
+		onCancel: PropTypes.func,
+		onCreate: PropTypes.func,
 	},
 	getDefaultProps () {
 		return {
@@ -179,7 +181,7 @@ const CreateForm = React.createClass({
 			<Modal.Dialog
 				isOpen={this.props.isOpen}
 				onClose={this.props.onCancel}
-				backdropClosesModal
+				backdropClosesModal={false}
 			>
 				{this.renderForm()}
 			</Modal.Dialog>

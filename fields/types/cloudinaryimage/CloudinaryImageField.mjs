@@ -6,7 +6,8 @@
  * It provides a button to upload an image, and it displays a thumbnail of the
  * uploaded image. It also provides a button to remove the image.
  */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Field from '../Field.mjs';
 import cloudinaryResize from '../../../admin/client-legacy/utils/cloudinaryResize';
 import { Button, FormField, FormInput, FormNote } from '../../../admin/client-legacy/App/elemental';
@@ -66,14 +67,14 @@ export default Field.create({
 	getInitialState () {
 		return buildInitialState(this.props);
 	},
-	componentWillReceiveProps (nextProps) {
+	UNSAFE_componentWillReceiveProps (nextProps) {
 		// console.log('CloudinaryImageField nextProps:', nextProps);
 	},
 	/**
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
 	 */
-	componentWillUpdate (nextProps) {
+	UNSAFE_componentWillUpdate (nextProps) {
 		// Reset the action state when the value changes
 		// TODO: We should add a check for a new item ID in the store
 		if (this.props.value.public_id !== nextProps.value.public_id) {

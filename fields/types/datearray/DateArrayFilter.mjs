@@ -6,6 +6,8 @@
  * It provides a date picker and a set of options for filtering by date.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
@@ -32,7 +34,7 @@ const MODE_OPTIONS = [
  * DayPicker.
  * @returns {React.Element} The rendered component.
  */
-const DayPickerIndicator = React.createClass({
+const DayPickerIndicator = createReactClass({
 	render () {
 		return (
 			<span className="DayPicker-Indicator">
@@ -61,12 +63,12 @@ function getDefaultValue () {
  * The `DateFilter` component.
  * @augments React.Component
  */
-const DateFilter = React.createClass({
+const DateFilter = createReactClass({
 	displayName: 'DateFilter',
 	propTypes: {
-		filter: React.PropTypes.shape({
-			mode: React.PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
-			presence: React.PropTypes.string,
+		filter: PropTypes.shape({
+			mode: PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
+			presence: PropTypes.string,
 		}),
 	},
 	statics: {
@@ -156,7 +158,7 @@ const DateFilter = React.createClass({
 	 * @param {Date} day The day that was clicked.
 	 * @param {object} modifiers The modifiers for the day.
 	 */
-	switchBetweenActiveInputFields (e, day, modifiers) {
+	switchBetweenActiveInputFields (day, modifiers) {
 		if (modifiers && modifiers.disabled) return;
 		const { activeInputField } = this.state;
 		const send = {};
@@ -176,7 +178,7 @@ const DateFilter = React.createClass({
 	 * @param {Date} day The day that was clicked.
 	 * @param {object} modifiers The modifiers for the day.
 	 */
-	selectDay (e, day, modifiers) {
+	selectDay (day, modifiers) {
 		if (modifiers && modifiers.disabled) return;
 		this.updateFilter({ value: day });
 	},

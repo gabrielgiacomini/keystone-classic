@@ -1,16 +1,18 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import Popout from '../../../../shared/Popout/index.mjs';
 
 import { Filters } from 'FieldTypes';
 
-const ListFiltersAddForm = React.createClass({
+const ListFiltersAddForm = createReactClass({
 	propTypes: {
-		field: React.PropTypes.object.isRequired,
-		maxHeight: React.PropTypes.number,
-		onApply: React.PropTypes.func,
-		onCancel: React.PropTypes.func,
-		onHeightChange: React.PropTypes.func,
+		field: PropTypes.object.isRequired,
+		maxHeight: PropTypes.number,
+		onApply: PropTypes.func,
+		onCancel: PropTypes.func,
+		onHeightChange: PropTypes.func,
 	},
 	getInitialState () {
 		const filterComponent = Filters[this.props.field.type];

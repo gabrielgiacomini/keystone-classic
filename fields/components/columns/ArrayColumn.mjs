@@ -1,12 +1,14 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 
-const ArrayColumn = React.createClass({
+const ArrayColumn = createReactClass({
 	displayName: 'ArrayColumn',
 	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
+		col: PropTypes.object,
+		data: PropTypes.object,
 	},
 	renderValue () {
 		const value = this.props.data.fields[this.props.col.path];

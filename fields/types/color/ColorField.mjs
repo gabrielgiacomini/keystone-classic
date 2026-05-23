@@ -9,6 +9,7 @@ import { SketchPicker } from 'react-color';
 import { css } from 'glamor';
 import Field from '../Field.mjs';
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
 	Button,
 	FormInput,
@@ -29,9 +30,9 @@ const ColorField = Field.create({
 		type: 'Color',
 	},
 	propTypes: {
-		onChange: React.PropTypes.func,
-		path: React.PropTypes.string,
-		value: React.PropTypes.string,
+		onChange: PropTypes.func,
+		path: PropTypes.string,
+		value: PropTypes.string,
 	},
 
 	/**

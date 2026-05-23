@@ -6,6 +6,8 @@
  * It provides a segmented control to filter by whether an image is set or not.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 import { SegmentedControl } from '../../../admin/client-legacy/App/elemental';
 
@@ -28,10 +30,10 @@ function getDefaultValue () {
  * The `CloudinaryImageFilter` component.
  * @augments React.Component
  */
-const CloudinaryImageFilter = React.createClass({
+const CloudinaryImageFilter = createReactClass({
 	propTypes: {
-		filter: React.PropTypes.shape({
-			exists: React.PropTypes.oneOf(OPTIONS.map(i => i.value)),
+		filter: PropTypes.shape({
+			exists: PropTypes.oneOf(OPTIONS.map(i => i.value)),
 		}),
 	},
 	statics: {

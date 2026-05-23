@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 /**
  * Renders alternate content when a modifier key (e.g. Alt) is held down
  */

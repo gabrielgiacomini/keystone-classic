@@ -5,7 +5,8 @@
  */
 import { FormInput } from '../../../admin/client-legacy/App/elemental';
 import Field from '../Field.mjs';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * The `MoneyField` component.

@@ -1,5 +1,6 @@
 import { css } from 'glamor';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import classes from './styles.mjs';
 import FormLabel from '../FormLabel/index.mjs';
@@ -104,9 +105,9 @@ FormField.propTypes = {
 		PropTypes.arrayOf(PropTypes.shape(stylesShape)),
 		PropTypes.shape(stylesShape),
 	]),
-	htmlFor: React.PropTypes.string,
-	label: React.PropTypes.string,
-	offsetAbsentLabel: React.PropTypes.bool,
+	htmlFor: PropTypes.string,
+	label: PropTypes.string,
+	offsetAbsentLabel: PropTypes.bool,
 };
 
 function generateId () {

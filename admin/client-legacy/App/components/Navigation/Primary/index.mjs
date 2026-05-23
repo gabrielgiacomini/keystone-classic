@@ -4,16 +4,18 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Container } from '../../../elemental/index.mjs';
 import PrimaryNavItem from './NavItem.mjs';
 
-const PrimaryNavigation = React.createClass({
+const PrimaryNavigation = createReactClass({
 	displayName: 'PrimaryNavigation',
 	propTypes: {
-		brand: React.PropTypes.string,
-		currentSectionKey: React.PropTypes.string,
-		sections: React.PropTypes.array.isRequired,
-		signoutUrl: React.PropTypes.string,
+		brand: PropTypes.string,
+		currentSectionKey: PropTypes.string,
+		sections: PropTypes.array.isRequired,
+		signoutUrl: PropTypes.string,
 	},
 	getInitialState () {
 		return {};

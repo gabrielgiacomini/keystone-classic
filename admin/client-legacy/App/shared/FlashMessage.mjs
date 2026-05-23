@@ -2,10 +2,12 @@
  * A single flash message component. Used by FlashMessages.js
  */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Alert } from '../elemental/index.mjs';
 
-const FlashMessage = React.createClass({
+const FlashMessage = createReactClass({
 	propTypes: {
 		message: PropTypes.oneOfType([
 			PropTypes.object,

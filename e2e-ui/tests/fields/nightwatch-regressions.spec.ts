@@ -63,34 +63,6 @@ async function createAdminNextItem(page: Page, listKey: string): Promise<Respons
 	return create;
 }
 
-async function chooseRelationship(
-	page: Page,
-	fieldName: string,
-	refListKey: string,
-	search: string,
-	label: string,
-): Promise<void> {
-	const searchInput = page.locator(`input#${fieldName}`);
-	if ((await searchInput.count()) === 0) {
-		await page
-			.locator(`[data-field-name="${fieldName}"][data-field-type="relationship"] [data-field-relationship-single-toggle]`)
-			.first()
-			.click();
-		await expect(searchInput).toBeVisible();
-	}
-	const searchResponse = page.waitForResponse(
-		(r) =>
-			r.url().includes(`/keystone-api/${refListKey}`) &&
-			r.url().includes(`search=${encodeURIComponent(search)}`) &&
-			r.request().method() === 'GET',
-	);
-	await searchInput.fill(search);
-	await searchResponse;
-	await page
-		.locator('[role="listbox"] [role="option"] button', { hasText: label })
-		.click();
-}
-
 async function setCheckbox(checkbox: Locator, checked: boolean): Promise<void> {
 	if ((await checkbox.isChecked()) !== checked) {
 		await checkbox.setChecked(checked);

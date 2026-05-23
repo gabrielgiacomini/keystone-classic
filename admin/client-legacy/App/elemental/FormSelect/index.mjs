@@ -1,5 +1,6 @@
 import { css } from 'glamor';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import classes from './styles.mjs';
 
@@ -54,10 +55,10 @@ FormSelect.contextTypes = {
 };
 FormSelect.propTypes = {
 	onChange: PropTypes.func.isRequired,
-	options: React.PropTypes.arrayOf(
-		React.PropTypes.shape({
-			label: React.PropTypes.string,
-			value: React.PropTypes.string,
+	options: PropTypes.arrayOf(
+		PropTypes.shape({
+			label: PropTypes.string,
+			value: PropTypes.string,
 		})
 	),
 	value: PropTypes.oneOfType([

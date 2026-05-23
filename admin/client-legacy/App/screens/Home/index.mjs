@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { Container, Spinner } from '../../elemental/index.mjs';
 import { connect } from 'react-redux';
 
@@ -14,7 +15,7 @@ import {
 	loadCounts,
 } from './actions.mjs';
 
-const HomeView = React.createClass({
+const HomeView = createReactClass({
 	displayName: 'HomeView',
 	getInitialState () {
 		return {

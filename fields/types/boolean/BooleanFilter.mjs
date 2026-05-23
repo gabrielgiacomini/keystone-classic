@@ -7,6 +7,8 @@
  * not.
  */
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { SegmentedControl } from '../../../admin/client-legacy/App/elemental';
 
 const VALUE_OPTIONS = [
@@ -28,10 +30,10 @@ function getDefaultValue () {
  * The `BooleanFilter` component.
  * @augments React.Component
  */
-const BooleanFilter = React.createClass({
+const BooleanFilter = createReactClass({
 	propTypes: {
-		filter: React.PropTypes.shape({
-			value: React.PropTypes.bool,
+		filter: PropTypes.shape({
+			value: PropTypes.bool,
 		}),
 	},
 	statics: {

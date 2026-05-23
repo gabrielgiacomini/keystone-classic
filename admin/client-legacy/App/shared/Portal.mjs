@@ -4,9 +4,10 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import ReactDOM from 'react-dom';
 
-export default React.createClass({
+export default createReactClass({
 	displayName: 'Portal',
 	portalElement: null,
 	componentDidMount () {

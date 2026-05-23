@@ -5,6 +5,8 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 
 import { setCurrentPage } from '../../actions/index.mjs';
@@ -12,13 +14,13 @@ import { setCurrentPage } from '../../actions/index.mjs';
 let timeoutID = false;
 
 // drop target
-const ItemsTableDragDropZoneTarget = React.createClass({
+const ItemsTableDragDropZoneTarget = createReactClass({
 	displayName: 'ItemsTableDragDropZoneTarget',
 	propTypes: {
-		className: React.PropTypes.string,
-		connectDropTarget: React.PropTypes.func,
-		isOver: React.PropTypes.bool,
-		pageItems: React.PropTypes.string,
+		className: PropTypes.string,
+		connectDropTarget: PropTypes.func,
+		isOver: PropTypes.bool,
+		pageItems: PropTypes.string,
 	},
 	componentDidUpdate () {
 		if (timeoutID && !this.props.isOver) {
@@ -82,7 +84,6 @@ const dropTarget = {
 				// drop onto a new page, no drop events are fired, and react-dnd doesn't have a way to
 				// manually force them to happen. Not sure what to do here.
 				props.dispatch(setCurrentPage(props.page));
-
 
 				clearTimeout(timeoutID);
 				timeoutID = false;

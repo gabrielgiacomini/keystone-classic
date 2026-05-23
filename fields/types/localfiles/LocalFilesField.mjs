@@ -11,6 +11,8 @@ import _ from 'lodash';
 import bytes from 'bytes';
 import Field from '../Field.mjs';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Button, FormField, FormInput, FormNote } from '../../../admin/client-legacy/App/elemental';
 
 const ICON_EXTS = [
@@ -20,13 +22,13 @@ const ICON_EXTS = [
 	'wav', 'xls', 'xlsx', 'xml', 'yml', 'zip',
 ];
 
-const LocalFilesFieldItem = React.createClass({
+const LocalFilesFieldItem = createReactClass({
 	propTypes: {
-		deleted: React.PropTypes.bool,
-		filename: React.PropTypes.string,
-		isQueued: React.PropTypes.bool,
-		size: React.PropTypes.number,
-		toggleDelete: React.PropTypes.func,
+		deleted: PropTypes.bool,
+		filename: PropTypes.string,
+		isQueued: PropTypes.bool,
+		size: PropTypes.number,
+		toggleDelete: PropTypes.func,
 	},
 
 	renderActionButton () {

@@ -7,7 +7,8 @@
  * uploaded file. It also provides a button to remove the file.
  */
 import Field from '../Field.mjs';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
 	Button,
 	FormField,
@@ -76,7 +77,7 @@ export default Field.create({
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
 	 */
-	componentWillUpdate (nextProps) {
+	UNSAFE_componentWillUpdate (nextProps) {
 		// Show the new filename when it's finished uploading
 		if (this.props.value.filename !== nextProps.value.filename) {
 			this.setState(buildInitialState(nextProps));
