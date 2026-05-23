@@ -26,7 +26,7 @@ export function setDragBase (item, index) {
 		dispatch(resetDragItems());
 		if (item) {
 			dispatch(setDragItem(item));
-			if (index) {
+			if (typeof index === 'number') {
 				dispatch(setDragIndex(index));
 			}
 		}

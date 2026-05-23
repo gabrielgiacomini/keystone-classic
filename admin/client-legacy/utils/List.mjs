@@ -67,7 +67,10 @@ function buildQueryString (options) {
 	if (options.columns) query.fields = options.columns.map(i => i.path).join(',');
 	if (options.page && options.page.size) query.limit = options.page.size;
 	if (options.page && options.page.index > 1) query.skip = (options.page.index - 1) * options.page.size;
-	if (options.sort) query.sort = getSortString(options.sort);
+	if (options.sort) {
+		const sort = getSortString(options.sort);
+		if (sort) query.sort = sort;
+	}
 	query.expandRelationshipFields = true;
 	return '?' + qs.stringify(query);
 };

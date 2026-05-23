@@ -1,0 +1,23 @@
+{
+  "name": "react-prop-toggle",
+  "version": "1.0.2-react17.0",
+  "description": "A safe, declarative way to influence the styles and attributes of nodes outside your app's tree.",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "homepage": "https://github.com/jossmac/react-prop-toggle",
+  "bugs": {
+    "url": "https://github.com/jossmac/react-prop-toggle/issues"
+  },
+  "keywords": [
+    "react",
+    "prop",
+    "property",
+    "attribute",
+    "style",
+    "toggle"
+  ],
+  "peerDependencies": {
+    "react": "^16.3.0 || ^17.0.0",
+    "react-dom": "^16.3.0 || ^17.0.0"
+  }
+}

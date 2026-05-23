@@ -4,7 +4,7 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
-import Popout from '../../admin/client-legacy/App/shared/Popout';
+import Popout from '../../admin/client-legacy/App/shared/Popout/index.mjs';
 import { FormInput } from '../../admin/client-legacy/App/elemental';
 
 let lastId = 0;

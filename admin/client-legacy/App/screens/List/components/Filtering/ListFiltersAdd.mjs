@@ -56,7 +56,10 @@ const ListFiltersAdd = createReactClass({
 		}, this.focusSearch);
 	},
 	focusSearch () {
-		findDOMNode(this.refs.search).focus();
+		const search = this.refs.search && findDOMNode(this.refs.search);
+		if (search && typeof search.focus === 'function') {
+			search.focus();
+		}
 	},
 	selectField (field) {
 		this.setState({

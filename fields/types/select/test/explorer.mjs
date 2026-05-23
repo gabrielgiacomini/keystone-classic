@@ -1,11 +1,10 @@
-import fs from 'node:fs';
 import SelectField from '../SelectField.mjs';
 import SelectFilter from '../SelectFilter.mjs';
 
 export default {
 	Field: SelectField,
 	Filter: SelectFilter,
-	readme: fs.readFileSync('./fields/types/select/Readme.md', 'utf8'),
+	readme: '',
 	section: 'Miscellaneous',
 	spec: [{
 		label: 'Text Select',

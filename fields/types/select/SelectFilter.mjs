@@ -14,8 +14,8 @@ import {
 	FormNote,
 	SegmentedControl,
 } from '../../../admin/client-legacy/App/elemental';
-import PopoutList from '../../../admin/client-legacy/App/shared/Popout/PopoutList';
-import Kbd from '../../../admin/client-legacy/App/shared/Kbd';
+import PopoutList from '../../../admin/client-legacy/App/shared/Popout/PopoutList.mjs';
+import Kbd from '../../../admin/client-legacy/App/shared/Kbd.mjs';
 import bindFunctions from '../../utils/bindFunctions.mjs';
 
 const INVERTED_OPTIONS = [

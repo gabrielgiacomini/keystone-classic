@@ -12139,7 +12139,7 @@ function setDragBase(item, index) {
         dispatch(resetDragItems());
         if (item) {
             dispatch(setDragItem(item));
-            if (index) {
+            if (typeof index === 'number') {
                 dispatch(setDragIndex(index));
             }
         }
@@ -12761,7 +12761,10 @@ const ListFiltersAdd = (0, _createreactclass.default)({
         }, this.focusSearch);
     },
     focusSearch () {
-        (0, _reactdom.findDOMNode)(this.refs.search).focus();
+        const search = this.refs.search && (0, _reactdom.findDOMNode)(this.refs.search);
+        if (search && typeof search.focus === 'function') {
+            search.focus();
+        }
     },
     selectField (field) {
         this.setState({
@@ -13180,6 +13183,30 @@ function _object_spread(target) {
     }
     return target;
 }
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) {
+            symbols = symbols.filter(function(sym) {
+                return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+            });
+        }
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _object_spread_props(target, source) {
+    source = source != null ? source : {};
+    if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+        ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
 const ItemsTable = (0, _createreactclass.default)({
     propTypes: {
         checkedItems: _proptypes.default.object.isRequired,
@@ -13250,14 +13277,15 @@ const ItemsTable = (0, _createreactclass.default)({
         const { items } = this.props;
         if (!items.results.length) return null;
         const tableBody = this.props.list.sortable ? /*#__PURE__*/ _react.default.createElement(_ItemsTableDragDrop.default, this.props) : /*#__PURE__*/ _react.default.createElement("tbody", null, items.results.map((item, i)=>{
-            return /*#__PURE__*/ _react.default.createElement(_ItemsTableRow.default, _object_spread({
-                key: item.id,
+            return /*#__PURE__*/ _react.default.createElement(_ItemsTableRow.default, _object_spread_props(_object_spread({
+                key: item.id
+            }, this.props), {
                 deleteTableItem: this.props.deleteTableItem,
                 index: i,
                 sortOrder: item.sortOrder || 0,
                 id: item.id,
                 item: item
-            }, this.props));
+            }));
         }));
         return /*#__PURE__*/ _react.default.createElement("div", {
             className: "ItemList-wrapper"
@@ -13325,6 +13353,30 @@ function _object_spread(target) {
     }
     return target;
 }
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) {
+            symbols = symbols.filter(function(sym) {
+                return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+            });
+        }
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _object_spread_props(target, source) {
+    source = source != null ? source : {};
+    if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+        ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
 const ItemsTableDragDrop = (0, _createreactclass.default)({
     displayName: 'ItemsTableDragDrop',
     propTypes: {
@@ -13336,13 +13388,14 @@ const ItemsTableDragDrop = (0, _createreactclass.default)({
     },
     render () {
         return /*#__PURE__*/ _react.default.createElement("tbody", null, this.props.items.results.map((item, i)=>{
-            return /*#__PURE__*/ _react.default.createElement(_ItemsTableRow.Sortable, _object_spread({
-                key: item.id,
+            return /*#__PURE__*/ _react.default.createElement(_ItemsTableRow.Sortable, _object_spread_props(_object_spread({
+                key: item.id
+            }, this.props), {
                 index: i,
                 sortOrder: item.sortOrder || 0,
                 id: item.id,
                 item: item
-            }, this.props));
+            }));
         }), /*#__PURE__*/ _react.default.createElement(_ItemsTableDragDropZone.default, this.props));
     }
 });
@@ -13666,8 +13719,6 @@ const _default = ItemsRow;
             props.dispatch((0, _index.resetItems)(props.id));
             return;
         }
-        const page = props.currentPage;
-        const pageSize = props.pageSize;
         // If we were dropped onto a page change target, then droppedOn.prevSortOrder etc will be
         // set by that target, and we should use those values. If we were just dropped onto a new row
         // then we need to calculate these values ourselves.
@@ -13677,7 +13728,10 @@ const _default = ItemsRow;
         // Previous to this page, there are (3 - 1)*10 = 20 items before us. If we have index 6
         // on this page, then we're the 7th item to display (index starts from 0), and so we
         // want to update the display order to 20 + 7 = 27.
-        const newSortOrder = droppedOn.newSortOrder || (page - 1) * pageSize + droppedOn.index + 1;
+        const droppedIndex = typeof droppedOn.index === 'number' ? droppedOn.index : typeof monitor.getItem().index === 'number' ? monitor.getItem().index : props.index;
+        const page = Number(props.currentPage) || 1;
+        const pageSize = Number(props.pageSize) || props.items && props.items.results && props.items.results.length || 0;
+        const newSortOrder = droppedOn.newSortOrder || (page - 1) * pageSize + droppedIndex + 1;
         // If we were dropped on a page change target, then droppedOn.gotToPage will be set, and we should
         // pass this to reorderItems, which will then change the page for the user.
         props.dispatch((0, _index.reorderItems)(props.item, prevSortOrder, newSortOrder, Number(droppedOn.goToPage)));
@@ -18528,7 +18582,10 @@ function getAdminApiPath() {
     if (options.columns) query.fields = options.columns.map((i)=>i.path).join(',');
     if (options.page && options.page.size) query.limit = options.page.size;
     if (options.page && options.page.index > 1) query.skip = (options.page.index - 1) * options.page.size;
-    if (options.sort) query.sort = getSortString(options.sort);
+    if (options.sort) {
+        const sort = getSortString(options.sort);
+        if (sort) query.sort = sort;
+    }
     query.expandRelationshipFields = true;
     return '?' + _qs.default.stringify(query);
 }

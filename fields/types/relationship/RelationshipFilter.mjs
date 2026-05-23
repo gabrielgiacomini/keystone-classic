@@ -19,7 +19,7 @@ import {
 	SegmentedControl,
 } from '../../../admin/client-legacy/App/elemental';
 
-import PopoutList from '../../../admin/client-legacy/App/shared/Popout/PopoutList';
+import PopoutList from '../../../admin/client-legacy/App/shared/Popout/PopoutList.mjs';
 
 const INVERTED_OPTIONS = [
 	{ label: 'Linked To', value: false },

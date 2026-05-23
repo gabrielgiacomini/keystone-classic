@@ -2,7 +2,7 @@ import { css } from 'glamor';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Spinner } from '../../admin/client-legacy/App/elemental';
-import theme from '../../admin/client-legacy/theme';
+import theme from '../../admin/client-legacy/theme.mjs';
 
 // FIXME static octicon classes leaning on Elemental to avoid duplicate
 // font and CSS; inflating the project size

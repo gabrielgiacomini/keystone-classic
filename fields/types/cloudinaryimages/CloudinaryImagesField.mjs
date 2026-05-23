@@ -11,7 +11,7 @@ import React, { cloneElement } from 'react';
 import Field from '../Field.mjs';
 import { Button, FormField, FormNote } from '../../../admin/client-legacy/App/elemental';
 import Lightbox from 'react-images';
-import cloudinaryResize from '../../../admin/client-legacy/utils/cloudinaryResize';
+import cloudinaryResize from '../../../admin/client-legacy/utils/cloudinaryResize.mjs';
 import Thumbnail from './CloudinaryImagesThumbnail.mjs';
 import HiddenFileInput from '../../components/HiddenFileInput.mjs';
 import FileChangeMessage from '../../components/FileChangeMessage.mjs';

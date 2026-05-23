@@ -18,7 +18,7 @@ import {
 } from '../../../admin/client-legacy/App/elemental';
 import transparentSwatch from './transparent-swatch.mjs';
 import coloredSwatch from './colored-swatch.mjs';
-import theme from '../../../admin/client-legacy/theme';
+import theme from '../../../admin/client-legacy/theme.mjs';
 
 /**
  * The `ColorField` component.

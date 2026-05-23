@@ -90,7 +90,13 @@ assert(typeof pkg.main === 'string' && pkg.main.length > 0, 'package.json must d
 assert(typeof pkg.types === 'string' && pkg.types.length > 0, 'package.json must declare "types"');
 assert(pkg.main === 'dist/index.mjs', 'package.json "main" must point at dist/index.mjs');
 assert(pkg.types === 'dist/index.d.mts', 'package.json "types" must point at dist/index.d.mts');
-assert(Array.isArray(pkg.files) && pkg.files.length === 1 && pkg.files[0] === 'dist', 'package files must publish dist only');
+assert(
+	Array.isArray(pkg.files)
+		&& pkg.files.length === 2
+		&& pkg.files.includes('dist')
+		&& pkg.files.includes('vendor/react17-peer-forks'),
+	'package files must publish dist and the React 17 peer fork sources',
+);
 assertNoRuntimeDependency('cloudinary');
 assert(pkg.peerDependencies?.cloudinary === '^2.0.0', 'package.json must expose cloudinary as a v2 peer dependency');
 assert(pkg.peerDependenciesMeta?.cloudinary?.optional === true, 'package.json must mark the cloudinary peer dependency as optional');

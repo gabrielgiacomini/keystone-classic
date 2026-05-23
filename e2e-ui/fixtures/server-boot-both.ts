@@ -127,6 +127,19 @@ function defineLists () {
 	Post.defaultColumns = 'title, state, author, publishedAt';
 	Post.register();
 
+	const SortableItem = createList('SortableItem', {
+		label: 'Sortable Items',
+		singular: 'Sortable Item',
+		plural: 'Sortable Items',
+		sortable: true,
+		searchFields: 'name',
+	});
+	SortableItem.add({
+		name: { type: Types.Text, required: true, initial: true, index: true },
+	});
+	SortableItem.defaultColumns = 'name';
+	SortableItem.register();
+
 	User.relationship({ ref: 'Post', path: 'posts', refPath: 'author' });
 	User.relationship({ ref: 'Post', path: 'editing', refPath: 'editors' });
 }
@@ -137,6 +150,7 @@ function defineLists () {
 async function seedData () {
 	const User = keystone.list('User');
 	const Post = keystone.list('Post');
+	const SortableItem = keystone.list('SortableItem');
 
 	// Admin user (idempotent).
 	let admin = await User.model.findOne({ email: TEST_ADMIN_EMAIL }).exec();
@@ -166,6 +180,13 @@ async function seedData () {
 			reviewedAt: new Date(Date.UTC(2026, 4, i, 15, 30, 0)),
 		});
 		await post.save();
+	}
+
+	for (let i = 1; i <= 5; i++) {
+		const item = new SortableItem.model({
+			name: `Sortable Item ${String(i).padStart(2, '0')}`,
+		});
+		await item.save();
 	}
 }
 

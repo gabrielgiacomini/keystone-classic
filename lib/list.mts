@@ -303,7 +303,7 @@ export default function listFactory(keystone: Keystone) {
 	Object.defineProperty(List.prototype, 'defaultSort', {
 		get: function (this: List) {
 			const ds = this.get('defaultSort');
-			if (ds !== '__default__') return ds;
+			if (ds && ds !== '__default__') return ds;
 			return this.get('sortable') ? 'sortOrder' : this.namePath;
 		},
 		set: function (this: List, value: unknown) {

@@ -6,7 +6,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '../../../admin/client-legacy/App/elemental';
-import ImageThumbnail from '../../components/ImageThumbnail';
+import ImageThumbnail from '../../components/ImageThumbnail.mjs';
 
 /**
  * The `CloudinaryImagesThumbnail` component.

@@ -21,11 +21,11 @@ const ItemsTableDragDrop = createReactClass({
 				{this.props.items.results.map((item, i) => {
 					return (
 						<Sortable key={item.id}
+							{...this.props}
 							index={i}
 							sortOrder={item.sortOrder || 0}
 							id={item.id}
 							item={item}
-							{...this.props}
 						/>
 					);
 				})}

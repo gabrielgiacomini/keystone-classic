@@ -2,8 +2,8 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { darken, fade } from '../../admin/client-legacy/utils/color';
-import E from '../../admin/client-legacy/constants';
+import { darken, fade } from '../../admin/client-legacy/utils/color.mjs';
+import E from '../../admin/client-legacy/constants.mjs';
 
 const Checkbox = createReactClass({
 	displayName: 'Checkbox',

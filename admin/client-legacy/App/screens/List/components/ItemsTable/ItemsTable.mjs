@@ -106,12 +106,12 @@ const ItemsTable = createReactClass({
 				{items.results.map((item, i) => {
 					return (
 						<TableRow key={item.id}
+							{...this.props}
 							deleteTableItem={this.props.deleteTableItem}
 							index={i}
 							sortOrder={item.sortOrder || 0}
 							id={item.id}
 							item={item}
-							{...this.props}
 						/>
 					);
 				})}

@@ -1,0 +1,35 @@
+{
+  "name": "react-input-autosize",
+  "version": "2.2.2-react17.0",
+  "description": "Auto-resizing Input Component for React",
+  "main": "lib/AutosizeInput.js",
+  "js:next": "dist/react-input-autosize.es.js",
+  "author": "Jed Watson",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JedWatson/react-input-autosize.git"
+  },
+  "dependencies": {
+    "prop-types": "^15.5.8"
+  },
+  "peerDependencies": {
+    "react": "^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0.0"
+  },
+  "jest": {
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/fbjs",
+      "<rootDir>/node_modules/react-dom"
+    ],
+    "roots": [
+      "<rootDir>/src"
+    ]
+  },
+  "keywords": [
+    "react",
+    "react-component",
+    "input",
+    "autosize"
+  ]
+}

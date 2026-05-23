@@ -7,7 +7,7 @@
  * can be configured to allow creating new related items inline.
  */
 import Field from '../Field.mjs';
-import { listsByKey } from '../../../admin/client-legacy/utils/lists';
+import { listsByKey } from '../../../admin/client-legacy/utils/lists.mjs';
 import React from 'react';
 import Select from 'react-select';
 import xhr from 'xhr';
@@ -18,7 +18,7 @@ import {
 	InlineGroupSection as Section,
 } from '../../../admin/client-legacy/App/elemental';
 import _ from 'lodash';
-import CreateForm from '../../../admin/client-legacy/App/shared/CreateForm';
+import CreateForm from '../../../admin/client-legacy/App/shared/CreateForm.mjs';
 
 function getAdminApiPath () {
 	return Keystone.adminApiPath || `${Keystone.adminLegacyPath}/api`;

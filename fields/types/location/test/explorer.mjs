@@ -1,11 +1,10 @@
-import fs from 'node:fs';
 import LocationField from '../LocationField.mjs';
 import LocationFilter from '../LocationFilter.mjs';
 
 export default {
 	Field: LocationField,
 	Filter: LocationFilter,
-	readme: fs.readFileSync('./fields/types/location/Readme.md', 'utf8'),
+	readme: '',
 	section: 'Text',
 	spec: {
 		label: 'Location',

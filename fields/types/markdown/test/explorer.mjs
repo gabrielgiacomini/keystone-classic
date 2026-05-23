@@ -1,11 +1,10 @@
-import fs from 'node:fs';
 import MarkdownField from '../MarkdownField.mjs';
 import MarkdownFilter from '../MarkdownFilter.mjs';
 
 export default {
 	Field: MarkdownField,
 	Filter: MarkdownFilter,
-	readme: fs.readFileSync('./fields/types/markdown/Readme.md', 'utf8'),
+	readme: '',
 	section: 'Text',
 	spec: {
 		label: 'Markdown',

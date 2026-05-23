@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormInput } from '../../admin/client-legacy/App/elemental';
-import { fade } from '../../admin/client-legacy/utils/color';
-import theme from '../../admin/client-legacy/theme';
+import { fade } from '../../admin/client-legacy/utils/color.mjs';
+import theme from '../../admin/client-legacy/theme.mjs';
 
 /**
  * Displays a read-only form input that communicates the result of a file change.

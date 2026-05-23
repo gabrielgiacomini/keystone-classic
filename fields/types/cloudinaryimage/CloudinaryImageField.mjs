@@ -9,7 +9,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Field from '../Field.mjs';
-import cloudinaryResize from '../../../admin/client-legacy/utils/cloudinaryResize';
+import cloudinaryResize from '../../../admin/client-legacy/utils/cloudinaryResize.mjs';
 import { Button, FormField, FormInput, FormNote } from '../../../admin/client-legacy/App/elemental';
 
 import ImageThumbnail from '../../components/ImageThumbnail.mjs';

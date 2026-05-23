@@ -108,9 +108,6 @@ const dragItem = {
 			props.dispatch(resetItems(props.id));
 			return;
 		}
-		const page = props.currentPage;
-		const pageSize = props.pageSize;
-
 		// If we were dropped onto a page change target, then droppedOn.prevSortOrder etc will be
 		// set by that target, and we should use those values. If we were just dropped onto a new row
 		// then we need to calculate these values ourselves.
@@ -121,7 +118,14 @@ const dragItem = {
 		// Previous to this page, there are (3 - 1)*10 = 20 items before us. If we have index 6
 		// on this page, then we're the 7th item to display (index starts from 0), and so we
 		// want to update the display order to 20 + 7 = 27.
-		const newSortOrder = droppedOn.newSortOrder || (page - 1) * pageSize + droppedOn.index + 1;
+		const droppedIndex = typeof droppedOn.index === 'number'
+			? droppedOn.index
+			: (typeof monitor.getItem().index === 'number' ? monitor.getItem().index : props.index);
+		const page = Number(props.currentPage) || 1;
+		const pageSize = Number(props.pageSize)
+			|| (props.items && props.items.results && props.items.results.length)
+			|| 0;
+		const newSortOrder = droppedOn.newSortOrder || (page - 1) * pageSize + droppedIndex + 1;
 
 		// If we were dropped on a page change target, then droppedOn.gotToPage will be set, and we should
 		// pass this to reorderItems, which will then change the page for the user.

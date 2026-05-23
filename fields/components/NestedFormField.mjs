@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormField, FormLabel } from '../../admin/client-legacy/App/elemental';
-import theme from '../../admin/client-legacy/theme';
+import theme from '../../admin/client-legacy/theme.mjs';
 
 /**
  * A form field row with a small, muted label suitable for use inside nested

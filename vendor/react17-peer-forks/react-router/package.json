@@ -1,0 +1,53 @@
+{
+  "name": "react-router",
+  "version": "3.2.6-react17.0",
+  "description": "A complete routing library for React",
+  "files": [
+    "*.md",
+    "docs",
+    "es",
+    "lib",
+    "umd"
+  ],
+  "main": "lib/index",
+  "module": "es/index",
+  "jsnext:main": "es/index",
+  "repository": "ReactTraining/react-router",
+  "homepage": "https://github.com/ReactTraining/react-router#readme",
+  "bugs": "https://github.com/ReactTraining/react-router/issues",
+  "authors": [
+    "Ryan Florence",
+    "Michael Jackson"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "create-react-class": "^15.5.1",
+    "history": "^3.0.0",
+    "hoist-non-react-statics": "^3.3.2",
+    "invariant": "^2.2.1",
+    "loose-envify": "^1.2.0",
+    "prop-types": "^15.7.2",
+    "react-is": "^16.13.0",
+    "warning": "^3.0.0"
+  },
+  "peerDependencies": {
+    "react": "^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0"
+  },
+  "browserify": {
+    "transform": [
+      "loose-envify"
+    ]
+  },
+  "tags": [
+    "react",
+    "router"
+  ],
+  "keywords": [
+    "react",
+    "react-component",
+    "routing",
+    "route",
+    "routes",
+    "router"
+  ]
+}

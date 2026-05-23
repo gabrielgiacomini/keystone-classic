@@ -20,6 +20,20 @@ function objectIdText(value: unknown): string {
 	return value instanceof Types.ObjectId ? value.toString() : String(value ?? '');
 }
 
+function cloudinaryImage(publicId: string, width = 1200, height = 800): Record<string, unknown> {
+	return {
+		public_id: publicId,
+		version: 1,
+		signature: `sig-${publicId}`,
+		format: 'jpg',
+		resource_type: 'image',
+		url: `http://res.cloudinary.test/${publicId}.jpg`,
+		width,
+		height,
+		secure_url: `https://res.cloudinary.test/${publicId}.jpg`,
+	};
+}
+
 async function mediaFixture(): Promise<MongoDoc> {
 	const doc = await withMongo((db) =>
 		db.collection('MediaAsset').findOne({ fixtureKey: 'media-hero' }),
@@ -28,16 +42,51 @@ async function mediaFixture(): Promise<MongoDoc> {
 	return doc as MongoDoc;
 }
 
+async function restoreLegacyCloudinaryFixture(id: string): Promise<void> {
+	await withMongo((db) =>
+		db.collection('MediaAsset').updateOne(
+			{ _id: new Types.ObjectId(id) },
+			{
+				$set: {
+					legacyImage: cloudinaryImage('field-complete/legacy-hero', 1600, 900),
+					legacyGallery: [
+						cloudinaryImage('field-complete/gallery-1', 1200, 800),
+						cloudinaryImage('field-complete/gallery-2', 900, 900),
+					],
+				},
+			},
+		),
+	);
+}
+
 async function gotoMediaItem(page: Page, id: string): Promise<void> {
 	const load = page.waitForResponse(
 		(r) =>
-			r.url().includes(`/keystone-api/MediaAsset/${id}`) &&
+			(
+				r.url().includes(`/keystone-api/MediaAsset/${id}`) ||
+				r.url().includes(`/keystone-api/media-assets/${id}`)
+			) &&
 			r.request().method() === 'GET' &&
 			r.status() === 200,
 	);
 	await page.goto(`/keystone-next/MediaAsset/${id}`);
 	await load;
 	await expect(page.locator('form')).toBeVisible();
+}
+
+async function gotoLegacyMediaItem(page: Page, id: string): Promise<void> {
+	const load = page.waitForResponse(
+		(r) =>
+			(
+				r.url().includes(`/keystone-api/MediaAsset/${id}`) ||
+				r.url().includes(`/keystone-api/media-assets/${id}`)
+			) &&
+			r.request().method() === 'GET' &&
+			r.status() === 200,
+	);
+	await page.goto(`/keystone/media-assets/${id}`);
+	await load;
+	await expect(page.locator('[data-screen-id="item"]')).toBeVisible();
 }
 
 async function saveMediaItem(page: Page, id: string): Promise<void> {
@@ -59,6 +108,35 @@ function fieldShell(page: Page, fieldName: string, fieldType: string) {
 }
 
 test.describe('field-complete media uploads', () => {
+	test('legacy Cloudinary image lightbox opens, advances, and closes', async ({
+		signedInPage,
+	}) => {
+		const media = await mediaFixture();
+		const mediaId = objectIdText(media._id);
+		await restoreLegacyCloudinaryFixture(mediaId);
+
+		await gotoLegacyMediaItem(signedInPage, mediaId);
+
+		await signedInPage
+			.locator('.field-type-cloudinaryimage a', { has: signedInPage.locator('img') })
+			.first()
+			.click();
+		const closeButton = signedInPage.getByTitle('Close (Esc)');
+		await expect(closeButton).toBeVisible();
+		await signedInPage.keyboard.press('Escape');
+		await expect(closeButton).toBeHidden();
+
+		await signedInPage
+			.locator('.field-type-cloudinaryimages a', { has: signedInPage.locator('img') })
+			.first()
+			.click();
+		await expect(closeButton).toBeVisible();
+		await signedInPage.getByTitle('Next (Right arrow key)').click();
+		await expect(closeButton).toBeVisible();
+		await closeButton.click();
+		await expect(closeButton).toBeHidden();
+	});
+
 	test('admin next uploads, replaces, and removes file and Cloudinary media hermetically', async ({
 		signedInPage,
 	}) => {

@@ -178,6 +178,28 @@ npm ls react-router react-redux react-router-redux react-transition-group \
   react-select react-images react-engine enzyme @wojtekmaj/enzyme-adapter-react-17 --depth=1
 ```
 
+### Implemented Package Strategy
+
+Current branch implementation, recorded 2026-05-23:
+
+| Package | Strategy | Fork source | Fork version | Runtime code change | Rollback path |
+| --- | --- | --- | --- | --- | --- |
+| `react-router` | Local peer-range fork. | `react-router@3.2.6` copied from the resolved npm package into `vendor/react17-peer-forks/react-router`. | `3.2.6-react17.0` | None. Package metadata only; dev-only files are pruned. | Restore dependency to `^3.0.2` and remove the local fork. |
+| `react-redux` | Upgrade to a React 17-compatible release. | Published npm package. | `7.2.9` | Yes, package runtime upgrade. Legacy `Provider` and `connect` imports are preserved. | Revert dependency to `^5.0.6` or replace with a peer-range fork of v5 if regression tests require it. |
+| `react-transition-group` | Local peer-range fork. | `react-transition-group@1.2.1` copied from the resolved npm package into `vendor/react17-peer-forks/react-transition-group`. | `1.2.1-react17.0` | None. Package metadata only; `react-transition-group/CSSTransitionGroup` remains available. | Restore dependency to `^1.2.1` and remove the local fork. |
+| `react-select` | Local peer-range fork. | `react-select@1.3.0` copied from the resolved npm package into `vendor/react17-peer-forks/react-select`. | `1.3.0-react17.0` | Metadata only for `react-select`; its `react-input-autosize` helper is also forked for a React 17 peer range. | Restore dependency to `^1.2.4` and remove the local forks. |
+| `react-input-autosize` | Local transitive peer-range fork for `react-select`. | `react-input-autosize@2.2.2` copied from the resolved npm package into `vendor/react17-peer-forks/react-input-autosize`. | `2.2.2-react17.0` | None. Package metadata only. | Restore `react-select` dependency on the published helper. |
+| `react-images` | Local peer-range fork. | `react-images@0.5.19` copied from the resolved npm package into `vendor/react17-peer-forks/react-images`. | `0.5.19-react17.0` | Peer metadata changed. Its bundled portal helper resolves the `react-transition-group@2.9.0` API from a vendored copy under the fork so the root can keep exposing `react-transition-group@1.2.1` for `CSSTransitionGroup` compatibility. Its `react-scrolllock`/`react-prop-toggle` helpers are also forked for React 17 peer ranges. | Restore dependency to `^0.5.6` and remove the local forks. |
+| `react-scrolllock` | Local transitive fork for `react-images`. | `react-scrolllock@2.0.7` copied from the resolved npm package into `vendor/react17-peer-forks/react-scrolllock`. | `2.0.7-react17.0` | Metadata only, plus dependency points at the local `react-prop-toggle` fork. | Restore `react-images` dependency on the published helper. |
+| `react-prop-toggle` | Local transitive peer-range fork for `react-scrolllock`. | `react-prop-toggle@1.0.2` copied from the resolved npm package into `vendor/react17-peer-forks/react-prop-toggle`. | `1.0.2-react17.0` | None. Package metadata only. | Restore `react-scrolllock` dependency on the published helper. |
+| `react-lifecycles-compat` | Explicit runtime helper for vendored `react-transition-group@2.9.0` inside the `react-images` fork. | Published npm package. | `3.0.4` | None. Existing helper package made explicit for Browserify resolution from local forks. | Remove when `react-images` is replaced or restored to the published dependency tree. |
+| `react-engine` | Local peer-range fork. | `react-engine@4.5.1` copied from the resolved npm package into `vendor/react17-peer-forks/react-engine`. | `4.5.1-react17.0` | None. Package metadata only; used by the e2e server fixture surface. | Restore dev dependency to `^4.5.1` and remove the local fork. |
+| `enzyme-adapter-react-16` | Replaced. | Published `@wojtekmaj/enzyme-adapter-react-17`. | `0.8.0` | Test adapter change only. | Restore `enzyme-adapter-react-16` and `test/enzyme.setup.cjs` if rolling back to React 16. |
+
+The local forks intentionally preserve the original package names so
+`packages.js` and custom legacy field bundles can continue resolving the public
+compatibility names documented below.
+
 ## React API and Risk Inventory
 
 Generated from the current post-React-16 tree with:
@@ -561,6 +583,20 @@ Acceptance:
 - Unit tests pass.
 - Admin-next still builds through React 18 aliases.
 
+Current evidence, 2026-05-23:
+
+- `node -p "require('./package.json').dependencies.react + ' / ' + require('./package.json').dependencies['react-dom']"` returns `^17.0.2 / ^17.0.2`.
+- `require('react/package.json').version` and `require('react-dom/package.json').version` both resolve to `17.0.2`.
+- `npm ls react react-dom --depth=3` reports React 17 as invalid only through the documented admin-next React 18 requirements from `@tanstack/react-query`, `@tanstack/react-router`, and the `react-dom18` alias.
+- `npm ls react-router react-redux react-router-redux react-transition-group react-select react-images react-engine enzyme @wojtekmaj/enzyme-adapter-react-17 --depth=1` resolves the legacy peer blockers to the chosen upgrade/forks and exits successfully.
+- `npm run build-dev` passes.
+- `npm run admin-next:build` passes.
+- `npm run test:unit` passes with 1315 passing and 3 pending.
+- `npm run lint` passes.
+- `npm run typecheck` passes.
+- `npm run build` passes.
+- `npm run package:verify` passes.
+
 ### Phase 4: React 17 Functional Regression Pass
 
 Goal: prove the migrated legacy client preserves behavior.
@@ -635,6 +671,29 @@ Browser console gate:
 - Treat React warnings introduced by the migration as failures unless listed in
   a warning allowlist with an owner.
 
+Current evidence, 2026-05-23:
+
+- `npm run test:e2e-ui` passes with 76 tests, including a browser drag of a
+  sortable legacy list row that emits one numeric reorder request.
+- `npm run test:e2e-ui:fields` passes with 77 tests.
+- `e2e-ui/tests/react17-events.spec.ts` covers detached-root/popout click
+  behavior, create modal Escape/backdrop behavior, confirmation modal
+  Escape/backdrop behavior, mobile navigation open/inside/Escape behavior, the
+  legacy field explorer React root, and sortable row drag/reorder behavior.
+- `e2e-ui/tests/fields/media-upload.spec.ts` covers the legacy CloudinaryImage
+  and CloudinaryImages lightbox: open, Escape close, next navigation, and close
+  button behavior against the `react-images` fork.
+- Existing e2e coverage continues to cover auth, dashboard counts, list search,
+  list sort query behavior, filters, create/edit/delete, bulk delete
+  confirmation dialogs, relationship dropdowns, inverse relationship panels,
+  CSV/JSON download, field rendering, field round trips, markdown/HTML/code
+  editors, media upload/clear, localfiles, and browser console gates.
+- Sortable coverage now includes a browser-level sortable legacy list drag in
+  `e2e-ui/tests/react17-events.spec.ts`, plus action/API/schema-plugin coverage
+  in:
+  `test/unit/admin/server/api/item-sort-order.test.mts`,
+  `test/unit/lib/list/sortable.mts`, and legacy drag/drop action tests.
+
 ### Phase 5: Package and Public API Verification
 
 Goal: preserve Keystone package consumers and runtime Browserify behavior.
@@ -678,6 +737,23 @@ Verify `packages.js` still exposes expected public package names:
 If any package is forked, aliased, or replaced, verify custom field bundles can
 still resolve the original public package name unless compatibility is
 intentionally removed and documented.
+
+Current evidence, 2026-05-23:
+
+- `npm run package:verify` passes and verifies `dist` plus
+  `vendor/react17-peer-forks` publication coverage.
+- `npm pack --dry-run` includes `vendor/react17-peer-forks`.
+- Installing the generated tarball into a temporary consumer project with
+  `npm install <tarball> --ignore-scripts` succeeds.
+- The installed tarball resolves `react@17.0.2`, `react-dom@17.0.2`,
+  `react-router@3.2.6-react17.0`, `react-select@1.3.0-react17.0`,
+  `react-images@0.5.19-react17.0`, and
+  `react-transition-group@1.2.1-react17.0`.
+- The generated `dist/admin/public-legacy/js/packages.js` contains the expected
+  public Browserify package names: `react`, `react-dom`, `react-router`,
+  `react-router-redux`, `react-redux`, `react-select`,
+  `react-transition-group/CSSTransitionGroup`, `react-images`, `react-dnd`, and
+  `react-dnd-html5-backend`.
 
 ### Phase 6: React 18 Readiness Cleanup
 
