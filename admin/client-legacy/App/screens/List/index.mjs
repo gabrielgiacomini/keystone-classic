@@ -299,15 +299,15 @@ const ListView = createReactClass({
 
 	checkTableItem (item, e) {
 		e.preventDefault();
-		const newCheckedItems = { ...this.state.checkedItems };
 		const itemId = item.id;
-		if (this.state.checkedItems[itemId]) {
-			delete newCheckedItems[itemId];
-		} else {
-			newCheckedItems[itemId] = true;
-		}
-		this.setState({
-			checkedItems: newCheckedItems,
+		this.setState((prevState) => {
+			const checkedItems = { ...prevState.checkedItems };
+			if (checkedItems[itemId]) {
+				delete checkedItems[itemId];
+			} else {
+				checkedItems[itemId] = true;
+			}
+			return { checkedItems };
 		});
 	},
 	checkAllTableItems () {

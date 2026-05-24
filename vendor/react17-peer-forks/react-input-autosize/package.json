@@ -1,6 +1,6 @@
 {
   "name": "react-input-autosize",
-  "version": "2.2.2-react17.0",
+  "version": "2.2.2-react18.0",
   "description": "Auto-resizing Input Component for React",
   "main": "lib/AutosizeInput.js",
   "js:next": "dist/react-input-autosize.es.js",
@@ -14,7 +14,7 @@
     "prop-types": "^15.5.8"
   },
   "peerDependencies": {
-    "react": "^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0.0"
+    "react": "^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0.0 || ^18.0.0"
   },
   "jest": {
     "unmockedModulePathPatterns": [

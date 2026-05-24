@@ -1,6 +1,6 @@
 {
   "name": "react-engine",
-  "version": "4.5.1-react17.0",
+  "version": "4.5.1-react18.0",
   "description": "a composite render engine for express apps to render both plain react views and react-router views",
   "main": "index.js",
   "engines": {
@@ -24,8 +24,8 @@
     "parent-require": "^1.0.0"
   },
   "peerDependencies": {
-    "react": "15.x.x || 16.x.x || 17.x.x",
-    "react-dom": "15.x.x || 16.x.x || 17.x.x"
+    "react": "15.x.x || 16.x.x || 17.x.x || 18.x.x",
+    "react-dom": "15.x.x || 16.x.x || 17.x.x || 18.x.x"
   },
   "keywords": [
     "react",

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 
 export default createReactClass({
 	displayName: 'Portal',
@@ -14,18 +14,16 @@ export default createReactClass({
 		const el = document.createElement('div');
 		document.body.appendChild(el);
 		this.portalElement = el;
-		this.componentDidUpdate();
+		this.forceUpdate();
 	},
 	componentWillUnmount () {
 		document.body.removeChild(this.portalElement);
-	},
-	componentDidUpdate () {
-		ReactDOM.render(<div {...this.props} />, this.portalElement);
 	},
 	getPortalDOMNode () {
 		return this.portalElement;
 	},
 	render () {
-		return null;
+		if (!this.portalElement) return null;
+		return createPortal(<div {...this.props} />, this.portalElement);
 	},
 });

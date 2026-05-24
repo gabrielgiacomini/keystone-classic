@@ -6241,16 +6241,7 @@ class Portal extends _react.Component {
         const p = document.createElement('div');
         document.body.appendChild(p);
         this.portalElement = p;
-        this.componentDidUpdate();
-    }
-    /**
-	 * Re-renders the portal content into this.portalElement, wrapping children
-	 * in a CSS fade transition group with a 200 ms enter/leave duration.
-	 * @returns {void}
-	 */ componentDidUpdate() {
-        (0, _reactdom.render)(/*#__PURE__*/ _react.default.createElement(_index.default, {
-            context: this.context
-        }, /*#__PURE__*/ _react.default.createElement("div", null, this.props.children)), this.portalElement);
+        this.forceUpdate();
     }
     /**
 	 * Removes the portal's div from document.body when the component unmounts.
@@ -6263,7 +6254,10 @@ class Portal extends _react.Component {
 	 * DOM node rather than inline in the React tree.
 	 * @returns {null} Always null.
 	 */ render() {
-        return null;
+        if (!this.portalElement) return null;
+        return /*#__PURE__*/ (0, _reactdom.createPortal)(/*#__PURE__*/ _react.default.createElement(_index.default, {
+            context: this.context
+        }, /*#__PURE__*/ _react.default.createElement("div", null, this.props.children)), this.portalElement);
     }
     /**
 	 * Initialises the instance and sets portalElement to null before mounting.
@@ -8603,7 +8597,7 @@ Object.defineProperty(exports, "default", {
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
 const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
-const _reactdom = /*#__PURE__*/ _interop_require_default(require("react-dom"));
+const _reactdom = require("react-dom");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -8616,19 +8610,17 @@ const _default = (0, _createreactclass.default)({
         const el = document.createElement('div');
         document.body.appendChild(el);
         this.portalElement = el;
-        this.componentDidUpdate();
+        this.forceUpdate();
     },
     componentWillUnmount () {
         document.body.removeChild(this.portalElement);
-    },
-    componentDidUpdate () {
-        _reactdom.default.render(/*#__PURE__*/ _react.default.createElement("div", this.props), this.portalElement);
     },
     getPortalDOMNode () {
         return this.portalElement;
     },
     render () {
-        return null;
+        if (!this.portalElement) return null;
+        return /*#__PURE__*/ (0, _reactdom.createPortal)(/*#__PURE__*/ _react.default.createElement("div", this.props), this.portalElement);
     }
 });
 

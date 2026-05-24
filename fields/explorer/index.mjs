@@ -10,7 +10,7 @@
 import React, { Children, cloneElement, Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link, Router, Route, browserHistory, IndexRoute } from 'react-router';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import FieldType from './components/FieldType.mjs';
 
 import Boolean from '../types/boolean/test/explorer.mjs';
@@ -168,12 +168,16 @@ const Home = (_props) => {
 	);
 };
 
-ReactDOM.render(
+const rootElement = document.getElementById('explorer');
+if (!rootElement) {
+	throw new Error('Field explorer root element not found');
+}
+
+createRoot(rootElement).render(
 	<Router history={browserHistory}>
 		<Route path="/" component={App}>
 			<IndexRoute component={Home} />
 			<Route path=":type" component={FieldType} />
 		</Route>
-	</Router>,
-	document.getElementById('explorer')
+	</Router>
 );

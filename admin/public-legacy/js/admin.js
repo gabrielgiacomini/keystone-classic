@@ -6983,16 +6983,7 @@ class Portal extends _react.Component {
         const p = document.createElement('div');
         document.body.appendChild(p);
         this.portalElement = p;
-        this.componentDidUpdate();
-    }
-    /**
-	 * Re-renders the portal content into this.portalElement, wrapping children
-	 * in a CSS fade transition group with a 200 ms enter/leave duration.
-	 * @returns {void}
-	 */ componentDidUpdate() {
-        (0, _reactdom.render)(/*#__PURE__*/ _react.default.createElement(_index.default, {
-            context: this.context
-        }, /*#__PURE__*/ _react.default.createElement("div", null, this.props.children)), this.portalElement);
+        this.forceUpdate();
     }
     /**
 	 * Removes the portal's div from document.body when the component unmounts.
@@ -7005,7 +6996,10 @@ class Portal extends _react.Component {
 	 * DOM node rather than inline in the React tree.
 	 * @returns {null} Always null.
 	 */ render() {
-        return null;
+        if (!this.portalElement) return null;
+        return /*#__PURE__*/ (0, _reactdom.createPortal)(/*#__PURE__*/ _react.default.createElement(_index.default, {
+            context: this.context
+        }, /*#__PURE__*/ _react.default.createElement("div", null, this.props.children)), this.portalElement);
     }
     /**
 	 * Initialises the instance and sets portalElement to null before mounting.
@@ -8044,7 +8038,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
-const _reactdom = /*#__PURE__*/ _interop_require_default(require("react-dom"));
+const _client = require("react-dom/client");
 const _reactrouter = require("react-router");
 const _reactredux = require("react-redux");
 const _reactrouterredux = require("react-router-redux");
@@ -8062,7 +8056,11 @@ function _interop_require_default(obj) {
 // Sync the browser history to the Redux store
 const history = (0, _reactrouterredux.syncHistoryWithStore)(_reactrouter.browserHistory, _store.default);
 Keystone.User = _lists.listsByKey[Keystone.userList];
-_reactdom.default.render(/*#__PURE__*/ _react.default.createElement(_reactredux.Provider, {
+const rootElement = document.getElementById('react-root');
+if (!rootElement) {
+    throw new Error('Legacy admin root element not found');
+}
+(0, _client.createRoot)(rootElement).render(/*#__PURE__*/ _react.default.createElement(_reactredux.Provider, {
     store: _store.default
 }, /*#__PURE__*/ _react.default.createElement(_reactrouter.Router, {
     history: history
@@ -8077,9 +8075,9 @@ _reactdom.default.render(/*#__PURE__*/ _react.default.createElement(_reactredux.
 }), /*#__PURE__*/ _react.default.createElement(_reactrouter.Route, {
     path: ":listId/:itemId",
     component: _index1.default
-})))), document.getElementById('react-root'));
+})))));
 
-},{"../utils/lists.mjs":155,"./App.mjs":1,"./screens/Home/index.mjs":84,"./screens/Item/index.mjs":102,"./screens/List/index.mjs":129,"./store.mjs":148,"react":undefined,"react-dom":undefined,"react-redux":undefined,"react-router":undefined,"react-router-redux":undefined}],75:[function(require,module,exports){
+},{"../utils/lists.mjs":155,"./App.mjs":1,"./screens/Home/index.mjs":84,"./screens/Item/index.mjs":102,"./screens/List/index.mjs":129,"./store.mjs":148,"react":undefined,"react-dom/client":261,"react-redux":undefined,"react-router":undefined,"react-router-redux":undefined}],75:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8360,7 +8358,7 @@ function* setActiveFilterSaga() {
 }
 const _default = rootSaga;
 
-},{"../parsers/index.mjs":76,"../screens/List/constants.mjs":128,"./queryParamsSagas.mjs":78,"redux-saga":undefined,"redux-saga/effects":264}],78:[function(require,module,exports){
+},{"../parsers/index.mjs":76,"../screens/List/constants.mjs":128,"./queryParamsSagas.mjs":78,"redux-saga":undefined,"redux-saga/effects":265}],78:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8554,7 +8552,7 @@ function parseQueryParams(query, currentList) {
     };
 }
 
-},{"../../utils/queryParams.mjs":156,"../parsers/index.mjs":76,"../screens/List/actions/index.mjs":106,"../screens/List/constants.mjs":128,"lodash/isEqual":243,"react-router-redux":undefined,"redux-saga/effects":264}],79:[function(require,module,exports){
+},{"../../utils/queryParams.mjs":156,"../parsers/index.mjs":76,"../screens/List/actions/index.mjs":106,"../screens/List/constants.mjs":128,"lodash/isEqual":243,"react-router-redux":undefined,"redux-saga/effects":265}],79:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -9837,7 +9835,7 @@ const EditForm = (0, _createreactclass.default)({
         const alerts = this.state.alerts;
         // Display validation errors inline
         if (alerts && alerts.error && alerts.error.error === 'validation errors') {
-            if (alerts.error.detail[field.path]) {
+            if (alerts.error.detail && alerts.error.detail[field.path]) {
                 // NOTE: This won't work yet, as ElementalUI doesn't allow
                 // passed in isValid, only invalidates via internal state.
                 // PR to fix that: https://github.com/elementalui/elemental/pull/149
@@ -15812,15 +15810,17 @@ const ListView = (0, _createreactclass.default)({
     // ==============================
     checkTableItem (item, e) {
         e.preventDefault();
-        const newCheckedItems = _object_spread({}, this.state.checkedItems);
         const itemId = item.id;
-        if (this.state.checkedItems[itemId]) {
-            delete newCheckedItems[itemId];
-        } else {
-            newCheckedItems[itemId] = true;
-        }
-        this.setState({
-            checkedItems: newCheckedItems
+        this.setState((prevState)=>{
+            const checkedItems = _object_spread({}, prevState.checkedItems);
+            if (checkedItems[itemId]) {
+                delete checkedItems[itemId];
+            } else {
+                checkedItems[itemId] = true;
+            }
+            return {
+                checkedItems
+            };
         });
     },
     checkAllTableItems () {
@@ -18047,7 +18047,7 @@ Object.defineProperty(exports, "default", {
 });
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
 const _createreactclass = /*#__PURE__*/ _interop_require_default(require("create-react-class"));
-const _reactdom = /*#__PURE__*/ _interop_require_default(require("react-dom"));
+const _reactdom = require("react-dom");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -18060,19 +18060,17 @@ const _default = (0, _createreactclass.default)({
         const el = document.createElement('div');
         document.body.appendChild(el);
         this.portalElement = el;
-        this.componentDidUpdate();
+        this.forceUpdate();
     },
     componentWillUnmount () {
         document.body.removeChild(this.portalElement);
-    },
-    componentDidUpdate () {
-        _reactdom.default.render(/*#__PURE__*/ _react.default.createElement("div", this.props), this.portalElement);
     },
     getPortalDOMNode () {
         return this.portalElement;
     },
     render () {
-        return null;
+        if (!this.portalElement) return null;
+        return /*#__PURE__*/ (0, _reactdom.createPortal)(/*#__PURE__*/ _react.default.createElement("div", this.props), this.portalElement);
     }
 });
 
@@ -24070,7 +24068,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   return ReactPropTypes;
 };
 
-},{"./checkPropTypes":255,"./lib/ReactPropTypesSecret":259,"./lib/has":260,"object-assign":253,"react-is":263}],258:[function(require,module,exports){
+},{"./checkPropTypes":255,"./lib/ReactPropTypesSecret":259,"./lib/has":260,"object-assign":253,"react-is":264}],258:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -24091,7 +24089,7 @@ if ("production" !== 'production') {
   module.exports = require('./factoryWithThrowingShims')();
 }
 
-},{"./factoryWithThrowingShims":256,"./factoryWithTypeCheckers":257,"react-is":263}],259:[function(require,module,exports){
+},{"./factoryWithThrowingShims":256,"./factoryWithTypeCheckers":257,"react-is":264}],259:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -24109,6 +24107,33 @@ module.exports = ReactPropTypesSecret;
 module.exports = Function.call.bind(Object.prototype.hasOwnProperty);
 
 },{}],261:[function(require,module,exports){
+'use strict';
+
+var m = require('react-dom');
+if ("production" === 'production') {
+  exports.createRoot = m.createRoot;
+  exports.hydrateRoot = m.hydrateRoot;
+} else {
+  var i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+  exports.createRoot = function(c, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.createRoot(c, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+  exports.hydrateRoot = function(c, h, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.hydrateRoot(c, h, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+}
+
+},{"react-dom":undefined}],262:[function(require,module,exports){
 (function (process){(function (){
 /** @license React v16.13.1
  * react-is.development.js
@@ -24293,7 +24318,7 @@ exports.typeOf = typeOf;
 }
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":254}],262:[function(require,module,exports){
+},{"_process":254}],263:[function(require,module,exports){
 /** @license React v16.13.1
  * react-is.production.min.js
  *
@@ -24310,7 +24335,7 @@ exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isAsyncMode=f
 exports.isMemo=function(a){return z(a)===r};exports.isPortal=function(a){return z(a)===d};exports.isProfiler=function(a){return z(a)===g};exports.isStrictMode=function(a){return z(a)===f};exports.isSuspense=function(a){return z(a)===p};
 exports.isValidElementType=function(a){return"string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||a===q||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n||a.$$typeof===w||a.$$typeof===x||a.$$typeof===y||a.$$typeof===v)};exports.typeOf=z;
 
-},{}],263:[function(require,module,exports){
+},{}],264:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -24321,7 +24346,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this)}).call(this,require('_process'))
-},{"./cjs/react-is.development.js":261,"./cjs/react-is.production.min.js":262,"_process":254}],264:[function(require,module,exports){
+},{"./cjs/react-is.development.js":262,"./cjs/react-is.production.min.js":263,"_process":254}],265:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24454,7 +24479,7 @@ Object.defineProperty(exports, 'throttle', {
     return _io.throttle;
   }
 });
-},{"./internal/io":267}],265:[function(require,module,exports){
+},{"./internal/io":268}],266:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -24562,7 +24587,7 @@ var buffers = exports.buffers = {
     return ringBuffer(initialSize, ON_OVERFLOW_EXPAND);
   }
 };
-},{"./utils":274}],266:[function(require,module,exports){
+},{"./utils":275}],267:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -24777,7 +24802,7 @@ function stdChannel(subscribe) {
   });
 }
 }).call(this)}).call(this,require('_process'))
-},{"./buffers":265,"./scheduler":273,"./utils":274,"_process":254}],267:[function(require,module,exports){
+},{"./buffers":266,"./scheduler":274,"./utils":275,"_process":254}],268:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -25071,7 +25096,7 @@ var asEffect = exports.asEffect = {
   getContext: createAsEffectType(GET_CONTEXT),
   setContext: createAsEffectType(SET_CONTEXT)
 };
-},{"./sagaHelpers":269,"./utils":274}],268:[function(require,module,exports){
+},{"./sagaHelpers":270,"./utils":275}],269:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -25128,7 +25153,7 @@ function fsmIterator(fsm, q0) {
     return next(null, error);
   }, name, true);
 }
-},{"../utils":274}],269:[function(require,module,exports){
+},{"../utils":275}],270:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -25164,7 +25189,7 @@ exports.throttle = throttle;
 exports.takeEveryHelper = _takeEvery2.default;
 exports.takeLatestHelper = _takeLatest2.default;
 exports.throttleHelper = _throttle2.default;
-},{"../utils":274,"./takeEvery":270,"./takeLatest":271,"./throttle":272}],270:[function(require,module,exports){
+},{"../utils":275,"./takeEvery":271,"./takeLatest":272,"./throttle":273}],271:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -25204,7 +25229,7 @@ function takeEvery(patternOrChannel, worker) {
     }
   }, 'q1', 'takeEvery(' + (0, _fsmIterator.safeName)(patternOrChannel) + ', ' + worker.name + ')');
 }
-},{"../channel":266,"../io":267,"./fsmIterator":268}],271:[function(require,module,exports){
+},{"../channel":267,"../io":268,"./fsmIterator":269}],272:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -25254,7 +25279,7 @@ function takeLatest(patternOrChannel, worker) {
     }
   }, 'q1', 'takeLatest(' + (0, _fsmIterator.safeName)(patternOrChannel) + ', ' + worker.name + ')');
 }
-},{"../channel":266,"../io":267,"./fsmIterator":268}],272:[function(require,module,exports){
+},{"../channel":267,"../io":268,"./fsmIterator":269}],273:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -25313,7 +25338,7 @@ function throttle(delayLength, pattern, worker) {
     }
   }, 'q1', 'throttle(' + (0, _fsmIterator.safeName)(pattern) + ', ' + worker.name + ')');
 }
-},{"../buffers":265,"../channel":266,"../io":267,"../utils":274,"./fsmIterator":268}],273:[function(require,module,exports){
+},{"../buffers":266,"../channel":267,"../io":268,"../utils":275,"./fsmIterator":269}],274:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -25382,7 +25407,7 @@ function flush() {
     exec(task);
   }
 }
-},{}],274:[function(require,module,exports){
+},{}],275:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 

@@ -48,16 +48,23 @@ var Portal = function (_Component) {
 			var p = document.createElement('div');
 			document.body.appendChild(p);
 			this.portalElement = p;
-			this.componentDidUpdate();
+			this.forceUpdate();
 		}
 	}, {
-		key: 'componentDidUpdate',
-		value: function componentDidUpdate() {
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			document.body.removeChild(this.portalElement);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			if (!this.portalElement) return null;
+
 			// Animate fade on mount/unmount
 			var duration = 200;
 			var styles = '\n\t\t\t\t.fade-enter { opacity: 0.01; }\n\t\t\t\t.fade-enter.fade-enter-active { opacity: 1; transition: opacity ' + duration + 'ms; }\n\t\t\t\t.fade-leave { opacity: 1; }\n\t\t\t\t.fade-leave.fade-leave-active { opacity: 0.01; transition: opacity ' + duration + 'ms; }\n\t\t';
 
-			(0, _reactDom.render)(_react2.default.createElement(
+			return (0, _reactDom.createPortal)(_react2.default.createElement(
 				_PassContext2.default,
 				{ context: this.context },
 				_react2.default.createElement(
@@ -79,17 +86,6 @@ var Portal = function (_Component) {
 					)
 				)
 			), this.portalElement);
-		}
-	}, {
-		key: 'componentWillUnmount',
-		value: function componentWillUnmount() {
-			(0, _reactDom.unmountComponentAtNode)(this.portalElement);
-			document.body.removeChild(this.portalElement);
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			return null;
 		}
 	}]);
 

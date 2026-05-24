@@ -6241,16 +6241,7 @@ class Portal extends _react.Component {
         const p = document.createElement('div');
         document.body.appendChild(p);
         this.portalElement = p;
-        this.componentDidUpdate();
-    }
-    /**
-	 * Re-renders the portal content into this.portalElement, wrapping children
-	 * in a CSS fade transition group with a 200 ms enter/leave duration.
-	 * @returns {void}
-	 */ componentDidUpdate() {
-        (0, _reactdom.render)(/*#__PURE__*/ _react.default.createElement(_index.default, {
-            context: this.context
-        }, /*#__PURE__*/ _react.default.createElement("div", null, this.props.children)), this.portalElement);
+        this.forceUpdate();
     }
     /**
 	 * Removes the portal's div from document.body when the component unmounts.
@@ -6263,7 +6254,10 @@ class Portal extends _react.Component {
 	 * DOM node rather than inline in the React tree.
 	 * @returns {null} Always null.
 	 */ render() {
-        return null;
+        if (!this.portalElement) return null;
+        return /*#__PURE__*/ (0, _reactdom.createPortal)(/*#__PURE__*/ _react.default.createElement(_index.default, {
+            context: this.context
+        }, /*#__PURE__*/ _react.default.createElement("div", null, this.props.children)), this.portalElement);
     }
     /**
 	 * Initialises the instance and sets portalElement to null before mounting.
@@ -7658,7 +7652,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 const _qs = /*#__PURE__*/ _interop_require_default(require("qs"));
 const _react = /*#__PURE__*/ _interop_require_default(require("react"));
-const _reactdom = /*#__PURE__*/ _interop_require_default(require("react-dom"));
+const _client = require("react-dom/client");
 const _Signin = /*#__PURE__*/ _interop_require_default(require("./Signin.mjs"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -7669,15 +7663,19 @@ function _interop_require_default(obj) {
 const internalFromRegex = /^\/[^/\\]\w+/;
 const params = _qs.default.parse(window.location.search.replace(/^\?/, ''));
 const from = internalFromRegex.test(params.from) ? params.from : undefined;
-_reactdom.default.render(/*#__PURE__*/ _react.default.createElement(_Signin.default, {
+const rootElement = document.getElementById('signin-view');
+if (!rootElement) {
+    throw new Error('Legacy signin root element not found');
+}
+(0, _client.createRoot)(rootElement).render(/*#__PURE__*/ _react.default.createElement(_Signin.default, {
     brand: Keystone.brand,
     from: from,
     logo: Keystone.logo,
     user: Keystone.user,
     userCanAccessKeystone: Keystone.userCanAccessKeystone
-}), document.getElementById('signin-view'));
+}));
 
-},{"./Signin.mjs":65,"qs":undefined,"react":undefined,"react-dom":undefined}],71:[function(require,module,exports){
+},{"./Signin.mjs":65,"qs":undefined,"react":undefined,"react-dom/client":85}],71:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -10365,7 +10363,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   return ReactPropTypes;
 };
 
-},{"./checkPropTypes":79,"./lib/ReactPropTypesSecret":83,"./lib/has":84,"object-assign":77,"react-is":87}],82:[function(require,module,exports){
+},{"./checkPropTypes":79,"./lib/ReactPropTypesSecret":83,"./lib/has":84,"object-assign":77,"react-is":88}],82:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -10386,7 +10384,7 @@ if ("production" !== 'production') {
   module.exports = require('./factoryWithThrowingShims')();
 }
 
-},{"./factoryWithThrowingShims":80,"./factoryWithTypeCheckers":81,"react-is":87}],83:[function(require,module,exports){
+},{"./factoryWithThrowingShims":80,"./factoryWithTypeCheckers":81,"react-is":88}],83:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -10404,6 +10402,33 @@ module.exports = ReactPropTypesSecret;
 module.exports = Function.call.bind(Object.prototype.hasOwnProperty);
 
 },{}],85:[function(require,module,exports){
+'use strict';
+
+var m = require('react-dom');
+if ("production" === 'production') {
+  exports.createRoot = m.createRoot;
+  exports.hydrateRoot = m.hydrateRoot;
+} else {
+  var i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+  exports.createRoot = function(c, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.createRoot(c, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+  exports.hydrateRoot = function(c, h, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.hydrateRoot(c, h, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+}
+
+},{"react-dom":undefined}],86:[function(require,module,exports){
 (function (process){(function (){
 /** @license React v16.13.1
  * react-is.development.js
@@ -10588,7 +10613,7 @@ exports.typeOf = typeOf;
 }
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":78}],86:[function(require,module,exports){
+},{"_process":78}],87:[function(require,module,exports){
 /** @license React v16.13.1
  * react-is.production.min.js
  *
@@ -10605,7 +10630,7 @@ exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isAsyncMode=f
 exports.isMemo=function(a){return z(a)===r};exports.isPortal=function(a){return z(a)===d};exports.isProfiler=function(a){return z(a)===g};exports.isStrictMode=function(a){return z(a)===f};exports.isSuspense=function(a){return z(a)===p};
 exports.isValidElementType=function(a){return"string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||a===q||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n||a.$$typeof===w||a.$$typeof===x||a.$$typeof===y||a.$$typeof===v)};exports.typeOf=z;
 
-},{}],87:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -10616,4 +10641,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this)}).call(this,require('_process'))
-},{"./cjs/react-is.development.js":85,"./cjs/react-is.production.min.js":86,"_process":78}]},{},[70]);
+},{"./cjs/react-is.development.js":86,"./cjs/react-is.production.min.js":87,"_process":78}]},{},[70]);

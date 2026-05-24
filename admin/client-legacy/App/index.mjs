@@ -8,7 +8,7 @@
 // targets need to be re-supported, add `core-js/stable` and
 // `regenerator-runtime/runtime` as direct imports here.
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -27,7 +27,12 @@ const history = syncHistoryWithStore(browserHistory, store);
 import { listsByKey } from '../utils/lists.mjs';
 Keystone.User = listsByKey[Keystone.userList];
 
-ReactDOM.render(
+const rootElement = document.getElementById('react-root');
+if (!rootElement) {
+	throw new Error('Legacy admin root element not found');
+}
+
+createRoot(rootElement).render(
 	<Provider store={store}>
 		<Router history={history}>
 			<Route path={Keystone.adminLegacyPath} component={App}>
@@ -36,6 +41,5 @@ ReactDOM.render(
 				<Route path=":listId/:itemId" component={Item} />
 			</Route>
 		</Router>
-	</Provider>,
-	document.getElementById('react-root')
+	</Provider>
 );

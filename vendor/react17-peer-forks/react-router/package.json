@@ -1,6 +1,6 @@
 {
   "name": "react-router",
-  "version": "3.2.6-react17.0",
+  "version": "3.2.6-react18.0",
   "description": "A complete routing library for React",
   "files": [
     "*.md",
@@ -31,7 +31,7 @@
     "warning": "^3.0.0"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0"
+    "react": "^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0"
   },
   "browserify": {
     "transform": [

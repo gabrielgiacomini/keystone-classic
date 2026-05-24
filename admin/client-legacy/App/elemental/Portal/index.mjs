@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { render } from 'react-dom';
+import { createPortal } from 'react-dom';
 import PassContext from '../PassContext/index.mjs';
 
 /**
@@ -24,20 +24,7 @@ export default class Portal extends Component {
 		const p = document.createElement('div');
 		document.body.appendChild(p);
 		this.portalElement = p;
-		this.componentDidUpdate();
-	}
-	/**
-	 * Re-renders the portal content into this.portalElement, wrapping children
-	 * in a CSS fade transition group with a 200 ms enter/leave duration.
-	 * @returns {void}
-	 */
-	componentDidUpdate () {
-		render(
-			<PassContext context={this.context}>
-				<div>{this.props.children}</div>
-			</PassContext>,
-			this.portalElement
-		);
+		this.forceUpdate();
 	}
 	/**
 	 * Removes the portal's div from document.body when the component unmounts.
@@ -52,7 +39,13 @@ export default class Portal extends Component {
 	 * @returns {null} Always null.
 	 */
 	render () {
-		return null;
+		if (!this.portalElement) return null;
+		return createPortal(
+			<PassContext context={this.context}>
+				<div>{this.props.children}</div>
+			</PassContext>,
+			this.portalElement
+		);
 	}
 }
 

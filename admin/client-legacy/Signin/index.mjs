@@ -7,7 +7,7 @@
  */
 import qs from 'qs';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import Signin from './Signin.mjs';
 
 // Sanitize from param
@@ -15,13 +15,17 @@ const internalFromRegex = /^\/[^/\\]\w+/;
 const params = qs.parse(window.location.search.replace(/^\?/, ''));
 const from = internalFromRegex.test(params.from) ? params.from : undefined;
 
-ReactDOM.render(
+const rootElement = document.getElementById('signin-view');
+if (!rootElement) {
+	throw new Error('Legacy signin root element not found');
+}
+
+createRoot(rootElement).render(
 	<Signin
 		brand={Keystone.brand}
 		from={from}
 		logo={Keystone.logo}
 		user={Keystone.user}
 		userCanAccessKeystone={Keystone.userCanAccessKeystone}
-	/>,
-	document.getElementById('signin-view')
+	/>
 );

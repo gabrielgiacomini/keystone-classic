@@ -17,8 +17,15 @@
 
 var Config = require('./config.json');
 var ReactDOM = require('react-dom');
+var ReactDOMClient;
 var assign = require('lodash/assign');
 var isFunction = require('lodash/isFunction');
+
+try {
+  ReactDOMClient = require('react-dom/client');
+} catch (err) {
+  ReactDOMClient = null;
+}
 
 // declaring like this helps in unit test
 // dependency injection using `rewire` module
@@ -87,7 +94,18 @@ exports.boot = function boot(options, callback) {
     }
   };
 
-  var renderMethod = ReactDOM.hydrate || ReactDOM.render;
+  var renderElement = function renderElement(component) {
+    if (ReactDOMClient && ReactDOMClient.hydrateRoot) {
+      ReactDOMClient.hydrateRoot(mountNode, component);
+      return;
+    }
+    if (ReactDOMClient && ReactDOMClient.createRoot) {
+      ReactDOMClient.createRoot(mountNode).render(component);
+      return;
+    }
+    var renderMethod = ReactDOM.hydrate || ReactDOM[ReactDOM.hydrate ? 'hydrate' : 'render'];
+    renderMethod(component, mountNode);
+  };
 
   if (useRouter) {
 
@@ -115,7 +133,7 @@ exports.boot = function boot(options, callback) {
       });
 
       // wrap routerComponent with redux provider
-      renderMethod(wrap(routerComponent), mountNode);
+      renderElement(wrap(routerComponent));
     });
 
   } else {
@@ -128,7 +146,7 @@ exports.boot = function boot(options, callback) {
     // render the factory on the client
     // doing this, sets up the event
     // listeners and stuff aka mounting views.
-    renderMethod(wrap(viewFactory(props)), mountNode);
+    renderElement(wrap(viewFactory(props)));
   }
 
   // call the callback with the data that was used for rendering
