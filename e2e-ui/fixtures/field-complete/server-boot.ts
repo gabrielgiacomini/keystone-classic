@@ -9,6 +9,7 @@
 import keystone from 'keystone';
 import mongoose from 'mongoose';
 import cloudinary from 'cloudinary';
+import { parse } from 'node:url';
 import { defineFieldCompleteLists } from './schema.ts';
 import { FIELD_COMPLETE_SEED, seedFieldCompleteData } from './seed.ts';
 
@@ -17,6 +18,8 @@ const MONGO_URI =
 const PORT = process.env.PORT ?? '3008';
 let uploadCounter = 0;
 const cloudinarySdk = cloudinary.v2 ?? cloudinary;
+const useRealCloudinary =
+	process.env.RUN_CLOUDINARY_INTEGRATION === '1' && Boolean(process.env.CLOUDINARY_URL);
 const cloudinaryMock = cloudinarySdk as unknown as {
 	api: {
 		resource: (...args: unknown[]) => Promise<unknown>;
@@ -39,50 +42,72 @@ function fixtureImageDataUrl (publicId: string, width: number, height: number): 
 	return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
-cloudinaryMock.uploader.upload = async function (_file: unknown, optionsOrCallback?: unknown, callback?: unknown): Promise<unknown> {
-	uploadCounter += 1;
-	const publicId = `field-complete/upload-${uploadCounter}`;
-	const url = fixtureImageDataUrl(publicId, 64, 64);
-	const done = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
-	const response = {
-		public_id: publicId,
-		version: uploadCounter,
-		signature: `sig-${uploadCounter}`,
-		format: 'png',
-		resource_type: 'image',
-		url,
-		secure_url: url,
-		width: 64,
-		height: 64,
-	};
-	if (typeof done === 'function') done(undefined, response);
-	return response;
-};
+function cloudinaryConfig () {
+	if (!process.env.CLOUDINARY_URL) {
+		return {
+			api_key: 'api_key',
+			api_secret: 'api_secret',
+			cloud_name: 'cloud_name',
+		};
+	}
 
-cloudinaryMock.uploader.destroy = async function (_publicId: unknown, optionsOrCallback?: unknown, callback?: unknown): Promise<unknown> {
-	const done = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
-	const response = { result: 'ok' };
-	if (typeof done === 'function') done(undefined, response);
-	return response;
-};
-
-cloudinaryMock.api.resource = async function (publicId: unknown, optionsOrCallback?: unknown, callback?: unknown): Promise<unknown> {
-	const done = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
-	const publicIdString = String(publicId);
-	const url = fixtureImageDataUrl(publicIdString, 64, 64);
-	const response = {
-		public_id: publicId,
-		version: 1,
-		format: 'png',
-		resource_type: 'image',
-		url,
-		secure_url: url,
-		width: 64,
-		height: 64,
+	const parts = parse(process.env.CLOUDINARY_URL);
+	const [apiKey, apiSecret] = (parts.auth ?? '').split(':');
+	return {
+		api_key: apiKey,
+		api_secret: apiSecret,
+		cloud_name: parts.host ?? undefined,
+		private_cdn: parts.pathname != null,
+		secure_distribution: parts.pathname?.substring(1),
 	};
-	if (typeof done === 'function') done(undefined, response);
-	return response;
-};
+}
+
+if (!useRealCloudinary) {
+	cloudinaryMock.uploader.upload = async function (_file: unknown, optionsOrCallback?: unknown, callback?: unknown): Promise<unknown> {
+		uploadCounter += 1;
+		const publicId = `field-complete/upload-${uploadCounter}`;
+		const url = fixtureImageDataUrl(publicId, 64, 64);
+		const done = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
+		const response = {
+			public_id: publicId,
+			version: uploadCounter,
+			signature: `sig-${uploadCounter}`,
+			format: 'png',
+			resource_type: 'image',
+			url,
+			secure_url: url,
+			width: 64,
+			height: 64,
+		};
+		if (typeof done === 'function') done(undefined, response);
+		return response;
+	};
+
+	cloudinaryMock.uploader.destroy = async function (_publicId: unknown, optionsOrCallback?: unknown, callback?: unknown): Promise<unknown> {
+		const done = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
+		const response = { result: 'ok' };
+		if (typeof done === 'function') done(undefined, response);
+		return response;
+	};
+
+	cloudinaryMock.api.resource = async function (publicId: unknown, optionsOrCallback?: unknown, callback?: unknown): Promise<unknown> {
+		const done = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
+		const publicIdString = String(publicId);
+		const url = fixtureImageDataUrl(publicIdString, 64, 64);
+		const response = {
+			public_id: publicId,
+			version: 1,
+			format: 'png',
+			resource_type: 'image',
+			url,
+			secure_url: url,
+			width: 64,
+			height: 64,
+		};
+		if (typeof done === 'function') done(undefined, response);
+		return response;
+	};
+}
 
 async function dropDatabase () {
 	const conn = await mongoose.createConnection(MONGO_URI).asPromise();
@@ -113,11 +138,7 @@ keystone.init({
 	'admin ui': 'both',
 	'headless': false,
 	'logger': false,
-	'cloudinary config': {
-		api_key: 'api_key',
-		api_secret: 'api_secret',
-		cloud_name: 'cloud_name',
-	},
+	'cloudinary config': cloudinaryConfig(),
 	'cloudinary secure': true,
 });
 

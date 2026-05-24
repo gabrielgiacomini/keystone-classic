@@ -11,9 +11,16 @@ const NODE_OPTIONS = process.env.NODE_OPTIONS ?? '--max-old-space-size=4096';
 const MONGO_URI =
 	process.env.MONGO_URI ??
 	'mongodb://localhost:27017/keystone-e2e-ui-fields';
+const RUN_CLOUDINARY_INTEGRATION = process.env.RUN_CLOUDINARY_INTEGRATION === '1';
+const CLOUDINARY_TEST_RUN_PREFIX =
+	process.env.CLOUDINARY_TEST_RUN_PREFIX ??
+	(RUN_CLOUDINARY_INTEGRATION
+		? `keystone-classic-e2e/${Date.now()}-${Math.random().toString(36).slice(2)}`
+		: '');
 
 process.env.MONGO_URI = MONGO_URI;
 process.env.E2E_BASE_URL = BASE_URL;
+process.env.CLOUDINARY_TEST_RUN_PREFIX = CLOUDINARY_TEST_RUN_PREFIX;
 
 export default defineConfig({
 	testDir: './tests/fields',
@@ -53,6 +60,9 @@ export default defineConfig({
 			NODE_ENV: 'test',
 			NODE_OPTIONS,
 			KEYSTONE_PREBUILD_ADMIN: 'true',
+			CLOUDINARY_URL: process.env.CLOUDINARY_URL ?? '',
+			RUN_CLOUDINARY_INTEGRATION: process.env.RUN_CLOUDINARY_INTEGRATION ?? '',
+			CLOUDINARY_TEST_RUN_PREFIX,
 			TZ: 'UTC',
 		},
 	},

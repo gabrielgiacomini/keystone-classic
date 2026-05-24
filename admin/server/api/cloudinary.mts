@@ -21,6 +21,10 @@ export function upload(req: Request, res: Response): void {
 			options.public_id = singleFile.originalname.substring(0, singleFile.originalname.lastIndexOf('.'));
 		}
 
+		if (process.env.CLOUDINARY_TEST_RUN_PREFIX) {
+			options.folder = process.env.CLOUDINARY_TEST_RUN_PREFIX;
+		}
+
 		cloudinary.uploader.upload(singleFile.path, function (result) {
 			const sendResult = function () {
 				if (result.error) {
