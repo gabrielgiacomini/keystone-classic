@@ -9,9 +9,12 @@
 import keystone from 'keystone';
 import mongoose from 'mongoose';
 import cloudinary from 'cloudinary';
+import express from 'express';
+import { readFile } from 'node:fs/promises';
 import { parse } from 'node:url';
 import { defineFieldCompleteLists } from './schema.ts';
 import { FIELD_COMPLETE_SEED, seedFieldCompleteData } from './seed.ts';
+import { FIELD_COMPLETE_UPLOAD_ROOT } from './storage.ts';
 
 const MONGO_URI =
 	process.env.MONGO_URI ?? 'mongodb://localhost:27017/keystone-e2e-ui-fields';
@@ -42,6 +45,42 @@ function fixtureImageDataUrl (publicId: string, width: number, height: number): 
 	return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
+function detectImageMimeType (buffer: Buffer): { format: string; mimeType: string } {
+	if (buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
+		return { format: 'png', mimeType: 'image/png' };
+	}
+	if (buffer.subarray(0, 3).equals(Buffer.from([0xff, 0xd8, 0xff]))) {
+		return { format: 'jpg', mimeType: 'image/jpeg' };
+	}
+	if (buffer.subarray(0, 6).toString('ascii') === 'GIF87a' || buffer.subarray(0, 6).toString('ascii') === 'GIF89a') {
+		return { format: 'gif', mimeType: 'image/gif' };
+	}
+	if (buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP') {
+		return { format: 'webp', mimeType: 'image/webp' };
+	}
+	const head = buffer.subarray(0, 256).toString('utf8').trimStart();
+	if (head.startsWith('<svg') || head.startsWith('<?xml')) {
+		return { format: 'svg', mimeType: 'image/svg+xml' };
+	}
+	return { format: 'png', mimeType: 'image/png' };
+}
+
+async function uploadedImageDataUrl (file: unknown, fallbackPublicId: string): Promise<{ format: string; url: string }> {
+	if (typeof file !== 'string') {
+		return { format: 'png', url: fixtureImageDataUrl(fallbackPublicId, 64, 64) };
+	}
+	try {
+		const buffer = await readFile(file);
+		const { format, mimeType } = detectImageMimeType(buffer);
+		return {
+			format,
+			url: `data:${mimeType};base64,${buffer.toString('base64')}`,
+		};
+	} catch (_err) {
+		return { format: 'png', url: fixtureImageDataUrl(fallbackPublicId, 64, 64) };
+	}
+}
+
 function cloudinaryConfig () {
 	if (!process.env.CLOUDINARY_URL) {
 		return {
@@ -63,16 +102,16 @@ function cloudinaryConfig () {
 }
 
 if (!useRealCloudinary) {
-	cloudinaryMock.uploader.upload = async function (_file: unknown, optionsOrCallback?: unknown, callback?: unknown): Promise<unknown> {
+	cloudinaryMock.uploader.upload = async function (file: unknown, optionsOrCallback?: unknown, callback?: unknown): Promise<unknown> {
 		uploadCounter += 1;
 		const publicId = `field-complete/upload-${uploadCounter}`;
-		const url = fixtureImageDataUrl(publicId, 64, 64);
+		const { format, url } = await uploadedImageDataUrl(file, publicId);
 		const done = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
 		const response = {
 			public_id: publicId,
 			version: uploadCounter,
 			signature: `sig-${uploadCounter}`,
-			format: 'png',
+			format,
 			resource_type: 'image',
 			url,
 			secure_url: url,
@@ -136,8 +175,12 @@ keystone.init({
 	'admin api path': 'keystone-api',
 	'admin legacy api alias': false,
 	'admin ui': 'both',
+	'cache admin bundles': false,
 	'headless': false,
 	'logger': false,
+	'pre:static': (app: express.Application) => {
+		app.use('/field-complete-files', express.static(FIELD_COMPLETE_UPLOAD_ROOT));
+	},
 	'cloudinary config': cloudinaryConfig(),
 	'cloudinary secure': true,
 });

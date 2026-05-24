@@ -16,6 +16,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const templatePath = path.resolve(__dirname, '../templates-legacy/signin.html');
+const devAssetVersion = Date.now().toString(36);
+
+function getLegacyAssetVersion(req: Request): string {
+	const keystone = req.keystone;
+	if (!keystone) return devAssetVersion;
+	const baseVersion = keystone.createKeystoneHash();
+	return keystone.get('cache admin bundles') === false
+		? `${baseVersion}-${devAssetVersion}`
+		: baseVersion;
+}
 
 /** Runtime-typed CSRF module shape as exposed on `keystone.security`. */
 interface CsrfModule {
@@ -43,6 +53,7 @@ export default function SigninRoute(req: Request, res: Response): void {
 		adminApiPath: getAdminLegacyApiAliasEnabled(keystone)
 			? getAdminLegacyApiAliasPath(keystone)
 			: getAdminApiPath(keystone),
+		assetVersion: getLegacyAssetVersion(req),
 		brand: keystone.get('brand'),
 		csrf,
 		cspNonce: String(res.locals['cspNonce'] ?? ''),

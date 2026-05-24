@@ -1,5 +1,41 @@
 # Cloudinary Integration Test Plan
 
+Status: implemented for the field-complete fixture as of 2026-05-24. The default fixture path remains hermetic; real Cloudinary is opt-in for manual testing and explicit integration runs.
+
+## Manual Test Command
+
+Use the legacy admin as the primary manual target:
+
+```sh
+npm run dev:full-fixture:cloudinary
+```
+
+Requires ignored local environment:
+
+```sh
+RUN_CLOUDINARY_INTEGRATION=1
+CLOUDINARY_URL=<cloudinary-url>
+```
+
+Manual test details to provide whenever this server is started:
+
+- URL: `http://127.0.0.1:3008/keystone`
+- login: `admin@example.com`
+- password: `admin-password-123`
+
+Admin next is also mounted at `http://127.0.0.1:3008/keystone-next`, but legacy admin is the current production-equivalent client for these upload regressions.
+
+## Implemented Coverage
+
+- Legacy `CloudinaryImage` previews render in the normal mocked fixture path.
+- Legacy `CloudinaryImage` uploads save without blanking the item screen.
+- Legacy `CloudinaryImages` accepts the hidden JSON object strings submitted by the legacy gallery UI.
+- Single legacy Cloudinary upload no longer requires `generateFilename`; when no generator is configured, Cloudinary assigns the public ID.
+- Mocked Cloudinary uploads return a preview data URL based on the uploaded local image when available.
+- Real Cloudinary manual mode uses `npm run dev:full-fixture:cloudinary` and `.env`.
+- Legacy admin asset tags include `?v=<hash>` cache-busting query strings, with a server-start suffix when admin bundle caching is disabled.
+- Legacy `Download` field uploads preserve the original filename and resolve through `/field-complete-files/<filename>`.
+
 ## Implementation Checklist
 
 1. Keep the default fixture hermetic.

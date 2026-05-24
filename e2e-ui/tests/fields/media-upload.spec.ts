@@ -201,6 +201,78 @@ test.describe('field-complete media uploads', () => {
 		);
 	});
 
+	test('legacy Cloudinary image upload saves without blanking the item screen', async ({
+		signedInPage,
+	}) => {
+		const media = await mediaFixture();
+		const mediaId = objectIdText(media._id);
+		await restoreLegacyCloudinaryFixture(mediaId);
+
+		await gotoLegacyMediaItem(signedInPage, mediaId);
+		await signedInPage
+			.locator('input[name^="CloudinaryImage-legacyImage-"]')
+			.setInputFiles({
+				name: 'field-complete-legacy-image.png',
+				mimeType: 'image/png',
+				buffer: PNG_BUFFER,
+			});
+		await expect(signedInPage.getByText('Save to Upload')).toBeVisible();
+
+		const save = signedInPage.waitForResponse(
+			(r) =>
+				r.url().includes(`/keystone-api/media-assets/${mediaId}`) &&
+				r.request().method() === 'POST',
+		);
+		await signedInPage.getByRole('button', { name: /^Save$/ }).click();
+		const res = await save;
+		expect(res.status()).toBe(200);
+		await expect(signedInPage.getByText('Your changes have been saved successfully')).toBeVisible();
+		await expect(signedInPage.locator('[data-screen-id="item"]')).toBeVisible();
+		await expectRenderableImages(signedInPage, '.field-type-cloudinaryimage img');
+
+		const stored = await mediaFixture();
+		expect(asRecord(stored.legacyImage).public_id).toBeTruthy();
+	});
+
+	test('legacy file upload keeps the original filename and resolves the public URL', async ({
+		signedInPage,
+	}) => {
+		const media = await mediaFixture();
+		const mediaId = objectIdText(media._id);
+
+		await gotoLegacyMediaItem(signedInPage, mediaId);
+		await signedInPage
+			.locator('[data-field-name="download"][data-field-type="file"] input[type="file"]')
+			.setInputFiles({
+				name: 'field-complete-legacy-download.txt',
+				mimeType: 'text/plain',
+				buffer: Buffer.from('field-complete legacy download'),
+			});
+		await expect(signedInPage.getByText('Save to Upload')).toBeVisible();
+
+		const save = signedInPage.waitForResponse(
+			(r) =>
+				r.url().includes(`/keystone-api/media-assets/${mediaId}`) &&
+				r.request().method() === 'POST',
+		);
+		await signedInPage.getByRole('button', { name: /^Save$/ }).click();
+		const res = await save;
+		expect(res.status()).toBe(200);
+		await expect(signedInPage.getByText('Your changes have been saved successfully')).toBeVisible();
+
+		const downloadField = signedInPage.locator('[data-field-name="download"][data-field-type="file"]');
+		await expect(downloadField.getByRole('link', { name: 'field-complete-legacy-download.txt' })).toBeVisible();
+		const href = await downloadField.getByRole('link', { name: 'field-complete-legacy-download.txt' }).getAttribute('href');
+		expect(href).toBe('/field-complete-files/field-complete-legacy-download.txt');
+		const downloadResponse = await signedInPage.request.head(href ?? '');
+		expect(downloadResponse.status()).toBe(200);
+
+		const stored = await mediaFixture();
+		expect(asRecord(stored.download).filename).toBe('field-complete-legacy-download.txt');
+		expect(asRecord(stored.download).originalname).toBe('field-complete-legacy-download.txt');
+		expect(asRecord(stored.download).url).toBe('/field-complete-files/field-complete-legacy-download.txt');
+	});
+
 	test('legacy Cloudinary image lightbox opens, advances, and closes', async ({
 		signedInPage,
 	}) => {

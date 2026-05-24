@@ -1,8 +1,15 @@
 # Keystone Legacy Admin — Smoke Test Runbook
 
-Last verified: 2026-05-09 against commit `2209f53` (working tree included three regression fixes; see "Known issues" — they need to be committed before this runbook produces a clean pass against `main`).
+Last verified: 2026-05-24 against the `migration/react-17` branch.
 
 Admin legacy is the React 15 / Redux / Browserify app served at `/keystone` by the existing keystone server. The admin next rewrite under `admin/client-next/` is not yet feature-complete (only signin + home), so the comprehensive testing target is admin legacy.
+
+For manual field testing, use the field-complete fixture at port `3008`. It serves both admin clients, but the legacy admin is the primary test target:
+
+- legacy admin URL: `http://127.0.0.1:3008/keystone`
+- admin next URL: `http://127.0.0.1:3008/keystone-next`
+- email: `admin@example.com`
+- password: `admin-password-123`
 
 ## When to run this
 
@@ -30,6 +37,34 @@ docker ps | grep keystone4-mongo   # expect "(healthy)"
 # Free port 3005 (skip if you know nothing is bound)
 lsof -ti :3005 | xargs -r kill -9
 ```
+
+## Field-Complete Manual Fixture
+
+Use this fixture when manually testing upload fields, Cloudinary behavior, the legacy `Download` field, or field-renderer regressions.
+
+```sh
+# MongoDB on localhost:27017
+docker start keystone-classic-e2e-mongo 2>/dev/null || docker run --name keystone-classic-e2e-mongo -p 27017:27017 -d mongo:6
+
+# Hermetic mocked Cloudinary mode
+npm run dev:full-fixture
+
+# Real Cloudinary mode; requires ignored .env with RUN_CLOUDINARY_INTEGRATION=1 and CLOUDINARY_URL
+npm run dev:full-fixture:cloudinary
+```
+
+When this server starts, provide these manual test details:
+
+- URL: `http://127.0.0.1:3008/keystone`
+- login: `admin@example.com`
+- password: `admin-password-123`
+
+Notes:
+
+- The legacy admin is the current production-equivalent client for this fixture. Admin next is available at `/keystone-next`, but it is a future client and should not be treated as the source of truth for legacy regressions.
+- The fixture sets `cache admin bundles` to `false`; legacy templates append `?v=<hash>` to admin CSS and JS assets so browser cache is invalidated after source or server-start changes without forcing `no-store`.
+- In mocked Cloudinary mode, uploaded image previews use a data URL generated from the uploaded local file when possible. In real Cloudinary mode, uploads are sent to Cloudinary and should render `res.cloudinary.com` URLs.
+- The `Download` field stores files under `.tmp/e2e-ui-field-complete/files`, serves them at `/field-complete-files/`, preserves the original uploaded filename, and writes a resolvable `url` value.
 
 ## 1. Boot the server
 

@@ -89,7 +89,7 @@ const EditForm = createReactClass({
 		const alerts = this.state.alerts;
 		// Display validation errors inline
 		if (alerts && alerts.error && alerts.error.error === 'validation errors') {
-			if (alerts.error.detail[field.path]) {
+			if (alerts.error.detail && alerts.error.detail[field.path]) {
 				// NOTE: This won't work yet, as ElementalUI doesn't allow
 				// passed in isValid, only invalidates via internal state.
 				// PR to fix that: https://github.com/elementalui/elemental/pull/149

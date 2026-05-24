@@ -18,6 +18,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const templatePath = path.resolve(__dirname, '../templates-legacy/index.html');
+const devAssetVersion = Date.now().toString(36);
+
+function getLegacyAssetVersion(req: Request): string {
+	const keystone = req.keystone;
+	if (!keystone) return devAssetVersion;
+	const baseVersion = keystone.createKeystoneHash();
+	return keystone.get('cache admin bundles') === false
+		? `${baseVersion}-${devAssetVersion}`
+		: baseVersion;
+}
 
 /** Runtime-typed CSRF module shape as exposed on `keystone.security`. */
 interface CsrfModule {
@@ -103,6 +113,7 @@ export default function IndexRoute(req: Request, res: Response): void {
 
 	const locals: Record<string, unknown> = {
 		adminLegacyPath: keystoneData['adminLegacyPath'],
+		assetVersion: getLegacyAssetVersion(req),
 		cloudinaryScript: false,
 		codemirrorPath: codemirrorPath,
 		cspNonce: String(res.locals['cspNonce'] ?? ''),

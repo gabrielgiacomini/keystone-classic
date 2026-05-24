@@ -606,20 +606,24 @@ class CloudinaryType extends FieldType<KeystoneFieldOptionsForCloudinaryType, Cl
 			if (folder) uploadOptions.folder = folder;
 
 			const uploadedFileFinal = uploadedFile;
-			field.getFilename(
-				uploadedFileFinal,
-				function (err: unknown, filename?: string) {
-					if (err) return callback(err);
-					if (filename !== undefined) {
-						filename = sanitize(filename);
-						uploadOptions.public_id = trimSupportedFileExtensions(filename);
-					}
-					cloudinarySdk.uploader.upload(uploadedFileFinal.path, function (result) {
-						if (result.error) { return callback(result.error); }
-						else { itemDoc.set(fieldPath, result); return callback(); }
-					}, uploadOptions);
-				},
-			);
+			const uploadFile = function () {
+				cloudinarySdk.uploader.upload(uploadedFileFinal.path, function (result) {
+					if (result.error) { return callback(result.error); }
+					else { itemDoc.set(fieldPath, result); return callback(); }
+				}, uploadOptions);
+			};
+			if (!opts.generateFilename) {
+				uploadFile();
+				return;
+			}
+			field.getFilename(uploadedFileFinal, function (err: unknown, filename?: string) {
+				if (err) return callback(err);
+				if (filename !== undefined) {
+					filename = sanitize(filename);
+					uploadOptions.public_id = trimSupportedFileExtensions(filename);
+				}
+				uploadFile();
+			});
 			return;
 		}
 
@@ -1015,6 +1019,14 @@ export type KeystoneTypeConstructorForCloudinaryType = new(
 function validateInputValue (value: unknown): boolean {
 	if (value === undefined || value === null || value === '') return true;
 	if (typeof value === 'string' && /^(?:(upload:)|(delete$)|(data:[a-z/]+;base64)|(https?:\/\/))/.test(value)) return true;
+	if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+		try {
+			const parsed = JSON.parse(value) as unknown;
+			return typeof parsed === 'object' && parsed !== null && 'public_id' in parsed;
+		} catch (_err) {
+			return false;
+		}
+	}
 	if (typeof value === 'object' && 'public_id' in value) return true;
 	return false;
 }
