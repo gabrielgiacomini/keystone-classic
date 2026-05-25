@@ -96,40 +96,73 @@ function createHeadlessHarness(): HeadlessHarness {
 
 describe('headless Cloom-style boot sequence', function () {
 	it('runs initDatabaseConfig -> initExpressSession -> openDatabaseConnection without an Express app', function () {
+		const originalMongoUri = process.env.MONGO_URI;
+		const originalMongodbUri = process.env.MONGODB_URI;
+		const originalMongoUrl = process.env.MONGO_URL;
+		const originalMongodbUrl = process.env.MONGODB_URL;
+		const originalMongolabUri = process.env.MONGOLAB_URI;
+		const originalMongolabUrl = process.env.MONGOLAB_URL;
+		const originalOpenShiftUrl = process.env.OPENSHIFT_MONGODB_DB_URL;
+		delete process.env.MONGO_URI;
+		delete process.env.MONGODB_URI;
+		delete process.env.MONGO_URL;
+		delete process.env.MONGODB_URL;
+		delete process.env.MONGOLAB_URI;
+		delete process.env.MONGOLAB_URL;
+		delete process.env.OPENSHIFT_MONGODB_DB_URL;
+
 		const keystone = createHeadlessHarness();
 		let callbackCalled = false;
 
-		expect(keystone.app).to.equal(undefined);
-		expect(keystone.httpServer).to.equal(undefined);
+		try {
+			expect(keystone.app).to.equal(undefined);
+			expect(keystone.httpServer).to.equal(undefined);
 
-		expect(keystone.initDatabaseConfig()).to.equal(keystone);
-		expect(keystone.values.get('mongo')).to.equal('mongodb://localhost/cloom-headless-smoke');
+			expect(keystone.initDatabaseConfig()).to.equal(keystone);
+			expect(keystone.values.get('mongo')).to.equal('mongodb://localhost/cloom-headless-smoke');
 
-		expect(keystone.initExpressSession(keystone.mongoose)).to.equal(keystone);
-		const sessionOptions = keystone.values.get('session options') as {
-			cookieParser?: RequestHandler;
-			key?: string;
-		};
-		expect(sessionOptions.key).to.equal('cloom.sid');
-		expect(sessionOptions.cookieParser).to.be.a('function');
-		expect(keystone.expressSession).to.be.a('function');
+			expect(keystone.initExpressSession(keystone.mongoose)).to.equal(keystone);
+			const sessionOptions = keystone.values.get('session options') as {
+				cookieParser?: RequestHandler;
+				key?: string;
+			};
+			expect(sessionOptions.key).to.equal('cloom.sid');
+			expect(sessionOptions.cookieParser).to.be.a('function');
+			expect(keystone.expressSession).to.be.a('function');
 
-		const result = keystone.openDatabaseConnection(function (err?: Error | null) {
-			expect(err).to.equal(undefined);
-			callbackCalled = true;
-		});
+			const result = keystone.openDatabaseConnection(function (err?: Error | null) {
+				expect(err).to.equal(undefined);
+				callbackCalled = true;
+			});
 
-		expect(result).to.equal(keystone);
-		expect(callbackCalled).to.equal(false);
-		expect(keystone.connectCalls).to.have.lengthOf(1);
-		expect(keystone.connectCalls[0]?.uri).to.equal('mongodb://localhost/cloom-headless-smoke');
-		expect(keystone.app).to.equal(undefined);
-		expect(keystone.httpServer).to.equal(undefined);
+			expect(result).to.equal(keystone);
+			expect(callbackCalled).to.equal(false);
+			expect(keystone.connectCalls).to.have.lengthOf(1);
+			expect(keystone.connectCalls[0]?.uri).to.equal('mongodb://localhost/cloom-headless-smoke');
+			expect(keystone.app).to.equal(undefined);
+			expect(keystone.httpServer).to.equal(undefined);
 
-		keystone.mongoose.connection.emit('open');
+			keystone.mongoose.connection.emit('open');
 
-		expect(callbackCalled).to.equal(true);
-		expect(keystone.app).to.equal(undefined);
-		expect(keystone.httpServer).to.equal(undefined);
+			expect(callbackCalled).to.equal(true);
+			expect(keystone.app).to.equal(undefined);
+			expect(keystone.httpServer).to.equal(undefined);
+		} finally {
+			restoreEnv('MONGO_URI', originalMongoUri);
+			restoreEnv('MONGODB_URI', originalMongodbUri);
+			restoreEnv('MONGO_URL', originalMongoUrl);
+			restoreEnv('MONGODB_URL', originalMongodbUrl);
+			restoreEnv('MONGOLAB_URI', originalMongolabUri);
+			restoreEnv('MONGOLAB_URL', originalMongolabUrl);
+			restoreEnv('OPENSHIFT_MONGODB_DB_URL', originalOpenShiftUrl);
+		}
 	});
 });
+
+function restoreEnv(key: string, value: string | undefined): void {
+	if (value === undefined) {
+		Reflect.deleteProperty(process.env, key);
+		return;
+	}
+	process.env[key] = value;
+}

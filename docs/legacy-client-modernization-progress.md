@@ -1007,6 +1007,9 @@ This file tracks implementation progress for
 | 2026-05-25 | `npm run test:unit` | Pass | Full unit suite passed with 1377 passing after making the unit script build admin-next before server/unit execution. |
 | 2026-05-25 | `npm run test:e2e-api` | Pass | API e2e suite passed with 18 tests after making the API webServer build admin-next before serving the converged admin routes. |
 | 2026-05-25 | `npm run package:verify && npm run admin-decommission:audit && npm run admin-parity:final -- --dry-run` | Pass | Package verification, decommission audit, and final-gate order checks pass after CI hardening; the actual final gate still depends on the external `admin-parity:soak` window. |
+| 2026-05-25 | `gh workflow run ci.yml --ref modernization/legacy-client-convergence` | Fail | Manual branch CI run `26382347256` improved to green `package-verify`, `lint-typecheck`, `prod-audit`, `e2e-api`, `e2e-ui`, and `admin-parity`, leaving two repo-owned failures: an obsolete `legacy-bundle-hash` job for the removed legacy bundle builder, and a headless unit test that did not isolate CI's `MONGO_URI`. |
+| 2026-05-25 | `npm run test:unit -- test/unit/lib/core/headless-boot.mts test/unit/scripts/ci-workflow-verify.test.mts` | Pass | Targeted rerun passed with 1377 passing after isolating Mongo environment variables in the headless boot test and making the CI verifier reject reintroduced legacy bundle-hash jobs. |
+| 2026-05-25 | `npm run lint && npm run package:verify` | Pass | Lint and package verification pass after removing the obsolete legacy bundle-hash CI job and guarding that it stays removed. |
 
 ## Current Route Policy
 

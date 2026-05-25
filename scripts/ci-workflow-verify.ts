@@ -35,6 +35,7 @@ assertJobContains('admin-parity', 'npm run test:e2e-ui');
 assertJobContains('admin-parity', 'npm run test:e2e-ui:fields');
 assertJobContains('admin-parity', 'npm run test:e2e-ui:visual');
 assertJobRunsOnSchedule('admin-parity');
+assertJobMissing('legacy-bundle-hash');
 
 if (failures.length) {
 	console.error(`CI workflow verification failed for ${workflowPath}`);
@@ -49,6 +50,7 @@ console.log(`CI workflow verified: ${workflowPath}`);
 console.log('- admin-parity runs on the scheduled workflow and covers UI, field-complete, and visual identity suites');
 console.log('- package-verify runs ci:verify, build:types, package:verify, and npm pack --dry-run');
 console.log('- lint-typecheck builds before typechecking dist-backed tests and runs admin-next:typecheck');
+console.log('- obsolete legacy bundle hash checks are absent after legacy client decommission');
 
 function assertJobContains(jobName: string, command: string): void {
 	const job = jobs.get(jobName);
@@ -58,6 +60,12 @@ function assertJobContains(jobName: string, command: string): void {
 	}
 	if (!job.includes(command)) {
 		failures.push(`jobs.${jobName} must run ${command}`);
+	}
+}
+
+function assertJobMissing(jobName: string): void {
+	if (jobs.has(jobName)) {
+		failures.push(`jobs.${jobName} must stay removed after legacy client decommission`);
 	}
 }
 

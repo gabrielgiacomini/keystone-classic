@@ -26,6 +26,12 @@ Last checked from this workspace:
   outside npm script PATH, and production audit flagged Express/QS. The branch
   now contains CI/package hardening for those repo-owned failures; rerun CI on a
   new commit before treating the branch as ready to merge into `master`.
+- Manual branch CI run `26382347256` on the hardened branch commit improved the
+  current head to green `package-verify`, `lint-typecheck`, `prod-audit`,
+  `e2e-api`, `e2e-ui`, and `admin-parity`. The remaining failures were
+  repo-owned and fixed afterward: the decommissioned legacy bundle-hash CI job
+  was removed, and the headless boot unit test now isolates CI Mongo environment
+  variables before asserting default database-name fallback behavior.
 - `npm run admin-parity:protect:status` exited non-zero during the
   2026-05-12T03:13:48Z refresh. Repository
   `gabrielgiacomini/keystone4-ts` is private, branch `main` is not protected,
