@@ -1,8 +1,8 @@
 import { FieldType } from '../Type.mjs';
 import type { KeystoneList, FieldOptionsBase, MongooseDocument } from '../Type.mjs';
-import numeral from 'numeral';
 import { defer } from '../../../lib/utils/async.mjs';
 import { number } from '../../../lib/utils/number.mjs';
+import { formatNumber } from '../../../lib/utils/numberFormat.mjs';
 
 function formatUnknownFieldValue(value: unknown): string {
 	if (value === null || value === undefined || value === false) return '';
@@ -94,7 +94,7 @@ class NumberType extends FieldType<KeystoneFieldOptionsForNumberType, number> {
 	override format (item: MongooseDocument, format?: string): string {
 		const value = item.get(this.path);
 		if (format || this.formatString) {
-			return (typeof value === 'number') ? numeral(value).format(format ?? (this.formatString || undefined)) : '';
+			return (typeof value === 'number') ? formatNumber(value, format ?? this.formatString) : '';
 		} else {
 			return formatUnknownFieldValue(value);
 		}

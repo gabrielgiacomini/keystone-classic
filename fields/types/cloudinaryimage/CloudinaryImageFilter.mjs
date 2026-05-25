@@ -7,7 +7,7 @@
  */
 import React from 'react';
 
-import { SegmentedControl } from '../../../admin/client-legacy/App/elemental';
+import SegmentedControl from '../../../admin/client-legacy/compat/elemental/SegmentedControl.mjs';
 
 const OPTIONS = [
 	{ label: 'Is Set', value: true },
@@ -28,43 +28,20 @@ function getDefaultValue () {
  * The `CloudinaryImageFilter` component.
  * @augments React.Component
  */
-const CloudinaryImageFilter = React.createClass({
-	propTypes: {
-		filter: React.PropTypes.shape({
-			exists: React.PropTypes.oneOf(OPTIONS.map(i => i.value)),
-		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
-	/**
-	 * Handles a change in the filter's value.
-	 * @param {boolean} value The new value.
-	 */
-	toggleExists (value) {
-		this.props.onChange({ exists: value });
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		const { filter } = this.props;
+function CloudinaryImageFilter({ filter, onChange }) {
+	return React.createElement(SegmentedControl, {
+		equalWidthSegments: true,
+		onChange: (value) => onChange({ exists: value }),
+		options: OPTIONS,
+		value: filter.exists,
+	});
+}
 
-		return (
-			<SegmentedControl
-				equalWidthSegments
-				onChange={this.toggleExists}
-				options={OPTIONS}
-				value={filter.exists}
-			/>
-		);
-	},
-});
+
+CloudinaryImageFilter.defaultProps = {
+	filter: getDefaultValue(),
+};
+
+CloudinaryImageFilter.getDefaultValue = getDefaultValue;
 
 export default CloudinaryImageFilter;

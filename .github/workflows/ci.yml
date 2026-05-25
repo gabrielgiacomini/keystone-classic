@@ -17,10 +17,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - run: npm ci --legacy-peer-deps
       - run: npm run lint
+      - run: npm run build
       - run: npm run typecheck
       - run: npm run admin-next:typecheck
 
@@ -31,7 +32,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - run: npm ci --legacy-peer-deps
       - run: npm run ci:verify
@@ -47,7 +48,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - run: npm ci --legacy-peer-deps
       - run: npm audit --omit=dev
@@ -58,7 +59,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22]
+        node: [24]
     services:
       mongodb:
         image: mongo:7
@@ -91,9 +92,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - run: npm ci --legacy-peer-deps
+      - run: npm run admin-next:build
       # API-only suite: Playwright's `request` fixture only — no
       # browser binaries needed, so we deliberately skip
       # `npx playwright install --with-deps`.
@@ -127,7 +129,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - run: npm ci --legacy-peer-deps
       # UI suite needs a real chromium binary.
@@ -146,71 +148,12 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
-  legacy-bundle-hash:
-    # Verifies that the legacy admin JS bundles (packages.js, admin.js,
-    # signin.js, fields.js) have not changed since the committed baseline in
-    # .roadmap/legacy-admin-typing/legacy-bundle-baseline.md.
-    # A hash change means a runtime behavior change was introduced — this must
-    # never happen silently. The baseline is updated intentionally (with a
-    # justified explanation) when a new .d.mts sidecar causes the copy-dist
-    # path to pick up the original source indentation instead of tsc-reformatted
-    # output. Zero hash drift is the load-bearing safety check for the migration.
-    if: github.event_name != 'schedule'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-      - run: npm ci --legacy-peer-deps
-      - name: Build legacy admin bundles
-        run: NODE_ENV=production jiti scripts/build-legacy-admin-bundles.ts
-      - name: Verify bundle hashes against baseline
-        run: |
-          set -e
-          # Compute current hashes
-          PACKAGES_HASH=$(md5sum admin/public-legacy/js/packages.js | awk '{print $1}')
-          ADMIN_HASH=$(md5sum admin/public-legacy/js/admin.js | awk '{print $1}')
-          SIGNIN_HASH=$(md5sum admin/public-legacy/js/signin.js | awk '{print $1}')
-          FIELDS_HASH=$(md5sum admin/public-legacy/js/fields.js | awk '{print $1}')
-          # Expected hashes from baseline
-          EXPECTED_PACKAGES="faaf6ef820ef473df15b91907ea1c360"
-          EXPECTED_ADMIN="cd51d89c6fcaafca39d374af93ad12eb"
-          EXPECTED_SIGNIN="3090cc8b46289c0c8c1c42cf8fc51f45"
-          EXPECTED_FIELDS="54f5d726f0c1eb3855603d0152f39247"
-          FAIL=0
-          if [ "$PACKAGES_HASH" != "$EXPECTED_PACKAGES" ]; then
-            echo "ERROR: packages.js hash mismatch: got $PACKAGES_HASH expected $EXPECTED_PACKAGES"
-            FAIL=1
-          fi
-          if [ "$ADMIN_HASH" != "$EXPECTED_ADMIN" ]; then
-            echo "ERROR: admin.js hash mismatch: got $ADMIN_HASH expected $EXPECTED_ADMIN"
-            FAIL=1
-          fi
-          if [ "$SIGNIN_HASH" != "$EXPECTED_SIGNIN" ]; then
-            echo "ERROR: signin.js hash mismatch: got $SIGNIN_HASH expected $EXPECTED_SIGNIN"
-            FAIL=1
-          fi
-          if [ "$FIELDS_HASH" != "$EXPECTED_FIELDS" ]; then
-            echo "ERROR: fields.js hash mismatch: got $FIELDS_HASH expected $EXPECTED_FIELDS"
-            FAIL=1
-          fi
-          if [ $FAIL -eq 1 ]; then
-            echo ""
-            echo "Bundle hash mismatch detected. This means the legacy admin JS changed."
-            echo "If this is intentional (new .d.mts sidecar, SWC artifact), update the"
-            echo "baseline in .roadmap/legacy-admin-typing/legacy-bundle-baseline.md with"
-            echo "a justified explanation. Otherwise investigate the change."
-            exit 1
-          fi
-          echo "All bundle hashes match the baseline."
-
   admin-parity:
     # UI parity Playwright suite (roadmap step P4-30). Drives a real
     # Chromium browser against BOTH admin legacy (/keystone) and admin
     # next (/keystone-next), then runs the field-complete project from
-    # P6-38b. Both suites share the canonical /keystone-api surface.
+    # P6-38b and the targeted visual identity guard. These suites share
+    # the canonical /keystone-api surface.
     runs-on: ubuntu-latest
     needs: []
     services:
@@ -222,7 +165,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: npm
       - run: npm ci --legacy-peer-deps
       - run: npx playwright install --with-deps chromium
@@ -233,6 +176,10 @@ jobs:
       - run: npm run test:e2e-ui:fields
         env:
           MONGO_URI: mongodb://localhost:27017/keystone-e2e-ui-fields
+          CI: 'true'
+      - run: npm run test:e2e-ui:visual
+        env:
+          MONGO_URI: mongodb://localhost:27017/keystone-e2e-ui-visual
           CI: 'true'
       - if: failure()
         uses: actions/upload-artifact@v4

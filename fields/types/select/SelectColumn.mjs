@@ -11,38 +11,18 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `SelectColumn` component.
  * @augments React.Component
  */
-const SelectColumn = React.createClass({
-	displayName: 'SelectColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-		linkTo: React.PropTypes.string,
-	},
-	/**
-	 * Renders the value of the field.
-	 * @returns {string} The rendered value.
-	 */
-	getValue () {
-		const value = this.props.data.fields[this.props.col.path];
-		const option = this.props.col.field.ops.filter(i => i.value === value)[0];
+function SelectColumn({ col, data, linkTo }) {
+	const selectedValue = data.fields[col.path];
+	const option = col.field.ops.filter(i => i.value === selectedValue)[0];
+	const value = option ? option.label : null;
+	const empty = !value && linkTo ? true : false;
 
-		return option ? option.label : null;
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		const value = this.getValue();
-		const empty = !value && this.props.linkTo ? true : false;
-		return (
-			<ItemsTableCell>
-				<ItemsTableValue field={this.props.col.type} to={this.props.linkTo} empty={empty}>
-					{value}
-				</ItemsTableValue>
-			</ItemsTableCell>
-		);
-	},
-});
+	return React.createElement(
+		ItemsTableCell,
+		null,
+		React.createElement(ItemsTableValue, { field: col.type, to: linkTo, empty }, value),
+	);
+}
+
 
 export default SelectColumn;

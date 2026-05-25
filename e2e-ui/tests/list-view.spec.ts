@@ -48,7 +48,7 @@ test.describe('C. List view', () => {
 		await load;
 		// Search-result count text (admin legacy uses "Showing 1 Post" /
 		// "Showing N Posts").
-		await expect(page.getByText(/Showing\s+1\s+Post/i)).toBeVisible();
+		await expect(page.locator('[data-list-pagination-summary]')).toHaveText(/Showing\s+1\s+Post/i);
 		// Exactly one body row in the items table.
 		const rows = page.locator('table tbody tr');
 		await expect(rows).toHaveCount(1);
@@ -90,7 +90,7 @@ test.describe('C. List view', () => {
 		//  i=1 'published', i=2 'archived', i=3 'draft' — wait, i%3:
 		//  i=1 →1 →'published'; i=2 →2 →'archived'; i=3 →0 →'draft'; ...)
 		// So published comes at i ∈ {1,4,7,10,13,16,19,22,25} → 9 posts.
-		await expect(page.getByText(/Showing\s+9\s+Post/i)).toBeVisible();
+		await expect(page.locator('[data-list-pagination-summary]')).toHaveText(/Showing\s+9\s+Post/i);
 		await expect(page.locator('table tbody tr')).toHaveCount(9);
 	});
 

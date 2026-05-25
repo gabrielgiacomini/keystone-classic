@@ -5,10 +5,8 @@
  */
 import Field from '../Field.mjs';
 import React from 'react';
-import {
-	FormInput,
-	Grid,
-} from '../../../admin/client-legacy/App/elemental';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import Grid from '../../../admin/client-legacy/compat/elemental/Grid.mjs';
 
 /**
  * The `GeoPointField` component.
@@ -56,9 +54,9 @@ export default Field.create({
 	renderValue () {
 		const { value } = this.props;
 		if (value && value[1] && value[0]) {
-			return <FormInput noedit>{value[1]}, {value[0]}</FormInput>;  
+			return React.createElement(FormInput, { noedit: true }, value[1], ', ', value[0]);
 		}
-		return <FormInput noedit>(not set)</FormInput>;
+		return React.createElement(FormInput, { noedit: true }, '(not set)');
 	},
 
 	/**
@@ -67,29 +65,33 @@ export default Field.create({
 	 */
 	renderField () {
 		const { value = [], path } = this.props;
-		return (
-			<Grid.Row xsmall="one-half" gutter={10}>
-				<Grid.Col>
-					<FormInput
-						autoComplete="off"
-						name={this.getInputName(path + '[1]')}
-						onChange={this.handleLat}
-						placeholder="Latitude"
-						ref="lat"
-						value={value[1]}
-					/>
-				</Grid.Col>
-				<Grid.Col width="one-half">
-					<FormInput
-						autoComplete="off"
-						name={this.getInputName(path + '[0]')}
-						onChange={this.handleLong}
-						placeholder="Longitude"
-						ref="lng"
-						value={value[0]}
-					/>
-				</Grid.Col>
-			</Grid.Row>
+		return React.createElement(
+			Grid.Row,
+			{ xsmall: 'one-half', gutter: 10 },
+			React.createElement(
+				Grid.Col,
+				null,
+				React.createElement(FormInput, {
+					autoComplete: 'off',
+					name: this.getInputName(path + '[1]'),
+					onChange: this.handleLat,
+					placeholder: 'Latitude',
+					ref: this.getFocusTargetRef('lat'),
+					value: value[1],
+				})
+			),
+			React.createElement(
+				Grid.Col,
+				{ width: 'one-half' },
+				React.createElement(FormInput, {
+					autoComplete: 'off',
+					name: this.getInputName(path + '[0]'),
+					onChange: this.handleLong,
+					placeholder: 'Longitude',
+					ref: this.getFocusTargetRef('lng'),
+					value: value[0],
+				})
+			)
 		);
 	},
 

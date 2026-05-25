@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import _ from 'lodash';
 import dayjs from 'dayjs';
 import csvUnparse from '../../../lib/utils/csvUnparse.mjs';
 import escapeValueForExcel from '../../../lib/security/escapeValueForExcel.mjs';
@@ -12,7 +11,9 @@ import {
 
 const FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
 
-/** Serialises an autokey field value for CSV without relying on `Object` default stringification. */
+/**
+ * Serialises an autokey field value for CSV without relying on `Object` default stringification.
+ */
 function stringifyAutokeyValue(value: unknown): string {
 	if (value === null || value === undefined) {
 		return '';
@@ -65,6 +66,10 @@ interface DepsMap {
 	[key: string]: unknown;
 }
 
+function cloneDeps(map: DepsMap): DepsMap {
+	return { ...map };
+}
+
 /**
  * Streams a filtered list as a CSV file attachment.
  * Supports a `toCSV` method on documents for custom row serialisation.
@@ -86,7 +91,7 @@ export default function download(req: Request, res: Response): void {
 	const queryFilters = list.getSearchFilters(req.query.search, filters);
 	const relFields: string[] = [];
 
-	_.forEach(list.fields as Record<string, KeystoneField>, function (field: KeystoneField) {
+	Object.values(list.fields as Record<string, KeystoneField>).forEach(function (field: KeystoneField) {
 		if (field.type === 'relationship') {
 			relFields.push(field.path);
 		}
@@ -100,7 +105,7 @@ export default function download(req: Request, res: Response): void {
 			rowData[autokey.path] = stringifyAutokeyValue(i.get(autokey.path));
 		}
 
-		_.forEach(list.fields as Record<string, KeystoneField>, function (field: KeystoneField) {
+		Object.values(list.fields as Record<string, KeystoneField>).forEach(function (field: KeystoneField) {
 			if (field.type === 'boolean') {
 				rowData[field.path] = i.get(field.path) ? 'true' : 'false';
 			} else if (field.type === 'relationship') {
@@ -112,7 +117,7 @@ export default function download(req: Request, res: Response): void {
 				if (field.many) {
 					const values: string[] = [];
 					if (Array.isArray(refData) && refData.length) {
-						_.forEach(refData as MongooseDoc[], function (item: MongooseDoc) {
+						(refData as MongooseDoc[]).forEach(function (item: MongooseDoc) {
 							let name = refList.getDocumentName(item);
 							if (keystone.get('csv expanded')) {
 								name = '[' + item.id + ',' + name + ']';
@@ -135,7 +140,8 @@ export default function download(req: Request, res: Response): void {
 			}
 		});
 
-		_.forOwn(rowData, (value: string, prop: string) => {
+		Object.keys(rowData).forEach((prop) => {
+			const value = rowData[prop] ?? '';
 			rowData[prop] = escapeValueForExcel(value);
 		});
 
@@ -169,20 +175,20 @@ export default function download(req: Request, res: Response): void {
 
 		let data: CsvRow[];
 
-		const firstToCSV = results.at(0)?.toCSV;
+			const firstToCSV = results.at(0)?.toCSV;
 		if (firstToCSV) {
 			const fnMatch = FN_ARGS.exec(firstToCSV.toString());
 			const paramStr = fnMatch?.[1] ?? '';
-			const deps = _.map(paramStr.split(','), function (i: string) { return i.trim(); });
+			const deps = paramStr.split(',').map(function (i: string) { return i.trim(); });
 			const includeRowData = (deps.includes('row'));
 			const map: DepsMap = { req: req, user: req.user };
 
 			const applyDeps = function (fn: (...args: unknown[]) => unknown, _this: MongooseDoc, _map: DepsMap) {
-				const args = _.map(deps, function (key: string) { return _map[key]; });
+				const args = deps.map(function (key: string) { return _map[key]; });
 				return fn.apply(_this, args);
 			};
 
-			if (_.last(deps) === 'callback') {
+			if (deps.at(-1) === 'callback') {
 				return Promise.all(results.map(function (i: MongooseDoc) {
 					return new Promise(function (resolve, reject) {
 						const rowToCsv = i.toCSV;
@@ -190,7 +196,7 @@ export default function download(req: Request, res: Response): void {
 							reject(new Error('toCSV missing on document for list ' + list.key));
 							return;
 						}
-						const _map = _.clone(map);
+						const _map = cloneDeps(map);
 						_map.callback = function (err: unknown, result: unknown) {
 							if (err) {
 								if (err instanceof Error) {
@@ -219,17 +225,17 @@ export default function download(req: Request, res: Response): void {
 			} else {
 				data = [];
 				if (includeRowData) {
-					_.forEach(results, function (i: MongooseDoc) {
+					results.forEach(function (i: MongooseDoc) {
 						const rowToCsv = i.toCSV;
 						if (typeof rowToCsv !== 'function') {
 							throw new Error('toCSV missing on document for list ' + list.key);
 						}
-						const _map = _.clone(map);
+						const _map = cloneDeps(map);
 						_map.row = getRowData(i);
 						data.push(applyDeps(rowToCsv, i, _map) as CsvRow);
 					});
 				} else {
-					_.forEach(results, function (i: MongooseDoc) {
+					results.forEach(function (i: MongooseDoc) {
 						const rowToCsv = i.toCSV;
 						if (typeof rowToCsv !== 'function') {
 							throw new Error('toCSV missing on document for list ' + list.key);
@@ -241,7 +247,7 @@ export default function download(req: Request, res: Response): void {
 			}
 		} else {
 			data = [];
-			_.forEach(results, function (i: MongooseDoc) {
+			results.forEach(function (i: MongooseDoc) {
 				data.push(getRowData(i));
 			});
 			return sendCSV(data);

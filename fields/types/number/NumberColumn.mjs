@@ -4,45 +4,26 @@
  * value of a `Number` or `Money` field in a list view.
  */
 import React from 'react';
-import numeral from 'numeral';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
+import { formatNumber } from '../../../lib/utils/numberFormat.mjs';
 
 /**
  * The `NumberColumn` component.
  * @augments React.Component
  */
-const NumberColumn = React.createClass({
-	displayName: 'NumberColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
-	 * Renders the value of the field.
-	 * @returns {string} The formatted value.
-	 */
-	renderValue () {
-		const value = this.props.data.fields[this.props.col.path];
-		if (value === undefined || isNaN(value)) return null;
+function NumberColumn({ col, data }) {
+	const value = data.fields[col.path];
+	const renderedValue = value === undefined || isNaN(value)
+		? null
+		: (col.type === 'money' ? formatNumber(value, '$0,0.00') : value);
 
-		const formattedValue = (this.props.col.type === 'money') ? numeral(value).format('$0,0.00') : value;
+	return React.createElement(
+		ItemsTableCell,
+		null,
+		React.createElement(ItemsTableValue, { field: col.type }, renderedValue),
+	);
+}
 
-		return formattedValue;
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		return (
-			<ItemsTableCell>
-				<ItemsTableValue field={this.props.col.type}>
-					{this.renderValue()}
-				</ItemsTableValue>
-			</ItemsTableCell>
-		);
-	},
-});
 
 export default NumberColumn;

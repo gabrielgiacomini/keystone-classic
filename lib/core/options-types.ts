@@ -119,8 +119,10 @@ export interface KeystoneOptions {
 	'admin api path'?: string;
 	'cache admin bundles'?: boolean;
 	headless?: boolean;
-	/** Which admin UI bundle(s) to serve. false = no UI, 'legacy' = admin legacy (default), 'next' = admin next, 'both' = both sibling panels. */
-	'admin ui'?: false | 'legacy' | 'next' | 'both';
+	/** Which admin UI bundle(s) to serve. false = no UI, 'legacy' = admin legacy (default), 'next' = admin next, 'both' = both sibling panels, 'auto' = next unless custom legacy field browser code is detected. */
+	'admin ui'?: false | 'legacy' | 'next' | 'both' | 'auto';
+	/** Same-origin module script URL(s) loaded before admin-next starts. These scripts may set `window.Keystone.fieldComponents` or `window.Keystone.legacyFieldComponents`. */
+	'admin next custom field scripts'?: string | string[];
 	/** Whether to mount the admin API independently of UI mounting. Defaults to true unless headless is enabled. */
 	'admin api'?: boolean;
 	/** Temporary compatibility alias from /{admin legacy path}/api to /{admin api path}. Defaults to true during migration. */

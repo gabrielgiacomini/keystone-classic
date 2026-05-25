@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { FieldType } from '../Type.mjs';
 import type { MongooseDocument, KeystoneList, FieldOptionsBase } from '../Type.mjs';
 import type { Schema } from 'mongoose';
@@ -38,7 +37,7 @@ export interface LocationPaths {
 /**
  * Structured location data built during a Google geocode response.
  * `street1` is accumulated as `string[]` then joined to `string` before return.
- * The index signature allows keyed access in `_.forEach` loops.
+ * The index signature allows keyed access when applying geocode results.
  */
 export interface LocationData {
 	number?: string;
@@ -192,7 +191,7 @@ class LocationType extends FieldType<LocationFieldOptionsNormalised, LocationDat
 		}, this.path + '.');
 
 		schema.virtual(paths.serialised).get(function (this: MongooseDocument) {
-			return _.compact([
+			return [
 				this.get(paths.number),
 				this.get(paths.name),
 				this.get(paths.street1),
@@ -201,12 +200,12 @@ class LocationType extends FieldType<LocationFieldOptionsNormalised, LocationDat
 				this.get(paths.state),
 				this.get(paths.postcode),
 				this.get(paths.country),
-			]).join(', ');
+			].filter(Boolean).join(', ');
 		});
 
 		schema.pre('save', function (this: MongooseDocument, next: () => void) {
 			const obj = field._path.get(this as MongooseDocument & Record<string, unknown>) as LocationData;
-			const geo = (obj.geo ?? []).map(Number).filter(n => _.isFinite(n));
+			const geo = (obj.geo ?? []).map(Number).filter(n => Number.isFinite(n));
 			obj.geo = (geo.length === 2) ? geo : undefined;
 			next();
 		});
@@ -237,7 +236,7 @@ class LocationType extends FieldType<LocationFieldOptionsNormalised, LocationDat
 		const parts = values.split(' ').map(function (i: string) {
 			return item.get(paths[i] ?? '');
 		});
-		return _.compact(parts).join(delimiter || ', ');
+		return parts.filter(Boolean).join(delimiter || ', ');
 	}
 
 	override isModified (item: MongooseDocument): boolean {
@@ -319,13 +318,15 @@ class LocationType extends FieldType<LocationFieldOptionsNormalised, LocationDat
 
 		if (nested) {
 			values = nested;
-			valuePaths = _.zipObject(valueKeys, valueKeys);
+			valuePaths = Object.fromEntries(valueKeys.map(key => [key, key]));
 		} else {
 			const flatPaths: string[] = valueKeys.map(function (k: LocationValueKey): string {
 				return paths[k];
 			});
-			values = _.pick(data, flatPaths);
-			valuePaths = _.zipObject(valueKeys, flatPaths);
+			values = Object.fromEntries(flatPaths
+				.filter(path => path in data)
+				.map(path => [path, data[path]]));
+			valuePaths = Object.fromEntries(valueKeys.map((key, index) => [key, flatPaths[index] as string]));
 		}
 
 		const setValue = function (key: typeof fieldKeys[number]): void {
@@ -410,21 +411,21 @@ class LocationType extends FieldType<LocationFieldOptionsNormalised, LocationDat
 				return callback(new Error('Geocoder returned no results'));
 			}
 			const loc: LocationData = {};
-			_.forEach(result.address_components, function (val: GeocodeAddressComponent) {
-				if (_.indexOf(val.types, 'street_number') >= 0) {
+			result.address_components.forEach(function (val: GeocodeAddressComponent) {
+				if (val.types.includes('street_number')) {
 					if (!Array.isArray(loc.street1)) loc.street1 = [];
 					loc.street1.unshift(val.long_name);
 				}
-				if (_.indexOf(val.types, 'route') >= 0) {
+				if (val.types.includes('route')) {
 					if (!Array.isArray(loc.street1)) loc.street1 = [];
 					loc.street1.push(val.short_name);
 				}
-				if (_.indexOf(val.types, 'locality') >= 0 && !loc.suburb) { loc.suburb = val.long_name; }
-				if (_.indexOf(val.types, 'administrative_area_level_1') >= 0) { loc.state = val.short_name; }
-				if (_.indexOf(val.types, 'country') >= 0) { loc.country = val.long_name; }
-				if (_.indexOf(val.types, 'postal_code') >= 0) { loc.postcode = val.short_name; }
-				if (_.indexOf(val.types, 'subpremise') >= 0) { loc.number = val.short_name; }
-				if (_.indexOf(val.types, 'floor') >= 0 || _.indexOf(val.types, 'post_box') >= 0 || _.indexOf(val.types, 'room') >= 0) {
+				if (val.types.includes('locality') && !loc.suburb) { loc.suburb = val.long_name; }
+				if (val.types.includes('administrative_area_level_1')) { loc.state = val.short_name; }
+				if (val.types.includes('country')) { loc.country = val.long_name; }
+				if (val.types.includes('postal_code')) { loc.postcode = val.short_name; }
+				if (val.types.includes('subpremise')) { loc.number = val.short_name; }
+				if (val.types.includes('floor') || val.types.includes('post_box') || val.types.includes('room')) {
 					loc.number = loc.number || val.short_name;
 				}
 			});
@@ -433,7 +434,7 @@ class LocationType extends FieldType<LocationFieldOptionsNormalised, LocationDat
 			if (update === 'overwrite') {
 				item.set(field.path, loc);
 			} else if (update) {
-				_.forEach(loc, function (value: unknown, key: string) {
+				Object.entries(loc).forEach(function ([key, value]) {
 					if (key === 'geo') return;
 					if (!stored[key]) { item.set(field.paths[key] as string, value); }
 				});

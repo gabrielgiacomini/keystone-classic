@@ -1,11 +1,15 @@
-import _ from 'lodash';
 import path from 'node:path';
-import moment from 'moment';
 import Nightwatch from 'nightwatch/lib/index.js';
 import child_process from 'node:child_process';
 import selenium from 'selenium-server-standalone-jar';
 import sauceConnectLauncher from 'sauce-connect-launcher';
 let selenium_proc = null;
+
+function timestamp() {
+	const date = new Date();
+	const pad = (value, length = 2) => String(value).padStart(length, '0');
+	return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}:${pad(date.getMilliseconds(), 3)}`;
+}
 
 /*
 On some machines, selenium fails with a timeout error when nightwatch tries to connect due to a
@@ -14,7 +18,7 @@ from stdin until this issue is fixed in nightwatch:
 https://github.com/nightwatchjs/nightwatch/issues/470
 */
 function runSeleniumInBackground (done) {
-	console.log([moment().format('HH:mm:ss:SSS')] + ' kne: starting selenium server in background...');
+	console.log([timestamp()] + ' kne: starting selenium server in background...');
 	selenium_proc = child_process.spawn('java',
 		[
 			'-jar', selenium.path,
@@ -41,7 +45,7 @@ function runSeleniumInBackground (done) {
 
 // Function that starts the nightwatch service
 function runNightwatch (done) {
-	console.log([moment().format('HH:mm:ss:SSS')] + ' kne: running nightwatch...');
+	console.log([timestamp()] + ' kne: running nightwatch...');
 
 	try {
 		Nightwatch.cli(function (argv) {
@@ -111,7 +115,7 @@ function runNightwatch (done) {
 						startSauceConnect(cb);
 					} else {
 						if (argv.env === 'saucelabs-local') {
-							console.error([moment().format('HH:mm:ss:SSS')] + ' kne: You must specify --sauce-username and --sauce-access-key when using: --' + argv.env);
+							console.error([timestamp()] + ' kne: You must specify --sauce-username and --sauce-access-key when using: --' + argv.env);
 							cb(new Error('kne: You must specify --sauce-username and --sauce-access-key when using: --' + argv.env));
 						} else {
 							cb();
@@ -122,9 +126,9 @@ function runNightwatch (done) {
 					Nightwatch.runner(argv, function (status) {
 						let err = null;
 						if (status) {
-							console.log([moment().format('HH:mm:ss:SSS')] + ' kne: tests passed');
+							console.log([timestamp()] + ' kne: tests passed');
 						} else {
-							console.log([moment().format('HH:mm:ss:SSS')] + ' kne: tests failed');
+							console.log([timestamp()] + ' kne: tests failed');
 							err = new Error('kne: nightwatch runner returned an error status code');
 						}
 						cb(err);
@@ -153,12 +157,12 @@ let sauceConnection = null;
 let sauceConnectionRunning = false;
 
 function sauceConnectLog (message) {
-	console.log([moment().format('HH:mm:ss:SSS')] + ' Sauce Connect: ' + message);
+	console.log([timestamp()] + ' Sauce Connect: ' + message);
 }
 
 // Function that starts the sauce connect servers if SAUCE_ACCESS_KEY is set.
 function startSauceConnect (done) {
-	console.log([moment().format('HH:mm:ss:SSS')] + ' kne: Starting Sauce Connect');
+	console.log([timestamp()] + ' kne: Starting Sauce Connect');
 
 	const default_options = {
 		username: process.env.SAUCE_USERNAME,
@@ -173,14 +177,14 @@ function startSauceConnect (done) {
 			tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
 		} : {
 		};
-	const options = _.extend({}, default_options, custom_options);
+	const options = { ...default_options, ...custom_options };
 
 	sauceConnectLauncher(options, function (err, sauceConnectProcess) {
 		if (err) {
-			console.error([moment().format('HH:mm:ss:SSS')] + ' kne: There was an error starting Sauce Connect');
+			console.error([timestamp()] + ' kne: There was an error starting Sauce Connect');
 			done(err);
 		} else {
-			console.log([moment().format('HH:mm:ss:SSS')] + ' kne: Sauce Connect Ready');
+			console.log([timestamp()] + ' kne: Sauce Connect Ready');
 			sauceConnection = sauceConnectProcess;
 			sauceConnectionRunning = true;
 			setTimeout(done, 5000);
@@ -190,9 +194,9 @@ function startSauceConnect (done) {
 
 function stopSauceConnect (done) {
 	if (process.env.SAUCE_ACCESS_KEY !== undefined && sauceConnection !== null) {
-		console.log([moment().format('HH:mm:ss:SSS')] + ' kne: Stopping Sauce Connect');
+		console.log([timestamp()] + ' kne: Stopping Sauce Connect');
 		sauceConnection.close(function () {
-			console.log([moment().format('HH:mm:ss:SSS')] + ' kne: Sauce Connect Stopped');
+			console.log([timestamp()] + ' kne: Sauce Connect Stopped');
 			sauceConnectionRunning = false;
 			setTimeout(done, 60000);
 		});
@@ -210,18 +214,18 @@ function stopSauceConnect (done) {
 	}
 */
 function start (options, callback) {
-	console.log([moment().format('HH:mm:ss:SSS')] + ' kne: starting...');
+	console.log([timestamp()] + ' kne: starting...');
 
         // add the keystone instance to the module exports so that the e2e harness may use it
 	exports.keystone = options.keystone;
 
 	runNightwatch(function (err) {
-		console.log([moment().format('HH:mm:ss:SSS')] + ' kne: finishing...');
+		console.log([timestamp()] + ' kne: finishing...');
 		if (err) {
-			console.error([moment().format('HH:mm:ss:SSS')] + ' kne: finished with error\n' + err);
+			console.error([timestamp()] + ' kne: finished with error\n' + err);
 		}
 		if (selenium_proc) {
-			console.error([moment().format('HH:mm:ss:SSS')] + ' kne: terminating selenium process');
+			console.error([timestamp()] + ' kne: terminating selenium process');
 			selenium_proc.kill('SIGTERM');
 			selenium_proc.kill('SIGKILL');
 		}

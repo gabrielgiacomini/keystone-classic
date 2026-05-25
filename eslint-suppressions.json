@@ -135,11 +135,6 @@
       "count": 1
     }
   },
-  "admin/server/app/createAdminLegacyStaticRouter.mts": {
-    "jsdoc/require-jsdoc": {
-      "count": 1
-    }
-  },
   "admin/server/app/createAdminNextStaticRouter.mts": {
     "jsdoc/require-param": {
       "count": 4
@@ -171,21 +166,6 @@
       "count": 1
     }
   },
-  "admin/server/routes-legacy/index.mts": {
-    "jsdoc/require-param": {
-      "count": 2
-    }
-  },
-  "admin/server/routes-legacy/signin.mts": {
-    "jsdoc/require-param": {
-      "count": 2
-    }
-  },
-  "admin/server/routes-legacy/signout.mts": {
-    "jsdoc/require-jsdoc": {
-      "count": 1
-    }
-  },
   "fields/types/Type.mts": {
     "jsdoc/require-returns": {
       "count": 8
@@ -196,11 +176,6 @@
       "count": 1
     },
     "jsdoc/require-returns": {
-      "count": 1
-    }
-  },
-  "fields/types/cloudinary/CloudinaryType.mts": {
-    "jsdoc/require-jsdoc": {
       "count": 1
     }
   },
@@ -298,11 +273,6 @@
       "count": 8
     }
   },
-  "fields/types/password/PasswordType.mts": {
-    "jsdoc/require-returns": {
-      "count": 3
-    }
-  },
   "fields/types/relationship/RelationshipType.mts": {
     "jsdoc/require-jsdoc": {
       "count": 12
@@ -332,11 +302,6 @@
   "lib/cloudinaryClient.mts": {
     "jsdoc/require-jsdoc": {
       "count": 1
-    }
-  },
-  "lib/core/adminSurfacePathUtils.mts": {
-    "jsdoc/require-jsdoc": {
-      "count": 12
     }
   },
   "lib/core/closeDatabaseConnection.mts": {
@@ -434,11 +399,6 @@
     }
   },
   "lib/core/wrapHTMLError.mts": {
-    "jsdoc/require-jsdoc": {
-      "count": 1
-    }
-  },
-  "lib/list/add.mts": {
     "jsdoc/require-jsdoc": {
       "count": 1
     }

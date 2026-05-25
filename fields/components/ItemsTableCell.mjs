@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import classnames from '../utils/classnames.mjs';
 
 /**
  * A `<td>` element styled as a column in the items list table.
@@ -13,7 +13,7 @@ import classnames from 'classnames';
 function ItemsTableCell ({ className, ...props }) {
 	props.className = classnames('ItemList__col', className);
 
-	return <td {...props} />;
+	return React.createElement('td', props);
 };
 
 export default ItemsTableCell;

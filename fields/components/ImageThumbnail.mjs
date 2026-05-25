@@ -1,7 +1,7 @@
-import { css } from 'glamor';
-import React, { PropTypes } from 'react';
-import { Spinner } from '../../admin/client-legacy/App/elemental';
-import theme from '../../admin/client-legacy/theme';
+import { css } from '../../admin/client-legacy/utils/glamor.mjs';
+import React from 'react';
+import Spinner from '../../admin/client-legacy/compat/elemental/Spinner.mjs';
+import theme from '../../admin/client-legacy/theme.mjs';
 
 // FIXME static octicon classes leaning on Elemental to avoid duplicate
 // font and CSS; inflating the project size
@@ -31,13 +31,13 @@ const ICON_MAP = {
  * @returns {React.Element} The thumbnail wrapper element with optional mask overlay.
  */
 function ImageThumbnail ({ children, className, component, mask, ...props }) {
-	const maskUI = mask ? (
-		<div className={css(classes.mask) + ` ${ICON_MAP[mask]}`}>
-			{mask === 'loading'
-				? <Spinner color="inverted" />
-				: null}
-		</div>
-	) : null;
+	const maskUI = mask
+		? React.createElement(
+				'div',
+				{ className: css(classes.mask) + ` ${ICON_MAP[mask]}` },
+				mask === 'loading' ? React.createElement(Spinner, { color: 'inverted' }) : null
+		  )
+		: null;
 
 	// apply hover and focus styles only when using an anchor
 	props.className = css(
@@ -52,13 +52,6 @@ function ImageThumbnail ({ children, className, component, mask, ...props }) {
 	return React.createElement(component, props);
 };
 
-ImageThumbnail.propTypes = {
-	component: PropTypes.oneOfType([
-		PropTypes.string,
-		PropTypes.func,
-	]),
-	mask: PropTypes.oneOf(['loading', 'remove', 'upload']),
-};
 ImageThumbnail.defaultProps = {
 	component: 'span',
 };

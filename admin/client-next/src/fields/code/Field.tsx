@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import type { EditorView } from '@codemirror/view';
 import type { FieldProps } from '../types.js';
 import styles from './Code.module.css';
 
@@ -20,10 +21,13 @@ export function Field({
   meta,
 }: FieldProps<string>) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const viewRef = useRef<EditorView | null>(null);
+  const valueRef = useRef(value);
   // Keep a stable ref to the current onChange so the CodeMirror listener
   // never goes stale without tearing down the editor.
   const onChangeRef = useRef(onChange);
   useEffect(() => { onChangeRef.current = onChange; }, [onChange]);
+  useEffect(() => { valueRef.current = value; }, [value]);
 
   // Derive language from field metadata (set by CodeType as `lang`).
   const lang = (meta as Record<string, unknown>).lang as string | undefined;
@@ -33,8 +37,6 @@ export function Field({
     if (!container) return;
 
     let destroyed = false;
-    let view: import('@codemirror/view').EditorView | null = null;
-
     void (async () => {
       // Dynamic import — CodeMirror bundle is NOT in the main chunk.
       const [
@@ -77,22 +79,39 @@ export function Field({
       if (destroyed) return;
 
       const state = EditorState.create({
-        doc: value ?? '',
+        doc: valueRef.current ?? '',
         extensions,
       });
 
-      view = new EditorView({ state, parent: container });
+      const view = new EditorView({ state, parent: container });
+      viewRef.current = view;
+      (container as HTMLElement & { __codemirrorView?: EditorView }).__codemirrorView = view;
     })();
 
     return () => {
       destroyed = true;
-      view?.destroy();
+      viewRef.current?.destroy();
+      delete (container as HTMLElement & { __codemirrorView?: EditorView }).__codemirrorView;
+      viewRef.current = null;
     };
     // We intentionally omit `value` and `onChange` from deps:
-    // value is loaded once on mount; subsequent changes come from the
-    // update listener. isReadonly and lang may change on re-render,
-    // and we want a fresh editor when they do.
+    // onChange is kept fresh via a ref, and value is synchronized below.
+    // isReadonly and lang may change on re-render, and we want a fresh
+    // editor when they do.
   }, [fieldName, isReadonly, lang]);
+
+  useEffect(() => {
+    const view = viewRef.current;
+    if (!view) return;
+
+    const nextValue = value ?? '';
+    const currentValue = view.state.doc.toString();
+    if (currentValue === nextValue) return;
+
+    view.dispatch({
+      changes: { from: 0, to: view.state.doc.length, insert: nextValue },
+    });
+  }, [value]);
 
   return (
     <div>

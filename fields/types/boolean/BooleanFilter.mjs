@@ -7,7 +7,7 @@
  * not.
  */
 import React from 'react';
-import { SegmentedControl } from '../../../admin/client-legacy/App/elemental';
+import SegmentedControl from '../../../admin/client-legacy/compat/elemental/SegmentedControl.mjs';
 
 const VALUE_OPTIONS = [
 	{ label: 'Is Checked', value: true },
@@ -28,34 +28,24 @@ function getDefaultValue () {
  * The `BooleanFilter` component.
  * @augments React.Component
  */
-const BooleanFilter = React.createClass({
-	propTypes: {
-		filter: React.PropTypes.shape({
-			value: React.PropTypes.bool,
-		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
-	/**
-	 * Handles a change in the filter's value.
-	 * @param {boolean} value The new value.
-	 */
-	updateValue (value) {
-		this.props.onChange({ value });
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		return <SegmentedControl equalWidthSegments options={VALUE_OPTIONS} value={this.props.filter.value} onChange={this.updateValue} />;
-	},
-});
+function BooleanFilter({ filter, onChange }) {
+	return React.createElement(
+		'div',
+		{ 'data-list-filter-boolean': true },
+		React.createElement(SegmentedControl, {
+			equalWidthSegments: true,
+			options: VALUE_OPTIONS,
+			value: filter.value,
+			onChange: (value) => onChange({ value }),
+		})
+	);
+}
+
+
+BooleanFilter.defaultProps = {
+	filter: getDefaultValue(),
+};
+
+BooleanFilter.getDefaultValue = getDefaultValue;
 
 export default BooleanFilter;

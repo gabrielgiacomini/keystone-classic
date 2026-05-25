@@ -7,13 +7,10 @@
  * inverting the filter.
  */
 import React from 'react';
-import { findDOMNode } from 'react-dom';
 
-import {
-	FormField,
-	FormInput,
-	FormSelect,
-} from '../../../admin/client-legacy/App/elemental';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import FormSelect from '../../../admin/client-legacy/compat/elemental/FormSelect.mjs';
 
 const MODE_OPTIONS = [
 	{ label: 'Contains', value: 'contains' },
@@ -43,91 +40,95 @@ function getDefaultValue () {
  * The `TextArrayFilter` component.
  * @augments React.Component
  */
-const TextArrayFilter = React.createClass({
-	propTypes: {
-		filter: React.PropTypes.shape({
-			mode: React.PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
-			presence: React.PropTypes.oneOf(PRESENCE_OPTIONS.map(i => i.value)),
-			value: React.PropTypes.string,
-		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
+class TextArrayFilter extends React.Component {
+
+	static defaultProps = {
+		filter: getDefaultValue(),
+	};
+
+	static getDefaultValue = getDefaultValue;
+
+	focusTarget = () => {
+		if (this.focusTargetRef) this.focusTargetRef.focus();
+	};
+
 	/**
 	 * Updates the filter with a new value.
 	 * @param {object} value The new value.
 	 */
-	updateFilter (value) {
+	updateFilter = (value) => {
 		this.props.onChange({ ...this.props.filter, ...value });
-	},
+	};
+
 	/**
 	 * Selects a new mode for the filter.
 	 * @param {object} e The event object.
 	 */
-	selectMode (e) {
+	selectMode = (e) => {
 		const mode = e.target.value;
 		this.updateFilter({ mode });
-		findDOMNode(this.refs.focusTarget).focus();
-	},
+		this.focusTarget();
+	};
+
 	/**
 	 * Selects a new presence for the filter.
 	 * @param {object} e The event object.
 	 */
-	selectPresence (e) {
+	selectPresence = (e) => {
 		const presence = e.target.value;
 		this.updateFilter({ presence });
-		findDOMNode(this.refs.focusTarget).focus();
-	},
+		this.focusTarget();
+	};
+
 	/**
 	 * Handles a change in the value of the filter.
 	 * @param {object} e The event object.
 	 */
-	updateValue (e) {
+	updateValue = (e) => {
 		this.updateFilter({ value: e.target.value });
-	},
+	};
+
 	/**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+	render() {
 		const { filter } = this.props;
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];
 		const presence = PRESENCE_OPTIONS.filter(i => i.value === filter.presence)[0];
 		const beingVerb = mode.value === 'exactly' ? ' is ' : ' ';
 		const placeholder = presence.label + beingVerb + mode.label.toLowerCase() + '...';
 
-		return (
-			<div>
-				<FormField>
-					<FormSelect
-						onChange={this.selectPresence}
-						options={PRESENCE_OPTIONS}
-						value={presence.value}
-					/>
-				</FormField>
-				<FormField>
-					<FormSelect
-						onChange={this.selectMode}
-						options={MODE_OPTIONS}
-						value={mode.value}
-					/>
-				</FormField>
-				<FormInput
-					autoFocus
-					onChange={this.updateValue}
-					placeholder={placeholder}
-					ref="focusTarget"
-					value={this.props.filter.value}
-				/>
-			</div>
+		return React.createElement(
+			'div',
+			null,
+			React.createElement(
+				FormField,
+				null,
+				React.createElement(FormSelect, {
+					onChange: this.selectPresence,
+					options: PRESENCE_OPTIONS,
+					value: presence.value,
+				})
+			),
+			React.createElement(
+				FormField,
+				null,
+				React.createElement(FormSelect, {
+					onChange: this.selectMode,
+					options: MODE_OPTIONS,
+					value: mode.value,
+				})
+			),
+			React.createElement(FormInput, {
+				autoFocus: true,
+				onChange: this.updateValue,
+				placeholder,
+				ref: (input) => { this.focusTargetRef = input; },
+				value: this.props.filter.value,
+			})
 		);
-	},
-});
+	}
+}
 
 export default TextArrayFilter;

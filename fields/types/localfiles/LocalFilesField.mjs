@@ -7,11 +7,13 @@ TODO: this file has been left as a reference for the new File type field.
 Some features here, including size formatting and icons, may be ported across.
 */
 
-import _ from 'lodash';
 import bytes from 'bytes';
 import Field from '../Field.mjs';
 import React from 'react';
-import { Button, FormField, FormInput, FormNote } from '../../../admin/client-legacy/App/elemental';
+import Button from '../../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import FormNote from '../../../admin/client-legacy/compat/elemental/FormNote.mjs';
 
 const ICON_EXTS = [
 	'aac', 'ai', 'aiff', 'avi', 'bmp', 'c', 'cpp', 'css', 'dat', 'dmg', 'doc', 'dotx', 'dwg', 'dxf', 'eps', 'exe', 'flv', 'gif', 'h',
@@ -20,52 +22,58 @@ const ICON_EXTS = [
 	'wav', 'xls', 'xlsx', 'xml', 'yml', 'zip',
 ];
 
-const LocalFilesFieldItem = React.createClass({
-	propTypes: {
-		deleted: React.PropTypes.bool,
-		filename: React.PropTypes.string,
-		isQueued: React.PropTypes.bool,
-		size: React.PropTypes.number,
-		toggleDelete: React.PropTypes.func,
-	},
+function LocalFilesFieldItem(props) {
+	const { deleted, filename, isQueued, shouldRenderActionButton, size, toggleDelete } = props;
+	const ext = filename.split('.').pop();
 
-	renderActionButton () {
-		if (!this.props.shouldRenderActionButton || this.props.isQueued) return null;
+	let iconName = '_blank';
+	if (ICON_EXTS.includes(ext)) iconName = ext;
 
-		const buttonLabel = this.props.deleted ? 'Undo' : 'Remove';
-		const buttonType = this.props.deleted ? 'link' : 'link-cancel';
+	let note;
+	if (deleted) {
+		note = React.createElement(FormInput, {
+			key: 'delete-note',
+			noedit: true,
+			className: 'field-type-localfiles__note field-type-localfiles__note--delete',
+		}, 'save to delete');
+	} else if (isQueued) {
+		note = React.createElement(FormInput, {
+			key: 'upload-note',
+			noedit: true,
+			className: 'field-type-localfiles__note field-type-localfiles__note--upload',
+		}, 'save to upload');
+	}
 
-		return <Button key="action-button" type={buttonType} onClick={this.props.toggleDelete}>{buttonLabel}</Button>;
-	},
+	let actionButton = null;
+	if (shouldRenderActionButton && !isQueued) {
+		const buttonLabel = deleted ? 'Undo' : 'Remove';
+		const buttonType = deleted ? 'link' : 'link-cancel';
+		actionButton = React.createElement(Button, {
+			key: 'action-button',
+			type: buttonType,
+			onClick: toggleDelete,
+		}, buttonLabel);
+	}
 
-	render () {
-		const { filename } = this.props;
-		const ext = filename.split('.').pop();
+	return React.createElement(
+		FormField,
+		null,
+		React.createElement('img', {
+			key: 'file-type-icon',
+			className: 'file-icon',
+			src: Keystone.adminLegacyPath + '/images/icons/32/' + iconName + '.png',
+		}),
+		React.createElement(
+			FormInput,
+			{ key: 'file-name', noedit: true, className: 'field-type-localfiles__filename' },
+			filename,
+			size ? ' (' + bytes(size) + ')' : null
+		),
+		note,
+		actionButton
+	);
+}
 
-		let iconName = '_blank';
-		if (_.includes(ICON_EXTS, ext)) iconName = ext;
-
-		let note;
-		if (this.props.deleted) {
-			note = <FormInput key="delete-note" noedit className="field-type-localfiles__note field-type-localfiles__note--delete">save to delete</FormInput>;
-		} else if (this.props.isQueued) {
-			note = <FormInput key="upload-note" noedit className="field-type-localfiles__note field-type-localfiles__note--upload">save to upload</FormInput>;
-		}
-
-		return (
-			<FormField>
-				<img key="file-type-icon" className="file-icon" src={Keystone.adminLegacyPath + '/images/icons/32/' + iconName + '.png'} />
-				<FormInput key="file-name" noedit className="field-type-localfiles__filename">
-					{filename}
-					{this.props.size ? ' (' + bytes(this.props.size) + ')' : null}
-				</FormInput>
-				{note}
-				{this.renderActionButton()}
-			</FormField>
-		);
-	},
-
-});
 
 let tempId = 0;
 
@@ -73,10 +81,9 @@ export default Field.create({
 
 	getInitialState () {
 		const items = [];
-		const self = this;
 
-		_.forEach(this.props.value, function (item) {
-			self.pushItem(item, items);
+		(this.props.value || []).forEach((item) => {
+			this.pushItem(item, items);
 		});
 
 		return { items: items };
@@ -84,13 +91,12 @@ export default Field.create({
 
 	removeItem (id) {
 		const thumbs = [];
-		const self = this;
-		_.forEach(this.state.items, function (thumb) {
+		this.state.items.forEach((thumb) => {
 			const newProps = Object.assign({}, thumb.props);
 			if (thumb.props._id === id) {
 				newProps.deleted = !thumb.props.deleted;
 			}
-			self.pushItem(newProps, thumbs);
+			this.pushItem(newProps, thumbs);
 		});
 
 		this.setState({ items: thumbs });
@@ -101,15 +107,23 @@ export default Field.create({
 		args.toggleDelete = this.removeItem.bind(this, args._id);
 		args.shouldRenderActionButton = this.shouldRenderField();
 		args.adminLegacyPath = Keystone.adminLegacyPath;
-		thumbs.push(<LocalFilesFieldItem key={args._id || tempId++} {...args} />);
+		thumbs.push(React.createElement(LocalFilesFieldItem, { key: args._id || tempId++, ...args }));
 	},
 
 	fileFieldNode () {
-		return this.refs.fileField;
+		return this.fileField;
 	},
 
 	renderFileField () {
-		return <input ref="fileField" type="file" name={this.props.paths.upload} multiple className="field-upload" onChange={this.uploadFile} tabIndex="-1" />;
+		return React.createElement('input', {
+			ref: (fileField) => { this.fileField = fileField; },
+			type: 'file',
+			name: this.props.paths.upload,
+			multiple: true,
+			className: 'field-upload',
+			onChange: this.uploadFile,
+			tabIndex: '-1',
+		});
 	},
 
 	clearFiles () {
@@ -123,12 +137,10 @@ export default Field.create({
 	},
 
 	uploadFile (event) {
-		const self = this;
-
 		const files = event.target.files;
-		_.forEach(files, function (f) {
-			self.pushItem({ isQueued: true, filename: f.name });
-			self.forceUpdate();
+		Array.from(files).forEach((f) => {
+			this.pushItem({ isQueued: true, filename: f.name });
+			this.forceUpdate();
 		});
 	},
 
@@ -137,7 +149,7 @@ export default Field.create({
 	},
 
 	hasFiles () {
-		return this.refs.fileField && this.fileFieldNode().value;
+		return this.fileFieldNode() && this.fileFieldNode().value;
 	},
 
 	renderToolbar () {
@@ -145,72 +157,90 @@ export default Field.create({
 
 		let clearFilesButton;
 		if (this.hasFiles()) {
-			clearFilesButton = <Button type="link-cancel" className="ml-5" onClick={this.clearFiles}>Clear Uploads</Button>;
+			clearFilesButton = React.createElement(Button, {
+				type: 'link-cancel',
+				className: 'ml-5',
+				onClick: this.clearFiles,
+			}, 'Clear Uploads');
 		}
 
-		return (
-			<div className="files-toolbar">
-				<Button onClick={this.changeFiles}>Upload</Button>
-				{clearFilesButton}
-			</div>
+		return React.createElement(
+			'div',
+			{ className: 'files-toolbar' },
+			React.createElement(Button, { onClick: this.changeFiles }, 'Upload'),
+			clearFilesButton
 		);
 	},
 
 	renderPlaceholder () {
-		return (
-			<div className="file-field file-upload" onClick={this.changeFiles}>
-				<div className="file-preview">
-					<span className="file-thumbnail">
-						<span className="file-dropzone" />
-						<div className="ion-picture file-uploading" />
-					</span>
-				</div>
-
-				<div className="file-details">
-					<span className="file-message">Click to upload</span>
-				</div>
-			</div>
+		return React.createElement(
+			'div',
+			{ className: 'file-field file-upload', onClick: this.changeFiles },
+			React.createElement(
+				'div',
+				{ className: 'file-preview' },
+				React.createElement(
+					'span',
+					{ className: 'file-thumbnail' },
+					React.createElement('span', { className: 'file-dropzone' }),
+					React.createElement('div', { className: 'ion-picture file-uploading' })
+				)
+			),
+			React.createElement(
+				'div',
+				{ className: 'file-details' },
+				React.createElement('span', { className: 'file-message' }, 'Click to upload')
+			)
 		);
 	},
 
 	renderContainer () {
-		return (
-			<div className="files-container clearfix">
-				{this.state.items}
-			</div>
-		);
+		return React.createElement('div', { className: 'files-container clearfix' }, this.state.items);
 	},
 
 	renderFieldAction () {
 		let value = '';
 		const remove = [];
-		_.forEach(this.state.items, function (thumb) {
+		this.state.items.forEach(function (thumb) {
 			if (thumb && thumb.props.deleted) remove.push(thumb.props._id);
 		});
 		if (remove.length) value = 'delete:' + remove.join(',');
 
-		return <input ref="action" className="field-action" type="hidden" value={value} name={this.props.paths.action} />;
+		return React.createElement('input', {
+			className: 'field-action',
+			type: 'hidden',
+			value,
+			name: this.props.paths.action,
+		});
 	},
 
 	renderUploadsField () {
-		return <input ref="uploads" className="field-uploads" type="hidden" name={this.props.paths.uploads} />;
+		return React.createElement('input', {
+			className: 'field-uploads',
+			type: 'hidden',
+			name: this.props.paths.uploads,
+		});
 	},
 
 	renderNote: function () {
 		if (!this.props.note) return null;
-		return <FormNote html={this.props.note} />;
+		return React.createElement(FormNote, { html: this.props.note });
 	},
 
 	renderUI () {
-		return (
-			<FormField label={this.props.label} className="field-type-localfiles" htmlFor={this.props.path}>
-				{this.renderFieldAction()}
-				{this.renderUploadsField()}
-				{this.renderFileField()}
-				{this.renderContainer()}
-				{this.renderToolbar()}
-				{this.renderNote()}
-			</FormField>
+		return React.createElement(
+			FormField,
+			{
+				label: this.props.label,
+				className: 'field-type-localfiles',
+				htmlFor: this.props.path,
+			},
+			this.renderFieldAction(),
+			this.renderUploadsField(),
+			this.renderFileField(),
+			this.renderContainer(),
+			this.renderToolbar(),
+			this.renderNote()
 		);
 	},
 });

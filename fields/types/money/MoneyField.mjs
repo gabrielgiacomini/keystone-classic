@@ -3,9 +3,9 @@
  * This file defines the `MoneyField` component, which is used to render a
  * money field in the KeystoneJS Admin UI.
  */
-import { FormInput } from '../../../admin/client-legacy/App/elemental';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
 import Field from '../Field.mjs';
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 /**
  * The `MoneyField` component.
@@ -13,14 +13,6 @@ import React, { PropTypes } from 'react';
  */
 export default Field.create({
 	displayName: 'MoneyField',
-	propTypes: {
-		onChange: PropTypes.func.isRequired,
-		path: PropTypes.string.isRequired,
-		value: PropTypes.oneOfType([
-			PropTypes.string,
-			PropTypes.number,
-		]),
-	},
 	statics: {
 		type: 'Money',
 	},
@@ -43,15 +35,13 @@ export default Field.create({
 	 * @returns {React.Element} The rendered field.
 	 */
 	renderField () {
-		return (
-			<FormInput
-				autoComplete="off"
-				name={this.getInputName(this.props.path)}
-				onChange={this.valueChanged}
-				ref="focusTarget"
-				value={this.props.value}
-			/>
-		);
+		return React.createElement(FormInput, {
+			autoComplete: 'off',
+			name: this.getInputName(this.props.path),
+			onChange: this.valueChanged,
+			ref: this.getFocusTargetRef(),
+			value: this.props.value,
+		});
 	},
 
 });

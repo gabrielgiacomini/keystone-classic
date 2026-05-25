@@ -1,11 +1,10 @@
-import fs from 'node:fs';
 import DatetimeField from '../DatetimeField.mjs';
 import DatetimeFilter from '../DatetimeFilter.mjs';
 
 export default {
 	Field: DatetimeField,
 	Filter: DatetimeFilter,
-	readme: fs.readFileSync('./fields/types/datetime/Readme.md', 'utf8'),
+	readme: '',
 	section: 'Date',
 	spec: {
 		label: 'Datetime',

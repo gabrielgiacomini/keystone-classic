@@ -7,9 +7,9 @@
  * field types in KeystoneJS, and to interact with them in a live environment.
  * @see {@link http://localhost:8001}
  */
-import React, { Children, cloneElement, Component, PropTypes } from 'react';
-import { Link, Router, Route, browserHistory, IndexRoute } from 'react-router';
-import ReactDOM from 'react-dom';
+import React, { Children, cloneElement, Component } from 'react';
+import { Link, Router, Route, browserHistory, IndexRoute } from '../../admin/client-legacy/router.mjs';
+import { createRoot } from 'react-dom/client';
 import FieldType from './components/FieldType.mjs';
 
 import Boolean from '../types/boolean/test/explorer.mjs';
@@ -67,10 +67,6 @@ const navSections = generateNavSections(Object.keys(Types).map(i => Types[i]));
  * @augments React.Component
  */
 class App extends Component {
-	static propTypes = {
-		children: PropTypes.node,
-		params: PropTypes.object,
-	};
 	constructor () {
 		super();
 		this.toggleSidebar = this.toggleSidebar.bind(this);
@@ -90,63 +86,66 @@ class App extends Component {
 		const { children, params } = this.props;
 		const { sidebarIsOpen } = this.state;
 
-		return (
-			<div className={`fx-wrapper ${sidebarIsOpen ? 'fx-wrapper--sidebar-is-open' : ''}`}>
-				<div className="fx-sidebar">
-					<div className="fx-sidebar__header">
-						{params.type
-							? <Link to="/" className="fx-sidebar__header__link">Field Types</Link>
-							: 'Ready'}
-						<div className="fx-sidebar__header__border" />
-					</div>
-					{Object.keys(navSections).sort().map(section => {
-						let currentSection;
-						const types = navSections[section].map(type => {
+		const sidebarSections = Object.keys(navSections).sort().map(section => {
+			const currentSection = Types[params.type]?.section;
+			const types = navSections[section].map(type => {
+				const itemClassName = params.type === type
+					? 'fx-sidebar__item fx-sidebar__item--active'
+					: 'fx-sidebar__item';
 
-							if (Types[params.type]) {
-								currentSection = Types[params.type].section;
-							}
+				return React.createElement(
+					Link,
+					{ key: type, to: `/${type}`, className: itemClassName },
+					type,
+				);
+			});
 
-							const itemClassName = params.type === type
-								? 'fx-sidebar__item fx-sidebar__item--active'
-								: 'fx-sidebar__item';
+			const sectionClassName = currentSection === section
+				? 'fx-sidebar__section fx-sidebar__section--active'
+				: 'fx-sidebar__section';
 
-							return (
-								<Link key={type} to={`/${type}`} className={itemClassName}>
-									{type}
-								</Link>
-							);
-						});
+			return React.createElement(
+				'div',
+				{ key: section, className: sectionClassName },
+				React.createElement('div', { className: 'fx-sidebar__section__title' }, section),
+				types,
+			);
+		});
 
-						const sectionClassName = currentSection === section
-							? 'fx-sidebar__section fx-sidebar__section--active'
-							: 'fx-sidebar__section';
+		const bodyChildren = Children.map(children, (child) => {
+			if (!params.type) return child;
 
-						return (
-							<div key={section} className={sectionClassName}>
-								<div key={section} className="fx-sidebar__section__title">{section}</div>
-								{types}
-							</div>
-						);
-					})}
-				</div>
-				<div className="fx-body">{Children.map(children, (child) => {
-					if (!params.type) return child;
+			const Type = Types[params.type];
 
-					const Type = Types[params.type];
+			return cloneElement(child, {
+				FieldComponent: Type.Field,
+				FilterComponent: Type.Filter,
+				filter: Type.Filter.getDefaultValue(),
+				readme: Type.readme,
+				section: Type.section,
+				spec: Type.spec,
+				toggleSidebar: this.toggleSidebar,
+				value: Type.spec.value,
+			});
+		});
 
-					return cloneElement(child, {
-						FieldComponent: Type.Field,
-						FilterComponent: Type.Filter,
-						filter: Type.Filter.getDefaultValue(),
-						readme: Type.readme,
-						section: Type.section,
-						spec: Type.spec,
-						toggleSidebar: this.toggleSidebar,
-						value: Type.spec.value,
-					});
-				})}</div>
-			</div>
+		return React.createElement(
+			'div',
+			{ className: `fx-wrapper ${sidebarIsOpen ? 'fx-wrapper--sidebar-is-open' : ''}` },
+			React.createElement(
+				'div',
+				{ className: 'fx-sidebar' },
+				React.createElement(
+					'div',
+					{ className: 'fx-sidebar__header' },
+					params.type
+						? React.createElement(Link, { to: '/', className: 'fx-sidebar__header__link' }, 'Field Types')
+						: 'Ready',
+					React.createElement('div', { className: 'fx-sidebar__header__border' }),
+				),
+				sidebarSections,
+			),
+			React.createElement('div', { className: 'fx-body' }, bodyChildren),
 		);
 	}
 };
@@ -157,22 +156,30 @@ class App extends Component {
  * @returns {React.Element} The rendered component.
  */
 const Home = (_props) => {
-	return (
-		<div className="fx-welcome">
-			<div className="fx-welcome__inner">
-				<h1 className="fx-welcome__heading">Welcome!</h1>
-				<div className="fx-welcome__content">Select a field on the left to begin exploring...</div>
-			</div>
-		</div>
+	return React.createElement(
+		'div',
+		{ className: 'fx-welcome' },
+		React.createElement(
+			'div',
+			{ className: 'fx-welcome__inner' },
+			React.createElement('h1', { className: 'fx-welcome__heading' }, 'Welcome!'),
+			React.createElement('div', { className: 'fx-welcome__content' }, 'Select a field on the left to begin exploring...'),
+		),
 	);
 };
 
-ReactDOM.render(
-	<Router history={browserHistory}>
-		<Route path="/" component={App}>
-			<IndexRoute component={Home} />
-			<Route path=":type" component={FieldType} />
-		</Route>
-	</Router>,
-	document.getElementById('explorer')
-);
+const rootElement = document.getElementById('explorer');
+if (!rootElement) {
+	throw new Error('Field explorer root element not found');
+}
+
+createRoot(rootElement).render(React.createElement(
+	Router,
+	{ history: browserHistory },
+	React.createElement(
+		Route,
+		{ path: '/', component: App },
+		React.createElement(IndexRoute, { component: Home }),
+		React.createElement(Route, { path: ':type', component: FieldType }),
+	),
+));

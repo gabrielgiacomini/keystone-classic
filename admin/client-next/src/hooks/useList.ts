@@ -10,6 +10,7 @@ interface UseListOptions {
   filters?: Record<string, unknown>;
   fields?: string[];
   expandRelationshipFields?: boolean;
+  enabled?: boolean;
 }
 
 interface UseListResult {
@@ -28,6 +29,7 @@ export function useList(listKey: string, options: UseListOptions = {}): UseListR
     filters = {},
     fields,
     expandRelationshipFields,
+    enabled = true,
   } = options;
   const skip = (page - 1) * pageSize;
 
@@ -46,6 +48,7 @@ export function useList(listKey: string, options: UseListOptions = {}): UseListR
       { page, pageSize, search, sort, filters, fields, expandRelationshipFields },
     ],
     queryFn: () => fetchList(listKey, params, { fields, expandRelationshipFields }),
+    enabled,
   });
 
   return {

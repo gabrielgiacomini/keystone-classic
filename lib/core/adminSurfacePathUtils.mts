@@ -1,6 +1,7 @@
 import type { Keystone } from '../../index.mjs';
 
 export type AdminClientMode = false | 'legacy' | 'next' | 'both';
+export type AdminClientModeOption = AdminClientMode | 'auto';
 
 export interface AdminSurfacePaths {
 	adminLegacyPath: string;
@@ -8,7 +9,40 @@ export interface AdminSurfacePaths {
 	adminApiPath: string;
 }
 
-type KeystoneLike = Pick<Keystone, 'get'>;
+type KeystoneLike = Pick<Keystone, 'get'> & Partial<Pick<Keystone, 'fieldTypes'>>;
+
+const builtInLegacyFieldTypeNames = new Set([
+	'boolean',
+	'cloudinary',
+	'cloudinaryimage',
+	'cloudinaryimages',
+	'code',
+	'color',
+	'date',
+	'datearray',
+	'datetime',
+	'email',
+	'file',
+	'geopoint',
+	'html',
+	'key',
+	'localfile',
+	'localfiles',
+	'location',
+	'markdown',
+	'money',
+	'name',
+	'number',
+	'numberarray',
+	'password',
+	'relationship',
+	'select',
+	'text',
+	'textarea',
+	'textarray',
+	'url',
+	'wysiwyg',
+]);
 
 export function normalizeAdminPath(value: unknown, fallback: string, optionName: string): string {
 	const raw = typeof value === 'string' && value.trim() ? value.trim() : fallback;
@@ -77,12 +111,54 @@ function formatOptionValue(value: unknown): string {
 	return Object.prototype.toString.call(value);
 }
 
-export function getAdminClientMode(keystone: KeystoneLike): AdminClientMode {
-	const raw = (keystone.get('admin ui') ?? 'legacy') as unknown;
-	if (raw === false || raw === 'legacy' || raw === 'next' || raw === 'both') {
-		return raw;
+function normalizeAdminClientModeOption(value: unknown, source: string): AdminClientModeOption {
+	if (value === false || value === 'legacy' || value === 'next' || value === 'both' || value === 'auto') {
+		return value;
 	}
-	throw new Error(`Keystone: unknown 'admin ui' value "${formatOptionValue(raw)}". Expected false, 'legacy', 'next', or 'both'.`);
+	throw new Error(`Keystone: unknown '${source}' value "${formatOptionValue(value)}". Expected false, 'legacy', 'next', 'both', or 'auto'.`);
+}
+
+function getAdminClientModeOption(keystone: KeystoneLike): AdminClientModeOption {
+	const envMode = process.env.KEYSTONE_ADMIN_CLIENT;
+	if (envMode !== undefined && envMode !== '') {
+		return normalizeAdminClientModeOption(envMode, 'KEYSTONE_ADMIN_CLIENT');
+	}
+	return normalizeAdminClientModeOption(keystone.get('admin ui') ?? 'legacy', 'admin ui');
+}
+
+export function hasCustomLegacyFieldTypes(fieldTypes: Record<string, unknown> | undefined): boolean {
+	return Object.keys(fieldTypes ?? {}).some((typeName) => !builtInLegacyFieldTypeNames.has(typeName));
+}
+
+export interface AdminClientModeDecision {
+	requested: AdminClientModeOption;
+	mode: AdminClientMode;
+	reason?: string;
+}
+
+export function getAdminClientModeDecision(keystone: KeystoneLike): AdminClientModeDecision {
+	const mode = getAdminClientModeOption(keystone);
+	if (mode !== 'auto') {
+		return { requested: mode, mode };
+	}
+
+	if (hasCustomLegacyFieldTypes(keystone.fieldTypes)) {
+		return {
+			requested: 'auto',
+			mode: 'legacy',
+			reason: 'custom legacy field browser code was detected',
+		};
+	}
+
+	return {
+		requested: 'auto',
+		mode: 'next',
+		reason: 'only built-in field browser code was detected',
+	};
+}
+
+export function getAdminClientMode(keystone: KeystoneLike): AdminClientMode {
+	return getAdminClientModeDecision(keystone).mode;
 }
 
 export function getAdminApiEnabled(keystone: KeystoneLike, adminClientMode: AdminClientMode = getAdminClientMode(keystone)): boolean {

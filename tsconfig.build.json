@@ -11,6 +11,8 @@
     "index.mts",
     "lib/**/*.mts",
     "server/**/*.mts",
+    "admin/shared/**/*.ts",
+    "admin/shared/**/*.mjs",
     "admin/server/**/*.mts",
     "fields/types/**/*.mts",
     "fields/types/**/*Field.mjs",

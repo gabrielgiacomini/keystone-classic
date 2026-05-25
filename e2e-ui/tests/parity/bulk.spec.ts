@@ -16,12 +16,100 @@ test.describe.configure({ mode: 'serial' });
 
 const LIST_KEY = 'Post';
 const LIST_PATH = 'posts';
+const COMPACT_LIST_KEY = 'CompactPost';
+const COMPACT_LIST_PATH = 'compact-posts';
+
+async function seedCompactPosts(count: number): Promise<void> {
+	await withMongo(async (db) => {
+		const existing = await db.listCollections({ name: 'CompactPost' }).toArray();
+		if (existing.length > 0) await db.dropCollection('CompactPost');
+		const now = new Date('2026-05-24T12:00:00.000Z');
+		const docs = Array.from({ length: count }, (_, index) => ({
+			title: `Compact Bulk Post ${String(index + 1).padStart(2, '0')}`,
+			createdAt: now,
+			updatedAt: now,
+		}));
+		await db.collection('CompactPost').insertMany(docs, { ordered: false });
+	});
+}
 
 test.beforeEach(async () => {
 	await seedPostsAndEditors();
 });
 
 test.describe('Parity: Bulk delete', () => {
+	test('cross-page All selection deletes every row from a paginated list in both UIs', async ({
+		adminLegacy,
+		adminNext,
+	}) => {
+		await seedCompactPosts(7);
+		await adminLegacy.gotoList(COMPACT_LIST_PATH);
+		await expect(adminLegacy.page.locator('[data-list-row]')).toHaveCount(3);
+		await adminLegacy.page.locator('[data-list-management-toggle]').click();
+		const legacyAllResponse = adminLegacy.page.waitForResponse(
+			(r) =>
+				r.url().includes(`/keystone-api/${COMPACT_LIST_PATH}`) &&
+				r.request().method() === 'GET',
+		);
+		await adminLegacy.page.locator('[data-list-management-select-all]').click();
+		await legacyAllResponse;
+		await expect(adminLegacy.page.locator('[data-list-management-selected-count]')).toHaveText(
+			/^\s*7\s+selected\s*$/i,
+		);
+		await adminLegacy.bulkDelete();
+		await expect
+			.poll(() => withMongo((db) => db.collection('CompactPost').countDocuments()))
+			.toBe(0);
+
+		await seedCompactPosts(7);
+		await adminNext.gotoList(COMPACT_LIST_KEY);
+		await expect(adminNext.page.locator('[data-list-row]')).toHaveCount(3);
+		await adminNext.page.locator('[data-list-management-toggle]').click();
+		const adminNextAllResponse = adminNext.page.waitForResponse(
+			(r) => {
+				const url = new URL(r.url());
+				return url.pathname.includes(`/keystone-api/${COMPACT_LIST_KEY}`) &&
+					url.searchParams.get('limit') === '7' &&
+					r.request().method() === 'GET';
+			},
+		);
+		await adminNext.page.locator('[data-list-management-select-all]').click();
+		await adminNextAllResponse;
+		await expect(adminNext.page.locator('[data-list-management] [data-list-management-selected-count]').getByText('7 selected'))
+			.toBeVisible();
+		await adminNext.bulkDelete();
+		await expect
+			.poll(() => withMongo((db) => db.collection('CompactPost').countDocuments()))
+			.toBe(0);
+	});
+
+	test('visible-page all and none selection controls update selected counts in both UIs', async ({
+		adminLegacy,
+		adminNext,
+	}) => {
+		await adminLegacy.gotoList(LIST_PATH);
+		const legacyVisibleCount = await adminLegacy.getRowCount();
+		expect(legacyVisibleCount).toBeGreaterThan(0);
+		await adminLegacy.page.locator('[data-list-management-toggle]').click();
+		await adminLegacy.page.locator('[data-list-management-select-visible]').click();
+		await expect(adminLegacy.page.locator('[data-list-management-selected-count]')).toHaveText(
+			new RegExp(`^\\s*${legacyVisibleCount}\\s+selected\\s*$`, 'i'),
+		);
+		await adminLegacy.page.locator('[data-list-management-select-none]').click();
+		await expect(adminLegacy.page.locator('[data-list-management-selected-count]')).toHaveText(/^\s*0\s+selected\s*$/i);
+
+		await adminNext.gotoList(LIST_KEY);
+		const adminNextVisibleCount = await adminNext.getRowCount();
+		expect(adminNextVisibleCount).toBe(legacyVisibleCount);
+		await adminNext.page.locator('[data-list-management-toggle]').click();
+		await adminNext.page.locator('[data-list-management-select-visible]').click();
+		await expect(adminNext.page.locator('[data-list-management] [data-list-management-selected-count]').getByText(`${adminNextVisibleCount} selected`))
+			.toBeVisible();
+		await adminNext.page.locator('[data-list-management-select-none]').click();
+		await expect(adminNext.page.locator('[data-list-management] [data-list-management-selected-count]').getByText('0 selected'))
+			.toBeVisible();
+	});
+
 	test('adminLegacy: select 2 rows → bulk delete → list shows N-2 rows', async ({ adminLegacy }) => {
 		const before = await withMongo((db) =>
 			db.collection('Post').countDocuments(),

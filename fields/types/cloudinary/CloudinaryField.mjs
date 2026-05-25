@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function CloudinaryField (props) {
 	const Component = Array.isArray(props.value) ? CloudinaryImagesField : CloudinaryImageField;
-	return <Component {...props} />;
+	return React.createElement(Component, props);
 }
 
 CloudinaryField.displayName = 'CloudinaryField';

@@ -4,20 +4,17 @@
  */
 import React from 'react';
 
-const LocalFilesColumn = React.createClass({
-	renderValue: function () {
-		const value = this.props.data.fields[this.props.col.path];
-		if (value.length === 0) return '';
-		const fileOrFiles = (value.length > 1) ? 'Files' : 'File';
-		return value.length + ' ' + fileOrFiles;
-	},
-	render: function () {
-		return (
-			<td className="ItemList__col">
-				<div className="ItemList__value ItemList__value--local-files">{this.renderValue()}</div>
-			</td>
-		);
-	},
-});
+function LocalFilesColumn({ col, data }) {
+	const value = data.fields[col.path];
+	const renderedValue = value.length === 0
+		? ''
+		: value.length + ' ' + (value.length > 1 ? 'Files' : 'File');
+
+	return React.createElement(
+		'td',
+		{ className: 'ItemList__col' },
+		React.createElement('div', { className: 'ItemList__value ItemList__value--local-files' }, renderedValue),
+	);
+}
 
 export default LocalFilesColumn;

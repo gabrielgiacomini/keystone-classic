@@ -12,43 +12,26 @@ import displayName from '../../../lib/utils/displayName.mjs';
  * The `NameColumn` component.
  * @augments React.Component
  */
-const NameColumn = React.createClass({
-	displayName: 'NameColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-		linkTo: React.PropTypes.string,
-	},
-	/**
-	 * Renders the value of the field.
-	 * @returns {(string|React.Element)} The rendered value.
-	 */
-	renderValue () {
-		const value = this.props.data.fields[this.props.col.path];
-		if (!value || (!value.first && !value.last)) return '(no name)';
-		return displayName(value.first, value.last);
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		return (
-			<ItemsTableCell
-				data-list-row-edit={this.props.linkTo ? true : undefined}
-				data-item-id={this.props.linkTo ? this.props.data.id : undefined}
-			>
-				<ItemsTableValue
-					to={this.props.linkTo}
-					padded
-					interior
-					field={this.props.col.type}
-				>
-					{this.renderValue()}
-				</ItemsTableValue>
-			</ItemsTableCell>
-		);
-	},
-});
+function NameColumn({ col, data, linkTo }) {
+	const value = data.fields[col.path];
+	const renderedValue = !value || (!value.first && !value.last)
+		? '(no name)'
+		: displayName(value.first, value.last);
+
+	return React.createElement(
+		ItemsTableCell,
+		{
+			'data-list-row-edit': linkTo ? true : undefined,
+			'data-item-id': linkTo ? data.id : undefined,
+		},
+		React.createElement(ItemsTableValue, {
+			to: linkTo,
+			padded: true,
+			interior: true,
+			field: col.type,
+		}, renderedValue),
+	);
+}
+
 
 export default NameColumn;

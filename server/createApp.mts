@@ -26,12 +26,34 @@ import { createAdminLegacyStaticRouter, createAdminApiRouter, createAdminLegacyR
 import createAdminNextStaticRouter, { createAdminNextIndexRouter } from '../admin/server/app/createAdminNextStaticRouter.mjs';
 import {
 	assertDistinctAdminSurfacePaths,
+	type AdminClientMode,
 	getAdminApiEnabled,
 	getAdminSurfacePaths,
-	getAdminClientMode,
+	getAdminClientModeDecision,
 	getAdminLegacyApiAliasEnabled,
 	getAdminLegacyApiAliasPath,
 } from '../lib/core/adminSurfacePathUtils.mjs';
+
+function uniquePaths(paths: string[]): string[] {
+	return Array.from(new Set(paths));
+}
+
+function getAdminLegacyMountPaths(mode: AdminClientMode, adminLegacyPath: string): string[] {
+	if (mode === 'legacy' || mode === 'both') {
+		return [adminLegacyPath];
+	}
+	return [];
+}
+
+function getAdminNextMountPaths(mode: AdminClientMode, adminLegacyPath: string, adminNextPath: string): string[] {
+	if (mode === 'next') {
+		return uniquePaths([adminLegacyPath, adminNextPath]);
+	}
+	if (mode === 'both') {
+		return [adminNextPath];
+	}
+	return [];
+}
 
 export default function createApp(keystone: Keystone, expressApp?: (() => Application)): Application {
 	if (!keystone.app) {
@@ -104,19 +126,31 @@ export default function createApp(keystone: Keystone, expressApp?: (() => Applic
 		app.get('/favicon.ico', (_req: Request, res: Response) => { res.sendFile(faviconPath); });
 	}
 
-	const adminClientMode = getAdminClientMode(keystone);
+	const adminClientModeDecision = getAdminClientModeDecision(keystone);
+	const adminClientMode = adminClientModeDecision.mode;
+	if (adminClientModeDecision.requested === 'auto') {
+		console.warn(
+			`Keystone: admin ui auto selected '${adminClientMode}' because ${adminClientModeDecision.reason}.`
+		);
+	}
 	const adminSurfacePaths = getAdminSurfacePaths(keystone);
 	assertDistinctAdminSurfacePaths(adminSurfacePaths);
+	const { adminLegacyPath, adminNextPath } = adminSurfacePaths;
 	const shouldMountAdminClients = !keystone.get('headless') && adminClientMode !== false;
 	const shouldMountAdminApi = getAdminApiEnabled(keystone, adminClientMode);
+	const adminLegacyMountPaths = shouldMountAdminClients
+		? getAdminLegacyMountPaths(adminClientMode, adminLegacyPath)
+		: [];
+	const adminNextMountPaths = shouldMountAdminClients
+		? getAdminNextMountPaths(adminClientMode, adminLegacyPath, adminNextPath)
+		: [];
 
 	if (shouldMountAdminClients) {
-		const { adminLegacyPath, adminNextPath } = adminSurfacePaths;
-		if (adminClientMode === 'legacy' || adminClientMode === 'both') {
-			app.use(adminLegacyPath, createAdminLegacyStaticRouter(keystone));
+		for (const path of adminLegacyMountPaths) {
+			app.use(path, createAdminLegacyStaticRouter(keystone));
 		}
-		if (adminClientMode === 'next' || adminClientMode === 'both') {
-			app.use(adminNextPath, createAdminNextStaticRouter(keystone));
+		for (const path of adminNextMountPaths) {
+			app.use(path, createAdminNextStaticRouter(keystone));
 		}
 	}
 
@@ -165,11 +199,11 @@ export default function createApp(keystone: Keystone, expressApp?: (() => Applic
 				app.use(getAdminLegacyApiAliasPath(keystone), createAdminApiRouter(keystone));
 			}
 		}
-		if (shouldMountAdminClients && (adminClientMode === 'legacy' || adminClientMode === 'both')) {
-			app.use(adminSurfacePaths.adminLegacyPath, createAdminLegacyRouter(keystone));
+		for (const path of adminLegacyMountPaths) {
+			app.use(path, createAdminLegacyRouter(keystone));
 		}
-		if (shouldMountAdminClients && (adminClientMode === 'next' || adminClientMode === 'both')) {
-			app.use(adminSurfacePaths.adminNextPath, createAdminNextIndexRouter(keystone));
+		for (const path of adminNextMountPaths) {
+			app.use(path, createAdminNextIndexRouter(keystone));
 		}
 	}
 

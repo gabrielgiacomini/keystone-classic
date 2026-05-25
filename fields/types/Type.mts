@@ -13,7 +13,6 @@
  */
 import type { Schema, Document as MongooseDoc } from 'mongoose';
 import type { PathConstructor } from '../../lib/path.mjs';
-import _ from 'lodash';
 import { marked } from 'marked';
 import Path from '../../lib/path.mjs';
 import { defer } from '../../lib/utils/async.mjs';
@@ -25,6 +24,10 @@ import __debug_factory from 'debug';
 const debug = __debug_factory('keystone:fields:types:Type');
 
 const FN_ARGS = /^function\s*[^(]*\(\s*([^)]*)\)/m;
+function isObjectLike(value: unknown): value is Record<string, unknown> {
+	return value !== null && typeof value === 'object';
+}
+
 function callWithCallback (fn: (this: MongooseDocument, callback?: (err: unknown, val?: unknown) => void) => unknown, context: MongooseDocument, callback: (err: unknown, val?: unknown) => void): void {
 	const params = (FN_ARGS.exec(Function.prototype.toString.call(fn))?.[1] ?? '').split(',').map((s: string) => s.trim()).filter(Boolean);
 	if (params.at(-1) === 'callback') {
@@ -186,7 +189,10 @@ abstract class FieldType<
 		const ctor = this.constructor as typeof FieldType & { typeName?: string; name: string };
 		const constructorName = ctor.typeName ?? ctor.name;
 		this.type = constructorName.endsWith('_') ? constructorName.slice(0, -1) : constructorName;
-		this.options = _.defaults({}, options, (this as Record<string, unknown>).defaults); // TODO(strict-types): `defaults` is set by subclasses, not declared on base
+		this.options = {
+			...((this as Record<string, unknown>).defaults as Record<string, unknown> | undefined),
+			...options,
+		} as TServerOptions; // TODO(strict-types): `defaults` is set by subclasses, not declared on base
 		this.label = options.label || keyToLabel(this.path);
 		this.typeDescription = options.typeDescription || this.typeDescription || this.type;
 
@@ -241,7 +247,7 @@ abstract class FieldType<
 			const cache: Record<string, unknown> = {};
 			this.__options = cache;
 			let optionKeys = DEFAULT_OPTION_KEYS;
-			if (_.isArray(this._properties)) {
+			if (Array.isArray(this._properties)) {
 				optionKeys = optionKeys.concat(this._properties);
 			}
 			const self = this as Record<string, unknown>;
@@ -312,7 +318,7 @@ abstract class FieldType<
 			}
 			if (typeof this.options.watch === 'function') {
 				applyValue = this.options.watch;
-			} else if (_.isArray(this.options.watch)) {
+			} else if (Array.isArray(this.options.watch)) {
 				const watchPaths = this.options.watch;
 				applyValue = function (item: MongooseDocument) {
 					let pass = false;
@@ -321,11 +327,11 @@ abstract class FieldType<
 					});
 					return pass;
 				};
-			} else if (_.isObject(this.options.watch)) {
+			} else if (isObjectLike(this.options.watch)) {
 				const watchMap = this.options.watch;
 				applyValue = function (item: MongooseDocument) {
 					let pass = false;
-					_.forEach(watchMap, function (value: unknown, path: string) {
+					Object.entries(watchMap).forEach(function ([path, value]) {
 						if (item.isModified(path) && item.get(path) === value) pass = true;
 					});
 					return pass;
@@ -372,7 +378,7 @@ abstract class FieldType<
 	 * @param schema The Mongoose Schema to add the field path to.
 	 */
 	addToSchema (schema: Schema): void {
-		const ops = (this._nativeType) ? _.defaults({ type: this._nativeType }, this.options) : this.options;
+		const ops = (this._nativeType) ? { ...this.options, type: this._nativeType } : this.options;
 		schema.path(this.path, ops);
 		this.bindUnderscoreMethods();
 	}

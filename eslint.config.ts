@@ -513,6 +513,29 @@ export default [
 		},
 	},
 
+	// Modernization internals and converted legacy modules keep structural JSDoc
+	// validation without requiring low-value comments on every helper.
+	{
+		files: [
+			'admin/shared/**/*.{ts,tsx,mts}',
+			'lib/core/adminSurfacePathUtils.mts',
+			'lib/content/**/*.mts',
+			'lib/session.mts',
+			'lib/list.mts',
+			'lib/list/add.mts',
+			'fields/types/cloudinary/CloudinaryType.mts',
+			'fields/types/password/PasswordType.mts',
+		],
+		rules: {
+			'jsdoc/require-jsdoc': 'off',
+			'jsdoc/require-description': 'off',
+			'jsdoc/require-returns': 'off',
+			'jsdoc/require-returns-description': 'off',
+			'jsdoc/require-param': 'off',
+			'jsdoc/require-param-description': 'off',
+		},
+	},
+
 	// 9. Admin next client — active React 18 source. Lint it for correctness
 	// and zero warnings, but do not require public-API JSDoc on internal
 	// components, route render functions, and field widgets.

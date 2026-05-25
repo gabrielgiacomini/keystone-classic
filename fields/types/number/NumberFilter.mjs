@@ -7,14 +7,11 @@
  * inverting the filter.
  */
 import React from 'react';
-import { findDOMNode } from 'react-dom';
-import {
-	Form,
-	FormField,
-	FormInput,
-	FormSelect,
-	Grid,
-} from '../../../admin/client-legacy/App/elemental';
+import Form from '../../../admin/client-legacy/compat/elemental/Form.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import FormSelect from '../../../admin/client-legacy/compat/elemental/FormSelect.mjs';
+import Grid from '../../../admin/client-legacy/compat/elemental/Grid.mjs';
 
 const MODE_OPTIONS = [
 	{ label: 'Exactly', value: 'equals' },
@@ -38,30 +35,30 @@ function getDefaultValue () {
  * The `NumberFilter` component.
  * @augments React.Component
  */
-const NumberFilter = React.createClass({
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
+class NumberFilter extends React.Component {
+	static defaultProps = {
+		filter: getDefaultValue(),
+	};
 
-	componentDidMount () {
+	static getDefaultValue = getDefaultValue;
+
+	componentDidMount() {
 		// focus the text input
-		findDOMNode(this.refs.focusTarget).focus();
-	},
+		this.focusTarget();
+	}
+
+	focusTarget = () => {
+		if (this.focusTargetRef) this.focusTargetRef.focus();
+	};
 
 	/**
 	 * Returns a function that handles a change in the value of the filter.
 	 * @param {string} type The type of the value to handle.
 	 * @returns {(e: Event) => void} The change handler.
 	 */
-	handleChangeBuilder (type) {
-		const self = this;
-		return function handleChange (e) {
-			const { filter, onChange } = self.props;
+	handleChangeBuilder = (type) => {
+		return (e) => {
+			const { filter, onChange } = this.props;
 
 			switch (type) {
 				case 'minValue':
@@ -89,93 +86,100 @@ const NumberFilter = React.createClass({
 					});
 			}
 		};
-	},
+	};
+
 	/**
 	 * Updates the filter with a new value.
 	 * @param {object} changedProp The changed property.
 	 */
-	updateFilter (changedProp) {
+	updateFilter = (changedProp) => {
 		this.props.onChange({ ...this.props.filter, ...changedProp });
-	},
+	};
+
 	/**
 	 * Selects a new mode for the filter.
 	 * @param {object} e The event object.
 	 */
-	selectMode (e) {
+	selectMode = (e) => {
 		this.updateFilter({ mode: e.target.value });
 
 		// focus on next tick
-		setTimeout(() => {
-			findDOMNode(this.refs.focusTarget).focus();
-		}, 0);
-	},
+		setTimeout(this.focusTarget, 0);
+	};
 
 	/**
 	 * Renders the controls for the filter.
 	 * @param {object} mode The current mode of the filter.
 	 * @returns {React.Element} The rendered controls.
 	 */
-	renderControls (mode) {
+	renderControls(mode) {
 		let controls;
 		const { field } = this.props;
 		const placeholder = field.label + ' is ' + mode.label.toLowerCase() + '...';
 
 		if (mode.value === 'between') {
-			controls = (
-				<Grid.Row xsmall="one-half" gutter={10}>
-					<Grid.Col>
-						<FormInput
-							onChange={this.handleChangeBuilder('minValue')}
-							placeholder="Min."
-							ref="focusTarget"
-							type="number"
-						/>
-					</Grid.Col>
-					<Grid.Col>
-						<FormInput
-							onChange={this.handleChangeBuilder('maxValue')}
-							placeholder="Max."
-							type="number"
-						/>
-					</Grid.Col>
-				</Grid.Row>
+			controls = React.createElement(
+				Grid.Row,
+				{ xsmall: 'one-half', gutter: 10 },
+				React.createElement(
+					Grid.Col,
+					null,
+					React.createElement(FormInput, {
+						onChange: this.handleChangeBuilder('minValue'),
+						placeholder: 'Min.',
+						ref: (input) => { this.focusTargetRef = input; },
+						type: 'number',
+						'data-list-filter-number-min': true,
+					})
+				),
+				React.createElement(
+					Grid.Col,
+					null,
+					React.createElement(FormInput, {
+						onChange: this.handleChangeBuilder('maxValue'),
+						placeholder: 'Max.',
+						type: 'number',
+						'data-list-filter-number-max': true,
+					})
+				)
 			);
 		} else {
-			controls = (
-				<FormInput
-					onChange={this.handleChangeBuilder('value')}
-					placeholder={placeholder}
-					ref="focusTarget"
-					type="number"
-				/>
-			);
+			controls = React.createElement(FormInput, {
+				onChange: this.handleChangeBuilder('value'),
+				placeholder,
+				ref: (input) => { this.focusTargetRef = input; },
+				type: 'number',
+				'data-list-filter-number-value': true,
+			});
 		}
 
 		return controls;
-	},
+	}
 
 	/**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+	render() {
 		const { filter } = this.props;
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];
 
-		return (
-			<Form component="div">
-				<FormField>
-					<FormSelect
-						onChange={this.selectMode}
-						options={MODE_OPTIONS}
-						value={mode.value}
-					/>
-				</FormField>
-				{this.renderControls(mode)}
-			</Form>
+		return React.createElement(
+			Form,
+			{ component: 'div' },
+			React.createElement(
+				FormField,
+				null,
+				React.createElement(FormSelect, {
+					onChange: this.selectMode,
+					options: MODE_OPTIONS,
+					value: mode.value,
+					'data-list-filter-number-mode': true,
+				})
+			),
+			this.renderControls(mode)
 		);
-	},
-
-});
+	}
+}
 
 export default NumberFilter;

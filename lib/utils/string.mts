@@ -1,6 +1,4 @@
-import createInflect from 'i';
-
-const inflect = createInflect();
+import { pluralize, singularize } from './inflect.mjs';
 
 /**
  * Crops a value using Keystone's historical `keystone-utils.cropString`
@@ -96,7 +94,7 @@ export function keyToLabel(value: unknown): string {
  * @returns Singular form of the value.
  */
 export function singular(value: string): string {
-	return inflect.singularize(value);
+	return singularize(value);
 }
 
 /**
@@ -109,7 +107,7 @@ export function singular(value: string): string {
  */
 export function plural(count: unknown, singularTemplate?: string, pluralTemplate?: string): string {
 	if (arguments.length === 1) {
-		return inflect.pluralize(count as string);
+		return pluralize(count as string);
 	}
 	let singularValue = singularTemplate;
 	if (typeof singularValue !== 'string') {
@@ -117,7 +115,7 @@ export function plural(count: unknown, singularTemplate?: string, pluralTemplate
 	}
 	let pluralValue = pluralTemplate;
 	if (!pluralValue) {
-		pluralValue = inflect.pluralize(singularValue);
+		pluralValue = pluralize(singularValue);
 	}
 	let countValue: unknown = count;
 	if (typeof countValue === 'string') {
@@ -188,7 +186,7 @@ export function keyToPath(value: unknown, makePlural?: boolean): string {
 	const parts = slug(keyToLabel(stringValue)).split('-');
 	if (parts.length && makePlural) {
 		const lastIndex = parts.length - 1;
-		parts[lastIndex] = inflect.pluralize(parts[lastIndex] ?? '');
+		parts[lastIndex] = pluralize(parts[lastIndex] ?? '');
 	}
 	return parts.join('-');
 }
@@ -212,7 +210,7 @@ export function keyToProperty(value: unknown, makePlural?: boolean): string {
 	const parts = slug(keyToLabel(stringValue)).split('-');
 	if (parts.length && makePlural) {
 		const lastIndex = parts.length - 1;
-		parts[lastIndex] = inflect.pluralize(parts[lastIndex] ?? '');
+		parts[lastIndex] = pluralize(parts[lastIndex] ?? '');
 	}
 	for (let i = 1; i < parts.length; i++) {
 		parts[i] = upcase(parts[i] ?? '');

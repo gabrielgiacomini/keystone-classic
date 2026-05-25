@@ -25,10 +25,16 @@ describe('scripts/admin-parity-final-gate', function () {
 		expect(result.status).to.equal(0);
 		expect(result.stderr).to.equal('');
 		expect(result.stdout.trim().split('\n')).to.deep.equal([
+			'npm run admin-parity:ledger',
+			'npm run admin-decommission:audit',
+			'npm run lint',
+			'npm run typecheck',
+			'npm run build-dev',
+			'npm run build',
+			'npm run test:unit',
 			'npm run test:e2e-api',
-			'npm run test:e2e-ui',
-			'npm run test:e2e-ui:fields',
 			'npm run admin-parity',
+			'npm run package:verify',
 			'npm run admin-parity:soak',
 		]);
 	});
@@ -41,6 +47,9 @@ describe('scripts/admin-parity-final-gate', function () {
 
 		expect(result.status).to.equal(0);
 		expect(result.stdout).to.contain('Usage: jiti scripts/admin-parity-final-gate.ts');
+		expect(result.stdout).to.contain('admin-parity:ledger step verifies that every parity ledger row is Complete');
+		expect(result.stdout).to.contain('admin-decommission:audit step verifies that legacy browser/server roots');
+		expect(result.stdout).to.contain('e2e parity, visual identity, and soak gates');
 		expect(result.stdout).to.contain('admin-parity:soak step verifies branch protection or an active branch ruleset');
 		expect(result.stdout).to.contain('inspect the required-check source');
 		expect(result.stdout).to.contain('--dry-run');
@@ -48,7 +57,7 @@ describe('scripts/admin-parity-final-gate', function () {
 	});
 
 	it('stops at the first failing command', function () {
-		writeFakeNpm({ failOn: 'test:e2e-ui:fields' });
+		writeFakeNpm({ failOn: 'admin-parity' });
 
 		const result = spawnSync('jiti', ['scripts/admin-parity-final-gate.ts'], {
 			cwd: root,
@@ -62,9 +71,15 @@ describe('scripts/admin-parity-final-gate', function () {
 
 		expect(result.status).to.equal(23);
 		expect(calls).to.deep.equal([
+			'run admin-parity:ledger',
+			'run admin-decommission:audit',
+			'run lint',
+			'run typecheck',
+			'run build-dev',
+			'run build',
+			'run test:unit',
 			'run test:e2e-api',
-			'run test:e2e-ui',
-			'run test:e2e-ui:fields',
+			'run admin-parity',
 		]);
 	});
 
@@ -83,10 +98,16 @@ describe('scripts/admin-parity-final-gate', function () {
 
 		expect(result.status).to.equal(0);
 		expect(calls).to.deep.equal([
+			'run admin-parity:ledger',
+			'run admin-decommission:audit',
+			'run lint',
+			'run typecheck',
+			'run build-dev',
+			'run build',
+			'run test:unit',
 			'run test:e2e-api',
-			'run test:e2e-ui',
-			'run test:e2e-ui:fields',
 			'run admin-parity',
+			'run package:verify',
 			'run admin-parity:soak',
 		]);
 	});

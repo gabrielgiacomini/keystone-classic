@@ -19,7 +19,7 @@ export default function getOptions(this: KeystoneList): Record<string, unknown> 
 		autocreate: this.options.autocreate,
 		autokey: self.autokey,
 		defaultColumns: this.options.defaultColumns,
-		defaultSort: this.options.defaultSort,
+		defaultSort: this.defaultSort,
 		fields: {},
 		hidden: this.options.hidden,
 		initialFields: self.initialFields.map((field: FieldWithOptions) => field.path),

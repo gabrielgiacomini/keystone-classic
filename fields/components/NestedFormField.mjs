@@ -1,6 +1,7 @@
 import React from 'react';
-import { FormField, FormLabel } from '../../admin/client-legacy/App/elemental';
-import theme from '../../admin/client-legacy/theme';
+import FormField from '../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormLabel from '../../admin/client-legacy/compat/elemental/FormLabel.mjs';
+import theme from '../../admin/client-legacy/theme.mjs';
 
 /**
  * A form field row with a small, muted label suitable for use inside nested
@@ -17,13 +18,11 @@ import theme from '../../admin/client-legacy/theme';
  * @returns {React.Element} A FormField with a styled FormLabel and the provided children.
  */
 function NestedFormField ({ children, className, label, ...props }) {
-	return (
-		<FormField {...props}>
-			<FormLabel cssStyles={classes.label}>
-				{label}
-			</FormLabel>
-			{children}
-		</FormField>
+	return React.createElement(
+		FormField,
+		props,
+		React.createElement(FormLabel, { cssStyles: classes.label }, label),
+		children
 	);
 };
 const classes = {

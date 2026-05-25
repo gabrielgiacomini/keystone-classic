@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 /*
 	Expose internal ref to parent
@@ -6,10 +6,10 @@ import React, { Component, PropTypes } from 'react';
 
 	Field.create({
 		triggerFileBrowser () {
-			this.refs.fileInput.clickDomNode();
+			this.fileInput.clickDomNode();
 		},
 		render () {
-			<HiddenFileInput ref="fileInput" />
+			<HiddenFileInput ref={(fileInput) => { this.fileInput = fileInput; }} />
 		}
 	});
 */
@@ -24,10 +24,10 @@ import React, { Component, PropTypes } from 'react';
  * @example
  * // Inside a field component:
  * triggerFileBrowser () {
- *   this.refs.fileInput.clickDomNode();
+ *   this.fileInput.clickDomNode();
  * }
  * render () {
- *   return <HiddenFileInput ref="fileInput" onChange={this.handleChange} />;
+ *   return <HiddenFileInput ref={(fileInput) => { this.fileInput = fileInput; }} onChange={this.handleChange} />;
  * }
  */
 class HiddenFileInput extends Component {
@@ -75,20 +75,15 @@ class HiddenFileInput extends Component {
 			...style,
 		};
 
-		return (
-			<input
-				{...props}
-				style={styles}
-				ref={setRef}
-				tabIndex="-1"
-				type="file"
-			/>
-		);
+		return React.createElement('input', {
+			...props,
+			style: styles,
+			ref: setRef,
+			tabIndex: '-1',
+			type: 'file',
+		});
 	}
 };
 
-HiddenFileInput.propTypes = {
-	onChange: PropTypes.func.isRequired,
-};
 
 export default HiddenFileInput;

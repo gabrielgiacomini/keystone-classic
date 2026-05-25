@@ -2,7 +2,8 @@ import { expect } from 'chai';
 import mongoose from 'mongoose';
 import init from 'keystone/lib/core/init';
 import { options, set } from 'keystone/lib/core/options';
-import type { Keystone, KeystoneGlobalOptions } from 'keystone';
+import type { Keystone } from 'keystone';
+import type { KeystoneGlobalOptions } from '../../../../lib/core/options-types.js';
 
 const setOption = set as unknown as (this: InitHarness, key: string, value: unknown) => InitHarness;
 const applyOptions = options as unknown as (

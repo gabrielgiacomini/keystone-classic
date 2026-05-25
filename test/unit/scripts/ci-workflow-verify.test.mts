@@ -22,6 +22,7 @@ describe('scripts/ci-workflow-verify', function () {
 		expect(result.status).to.equal(0);
 		expect(result.stdout).to.contain('CI workflow verified');
 		expect(result.stdout).to.contain('admin-parity runs on the scheduled workflow');
+		expect(result.stdout).to.contain('visual identity suites');
 		expect(result.stdout).to.contain('package-verify runs ci:verify, build:types, package:verify, and npm pack --dry-run');
 		expect(result.stderr).to.equal('');
 	});
@@ -41,6 +42,14 @@ describe('scripts/ci-workflow-verify', function () {
 
 		expect(result.status).to.equal(1);
 		expect(result.stderr).to.contain('jobs.admin-parity must run npm run test:e2e-ui:fields');
+	});
+
+	it('fails when admin-parity does not run the visual identity suite', function () {
+		const workflowPath = writeWorkflow(minimalWorkflow().replace('      - run: npm run test:e2e-ui:visual\n', ''));
+		const result = runScript('--workflow', workflowPath);
+
+		expect(result.status).to.equal(1);
+		expect(result.stderr).to.contain('jobs.admin-parity must run npm run test:e2e-ui:visual');
 	});
 
 	it('fails when scheduled runs would skip admin-parity', function () {
@@ -102,6 +111,7 @@ jobs:
     steps:
       - run: npm run test:e2e-ui
       - run: npm run test:e2e-ui:fields
+      - run: npm run test:e2e-ui:visual
 `;
 	}
 });

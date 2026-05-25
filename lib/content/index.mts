@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import mongoose from 'mongoose';
 import keystone from '../../index.mjs';
 import { userCanAccessKeystone, type KeystoneAccessUser } from '../canAccessKeystone.mjs';
@@ -38,13 +37,33 @@ interface PageInstance {
 	clean(data: Record<string, unknown>): Record<string, unknown>;
 }
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+	if (Object.prototype.toString.call(value) !== '[object Object]') {
+		return false;
+	}
+	const prototype: unknown = Object.getPrototypeOf(value);
+	return prototype === null || prototype === Object.prototype;
+}
+
+function defaultsDeep(target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> {
+	Object.keys(source).forEach((key) => {
+		const sourceValue = source[key];
+		const targetValue = target[key];
+		if (targetValue === undefined) {
+			target[key] = sourceValue;
+		} else if (isPlainObject(targetValue) && isPlainObject(sourceValue)) {
+			defaultsDeep(targetValue, sourceValue);
+		}
+	});
+	return target;
+}
+
 // ---------------------------------------------------------------------------
 // Content class
 // ---------------------------------------------------------------------------
 
 /**
  * Content.
- *
  */
 class Content {
 	pages: Record<string, PageInstance> = {};
@@ -52,13 +71,7 @@ class Content {
 	Page!: typeof Page;
 	Types!: typeof Types;
 
-	/**
-	 * Documentation placeholder.
-	 *
-	 * @param page - Description
-	 * @param callback - Description
-	 * @returns The return value.
-	 */
+
 	fetch (page: string | null | undefined | ContentCallback, callback?: ContentCallback): void {
 		if (typeof page === 'function') {
 			callback = page;
@@ -96,7 +109,7 @@ class Content {
 						data[i.key] = pg.populate(i.content.data);
 					}
 				});
-				_.forEach(content.pages, function (i: PageInstance) {
+				Object.values(content.pages).forEach(function (i: PageInstance) {
 					if (!data[i.key]) {
 						data[i.key] = i.populate();
 					}
@@ -108,14 +121,7 @@ class Content {
 		}
 	}
 
-	/**
-	 * Documentation placeholder.
-	 *
-	 * @param page - Description
-	 * @param contentData - Description
-	 * @param callback - Description
-	 * @returns The return value.
-	 */
+
 	store (page: string, contentData: Record<string, unknown>, callback: ContentCallback): void {
 		const pageObj = this.pages[page];
 		if (!pageObj) {
@@ -137,7 +143,7 @@ class Content {
 			let activeDoc: AppContentDoc;
 			if (doc) {
 				doc.history.push(doc.content);
-				_.defaultsDeep(validatedContent, doc.content.data);
+				defaultsDeep(validatedContent, doc.content.data);
 				activeDoc = doc;
 			} else {
 				activeDoc = new appContent({ key: pageKey });
@@ -149,13 +155,7 @@ class Content {
 		}, callback);
 	}
 
-	/**
-	 * Documentation placeholder.
-	 *
-	 * @param key - Description
-	 * @param page - Description
-	 * @returns The return value.
-	 */
+
 	page (key: string, page?: PageInstance): PageInstance {
 		if (arguments.length === 1) {
 			const existing = this.pages[key];
@@ -172,10 +172,7 @@ class Content {
 		return page as unknown as PageInstance;
 	}
 
-	/**
-	 * Documentation placeholder.
-	 *
-	 */
+
 	initModel (): void {
 		if (this.AppContent) return;
 		const contentSchemaDef = {
@@ -192,14 +189,7 @@ class Content {
 		this.AppContent = mongoose.model<AppContentDoc>('App_Content', PageSchema);
 	}
 
-	/**
-	 * Documentation placeholder.
-	 *
-	 * @param user - Description
-	 * @param user.canAccessKeystone - Description
-	 * @param options - Description
-	 * @returns The return value.
-	 */
+
 	editable (user: KeystoneAccessUser, options: EditableOptions): string | undefined {
 		if (!userCanAccessKeystone(user)) return undefined;
 		if (options.list) {

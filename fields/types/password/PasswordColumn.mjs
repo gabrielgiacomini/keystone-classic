@@ -13,33 +13,14 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `PasswordColumn` component.
  * @augments React.Component
  */
-const PasswordColumn = React.createClass({
-	displayName: 'PasswordColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
-	 * Renders the value of the field.
-	 * @returns {string} The rendered value.
-	 */
-	renderValue () {
-		const value = this.props.data.fields[this.props.col.path];
-		return value ? '********' : '';
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		return (
-			<ItemsTableCell>
-				<ItemsTableValue field={this.props.col.type}>
-					{this.renderValue()}
-				</ItemsTableValue>
-			</ItemsTableCell>
-		);
-	},
-});
+function PasswordColumn({ col, data }) {
+	const value = data.fields[col.path];
+	return React.createElement(
+		ItemsTableCell,
+		null,
+		React.createElement(ItemsTableValue, { field: col.type }, value ? '********' : ''),
+	);
+}
+
 
 export default PasswordColumn;

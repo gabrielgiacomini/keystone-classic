@@ -164,7 +164,7 @@ describe('admin surface mounting', function () {
 			.expect('content-type', /html/)
 			.expect(function (res) {
 				expect(res.text).to.contain('"adminLegacyPath":"/manage"');
-				expect(res.text).to.contain('"adminApiPath":"/manage/api"');
+				expect(res.text).to.contain('"adminApiPath":"/manage-api"');
 			});
 		await request(app).get('/keystone-api/session').expect(404);
 		await request(app).get('/keystone/api/session').expect(404);
@@ -178,6 +178,128 @@ describe('admin surface mounting', function () {
 
 		await request(app).get('/keystone-api/session').expect(200);
 		await request(app).get('/keystone/api/session').expect(404);
+	});
+
+	it('serves admin next from the historical admin path in next-only cutover mode', async function () {
+		const app: Application = createApp(createKeystoneMock({
+			'admin ui': 'next',
+		}), express);
+
+		await request(app)
+			.get('/keystone/')
+			.expect(200)
+			.expect('content-type', /html/)
+			.expect(function (res) {
+				expect(res.text).to.contain('"adminLegacyPath":"/keystone"');
+				expect(res.text).to.contain('"adminNextPath":"/keystone"');
+				expect(res.text).to.contain('"adminApiPath":"/keystone-api"');
+			});
+		await request(app)
+			.get('/keystone/signin')
+			.expect(200)
+			.expect('content-type', /html/)
+			.expect(function (res) {
+				expect(res.text).to.contain('"adminLegacyPath":"/keystone"');
+				expect(res.text).to.contain('"adminNextPath":"/keystone"');
+			});
+		await request(app)
+			.get('/keystone-next/')
+			.expect(200)
+			.expect('content-type', /html/)
+			.expect(function (res) {
+				expect(res.text).to.contain('"adminNextPath":"/keystone-next"');
+			});
+		await request(app).get('/keystone/api/session').expect(200);
+	});
+
+	it('serves admin next deep links from a custom historical admin path in next-only cutover mode', async function () {
+		const app: Application = createApp(createKeystoneMock({
+			'admin ui': 'next',
+			'admin legacy path': 'manage',
+			'admin next path': 'manage-next',
+			'admin api path': 'manage-api',
+		}), express);
+
+		for (const route of ['/manage/', '/manage/signin', '/manage/signout', '/manage/posts/507f1f77bcf86cd799439011']) {
+			await request(app)
+				.get(route)
+				.expect(200)
+				.expect('content-type', /html/)
+				.expect(function (res) {
+					expect(res.text).to.contain('"adminLegacyPath":"/manage"');
+					expect(res.text).to.contain('"adminNextPath":"/manage"');
+					expect(res.text).to.contain('"adminApiPath":"/manage-api"');
+				});
+		}
+
+		await request(app)
+			.get('/manage-next/signin')
+			.expect(200)
+			.expect('content-type', /html/)
+			.expect(function (res) {
+				expect(res.text).to.contain('"adminLegacyPath":"/manage"');
+				expect(res.text).to.contain('"adminNextPath":"/manage-next"');
+				expect(res.text).to.contain('"adminApiPath":"/manage-api"');
+			});
+		await request(app).get('/manage-api/session').expect(200);
+		await request(app).get('/manage/api/session').expect(200);
+		await request(app).get('/manage/js/admin.js').expect(404);
+		await request(app).get('/keystone/').expect(404);
+	});
+
+	it('loads configured admin-next custom field module scripts before the app bundle', async function () {
+		const app: Application = createApp(createKeystoneMock({
+			'admin ui': 'next',
+			'admin next custom field scripts': [
+				'/custom-fields/modern.js',
+				'/custom-fields/legacy.js?name="quoted"&unsafe=<tag>',
+				'   ',
+			],
+		}), express);
+
+		await request(app)
+			.get('/keystone/')
+			.expect(200)
+			.expect('content-type', /html/)
+			.expect(function (res) {
+				const html = res.text;
+				const configIndex = html.indexOf('window.Keystone=');
+				const modernIndex = html.indexOf('src="/custom-fields/modern.js"');
+				const legacyIndex = html.indexOf('src="/custom-fields/legacy.js?name=&quot;quoted&quot;&amp;unsafe=&lt;tag&gt;"');
+				const appEntryIndex = html.indexOf('/assets/');
+
+				expect(configIndex).to.be.greaterThan(-1);
+				expect(html).to.contain('<script type="module"');
+				expect(modernIndex).to.be.greaterThan(configIndex);
+				expect(legacyIndex).to.be.greaterThan(modernIndex);
+				if (appEntryIndex !== -1) {
+					expect(legacyIndex).to.be.lessThan(appEntryIndex);
+				}
+				expect(html).to.not.contain('src="   "');
+			});
+	});
+
+	it('keeps legacy and admin next on separate paths in both mode', async function () {
+		const app: Application = createApp(createKeystoneMock({
+			'admin ui': 'both',
+			'auth': true,
+			'session': true,
+		}), express);
+
+		await request(app)
+			.get('/keystone/signin')
+			.expect(200)
+			.expect('content-type', /html/)
+			.expect(function (res) {
+				expect(res.text).to.contain('"adminApiPath":"/keystone-api"');
+			});
+		await request(app)
+			.get('/keystone-next/')
+			.expect(200)
+			.expect('content-type', /html/)
+			.expect(function (res) {
+				expect(res.text).to.contain('"adminApiPath":"/keystone-api"');
+			});
 	});
 
 	it('supports the legacy manual static/session/dynamic admin mounting sequence', async function () {
@@ -228,7 +350,7 @@ describe('admin surface mounting', function () {
 			.expect('content-type', /html/)
 			.expect(function (res) {
 				expect(res.text).to.contain('"adminLegacyPath":"/keystone"');
-				expect(res.text).to.contain('"adminApiPath":"/keystone/api"');
+				expect(res.text).to.contain('"adminApiPath":"/keystone-api"');
 			});
 		await request(app)
 			.get('/keystone/')
@@ -236,7 +358,7 @@ describe('admin surface mounting', function () {
 			.expect('content-type', /html/)
 			.expect(function (res) {
 				expect(res.text).to.contain('"adminLegacyPath":"/keystone"');
-				expect(res.text).to.contain('"adminApiPath":"/keystone/api"');
+				expect(res.text).to.contain('"adminApiPath":"/keystone-api"');
 			});
 		expect(cookieParserHits).to.equal(3);
 		expect(expressSessionHits).to.equal(3);
@@ -274,6 +396,21 @@ describe('admin surface mounting', function () {
 			.get('/keystone/signin')
 			.expect(200)
 			.expect('content-type', /html/);
+	});
+
+	it('serves modern static assets from the historical legacy static router', async function () {
+		const keystone = createKeystoneMock();
+		const app = express();
+		app.use('/keystone', keystoneSingleton.Admin.Server.createAdminLegacyStaticRouter(keystone));
+
+		await request(app)
+			.get('/keystone/index.html')
+			.expect(200)
+			.expect('content-type', /html/);
+
+		await request(app)
+			.get('/keystone/styles/keystone.css')
+			.expect(404);
 	});
 
 	it('supports a Cloom-owned Express app and HTTP listener without keystone.start()', async function () {
@@ -408,6 +545,64 @@ describe('admin surface mounting', function () {
 		await request(app).get('/keystone/api/session').expect(404);
 	});
 
+	it('auto admin UI mode serves admin next when only built-in field types are registered', async function () {
+		const originalWarn = console.warn;
+		const warnings: string[] = [];
+		console.warn = (message?: unknown) => {
+			warnings.push(String(message));
+		};
+		try {
+			const keystone = createKeystoneMock({ 'admin ui': 'auto' });
+			keystone.fieldTypes = { text: 'Text', relationship: 'Relationship' } as Keystone['fieldTypes'];
+			const app = createApp(keystone, express);
+
+			await request(app).get('/keystone/').expect(200).expect('content-type', /html/);
+			await request(app).get('/keystone/signin').expect(200).expect('content-type', /html/);
+			await request(app).get('/keystone-next/').expect(200).expect('content-type', /html/);
+		} finally {
+			console.warn = originalWarn;
+		}
+		expect(warnings).to.deep.equal([
+			"Keystone: admin ui auto selected 'next' because only built-in field browser code was detected.",
+		]);
+	});
+
+	it('auto admin UI mode keeps the legacy admin when custom legacy field types are registered', async function () {
+		const originalWarn = console.warn;
+		const warnings: string[] = [];
+		console.warn = (message?: unknown) => {
+			warnings.push(String(message));
+		};
+		try {
+			const keystone = createKeystoneMock({ 'admin ui': 'auto' });
+			keystone.fieldTypes = { text: 'Text', customText: 'CustomText' } as Keystone['fieldTypes'];
+			const app = createApp(keystone, express);
+
+			await request(app).get('/keystone/api/session').expect(200).expect('content-type', /json/);
+			await request(app).get('/keystone-next/').expect(404);
+		} finally {
+			console.warn = originalWarn;
+		}
+		expect(warnings).to.deep.equal([
+			"Keystone: admin ui auto selected 'legacy' because custom legacy field browser code was detected.",
+		]);
+	});
+
+	it('KEYSTONE_ADMIN_CLIENT overrides admin ui routing mode', async function () {
+		const originalMode = process.env.KEYSTONE_ADMIN_CLIENT;
+		try {
+			process.env.KEYSTONE_ADMIN_CLIENT = 'next';
+			const app = createApp(createKeystoneMock({ 'admin ui': 'legacy' }), express);
+
+			await request(app).get('/keystone/').expect(200).expect('content-type', /html/);
+			await request(app).get('/keystone/signin').expect(200).expect('content-type', /html/);
+			await request(app).get('/keystone-next/').expect(200).expect('content-type', /html/);
+		} finally {
+			if (originalMode === undefined) delete process.env.KEYSTONE_ADMIN_CLIENT;
+			else process.env.KEYSTONE_ADMIN_CLIENT = originalMode;
+		}
+	});
+
 	it('can disable the admin API independently of UI configuration', async function () {
 		const app = createApp(createKeystoneMock({
 			'admin ui': false,
@@ -418,7 +613,7 @@ describe('admin surface mounting', function () {
 		await request(app).get('/keystone/signin').expect(404);
 	});
 
-	it('serves prebuilt legacy admin browser bundles without runtime bundling enabled', async function () {
+	it('does not serve prebuilt legacy admin browser bundles after static router decommission', async function () {
 		const originalDev = process.env.KEYSTONE_DEV;
 		const originalPrebuild = process.env.KEYSTONE_PREBUILD_ADMIN;
 		const originalRuntimeBundler = process.env.KEYSTONE_LEGACY_RUNTIME_BUNDLER;
@@ -428,9 +623,9 @@ describe('admin surface mounting', function () {
 		try {
 			const app = createApp(createKeystoneMock(), express);
 
-			await request(app).get('/keystone/js/admin.js').expect(200).expect('content-type', /javascript/);
-			await request(app).get('/keystone/js/signin.js').expect(200).expect('content-type', /javascript/);
-			await request(app).get('/keystone/js/fields.js').expect(200).expect('content-type', /javascript/);
+			await request(app).get('/keystone/js/admin.js').expect(404);
+			await request(app).get('/keystone/js/signin.js').expect(404);
+			await request(app).get('/keystone/js/fields.js').expect(404);
 		} finally {
 			if (originalDev === undefined) delete process.env.KEYSTONE_DEV;
 			else process.env.KEYSTONE_DEV = originalDev;
@@ -441,7 +636,7 @@ describe('admin surface mounting', function () {
 		}
 	});
 
-	it('serves prebuilt legacy admin browser bundles when cache admin bundles is enabled', async function () {
+	it('keeps legacy admin browser bundles unavailable when cache admin bundles is enabled', async function () {
 		const originalDev = process.env.KEYSTONE_DEV;
 		const originalPrebuild = process.env.KEYSTONE_PREBUILD_ADMIN;
 		const originalRuntimeBundler = process.env.KEYSTONE_LEGACY_RUNTIME_BUNDLER;
@@ -453,9 +648,9 @@ describe('admin surface mounting', function () {
 				'cache admin bundles': true,
 			}), express);
 
-			await request(app).get('/keystone/js/admin.js').expect(200).expect('content-type', /javascript/);
-			await request(app).get('/keystone/js/signin.js').expect(200).expect('content-type', /javascript/);
-			await request(app).get('/keystone/js/fields.js').expect(200).expect('content-type', /javascript/);
+			await request(app).get('/keystone/js/admin.js').expect(404);
+			await request(app).get('/keystone/js/signin.js').expect(404);
+			await request(app).get('/keystone/js/fields.js').expect(404);
 		} finally {
 			if (originalDev === undefined) delete process.env.KEYSTONE_DEV;
 			else process.env.KEYSTONE_DEV = originalDev;

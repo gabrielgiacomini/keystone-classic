@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react';
-import { FormInput } from '../../admin/client-legacy/App/elemental';
-import { fade } from '../../admin/client-legacy/utils/color';
-import theme from '../../admin/client-legacy/theme';
+import React from 'react';
+import FormInput from '../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import { fade } from '../../admin/client-legacy/utils/color.mjs';
+import theme from '../../admin/client-legacy/theme.mjs';
 
 /**
  * Displays a read-only form input that communicates the result of a file change.
@@ -28,18 +28,13 @@ function FileChangeMessage ({ style, color, ...props }) {
 		styles.color = theme.color[color];
 	}
 
-	return (
-		<FormInput
-			noedit
-			style={styles}
-			{...props}
-		/>
-	);
+	return React.createElement(FormInput, {
+		noedit: true,
+		style: styles,
+		...props,
+	});
 };
 
-FileChangeMessage.propTypes = {
-	color: PropTypes.oneOf(['danger', 'default', 'success']),
-};
 FileChangeMessage.defaultProps = {
 	color: 'default',
 };

@@ -12,34 +12,17 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `BooleanColumn` component.
  * @augments React.Component
  */
-const BooleanColumn = React.createClass({
-	displayName: 'BooleanColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
-	 * Renders the value of the field.
-	 * @returns {React.Element} The rendered value.
-	 */
-	renderValue () {
-		return (
-			<ItemsTableValue truncate={false} field={this.props.col.type}>
-				<Checkbox readonly checked={this.props.data.fields[this.props.col.path]} />
-			</ItemsTableValue>
-		);
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		return (
-			<ItemsTableCell>
-				{this.renderValue()}
-			</ItemsTableCell>
-		);
-	},
-});
+function BooleanColumn({ col, data }) {
+	return React.createElement(
+		ItemsTableCell,
+		null,
+		React.createElement(
+			ItemsTableValue,
+			{ truncate: false, field: col.type },
+			React.createElement(Checkbox, { readonly: true, checked: data.fields[col.path] }),
+		),
+	);
+}
+
 
 export default BooleanColumn;

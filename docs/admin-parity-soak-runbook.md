@@ -1,12 +1,43 @@
 # Admin Parity Soak Runbook
 
 This runbook covers the remaining external P4 gate: requiring the `admin-parity`
-GitHub Actions check on `main` and proving that it stays green for 14 days.
+GitHub Actions check on `master` and proving that it stays green for 14 days.
 
 ## Current Verified State
 
 Last checked from this workspace:
 
+- `npm run admin-parity:protect:status` exited 0 on 2026-05-25. Repository
+  `gabrielgiacomini/keystone-classic` is public, branch `master` is protected,
+  and classic branch protection requires the `admin-parity` check.
+- `npm run admin-parity:soak` exited non-zero on 2026-05-25. The required-check
+  source is now valid, but the historical 14-day window is not clean: 12
+  in-window `admin-parity` jobs did not succeed, only 1 green day was found, and
+  green days are missing for 2026-05-12 through 2026-05-25 except 2026-05-22.
+- `npm run admin-parity:final -- --dry-run` on 2026-05-25 confirms the local
+  final-gate order now covers the convergence baseline commands before the
+  external soak: ledger, decommission audit, lint, typecheck, `build-dev`,
+  production build, unit, API e2e, canonical admin parity, package verification,
+  and `admin-parity:soak`.
+- Manual branch CI run `26382033849` on 2026-05-25 found fresh-checkout CI
+  drift on `modernization/legacy-client-convergence`: Node 20/22 test jobs were
+  incompatible with the Node 24 Mocha strip-types setup, some jobs ran before
+  admin-next assets or `dist` existed, the legacy bundle job invoked bare `jiti`
+  outside npm script PATH, and production audit flagged Express/QS. The branch
+  now contains CI/package hardening for those repo-owned failures; rerun CI on a
+  new commit before treating the branch as ready to merge into `master`.
+- Manual branch CI run `26382347256` on the hardened branch commit improved the
+  current head to green `package-verify`, `lint-typecheck`, `prod-audit`,
+  `e2e-api`, `e2e-ui`, and `admin-parity`. The remaining failures were
+  repo-owned and fixed afterward: the decommissioned legacy bundle-hash CI job
+  was removed, and the headless boot unit test now isolates CI Mongo environment
+  variables before asserting default database-name fallback behavior.
+- Manual branch CI run `26382502620` passed on 2026-05-25 for commit
+  `bcfce962` on `modernization/legacy-client-convergence`: `prod-audit`,
+  `e2e-ui`, `test (24)`, `admin-parity`, `e2e-api`, `package-verify`, and
+  `lint-typecheck` all completed successfully. This proves the current branch
+  head is green before merge; the 14-day soak still cannot pass until the fixed
+  branch is on `master` and the required check stays green for the full window.
 - `npm run admin-parity:protect:status` exited non-zero during the
   2026-05-12T03:13:48Z refresh. Repository
   `gabrielgiacomini/keystone4-ts` is private, branch `main` is not protected,
@@ -24,23 +55,19 @@ Last checked from this workspace:
   `https://github.com/gabrielgiacomini/keystone4-ts/actions/runs/25667193476/job/75342652937`.
 - The local Playwright webServer memory mitigation is in place, and the local
   `npm run admin-parity` wrapper passed after that hardening. The remaining
-  work is the owner-controlled GitHub branch-protection/ruleset required-check
-  setting and the clean 14-day soak.
+  external work is a clean 14-day `admin-parity` soak on `master`.
 
 ## Preconditions
 
-- The CI workflow in `.github/workflows/ci.yml` is present on `main`.
+- The CI workflow in `.github/workflows/ci.yml` is present on `master`.
 - The workflow contains the `admin-parity` job and the daily schedule.
 - `gh auth status` succeeds for an account with admin access to the repository.
 - Classic branch protection or active branch rulesets with required status
-  checks are available for the repository. For this private repository, earlier
-  GitHub API attempts returned `403 Upgrade to GitHub Pro or make this
-  repository public to enable this feature`; choose one of those account/repo
-  changes only with explicit owner approval.
+  checks are available for the repository.
 
 ## Owner Handoff Checklist
 
-1. Run `npm run admin-parity:protect:status` and confirm whether `main`
+1. Run `npm run admin-parity:protect:status` and confirm whether `master`
    already has a required-check source for `admin-parity`.
 2. If GitHub rejects branch protection/rulesets for a private repository, stop and have
    the repository owner choose the account/repository change first. Do not make
@@ -61,7 +88,7 @@ Last checked from this workspace:
 
 1. Open GitHub repository settings.
 2. Go to Branches or Rulesets.
-3. Create or edit a branch protection rule or active ruleset for `main`.
+3. Create or edit a branch protection rule or active ruleset for `master`.
 4. Enable required status checks.
 5. Require the `admin-parity` check.
 6. Save the rule.
@@ -76,7 +103,7 @@ npm run admin-parity:protect
 ```
 
 The dry run should print a `gh api --method PUT
-repos/gabrielgiacomini/keystone4-ts/branches/main/protection --input -`
+repos/gabrielgiacomini/keystone-classic/branches/master/protection --input -`
 command whose JSON body includes:
 
 ```json
@@ -126,14 +153,14 @@ npm run admin-parity:protect:status
 Expected result:
 
 ```text
-admin-parity required check ready for gabrielgiacomini/keystone4-ts@main
+admin-parity required check ready for gabrielgiacomini/keystone-classic@master
 ```
 
 For classic branch protection specifically, the raw GitHub branch endpoint can
 also be inspected:
 
 ```sh
-gh api repos/gabrielgiacomini/keystone4-ts/branches/main \
+gh api repos/gabrielgiacomini/keystone-classic/branches/master \
   --jq '{protected:.protected,required_status_checks:.protection.required_status_checks}'
 ```
 
@@ -172,7 +199,7 @@ npm run admin-parity:soak -- --help
 
 The verifier checks both conditions:
 
-- `main` has classic branch protection or an active branch ruleset requiring
+- `master` has classic branch protection or an active branch ruleset requiring
   `admin-parity`.
 - The last 14 days contain at least 14 green `admin-parity` days and no failed
   `admin-parity` jobs.

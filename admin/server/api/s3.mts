@@ -76,7 +76,9 @@ function headersToPutInput(headers: Record<string, string>): Partial<PutObjectCo
 	return input;
 }
 
-/** Uploads a file to S3 after verifying the CSRF token and returns the resulting image URL. */
+/**
+ * Uploads a file to S3 after verifying the CSRF token and returns the resulting image URL.
+ */
 export function upload(req: Request, res: Response): void {
 	const keystone = req.keystone as Keystone;
 

@@ -26,7 +26,7 @@ describe('Keystone "module root" setting', function () {
 		});
 	});
 
-	describe.skip('custom with relative path', function () {
+	describe('custom with relative path', function () {
 		const customPath = '../..';
 		before(function () { keystone.set('module root', customPath); });
 		it('should return the custom configured path', function () {

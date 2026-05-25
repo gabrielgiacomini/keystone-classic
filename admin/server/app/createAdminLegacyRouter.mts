@@ -2,9 +2,7 @@ import type { Keystone } from '../../../index.mjs';
 import type { Router as ExpressRouter, Request, Response, NextFunction, RequestHandler } from 'express';
 import express from 'express';
 
-import IndexRoute from '../routes-legacy/index.mjs';
-import SigninRoute from '../routes-legacy/signin.mjs';
-import SignoutRoute from '../routes-legacy/signout.mjs';
+import { createAdminNextIndexRouter } from './createAdminNextStaticRouter.mjs';
 import createHealthchecksHandler from './createHealthchecksHandler.mjs';
 import { getAdminLegacyPath } from '../../../lib/core/adminSurfacePathUtils.mjs';
 import type { KeystoneSessionModule } from '../../../lib/session.mjs';
@@ -27,7 +25,9 @@ function bindKeystone(keystone: Keystone): RequestHandler {
 	};
 }
 
-/** Builds the admin legacy React 15 page router. */
+/**
+ * Preserves historical admin deep links by serving the modern admin SPA.
+ */
 export default function createAdminLegacyRouter(keystone: Keystone): ExpressRouter {
 	const ks = keystone as KeystoneWithInternals;
 	initNav(ks);
@@ -54,22 +54,17 @@ export default function createAdminLegacyRouter(keystone: Keystone): ExpressRout
 		if (!keystone.get('signout url')) {
 			keystone.set('signout url', getAdminLegacyPath(keystone) + '/signout');
 		}
-			if (!keystone.get('signin url')) {
-				keystone.set('signin url', getAdminLegacyPath(keystone) + '/signin');
-			}
-			if (!ks.nativeApp || !keystone.get('session')) {
-				router.all('*', function persistSession(req, res, next) { ks.session.persist(req, res, next); });
-			}
-			router.all('/signin', SigninRoute as RequestHandler);
-			router.all('/signout', SignoutRoute as RequestHandler);
-			router.use(function requireKeystoneAuth(req, res, next) { ks.session.keystoneAuth(req, res, next); });
-		} else if (typeof keystone.get('auth') === 'function') {
-			router.use(keystone.get('auth') as RequestHandler);
+		if (!keystone.get('signin url')) {
+			keystone.set('signin url', getAdminLegacyPath(keystone) + '/signin');
 		}
+		if (!ks.nativeApp || !keystone.get('session')) {
+			router.all('*', function persistSession(req, res, next) { ks.session.persist(req, res, next); });
+		}
+	} else if (typeof keystone.get('auth') === 'function') {
+		router.use(keystone.get('auth') as RequestHandler);
+	}
 
-	router.get('/', IndexRoute as RequestHandler);
-	router.all('/:list/:page([0-9]{1,5})?', IndexRoute as RequestHandler);
-	router.all('/:list/:item', IndexRoute as RequestHandler);
+	router.use(createAdminNextIndexRouter(keystone));
 
 	return router;
 }

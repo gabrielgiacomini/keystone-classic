@@ -18,68 +18,54 @@ const moreIndicatorStyle = {
  * The `RelationshipColumn` component.
  * @augments React.Component
  */
-const RelationshipColumn = React.createClass({
-	displayName: 'RelationshipColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
-	 * Renders the values of a many-to-many relationship.
-	 * @param {Array} value The array of related items.
-	 * @returns {React.Element|undefined} The rendered values, or undefined if the array is empty.
-	 */
-	renderMany (value) {
-		if (!value || !value.length) return;
-		const refList = this.props.col.field.refList;
-		const items = [];
-		for (let i = 0; i < 3; i++) {
-			if (!value[i]) break;
-			if (i) {
-				items.push(<span key={'comma' + i}>, </span>);
-			}
-			items.push(
-				<ItemsTableValue interior truncate={false} key={'anchor' + i} to={Keystone.adminLegacyPath + '/' + refList.path + '/' + value[i].id}>
-					{value[i].name}
-				</ItemsTableValue>
-			);
+function renderMany(col, value) {
+	if (!value || !value.length) return null;
+	const refList = col.field.refList;
+	const items = [];
+	for (let i = 0; i < 3; i++) {
+		if (!value[i]) break;
+		if (i) {
+			items.push(React.createElement('span', { key: 'comma' + i }, ', '));
 		}
-		if (value.length > 3) {
-			items.push(<span key="more" style={moreIndicatorStyle}>[...{value.length - 3} more]</span>);
-		}
-		return (
-			<ItemsTableValue field={this.props.col.type}>
-				{items}
-			</ItemsTableValue>
+		items.push(
+			React.createElement(
+				ItemsTableValue,
+				{
+					interior: true,
+					truncate: false,
+					key: 'anchor' + i,
+					to: Keystone.adminLegacyPath + '/' + refList.path + '/' + value[i].id,
+				},
+				value[i].name,
+			),
 		);
-	},
-	/**
-	 * Renders the value of a one-to-many relationship.
-	 * @param {object} value The related item.
-	 * @returns {React.Element|undefined} The rendered value, or undefined if no value is provided.
-	 */
-	renderValue (value) {
-		if (!value) return;
-		const refList = this.props.col.field.refList;
-		return (
-			<ItemsTableValue to={Keystone.adminLegacyPath + '/' + refList.path + '/' + value.id} padded interior field={this.props.col.type}>
-				{value.name}
-			</ItemsTableValue>
-		);
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		const value = this.props.data.fields[this.props.col.path];
-		const many = this.props.col.field.many;
-		return (
-			<ItemsTableCell>
-				{many ? this.renderMany(value) : this.renderValue(value)}
-			</ItemsTableCell>
-		);
-	},
-});
+	}
+	if (value.length > 3) {
+		items.push(React.createElement('span', { key: 'more', style: moreIndicatorStyle }, '[...', value.length - 3, ' more]'));
+	}
+	return React.createElement(ItemsTableValue, { field: col.type }, items);
+}
+
+function renderValue(col, value) {
+	if (!value) return null;
+	const refList = col.field.refList;
+	return React.createElement(
+		ItemsTableValue,
+		{
+			to: Keystone.adminLegacyPath + '/' + refList.path + '/' + value.id,
+			padded: true,
+			interior: true,
+			field: col.type,
+		},
+		value.name,
+	);
+}
+
+function RelationshipColumn({ col, data }) {
+	const value = data.fields[col.path];
+	const many = col.field.many;
+	return React.createElement(ItemsTableCell, null, many ? renderMany(col, value) : renderValue(col, value));
+}
+
 
 export default RelationshipColumn;

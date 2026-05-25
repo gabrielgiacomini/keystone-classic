@@ -84,6 +84,83 @@ import {
 	createAdminNextStaticRouter,
 } from 'keystone/admin/server';
 import createAdminNextStaticRouterFromSubpath from 'keystone/admin/server/app/createAdminNextStaticRouter';
+import { api as sharedAdminApi } from 'keystone/admin/shared/api/fetch';
+import {
+	fetchAdminMeta,
+	fetchItem,
+	fetchList,
+	type AdminFieldMeta,
+	type AdminListMeta,
+	type AdminMetaResponse,
+	type ListItem,
+	type ListResponse,
+} from 'keystone/admin/shared/api/list';
+import {
+	getSession,
+	signin,
+	signout,
+	type SessionResponse,
+	type SigninPayload,
+	type SigninResponse,
+} from 'keystone/admin/shared/api/session';
+import { legacyApiRequest } from 'keystone/admin/shared/api/legacyRequest.mjs';
+import {
+	assertAllFieldsRegistered,
+	getFieldComponents,
+	getUnregisteredFieldTypes,
+	registerField,
+	registry as sharedFieldRegistry,
+} from 'keystone/admin/shared/fields/registry';
+import type {
+	ColumnProps,
+	FieldComponentSet,
+	FieldMeta,
+	FieldProps,
+	FilterProps,
+	FieldTypeName,
+} from 'keystone/admin/shared/fields/types';
+import {
+	legacyComponentsToModernFieldSet,
+	legacyFieldToModernField,
+	registerLegacyFieldComponents,
+	type LegacyColumnProps,
+	type LegacyFieldComponentSet,
+	type LegacyFieldProps,
+	type LegacyFilterProps,
+} from 'keystone/admin/shared/fields/legacyAdapters';
+import {
+	registerRuntimeCustomFieldComponents,
+	type RuntimeCustomFieldComponents,
+	type RuntimeCustomFieldRegistrationResult,
+} from 'keystone/admin/shared/fields/customFields';
+import {
+	columnsParser,
+	createFilterObject,
+	filterParser,
+	filtersParser,
+	sortParser,
+} from 'keystone/admin/shared/state/queryParsers.mjs';
+import {
+	buildApiFilter,
+	buildApiFilters,
+	buildListDownloadUrl,
+	buildPageWindow,
+	formatCount,
+	formatFilterDisplay,
+	getActiveColumnPaths,
+	getDefaultColumnPaths,
+	getFilterFields,
+	getFilterValuesFromSearch,
+	isIdColumnPath,
+	parseGeopointFilterValue,
+	parseDefaultColumnPaths,
+	pluralizeCount,
+	serializeColumnPaths,
+	validateListSearch,
+	type GeopointRouteFilterValue,
+	type ListRouteFilterField,
+	type ListSearch,
+} from 'keystone/admin/shared/state/listRoute';
 import TextType from 'keystone/fields/types/text/TextType';
 import { originalFilename, type NormalisedGenerateFilename, type StorageNameFile } from 'keystone/lib/storage/nameFunctions';
 
@@ -515,6 +592,148 @@ const requestList: KeystoneList | undefined = req.list;
 const requestUserId: string | undefined = req.user?.id;
 
 const textField = new TextType(postList, 'title', textOptions);
+const sharedTextMeta: FieldMeta = { fieldType: 'text', label: 'Title', path: 'title' };
+const sharedFieldTypeName: FieldTypeName = sharedTextMeta.fieldType;
+const sharedFieldComponentSet: FieldComponentSet<string, KSAdminUiFilterForTextField> = {
+	Field(props: FieldProps<string>) {
+		const value: string = props.value;
+		props.onChange(value);
+		return null;
+	},
+	Filter(props: FilterProps<KSAdminUiFilterForTextField>) {
+		props.onChange(props.value);
+		return null;
+	},
+	Column(props: ColumnProps<string>) {
+		const value: string = props.value;
+		void value;
+		return null;
+	},
+	defaultFilterValue: textFilter,
+};
+registerField(sharedFieldTypeName, sharedFieldComponentSet as FieldComponentSet<unknown, unknown>);
+const sharedRegisteredField = getFieldComponents(sharedFieldTypeName);
+const sharedUnregisteredFields: FieldTypeName[] = getUnregisteredFieldTypes();
+const sharedRegistryText = sharedFieldRegistry.text;
+assertAllFieldsRegistered;
+
+const legacyFieldComponentSet: LegacyFieldComponentSet = {
+	Field(props: LegacyFieldProps) {
+		props.onChange({ path: props.path, value: props.value });
+		return null;
+	},
+	Filter(props: LegacyFilterProps) {
+		props.onChange(props.filter);
+		return null;
+	},
+	Column(props: LegacyColumnProps) {
+		const fields = props.data.fields;
+		void fields;
+		return null;
+	},
+	defaultFilterValue: textFilter,
+};
+const modernizedLegacyFieldSet: FieldComponentSet<unknown, unknown> =
+	legacyComponentsToModernFieldSet(legacyFieldComponentSet);
+const ModernizedLegacyField = legacyFieldToModernField(legacyFieldComponentSet.Field);
+const registeredLegacyFieldSet: FieldComponentSet<unknown, unknown> =
+	registerLegacyFieldComponents('__legacyCustomText__', legacyFieldComponentSet);
+const runtimeCustomFields: RuntimeCustomFieldComponents = {
+	legacyFieldComponents: {
+		__legacyCustomTextRuntime__: legacyFieldComponentSet,
+	},
+};
+const runtimeCustomFieldRegistration: RuntimeCustomFieldRegistrationResult =
+	registerRuntimeCustomFieldComponents(runtimeCustomFields);
+
+const adminListMeta: AdminListMeta = {
+	key: 'Post',
+	path: 'posts',
+	label: 'Posts',
+	fields: {
+		title: { path: 'title', label: 'Title', fieldType: 'text', required: true } satisfies AdminFieldMeta,
+	},
+};
+const adminMetaResponse: AdminMetaResponse = {
+	lists: { Post: adminListMeta },
+	nav: { sections: [{ key: 'content', label: 'Content', lists: [{ key: 'Post', path: 'posts', label: 'Posts' }] }] },
+	orphanedLists: [],
+};
+const listItem: ListItem = { id: 'post-1', name: 'Launch', fields: { title: 'Launch' } };
+const listResponse: ListResponse = { results: [listItem], count: 1 };
+const sessionResponse: SessionResponse = { user: { id: 'user-1', email: 'editor@example.test' } };
+const signinPayload: SigninPayload = { email: 'editor@example.test', password: 'secret' };
+const signinResponse: SigninResponse = { success: true, user: sessionResponse.user! };
+const sharedColumns = columnsParser('title', {
+	defaultColumns: 'title',
+	expandColumns(value: unknown) { return value; },
+});
+const sharedSort = sortParser('-title', {
+	defaultSort: 'title',
+	expandSort(value: unknown) { return value; },
+});
+const sharedFilters = filtersParser([{ path: 'title', value: 'Launch' }], { fields: { title: sharedTextMeta } });
+const sharedFilter = filterParser({ path: 'title', value: textFilter }, [], { fields: { title: sharedTextMeta } });
+const sharedFilterObject = createFilterObject('title', textFilter, { title: sharedTextMeta });
+const sharedListSearch: ListSearch = validateListSearch({
+	page: 2,
+	search: 'Launch',
+	columns: 'title,status',
+	'f.status': 'published',
+});
+const sharedListFilterValues: Record<string, string> = getFilterValuesFromSearch(sharedListSearch);
+const sharedActiveColumns: string[] = getActiveColumnPaths(sharedListSearch.cols, ['title']);
+const sharedSerializedColumns: string = serializeColumnPaths(sharedActiveColumns);
+const sharedParsedDefaultColumns: string[] = parseDefaultColumnPaths('title,status');
+const sharedDefaultColumnPaths: string[] = getDefaultColumnPaths({
+	defaultColumns: sharedParsedDefaultColumns,
+	fields: adminListMeta.fields,
+	resolveField(column) {
+		const path = typeof column === 'string' ? column : column.path ?? column.field ?? column.key ?? '';
+		return adminListMeta.fields[path];
+	},
+});
+const sharedIsIdColumnPath: boolean = isIdColumnPath('_id');
+const sharedDownloadUrl: string = buildListDownloadUrl({
+	adminApiBasepath: '/keystone-api',
+	columns: sharedActiveColumns.map((path) => ({ path })),
+	filters: sharedListFilterValues,
+	format: 'csv',
+	listPath: 'posts',
+	origin: 'https://example.test',
+	search: sharedListSearch.search,
+	sort: sharedListSearch.sort,
+});
+const sharedListFilterField: ListRouteFilterField = {
+	path: 'status',
+	label: 'Status',
+	fieldType: 'select',
+	hasFilterMethod: true,
+	options: [{ value: 'published', label: 'Published' }],
+};
+const sharedFilterableFields: ListRouteFilterField[] = getFilterFields({ status: sharedListFilterField });
+const sharedApiFilter: Record<string, unknown> | undefined = buildApiFilter(sharedListFilterField, 'published');
+const sharedApiFilters: Record<string, unknown> = buildApiFilters(sharedFilterableFields, { status: 'published' });
+const sharedGeopointFilter: GeopointRouteFilterValue | undefined = parseGeopointFilterValue({
+	lat: 40.7484,
+	lon: -73.9857,
+	distance: { mode: 'max', value: 5 },
+});
+const sharedFilterDisplay: string = formatFilterDisplay(sharedListFilterField, 'published');
+const sharedFormattedCount: string = formatCount(1200);
+const sharedPluralCount: string = pluralizeCount(2, 'Post', 'Posts');
+const sharedPageWindow: number[] = buildPageWindow(2, 10);
+void sharedFormattedCount;
+void sharedPluralCount;
+void sharedPageWindow;
+void sharedAdminApi<ListResponse>('/posts');
+void fetchAdminMeta();
+void fetchList('Post', { search: 'Launch' });
+void fetchItem('Post', 'post-1');
+void getSession();
+void signin(signinPayload);
+void signout();
+legacyApiRequest({ url: '/keystone-api/session', responseType: 'json' }, () => {});
 
 void singleton;
 void registryFromField;
@@ -552,6 +771,41 @@ void requestKeystone;
 void requestList;
 void requestUserId;
 void textField;
+void sharedTextMeta;
+void sharedFieldTypeName;
+void sharedFieldComponentSet;
+void sharedRegisteredField;
+void sharedUnregisteredFields;
+void sharedRegistryText;
+void modernizedLegacyFieldSet;
+void ModernizedLegacyField;
+void registeredLegacyFieldSet;
+void runtimeCustomFields;
+void runtimeCustomFieldRegistration;
+void adminListMeta;
+void adminMetaResponse;
+void listResponse;
+void sessionResponse;
+void signinResponse;
+void sharedColumns;
+void sharedSort;
+void sharedFilters;
+void sharedFilter;
+void sharedFilterObject;
+void sharedListSearch;
+void sharedListFilterValues;
+void sharedActiveColumns;
+void sharedSerializedColumns;
+void sharedParsedDefaultColumns;
+void sharedDefaultColumnPaths;
+void sharedIsIdColumnPath;
+void sharedDownloadUrl;
+void sharedListFilterField;
+void sharedFilterableFields;
+void sharedApiFilter;
+void sharedApiFilters;
+void sharedGeopointFilter;
+void sharedFilterDisplay;
 void selectOption;
 void selectValue;
 void selectStringOptions;

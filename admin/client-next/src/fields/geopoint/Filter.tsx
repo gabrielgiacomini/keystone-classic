@@ -64,6 +64,7 @@ export function Filter({
             onChange={(e) => updateField({ lat: e.target.value })}
             autoFocus
             style={{ width: '100%', boxSizing: 'border-box' }}
+            data-list-filter-geopoint-lat
           />
         </div>
         <div style={{ flex: 1 }}>
@@ -81,6 +82,7 @@ export function Filter({
             value={val.lon}
             onChange={(e) => updateField({ lon: e.target.value })}
             style={{ width: '100%', boxSizing: 'border-box' }}
+            data-list-filter-geopoint-lon
           />
         </div>
       </div>
@@ -88,6 +90,7 @@ export function Filter({
         <button
           type="button"
           onClick={() => setMode('max')}
+          data-list-filter-geopoint-mode-max
           style={{
             flex: 1,
             padding: '0.25rem',
@@ -103,6 +106,7 @@ export function Filter({
         <button
           type="button"
           onClick={() => setMode('min')}
+          data-list-filter-geopoint-mode-min
           style={{
             flex: 1,
             padding: '0.25rem',
@@ -126,6 +130,7 @@ export function Filter({
           updateField({ distance: { ...val.distance, value: e.target.value } })
         }
         style={{ width: '100%', boxSizing: 'border-box' }}
+        data-list-filter-geopoint-distance
       />
     </div>
   );

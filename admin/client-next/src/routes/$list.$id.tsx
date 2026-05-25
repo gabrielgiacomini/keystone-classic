@@ -19,6 +19,8 @@ import {
   resolveListMeta,
   toFieldMeta,
 } from '../api/list.js';
+import { getValidationFieldErrors } from '../api/errors.js';
+import type { FieldErrors } from '../api/errors.js';
 import type {
   AdminFieldMeta,
   AdminListMeta,
@@ -33,6 +35,7 @@ import { Layout } from '../components/Layout/Layout.js';
 import { ConfirmDialog } from '../components/ConfirmDialog/ConfirmDialog.js';
 import { InverseRelationshipPanel } from '../components/InverseRelationshipPanel/InverseRelationshipPanel.js';
 import { buildAdminNextPath } from '../adminNextPath.js';
+import { requireAuth } from './requireAuth.js';
 import styles from './$list.$id.module.css';
 
 const ESC_KEY = 'Escape';
@@ -40,6 +43,7 @@ const ESC_KEY = 'Escape';
 export const Route = createRoute({
   getParentRoute: () => RootRoute,
   path: '/$list/$id',
+  beforeLoad: ({ context }) => requireAuth(context),
   component: ItemEditPage,
 });
 
@@ -120,15 +124,6 @@ function buildDefaultValues(elements: FormElement[], item: ListItem | undefined)
 
 function getFormKey(elements: FormElement[], item: ListItem | undefined): string {
   return `${item?.id ?? 'loading'}:${getFormFields(elements).map((field) => field.path).join(',')}`;
-}
-
-function getDirtyValues(
-  data: Record<string, unknown>,
-  dirtyFields: Record<string, unknown>,
-): Record<string, unknown> {
-  return Object.fromEntries(
-    Object.entries(data).filter(([key]) => dirtyFields[key] !== undefined),
-  );
 }
 
 function getSubtitleSecondary(
@@ -361,11 +356,13 @@ function ItemEditPage() {
   const { item, isLoading, isError } = useItem(apiListKey, id, {
     fields: requestedFields.length > 0 ? requestedFields : undefined,
     expandRelationshipFields,
-    enabled: adminMeta !== undefined,
+    enabled: adminMeta !== undefined && listMeta !== undefined,
   });
   const { update, isUpdating } = useItemMutations(apiListKey, id);
 
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [deleteStatus, setDeleteStatus] = useState<'idle' | 'error'>('idle');
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const formElements = useMemo(
     () => metadataElements.length > 0 ? metadataElements : getFallbackFormElements(item),
     [metadataElements, item],
@@ -376,40 +373,44 @@ function ItemEditPage() {
   );
   const formKey = useMemo(() => getFormKey(formElements, item), [formElements, item]);
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { dirtyFields, isDirty },
-  } = useForm<Record<string, unknown>>({
+	const {
+		control,
+		handleSubmit,
+		reset,
+		watch,
+		formState: { isDirty },
+	} = useForm<Record<string, unknown>>({
     defaultValues,
   });
   const formValues = watch();
 
   useEffect(() => {
     reset(defaultValues);
+    setFieldErrors({});
   }, [defaultValues, formKey, reset]);
 
   async function onSubmit(data: Record<string, unknown>) {
     try {
-      const dirtyData = getDirtyValues(data, dirtyFields as Record<string, unknown>);
-      await update(prepareItemData(metadataFields, dirtyData));
+      await update(prepareItemData(metadataFields, data));
+      setFieldErrors({});
       setSaveStatus('success');
       setTimeout(() => setSaveStatus('idle'), 3000);
-    } catch {
+    } catch (error) {
+      setFieldErrors(getValidationFieldErrors(error));
       setSaveStatus('error');
     }
   }
 
   function handleResetChanges() {
     reset(defaultValues);
+    setFieldErrors({});
     setSaveStatus('idle');
   }
 
   const deleteMutation = useMutation({
     mutationFn: () => deleteItems(apiListKey, [id]),
     onSuccess: async () => {
+      setDeleteStatus('idle');
       await queryClient.invalidateQueries({ queryKey: ['list', apiListKey] });
       await queryClient.invalidateQueries({ queryKey: ['counts'] });
       await navigate({
@@ -418,9 +419,13 @@ function ItemEditPage() {
         search: { page: 1, search: '', sort: '', cols: '' },
       });
     },
+    onError: () => {
+      setDeleteStatus('error');
+    },
   });
 
   function handleDeleteConfirm() {
+    setDeleteStatus('idle');
     deleteMutation.mutate();
   }
 
@@ -433,6 +438,15 @@ function ItemEditPage() {
     item.name.length > 0
       ? item.name
       : item?.id ?? id;
+
+  if (adminMeta !== undefined && listMeta === undefined) {
+    return (
+      <Layout listKeys={navListKeys.length > 0 ? navListKeys : [listPath]}>
+        <p className={styles.error} role="alert">List not found!</p>
+        <p><a href={buildAdminNextPath('/')}>Go back home</a></p>
+      </Layout>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -516,6 +530,7 @@ function ItemEditPage() {
         onSubmit={handleSubmit(onSubmit)}
         className={styles.form}
         data-item-form
+        noValidate
       >
         {formElements.map((element) => {
           if (element.type === 'heading') {
@@ -554,7 +569,7 @@ function ItemEditPage() {
                     onChange={field.onChange}
                     isRequired={fieldMeta.required === true}
                     isReadonly={fieldMeta.noedit === true || noedit}
-                    errors={[]}
+                    errors={fieldErrors[fieldMeta.path] ?? []}
                     meta={meta}
                   />
                 )}
@@ -597,6 +612,11 @@ function ItemEditPage() {
                 {saveStatus === 'error' && (
                   <span role="status" className={styles.errorMsg}>
                     Save failed. Please try again.
+                  </span>
+                )}
+                {deleteStatus === 'error' && (
+                  <span role="status" className={styles.errorMsg} data-item-delete-error>
+                    Delete failed. Please try again.
                   </span>
                 )}
               </div>

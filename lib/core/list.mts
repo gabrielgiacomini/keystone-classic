@@ -3,6 +3,7 @@ import type { KeystoneList } from '../list.mjs';
 
 /**
  * Looks up a registered Keystone List by key (or alias path).
+ *
  * @throws {ReferenceError} If no list is registered under the given key.
  */
 export default function list(this: Keystone, key: string): KeystoneList {

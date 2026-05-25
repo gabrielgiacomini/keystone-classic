@@ -1,14 +1,5 @@
-import type { FilterProps } from '../types.js';
-
-/** Text input filter widget for code fields. */
-export function Filter({ fieldName, value, onChange }: FilterProps<string>) {
-  return (
-    <input
-      name={fieldName}
-      type="text"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder="Filter by code..."
-    />
-  );
-}
+export {
+	Filter,
+	getDefaultTextFilterValue as getDefaultCodeFilterValue,
+} from '../text/Filter.js';
+export type { TextFilterValue as CodeFilterValue } from '../text/Filter.js';

@@ -11,20 +11,10 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `ColorColumn` component.
  * @augments React.Component
  */
-const ColorColumn = React.createClass({
-	displayName: 'ColorColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
-	 * Renders the value of the field.
-	 * @returns {React.Element} The rendered value.
-	 */
-	renderValue () {
-		const value = this.props.data.fields[this.props.col.path];
-		if (!value) return null;
-
+function ColorColumn({ col, data }) {
+	const value = data.fields[col.path];
+	let renderedValue = null;
+	if (value) {
 		const colorBoxStyle = {
 			backgroundColor: value,
 			borderRadius: 3,
@@ -35,26 +25,20 @@ const ColorColumn = React.createClass({
 			width: 18,
 		};
 
-		return (
-			<ItemsTableValue truncate={false} field={this.props.col.type}>
-				<div style={{ lineHeight: '18px' }}>
-					<span style={colorBoxStyle} />
-					<span style={{ display: 'inline-block', verticalAlign: 'middle' }}>{value}</span>
-				</div>
-			</ItemsTableValue>
+		renderedValue = React.createElement(
+			ItemsTableValue,
+			{ truncate: false, field: col.type },
+			React.createElement(
+				'div',
+				{ style: { lineHeight: '18px' } },
+				React.createElement('span', { style: colorBoxStyle }),
+				React.createElement('span', { style: { display: 'inline-block', verticalAlign: 'middle' } }, value),
+			),
 		);
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		return (
-			<ItemsTableCell>
-				{this.renderValue()}
-			</ItemsTableCell>
-		);
-	},
-});
+	}
+
+	return React.createElement(ItemsTableCell, null, renderedValue);
+}
+
 
 export default ColorColumn;

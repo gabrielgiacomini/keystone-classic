@@ -14,7 +14,7 @@
 			...concatClassnames(className)
 		);
 
-		return <Component {...props} />;
+		return React.createElement(Component, props);
 	};
 */
 

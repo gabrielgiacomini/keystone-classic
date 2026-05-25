@@ -1,14 +1,5 @@
-import type { FilterProps } from '../types.js';
-
-/** Text input filter widget for markdown fields. */
-export function Filter({ fieldName, value, onChange }: FilterProps<string>) {
-  return (
-    <input
-      name={fieldName}
-      type="text"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder="Filter by markdown content..."
-    />
-  );
-}
+export {
+	Filter,
+	getDefaultTextFilterValue as getDefaultMarkdownFilterValue,
+} from '../text/Filter.js';
+export type { TextFilterValue as MarkdownFilterValue } from '../text/Filter.js';

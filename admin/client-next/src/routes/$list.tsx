@@ -5,6 +5,7 @@ import { Route as RootRoute } from './__root.js';
 import { useAdminMeta, useList } from '../hooks/useList.js';
 import {
   deleteItems,
+  fetchList,
   fetchCounts,
   getAdminListRoutePaths,
   getFallbackTextField,
@@ -20,91 +21,48 @@ import { Layout } from '../components/Layout/Layout.js';
 import { ConfirmDialog } from '../components/ConfirmDialog/ConfirmDialog.js';
 import { CreateItemModal } from '../components/CreateItemModal/CreateItemModal.js';
 import { buildAdminNextPath, getAdminApiBasepath } from '../adminNextPath.js';
+import {
+	buildApiFilters,
+	buildListDownloadUrl,
+	buildPageWindow,
+	formatCount,
+	formatFilterDisplay,
+	getActiveColumnPaths,
+	getDefaultColumnPaths as getSharedDefaultColumnPaths,
+	getFilterFields,
+	getFilterValuesFromSearch,
+	isIdColumnPath,
+	pluralizeCount,
+	serializeColumnPaths,
+	validateListSearch,
+} from '../../../shared/state/listRoute.js';
+import { requireAuth } from './requireAuth.js';
 import styles from './$list.module.css';
 
 const ESC_KEY = 'Escape';
 const WIDTH_LS_KEY = 'keystone-next:list:expanded';
+const SEARCH_DEBOUNCE_MS = 500;
 
 export const Route = createRoute({
   getParentRoute: () => RootRoute,
   path: '/$list',
   validateSearch: validateListSearch,
+  beforeLoad: ({ context }) => requireAuth(context),
   component: ListPage,
 });
-
-interface ListSearch {
-  page: number;
-  search: string;
-  sort: string;
-  cols: string;
-  create?: boolean;
-  [filterKey: `f.${string}`]: string;
-}
-
-function validateListSearch(search: Record<string, unknown>): ListSearch {
-  const cols = typeof search['cols'] === 'string'
-    ? search['cols']
-    : typeof search['columns'] === 'string'
-      ? search['columns']
-      : '';
-  const result: ListSearch = {
-    page: typeof search['page'] === 'number' ? search['page'] : 1,
-    search: typeof search['search'] === 'string' ? search['search'] : '',
-    sort: typeof search['sort'] === 'string' ? search['sort'] : '',
-    cols,
-  };
-  if (search['create'] === true || search['create'] === 'true') {
-    result.create = true;
-  }
-  for (const [key, value] of Object.entries(search)) {
-    if (key.startsWith('f.') && typeof value === 'string' && value.length > 0) {
-      (result as unknown as Record<string, string>)[key] = value;
-    }
-  }
-  return result;
-}
-
-function getFilterValuesFromSearch(search: ListSearch): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const [key, value] of Object.entries(search)) {
-    if (key.startsWith('f.') && typeof value === 'string') {
-      out[key.slice(2)] = value;
-    }
-  }
-  return out;
-}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function parseDefaultColumns(defaultColumns: AdminListMeta['defaultColumns']): string[] {
-  if (Array.isArray(defaultColumns)) return defaultColumns;
-  if (typeof defaultColumns !== 'string') return [];
-  return defaultColumns
-    .split(/[,\s]+/)
-    .map((part) => part.trim())
-    .filter(Boolean);
-}
-
 function getDefaultColumnPaths(listMeta: AdminListMeta | undefined): string[] {
   if (listMeta === undefined) return [];
-  const columnDefs = listMeta.columns?.length
-    ? listMeta.columns
-    : parseDefaultColumns(listMeta.defaultColumns);
-  const paths = columnDefs
-    .map((column) => resolveAdminField(listMeta, column))
-    .filter((field): field is AdminFieldMeta => field !== undefined && field.hidden !== true)
-    .map((field) => field.path);
-  const idColumnPaths = columnDefs
-    .map((column) => typeof column === 'string' ? column : column.path ?? column.field ?? column.key ?? '')
-    .filter((path) => typeof path === 'string' && isIdColumnPath(path.trim()))
-    .map(() => 'id');
-  if (idColumnPaths.length > 0) return idColumnPaths;
-  if (paths.length > 0) return paths;
-  return Object.values(listMeta.fields)
-    .filter((field) => field.hidden !== true && field.nocol !== true)
-    .map((field) => field.path);
+  return getSharedDefaultColumnPaths({
+    columns: listMeta.columns,
+    defaultColumns: listMeta.defaultColumns,
+    fields: listMeta.fields,
+    resolveField: (column) => resolveAdminField(listMeta, column),
+  });
 }
 
 function resolveColumns(
@@ -129,16 +87,20 @@ function getAvailableColumnFields(listMeta: AdminListMeta | undefined): AdminFie
   return [ID_COLUMN_FIELD, ...fields];
 }
 
+function getNoResultsText(plural: string, searchQuery: string, filterCount: number): string {
+  let matching = searchQuery;
+  if (filterCount > 0) {
+    matching += `${matching ? ' and ' : ''}${filterCount} ${filterCount === 1 ? 'filter' : 'filters'}`;
+  }
+  return `No ${plural.toLowerCase()}${matching ? ` found matching ${matching}` : '.'}`;
+}
+
 const ID_COLUMN_FIELD: AdminFieldMeta = {
   path: 'id',
   label: 'ID',
   fieldType: '__id__',
   nosort: false,
 };
-
-function isIdColumnPath(path: string): boolean {
-  return path === 'id' || path === '_id';
-}
 
 function getFallbackColumns(items: ListItem[]): AdminFieldMeta[] {
   const firstItem = items[0];
@@ -149,162 +111,6 @@ function getFallbackColumns(items: ListItem[]): AdminFieldMeta[] {
   return Object.keys(firstItem)
     .filter((key) => key !== 'id' && key !== '_id' && key !== '__v' && key !== 'fields')
     .map(getFallbackTextField);
-}
-
-// ---------------------------------------------------------------------------
-// Filter helpers — mirror legacy server-side filter shape
-// ---------------------------------------------------------------------------
-
-function isEmptyFilterValue(value: unknown): boolean {
-  if (value === undefined || value === null || value === '') return true;
-  if (value === 'any') return true;
-  if (Array.isArray(value)) return value.length === 0;
-  if (typeof value === 'object') return Object.keys(value).length === 0;
-  return false;
-}
-
-function numberFilterValue(value: unknown): unknown {
-  if (typeof value === 'number') return value;
-  if (typeof value === 'string' && value.trim() !== '') {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : value;
-  }
-  return value;
-}
-
-function selectFilterValue(field: AdminFieldMeta, value: unknown): unknown {
-  return field.numeric === true ? numberFilterValue(value) : value;
-}
-
-function parseGeopointFilterValue(
-  value: unknown,
-): { lat: number; lon: number; distance: { mode: string; value: number | undefined } } | undefined {
-  let parsed: unknown = value;
-  if (typeof value === 'string') {
-    try {
-      parsed = JSON.parse(value);
-    } catch {
-      return undefined;
-    }
-  }
-  if (!isRecord(parsed)) return undefined;
-  const lat = typeof parsed['lat'] === 'string' ? parseFloat(parsed['lat']) : Number(parsed['lat']);
-  const lon = typeof parsed['lon'] === 'string' ? parseFloat(parsed['lon']) : Number(parsed['lon']);
-  if (!isFinite(lat) || !isFinite(lon)) return undefined;
-  const dist = isRecord(parsed['distance']) ? parsed['distance'] : {};
-  const mode = typeof dist['mode'] === 'string' ? dist['mode'] : 'max';
-  const rawDistVal = dist['value'];
-  const distanceKm =
-    rawDistVal !== '' && rawDistVal !== undefined && rawDistVal !== null
-      ? (typeof rawDistVal === 'string' ? parseFloat(rawDistVal) : Number(rawDistVal))
-      : undefined;
-  return { lat, lon, distance: { mode, value: distanceKm !== undefined && isFinite(distanceKm) ? distanceKm : undefined } };
-}
-
-function buildApiFilter(field: AdminFieldMeta, value: unknown): Record<string, unknown> | undefined {
-  if (isEmptyFilterValue(value)) return undefined;
-  switch (field.fieldType) {
-    case 'boolean':
-      return { value };
-    case 'date':
-    case 'datearray':
-    case 'datetime':
-      return { mode: 'on', value };
-    case 'geopoint': {
-      const gp = parseGeopointFilterValue(value);
-      if (gp === undefined) return undefined;
-      return { lat: gp.lat, lon: gp.lon, distance: gp.distance };
-    }
-    case 'location':
-      return { city: value };
-    case 'money':
-    case 'number':
-    case 'numberarray':
-      return { mode: 'equals', value: numberFilterValue(value) };
-    case 'relationship':
-      return { value };
-    case 'select':
-      return { value: selectFilterValue(field, value) };
-    case 'code':
-    case 'color':
-    case 'email':
-    case 'html':
-    case 'key':
-    case 'markdown':
-    case 'name':
-    case 'text':
-    case 'textarea':
-    case 'textarray':
-    case 'url':
-      return { mode: 'contains', value };
-    default:
-      return undefined;
-  }
-}
-
-function buildApiFilters(
-  fields: AdminFieldMeta[],
-  values: Record<string, unknown>,
-): Record<string, unknown> {
-  const filters: Record<string, unknown> = {};
-  for (const field of fields) {
-    const filter = buildApiFilter(field, values[field.path]);
-    if (filter !== undefined) {
-      filters[field.path] = filter;
-    }
-  }
-  return filters;
-}
-
-function getFilterFields(listMeta: AdminListMeta | undefined): AdminFieldMeta[] {
-  if (listMeta === undefined) return [];
-  return Object.values(listMeta.fields).filter(
-    (field) =>
-      field.hidden !== true &&
-      field.hasFilterMethod === true,
-  );
-}
-
-function formatFilterDisplay(field: AdminFieldMeta, raw: string): string {
-  if (field.fieldType === 'select' && Array.isArray(field.options)) {
-    const opt = field.options.find((o) => String(o.value) === String(raw));
-    if (opt !== undefined) return opt.label;
-  }
-  return raw;
-}
-
-// ---------------------------------------------------------------------------
-// Format helpers
-// ---------------------------------------------------------------------------
-
-function formatCount(n: number): string {
-  // numeral '0,0' equivalent — thousand-separated
-  return n.toLocaleString('en-US');
-}
-
-function pluralizeCount(count: number, singular: string, plural: string): string {
-  return `${formatCount(count)} ${count === 1 ? singular : plural}`;
-}
-
-function buildPageWindow(currentPage: number, totalPages: number, limit = 10): number[] {
-  if (totalPages <= 1) return [];
-  if (totalPages <= limit) return Array.from({ length: totalPages }, (_, i) => i + 1);
-
-  const rightLimit = Math.floor(limit / 2);
-  const leftLimit = rightLimit + (limit % 2) - 1;
-  let minPage = currentPage - leftLimit;
-  let maxPage = currentPage + rightLimit;
-  if (minPage < 1) {
-    maxPage = limit;
-    minPage = 1;
-  }
-  if (maxPage > totalPages) {
-    minPage = totalPages - limit + 1;
-    maxPage = totalPages;
-  }
-  const out: number[] = [];
-  for (let p = minPage; p <= maxPage; p++) out.push(p);
-  return out;
 }
 
 // ---------------------------------------------------------------------------
@@ -499,7 +305,7 @@ function ListPage() {
 
   const defaultColumnPaths = useMemo(() => getDefaultColumnPaths(listMeta), [listMeta]);
   const availableColumnFields = useMemo(() => getAvailableColumnFields(listMeta), [listMeta]);
-  const filterFields = useMemo(() => getFilterFields(listMeta), [listMeta]);
+  const filterFields = useMemo(() => getFilterFields(listMeta?.fields), [listMeta]);
 
   const page = searchParams.page;
   const searchQuery = searchParams.search;
@@ -508,8 +314,9 @@ function ListPage() {
 
   // Active columns from URL `cols=path1,path2` or default
   const activeColumnPaths = useMemo(() => {
-    if (searchParams.cols.length === 0) return defaultColumnPaths;
-    return searchParams.cols.split(',').map((p) => p.trim()).filter(Boolean);
+    return getActiveColumnPaths(searchParams.cols, defaultColumnPaths, {
+      prependIdWhenExplicitColumnsOmitId: true,
+    });
   }, [searchParams.cols, defaultColumnPaths]);
 
   const activeColumns = useMemo(
@@ -523,6 +330,17 @@ function ListPage() {
     () => getFilterValuesFromSearch(searchParams),
     [searchParams],
   );
+  const relationshipCreateValues = useMemo(() => {
+    if (listMeta === undefined) return {};
+    const values: Record<string, unknown> = {};
+    for (const [path, rawValue] of Object.entries(filterValues)) {
+      const field = resolveAdminField(listMeta, path);
+      if (field?.fieldType === 'relationship' && typeof rawValue === 'string' && rawValue.length > 0) {
+        values[path] = rawValue;
+      }
+    }
+    return values;
+  }, [filterValues, listMeta]);
 
   const apiFilters = useMemo(
     () => buildApiFilters(filterFields, filterValues),
@@ -540,9 +358,13 @@ function ListPage() {
   function handleSearchChange(value: string) {
     setLocalSearch(value);
     if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (value.length === 0) {
+      void navigate({ search: (prev) => ({ ...prev, search: '', page: 1 }) });
+      return;
+    }
     debounceRef.current = setTimeout(() => {
       void navigate({ search: (prev) => ({ ...prev, search: value, page: 1 }) });
-    }, 300);
+    }, SEARCH_DEBOUNCE_MS);
   }
 
   function handleSearchKey(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -582,6 +404,7 @@ function ListPage() {
     filters: apiFilters,
     fields: activeColumnPaths.length > 0 ? activeColumnPaths : undefined,
     expandRelationshipFields,
+    enabled: adminMeta !== undefined && listMeta !== undefined,
   });
 
   // Counts for sidebar nav
@@ -595,6 +418,7 @@ function ListPage() {
   // Selection state
   const [manageMode, setManageMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [selectAllItemsLoading, setSelectAllItemsLoading] = useState(false);
 
   useEffect(() => {
     setSelected(new Set());
@@ -613,6 +437,24 @@ function ListPage() {
   function selectVisible() {
     setSelected(new Set(items.map((item) => item.id)));
   }
+
+  async function selectAllItems() {
+    setSelectAllItemsLoading(true);
+    try {
+      const params: Record<string, string> = {
+        limit: String(count),
+        skip: '0',
+      };
+      if (searchQuery) params['search'] = searchQuery;
+      if (sort) params['sort'] = sort;
+      if (Object.keys(apiFilters).length > 0) params['filters'] = JSON.stringify(apiFilters);
+      const data = await fetchList(apiListKey, params);
+      setSelected(new Set(data.results.map((item) => item.id).filter(Boolean)));
+    } finally {
+      setSelectAllItemsLoading(false);
+    }
+  }
+
   function selectNone() {
     setSelected(new Set());
   }
@@ -727,7 +569,7 @@ function ListPage() {
     void navigate({
       search: (prev) => ({
         ...prev,
-        cols: paths.length === 0 ? '' : paths.join(','),
+        cols: serializeColumnPaths(paths),
         page: 1,
       }),
     });
@@ -750,11 +592,26 @@ function ListPage() {
   };
 
   const activeFilterPaths = Object.keys(filterValues);
+  const showBlankState =
+    !isLoading &&
+    !isError &&
+    items.length === 0 &&
+    searchQuery.length === 0 &&
+    activeFilterPaths.length === 0;
 
   // Header title — show spinner while loading
   const titleText = isLoading
     ? null
     : pluralizeCount(count, singular, plural);
+
+  if (adminMeta !== undefined && listMeta === undefined) {
+    return (
+      <Layout listKeys={listKeys.length > 0 ? listKeys : [listPath]}>
+        <p className={styles.error} role="alert">List not found!</p>
+        <p><a href={buildAdminNextPath('/')}>Go back home</a></p>
+      </Layout>
+    );
+  }
 
   return (
     <Layout listKeys={listKeys.length > 0 ? listKeys : [listPath]}>
@@ -823,6 +680,7 @@ function ListPage() {
                 <DownloadPanel
                   listPath={listPath}
                   columns={activeColumns}
+                  availableFields={availableColumnFields}
                   search={searchQuery}
                   filters={apiFilters}
                   sort={sort}
@@ -914,10 +772,23 @@ function ListPage() {
             )}
             {manageMode && (
               <>
+                {count > items.length && (
+                  <button
+                    type="button"
+                    className={`${styles.btn}${selected.size === count ? ` ${styles.btnActive}` : ''}`}
+                    onClick={() => void selectAllItems()}
+                    disabled={selectAllItemsLoading}
+                    data-list-management-select-all
+                    title="Select all rows, including rows on other pages"
+                  >
+                    {selectAllItemsLoading ? 'Loading' : 'All'} <small className={styles.btnNote}>({count})</small>
+                  </button>
+                )}
                 <button
                   type="button"
                   className={`${styles.btn}${selected.size === items.length && items.length > 0 ? ` ${styles.btnActive}` : ''}`}
                   onClick={selectVisible}
+                  data-list-management-select-visible
                   title="Select all visible rows"
                 >
                   All <small className={styles.btnNote}>({items.length})</small>
@@ -926,6 +797,7 @@ function ListPage() {
                   type="button"
                   className={`${styles.btn}${selected.size === 0 ? ` ${styles.btnActive}` : ''}`}
                   onClick={selectNone}
+                  data-list-management-select-none
                   title="Deselect all"
                 >
                   None
@@ -950,8 +822,8 @@ function ListPage() {
             )}
           </div>
           <div className={styles.managementRight}>
-            {!manageMode && count > 0 && (
-              <span className={styles.showingText} data-list-management-showing>
+            {!showBlankState && !manageMode && count > 0 && (
+              <span className={styles.showingText} data-list-management-showing data-list-pagination-summary>
                 {count > PAGE_SIZE
                   ? `Showing ${(PAGE_SIZE * (page - 1)) + 1} to ${Math.min(PAGE_SIZE * page, count)} of ${formatCount(count)}`
                   : `Showing ${pluralizeCount(count, singular, plural)}`}
@@ -962,8 +834,27 @@ function ListPage() {
 
         {/* Error / loading / table */}
         {isError && <p className={styles.error}>Failed to load items.</p>}
+        {showBlankState && (
+          <div className={styles.empty}>
+            <p>No {plural.toLowerCase()} found...</p>
+            {listMeta?.nocreate !== true && (
+              <button
+                type="button"
+                onClick={() => openCreateModal()}
+                className={`${styles.btn} ${styles.btnSuccess}`}
+                data-list-create
+                data-e2e-list-create-button="no-results"
+                data-list-key={apiListKey}
+                data-list-path={listPath}
+              >
+                <PlusIcon />
+                <span>{`Create ${singular}`}</span>
+              </button>
+            )}
+          </div>
+        )}
 
-        {!isError && (
+        {!isError && !showBlankState && (
           <div className={styles.tableWrapper}>
             <table
               className={styles.table}
@@ -990,6 +881,8 @@ function ListPage() {
                       <th
                         key={field.path}
                         className={isIdColumnPath(field.path) ? styles.thControl : undefined}
+                        data-list-column-header
+                        data-field-name={field.path}
                       >
                         {sortable ? (
                           <button
@@ -1029,7 +922,7 @@ function ListPage() {
                       className={styles.empty}
                     >
                       {searchQuery.length > 0 || activeFilterPaths.length > 0
-                        ? `No ${plural.toLowerCase()} found matching your query.`
+                        ? getNoResultsText(plural, searchQuery, activeFilterPaths.length)
                         : `No ${plural.toLowerCase()} yet.`}
                     </td>
                   </tr>
@@ -1146,7 +1039,7 @@ function ListPage() {
         )}
 
         {/* Pagination */}
-        {!isLoading && !isError && totalPages > 1 && (
+        {!showBlankState && !isLoading && !isError && totalPages > 1 && (
           <nav className={styles.paginationRow} aria-label="Pagination" data-list-pagination>
             <button
               type="button"
@@ -1168,6 +1061,8 @@ function ListPage() {
                     className={`${styles.pageBtn}${p === page ? ` ${styles.pageBtnActive}` : ''}`}
                     onClick={() => goToPage(p)}
                     aria-current={p === page ? 'page' : undefined}
+                    data-list-page-button
+                    data-page={p}
                   >
                     {p}
                   </button>
@@ -1199,6 +1094,7 @@ function ListPage() {
         isOpen={createModalOpen}
         onClose={closeCreateModal}
         onCreated={handleCreated}
+        initialValues={relationshipCreateValues}
       />
     </Layout>
   );
@@ -1260,6 +1156,7 @@ function FilterAddPanel({
           <button
             type="button"
             className={`${styles.btn} ${styles.btnPrimary}`}
+            data-list-filter-apply
             onClick={() => {
               const raw = draftValue;
               const text =
@@ -1302,6 +1199,8 @@ function FilterAddPanel({
                     setSelectedField(field);
                     setDraftValue('');
                   }}
+                  data-list-filter-option
+                  data-field-name={field.path}
                 >
                   <span>{field.label}</span>
                   <span className={styles.popoutItemArrow}>›</span>
@@ -1351,6 +1250,7 @@ function ColumnsPanel({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className={styles.dropdownSearch}
+          data-list-column-search
           autoFocus
         />
         <ul className={styles.popoutList}>
@@ -1362,6 +1262,8 @@ function ColumnsPanel({
                   type="button"
                   className={`${styles.popoutItem}${isActive ? ` ${styles.popoutItemActive}` : ''}`}
                   onClick={() => onToggle(field.path)}
+                  data-list-column-option
+                  data-field-name={field.path}
                 >
                   <span className={styles.popoutCheck} aria-hidden="true">
                     {isActive ? '✓' : ''}
@@ -1382,6 +1284,7 @@ function ColumnsPanel({
             type="button"
             className={styles.btn}
             onClick={() => onReset()}
+            data-list-column-reset
           >
             Reset to default
           </button>
@@ -1394,29 +1297,58 @@ function ColumnsPanel({
 function DownloadPanel({
   listPath,
   columns,
+  availableFields,
   search,
   filters,
   sort,
 }: {
   listPath: string;
   columns: AdminFieldMeta[];
+  availableFields: AdminFieldMeta[];
   search: string;
   filters: Record<string, unknown>;
   sort: string;
 }) {
   const [format, setFormat] = useState<'csv' | 'json'>('csv');
+  const [useCurrentColumns, setUseCurrentColumns] = useState(true);
+  const [selectedPaths, setSelectedPaths] = useState<string[]>(() => columns.map((field) => field.path));
+
+  useEffect(() => {
+    setSelectedPaths(columns.map((field) => field.path));
+  }, [columns]);
+
+  const selectedPathSet = new Set(selectedPaths);
+  const exportColumns = useCurrentColumns
+    ? columns
+    : selectedPaths
+      .map((path) => columns.find((field) => field.path === path) ?? availableFields.find((field) => field.path === path))
+      .filter((field): field is AdminFieldMeta => field !== undefined);
+  const allColumnsSelected = availableFields.length > 0 &&
+    availableFields.every((field) => selectedPathSet.has(field.path));
+
+  function toggleSelectedPath(path: string) {
+    setSelectedPaths((current) => (
+      current.includes(path)
+        ? current.filter((entry) => entry !== path)
+        : [...current, path]
+    ));
+  }
+
+  function toggleAllColumns() {
+    setSelectedPaths(allColumnsSelected ? [] : availableFields.map((field) => field.path));
+  }
 
   function handleDownload() {
-    const base = getAdminApiBasepath();
-    const url = new URL(`${base}/${listPath}/export.${format}`, window.location.origin);
-    if (search) url.searchParams.set('search', search);
-    if (Object.keys(filters).length > 0) {
-      url.searchParams.set('filters', JSON.stringify(filters));
-    }
-    if (sort) url.searchParams.set('sort', sort);
-    const selectPaths = columns.map((c) => c.path).join(',');
-    if (selectPaths) url.searchParams.set('select', selectPaths);
-    window.location.href = url.toString();
+    window.location.href = buildListDownloadUrl({
+      adminApiBasepath: getAdminApiBasepath(),
+      columns: exportColumns,
+      filters,
+      format,
+      listPath,
+      origin: window.location.origin,
+      search,
+      sort,
+    });
   }
 
   return (
@@ -1441,6 +1373,53 @@ function DownloadPanel({
             </button>
           </div>
         </div>
+        <div className={styles.dropdownFormRow}>
+          <label>
+            <input
+              type="checkbox"
+              className={styles.checkbox}
+              checked={useCurrentColumns}
+              onChange={(e) => setUseCurrentColumns(e.target.checked)}
+              data-list-download-use-current-columns
+            />{' '}
+            Use currently selected
+          </label>
+        </div>
+        {!useCurrentColumns ? (
+          <div className={styles.dropdownFormRow} data-list-download-column-options>
+            <label>
+              <input
+                type="checkbox"
+                className={styles.checkbox}
+                checked={allColumnsSelected}
+                onChange={toggleAllColumns}
+                data-list-download-toggle-all-columns
+              />{' '}
+              {allColumnsSelected ? 'Select None' : 'Select All'}
+            </label>
+            <ul className={styles.popoutList}>
+              {availableFields.map((field) => {
+                const isSelected = selectedPathSet.has(field.path);
+                return (
+                  <li key={field.path}>
+                    <button
+                      type="button"
+                      className={`${styles.popoutItem}${isSelected ? ` ${styles.popoutItemActive}` : ''}`}
+                      onClick={() => toggleSelectedPath(field.path)}
+                      data-list-download-column-option
+                      data-field-name={field.path}
+                    >
+                      <span className={styles.popoutCheck} aria-hidden="true">
+                        {isSelected ? '✓' : ''}
+                      </span>
+                      <span>{field.label}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ) : null}
       </div>
       <div className={styles.dropdownFooter}>
         <button

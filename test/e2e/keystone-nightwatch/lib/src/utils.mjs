@@ -1,4 +1,28 @@
-import _, { camelCase, upperFirst } from 'lodash';
+function collectionSize(value) {
+	if (value == null) return 0;
+	if (typeof value === 'string' || Array.isArray(value)) return value.length;
+	if (typeof value.length === 'number') return value.length;
+	if (typeof value.size === 'number') return value.size;
+	if (typeof value === 'object') return Object.keys(value).length;
+	return 0;
+}
+
+function asciiWords(value) {
+	return String(value ?? '').match(/[A-Za-z0-9]+/g) || [];
+}
+
+function camelCase(value) {
+	const words = asciiWords(value);
+	return words.map((word, index) => {
+		const lower = word.toLowerCase();
+		return index === 0 ? lower : lower.charAt(0).toUpperCase() + lower.slice(1);
+	}).join('');
+}
+
+function upperFirst(value) {
+	const text = String(value ?? '');
+	return text.charAt(0).toUpperCase() + text.slice(1);
+}
 
 
 /**
@@ -24,7 +48,7 @@ export const plural = function (count, sn, pl) {
 	if (typeof count === 'string') {
 		count = Number(count);
 	} else if (typeof count !== 'number') {
-		count = _.size(count);
+		count = collectionSize(count);
 	}
 	return (count === 1 ? sn : pl).replace('*', count);
 };
@@ -75,7 +99,7 @@ export const titlecase = function (str) {
 			parts[i] = upcase(parts[i]);
 		}
 	}
-	return _.compact(parts).join(' ');
+	return parts.filter(Boolean).join(' ');
 };
 
 

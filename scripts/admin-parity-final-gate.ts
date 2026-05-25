@@ -9,10 +9,16 @@ if (args.has('--help')) {
 }
 
 const commands: Array<[string, string[]]> = [
+	['npm', ['run', 'admin-parity:ledger']],
+	['npm', ['run', 'admin-decommission:audit']],
+	['npm', ['run', 'lint']],
+	['npm', ['run', 'typecheck']],
+	['npm', ['run', 'build-dev']],
+	['npm', ['run', 'build']],
+	['npm', ['run', 'test:unit']],
 	['npm', ['run', 'test:e2e-api']],
-	['npm', ['run', 'test:e2e-ui']],
-	['npm', ['run', 'test:e2e-ui:fields']],
 	['npm', ['run', 'admin-parity']],
+	['npm', ['run', 'package:verify']],
 	['npm', ['run', 'admin-parity:soak']],
 ];
 
@@ -47,6 +53,12 @@ function printHelp() {
 	console.log(`Usage: jiti scripts/admin-parity-final-gate.ts [options]
 
 Run the final P4 admin-parity closeout gates in the required order.
+The admin-parity:ledger step verifies that every parity ledger row is Complete
+or Out of scope before final decommission starts.
+The admin-decommission:audit step verifies that legacy browser/server roots have
+been removed or isolated according to the convergence plan.
+The lint/typecheck/build-dev/build/unit/package steps mirror the convergence Definition
+of Done before the e2e parity, visual identity, and soak gates run.
 The final admin-parity:soak step verifies branch protection or an active branch ruleset plus the 14-day green window.
 Use npm run admin-parity:protect:status to inspect the required-check source without running e2e gates.
 

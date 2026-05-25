@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { FieldType } from '../Type.mjs';
 import type { KeystoneList, FieldOptionsBase, MongooseDocument } from '../Type.mjs';
 import sanitize from 'sanitize-filename';
@@ -61,7 +60,7 @@ function truthy (value: unknown): boolean { return Boolean(value); }
 function cleanUp (oldValues: CloudinaryImageData[], newValues: CloudinaryImageData[]): void {
 	const oldvalIds = oldValues.map((v: CloudinaryImageData) => v.public_id);
 	const newValIds = newValues.map((v: CloudinaryImageData) => v.public_id);
-	const removed = _.difference(oldvalIds, newValIds);
+	const removed = oldvalIds.filter(id => !newValIds.includes(id));
 	removed.forEach(function (id: string) {
 		cloudinarySdk.uploader.destroy(id, function () {});
 	});
@@ -75,7 +74,7 @@ function trimSupportedFileExtensions (publicId: string): string {
 		'.djvu', '.flif', '.tga',
 	];
 	for (const ext of exts) {
-		if (_.endsWith(publicId, ext)) return publicId.slice(0, -ext.length);
+		if (publicId.endsWith(ext)) return publicId.slice(0, -ext.length);
 	}
 	return publicId;
 }
@@ -291,7 +290,7 @@ class CloudinaryType extends FieldType<KeystoneFieldOptionsForCloudinaryType, Cl
 			},
 		};
 
-		_.forEach(schemaMethods, function (fn, key: string) {
+		Object.entries(schemaMethods).forEach(function ([key, fn]) {
 			(field.underscoreMethod as (key: string, fn: (...args: unknown[]) => unknown) => void)(key, fn);
 		});
 
@@ -414,10 +413,9 @@ class CloudinaryType extends FieldType<KeystoneFieldOptionsForCloudinaryType, Cl
 	 */
 	override format (item: MongooseDocument): string {
 		if (this.options.multiple) {
-			return _.map(
-				item.get(this.path) as CloudinaryImageData[],
-				function (img: CloudinaryImageData) { return img.src?.() ?? ''; },
-			).join(', ');
+			return ((item.get(this.path) as CloudinaryImageData[] | undefined) ?? [])
+				.map(function (img: CloudinaryImageData) { return img.src?.() ?? ''; })
+				.join(', ');
 		}
 		return item.get(this.paths.url ?? '') as string;
 	}
@@ -606,20 +604,24 @@ class CloudinaryType extends FieldType<KeystoneFieldOptionsForCloudinaryType, Cl
 			if (folder) uploadOptions.folder = folder;
 
 			const uploadedFileFinal = uploadedFile;
-			field.getFilename(
-				uploadedFileFinal,
-				function (err: unknown, filename?: string) {
-					if (err) return callback(err);
-					if (filename !== undefined) {
-						filename = sanitize(filename);
-						uploadOptions.public_id = trimSupportedFileExtensions(filename);
-					}
-					cloudinarySdk.uploader.upload(uploadedFileFinal.path, function (result) {
-						if (result.error) { return callback(result.error); }
-						else { itemDoc.set(fieldPath, result); return callback(); }
-					}, uploadOptions);
-				},
-			);
+			const uploadFile = function () {
+				cloudinarySdk.uploader.upload(uploadedFileFinal.path, function (result) {
+					if (result.error) { return callback(result.error); }
+					else { itemDoc.set(fieldPath, result); return callback(); }
+				}, uploadOptions);
+			};
+			if (!opts.generateFilename) {
+				uploadFile();
+				return;
+			}
+			field.getFilename(uploadedFileFinal, function (err: unknown, filename?: string) {
+				if (err) return callback(err);
+				if (filename !== undefined) {
+					filename = sanitize(filename);
+					uploadOptions.public_id = trimSupportedFileExtensions(filename);
+				}
+				uploadFile();
+			});
 			return;
 		}
 
@@ -642,7 +644,6 @@ class CloudinaryType extends FieldType<KeystoneFieldOptionsForCloudinaryType, Cl
 	 * @param data - The submitted form data.
 	 * @param files - Uploaded files map.
 	 * @param callback - Callback on completion.
-	 * @returns Nothing.
 	 */
 	_updateItemMulti (
 		item: Record<string, unknown>,
@@ -694,7 +695,7 @@ class CloudinaryType extends FieldType<KeystoneFieldOptionsForCloudinaryType, Cl
 			}
 			return value;
 		});
-		valuesArr = _.flatten(valuesArr);
+		valuesArr = valuesArr.flat();
 
 		Promise.all(valuesArr.map(function (value: unknown) {
 			if (typeof value === 'object' && value !== null && 'public_id' in value) {
@@ -737,7 +738,6 @@ class CloudinaryType extends FieldType<KeystoneFieldOptionsForCloudinaryType, Cl
 	 * @param attempt - The current retry attempt number.
 	 * @param file - The uploaded file descriptor.
 	 * @param callback - Callback with the generated filename or error.
-	 * @returns Nothing.
 	 */
 	retryFilename (attempt: number, file: UploadedFile, callback: (err: unknown, name?: string) => void): void {
 		const self = this;
@@ -766,7 +766,6 @@ class CloudinaryType extends FieldType<KeystoneFieldOptionsForCloudinaryType, Cl
 	 * Generates a filename for an uploaded Cloudinary file.
 	 * @param file - The uploaded file descriptor.
 	 * @param callback - Callback with the generated filename or error.
-	 * @returns Nothing.
 	 */
 	getFilename (file: UploadedFile, callback: (err: unknown, name?: string) => void): void {
 		const self = this;
@@ -1015,6 +1014,14 @@ export type KeystoneTypeConstructorForCloudinaryType = new(
 function validateInputValue (value: unknown): boolean {
 	if (value === undefined || value === null || value === '') return true;
 	if (typeof value === 'string' && /^(?:(upload:)|(delete$)|(data:[a-z/]+;base64)|(https?:\/\/))/.test(value)) return true;
+	if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+		try {
+			const parsed = JSON.parse(value) as unknown;
+			return typeof parsed === 'object' && parsed !== null && 'public_id' in parsed;
+		} catch (_err) {
+			return false;
+		}
+	}
 	if (typeof value === 'object' && 'public_id' in value) return true;
 	return false;
 }

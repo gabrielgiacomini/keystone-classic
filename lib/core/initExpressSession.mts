@@ -1,7 +1,6 @@
 import type { Keystone } from '../../index.mjs';
 import type { Request, Response, NextFunction } from 'express';
 import type { Mongoose } from 'mongoose';
-import _ from 'lodash';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import debugLib from 'debug';
@@ -15,6 +14,15 @@ const debug = debugLib('keystone:core:initExpressSession');
 function formatSessionStoreName(value: unknown): string {
 	if (typeof value === 'string') return value;
 	return Object.prototype.toString.call(value);
+}
+
+function applyDefaults<T extends Record<string, unknown>>(target: T, defaults: Record<string, unknown>): T {
+	for (const key of Object.keys(defaults)) {
+		if (target[key] === undefined) {
+			target[key as keyof T] = defaults[key] as T[keyof T];
+		}
+	}
+	return target;
 }
 
 /**
@@ -34,7 +42,7 @@ export function initExpressSessionCore(this: Keystone, mongoose: Mongoose): Keys
 	}
 
 	const sessionOptions: KeystoneSessionOptions = (this.get('session options') as unknown as KeystoneSessionOptions | null) ?? ({} as KeystoneSessionOptions);
-	_.defaults(sessionOptions, {
+	applyDefaults(sessionOptions as unknown as Record<string, unknown>, {
 		key: 'keystone.sid',
 		resave: false,
 		saveUninitialized: false,
@@ -73,7 +81,7 @@ export function initExpressSessionCore(this: Keystone, mongoose: Mongoose): Keys
 		switch (sessionStore) {
 			case 'connect-mongo':
 				debug('using connect-mongo session store');
-				_.defaults(sessionStoreOptions, {
+				applyDefaults(sessionStoreOptions, {
 					collection: 'app_sessions',
 					mongooseConnection: mongoose.connection,
 				});
@@ -81,7 +89,7 @@ export function initExpressSessionCore(this: Keystone, mongoose: Mongoose): Keys
 
 			case 'connect-mongostore':
 				debug('using connect-mongostore session store');
-				_.defaults(sessionStoreOptions, { collection: 'app_sessions' });
+				applyDefaults(sessionStoreOptions, { collection: 'app_sessions' });
 				if (!sessionStoreOptions.db) {
 					console.error('\nERROR: connect-mongostore requires `session store options` to be set.\n');
 					process.exit(1);

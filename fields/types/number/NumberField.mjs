@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import Field from '../Field.mjs';
-import { FormInput } from '../../../admin/client-legacy/App/elemental';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
 
 /**
  * The `NumberField` component.
@@ -34,14 +34,12 @@ export default Field.create({
 	 * @returns {React.Element} The rendered field.
 	 */
 	renderField () {
-		return (
-			<FormInput
-				autoComplete="off"
-				name={this.getInputName(this.props.path)}
-				onChange={this.valueChanged}
-				ref="focusTarget"
-				value={this.props.value}
-			/>
-		);
+		return React.createElement(FormInput, {
+			autoComplete: 'off',
+			name: this.getInputName(this.props.path),
+			onChange: this.valueChanged,
+			ref: this.getFocusTargetRef(),
+			value: this.props.value,
+		});
 	},
 });

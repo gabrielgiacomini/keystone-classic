@@ -10,10 +10,12 @@ import { createRoute, useNavigate } from '@tanstack/react-router';
 import { Route as RootRoute } from './__root.js';
 import { resolveListMeta } from '../api/list.js';
 import { useAdminMeta } from '../hooks/useList.js';
+import { requireAuth } from './requireAuth.js';
 
 export const Route = createRoute({
   getParentRoute: () => RootRoute,
   path: '/$list/create',
+  beforeLoad: ({ context }) => requireAuth(context),
   component: CreateRedirect,
 });
 

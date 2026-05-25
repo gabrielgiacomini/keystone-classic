@@ -1,11 +1,10 @@
-import fs from 'node:fs';
 import CodeField from '../CodeField.mjs';
 import CodeFilter from '../CodeFilter.mjs';
 
 export default {
 	Field: CodeField,
 	Filter: CodeFilter,
-	readme: fs.readFileSync('./fields/types/code/Readme.md', 'utf8'),
+	readme: '',
 	section: 'Text',
 	spec: {
 		label: 'Code',

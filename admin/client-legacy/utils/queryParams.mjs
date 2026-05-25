@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from '../../shared/state/valueGuards.mjs';
 
 /**
  * Checks whether the query parameters have changed between the previous and
@@ -24,7 +24,7 @@ export function checkForQueryChange (nextProps, thisProps) {
 
 	if (nextProps.location.pathname !== thisProps.location.pathname) return true;
 
-	if (!isEqual(attenuatedQuery, attenuatedCache)) return true;
+	if (!deepEqual(attenuatedQuery, attenuatedCache)) return true;
 
 	return false;
 }

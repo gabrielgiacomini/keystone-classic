@@ -32,46 +32,31 @@ const textStyle = {
 	verticalAlign: 'middle',
 };
 
-const CloudinaryImageSummary = React.createClass({
-	displayName: 'CloudinaryImageSummary',
-	propTypes: {
-		image: React.PropTypes.object.isRequired,
-		label: React.PropTypes.oneOf(['dimensions', 'publicId']),
-	},
-	renderLabel () {
-		if (!this.props.label) return;
+function renderLabel({ image, label }) {
+	if (!label) return null;
 
-		const { label, image } = this.props;
+	const text = label === 'dimensions'
+		? `${image.width} × ${image.height}`
+		: `${image.public_id}.${image.format}`;
 
-		let text;
-		if (label === 'dimensions') {
-			text = `${image.width} × ${image.height}`;
-		} else {
-			text = `${image.public_id}.${image.format}`;
-		}
+	return React.createElement('span', { style: textStyle }, text);
+}
 
-		return (
-			<span style={textStyle}>
-				{text}
-			</span>
-		);
-	},
-	renderImageThumbnail () {
-		if (!this.props.image) return;
-		const startingUrl = this.props.secure ? this.props.image.secure_url : this.props.image.url;
-		const url = startingUrl.replace(/image\/upload/, `image/upload/c_thumb,g_face,h_${IMAGE_SIZE},w_${IMAGE_SIZE}`);
-		return <img src={url} style={imageStyle} className="img-load" />;
-	},
-	render () {
-		return (
-			<span style={linkStyle}>
-				<span style={boxStyle}>
-					{this.renderImageThumbnail()}
-				</span>
-				{this.renderLabel()}
-			</span>
-		);
-	},
-});
+function renderImageThumbnail({ image, secure }) {
+	if (!image) return null;
+	const startingUrl = secure ? image.secure_url : image.url;
+	const url = startingUrl.replace(/image\/upload/, `image/upload/c_thumb,g_face,h_${IMAGE_SIZE},w_${IMAGE_SIZE}`);
+	return React.createElement('img', { src: url, style: imageStyle, className: 'img-load' });
+}
+
+function CloudinaryImageSummary(props) {
+	return React.createElement(
+		'span',
+		{ style: linkStyle },
+		React.createElement('span', { style: boxStyle }, renderImageThumbnail(props)),
+		renderLabel(props),
+	);
+}
+
 
 export default CloudinaryImageSummary;

@@ -1,14 +1,5 @@
-import type { FilterProps } from '../types.js';
-
-/** Text input filter widget for textarea fields. */
-export function Filter({ fieldName, value, onChange }: FilterProps<string>) {
-  return (
-    <input
-      name={fieldName}
-      type="text"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder="Filter..."
-    />
-  );
-}
+export {
+  Filter,
+  getDefaultTextFilterValue as getDefaultTextareaFilterValue,
+} from '../text/Filter.js';
+export type { TextFilterValue as TextareaFilterValue } from '../text/Filter.js';

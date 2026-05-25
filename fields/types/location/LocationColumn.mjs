@@ -13,44 +13,19 @@ const SUB_FIELDS = ['street1', 'suburb', 'state', 'postcode', 'country'];
  * The `LocationColumn` component.
  * @augments React.Component
  */
-const LocationColumn = React.createClass({
-	displayName: 'LocationColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
-	 * Renders the value of the field.
-	 * @returns {React.Element} The rendered value.
-	 */
-	renderValue () {
-		const value = this.props.data.fields[this.props.col.path];
-		if (!value || !Object.keys(value).length) return null;
+function LocationColumn({ col, data }) {
+	const value = data.fields[col.path];
+	const output = value && Object.keys(value).length
+		? SUB_FIELDS.filter(i => value[i]).map(i => value[i])
+		: [];
+	const renderedValue = output.length ? React.createElement(
+		ItemsTableValue,
+		{ field: col.type, title: output.join(', ') },
+		output.join(', '),
+	) : null;
 
-		const output = [];
+	return React.createElement(ItemsTableCell, null, renderedValue);
+}
 
-		SUB_FIELDS.map((i) => {
-			if (value[i]) {
-				output.push(value[i]);
-			}
-		});
-		return (
-			<ItemsTableValue field={this.props.col.type} title={output.join(', ')}>
-				{output.join(', ')}
-			</ItemsTableValue>
-		);
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		return (
-			<ItemsTableCell>
-				{this.renderValue()}
-			</ItemsTableCell>
-		);
-	},
-});
 
 export default LocationColumn;

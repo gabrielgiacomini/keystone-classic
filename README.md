@@ -20,7 +20,7 @@ This fork currently modernizes Keystone v4 to:
 - **Mongoose 7** — upgraded from Mongoose 5, with compatibility work for hooks, queries, and legacy list APIs
 - **Mocha 11 + chai** — test runner and assertion library modernized
 - **Node 20+** — `engines: { "node": ">=20.19.0" }`
-- **Admin next rewrite** (in progress) — admin next client in `admin/client-next/` (Vite, React 18, TanStack Router/Query, react-hook-form, zod); runs side-by-side with admin legacy via `keystone.set('admin ui', false | 'legacy' | 'next' | 'both')`; both clients use the standalone admin API at `/keystone-api`
+- **Admin next rewrite** (in progress) — admin next client in `admin/client-next/` (Vite, React 18, TanStack Router/Query, react-hook-form, zod); runs side-by-side with admin legacy via `keystone.set('admin ui', false | 'legacy' | 'next' | 'both' | 'auto')`; both clients use the standalone admin API at `/keystone-api`
 
 ### Documentation
 
@@ -58,6 +58,70 @@ Config variables can be passed in an object to the `keystone.init` method, or ca
 
 See the [upstream KeystoneJS configuration documentation](https://v4.keystonejs.com/documentation/configuration) for the original option model.
 
+### Admin client modes
+
+This fork separates the admin UI shell from the admin JSON/session/upload API.
+The canonical admin API defaults to `/keystone-api`; during migration,
+`/{admin legacy path}/api` remains a compatibility alias unless
+`keystone.set('admin legacy api alias', false)` is used.
+
+The admin UI shell is selected with `keystone.set('admin ui', mode)` or, for
+deployment-time overrides, `KEYSTONE_ADMIN_CLIENT=mode`:
+
+| Mode | Route behavior |
+| --- | --- |
+| `false` | No admin UI is mounted. The admin API can still be enabled with `admin api`. |
+| `legacy` | Legacy Browserify admin is served from `admin legacy path`, default `/keystone`. |
+| `next` | Modern Vite admin is served from both `admin legacy path` and `admin next path`, default `/keystone` and `/keystone-next`. This is the opt-in historical-path cutover mode. |
+| `both` | Legacy admin stays on `admin legacy path`; modern admin is served from `admin next path`. |
+| `auto` | Modern admin is selected when only built-in legacy field browser types are registered; legacy admin is selected when custom legacy field browser code is detected. Startup logs the decision. |
+
+Related path options:
+
+- `admin legacy path`: historical admin route, default `keystone`.
+- `admin next path`: migration route for the modern shell, default `keystone-next`.
+- `admin api path`: canonical admin API route, default `keystone-api`.
+
+The `next` and `auto -> next` modes are still migration modes. Projects with
+custom legacy field browser code should use `auto`, `legacy`, or `both` until
+their custom fields are covered by the modern field adapter policy.
+
+Admin-next can load deployment-owned custom field bundles before the app starts:
+
+```js
+keystone.set('admin next custom field scripts', [
+  '/keystone-next/custom-fields/custom-fields.js',
+]);
+```
+
+Each script is loaded as a same-origin `<script type="module">` and may assign
+`window.Keystone.fieldComponents` for modern component sets or
+`window.Keystone.legacyFieldComponents` for legacy `Field`/`Filter`/`Column`
+sets. Admin-next registers both maps before rendering.
+
+When building from this repository, you can produce that script with the Vite
+helper:
+
+```sh
+npm run admin-next:build-custom-fields -- \
+  --entry ./admin/custom-fields.ts \
+  --outDir ./admin/public-next/custom-fields \
+  --fileName custom-fields.js
+```
+
+The entry is a normal ES module. It should populate `window.Keystone` with the
+custom field maps described above.
+
+The modern custom field compatibility surface is intentionally scoped to those
+module scripts and the `window.Keystone.legacyFieldComponents` adapter. The old
+legacy `packages.js` vendor bundle is not a supported way to keep using
+React Router 3 in custom field browser code; custom field navigation should use
+normal links or the modern admin route APIs provided by the custom field module.
+See `docs/admin-next-custom-field-migration.md` for the migration checklist and
+support policy.
+See `docs/admin-modernization-upgrade-guide.md` for the admin mode, package
+compatibility, and final decommission checklist.
+
 ### Database field types
 
 Keystone builds on the basic data types provided by MongoDB and allows you to easily add rich, functional fields to your application's models.
@@ -75,7 +139,7 @@ See the [upstream KeystoneJS database documentation](https://v4.keystonejs.com/d
   import keystone from 'keystone';
   ```
 
-- **`scripts/build-legacy-admin-bundles.ts`**: This script builds the prebuilt admin legacy browser bundles shipped in `admin/public-legacy/js/` and copied to `dist/admin/public-legacy/js/`. Browserify remains dev tooling for this build and for explicit runtime-bundler opt-in cases, but normal production installs serve the prebuilt `admin.js`, `fields.js`, `signin.js`, and `packages.js` files without Browserify in the production dependency graph.
+- **`admin/client-next` / `admin/public-next`**: The modern admin client source and built static assets. Historical admin paths serve this shell; the legacy browser bundle build has been removed from the package build.
 
   **Usage**:
   ```bash

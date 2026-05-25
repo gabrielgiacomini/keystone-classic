@@ -32,13 +32,12 @@ export default function (_req: Request, res: Response, next: NextFunction): void
 			res.status(statusCode);
 		}
 
-			// Unwrap {error, detail} shaped objects
-			if (!detail && typeof error === 'object' && error !== null
-				&& !Array.isArray(error)
-				&& Object.prototype.toString.call(error) === '[object Object]') {
-				const rec = error as Record<string, unknown>;
-				if (rec['error'] !== undefined && rec['detail'] !== undefined) {
-					detail = rec['detail'];
+		// Unwrap { error, detail } shaped objects, including Error instances
+		// that carry Keystone's structured validation payload.
+		if (!detail && typeof error === 'object' && error !== null && !Array.isArray(error)) {
+			const rec = error as Record<string, unknown>;
+			if (rec['error'] !== undefined && rec['detail'] !== undefined) {
+				detail = rec['detail'];
 				error = rec['error'];
 			}
 		}

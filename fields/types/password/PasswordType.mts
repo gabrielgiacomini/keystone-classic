@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import bcrypt from 'bcryptjs';
 import { FieldType } from '../Type.mjs';
 import type { KeystoneList, FieldOptionsBase, MongooseDocument } from '../Type.mjs';
@@ -45,13 +44,7 @@ class PasswordType extends FieldType<KeystoneFieldOptionsForPasswordType, string
 	/** Derived paths: `confirm` and `hash`. Set in `addToSchema`. */
 	paths!: { confirm: string; hash: string };
 
-	/**
-	 * Documentation placeholder.
-	 *
-	 * @param list - Description
-	 * @param path - Description
-	 * @param options - Description
-	 */
+
 	constructor(list: KeystoneList, path: string, options: KeystoneFieldOptionsForPasswordType) {
 		const mergedOptions = Object.assign({}, defaultOptions, options, { nosort: false }) as KeystoneFieldOptionsForPasswordType;
 		super(list, path, mergedOptions);
@@ -86,13 +79,14 @@ class PasswordType extends FieldType<KeystoneFieldOptionsForPasswordType, string
 			confirm: this.options.confirmPath ?? this.path + '_confirm',
 			hash: this.options.hashPath ?? this.path + '_hash',
 		};
-		schema.path(this.path, _.defaults({
+		schema.path(this.path, {
+			...this.options,
 			type: String,
 			set: function (this: MongooseDocument & Record<string, boolean>, newValue: string): string {
 				this[needs_hashing] = true;
 				return newValue;
 			},
-		}, this.options));
+		});
 		schema.virtual(this.paths.hash).set(function (this: MongooseDocument & Record<string, boolean>, newValue: string): void {
 			this.set(field.path, newValue);
 			this[needs_hashing] = false;
@@ -122,9 +116,9 @@ class PasswordType extends FieldType<KeystoneFieldOptionsForPasswordType, string
 
 	/**
 	 * Builds a Mongoose query condition based on password existence.
-	 * @param filter Filter descriptor; `filter.exists` truthy matches documents
-	 *               with a stored hash, falsy matches those without.
-	 * @param filter.exists - Description
+	 * @param filter - Filter descriptor for matching documents by stored hash presence.
+	 * @param filter.exists - Whether the password hash must exist.
+	 *
 	 * @returns Mongoose condition object keyed by the field path.
 	 */
 	addFilterToQuery(filter: { exists?: boolean }): Record<string, unknown> {

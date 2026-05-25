@@ -1,11 +1,10 @@
-import fs from 'node:fs';
 import NumberField from '../NumberField.mjs';
 import NumberFilter from '../NumberFilter.mjs';
 
 export default {
 	Field: NumberField,
 	Filter: NumberFilter,
-	readme: fs.readFileSync('./fields/types/number/Readme.md', 'utf8'),
+	readme: '',
 	section: 'Number',
 	spec: {
 		label: 'Number',

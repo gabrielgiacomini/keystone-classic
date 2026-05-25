@@ -11,40 +11,18 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `GeoPointColumn` component.
  * @augments React.Component
  */
-const GeoPointColumn = React.createClass({
-	displayName: 'GeoPointColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
-	 * Renders the value of the field.
-	 * @returns {React.Element} The rendered value.
-	 */
-	renderValue () {
-		const value = this.props.data.fields[this.props.col.path];
-		if (!value || !value.length) return null;
-
+function GeoPointColumn({ col, data }) {
+	const value = data.fields[col.path];
+	let renderedValue = null;
+	if (value && value.length) {
 		const formattedValue = `${value[1]}, ${value[0]}`;
 		const formattedTitle = `Lat: ${value[1]} Lng: ${value[0]}`;
 
-		return (
-			<ItemsTableValue title={formattedTitle} field={this.props.col.type}>
-				{formattedValue}
-			</ItemsTableValue>
-		);
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		return (
-			<ItemsTableCell>
-				{this.renderValue()}
-			</ItemsTableCell>
-		);
-	},
-});
+		renderedValue = React.createElement(ItemsTableValue, { title: formattedTitle, field: col.type }, formattedValue);
+	}
+
+	return React.createElement(ItemsTableCell, null, renderedValue);
+}
+
 
 export default GeoPointColumn;

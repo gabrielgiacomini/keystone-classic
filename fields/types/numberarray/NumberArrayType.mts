@@ -1,9 +1,9 @@
 import { FieldType } from '../Type.mjs';
 import type { KeystoneList, FieldOptionsBase, MongooseDocument } from '../Type.mjs';
-import numeral from 'numeral';
 import addPresenceToQuery from '../../utils/addPresenceToQuery.mjs';
 import { defer } from '../../../lib/utils/async.mjs';
 import { number } from '../../../lib/utils/number.mjs';
+import { formatNumber } from '../../../lib/utils/numberFormat.mjs';
 
 class NumberArrayType extends FieldType<KeystoneFieldOptionsForNumberArrayType, number[]> {
 	/** Human-readable type name used by the Admin UI. */
@@ -30,10 +30,10 @@ class NumberArrayType extends FieldType<KeystoneFieldOptionsForNumberArrayType, 
 	}
 
 	override format(item: MongooseDocument, format?: string, separator?: string): string {
-		let value = item.get(this.path) as number[];
+		let value = item.get(this.path) as Array<number | string>;
 		if (format || this._formatString) {
 			const fmt = format ?? this._formatString;
-			value = value.map((n) => numeral(n).format(fmt || undefined) as unknown as number);
+			value = value.map((n) => typeof n === 'number' ? formatNumber(n, fmt) : n);
 		}
 		return value.join(separator ?? this.separator);
 	}

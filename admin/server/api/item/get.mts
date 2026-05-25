@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
 import type { Keystone } from '../../../../index.mjs';
-import _ from 'lodash';
 import listToArray from '../../../../lib/list/listToArray.mjs';
 import { getAdminLegacyPath } from '../../../../lib/core/adminSurfacePathUtils.mjs';
 
@@ -96,7 +95,7 @@ export default function itemGet(req: Request, res: Response): void {
 						if (results.length) {
 							drilldown.items.push({
 								list: refList.getOptions(),
-								items: _.map(results, function (i: Record<string, unknown>) {
+								items: results.map(function (i: Record<string, unknown>) {
 									return {
 										label: refList.getDocumentName(i),
 										href: adminLegacyPath + '/' + refList.path + '/' + String(i.id),
@@ -125,7 +124,7 @@ export default function itemGet(req: Request, res: Response): void {
 			drilldown.items.reverse();
 		}
 
-		res.json(_.assign(list.getData(item, fields, req.query.expandRelationshipFields), { drilldown }));
+		res.json(Object.assign(list.getData(item, fields, req.query.expandRelationshipFields), { drilldown }));
 	}).catch(function (err: unknown) {
 		res.logError('admin/server/api/item/get', 'database error finding item', err);
 		res.apiError('database error', err);

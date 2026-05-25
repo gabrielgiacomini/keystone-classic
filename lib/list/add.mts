@@ -2,6 +2,10 @@ import type { AddArg, FieldMap } from '../../fields/types/FieldSpec.mjs';
 import type { KeystoneList } from '../list.mjs';
 import isObject from '../utils/isObject.mjs';
 
+/**
+ *
+ * @param {...any} args
+ */
 export default function add(
 	this: KeystoneList,
 	...args: AddArg[]

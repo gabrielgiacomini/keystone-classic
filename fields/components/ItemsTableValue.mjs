@@ -1,12 +1,12 @@
-import React, { PropTypes } from 'react';
-import classnames from 'classnames';
-import { Link } from 'react-router';
+import React from 'react';
+import classnames from '../utils/classnames.mjs';
+import { Link } from '../../admin/client-legacy/router.mjs';
 
 /**
  * Renders a value cell inside the items list table, optionally as a router link.
  *
  * When `to` (or the deprecated `href`) is provided the cell is rendered using
- * React Router's `<Link>`; otherwise the element type given by `component` is
+ * the legacy router `<Link>`; otherwise the element type given by `component` is
  * used (defaults to `'div'`).  BEM modifier classes are applied for the field
  * name, empty/interior/exterior/padded link states, and optional text truncation.
  * @param {object} props - Component props.
@@ -54,23 +54,9 @@ function ItemsTableValue ({
 	}, className);
 	props.to = linkRef;
 
-	return <Component {...props} />;
+	return React.createElement(Component, props);
 };
 
-ItemsTableValue.propTypes = {
-	component: PropTypes.oneOfType([
-		React.PropTypes.string,
-		React.PropTypes.func,
-	]),
-	empty: PropTypes.bool,
-	exterior: PropTypes.bool, // FIXME this should be "external" e.g. an external link
-	field: PropTypes.string,
-	href: PropTypes.string, // TODO remove in next release
-	interior: PropTypes.bool, // FIXME this should be "internal" e.g. an internal link
-	padded: PropTypes.bool,
-	to: PropTypes.string,
-	truncate: PropTypes.bool,
-};
 ItemsTableValue.defaultProps = {
 	component: 'div',
 	truncate: true,

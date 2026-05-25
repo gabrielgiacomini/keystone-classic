@@ -7,7 +7,6 @@ function scmp (a: string | number, b: string | number): boolean {
 	if (sa.length !== sb.length) return false;
 	return crypto.timingSafeEqual(Buffer.from(sa), Buffer.from(sb));
 }
-import _ from 'lodash';
 import keystone from '../index.mjs';
 import type { Request, Response, NextFunction } from 'express';
 import type { SessionUser } from '../types/express.js';
@@ -28,7 +27,6 @@ declare module 'express-session' {
 // ---------------------------------------------------------------------------
 /**
  * KeystoneSessionModule.
- *
  */
 export interface KeystoneSessionModule {
 	signinWithUser(user: SessionUser, req: Request, res: Response, onSuccess: (user: SessionUser) => void): void;
@@ -63,13 +61,25 @@ interface CookieSigninOptions {
 	maxAge?: number;
 }
 
+function applyDefaults<T extends Record<string, unknown>>(target: T, ...sources: Array<Record<string, unknown> | null | undefined>): T {
+	for (const source of sources) {
+		if (!source) continue;
+		for (const key of Object.keys(source)) {
+			if (target[key] === undefined) {
+				target[key as keyof T] = source[key] as T[keyof T];
+			}
+		}
+	}
+	return target;
+}
+
 function getCookieSigninOptions(defaults: Partial<CookieSigninOptions> = {}): CookieSigninOptions {
-	return _.defaults({}, keystone.get('cookie signin options'), defaults, {
+	return applyDefaults({}, keystone.get('cookie signin options') as Record<string, unknown> | undefined, defaults, {
 		signed: true,
 		httpOnly: true,
 		secure: true,
 		sameSite: 'strict',
-	});
+	}) as CookieSigninOptions;
 }
 
 function hash(str: string): string {
@@ -85,11 +95,6 @@ function hash(str: string): string {
 
 /**
  * signinWithUser.
- *
- * @param user - Description
- * @param req - Description
- * @param res - Description
- * @param onSuccess - Description
  */
 export function signinWithUser(user: SessionUser, req: Request, res: Response, onSuccess: (user: SessionUser) => void): void {
 	if (arguments.length < 4) {
@@ -182,12 +187,6 @@ const doSignin = function (lookup: SigninLookup, req: Request, res: Response, on
 
 /**
  * signin.
- *
- * @param lookup - Description
- * @param req - Description
- * @param res - Description
- * @param onSuccess - Description
- * @param onFail - Description
  */
 export function signin(lookup: SigninLookup, req: Request, res: Response, onSuccess: (user: SessionUser) => void, onFail: (err: Error | null) => void): void {
 	keystone.callHook({}, 'pre:signin', req, function (err?: Error) {

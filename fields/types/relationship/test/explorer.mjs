@@ -1,11 +1,10 @@
-import fs from 'node:fs';
 import RelationshipField from '../RelationshipField.mjs';
 import RelationshipFilter from '../RelationshipFilter.mjs';
 
 export default {
 	Field: RelationshipField,
 	Filter: RelationshipFilter,
-	readme: fs.readFileSync('./fields/types/relationship/Readme.md', 'utf8'),
+	readme: '',
 	section: 'Miscellaneous',
 	spec: [{
 		label: 'Single Relationship',

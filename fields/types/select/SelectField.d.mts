@@ -5,7 +5,7 @@
  * left unmodified. This declaration sidecar provides fully-typed props for
  * consumers of the SelectField component.
  *
- * SelectField renders a react-select dropdown. The `ops` array drives both the
+ * SelectField renders a custom select dropdown. The `ops` array drives both the
  * dropdown options and value display. `numeric` controls whether option values
  * are coerced to numbers. Props derived from this.props usage throughout source.
  *
@@ -30,7 +30,7 @@ export interface SelectOption {
  * Props for the SelectField component.
  *
  * - `path` uses the branded `FieldPath` type.
- * - `ops` provides the option list for the react-select dropdown.
+ * - `ops` provides the option list for the custom select dropdown.
  * - `numeric` coerces string option values to numbers before calling onChange.
  */
 export interface SelectFieldProps {

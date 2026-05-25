@@ -8,12 +8,10 @@
  */
 import React from 'react';
 import Field from '../Field.mjs';
-import {
-	Button,
-	FormInput,
-	InlineGroup as Group,
-	InlineGroupSection as Section,
-} from '../../../admin/client-legacy/App/elemental';
+import Button from '../../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import Group from '../../../admin/client-legacy/compat/elemental/InlineGroup.mjs';
+import Section from '../../../admin/client-legacy/compat/elemental/InlineGroupSection.mjs';
 
 /**
  * The `PasswordField` component.
@@ -73,7 +71,7 @@ export default Field.create({
 	 * @returns {React.Element} The rendered value.
 	 */
 	renderValue () {
-		return <FormInput noedit>{this.props.value ? 'Password Set' : ''}</FormInput>;
+		return React.createElement(FormInput, { noedit: true }, this.props.value ? 'Password Set' : '');
 	},
 
 	/**
@@ -89,34 +87,41 @@ export default Field.create({
 	 * @returns {React.Element} The rendered fields.
 	 */
 	renderFields () {
-		return (
-			<Group block>
-				<Section grow>
-					<FormInput
-						autoComplete="off"
-						name={this.getInputName(this.props.path)}
-						onChange={this.valueChanged.bind(this, 'password')}
-						placeholder="New password"
-						ref="focusTarget"
-						type="password"
-						value={this.state.password}
-					/>
-				</Section>
-				<Section grow>
-					<FormInput
-						autoComplete="off"
-						name={this.getInputName(this.props.paths.confirm)}
-						onChange={this.valueChanged.bind(this, 'confirm')}
-						placeholder="Confirm new password" value={this.state.confirm}
-						type="password"
-					/>
-				</Section>
-				{this.state.passwordIsSet ? (
-					<Section>
-						<Button onClick={this.onCancel}>Cancel</Button>
-					</Section>
-				) : null}
-			</Group>
+		return React.createElement(
+			Group,
+			{ block: true },
+			React.createElement(
+				Section,
+				{ grow: true },
+				React.createElement(FormInput, {
+					autoComplete: 'off',
+					name: this.getInputName(this.props.path),
+					onChange: this.valueChanged.bind(this, 'password'),
+					placeholder: 'New password',
+					ref: this.getFocusTargetRef(),
+					type: 'password',
+					value: this.state.password,
+				})
+			),
+			React.createElement(
+				Section,
+				{ grow: true },
+				React.createElement(FormInput, {
+					autoComplete: 'off',
+					name: this.getInputName(this.props.paths.confirm),
+					onChange: this.valueChanged.bind(this, 'confirm'),
+					placeholder: 'Confirm new password',
+					value: this.state.confirm,
+					type: 'password',
+				})
+			),
+			this.state.passwordIsSet
+				? React.createElement(
+						Section,
+						null,
+						React.createElement(Button, { onClick: this.onCancel }, 'Cancel')
+				  )
+				: null
 		);
 	},
 
@@ -129,9 +134,10 @@ export default Field.create({
 			? 'Change Password'
 			: 'Set Password';
 
-		return (
-			<Button ref="focusTarget" onClick={this.showChangeUI}>{label}</Button>
-		);
+		return React.createElement(Button, {
+			ref: this.getFocusTargetRef(),
+			onClick: this.showChangeUI,
+		}, label);
 	},
 
 });

@@ -73,18 +73,18 @@ await Promise.all([
 	copyIfPresent('index.cjs', 'index.cjs'),
 	copyIfPresent('admin/server/index.cjs', 'admin/server/index.cjs'),
 	copyIfPresent('package.json', 'package.json'),
-	copyIfPresent('admin/client-legacy', 'admin/client-legacy'),
 	copyIfPresent('admin/public-next', 'admin/public-next'),
-	copyIfPresent('admin/public-legacy', 'admin/public-legacy'),
-	copyIfPresent('admin/server/templates-legacy', 'admin/server/templates-legacy'),
+	copyIfPresent('admin/client-legacy/compat', 'admin/client-legacy/compat'),
+	copyIfPresent('admin/client-legacy/utils', 'admin/client-legacy/utils'),
 	copyIfPresent('fields/types/markdown/less', 'fields/types/markdown/less'),
 ]);
 
-await addExtensionlessMjsSiblings(path.join(dist, 'admin', 'client-legacy'));
+await copyIfPresent('lib/utils/inflect.mjs', 'lib/utils/inflect.mjs');
+await copyIfPresent('lib/utils/numberFormat.mjs', 'lib/utils/numberFormat.mjs');
 await addExtensionlessMjsSiblings(path.join(dist, 'fields', 'components'));
 
 // When a .d.mts sidecar exists for a .mjs file, tsc skips emitting the .mjs.
-// Copy these explicitly so the browser bundler (browserify) can resolve them.
+// Copy these explicitly so legacy browser bundle generation can resolve them.
 await copyIfPresent('fields/types/Field.mjs', 'fields/types/Field.mjs');
 await copyIfPresent('fields/types/boolean/BooleanField.mjs', 'fields/types/boolean/BooleanField.mjs');
 await copyIfPresent('fields/types/text/TextField.mjs', 'fields/types/text/TextField.mjs');
@@ -167,6 +167,7 @@ await copyIfPresent('fields/types/cloudinaryimages/CloudinaryImagesField.mjs', '
 await copyIfPresent('fields/types/textarray/TextArrayField.mjs', 'fields/types/textarray/TextArrayField.mjs');
 await copyIfPresent('fields/types/numberarray/NumberArrayField.mjs', 'fields/types/numberarray/NumberArrayField.mjs');
 await copyIfPresent('fields/types/datearray/DateArrayField.mjs', 'fields/types/datearray/DateArrayField.mjs');
+await copyIfPresent('fields/utils/classnames.mjs', 'fields/utils/classnames.mjs');
 await copyIfPresent('fields/components/Checkbox.mjs', 'fields/components/Checkbox.mjs');
 await copyIfPresent('fields/components/CollapsedFieldLabel.mjs', 'fields/components/CollapsedFieldLabel.mjs');
 await copyIfPresent('fields/components/DateInput.mjs', 'fields/components/DateInput.mjs');

@@ -2,7 +2,28 @@
  * A few helper methods for strings
  */
 
-import { camelCase, compact, size, upperFirst } from 'lodash';
+function collectionSize(value) {
+	if (!value) return 0;
+	if (typeof value.length === 'number') return value.length;
+	return Object.keys(value).length;
+}
+
+function compact(values) {
+	return values.filter(Boolean);
+}
+
+function asciiWords(value) {
+	return String(value)
+		.replace(/['\u2019]/g, '')
+		.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]+|[0-9]+/g) || [];
+}
+
+function localCamelCase(value) {
+	const words = asciiWords(value).map(word => word.toLowerCase());
+	return words.map((word, index) => {
+		return index === 0 ? word : upcase(word);
+	}).join('');
+}
 
 /**
  * Displays the singular or plural of a string based on a number
@@ -25,7 +46,7 @@ export const plural = function (count, sn, pl) {
 	if (typeof count === 'string') {
 		count = Number(count);
 	} else if (typeof count !== 'number') {
-		count = size(count);
+		count = collectionSize(count);
 	}
 	return (count === 1 ? sn : pl).replace('*', count);
 };
@@ -85,5 +106,6 @@ export const titlecase = function (str) {
  */
 
 export const camelcase = function (str, lc) {
-	return lc ? camelCase(str) : upperFirst(camelCase(str));
+	const value = localCamelCase(str);
+	return lc ? value : upcase(value);
 };

@@ -11,33 +11,16 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `MarkdownColumn` component.
  * @augments React.Component
  */
-const MarkdownColumn = React.createClass({
-	displayName: 'MarkdownColumn',
-	propTypes: {
-		col: React.PropTypes.object,
-		data: React.PropTypes.object,
-	},
-	/**
-	 * Renders the value of the field.
-	 * @returns {string} The value of the field.
-	 */
-	renderValue () {
-		const value = this.props.data.fields[this.props.col.path];
-		return (value && Object.keys(value).length) ? value.md.slice(0, 100) : null;
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		return (
-			<ItemsTableCell>
-				<ItemsTableValue field={this.props.col.type}>
-					{this.renderValue()}
-				</ItemsTableValue>
-			</ItemsTableCell>
-		);
-	},
-});
+function MarkdownColumn({ col, data }) {
+	const value = data.fields[col.path];
+	const renderedValue = (value && Object.keys(value).length) ? value.md.slice(0, 100) : null;
+
+	return React.createElement(
+		ItemsTableCell,
+		null,
+		React.createElement(ItemsTableValue, { field: col.type }, renderedValue),
+	);
+}
+
 
 export default MarkdownColumn;

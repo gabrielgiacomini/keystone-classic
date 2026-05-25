@@ -18,17 +18,30 @@ type KeystoneLike = {
 	list(key: string): { model: FixtureModel };
 };
 
+function fixtureImageDataUrl (publicId: string, width: number, height: number): string {
+	const label = publicId.split('/').pop() ?? publicId;
+	const svg = [
+		`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+		'<rect width="100%" height="100%" fill="#e8f1fb"/>',
+		'<rect x="0" y="0" width="100%" height="100%" fill="none" stroke="#2f80ed" stroke-width="12"/>',
+		`<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.max(24, Math.floor(width / 18))}" fill="#1f2937">${label}</text>`,
+		'</svg>',
+	].join('');
+	return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
 function cloudinaryImage (publicId: string, width = 1200, height = 800): Record<string, unknown> {
+	const fixtureUrl = fixtureImageDataUrl(publicId, width, height);
 	return {
 		public_id: publicId,
 		version: 1,
 		signature: `sig-${publicId}`,
 		format: 'jpg',
 		resource_type: 'image',
-		url: `http://res.cloudinary.test/${publicId}.jpg`,
+		url: fixtureUrl,
 		width,
 		height,
-		secure_url: `https://res.cloudinary.test/${publicId}.jpg`,
+		secure_url: fixtureUrl,
 	};
 }
 
@@ -39,6 +52,7 @@ export async function seedFieldCompleteData (keystone: KeystoneLike): Promise<Se
 	const Venue = keystone.list('Venue');
 	const Event = keystone.list('Event');
 	const Product = keystone.list('Product');
+	const SortableItem = keystone.list('SortableItem');
 	const RelationshipTarget = keystone.list('RelationshipTarget');
 	const ManyRelationship = keystone.list('ManyRelationship');
 	const NoDefaultColumn = keystone.list('NoDefaultColumn');
@@ -176,6 +190,14 @@ export async function seedFieldCompleteData (keystone: KeystoneLike): Promise<Se
 	});
 	await product.save();
 
+	for (let i = 1; i <= 5; i++) {
+		const sortableItem = new SortableItem.model({
+			fixtureKey: `sortable-item-${i}`,
+			name: `Sortable Item ${String(i).padStart(2, '0')}`,
+		});
+		await sortableItem.save();
+	}
+
 	const relationshipTarget = new RelationshipTarget.model({
 		fixtureKey: 'relationship-target-alpha',
 		name: 'Relationship Target Alpha',
@@ -219,6 +241,7 @@ export async function seedFieldCompleteData (keystone: KeystoneLike): Promise<Se
 		venueId: String(venue._id),
 		eventId: String(event._id),
 		productId: String(product._id),
+		sortableItemIds: 'seeded',
 		relationshipTargetId: String(relationshipTarget._id),
 		manyRelationshipId: String(manyRelationship._id),
 		noDefaultColumnId: String(noDefaultColumn._id),

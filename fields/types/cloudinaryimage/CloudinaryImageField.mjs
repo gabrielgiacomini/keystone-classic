@@ -6,20 +6,29 @@
  * It provides a button to upload an image, and it displays a thumbnail of the
  * uploaded image. It also provides a button to remove the image.
  */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Field from '../Field.mjs';
-import cloudinaryResize from '../../../admin/client-legacy/utils/cloudinaryResize';
-import { Button, FormField, FormInput, FormNote } from '../../../admin/client-legacy/App/elemental';
+import cloudinaryResize from '../../../admin/client-legacy/utils/cloudinaryResize.mjs';
+import Button from '../../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import FormNote from '../../../admin/client-legacy/compat/elemental/FormNote.mjs';
 
 import ImageThumbnail from '../../components/ImageThumbnail.mjs';
 import FileChangeMessage from '../../components/FileChangeMessage.mjs';
 import HiddenFileInput from '../../components/HiddenFileInput.mjs';
-import Lightbox from 'react-images';
+import Lightbox from '../../components/Lightbox.mjs';
 
 const SUPPORTED_TYPES = ['image/*', 'application/pdf', 'application/postscript'];
 const SUPPORTED_REGEX = new RegExp(/^image\/|application\/pdf|application\/postscript/g);
 
 let uploadInc = 1000;
+
+function getStoredImageSource (value, secure) {
+	const source = secure ? value.secure_url : value.url;
+	if (!source || /^https?:\/\/res\.cloudinary\.com\//.test(source)) return null;
+	return source;
+}
 
 /**
  * Returns the initial state of the component.
@@ -37,23 +46,6 @@ const buildInitialState = (props) => ({
  * @augments Field
  */
 export default Field.create({
-	propTypes: {
-		collapse: PropTypes.bool,
-		label: PropTypes.string,
-		note: PropTypes.string,
-		path: PropTypes.string.isRequired,
-		value: PropTypes.shape({
-			format: PropTypes.string,
-			height: PropTypes.number,
-			public_id: PropTypes.string,
-			resource_type: PropTypes.string,
-			secure_url: PropTypes.string,
-			signature: PropTypes.string,
-			url: PropTypes.string,
-			version: PropTypes.number,
-			width: PropTypes.number,
-		}),
-	},
 	displayName: 'CloudinaryImageField',
 	statics: {
 		type: 'CloudinaryImage',
@@ -66,17 +58,14 @@ export default Field.create({
 	getInitialState () {
 		return buildInitialState(this.props);
 	},
-	componentWillReceiveProps (nextProps) {
-		// console.log('CloudinaryImageField nextProps:', nextProps);
-	},
 	/**
-	 * Handles the component receiving new props.
-	 * @param {object} nextProps The new props.
+	 * Handles updates after new props arrive.
+	 * @param {object} prevProps The previous props.
 	 */
-	componentWillUpdate (nextProps) {
+	componentDidUpdate (prevProps) {
 		// Reset the action state when the value changes
 		// TODO: We should add a check for a new item ID in the store
-		if (this.props.value.public_id !== nextProps.value.public_id) {
+		if (prevProps.value.public_id !== this.props.value.public_id) {
 			this.setState({
 				removeExisting: false,
 				userSelectedFile: null,
@@ -131,7 +120,7 @@ export default Field.create({
 		if (this.hasLocal()) {
 			src = this.state.dataUri;
 		} else if (this.hasExisting()) {
-			src = cloudinaryResize(this.props.value.public_id, {
+			src = getStoredImageSource(this.props.value, this.props.secure) || cloudinaryResize(this.props.value.public_id, {
 				crop: 'fit',
 				height: height,
 				format: 'jpg',
@@ -150,7 +139,7 @@ export default Field.create({
 	 * Triggers the file browser.
 	 */
 	triggerFileBrowser () {
-		this.refs.fileInput.clickDomNode();
+		this.fileInput.clickDomNode();
 	},
 	/**
 	 * Handles a change in the file input.
@@ -254,15 +243,13 @@ export default Field.create({
 
 		if (!value || !value.public_id) return;
 
-		return (
-			<Lightbox
-				currentImage={0}
-				images={[{ src: this.getImageSource(600) }]}
-				isOpen={this.state.lightboxIsVisible}
-				onClose={this.closeLightbox}
-				showImageCount={false}
-			/>
-		);
+		return React.createElement(Lightbox, {
+			currentImage: 0,
+			images: [{ src: this.getImageSource(600) }],
+			isOpen: this.state.lightboxIsVisible,
+			onClose: this.closeLightbox,
+			showImageCount: false,
+		});
 	},
 	/**
 	 * Renders the image preview.
@@ -279,17 +266,17 @@ export default Field.create({
 
 		const shouldOpenLightbox = value.format !== 'pdf';
 
-		return (
-			<ImageThumbnail
-				component="a"
-				href={this.getImageSource(600)}
-				onClick={shouldOpenLightbox && this.openLightbox}
-				mask={mask}
-				target="__blank"
-				style={{ float: 'left', marginRight: '1em' }}
-			>
-				<img src={this.getImageSource()} style={{ height: 90 }} />
-			</ImageThumbnail>
+		return React.createElement(
+			ImageThumbnail,
+			{
+				component: 'a',
+				href: this.getImageSource(600),
+				onClick: shouldOpenLightbox && this.openLightbox,
+				mask,
+				target: '__blank',
+				style: { float: 'left', marginRight: '1em' },
+			},
+			React.createElement('img', { src: this.getImageSource(), style: { height: 90 } })
 		);
 	},
 	/**
@@ -298,15 +285,11 @@ export default Field.create({
 	 * @returns {React.Element} The rendered file name and message.
 	 */
 	renderFileNameAndOptionalMessage (showChangeMessage = false) {
-		return (
-			<div>
-				{this.hasImage() ? (
-					<FileChangeMessage>
-						{this.getFilename()}
-					</FileChangeMessage>
-				) : null}
-				{showChangeMessage && this.renderChangeMessage()}
-			</div>
+		return React.createElement(
+			'div',
+			null,
+			this.hasImage() ? React.createElement(FileChangeMessage, null, this.getFilename()) : null,
+			showChangeMessage && this.renderChangeMessage()
 		);
 	},
 	/**
@@ -315,17 +298,9 @@ export default Field.create({
 	 */
 	renderChangeMessage () {
 		if (this.state.userSelectedFile) {
-			return (
-				<FileChangeMessage color="success">
-					Save to Upload
-				</FileChangeMessage>
-			);
+			return React.createElement(FileChangeMessage, { color: 'success' }, 'Save to Upload');
 		} else if (this.state.removeExisting) {
-			return (
-				<FileChangeMessage color="danger">
-					Save to Remove
-				</FileChangeMessage>
-			);
+			return React.createElement(FileChangeMessage, { color: 'danger' }, 'Save to Remove');
 		} else {
 			return null;
 		}
@@ -339,15 +314,13 @@ export default Field.create({
 	renderClearButton () {
 		const clearText = this.hasLocal() ? 'Cancel' : 'Remove Image';
 
-		return this.state.removeExisting ? (
-			<Button variant="link" onClick={this.undoRemove}>
-				Undo Remove
-			</Button>
-		) : (
-			<Button variant="link" color="cancel" onClick={this.handleRemove}>
-				{clearText}
-			</Button>
-		);
+		return this.state.removeExisting
+			? React.createElement(Button, { variant: 'link', onClick: this.undoRemove }, 'Undo Remove')
+			: React.createElement(Button, {
+					variant: 'link',
+					color: 'cancel',
+					onClick: this.handleRemove,
+			  }, clearText);
 	},
 
 	/**
@@ -355,13 +328,11 @@ export default Field.create({
 	 * @returns {React.Element} The rendered image toolbar.
 	 */
 	renderImageToolbar () {
-		return (
-			<div key={this.props.path + '_toolbar'} className="image-toolbar">
-				<Button onClick={this.triggerFileBrowser}>
-					{this.hasImage() ? 'Change' : 'Upload'} Image
-				</Button>
-				{this.hasImage() ? this.renderClearButton() : null}
-			</div>
+		return React.createElement(
+			'div',
+			{ key: this.props.path + '_toolbar', className: 'image-toolbar' },
+			React.createElement(Button, { onClick: this.triggerFileBrowser }, this.hasImage() ? 'Change Image' : 'Upload Image'),
+			this.hasImage() ? this.renderClearButton() : null
 		);
 	},
 
@@ -372,14 +343,12 @@ export default Field.create({
 	renderFileInput () {
 		if (!this.shouldRenderField()) return null;
 
-		return (
-			<HiddenFileInput
-				accept={SUPPORTED_TYPES.join()}
-				ref="fileInput"
-				name={this.state.uploadFieldPath}
-				onChange={this.handleImageChange}
-			/>
-		);
+		return React.createElement(HiddenFileInput, {
+			accept: SUPPORTED_TYPES.join(),
+			ref: (fileInput) => { this.fileInput = fileInput; },
+			name: this.state.uploadFieldPath,
+			onChange: this.handleImageChange,
+		});
 	},
 
 	// This renders a hidden input that holds the payload data for how the field
@@ -398,13 +367,11 @@ export default Field.create({
 			} else if (this.state.removeExisting && this.props.autoCleanup) {
 				value = 'delete';
 			}
-			return (
-				<input
-					name={this.getInputName(this.props.path)}
-					type="hidden"
-					value={value}
-				/>
-			);
+			return React.createElement('input', {
+				name: this.getInputName(this.props.path),
+				type: 'hidden',
+				value,
+			});
 		} else {
 			return null;
 		}
@@ -417,26 +384,26 @@ export default Field.create({
 	renderUI () {
 		const { label, note, path } = this.props;
 
-		const imageContainer = (
-			<div style={this.hasImage() ? { marginBottom: '1em' } : null}>
-				{this.hasImage() && this.renderImagePreview()}
-				{this.hasImage() && this.renderFileNameAndOptionalMessage(this.shouldRenderField())}
-			</div>
+		const imageContainer = React.createElement(
+			'div',
+			{ style: this.hasImage() ? { marginBottom: '1em' } : null },
+			this.hasImage() && this.renderImagePreview(),
+			this.hasImage() && this.renderFileNameAndOptionalMessage(this.shouldRenderField())
 		);
 
 		const toolbar = this.shouldRenderField()
 			? this.renderImageToolbar()
-			: <FormInput noedit />;
+			: React.createElement(FormInput, { noedit: true });
 
-		return (
-			<FormField label={label} className="field-type-cloudinaryimage" htmlFor={path}>
-				{imageContainer}
-				{toolbar}
-				{!!note && <FormNote note={note} />}
-				{this.renderLightbox()}
-				{this.renderFileInput()}
-				{this.renderActionInput()}
-			</FormField>
+		return React.createElement(
+			FormField,
+			{ label, className: 'field-type-cloudinaryimage', htmlFor: path },
+			imageContainer,
+			toolbar,
+			!!note && React.createElement(FormNote, { note }),
+			this.renderLightbox(),
+			this.renderFileInput(),
+			this.renderActionInput()
 		);
 	},
 });

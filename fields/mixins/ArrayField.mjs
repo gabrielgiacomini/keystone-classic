@@ -9,8 +9,9 @@
  * field types.
  */
 import React from 'react';
-import { findDOMNode } from 'react-dom';
-import { Button, FormField, FormInput } from 'elemental';
+import Button from '../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormField from '../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../admin/client-legacy/compat/elemental/FormInput.mjs';
 
 let lastId = 0;
 const ENTER_KEYCODE = 13;
@@ -36,41 +37,80 @@ function reduceValues (values) {
 
 /**
  * The `ArrayField` mixin.
- * @type {object}
+ * @type {any}
  */
-export default {
+const ArrayFieldMixin = {
 	/**
 	 * Gets the initial state of the component.
 	 * @returns {object} The initial state.
 	 */
 	getInitialState: function () {
+		this.itemRefs = {};
 		return {
 			values: Array.isArray(this.props.value) ? this.props.value.map(newItem) : [],
 		};
 	},
 
 	/**
-	 * Handles the component receiving new props.
-	 * @param {object} nextProps The new props.
+	 * Handles externally supplied value changes.
+	 * @param {object} prevProps The previous props.
 	 */
-	componentWillReceiveProps: function (nextProps) {
-		if (nextProps.value.join('|') !== reduceValues(this.state.values).join('|')) {
+	componentDidUpdate: function (prevProps) {
+		if (this.props.value === prevProps.value) return;
+		if (this.props.value.join('|') !== reduceValues(this.state.values).join('|')) {
 			this.setState({
-				values: nextProps.value.map(newItem),
+				values: this.props.value.map(newItem),
 			});
 		}
+	},
+
+	/**
+	 * Stores a rendered array input ref.
+	 * @param {string} key The array item key.
+	 * @param {object} target The rendered input component.
+	 */
+	setItemRef: function (key, target) {
+		if (target) {
+			this.itemRefs[key] = target;
+		} else {
+			delete this.itemRefs[key];
+		}
+	},
+
+	/**
+	 * Stores the add-item button ref.
+	 * @param {object} target The rendered button component.
+	 */
+	setButtonRef: function (target) {
+		this.buttonRef = target;
+	},
+
+	/**
+	 * Moves focus to the provided item input.
+	 * @param {object} item The item whose input should receive focus.
+	 */
+	focusItem: function (item) {
+		const target = this.itemRefs[item.key];
+		if (target && target.focus) target.focus();
+	},
+
+	/**
+	 * Moves focus back to the add-item button.
+	 */
+	focusButton: function () {
+		if (this.buttonRef && this.buttonRef.focus) this.buttonRef.focus();
 	},
 
 	/**
 	 * Adds a new item to the array.
 	 */
 	addItem: function () {
-		const newValues = this.state.values.concat(newItem(''));
+		const item = newItem('');
+		const newValues = this.state.values.concat(item);
 		this.setState({
 			values: newValues,
 		}, () => {
-			if (!this.state.values.length) return;
-			findDOMNode(this.refs['item_' + this.state.values.length]).focus();
+			this.focusItem(item);
 		});
 		this.valueChanged(reduceValues(newValues));
 	},
@@ -84,7 +124,7 @@ export default {
 		this.setState({
 			values: newValues,
 		}, function () {
-			findDOMNode(this.refs.button).focus();
+			this.focusButton();
 		});
 		this.valueChanged(reduceValues(newValues));
 	},
@@ -123,11 +163,11 @@ export default {
 	 * @returns {React.Element} The rendered field.
 	 */
 	renderField: function () {
-		return (
-			<div>
-				{this.state.values.map(this.renderItem)}
-				<Button ref="button" onClick={this.addItem}>Add item</Button>
-			</div>
+		return React.createElement(
+			'div',
+			null,
+			this.state.values.map(this.renderItem),
+			React.createElement(Button, { ref: this.setButtonRef, onClick: this.addItem }, 'Add item')
 		);
 	},
 
@@ -140,13 +180,26 @@ export default {
 	renderItem: function (item, index) {
 		const Input = this.getInputComponent ? this.getInputComponent() : FormInput;
 		const value = this.processInputValue ? this.processInputValue(item.value) : item.value;
-		return (
-			<FormField key={item.key}>
-				<Input ref={'item_' + (index + 1)} name={this.getInputName(this.props.path)} value={value} onChange={this.updateItem.bind(this, item)} onKeyDown={this.addItemOnEnter} autoComplete="off" />
-				<Button type="link-cancel" onClick={this.removeItem.bind(this, item)} className="keystone-relational-button">
-					<span className="octicon octicon-x" />
-				</Button>
-			</FormField>
+		return React.createElement(
+			FormField,
+			{ key: item.key },
+			React.createElement(Input, {
+				ref: (target) => this.setItemRef(item.key, target),
+				name: this.getInputName(this.props.path),
+				value,
+				onChange: this.updateItem.bind(this, item),
+				onKeyDown: this.addItemOnEnter,
+				autoComplete: 'off',
+			}),
+			React.createElement(
+				Button,
+				{
+					type: 'link-cancel',
+					onClick: this.removeItem.bind(this, item),
+					className: 'keystone-relational-button',
+				},
+				React.createElement('span', { className: 'octicon octicon-x' })
+			)
 		);
 	},
 
@@ -156,17 +209,17 @@ export default {
 	 */
 	renderValue: function () {
 		const Input = this.getInputComponent ? this.getInputComponent() : FormInput;
-		return (
-			<div>
-				{this.state.values.map((item, i) => {
-					const value = this.formatValue ? this.formatValue(item.value) : item.value;
-					return (
-						<div key={i} style={i ? { marginTop: '1em' } : null}>
-							<Input noedit value={value} />
-						</div>
-					);
-				})}
-			</div>
+		return React.createElement(
+			'div',
+			null,
+			this.state.values.map((item, i) => {
+				const value = this.formatValue ? this.formatValue(item.value) : item.value;
+				return React.createElement(
+					'div',
+					{ key: i, style: i ? { marginTop: '1em' } : null },
+					React.createElement(Input, { noedit: true, value })
+				);
+			})
 		);
 	},
 
@@ -189,3 +242,5 @@ export default {
 		}
 	},
 };
+
+export default ArrayFieldMixin;

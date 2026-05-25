@@ -51,7 +51,6 @@ export default function listFactory(keystone: Keystone) {
 
 	/**
 	 * List.
-	 *
 	 */
 	class List {
 		// -----------------------------------------------------------------------
@@ -119,7 +118,7 @@ export default function listFactory(keystone: Keystone) {
 		declare ensureTextIndex: (callback: (err?: Error | null) => void) => void;
 
 		/**
-		 * Documentation placeholder.
+		 *
 		 *
 		 * @param key - The list key.
 		 * @param options - Explicit list configuration options.
@@ -303,7 +302,7 @@ export default function listFactory(keystone: Keystone) {
 	Object.defineProperty(List.prototype, 'defaultSort', {
 		get: function (this: List) {
 			const ds = this.get('defaultSort');
-			if (ds !== '__default__') return ds;
+			if (ds && ds !== '__default__') return ds;
 			return this.get('sortable') ? 'sortOrder' : this.namePath;
 		},
 		set: function (this: List, value: unknown) {
@@ -654,7 +653,6 @@ export type UnderscoreMethodTree = UnderscoreMethod | UnderscoreMethodNode;
 
 /**
  * KeystoneList.
- *
  */
 export interface KeystoneList<
 	TListOrDocument extends string | KeystoneDocument = ListKey,
@@ -793,7 +791,7 @@ export interface KeystoneList<
  * assignability for methods with narrower, optional parameters.
  */
 export type KeystoneSchemaMethod<T extends KeystoneDocument = KeystoneDocument> = {
-	bivarianceHack(this: T, ...args: any[]): unknown;
+	bivarianceHack(this: T, ...args: unknown[]): unknown;
 }['bivarianceHack'];
 
 /**
