@@ -1,57 +1,35 @@
 import React from 'react';
+import Select from 'react-select';
 
-export default function Select({ children, onChange, options = [], value, ...props }) {
-	const className = ['Select', props.className].filter(Boolean).join(' ');
-	const optionNodes = options.map(option => {
-		const optionValue = option.value ?? option;
-		return React.createElement('option', {
-			key: optionValue,
-			value: optionValue,
-		}, option.label ?? String(optionValue));
-	});
-	return React.createElement('select', {
-		...props,
-		className,
-		value,
-		onChange: event => onChange?.(event.target.value),
-	}, children ?? optionNodes);
+const stringifyValue = (value) => {
+	return typeof value === 'string' ? value : value !== null && JSON.stringify(value) || '';
+};
+
+function patchHiddenFieldStringRefs(SelectComponent) {
+	const proto = SelectComponent && SelectComponent.prototype;
+	if (!proto || proto.__keystoneReact18HiddenFieldPatch) return;
+	proto.renderHiddenField = function renderHiddenField(valueArray) {
+		if (!this.props.name) return undefined;
+		if (this.props.joinValues) {
+			const value = valueArray.map((item) => stringifyValue(item[this.props.valueKey])).join(this.props.delimiter);
+			return React.createElement('input', {
+				disabled: this.props.disabled,
+				name: this.props.name,
+				type: 'hidden',
+				value,
+			});
+		}
+		return valueArray.map((item, index) => React.createElement('input', {
+			disabled: this.props.disabled,
+			key: 'hidden.' + index,
+			name: this.props.name,
+			type: 'hidden',
+			value: stringifyValue(item[this.props.valueKey]),
+		}));
+	};
+	Object.defineProperty(proto, '__keystoneReact18HiddenFieldPatch', { value: true });
 }
 
-Select.Async = function AsyncSelect({ loadOptions, multi, onChange, value, valueKey = 'value', labelKey = 'label', ...props }) {
-	const [options, setOptions] = React.useState([]);
-	const [input, setInput] = React.useState('');
+patchHiddenFieldStringRefs(Select);
 
-	React.useEffect(() => {
-		let isMounted = true;
-		loadOptions?.(input, (_error, result) => {
-			if (!isMounted) return;
-			const nextOptions = Array.isArray(result) ? result : result?.options ?? [];
-			setOptions(nextOptions);
-		});
-		return () => {
-			isMounted = false;
-		};
-	}, [input, loadOptions]);
-
-	const selectedValues = Array.isArray(value)
-		? value.map(item => String(typeof item === 'object' ? item[valueKey] : item))
-		: value == null ? [] : [String(typeof value === 'object' ? value[valueKey] : value)];
-
-	return React.createElement('select', {
-		...props,
-		multiple: multi,
-		value: multi ? selectedValues : selectedValues[0] ?? '',
-		onChange: event => {
-			const selected = Array.from(event.target.selectedOptions).map(option => option.value);
-			onChange?.(multi ? selected : selected[0] ?? null);
-		},
-		onInput: event => setInput(event.target.value),
-	}, [
-		!multi ? React.createElement('option', { key: '', value: '' }, '') : null,
-		...options.map(option => {
-			const optionValue = option[valueKey] ?? option.value ?? option;
-			const optionLabel = option[labelKey] ?? option.label ?? String(optionValue);
-			return React.createElement('option', { key: optionValue, value: optionValue }, optionLabel);
-		}),
-	]);
-};
+export default Select;

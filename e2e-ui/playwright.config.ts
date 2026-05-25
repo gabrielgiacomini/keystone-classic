@@ -1,9 +1,8 @@
 /**
- * Playwright configuration for the modern admin parity e2e suite.
+ * Playwright configuration for the dual-admin e2e suite.
  *
- * Drives a real Chromium browser against the historical admin path
- * (/keystone) and the explicit modern alias (/keystone-next). After legacy
- * client decommission both paths serve the modern admin shell.
+ * Drives a real Chromium browser against the historical legacy admin path
+ * (/keystone) and the explicit modern alias (/keystone-next).
  *
  * Port assignment: 3008 (hard constraint from roadmap P4-30).
  * DB: keystone-e2e-ui (MongoDB).
@@ -28,7 +27,19 @@ const NODE_OPTIONS = process.env.NODE_OPTIONS ?? '--max-old-space-size=4096';
 
 export default defineConfig({
 	testDir: './tests',
-	testMatch: [/.*\/tests\/decommission\.spec\.ts/, /.*\/tests\/visual-identity\.spec\.ts/],
+	testMatch: [
+		/.*\/tests\/auth\.spec\.ts/,
+		/.*\/tests\/home\.spec\.ts/,
+		/.*\/tests\/list-view\.spec\.ts/,
+		/.*\/tests\/item-create\.spec\.ts/,
+		/.*\/tests\/item-edit\.spec\.ts/,
+		/.*\/tests\/user-edit\.spec\.ts/,
+		/.*\/tests\/relationships\.spec\.ts/,
+		/.*\/tests\/errors\.spec\.ts/,
+		/.*\/tests\/react17-events\.spec\.ts/,
+		/.*\/tests\/decommission\.spec\.ts/,
+		/.*\/tests\/visual-identity\.spec\.ts/,
+	],
 	fullyParallel: false,
 	workers: 1,
 	retries: 1,

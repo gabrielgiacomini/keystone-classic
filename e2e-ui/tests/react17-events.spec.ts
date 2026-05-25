@@ -95,7 +95,7 @@ async function ensureFieldExplorer (): Promise<void> {
 		.toBe(true);
 }
 
-test.describe('React 17 legacy event boundaries', () => {
+test.describe('React 18 legacy event boundaries', () => {
 	test('popouts keep inside clicks and close on blockout clicks', async ({ signedInPage }) => {
 		const page = signedInPage;
 		await gotoPostsList(page);

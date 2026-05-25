@@ -12,6 +12,7 @@ const __dirname = dirname(__filename);
 
 const basedir = path.resolve(__dirname + '/../../client-legacy/');
 const devMode = process.env.KEYSTONE_DEV === 'true';
+const prebuildMode = process.env.KEYSTONE_PREBUILD_ADMIN === 'true';
 const devWriteBundles = process.env.KEYSTONE_WRITE_BUNDLES === 'true';
 
 function ts(): string { return dayjs().format('YYYY-MM-DD HH:MM:SS '); }
@@ -171,7 +172,10 @@ export default function createLegacyRuntimeBundler(opts: LegacyRuntimeBundlerOpt
 			if (devMode) logInit(logName);
 			const buff = await bundleWithEsbuild();
 			updateBundle(buff);
-			queue.forEach(function (reqres) { send(reqres[0], reqres[1]); });
+			while (queue.length) {
+				const entry = queue.shift();
+				if (entry) { send(entry[0], entry[1]); }
+			}
 			writeBundle(buff);
 		} catch (err) {
 			const error = err instanceof Error ? err : new Error(String(err));
@@ -187,10 +191,14 @@ export default function createLegacyRuntimeBundler(opts: LegacyRuntimeBundlerOpt
 
 	function serve(req: Request, res: Response): void {
 		if (src) { return send(req, res); }
-			fs.readFile(outputFilename, function (_err: NodeJS.ErrnoException | null, data?: Buffer) {
-				if (data) {
-					updateBundle(data);
-					if (devMode) { void build(); }
+		if (devMode || prebuildMode) {
+			queue.push([req, res]);
+			void build();
+			return;
+		}
+		fs.readFile(outputFilename, function (_err: NodeJS.ErrnoException | null, data?: Buffer) {
+			if (data) {
+				updateBundle(data);
 				send(req, res);
 			} else {
 				queue.push([req, res]);

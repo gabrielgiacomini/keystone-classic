@@ -1,0 +1,61 @@
+/**
+ * A item in the primary navigation. If it has a "to" prop it'll render a
+ * react-router "Link", if it has a "href" prop it'll render a simple "a" tag
+ */
+
+import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import { Link } from '../../../../router.mjs';
+
+const PrimaryNavItem = ({ children, className, href, label, listPath, title, to, active }) => {
+	const itemClassName = classnames('primary-navbar__item', className);
+
+	const Button = to ? (
+		<Link
+			className="primary-navbar__link"
+			key={title}
+			tabIndex="-1"
+			title={title}
+			to={to}
+			// Block clicks on active link
+			onClick={(evt) => { if (active) evt.preventDefault(); }}
+		>
+			{children}
+		</Link>
+	) : (
+		<a
+			className="primary-navbar__link"
+			href={href}
+			key={title}
+			tabIndex="-1"
+			title={title}
+		>
+			{children}
+		</a>
+	);
+
+	return (
+		<li
+			className={itemClassName}
+			data-section-label={label}
+			data-nav-list-link={listPath ? 'true' : undefined}
+			data-list-path={listPath}
+		>
+			{Button}
+		</li>
+	);
+};
+
+PrimaryNavItem.displayName = 'PrimaryNavItem';
+PrimaryNavItem.propTypes = {
+	children: PropTypes.node.isRequired,
+	className: PropTypes.string,
+	href: PropTypes.string,
+	label: PropTypes.string,
+	listPath: PropTypes.string,
+	title: PropTypes.string,
+	to: PropTypes.string,
+};
+
+export default PrimaryNavItem;

@@ -1,6 +1,6 @@
 # Client
 
-This is the client you see when you go to `/keystone`. It's a React.js app that uses Redux for state management.
+This is the client you see when you go to `/keystone`. It's the legacy Keystone visual UI running on React 18 with Redux for state management.
 
 ## Overview
 
@@ -10,7 +10,7 @@ The client consists of two separate bundles: `Signin` and `App`.
 
 `App` consists of three parts: The Homepage (Dashboard with lists), the List view and the single Item view.
 
-Both of these have a separate EJS template that is rendered in the backend, [`admin/server/templates-legacy-legacy/signin.html`](../server/templates/signin.html) and [`admin/server/templates-legacy-legacy/index.html`](../server/templates/index.html). This where the data for the `App` bundle is injected too.
+Both of these have a separate EJS template that is rendered in the backend, [`admin/server/templates-legacy/signin.html`](../server/templates-legacy/signin.html) and [`admin/server/templates-legacy/index.html`](../server/templates-legacy/index.html). This is where the data for the `App` bundle is injected too.
 
 ## Folder structure
 
@@ -31,7 +31,7 @@ client
 ├── utils/                           # Some common utilities we use in both Signin and App
 ├── README.md
 ├── constants.js                     # A few shared constants
-└── packages.js                      # Historical vendor-bundle placeholder kept for script-tag compatibility
+└── routerRedux.mjs                  # Small compatibility shim for the legacy routing actions
 ```
 
 This means an import like `import SomeSharedComponent from '../../../shared/SomeSharedComponent'` is perfectly fine, but if you find yourself import from a `component` folder like so `import SomeComponent from '../../../component/SomeComponent'` move that component to the `shared/` folder on the same level.

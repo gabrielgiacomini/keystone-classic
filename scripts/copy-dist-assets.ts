@@ -74,8 +74,16 @@ await Promise.all([
 	copyIfPresent('admin/server/index.cjs', 'admin/server/index.cjs'),
 	copyIfPresent('package.json', 'package.json'),
 	copyIfPresent('admin/public-next', 'admin/public-next'),
+	copyIfPresent('admin/public-legacy', 'admin/public-legacy'),
+	copyIfPresent('admin/client-legacy/App', 'admin/client-legacy/App'),
+	copyIfPresent('admin/client-legacy/Signin', 'admin/client-legacy/Signin'),
 	copyIfPresent('admin/client-legacy/compat', 'admin/client-legacy/compat'),
 	copyIfPresent('admin/client-legacy/utils', 'admin/client-legacy/utils'),
+	copyIfPresent('admin/client-legacy/router.mjs', 'admin/client-legacy/router.mjs'),
+	copyIfPresent('admin/client-legacy/routerRedux.mjs', 'admin/client-legacy/routerRedux.mjs'),
+	copyIfPresent('admin/client-legacy/theme.mjs', 'admin/client-legacy/theme.mjs'),
+	copyIfPresent('admin/client-legacy/constants.mjs', 'admin/client-legacy/constants.mjs'),
+	copyIfPresent('admin/server/templates-legacy', 'admin/server/templates-legacy'),
 	copyIfPresent('fields/types/markdown/less', 'fields/types/markdown/less'),
 ]);
 

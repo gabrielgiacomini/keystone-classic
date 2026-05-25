@@ -138,6 +138,7 @@ function resolveRoute(pathname, rootRoute) {
 }
 
 export const browserHistory = {
+	getCurrentLocation,
 	listen(listener) {
 		const currentWindow = getWindow();
 		if (!currentWindow) return () => {};

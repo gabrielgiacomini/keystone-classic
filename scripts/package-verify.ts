@@ -3,6 +3,7 @@ import { access, readFile, readdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { promisify } from 'node:util';
+import { transform as transformWithEsbuild } from 'esbuild';
 
 const root = process.cwd();
 const packageJsonPath = path.join(root, 'package.json');
@@ -153,10 +154,15 @@ async function assertNoSourcePatternInExtensions(
 	assert(matches.length === 0, `${label}:\n${matches.join('\n')}`);
 }
 
-async function assertSourceParses(relativeRoots: string[], label: string): Promise<void> {
+async function assertSourceParses(
+	relativeRoots: string[],
+	label: string,
+	allowFile?: (file: string) => boolean,
+): Promise<void> {
 	const files = (await Promise.all(relativeRoots.map(listFiles)))
 		.flat()
-		.filter((file) => file.endsWith('.mjs'));
+		.filter((file) => file.endsWith('.mjs'))
+		.filter((file) => !allowFile?.(file));
 
 	const failures: string[] = [];
 	for (const file of files) {
@@ -171,9 +177,42 @@ async function assertSourceParses(relativeRoots: string[], label: string): Promi
 	assert(failures.length === 0, `${label}:\n${failures.join('\n')}`);
 }
 
-async function assertNoFilePattern(relativeFiles: string[], pattern: RegExp, label: string): Promise<void> {
+async function assertSourceParsesWithJsx(relativeRoots: string[], label: string): Promise<void> {
+	const files = (await Promise.all(relativeRoots.map(listFiles)))
+		.flat()
+		.filter((file) => file.endsWith('.mjs'));
+
+	const failures: string[] = [];
+	for (const file of files) {
+		try {
+			const source = await readFile(path.join(root, file), 'utf8');
+			await transformWithEsbuild(source, {
+				format: 'esm',
+				jsx: 'transform',
+				loader: 'jsx',
+				sourcefile: file,
+				target: 'es2018',
+			});
+		} catch (error) {
+			const failure = error as { message?: string };
+			failures.push(`${file}\n${failure.message || 'JSX transform parse failed'}`);
+		}
+	}
+
+	assert(failures.length === 0, `${label}:\n${failures.join('\n')}`);
+}
+
+async function assertNoFilePattern(
+	relativeFiles: string[],
+	pattern: RegExp,
+	label: string,
+	allowFile?: (file: string) => boolean,
+): Promise<void> {
 	const matches: string[] = [];
 	for (const file of relativeFiles) {
+		if (allowFile?.(file)) {
+			continue;
+		}
 		let source: string;
 		try {
 			source = await readFile(path.join(root, file), 'utf8');
@@ -248,30 +287,18 @@ assertNoDirectDependency('method-override');
 assertNoDirectDependency('keystone-storage-namefunctions');
 assertNoDirectDependency('react-router');
 assertNoDirectDependency('react-router-redux');
-assertNoDirectDependency('redux');
-assertNoDirectDependency('redux-thunk');
-assertNoDirectDependency('xhr');
 assertNoDirectDependency('browserify-shim');
 assertNoDirectDependency('browserify-middleware');
 assertNoDirectDependency('browserify');
 assertNoDirectDependency('@types/browserify');
 assertNoDirectDependency('swcify');
-assertNoDirectDependency('glamor');
 assertNoDirectDependency('react-markdown');
 assertNoDirectDependency('react-images');
 assertNoDirectDependency('react-scrolllock');
 assertNoDirectDependency('react-prop-toggle');
 assertNoDirectDependency('react-lifecycles-compat');
-assertNoDirectDependency('react-transition-group');
 assertNoDirectDependency('react-day-picker');
-assertNoDirectDependency('react-dnd');
-assertNoDirectDependency('react-dnd-html5-backend');
-assertNoDirectDependency('react-select');
 assertNoDirectDependency('react-input-autosize');
-assertNoDirectDependency('create-react-class');
-assertNoDirectDependency('react-redux');
-assertNoDirectDependency('redux-saga');
-assertNoDirectDependency('prop-types');
 assertNoDirectDependency('uglify-js');
 assertNoDirectDependency('disc');
 assertNoDirectDependency('brfs');
@@ -286,14 +313,10 @@ assertNoDirectDependency('i');
 assertNoDirectDependency('chalk');
 assertNoDirectDependency('greenlock-express');
 assertNoDirectDependency('@types/greenlock-express');
-assertNoDirectDependency('classnames');
 assertNoDirectDependency('react-color');
-assertNoDirectDependency('numeral');
 assertNoDirectDependency('@types/numeral');
 assertNoDirectDependency('keystone-tinymce');
-assertNoDirectDependency('lodash');
 assertNoDirectDependency('@types/lodash');
-assertNoDirectDependency('moment');
 assertNoDirectDependency('enzyme');
 assertNoDirectDependency('@cfaester/enzyme-adapter-react-18');
 assertNoDirectDependency('cheerio');
@@ -350,26 +373,16 @@ await assertFile('dist/index.cjs');
 await assertFile('dist/package.json');
 await assertFile('dist/admin/server/index.mjs');
 await assertFile('dist/admin/public-next/index.html');
-await assertNoFile(
-	'dist/admin/client-legacy/App',
-	'package output must not include the legacy App client root',
-);
+await assertFile('dist/admin/client-legacy/App/index.mjs');
 await assertFile('dist/admin/client-legacy/compat/elemental/FormInput.mjs');
 await assertFile('dist/admin/client-legacy/compat/shared/Select.mjs');
 await assertFile('dist/admin/client-legacy/utils/lists.mjs');
 await assertFile('dist/admin/client-legacy/utils/glamor.mjs');
-await assertNoFile(
-	'dist/admin/client-legacy/Signin',
-	'package output must not include the legacy Signin client root',
-);
-await assertNoFile(
-	'dist/admin/public-legacy',
-	'package output must not include legacy browser assets',
-);
-await assertNoFile(
-	'dist/admin/server/templates-legacy',
-	'package output must not include legacy admin templates',
-);
+await assertFile('dist/admin/client-legacy/Signin/index.mjs');
+await assertFile('dist/admin/public-legacy/styles/keystone.min.css');
+await assertFile('dist/admin/public-legacy/js/lib/jquery/jquery-1.10.2.min.js');
+await assertFile('dist/admin/server/templates-legacy/index.html');
+await assertFile('dist/admin/server/templates-legacy/signin.html');
 await assertFile('dist/fields/types/markdown/less/bootstrap-markdown.less');
 await assertFile('scripts/admin-decommission-audit.ts');
 await assertFile('scripts/admin-parity-final-gate.ts');
@@ -589,7 +602,12 @@ await assertFileIncludes(
 );
 await assertSourceParses(
 	['admin/client-legacy', 'fields'],
-	'built-in legacy admin and field .mjs source must parse without a JSX transform',
+	'built-in legacy support and field .mjs source must parse without a JSX transform',
+	(file) => file.startsWith('admin/client-legacy/App/') || file.startsWith('admin/client-legacy/Signin/'),
+);
+await assertSourceParsesWithJsx(
+	['admin/client-legacy/App', 'admin/client-legacy/Signin'],
+	'restored legacy admin UI source must parse with the React 18 esbuild JSX transform',
 );
 await assertNoSourcePatternInExtensions(
 	['admin/client-next', 'admin/shared'],
@@ -623,7 +641,7 @@ await assertNoSourcePatternInExtensions(
 );
 await assertNoFile(
 	'admin/client-legacy/packages.mjs',
-	'legacy vendor package manifest must stay removed; packages.js is now a compatibility placeholder',
+	'legacy vendor package manifest and packages.js compatibility path must stay removed',
 );
 
 await assertNoFile(
@@ -640,12 +658,14 @@ await assertNoSourcePattern(
 	['admin/client-legacy', 'fields'],
 	/findDOMNode|this\.refs|(?<!h)ref=(["'])|UNSAFE_/,
 	'built-in legacy .mjs source must not reintroduce findDOMNode, string refs, this.refs, or unsafe lifecycle markers',
+	(file) => file.startsWith('admin/client-legacy/App/') || file.startsWith('admin/client-legacy/Signin/'),
 );
 
 await assertNoSourcePattern(
 	['admin/client-legacy', 'fields'],
 	/from ['"]prop-types['"]|PropTypes/,
 	'built-in legacy admin and field source must not reintroduce PropTypes',
+	(file) => file.startsWith('admin/client-legacy/App/') || file.startsWith('admin/client-legacy/Signin/'),
 );
 
 await assertNoSourcePatternInExtensions(
@@ -707,9 +727,6 @@ await assertNoFilePattern(
 		'admin/shared/state/valueGuards.mjs',
 		'admin/client-legacy/utils/queryParams.mjs',
 		'admin/client-legacy/App/listStateMiddleware.mjs',
-		'admin/client-legacy/App/shared/FlashMessages.mjs',
-		'admin/client-legacy/App/screens/Home/components/Lists.mjs',
-		'admin/client-legacy/App/screens/List/reducers/active.mjs',
 		'admin/client-legacy/utils/string.mjs',
 		'lib/session.mts',
 		'lib/core/initExpressSession.mts',
@@ -750,8 +767,6 @@ await assertNoFilePattern(
 		'test/e2e/server.mjs',
 		'test/e2e/keystone-nightwatch/index.mjs',
 		'admin/client-legacy/utils/dateFormat.mjs',
-		'admin/client-legacy/App/screens/List/components/Filtering/getFilterLabel.mjs',
-		'admin/client-legacy/App/screens/Item/components/EditForm.mjs',
 	],
 	/from ['"]moment['"]|require\(['"]moment['"]\)/,
 	'guarded legacy display and old e2e slices must not reintroduce moment',
@@ -920,34 +935,8 @@ await assertNoFilePattern(
 		'fields/types/url/UrlField.mjs',
 	],
 	/admin\/client-legacy\/App\/elemental['"]|admin\/client-legacy\/App\/elemental\/index\.mjs/,
-	'migrated legacy admin and field files must import direct Elemental modules instead of the aggregate barrel',
-);
-
-await assertNoFilePattern(
-	[
-		'admin/client-legacy/App/elemental/GlyphField/index.mjs',
-		'admin/client-legacy/App/screens/List/components/Filtering/Filter.mjs',
-		'admin/client-legacy/App/screens/List/components/Filtering/ListFiltersAddForm.mjs',
-		'admin/client-legacy/App/screens/Item/components/EditForm.mjs',
-		'admin/client-legacy/App/screens/Item/components/RelatedItemsList/RelatedItemsListRow.mjs',
-		'admin/client-legacy/App/screens/List/components/ItemsTable/ItemsTableRow.mjs',
-		'admin/client-legacy/App/screens/List/components/UpdateForm.mjs',
-		'admin/client-legacy/App/shared/CreateForm.mjs',
-	],
-	/from ['"]FieldTypes['"]/,
-	'legacy browser source must use the existing FieldTypes global instead of static bundler alias imports in guarded files',
-);
-
-await assertNoSourcePattern(
-	['admin/client-legacy/App/screens/List'],
-	/admin\/client-legacy\/App\/elemental['"]|admin\/client-legacy\/App\/elemental\/index\.mjs|from ['"]\.\.?\/.*elemental['"]|from ['"]\.\.?\/.*elemental\/index\.mjs/,
-	'legacy List screen source must not import the Elemental aggregate barrel',
-);
-
-await assertNoSourcePattern(
-	['admin/client-legacy/App/screens/Item'],
-	/admin\/client-legacy\/App\/elemental['"]|admin\/client-legacy\/App\/elemental\/index\.mjs|from ['"]\.\.?\/.*elemental['"]|from ['"]\.\.?\/.*elemental\/index\.mjs/,
-	'legacy Item screen source must not import the Elemental aggregate barrel',
+	'migrated field files must import direct Elemental compatibility modules instead of the legacy aggregate barrel',
+	(file) => file.startsWith('admin/client-legacy/App/'),
 );
 
 await assertNoFilePattern(
