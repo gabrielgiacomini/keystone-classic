@@ -32,6 +32,12 @@ Last checked from this workspace:
   repo-owned and fixed afterward: the decommissioned legacy bundle-hash CI job
   was removed, and the headless boot unit test now isolates CI Mongo environment
   variables before asserting default database-name fallback behavior.
+- Manual branch CI run `26382502620` passed on 2026-05-25 for commit
+  `bcfce962` on `modernization/legacy-client-convergence`: `prod-audit`,
+  `e2e-ui`, `test (24)`, `admin-parity`, `e2e-api`, `package-verify`, and
+  `lint-typecheck` all completed successfully. This proves the current branch
+  head is green before merge; the 14-day soak still cannot pass until the fixed
+  branch is on `master` and the required check stays green for the full window.
 - `npm run admin-parity:protect:status` exited non-zero during the
   2026-05-12T03:13:48Z refresh. Repository
   `gabrielgiacomini/keystone4-ts` is private, branch `main` is not protected,

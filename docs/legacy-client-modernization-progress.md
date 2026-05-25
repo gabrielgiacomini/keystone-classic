@@ -1010,6 +1010,7 @@ This file tracks implementation progress for
 | 2026-05-25 | `gh workflow run ci.yml --ref modernization/legacy-client-convergence` | Fail | Manual branch CI run `26382347256` improved to green `package-verify`, `lint-typecheck`, `prod-audit`, `e2e-api`, `e2e-ui`, and `admin-parity`, leaving two repo-owned failures: an obsolete `legacy-bundle-hash` job for the removed legacy bundle builder, and a headless unit test that did not isolate CI's `MONGO_URI`. |
 | 2026-05-25 | `npm run test:unit -- test/unit/lib/core/headless-boot.mts test/unit/scripts/ci-workflow-verify.test.mts` | Pass | Targeted rerun passed with 1377 passing after isolating Mongo environment variables in the headless boot test and making the CI verifier reject reintroduced legacy bundle-hash jobs. |
 | 2026-05-25 | `npm run lint && npm run package:verify` | Pass | Lint and package verification pass after removing the obsolete legacy bundle-hash CI job and guarding that it stays removed. |
+| 2026-05-25 | GitHub Actions CI run `26382502620` on `modernization/legacy-client-convergence` | Pass | Manual `workflow_dispatch` CI passed on commit `bcfce962`: `prod-audit`, `e2e-ui`, `test (24)`, `admin-parity`, `e2e-api`, `package-verify`, and `lint-typecheck` all completed successfully. This proves the current branch head is green before merge; the external `master` 14-day soak remains separate. |
 
 ## Current Route Policy
 
