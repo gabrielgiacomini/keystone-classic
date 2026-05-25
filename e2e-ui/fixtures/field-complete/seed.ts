@@ -204,6 +204,12 @@ export async function seedFieldCompleteData (keystone: KeystoneLike): Promise<Se
 	});
 	await relationshipTarget.save();
 
+	const stableRelationshipTarget = new RelationshipTarget.model({
+		fixtureKey: 'relationship-target-stable',
+		name: 'Relationship Target Stable',
+	});
+	await stableRelationshipTarget.save();
+
 	const manyRelationship = new ManyRelationship.model({
 		fixtureKey: 'many-relationship-alpha',
 		name: 'Many Relationship Alpha',

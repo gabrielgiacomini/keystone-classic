@@ -35,11 +35,16 @@ class Form extends Component {
 			...props
 		} = this.props;
 
-		props.className = css(
+		const generatedClassName = css(
 			classes.Form,
-			classes['Form__' + layout],
-			className
+			classes['Form__' + layout]
 		);
+		props.className = [
+			'Form',
+			layout ? `Form--${layout}` : null,
+			generatedClassName,
+			className,
+		].filter(Boolean).join(' ');
 
 		return <Component {...props} />;
 	}

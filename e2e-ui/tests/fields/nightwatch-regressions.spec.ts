@@ -69,6 +69,43 @@ async function setCheckbox(checkbox: Locator, checked: boolean): Promise<void> {
 	}
 }
 
+async function expectLegacyItemFieldSpacing(page: Page, route: string): Promise<number> {
+	await page.goto(route);
+	await expect(page.locator('form.EditForm-container')).toBeVisible();
+	await expect(page.locator('.Form--horizontal')).toBeVisible();
+
+	const rows = await page.evaluate(() => {
+		return Array.from(document.querySelectorAll('.Form--horizontal > .FormField'))
+			.map((field, index) => {
+				const children = Array.from(field.children).filter((child) => {
+					const rect = child.getBoundingClientRect();
+					return rect.width > 0 && rect.height > 0 && rect.left > -100;
+				});
+				const label = children.find((child) => child.classList.contains('FormLabel'));
+				const control = children.find((child) => child !== label);
+				if (!label || !control) return null;
+
+				const fieldStyle = window.getComputedStyle(field);
+				const labelRect = label.getBoundingClientRect();
+				const controlRect = control.getBoundingClientRect();
+				return {
+					index,
+					label: label.textContent?.trim() ?? '',
+					fieldDisplay: fieldStyle.display,
+					labelWidth: labelRect.width,
+					controlOffset: controlRect.left - field.getBoundingClientRect().left,
+				};
+			})
+			.filter(Boolean);
+	});
+	expect(rows.filter((row) =>
+		row?.fieldDisplay !== 'table' ||
+		(row?.labelWidth ?? 0) < 160 ||
+		(row?.controlOffset ?? 0) < 160,
+	), `${route} should keep labels and controls in separate columns`).toEqual([]);
+	return rows.length;
+}
+
 test.describe('Nightwatch high-value regression ports', () => {
 	test('many relationship clears a deleted related target', async ({ signedInPage }) => {
 		const source = await fixtureDoc('ManyRelationship', 'many-relationship-alpha');
@@ -181,6 +218,40 @@ test.describe('Nightwatch high-value regression ports', () => {
 		await expect(signedInPage.locator('input[name="fieldB"]')).toHaveValue('Fallback column B');
 		await expect(signedInPage.locator('.FormInput-noedit')).toHaveCount(2);
 		await expect(signedInPage.locator('.FormInput-noedit').first()).toContainText('2026-');
+		expect(pageErrors).toEqual([]);
+	});
+
+	test('legacy item forms keep horizontal label spacing across fixture pages', async ({
+		signedInPage,
+	}) => {
+		const cases = [
+			{ collection: 'User', fixtureKey: 'account-admin', path: 'users' },
+			{ collection: 'MediaAsset', fixtureKey: 'media-hero', path: 'media-assets' },
+			{ collection: 'Venue', fixtureKey: 'venue-main-hall', path: 'venues' },
+			{ collection: 'Article', fixtureKey: 'article-launch-playbook', path: 'articles' },
+			{ collection: 'Event', fixtureKey: 'event-launch-workshop', path: 'events' },
+			{ collection: 'Product', fixtureKey: 'product-starter-kit', path: 'products' },
+			{ collection: 'SortableItem', fixtureKey: 'sortable-item-1', path: 'sortable-items' },
+			{ collection: 'RelationshipTarget', fixtureKey: 'relationship-target-stable', path: 'relationship-targets' },
+			{ collection: 'ManyRelationship', fixtureKey: 'many-relationship-alpha', path: 'many-relationships' },
+			{ collection: 'NoDefaultColumn', fixtureKey: 'no-default-column-alpha', path: 'no-default-columns' },
+			{ collection: 'DateFieldMap', fixtureKey: 'date-field-map-alpha', path: 'date-field-maps' },
+			{ collection: 'DependsOn', fixtureKey: 'depends-on-alpha', path: 'depends-ons' },
+		];
+		const pageErrors: string[] = [];
+		signedInPage.on('pageerror', (error) => {
+			pageErrors.push(error.message);
+		});
+
+		let measuredRows = 0;
+		for (const entry of cases) {
+			const doc = await fixtureDoc(entry.collection, entry.fixtureKey);
+			measuredRows += await expectLegacyItemFieldSpacing(
+				signedInPage,
+				`/keystone/${entry.path}/${objectIdText(doc._id)}`,
+			);
+		}
+		expect(measuredRows).toBeGreaterThan(10);
 		expect(pageErrors).toEqual([]);
 	});
 
