@@ -28,6 +28,10 @@ export default class DayPicker extends React.Component {
 		}));
 	};
 
+	handleButtonMouseDown = (event) => {
+		event.preventDefault();
+	};
+
 	modifiersFor(day) {
 		const { modifiers } = this.props;
 		const result = {};
@@ -55,6 +59,7 @@ export default class DayPicker extends React.Component {
 				key: formatDateByFormat(day, 'YYYY-MM-DD'),
 				className,
 				onClick: () => this.props.onDayClick(day, modifiers),
+				onMouseDown: this.handleButtonMouseDown,
 				tabIndex: this.props.tabIndex,
 				type: 'button',
 			},
@@ -76,12 +81,14 @@ export default class DayPicker extends React.Component {
 					'aria-label': 'Previous Month',
 					className: 'DayPicker-NavButton DayPicker-NavButton--prev',
 					onClick: this.handlePrevious,
+					onMouseDown: this.handleButtonMouseDown,
 					type: 'button',
 				}),
 				React.createElement('button', {
 					'aria-label': 'Next Month',
 					className: 'DayPicker-NavButton DayPicker-NavButton--next',
 					onClick: this.handleNext,
+					onMouseDown: this.handleButtonMouseDown,
 					type: 'button',
 				})
 			),

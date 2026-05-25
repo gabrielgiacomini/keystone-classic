@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import DayPicker from '../../components/DayPicker.mjs';
-import { formatDateByFormat, isSameDay, parseDateByFormat, startOfToday } from '../../utils/date.mjs';
+import { formatDateByFormat, isSameDay, parseDateByFormat, startOfToday, toValidDate } from '../../utils/date.mjs';
 
 import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
 import FormSelect from '../../../admin/client-legacy/compat/elemental/FormSelect.mjs';
@@ -58,6 +58,11 @@ function getDefaultValue () {
 	};
 }
 
+function getFilterMonth(filter) {
+	const value = filter.mode === 'between' ? filter.after : filter.value;
+	return toValidDate(value) || startOfToday();
+}
+
 /**
  * The `DateFilter` component.
  * @augments React.Component
@@ -78,7 +83,7 @@ class DateFilter extends React.Component {
 		this.inputRefs = {};
 		this.state = {
 			activeInputField: 'after',
-			month: new Date(), // The month to display in the calendar
+			month: getFilterMonth(props.filter),
 		};
 	}
 
@@ -148,7 +153,7 @@ class DateFilter extends React.Component {
 		if (!nextValue) return;
 		if (name === 'after' || name === 'before') {
 			this.updateFilter({ [name]: nextValue });
-			this.setState({ month: nextValue });
+			this.setState({ month: nextValue }, this.showCurrentDate);
 			return;
 		}
 		this.updateFilter({ value: nextValue });
@@ -293,6 +298,8 @@ class DateFilter extends React.Component {
 					'div',
 					{ style: { position: 'relative' } },
 					React.createElement(DayPicker, {
+						ref: (dayPicker) => { this.dayPickerRef = dayPicker; },
+						initialMonth: this.state.month,
 						modifiers,
 						className: 'DayPicker--chrome',
 						onDayClick: this.switchBetweenActiveInputFields,
@@ -323,6 +330,7 @@ class DateFilter extends React.Component {
 					{ style: { position: 'relative' } },
 					React.createElement(DayPicker, {
 						ref: (dayPicker) => { this.dayPickerRef = dayPicker; },
+						initialMonth: this.state.month,
 						modifiers,
 						className: 'DayPicker--chrome',
 						onDayClick: this.selectDay,

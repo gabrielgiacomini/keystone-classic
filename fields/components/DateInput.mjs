@@ -53,19 +53,19 @@ export default class DateInput extends React.Component {
 		this.setState({ inputValue: value }, this.showCurrentMonth);
 	};
 
-	handleKeyPress = (e) => {
-		if (e.key === 'Enter') {
-			e.preventDefault();
-			// If the date is strictly equal to the format string, dispatch onChange
-			const parsed = parseDateByFormat(this.state.inputValue, this.props.format);
-			if (parsed && formatDateByFormat(parsed, this.props.format) === this.state.inputValue) {
-				this.props.onChange({ value: this.state.inputValue });
-			// If the date is not strictly equal, only change the tab that is displayed
-			} else if (toValidDate(this.state.inputValue)) {
-				this.setState({
-					month: toValidDate(this.state.inputValue),
-				}, this.showCurrentMonth);
-			}
+	handleKeyDown = (e) => {
+		if (e.key !== 'Enter') return;
+
+		e.preventDefault();
+		// If the date is strictly equal to the format string, dispatch onChange
+		const parsed = parseDateByFormat(this.state.inputValue, this.props.format);
+		if (parsed && formatDateByFormat(parsed, this.props.format) === this.state.inputValue) {
+			this.props.onChange({ value: this.state.inputValue });
+		// If the date is not strictly equal, only change the tab that is displayed
+		} else if (toValidDate(this.state.inputValue)) {
+			this.setState({
+				month: toValidDate(this.state.inputValue),
+			}, this.showCurrentMonth);
 		}
 	};
 
@@ -129,7 +129,7 @@ export default class DateInput extends React.Component {
 				onBlur: this.handleBlur,
 				onChange: this.handleInputChange,
 				onFocus: this.handleFocus,
-				onKeyPress: this.handleKeyPress,
+				onKeyDown: this.handleKeyDown,
 				placeholder: this.props.format,
 				ref: (input) => { this.inputRef = input; },
 				value: this.state.inputValue,

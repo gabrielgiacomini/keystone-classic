@@ -107,6 +107,13 @@ test.describe('E. Item edit', () => {
 		expect(firstWeekBoxes[1]?.top).toBe(firstWeekBoxes[0]?.top);
 		expect((firstWeekBoxes[6]?.left ?? 0) - (firstWeekBoxes[0]?.left ?? 0))
 			.toBeGreaterThan((firstWeekBoxes[0]?.width ?? 0) * 4);
+
+		const startingCaption = await page.locator('.DayPicker-Caption').textContent();
+		await page.locator('.DayPicker-NavButton--next').click();
+		await expect(page.locator('.DayPicker')).toBeVisible();
+		await expect(page.locator('.DayPicker-Caption')).not.toHaveText(startingCaption ?? '');
+		await page.locator('.DayPicker-NavButton--prev').click();
+		await expect(page.locator('.DayPicker-Caption')).toHaveText(startingCaption ?? '');
 	});
 
 	test('flipping Featured saves and round-trips via the JSON API', async ({

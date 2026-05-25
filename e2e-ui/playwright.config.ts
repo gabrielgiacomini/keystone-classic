@@ -31,6 +31,7 @@ export default defineConfig({
 		/.*\/tests\/auth\.spec\.ts/,
 		/.*\/tests\/home\.spec\.ts/,
 		/.*\/tests\/list-view\.spec\.ts/,
+		/.*\/tests\/date-picker\.spec\.ts/,
 		/.*\/tests\/item-create\.spec\.ts/,
 		/.*\/tests\/item-edit\.spec\.ts/,
 		/.*\/tests\/user-edit\.spec\.ts/,

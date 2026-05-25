@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import DayPicker from '../../components/DayPicker.mjs';
-import { formatDateByFormat, isSameDay, parseDateByFormat, startOfToday } from '../../utils/date.mjs';
+import { formatDateByFormat, isSameDay, parseDateByFormat, startOfToday, toValidDate } from '../../utils/date.mjs';
 import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
 import FormSelect from '../../../admin/client-legacy/compat/elemental/FormSelect.mjs';
 import Grid from '../../../admin/client-legacy/compat/elemental/Grid.mjs';
@@ -29,10 +29,12 @@ const MODE_OPTIONS = [
  * DayPicker.
  * @returns {React.Element} The rendered component.
  */
-function DayPickerIndicator() {
+function DayPickerIndicator({ activeInputField }) {
+	const style = activeInputField === 'before' ? { left: '11rem' } : null;
+
 	return React.createElement(
 		'span',
-		{ className: 'DayPicker-Indicator' },
+		{ className: 'DayPicker-Indicator', style },
 		React.createElement('span', { className: 'DayPicker-Indicator__border' }),
 		React.createElement('span', { className: 'DayPicker-Indicator__bg' })
 	);
@@ -50,6 +52,11 @@ function getDefaultValue () {
 		before: startOfToday(),
 		after: startOfToday(),
 	};
+}
+
+function getFilterMonth(filter) {
+	const value = filter.mode === 'between' ? filter.after : filter.value;
+	return toValidDate(value) || startOfToday();
 }
 
 /**
@@ -72,7 +79,7 @@ class DateFilter extends React.Component {
 		this.inputRefs = {};
 		this.state = {
 			activeInputField: 'after',
-			month: new Date(), // The month to display in the calendar
+			month: getFilterMonth(props.filter),
 		};
 	}
 
@@ -122,16 +129,16 @@ class DateFilter extends React.Component {
 	 * @param {object} e The event object.
 	 */
 	handleInputChange = (e) => {
-		const { value } = e.target;
-		let { month } = this.state;
-		// Change the current month only if the value entered by the user is a valid
-		// date, according to the `L` format
-		const parsed = parseDateByFormat(value, 'L');
-		if (parsed) {
-			month = parsed;
+		const { name, value } = e.target;
+		const nextValue = parseDateByFormat(value, this.props.format);
+		if (!nextValue) return;
+		if (name === 'after' || name === 'before') {
+			this.updateFilter({ [name]: nextValue });
+			this.setState({ month: nextValue }, this.showCurrentDate);
+			return;
 		}
-		this.updateFilter({ value: value });
-		this.setState({ month }, this.showCurrentDate);
+		this.updateFilter({ value: nextValue });
+		this.setState({ month: nextValue }, this.showCurrentDate);
 	};
 
 	/**
@@ -194,7 +201,9 @@ class DateFilter extends React.Component {
 		const placeholder = field.label + ' is ' + mode.label.toLowerCase() + '...';
 
 		// DayPicker stuff
-		const modifiers = {
+		const modifiers = mode.value === 'between' ? {
+			selected: (day) => isSameDay(filter[this.state.activeInputField], day),
+		} : {
 			selected: (day) => isSameDay(filter.value, day),
 		};
 
@@ -212,20 +221,26 @@ class DateFilter extends React.Component {
 							Grid.Col,
 							null,
 							React.createElement(FormInput, {
+								name: 'after',
 								ref: (input) => { this.inputRefs.after = input; },
 								placeholder: 'From',
+								onChange: this.handleInputChange,
 								onFocus: () => { this.setActiveField('after'); },
 								value: formatDateByFormat(filter.after, this.props.format),
+								'data-list-filter-date-after': true,
 							})
 						),
 						React.createElement(
 							Grid.Col,
 							null,
 							React.createElement(FormInput, {
+								name: 'before',
 								ref: (input) => { this.inputRefs.before = input; },
 								placeholder: 'To',
+								onChange: this.handleInputChange,
 								onFocus: () => { this.setActiveField('before'); },
 								value: formatDateByFormat(filter.before, this.props.format),
+								'data-list-filter-date-before': true,
 							})
 						)
 					)
@@ -235,10 +250,12 @@ class DateFilter extends React.Component {
 					{ style: { position: 'relative' } },
 					React.createElement(DayPicker, {
 						className: 'DayPicker--chrome',
+						initialMonth: this.state.month,
 						modifiers,
 						onDayClick: this.switchBetweenActiveInputFields,
+						ref: (dayPicker) => { this.dayPickerRef = dayPicker; },
 					}),
-					React.createElement(DayPickerIndicator)
+					React.createElement(DayPickerIndicator, { activeInputField: this.state.activeInputField })
 				)
 			);
 		} else {
@@ -249,6 +266,7 @@ class DateFilter extends React.Component {
 					'div',
 					{ style: { marginBottom: '1em' } },
 					React.createElement(FormInput, {
+						name: 'value',
 						onChange: this.handleInputChange,
 						onFocus: this.showCurrentDate,
 						placeholder,
@@ -262,6 +280,7 @@ class DateFilter extends React.Component {
 					{ style: { position: 'relative' } },
 					React.createElement(DayPicker, {
 						className: 'DayPicker--chrome',
+						initialMonth: this.state.month,
 						modifiers,
 						onDayClick: this.selectDay,
 						ref: (dayPicker) => { this.dayPickerRef = dayPicker; },
@@ -303,6 +322,7 @@ class DateFilter extends React.Component {
 					onChange: this.selectMode,
 					options: MODE_OPTIONS,
 					value: mode.value,
+					'data-list-filter-date-mode': true,
 				})
 			),
 			this.renderControls()
