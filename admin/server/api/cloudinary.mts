@@ -3,7 +3,9 @@ import type { Keystone } from '../../../index.mjs';
 import type { UploadApiOptions } from 'cloudinary';
 import cloudinary from '../../../lib/cloudinaryClient.mjs';
 
-/** Uploads a file to Cloudinary and returns the resulting image URL. */
+/**
+ * Uploads a file to Cloudinary and returns the resulting image URL.
+ */
 export function upload(req: Request, res: Response): void {
 	const keystone = req.keystone as Keystone;
 
@@ -47,7 +49,9 @@ export function upload(req: Request, res: Response): void {
 	}
 }
 
-/** Lists Cloudinary resources matching an optional prefix for use in autocomplete UI. */
+/**
+ * Lists Cloudinary resources matching an optional prefix for use in autocomplete UI.
+ */
 export function autocomplete(req: Request, res: Response): void {
 	const max = req.query.max || 10;
 	const prefix = req.query.prefix || '';
@@ -70,7 +74,9 @@ export function autocomplete(req: Request, res: Response): void {
 	});
 }
 
-/** Fetches metadata for a single Cloudinary resource by public id. */
+/**
+ * Fetches metadata for a single Cloudinary resource by public id.
+ */
 export function get(req: Request, res: Response): void {
 	const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
 	if (typeof id !== 'string') {

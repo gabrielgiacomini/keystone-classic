@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import {
@@ -10,7 +11,9 @@ import {
   resolveListMeta,
   toFieldMeta,
 } from '../../api/list.js';
-import type { AdminFieldMeta, AdminListMeta } from '../../api/list.js';
+import type { AdminFieldMeta, AdminListMeta, ListItem } from '../../api/list.js';
+import { getValidationFieldErrors, hasFieldErrors } from '../../api/errors.js';
+import type { FieldErrors } from '../../api/errors.js';
 import { useAdminMeta } from '../../hooks/useList.js';
 import { getFieldComponents } from '../../fields/registry.js';
 import { FieldShell } from '../FieldShell/FieldShell.js';
@@ -20,8 +23,11 @@ interface CreateItemModalProps {
   listKey: string;
   isOpen: boolean;
   onClose: () => void;
-  onCreated: (id: string) => void;
+  onCreated: (id: string, item?: ListItem) => void;
+  initialValues?: Record<string, unknown>;
 }
+
+const EMPTY_INITIAL_VALUES: Record<string, unknown> = {};
 
 function getInitialFields(listMeta: AdminListMeta | undefined): AdminFieldMeta[] {
   if (listMeta === undefined) return [getFallbackTextField('name')];
@@ -61,18 +67,28 @@ function buildDefaultValues(fields: AdminFieldMeta[]): Record<string, unknown> {
   return values;
 }
 
-export function CreateItemModal({ listKey, isOpen, onClose, onCreated }: CreateItemModalProps) {
+export function CreateItemModal({
+  listKey,
+  isOpen,
+  onClose,
+  onCreated,
+  initialValues = EMPTY_INITIAL_VALUES,
+}: CreateItemModalProps) {
   const { data: adminMeta } = useAdminMeta();
   const listMeta = resolveListMeta(adminMeta, listKey);
   const apiListKey = listMeta?.key ?? listKey;
   const singular = (listMeta?.singular as string | undefined) ?? listMeta?.label ?? listKey;
 
   const initialFields = useMemo(() => getInitialFields(listMeta), [listMeta]);
-  const defaultValues = useMemo(() => buildDefaultValues(initialFields), [initialFields]);
+  const defaultValues = useMemo(
+    () => ({ ...buildDefaultValues(initialFields), ...initialValues }),
+    [initialFields, initialValues],
+  );
   const formKey = useMemo(
     () => initialFields.map((field) => field.path).join(','),
     [initialFields],
   );
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const { control, handleSubmit, reset, setError, clearErrors, watch, formState: { errors } } = useForm<Record<string, unknown>>({
     defaultValues,
@@ -80,25 +96,34 @@ export function CreateItemModal({ listKey, isOpen, onClose, onCreated }: CreateI
   const formValues = watch();
 
   // Reset form whenever it (re)opens or fields change.
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isOpen) {
       reset(defaultValues);
       clearErrors();
+      setFieldErrors({});
     }
-  }, [isOpen, defaultValues, formKey, reset, clearErrors]);
+  }, [isOpen, formKey, reset, clearErrors]);
 
   const mutation = useMutation({
     mutationFn: (data: Record<string, unknown>) => createItem(apiListKey, data),
     onSuccess: (result) => {
-      onCreated(result.item.id);
+      onCreated(result.item.id, result.item);
     },
   });
 
   async function onSubmit(data: Record<string, unknown>) {
     try {
-      await mutation.mutateAsync(prepareItemData(initialFields, data));
-    } catch {
-      setError('root', { message: 'Failed to create item. Please try again.' });
+      await mutation.mutateAsync({
+        ...initialValues,
+        ...prepareItemData(initialFields, data),
+      });
+      setFieldErrors({});
+    } catch (error) {
+      const validationErrors = getValidationFieldErrors(error);
+      setFieldErrors(validationErrors);
+      if (!hasFieldErrors(validationErrors)) {
+        setError('root', { message: 'Failed to create item. Please try again.' });
+      }
     }
   }
 
@@ -146,7 +171,7 @@ export function CreateItemModal({ listKey, isOpen, onClose, onCreated }: CreateI
     }
   }
 
-  return (
+  return createPortal(
     <div
       className={styles.backdrop}
       onClick={handleBackdropClick}
@@ -160,7 +185,7 @@ export function CreateItemModal({ listKey, isOpen, onClose, onCreated }: CreateI
         data-create-item-modal
         data-list-key={apiListKey}
       >
-        <form key={formKey} onSubmit={handleSubmit(onSubmit)}>
+        <form key={formKey} onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className={styles.header}>
             <h2 id="create-item-modal-title" className={styles.title}>
               Create a new {singular}
@@ -208,7 +233,7 @@ export function CreateItemModal({ listKey, isOpen, onClose, onCreated }: CreateI
                         onChange={field.onChange}
                         isRequired={fieldMeta.required === true}
                         isReadonly={fieldMeta.noedit === true}
-                        errors={[]}
+                        errors={fieldErrors[fieldMeta.path] ?? []}
                         meta={meta}
                       />
                     )}
@@ -238,6 +263,7 @@ export function CreateItemModal({ listKey, isOpen, onClose, onCreated }: CreateI
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

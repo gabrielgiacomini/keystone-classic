@@ -2,7 +2,7 @@ import { FieldType } from '../Type.mjs';
 import type { KeystoneList, FieldOptionsBase, MongooseDocument } from '../Type.mjs';
 import type { KSAdminUiFilterForNumberField } from '../number/NumberType.mjs';
 import NumberType from '../number/NumberType.mjs';
-import numeral from 'numeral';
+import { formatNumber } from '../../../lib/utils/numberFormat.mjs';
 
 function formatUnknownFieldValue(value: unknown): unknown {
 	if (value === null || value === undefined) return '';
@@ -38,7 +38,8 @@ class MoneyType extends FieldType<KeystoneFieldOptionsForMoneyType, number> {
 
 	override format (item: MongooseDocument, format?: string): unknown {
 		if (format || this._formatString) {
-			return (typeof item.get(this.path) === 'number') ? numeral(item.get(this.path)).format(format || this._formatString || undefined) : '';
+			const value = item.get(this.path);
+			return (typeof value === 'number') ? formatNumber(value, format || this._formatString) : '';
 		} else {
 			const raw = item.get(this.path);
 			return formatUnknownFieldValue(raw);

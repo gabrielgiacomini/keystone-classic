@@ -63,6 +63,7 @@ export async function seedPostsAndEditors (): Promise<{
 	aliceId: string;
 	bobId: string;
 	postIds: string[];
+	assignmentIds: string[];
 }> {
 	const conn = await mongoose.createConnection(MONGO_URI).asPromise();
 	try {
@@ -71,12 +72,15 @@ export async function seedPostsAndEditors (): Promise<{
 
 		const usersCol = db.collection('User');
 		const postsCol = db.collection('Post');
-
+		const assignmentsCol = db.collection('Assignment');
 		// 1. Drop posts and non-admin users (idempotent).
 		const existing = await db.listCollections().toArray();
 		const names = new Set(existing.map((c) => c.name));
 		if (names.has('Post')) await db.dropCollection('Post');
+		if (names.has('Assignment')) await db.dropCollection('Assignment');
+		if (names.has('Sponsor')) await db.dropCollection('Sponsor');
 		await usersCol.deleteMany({ email: { $ne: TEST_ADMIN_EMAIL } });
+		await postsCol.createIndex({ coordinates: '2dsphere' });
 
 		// 2. Resolve admin id (must exist — boot script seeded it).
 		const admin = await usersCol.findOne({ email: TEST_ADMIN_EMAIL });
@@ -114,12 +118,41 @@ export async function seedPostsAndEditors (): Promise<{
 			docs.push({
 				title,
 				slug: slugify(title),
+				slugKey: `smoke-test-post-key-${i}`,
 				state,
 				category: i % 2 === 0 ? 'news' : 'guide',
 				priority: (i % 3) + 1,
 				author: admin._id,
 				editors,
 				content: `Auto-seeded post #${i} for admin smoke test. State=${state}.`,
+				summary: `Auto-seeded summary #${i}\nState=${state}.`,
+				editorialMarkdown: {
+					md: `## Smoke markdown ${i}\n\nSeeded **markdown** body ${i}.`,
+					html: `<h2>Smoke markdown ${i}</h2>\n<p>Seeded <strong>markdown</strong> body ${i}.</p>\n`,
+				},
+				articleHtml: `<h2>Smoke HTML ${i}</h2><p>Seeded <strong>HTML</strong> body ${i}.</p>`,
+				codeSnippet: `export const smokePost${i} = true;`,
+				canonicalUrl: `https://example.com/smoke-test-post-${i}`,
+				accentColor: i % 2 === 0 ? '#2f80ed' : '#27ae60',
+				budgetCost: i * 12.5,
+				tags: ['smoke', `post-${i}`],
+				scoreHistory: [i, i + 0.5],
+				blackoutDates: [
+					new Date(Date.UTC(2026, 5, i)),
+					new Date(Date.UTC(2026, 6, i)),
+				],
+				coordinates: [-73.9857 + i / 1000, 40.7484 + i / 1000],
+				venueAddress: {
+					number: `Suite ${i}`,
+					name: `Parity Venue ${i}`,
+					street1: `${100 + i} Example Street`,
+					street2: `Level ${i}`,
+					suburb: 'Springfield',
+					state: 'IL',
+					postcode: `6270${i % 10}`,
+					country: 'USA',
+					geo: [-75.1652 + i / 1000, 39.9526 + i / 1000],
+				},
 				viewCount: i * 7,
 				featured: i % 4 === 0,
 				publishedAt:
@@ -136,11 +169,20 @@ export async function seedPostsAndEditors (): Promise<{
 			oid.toString(),
 		);
 
+		const assignment = await assignmentsCol.insertOne({
+			title: 'Required Relationship Assignment',
+			assignee: admin._id,
+			reviewers: [admin._id],
+			createdAt: new Date(SEED_REFERENCE_DATE),
+			updatedAt: new Date(SEED_REFERENCE_DATE),
+		});
+
 		return {
 			adminId: admin._id.toString(),
 			aliceId: editorIds[0]!.toString(),
 			bobId: editorIds[1]!.toString(),
 			postIds,
+			assignmentIds: [assignment.insertedId.toString()],
 		};
 	} finally {
 		await conn.close();

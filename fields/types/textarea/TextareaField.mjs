@@ -5,7 +5,7 @@
  */
 import Field from '../Field.mjs';
 import React from 'react';
-import { FormInput } from '../../../admin/client-legacy/App/elemental';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
 
 /**
  * The `TextareaField` component.
@@ -28,9 +28,11 @@ export default Field.create({
 			whiteSpace: 'pre-wrap',
 			overflowY: 'auto',
 		};
-		return (
-			<FormInput multiline noedit style={styles}>{this.props.value}</FormInput>
-		);
+		return React.createElement(FormInput, {
+			multiline: true,
+			noedit: true,
+			style: styles,
+		}, this.props.value);
 	},
 	/**
 	 * Renders the field.
@@ -43,16 +45,14 @@ export default Field.create({
 			height: height,
 			...style,
 		};
-		return (
-			<FormInput
-				autoComplete="off"
-				multiline
-				name={this.getInputName(path)}
-				onChange={this.valueChanged}
-				ref="focusTarget"
-				style={styles}
-				value={value}
-			/>
-		);
+		return React.createElement(FormInput, {
+			autoComplete: 'off',
+			multiline: true,
+			name: this.getInputName(path),
+			onChange: this.valueChanged,
+			ref: this.getFocusTargetRef(),
+			style: styles,
+			value,
+		});
 	},
 });

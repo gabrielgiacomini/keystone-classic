@@ -1,4 +1,4 @@
-import demand from 'must';
+import { expect } from 'chai';
 import {
 	stringifyColumns,
 	parametizeFilters,
@@ -19,7 +19,7 @@ describe('client utils', () => {
 					const expectedResult = true;
 					const result = checkForQueryChange(nextProps, thisProps);
 
-					demand(result).eql(expectedResult);
+					expect(result).to.equal(expectedResult);
 				});
 			});
 			describe('If the nextProps.active.cachedQuery sans search, is not the same as the nextProps.location.query sans search', function () {
@@ -32,7 +32,7 @@ describe('client utils', () => {
 					const expectedResult = true;
 					const result = checkForQueryChange(nextProps, thisProps);
 
-					demand(result).eql(expectedResult);
+					expect(result).to.equal(expectedResult);
 				});
 			});
 			describe('If the nextProps.location.pathname is the same as thisProps.location.pathname, and the query is the same as the cached query', function () {
@@ -44,7 +44,29 @@ describe('client utils', () => {
 					const expectedResult = false;
 					const result = checkForQueryChange(nextProps, thisProps);
 
-					demand(result).eql(expectedResult);
+					expect(result).to.equal(expectedResult);
+				});
+			});
+			describe('If the nextProps query has nested values equivalent to the cached query', function () {
+				it('returns false', function () {
+					const active = {
+						cachedQuery: {
+							page: 2,
+							filters: [{ path: 'name', value: 'Ada' }],
+						},
+					};
+					const location = {
+						pathname: '/',
+						query: {
+							page: '2',
+							filters: [{ path: 'name', value: 'Ada' }],
+						},
+					};
+					const nextProps = { location, active };
+					const thisProps = { location };
+					const result = checkForQueryChange(nextProps, thisProps);
+
+					expect(result).to.equal(false);
 				});
 			});
 		});
@@ -58,7 +80,7 @@ describe('client utils', () => {
 				const result = normaliseValue(value, benchmark);
 				const expectedResult = void 0;
 
-				demand(result).eql(expectedResult);
+				expect(result).to.equal(expectedResult);
 			});
 		});
 		describe('If the value is not the same as the benchmark', function () {
@@ -67,7 +89,7 @@ describe('client utils', () => {
 				const benchmark = 3;
 				const result = normaliseValue(value, benchmark);
 
-				demand(result).eql(value);
+				expect(result).to.equal(value);
 			});
 		});
 	});
@@ -76,13 +98,13 @@ describe('client utils', () => {
 		const columns = [{ path: 'someColumn' }, { path: 'someOtherColumn' }];
 		const defaultPathString = 'someColumn,someOtherColumn';
 		it('should return if no columns are passed in', () => {
-			demand(stringifyColumns()).eql(undefined);
+			expect(stringifyColumns()).to.equal(undefined);
 		});
 		it('should return a string of column names separated by commas from the object', () => {
-			demand(stringifyColumns(columns)).eql(defaultPathString);
+			expect(stringifyColumns(columns)).to.equal(defaultPathString);
 		});
 		it('should return undefined if the column string and defaultColumnPaths match', () => {
-			demand(stringifyColumns(columns, defaultPathString)).eql(undefined);
+			expect(stringifyColumns(columns, defaultPathString)).to.equal(undefined);
 		});
 	});
 
@@ -99,20 +121,20 @@ describe('client utils', () => {
 			},
 		};
 		it('should return undefined if nothing is passed in', () => {
-			demand(parametizeFilters()).eql(undefined);
+			expect(parametizeFilters()).to.equal(undefined);
 		});
 		it('should return undefined if an empty array is provided', () => {
-			demand(parametizeFilters([])).eql(undefined);
+			expect(parametizeFilters([])).to.equal(undefined);
 		});
 		const firstResult = parametizeFilters([singleFilter])[0];
 		it('should return an array of flat objects with all value properties mapped to it', () => {
-			demand(firstResult).must.have.properties(singleFilter.value);
+			expect(firstResult).to.include(singleFilter.value);
 		});
 		it('should return an array of flat objects with a path property', () => {
-			demand(firstResult).must.have.property('path', singleFilter.field.path);
+			expect(firstResult).to.have.property('path', singleFilter.field.path);
 		});
 		it('should not include other field properties', () => {
-			demand(firstResult).must.not.have.property('otherProp');
+			expect(firstResult).to.not.have.property('otherProp');
 		});
 	});
 });

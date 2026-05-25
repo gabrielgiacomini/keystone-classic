@@ -77,8 +77,8 @@ test.describe('E. Item edit', () => {
 		await expect(page.locator('input[name="title"]')).toBeVisible();
 		await expect(page.locator('input[name="content"]')).toBeVisible();
 		await expect(page.locator('input[name="viewCount"]')).toBeVisible();
-		// Four react-select singles render: State, Category, Priority, Author.
-		await expect(page.locator('.Select--single')).toHaveCount(4);
+		// Five react-select singles render: State, Category, Priority, Author, Sponsor.
+		await expect(page.locator('.Select--single')).toHaveCount(5);
 		// Exactly one react-select multi: Editors.
 		await expect(page.locator('.Select--multi')).toHaveCount(1);
 		// Featured: BooleanField renders a wrapper div with data-attrs
@@ -180,7 +180,7 @@ test.describe('E. Item edit', () => {
 		await page
 			.getByRole('button', { name: /^delete post$/i })
 			.first()
-			.click();
+			.evaluate((button: HTMLElement) => button.click());
 
 		// Confirmation dialog body text.
 		await expect(page.getByText(/Are you sure you want to delete/i)).toBeVisible();

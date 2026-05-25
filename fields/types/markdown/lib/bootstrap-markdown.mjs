@@ -6,8 +6,14 @@
  *
  * @see https://github.com/toopay/bootstrap-markdown
  */
-import $ from 'jquery';
 import { marked } from 'marked';
+
+const $ = (() => {
+	if (typeof window === 'undefined' || !(window.jQuery || window.$)) {
+		throw new Error('jQuery global is required for the legacy Markdown field');
+	}
+	return window.jQuery || window.$;
+})();
 
 /* ===================================================
 * bootstrap-markdown.js v2.7.0

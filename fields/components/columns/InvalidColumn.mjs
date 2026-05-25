@@ -1,29 +1,14 @@
 import React from 'react';
-import createReactClass from 'create-react-class';
-import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 
-const InvalidColumn = createReactClass({
-	displayName: 'InvalidColumn',
-	propTypes: {
-		col: PropTypes.object,
-	},
-	renderValue () {
-		return (
-			<ItemsTableValue field={this.props.col.type}>
-				(Invalid Type: {this.props.col.type})
-			</ItemsTableValue>
-		);
+function InvalidColumn({ col }) {
+	return React.createElement(
+		ItemsTableCell,
+		null,
+		React.createElement(ItemsTableValue, { field: col.type }, '(Invalid Type: ', col.type, ')'),
+	);
+}
 
-	},
-	render () {
-		return (
-			<ItemsTableCell>
-				{this.renderValue()}
-			</ItemsTableCell>
-		);
-	},
-});
 
 export default InvalidColumn;

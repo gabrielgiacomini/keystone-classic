@@ -90,7 +90,9 @@ test.describe('F. User edit', () => {
 		await itemLoad;
 
 		// Reveal the inline password-change UI.
-		await page.getByRole('button', { name: /Change Password/i }).click();
+		await page
+			.getByRole('button', { name: /Change Password/i })
+			.evaluate((button: HTMLElement) => button.click());
 
 		// PasswordField renders two `<FormInput type="password">` inputs.
 		// Their names are `password` and `password_confirm`.

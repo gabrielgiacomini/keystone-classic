@@ -7,16 +7,11 @@
  * inverting the filter.
  */
 import React from 'react';
-import createReactClass from 'create-react-class';
-import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
 
-import {
-	FormField,
-	FormInput,
-	FormSelect,
-	SegmentedControl,
-} from '../../../admin/client-legacy/App/elemental';
+import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import FormSelect from '../../../admin/client-legacy/App/elemental/FormSelect/index.mjs';
+import SegmentedControl from '../../../admin/client-legacy/App/elemental/SegmentedControl/index.mjs';
 
 const INVERTED_OPTIONS = [
 	{ label: 'Matches', value: false },
@@ -46,89 +41,96 @@ function getDefaultValue () {
  * The `TextFilter` component.
  * @augments React.Component
  */
-const TextFilter = createReactClass({
-	propTypes: {
-		filter: PropTypes.shape({
-			mode: PropTypes.oneOf(MODE_OPTIONS.map(i => i.value)),
-			inverted: PropTypes.bool,
-			value: PropTypes.string,
-		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
+class TextFilter extends React.Component {
+
+	static defaultProps = {
+		filter: getDefaultValue(),
+	};
+
+	static getDefaultValue = getDefaultValue;
+
+	focusTarget = () => {
+		if (this.focusTargetRef) this.focusTargetRef.focus();
+	};
+
 	/**
 	 * Updates the filter with a new value.
 	 * @param {object} value The new value.
 	 */
-	updateFilter (value) {
+	updateFilter = (value) => {
 		this.props.onChange({ ...this.props.filter, ...value });
-	},
+	};
+
 	/**
 	 * Selects a new mode for the filter.
 	 * @param {object} e The event object.
 	 */
-	selectMode (e) {
+	selectMode = (e) => {
 		const mode = e.target.value;
 		this.updateFilter({ mode });
-		findDOMNode(this.refs.focusTarget).focus();
-	},
+		this.focusTarget();
+	};
+
 	/**
 	 * Toggles the inverted state of the filter.
 	 * @param {boolean} inverted The new inverted state.
 	 */
-	toggleInverted (inverted) {
+	toggleInverted = (inverted) => {
 		this.updateFilter({ inverted });
-		findDOMNode(this.refs.focusTarget).focus();
-	},
+		this.focusTarget();
+	};
+
 	/**
 	 * Handles a change in the value of the filter.
 	 * @param {object} e The event object.
 	 */
-	updateValue (e) {
+	updateValue = (e) => {
 		this.updateFilter({ value: e.target.value });
-	},
+	};
+
 	/**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+	render() {
 		const { field, filter } = this.props;
 		const mode = MODE_OPTIONS.filter(i => i.value === filter.mode)[0];
 		const placeholder = field.label + ' ' + mode.label.toLowerCase() + '...';
 
-		return (
-			<div>
-				<FormField>
-					<SegmentedControl
-						equalWidthSegments
-						onChange={this.toggleInverted}
-						options={INVERTED_OPTIONS}
-						value={filter.inverted}
-					/>
-				</FormField>
-				<FormField>
-					<FormSelect
-						onChange={this.selectMode}
-						options={MODE_OPTIONS}
-						value={mode.value}
-					/>
-				</FormField>
-				<FormInput
-					autoFocus
-					onChange={this.updateValue}
-					placeholder={placeholder}
-					ref="focusTarget"
-					value={this.props.filter.value}
-				/>
-			</div>
+		return React.createElement(
+			'div',
+			null,
+			React.createElement(
+				FormField,
+				null,
+				React.createElement(SegmentedControl, {
+					equalWidthSegments: true,
+					onChange: this.toggleInverted,
+					options: INVERTED_OPTIONS,
+					value: filter.inverted,
+					'data-list-filter-text-inverted': true,
+				})
+			),
+			React.createElement(
+				FormField,
+				null,
+				React.createElement(FormSelect, {
+					onChange: this.selectMode,
+					options: MODE_OPTIONS,
+					value: mode.value,
+					'data-list-filter-text-mode': true,
+				})
+			),
+			React.createElement(FormInput, {
+				autoFocus: true,
+				onChange: this.updateValue,
+				placeholder,
+				ref: (input) => { this.focusTargetRef = input; },
+				value: this.props.filter.value,
+				'data-list-filter-text-value': true,
+			})
 		);
-	},
-});
+	}
+}
 
 export default TextFilter;

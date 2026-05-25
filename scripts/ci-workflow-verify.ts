@@ -30,6 +30,7 @@ assertJobSkipsSchedule('package-verify');
 
 assertJobContains('admin-parity', 'npm run test:e2e-ui');
 assertJobContains('admin-parity', 'npm run test:e2e-ui:fields');
+assertJobContains('admin-parity', 'npm run test:e2e-ui:visual');
 assertJobRunsOnSchedule('admin-parity');
 
 if (failures.length) {
@@ -42,7 +43,7 @@ if (failures.length) {
 }
 
 console.log(`CI workflow verified: ${workflowPath}`);
-console.log('- admin-parity runs on the scheduled workflow and covers UI plus field-complete suites');
+console.log('- admin-parity runs on the scheduled workflow and covers UI, field-complete, and visual identity suites');
 console.log('- package-verify runs ci:verify, build:types, package:verify, and npm pack --dry-run');
 console.log('- lint-typecheck runs admin-next:typecheck');
 

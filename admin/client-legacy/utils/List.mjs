@@ -5,7 +5,7 @@
 
 import listToArray from '../../../lib/list/listToArray.mjs';
 import qs from 'qs';
-import xhr from 'xhr';
+import { legacyApiRequest } from '../../shared/api/legacyRequest.mjs';
 // Filters for truthy elements in an array
 const truthy = (i) => i;
 
@@ -93,7 +93,7 @@ const List = function (options) {
  * @param  {function()} callback Called after the API call
  */
 List.prototype.createItem = function (formData, callback) {
-	xhr({
+	legacyApiRequest({
 		url: `${getAdminApiPath()}/${this.path}/create`,
 		responseType: 'json',
 		method: 'POST',
@@ -104,10 +104,8 @@ List.prototype.createItem = function (formData, callback) {
 		if (resp.statusCode === 200) {
 			callback(null, data);
 		} else {
-			// NOTE: xhr callback will be called with an Error if
-			//  there is an error in the browser that prevents
-			//  sending the request. A HTTP 500 response is not
-			//  going to cause an error to be returned.
+			// Network failures are reported as callback errors; HTTP errors
+			// preserve the legacy body-as-error callback shape.
 			callback(data, null);
 		}
 	});
@@ -120,7 +118,7 @@ List.prototype.createItem = function (formData, callback) {
  * @param  {function()} callback Called after the API call
  */
 List.prototype.updateItem = function (id, formData, callback) {
-	xhr({
+	legacyApiRequest({
 		url: `${getAdminApiPath()}/${this.path}/${id}`,
 		responseType: 'json',
 		method: 'POST',
@@ -228,7 +226,7 @@ List.prototype.loadItem = function (itemId, options, callback) {
 	let url = getAdminApiPath() + '/' + this.path + '/' + itemId;
 	const query = qs.stringify(options);
 	if (query.length) url += '?' + query;
-	xhr({
+	legacyApiRequest({
 		url: url,
 		responseType: 'json',
 	}, (err, resp, data) => {
@@ -250,7 +248,7 @@ List.prototype.loadItem = function (itemId, options, callback) {
  */
 List.prototype.loadItems = function (options, callback) {
 	const url = getAdminApiPath() + '/' + this.path + buildQueryString(options);
-	xhr({
+	legacyApiRequest({
 		url: url,
 		responseType: 'json',
 	}, (err, resp, data) => {
@@ -300,7 +298,7 @@ List.prototype.deleteItem = function (itemId, callback) {
  */
 List.prototype.deleteItems = function (itemIds, callback) {
 	const url = getAdminApiPath() + '/' + this.path + '/delete';
-	xhr({
+	legacyApiRequest({
 		url: url,
 		method: 'POST',
 		headers: Object.assign({}, Keystone.csrf.header),
@@ -320,18 +318,13 @@ List.prototype.deleteItems = function (itemIds, callback) {
 
 List.prototype.reorderItems = function (item, oldSortOrder, newSortOrder, pageOptions, callback) {
 	const url = getAdminApiPath() + '/' + this.path + '/' + item.id + '/sortOrder/' + oldSortOrder + '/' + newSortOrder + '/' + buildQueryString(pageOptions);
-	xhr({
+	legacyApiRequest({
 		url: url,
 		method: 'POST',
+		responseType: 'json',
 		headers: Object.assign({}, Keystone.csrf.header),
 	}, (err, resp, body) => {
 		if (err) return callback(err);
-		try {
-			body = JSON.parse(body);
-		} catch (e) {
-			console.log('Error parsing results json:', e, body);
-			return callback(e);
-		}
 		// Pass the body as result or error, depending on the statusCode
 		if (resp.statusCode === 200) {
 			callback(null, body);

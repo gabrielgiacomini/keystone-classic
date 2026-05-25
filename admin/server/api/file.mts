@@ -16,7 +16,9 @@ function safeFilename(value: unknown): string {
 	return raw.replace(/[^A-Za-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '') || 'upload';
 }
 
-/** Uploads a file and returns the metadata shape accepted by Types.File. */
+/**
+ * Uploads a file and returns the metadata shape accepted by Types.File.
+ */
 export function upload(req: Request, res: Response): void {
 	const keystone = req.keystone as Keystone;
 

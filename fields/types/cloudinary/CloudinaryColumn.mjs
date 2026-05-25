@@ -5,5 +5,5 @@ import React from 'react';
 export default function CloudinaryColumn (props) {
 	const value = props.data?.fields?.[props.col?.path];
 	const Component = Array.isArray(value) ? CloudinaryImagesColumn : CloudinaryImageColumn;
-	return <Component {...props} />;
+	return React.createElement(Component, props);
 }

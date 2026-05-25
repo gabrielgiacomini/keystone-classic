@@ -4,8 +4,7 @@
  * render a thumbnail for a Cloudinary image.
  */
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Button } from '../../../admin/client-legacy/App/elemental';
+import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
 import ImageThumbnail from '../../components/ImageThumbnail.mjs';
 
 /**
@@ -40,15 +39,18 @@ function CloudinaryImagesThumbnail ({
 	else if (isDeleted) mask = 'remove';
 
 	// action button
-	const actionButton = (shouldRenderActionButton && !isQueued) ? (
-		<Button variant="link" color={isDeleted ? 'default' : 'cancel'} block onClick={toggleDelete}>
-			{isDeleted ? 'Undo' : 'Remove'}
-		</Button>
-	) : null;
+	const actionButton = (shouldRenderActionButton && !isQueued)
+		? React.createElement(Button, {
+				variant: 'link',
+				color: isDeleted ? 'default' : 'cancel',
+				block: true,
+				onClick: toggleDelete,
+		  }, isDeleted ? 'Undo' : 'Remove')
+		: null;
 
-	const input = (!isQueued && !isDeleted && value) ? (
-		<input type="hidden" name={inputName} value={JSON.stringify(value)} />
-	) : null;
+	const input = (!isQueued && !isDeleted && value)
+		? React.createElement('input', { type: 'hidden', name: inputName, value: JSON.stringify(value) })
+		: null;
 
 	// provide gutter for the images
 	const imageStyles = {
@@ -57,32 +59,25 @@ function CloudinaryImagesThumbnail ({
 		marginRight: 10,
 	};
 
-	return (
-		<div style={imageStyles}>
-			<ImageThumbnail
-				component={imageSourceLarge ? 'a' : 'span'}
-				href={!!imageSourceLarge && imageSourceLarge}
-				onClick={!!imageSourceLarge && openLightbox}
-				mask={mask}
-				target={!!imageSourceLarge && '__blank'}
-			>
-				<img src={imageSourceSmall} style={{ height: 90 }} />
-			</ImageThumbnail>
-			{actionButton}
-			{input}
-		</div>
+	return React.createElement(
+		'div',
+		{ style: imageStyles },
+		React.createElement(
+			ImageThumbnail,
+			{
+				component: imageSourceLarge ? 'a' : 'span',
+				href: !!imageSourceLarge && imageSourceLarge,
+				onClick: !!imageSourceLarge && openLightbox,
+				mask,
+				target: !!imageSourceLarge && '__blank',
+			},
+			React.createElement('img', { src: imageSourceSmall, style: { height: 90 } })
+		),
+		actionButton,
+		input
 	);
 
 };
 
-CloudinaryImagesThumbnail.propTypes = {
-	imageSourceLarge: PropTypes.string,
-	imageSourceSmall: PropTypes.string.isRequired,
-	isDeleted: PropTypes.bool,
-	isQueued: PropTypes.bool,
-	openLightbox: PropTypes.func.isRequired,
-	shouldRenderActionButton: PropTypes.bool,
-	toggleDelete: PropTypes.func.isRequired,
-};
 
 export default CloudinaryImagesThumbnail;

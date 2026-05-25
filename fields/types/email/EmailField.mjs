@@ -5,8 +5,7 @@
  */
 import Field from '../Field.mjs';
 import React from 'react';
-import PropTypes from 'prop-types';
-import { FormInput } from '../../../admin/client-legacy/App/elemental';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
 
 /*
 	TODO:
@@ -20,10 +19,6 @@ import { FormInput } from '../../../admin/client-legacy/App/elemental';
  */
 export default Field.create({
 	displayName: 'EmailField',
-	propTypes: {
-		path: PropTypes.string.isRequired,
-		value: PropTypes.string,
-	},
 	statics: {
 		type: 'Email',
 	},
@@ -32,28 +27,26 @@ export default Field.create({
 	 * @returns {React.Element} The rendered field.
 	 */
 	renderField () {
-		return (
-			<FormInput
-				name={this.getInputName(this.props.path)}
-				ref="focusTarget"
-				value={this.props.value}
-				onChange={this.valueChanged}
-				autoComplete="off"
-				type="email"
-			/>
-		);
+		return React.createElement(FormInput, {
+			name: this.getInputName(this.props.path),
+			ref: this.getFocusTargetRef(),
+			value: this.props.value,
+			onChange: this.valueChanged,
+			autoComplete: 'off',
+			type: 'email',
+		});
 	},
 	/**
 	 * Renders the value of the field.
 	 * @returns {React.Element} The rendered value.
 	 */
 	renderValue () {
-		return this.props.value ? (
-			<FormInput noedit component="a" href={'mailto:' + this.props.value}>
-				{this.props.value}
-			</FormInput>
-		) : (
-			<FormInput noedit />
-		);
+		return this.props.value
+			? React.createElement(
+					FormInput,
+					{ noedit: true, component: 'a', href: 'mailto:' + this.props.value },
+					this.props.value
+			  )
+			: React.createElement(FormInput, { noedit: true });
 	},
 });

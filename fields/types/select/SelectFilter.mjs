@@ -7,13 +7,10 @@
  * inverting the filter.
  */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {
-	Button,
-	FormField,
-	FormNote,
-	SegmentedControl,
-} from '../../../admin/client-legacy/App/elemental';
+import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
+import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
+import FormNote from '../../../admin/client-legacy/App/elemental/FormNote/index.mjs';
+import SegmentedControl from '../../../admin/client-legacy/App/elemental/SegmentedControl/index.mjs';
 import PopoutList from '../../../admin/client-legacy/App/shared/Popout/PopoutList.mjs';
 import Kbd from '../../../admin/client-legacy/App/shared/Kbd.mjs';
 import bindFunctions from '../../utils/bindFunctions.mjs';
@@ -59,14 +56,14 @@ class FilterOption extends Component {
 	 */
 	render () {
 		const { option, selected } = this.props;
-		return (
-			<PopoutList.Item
-				icon={selected ? 'check' : 'dash'}
-				isSelected={selected}
-				label={option.label}
-				onClick={this.handleClick}
-			/>
-		);
+		return React.createElement(PopoutList.Item, {
+			'data-list-filter-select-option': true,
+			'data-filter-option-value': option.value,
+			icon: selected ? 'check' : 'dash',
+			isSelected: selected,
+			label: option.label,
+			onClick: this.handleClick,
+		});
 	}
 }
 
@@ -218,14 +215,12 @@ class SelectFilter extends Component {
 	renderOptions () {
 		return this.props.field.ops.map((option, i) => {
 			const selected = this.props.filter.value.indexOf(option.value) > -1;
-			return (
-				<FilterOption
-					key={`item-${i}-${option.value}`}
-					option={option}
-					selected={selected}
-					onClick={this.handleClick}
-				/>
-			);
+			return React.createElement(FilterOption, {
+				key: `item-${i}-${option.value}`,
+				option,
+				selected,
+				onClick: this.handleClick,
+			});
 		});
 	}
 	/**
@@ -249,37 +244,40 @@ class SelectFilter extends Component {
 			paddingBottom: '1em',
 		};
 
-		return (
-			<div>
-				<FormField>
-					<SegmentedControl
-						equalWidthSegments
-						onChange={this.toggleInverted}
-						options={INVERTED_OPTIONS}
-						value={filter.inverted}
-					/>
-				</FormField>
-				<div style={fieldStyles}>
-					<Button size="xsmall" onClick={this.toggleAllOptions} style={{ padding: 0, width: 50 }}>
-						{indeterminate ? 'All' : 'None'}
-					</Button>
-					<FormNote style={{ margin: 0 }}>
-						Hold <Kbd>{metaKeyLabel}</Kbd> to select multiple options
-					</FormNote>
-				</div>
-				{this.renderOptions()}
-			</div>
+		return React.createElement(
+			'div',
+			null,
+			React.createElement(
+				FormField,
+				null,
+				React.createElement(SegmentedControl, {
+					equalWidthSegments: true,
+					onChange: this.toggleInverted,
+					options: INVERTED_OPTIONS,
+					value: filter.inverted,
+				})
+			),
+			React.createElement(
+				'div',
+				{ style: fieldStyles },
+				React.createElement(Button, {
+					size: 'xsmall',
+					onClick: this.toggleAllOptions,
+					style: { padding: 0, width: 50 },
+				}, indeterminate ? 'All' : 'None'),
+				React.createElement(
+					FormNote,
+					{ style: { margin: 0 } },
+					'Hold ',
+					React.createElement(Kbd, null, metaKeyLabel),
+					' to select multiple options'
+				)
+			),
+			this.renderOptions()
 		);
 	}
 };
 
-SelectFilter.propTypes = {
-	field: PropTypes.object,
-	filter: PropTypes.shape({
-		inverted: PropTypes.bool,
-		value: PropTypes.array,
-	}),
-};
 SelectFilter.getDefaultValue = getDefaultValue;
 SelectFilter.defaultProps = {
 	filter: getDefaultValue(),

@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { FieldProps, FieldMeta } from '../types.js';
 import { api } from '../../api/fetch.js';
+import { CreateItemModal } from '../../components/CreateItemModal/CreateItemModal.js';
+import type { ListItem } from '../../api/list.js';
 
 type RelMeta = Extract<FieldMeta, { fieldType: 'relationship' }>;
 
@@ -33,8 +35,11 @@ export function Field({
   const relMeta = meta as RelMeta;
   const refList = relMeta.refList;
   const isMany = relMeta.many === true;
+  const createInline = relMeta.createInline === true;
   const [searchQuery, setSearchQuery] = useState('');
   const [singleOpen, setSingleOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const queryClient = useQueryClient();
   const wrapRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -102,6 +107,13 @@ export function Field({
     }
   }
 
+  function handleInlineCreated(id: string, item?: ListItem) {
+    const label = typeof item?.name === 'string' && item.name.length > 0 ? item.name : id;
+    addItem({ id, label });
+    setCreateOpen(false);
+    void queryClient.invalidateQueries({ queryKey: ['rel-search', refList] });
+  }
+
   // ---------------------------------------------------------------------------
   // Shared styles
   // ---------------------------------------------------------------------------
@@ -132,6 +144,22 @@ export function Field({
     border: 0,
     cursor: 'pointer',
     font: 'inherit',
+  };
+  const createButtonStyle: React.CSSProperties = {
+    flex: '0 0 auto',
+    padding: '6px 10px',
+    border: '1px solid var(--ks-border, #ccc)',
+    borderRadius: 4,
+    background: 'var(--ks-bg-muted, #eee)',
+    color: 'var(--ks-text, #333)',
+    cursor: 'pointer',
+    font: 'inherit',
+    lineHeight: 1,
+  };
+  const inputGroupStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'stretch',
+    gap: 4,
   };
 
   // ---------------------------------------------------------------------------
@@ -184,59 +212,85 @@ export function Field({
     return (
       <div style={containerStyle} ref={wrapRef}>
         {singleOpen ? (
-          <input
-            ref={searchInputRef}
-            id={fieldName}
-            type="text"
-            placeholder="Search…"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            disabled={isReadonly}
-            style={triggerSearchStyle}
-            data-field-relationship-single-search
-          />
-        ) : (
-          <div
-            style={singleSelectStyle}
-            onClick={() => {
-              if (!isReadonly) setSingleOpen(true);
-            }}
-            data-field-relationship-single
-            data-has-value={singleSelected !== null ? 'true' : 'false'}
-          >
-            {singleSelected !== null ? (
-              <span style={valueLabelStyle} data-field-relationship-single-value>
-                {getItemLabel(singleSelected)}
-              </span>
-            ) : (
-              <span style={placeholderStyle}>Search…</span>
-            )}
-            {singleSelected !== null && !isReadonly && (
+          <div style={inputGroupStyle}>
+            <input
+              ref={searchInputRef}
+              id={fieldName}
+              type="text"
+              placeholder="Search…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              disabled={isReadonly}
+              style={triggerSearchStyle}
+              data-field-relationship-single-search
+            />
+            {createInline && !isReadonly && (
               <button
                 type="button"
-                aria-label={`Remove ${getItemLabel(singleSelected)}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeItem(singleSelected.id);
-                }}
-                style={iconBtnStyle}
-                data-field-relationship-single-clear
+                onClick={() => setCreateOpen(true)}
+                style={createButtonStyle}
+                data-field-relationship-create-inline
+                aria-label={`Create ${refList}`}
               >
-                {'×'}
+                +
               </button>
             )}
-            {!isReadonly && (
+          </div>
+        ) : (
+          <div style={inputGroupStyle}>
+            <div
+              style={singleSelectStyle}
+              onClick={() => {
+                if (!isReadonly) setSingleOpen(true);
+              }}
+              data-field-relationship-single
+              data-has-value={singleSelected !== null ? 'true' : 'false'}
+            >
+              {singleSelected !== null ? (
+                <span style={valueLabelStyle} data-field-relationship-single-value>
+                  {getItemLabel(singleSelected)}
+                </span>
+              ) : (
+                <span style={placeholderStyle}>Search…</span>
+              )}
+              {singleSelected !== null && !isReadonly && (
+                <button
+                  type="button"
+                  aria-label={`Remove ${getItemLabel(singleSelected)}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeItem(singleSelected.id);
+                  }}
+                  style={iconBtnStyle}
+                  data-field-relationship-single-clear
+                >
+                  {'×'}
+                </button>
+              )}
+              {!isReadonly && (
+                <button
+                  type="button"
+                  aria-label="Open"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSingleOpen(true);
+                  }}
+                  style={iconBtnStyle}
+                  data-field-relationship-single-toggle
+                >
+                  {'▾'}
+                </button>
+              )}
+            </div>
+            {createInline && !isReadonly && (
               <button
                 type="button"
-                aria-label="Open"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSingleOpen(true);
-                }}
-                style={iconBtnStyle}
-                data-field-relationship-single-toggle
+                onClick={() => setCreateOpen(true)}
+                style={createButtonStyle}
+                data-field-relationship-create-inline
+                aria-label={`Create ${refList}`}
               >
-                {'▾'}
+                +
               </button>
             )}
           </div>
@@ -271,6 +325,14 @@ export function Field({
             {err}
           </span>
         ))}
+        {createInline && !isReadonly && (
+          <CreateItemModal
+            listKey={refList}
+            isOpen={createOpen}
+            onClose={() => setCreateOpen(false)}
+            onCreated={handleInlineCreated}
+          />
+        )}
       </div>
     );
   }
@@ -339,17 +401,30 @@ export function Field({
         </ul>
       )}
 
-      <input
-        id={fieldName}
-        type="text"
-        placeholder="Search…"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        disabled={isReadonly}
-        required={isRequired && selectedItems.length === 0}
-        style={searchInputStyle}
-        data-field-relationship-search
-      />
+      <div style={inputGroupStyle}>
+        <input
+          id={fieldName}
+          type="text"
+          placeholder="Search…"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          disabled={isReadonly}
+          required={isRequired && selectedItems.length === 0}
+          style={searchInputStyle}
+          data-field-relationship-search
+        />
+        {createInline && !isReadonly && (
+          <button
+            type="button"
+            onClick={() => setCreateOpen(true)}
+            style={createButtonStyle}
+            data-field-relationship-create-inline
+            aria-label={`Create ${refList}`}
+          >
+            +
+          </button>
+        )}
+      </div>
 
       {showDropdown && (
         <ul role="listbox" style={dropdownStyle}>
@@ -380,6 +455,14 @@ export function Field({
           {err}
         </span>
       ))}
+      {createInline && !isReadonly && (
+        <CreateItemModal
+          listKey={refList}
+          isOpen={createOpen}
+          onClose={() => setCreateOpen(false)}
+          onCreated={handleInlineCreated}
+        />
+      )}
     </div>
   );
 }

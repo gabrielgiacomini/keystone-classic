@@ -6,11 +6,12 @@
  * It provides a button to upload images, and it displays thumbnails of the
  * uploaded images. It also provides a button to remove images.
  */
-import _ from 'lodash';
 import React, { cloneElement } from 'react';
 import Field from '../Field.mjs';
-import { Button, FormField, FormNote } from '../../../admin/client-legacy/App/elemental';
-import Lightbox from 'react-images';
+import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
+import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
+import FormNote from '../../../admin/client-legacy/App/elemental/FormNote/index.mjs';
+import Lightbox from '../../components/Lightbox.mjs';
 import cloudinaryResize from '../../../admin/client-legacy/utils/cloudinaryResize.mjs';
 import Thumbnail from './CloudinaryImagesThumbnail.mjs';
 import HiddenFileInput from '../../components/HiddenFileInput.mjs';
@@ -52,13 +53,13 @@ export default Field.create({
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
 	 */
-	UNSAFE_componentWillUpdate (nextProps) {
+	componentDidUpdate (prevProps) {
 		// Reset the thumbnails and upload ID when the item value changes
 		// TODO: We should add a check for a new item ID in the store
-		const value = _.map(this.props.value, 'public_id').join();
-		const nextValue = _.map(nextProps.value, 'public_id').join();
-		if (value !== nextValue) {
-			this.setState(this.buildInitialState(nextProps));
+		const prevValue = (prevProps.value || []).map(image => image.public_id).join();
+		const value = (this.props.value || []).map(image => image.public_id).join();
+		if (prevValue !== value) {
+			this.setState(this.buildInitialState(this.props));
 		}
 	},
 	/**
@@ -94,16 +95,14 @@ export default Field.create({
 	 * @returns {React.Element} The thumbnail component.
 	 */
 	getThumbnail (props, index) {
-		return (
-			<Thumbnail
-				key={`thumbnail-${index}`}
-				inputName={this.getInputName(this.props.path)}
-				openLightbox={(e) => this.openLightbox(e, index)}
-				shouldRenderActionButton={this.shouldRenderField()}
-				toggleDelete={this.removeImage.bind(this, index)}
-				{...props}
-			/>
-		);
+		return React.createElement(Thumbnail, {
+			key: `thumbnail-${index}`,
+			inputName: this.getInputName(this.props.path),
+			openLightbox: (e) => this.openLightbox(e, index),
+			shouldRenderActionButton: this.shouldRenderField(),
+			toggleDelete: this.removeImage.bind(this, index),
+			...props,
+		});
 	},
 
 	// ==============================
@@ -114,14 +113,14 @@ export default Field.create({
 	 * Triggers the file browser.
 	 */
 	triggerFileBrowser () {
-		this.refs.fileInput.clickDomNode();
+		this.fileInput.clickDomNode();
 	},
 	/**
 	 * Returns whether the field has files.
 	 * @returns {boolean} Whether the field has files.
 	 */
 	hasFiles () {
-		return this.refs.fileInput && this.refs.fileInput.hasValue();
+		return this.fileInput && this.fileInput.hasValue();
 	},
 	/**
 	 * Opens the lightbox.
@@ -198,7 +197,7 @@ export default Field.create({
 	 * Clears the file input.
 	 */
 	clearFiles () {
-		this.refs.fileInput.clearValue();
+		this.fileInput.clearValue();
 
 		this.setState({
 			thumbnails: this.state.thumbnails.filter(function (thumb) {
@@ -254,16 +253,14 @@ export default Field.create({
 	renderFileInput () {
 		if (!this.shouldRenderField()) return null;
 
-		return (
-			<HiddenFileInput
-				accept={SUPPORTED_TYPES.join()}
-				key={this.state.uploadFieldPath}
-				multiple
-				name={this.state.uploadFieldPath}
-				onChange={this.uploadFile}
-				ref="fileInput"
-			/>
-		);
+		return React.createElement(HiddenFileInput, {
+			accept: SUPPORTED_TYPES.join(),
+			key: this.state.uploadFieldPath,
+			multiple: true,
+			name: this.state.uploadFieldPath,
+			onChange: this.uploadFile,
+			ref: (fileInput) => { this.fileInput = fileInput; },
+		});
 	},
 	/**
 	 * Renders the value input.
@@ -276,21 +273,17 @@ export default Field.create({
 		// This renders an input with either the upload field reference, or an
 		// empty value to reset the field if all images have been removed
 		if (this.hasFiles()) {
-			return (
-				<input
-					name={this.getInputName(this.props.path)}
-					value={`upload:${this.state.uploadFieldPath}`}
-					type="hidden"
-				/>
-			);
+			return React.createElement('input', {
+				name: this.getInputName(this.props.path),
+				value: `upload:${this.state.uploadFieldPath}`,
+				type: 'hidden',
+			});
 		} else if (this.getCount('isDeleted') === this.props.value.length) {
-			return (
-				<input
-					name={this.getInputName(this.props.path)}
-					value=""
-					type="hidden"
-				/>
-			);
+			return React.createElement('input', {
+				name: this.getInputName(this.props.path),
+				value: '',
+				type: 'hidden',
+			});
 		}
 	},
 	/**
@@ -310,16 +303,14 @@ export default Field.create({
 			}),
 		}));
 
-		return (
-			<Lightbox
-				images={images}
-				currentImage={this.state.lightboxImageIndex}
-				isOpen={this.state.lightboxIsVisible}
-				onClickPrev={this.lightboxPrevious}
-				onClickNext={this.lightboxNext}
-				onClose={this.closeLightbox}
-			/>
-		);
+		return React.createElement(Lightbox, {
+			images,
+			currentImage: this.state.lightboxImageIndex,
+			isOpen: this.state.lightboxIsVisible,
+			onClickPrev: this.lightboxPrevious,
+			onClickNext: this.lightboxNext,
+			onClose: this.closeLightbox,
+		});
 	},
 	/**
 	 * Renders the toolbar.
@@ -338,39 +329,46 @@ export default Field.create({
 			: {};
 
 		// prepare the change message
-		const changeMessage = uploadCount || deleteCount ? (
-			<FileChangeMessage>
-				{uploadCount && deleteCount ? `${uploadCount} added and ${deleteCount} removed` : null}
-				{uploadCount && !deleteCount ? `${uploadCount} image added` : null}
-				{!uploadCount && deleteCount ? `${deleteCount} image removed` : null}
-			</FileChangeMessage>
-		) : null;
+		const changeMessage = uploadCount || deleteCount
+			? React.createElement(
+					FileChangeMessage,
+					null,
+					uploadCount && deleteCount ? `${uploadCount} added and ${deleteCount} removed` : null,
+					uploadCount && !deleteCount ? `${uploadCount} image added` : null,
+					!uploadCount && deleteCount ? `${deleteCount} image removed` : null
+			  )
+			: null;
 
 		// prepare the save message
-		const saveMessage = uploadCount || deleteCount ? (
-			<FileChangeMessage color={!deleteCount ? 'success' : 'danger'}>
-				Save to {!deleteCount ? 'Upload' : 'Confirm'}
-			</FileChangeMessage>
-		) : null;
+		const saveMessage = uploadCount || deleteCount
+			? React.createElement(
+					FileChangeMessage,
+					{ color: !deleteCount ? 'success' : 'danger' },
+					'Save to ',
+					!deleteCount ? 'Upload' : 'Confirm'
+			  )
+			: null;
 
 		// clear floating images above
 		const toolbarStyles = {
 			clear: 'both',
 		};
 
-		return (
-			<div style={toolbarStyles}>
-				<Button onClick={this.triggerFileBrowser} style={uploadButtonStyles} data-e2e-upload-button="true">
-					Upload Images
-				</Button>
-				{this.hasFiles() && (
-					<Button variant="link" color="cancel" onClick={this.clearFiles}>
-						Clear selection
-					</Button>
-				)}
-				{changeMessage}
-				{saveMessage}
-			</div>
+		return React.createElement(
+			'div',
+			{ style: toolbarStyles },
+			React.createElement(Button, {
+				onClick: this.triggerFileBrowser,
+				style: uploadButtonStyles,
+				'data-e2e-upload-button': 'true',
+			}, 'Upload Images'),
+			this.hasFiles() && React.createElement(Button, {
+				variant: 'link',
+				color: 'cancel',
+				onClick: this.clearFiles,
+			}, 'Clear selection'),
+			changeMessage,
+			saveMessage
 		);
 	},
 	/**
@@ -381,17 +379,15 @@ export default Field.create({
 		const { label, note, path } = this.props;
 		const { thumbnails } = this.state;
 
-		return (
-			<FormField label={label} className="field-type-cloudinaryimages" htmlFor={path}>
-				<div>
-					{thumbnails}
-				</div>
-				{this.renderValueInput()}
-				{this.renderFileInput()}
-				{this.renderToolbar()}
-				{!!note && <FormNote note={note} />}
-				{this.renderLightbox()}
-			</FormField>
+		return React.createElement(
+			FormField,
+			{ label, className: 'field-type-cloudinaryimages', htmlFor: path },
+			React.createElement('div', null, thumbnails),
+			this.renderValueInput(),
+			this.renderFileInput(),
+			this.renderToolbar(),
+			!!note && React.createElement(FormNote, { note }),
+			this.renderLightbox()
 		);
 	},
 });

@@ -7,6 +7,24 @@
   padding-bottom: 12px;
 }
 
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section {
+  display: block;
+}
+
+.sectionHeading {
+  color: var(--ks-text);
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

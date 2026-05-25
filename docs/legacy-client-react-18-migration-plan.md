@@ -216,20 +216,20 @@ Installed versions are from the current React 17 lockfile.
 | `react-dom18` | `18.3.1` alias | Alias workaround becomes obsolete. | Remove from devDependencies. |
 | `create-react-class` | `15.7.0` | No blocking peer. | Keep until createReactClass components are refactored later. |
 | `prop-types` | `15.8.1` | No blocking peer. | Keep. |
-| `react-day-picker` | `7.4.10` | Peers through React 17 only. | Fork peer range to React 18 or migrate to v8 with date-fns. Prefer fork for this milestone. |
+| `react-day-picker` | removed | Date fields and filters now use a local DayPicker-compatible component. | Removed during legacy client modernization. |
 | `react-router` | `file:vendor/react17-peer-forks/react-router` | Fork peers through React 17 only. | Extend fork peer range to React 18 or replace router. Prefer fork for this milestone. |
 | `react-redux` | `7.2.9` | Supports React 18. | Keep. Do not jump to v9 unless also upgrading Redux. |
 | `react-router-redux` | `4.0.8` | No direct React peer in current audit. | Keep, verify route sync. |
-| `react-transition-group` | `file:vendor/react17-peer-forks/react-transition-group` | Fork peers through React 17 only. | Extend fork peer range to React 18 or migrate away from v1 API. Prefer fork for this milestone. |
+| `react-transition-group` | removed | Legacy `CSSTransitionGroup` call sites now use a local compatibility component. | Removed during legacy client modernization. |
 | `react-select` | `file:vendor/react17-peer-forks/react-select` | Fork peers through React 17 only. | Extend fork peer range and nested fork peers, or migrate to v5. Prefer fork for this milestone. |
 | `react-input-autosize` | vendored fork | Fork peers through React 17 only. | Extend fork peer range if still pulled by `react-select`. |
-| `react-prop-toggle` | vendored fork | Fork peers through React 17 only. | Extend fork peer range if still pulled by `react-select`. |
-| `react-scrolllock` | vendored fork | No React peer in current fork. | Keep and test modal/lightbox scroll lock. |
-| `react-images` | `file:vendor/react17-peer-forks/react-images` | Fork peers through React 17 only. | Extend fork peer range or replace with local lightbox. Prefer fork for this milestone. |
+| `react-prop-toggle` | removed | Was only retained for the old `react-images` fork path. | Removed during legacy client modernization. |
+| `react-scrolllock` | removed | Was only retained for the old `react-images` fork path. | Removed during legacy client modernization. |
+| `react-images` | removed | Cloudinary fields now use a local lightbox component. | Removed during legacy client modernization. |
 | `react-dnd` | `2.6.0` | Peer `react: *`. | Keep, test drag sorting. |
 | `react-dnd-html5-backend` | `2.6.0` | No blocking peer in current audit. | Keep, test drag sorting. |
 | `react-color` | `2.19.3` | Peer `react: *`. | Keep, test color field. |
-| `react-markdown` | `2.5.1` | Peer `react >=0.13.3`. | Keep. |
+| `react-markdown` | removed | Field explorer readmes now use a local `marked`-backed component. | Removed during legacy client modernization. |
 | `react-engine` | `file:vendor/react17-peer-forks/react-engine` | Fork peers through React 17 only. | Extend fork peer range to React 18, verify e2e server. |
 | `enzyme` | `3.11.0` | Enzyme itself can stay, adapter must change. | Keep initially. |
 | `@wojtekmaj/enzyme-adapter-react-17` | `0.8.0` | React 17 adapter only. | Replace with `@cfaester/enzyme-adapter-react-18`. |
@@ -245,13 +245,13 @@ runtime rewrites. React 18 migration must revisit every one of them.
 | Local package | Version | Current peer range | React 18 action |
 | --- | ---: | --- | --- |
 | `vendor/react17-peer-forks/react-router` | `3.2.6-react17.0` | React 0.14/15/16/17 | Extend to React 18 or replace router. |
-| `vendor/react17-peer-forks/react-transition-group` | `1.2.1-react17.0` | React 15/16/17 | Extend to React 18 or rewrite transition usage. |
+| `vendor/react17-peer-forks/react-transition-group` | removed | Replaced by local `CSSTransitionGroup` compatibility component. |
 | `vendor/react17-peer-forks/react-select` | `1.3.0-react17.0` | React 0.14/15/16/17 | Extend to React 18 or migrate to v5. |
-| `vendor/react17-peer-forks/react-images` | `0.5.19-react17.0` | React 15/16/17 | Extend to React 18 or replace lightbox. |
+| `vendor/react17-peer-forks/react-images` | removed | Replaced by local Cloudinary lightbox. |
 | `vendor/react17-peer-forks/react-engine` | `4.5.1-react17.0` | React 15/16/17 | Extend to React 18 or remove/replace. |
 | `vendor/react17-peer-forks/react-input-autosize` | `2.2.2-react17.0` | React 0.14/15/16/17 | Extend to React 18 if retained. |
-| `vendor/react17-peer-forks/react-prop-toggle` | `1.0.2-react17.0` | React 16/17 | Extend to React 18 if retained. |
-| `vendor/react17-peer-forks/react-scrolllock` | `2.0.7-react17.0` | none | Keep, test scroll lock. |
+| `vendor/react17-peer-forks/react-prop-toggle` | removed | Old `react-images` helper no longer used. |
+| `vendor/react17-peer-forks/react-scrolllock` | removed | Old `react-images` helper no longer used. |
 
 Conservative recommendation:
 
@@ -649,7 +649,7 @@ Tasks:
 
    Alternative:
 
-   - Migrate to `react-day-picker@8.10.1`.
+   - Replaced with a local DayPicker-compatible component.
    - Add `date-fns` peer/dependency.
    - Rewrite date field and datearray filter usage for v8 API changes.
    - Treat as a larger date-field migration commit.

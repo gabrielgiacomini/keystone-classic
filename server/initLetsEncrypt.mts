@@ -1,6 +1,36 @@
 import type { Keystone } from '../index.mjs';
 import type { Application } from 'express';
-import { create as greenlockCreate } from 'greenlock-express';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+
+type GreenlockInstance = {
+	httpsOptions: unknown;
+	middleware(): Parameters<Application['use']>[0];
+};
+
+type GreenlockExpressModule = {
+	create(options: {
+		server: string;
+		approveDomains: string[];
+		agreeTos: boolean;
+		email: string;
+	}): GreenlockInstance;
+};
+
+function loadGreenlockExpress(): GreenlockExpressModule {
+	try {
+		return require('greenlock-express') as GreenlockExpressModule;
+	} catch (error) {
+		const code = (error as { code?: unknown }).code;
+		if (code === 'MODULE_NOT_FOUND' || code === 'ERR_MODULE_NOT_FOUND') {
+			const missingDependencyError = new Error('To use the `letsencrypt` option, install the optional package `greenlock-express`.');
+			(missingDependencyError as Error & { cause: unknown }).cause = error;
+			throw missingDependencyError;
+		}
+		throw error;
+	}
+}
 
 export default function initLetsEncrypt(keystone: Keystone, app: Application): void {
 	const options = keystone.get('letsencrypt');
@@ -33,7 +63,7 @@ export default function initLetsEncrypt(keystone: Keystone, app: Application): v
 		return;
 	}
 
-	const lex = greenlockCreate({
+	const lex = loadGreenlockExpress().create({
 		server: server,
 		approveDomains: approveDomains,
 		agreeTos: agreeTos,

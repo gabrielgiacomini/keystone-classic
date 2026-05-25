@@ -7,6 +7,16 @@ GitHub Actions check on `main` and proving that it stays green for 14 days.
 
 Last checked from this workspace:
 
+- `npm run admin-parity:protect:status` exited non-zero on 2026-05-25.
+  Repository `gabrielgiacomini/keystone4-ts` is private, branch `main` is not
+  protected, no required-check source is available, and GitHub returned
+  `403 Upgrade to GitHub Pro or make this repository public to enable this
+  feature` while reading branch rules.
+- `npm run admin-parity:final -- --dry-run` on 2026-05-25 confirms the local
+  final-gate order now covers the convergence baseline commands before the
+  external soak: ledger, decommission audit, lint, typecheck, `build-dev`,
+  production build, unit, API e2e, canonical admin parity, package verification,
+  and `admin-parity:soak`.
 - `npm run admin-parity:protect:status` exited non-zero during the
   2026-05-12T03:13:48Z refresh. Repository
   `gabrielgiacomini/keystone4-ts` is private, branch `main` is not protected,

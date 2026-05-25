@@ -1,33 +1,26 @@
 import React from 'react';
-import createReactClass from 'create-react-class';
-import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 
-const IdColumn = createReactClass({
-	displayName: 'IdColumn',
-	propTypes: {
-		col: PropTypes.object,
-		data: PropTypes.object,
-		list: PropTypes.object,
-	},
-	renderValue () {
-		const value = this.props.data.id;
-		if (!value) return null;
+function IdColumn({ col, data, list }) {
+	const value = data.id;
 
-		return (
-			<ItemsTableValue padded interior title={value} to={Keystone.adminLegacyPath + '/' + this.props.list.path + '/' + value} field={this.props.col.type}>
-				{value}
-			</ItemsTableValue>
-		);
-	},
-	render () {
-		return (
-			<ItemsTableCell>
-				{this.renderValue()}
-			</ItemsTableCell>
-		);
-	},
-});
+	return React.createElement(
+		ItemsTableCell,
+		null,
+		value ? React.createElement(
+			ItemsTableValue,
+			{
+				padded: true,
+				interior: true,
+				title: value,
+				to: Keystone.adminLegacyPath + '/' + list.path + '/' + value,
+				field: col.type,
+			},
+			value,
+		) : null,
+	);
+}
+
 
 export default IdColumn;

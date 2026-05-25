@@ -4,8 +4,6 @@
  * render the value of a `CloudinaryImage` field in a list view.
  */
 import React from 'react';
-import createReactClass from 'create-react-class';
-import PropTypes from 'prop-types';
 import CloudinaryImageSummary from '../../components/columns/CloudinaryImageSummary.mjs';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
@@ -14,38 +12,16 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `CloudinaryImageColumn` component.
  * @augments React.Component
  */
-const CloudinaryImageColumn = createReactClass({
-	displayName: 'CloudinaryImageColumn',
-	propTypes: {
-		col: PropTypes.object,
-		data: PropTypes.object,
-	},
-	/**
-	 * Renders the value of the field, or nothing if the field has no value.
-	 * @returns {React.Element|undefined} The rendered value, or undefined if no image data is present.
-	 */
-	renderValue: function () {
-		const value = this.props.data.fields[this.props.col.path];
-		if (!value || !Object.keys(value).length) return;
+function CloudinaryImageColumn({ col, data }) {
+	const value = data.fields[col.path];
+	const renderedValue = value && Object.keys(value).length ? React.createElement(
+		ItemsTableValue,
+		{ field: col.type },
+		React.createElement(CloudinaryImageSummary, { label: 'dimensions', image: value, secure: col.field.secure }),
+	) : null;
 
-		return (
-			<ItemsTableValue field={this.props.col.type}>
-				<CloudinaryImageSummary label="dimensions" image={value} secure={this.props.col.field.secure} />
-			</ItemsTableValue>
-		);
+	return React.createElement(ItemsTableCell, null, renderedValue);
+}
 
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		return (
-			<ItemsTableCell>
-				{this.renderValue()}
-			</ItemsTableCell>
-		);
-	},
-});
 
 export default CloudinaryImageColumn;

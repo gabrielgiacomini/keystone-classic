@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { FieldType } from '../Type.mjs';
 import type { MongooseDocument, KeystoneList, FieldOptionsBase } from '../Type.mjs';
 import type { Schema } from 'mongoose';
@@ -31,7 +30,7 @@ class GeoPointType extends FieldType<KeystoneFieldOptionsForGeoPointType, number
 	 * @param schema - The Mongoose schema to augment.
 	 */
 	override addToSchema (schema: Schema): void {
-		schema.path(this.path, _.defaults({ type: [Number], index: '2dsphere' }, this.options));
+		schema.path(this.path, { ...this.options, type: [Number], index: '2dsphere' });
 		this.bindUnderscoreMethods();
 	}
 
@@ -154,7 +153,7 @@ class GeoPointType extends FieldType<KeystoneFieldOptionsForGeoPointType, number
 				item.set(this.path, undefined);
 			}
 		} else if (Array.isArray(value)) {
-			if (value.length === 2 && REGEXP_LNGLAT.test(_.compact(value).join(','))) {
+			if (value.length === 2 && REGEXP_LNGLAT.test(value.filter(Boolean).join(','))) {
 				item.set(this.path, value);
 			} else {
 				item.set(this.path, undefined);

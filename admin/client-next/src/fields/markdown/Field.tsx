@@ -39,6 +39,11 @@ export function Field({
   const markedRef = useRef<((src: string) => string) | null>(null);
   const purifyRef = useRef<((dirty: string) => string) | null>(null);
   const librariesLoaded = useRef(false);
+  const latestMarkdown = useRef(value.md ?? '');
+
+  useEffect(() => {
+    latestMarkdown.current = value.md ?? '';
+  }, [value.md]);
 
   // Lazily import marked + DOMPurify once, then run an initial render.
   useEffect(() => {
@@ -55,9 +60,10 @@ export function Field({
       const purify = DOMPurify.default ?? DOMPurify;
       purifyRef.current = (dirty: string) => purify.sanitize(dirty);
       librariesLoaded.current = true;
-      // Run initial preview with whatever is already in the field.
-      if (value.md) {
-        setPreviewHtml(purifyRef.current(markedRef.current(value.md)));
+      // Run initial preview with the latest field value. The item can load
+      // after this component mounts while the preview libraries are in flight.
+      if (latestMarkdown.current) {
+        setPreviewHtml(purifyRef.current(markedRef.current(latestMarkdown.current)));
       }
     }
     void loadLibraries();
@@ -74,6 +80,10 @@ export function Field({
     }
     setPreviewHtml(purifyRef.current(markedRef.current(md)));
   }, []);
+
+  useEffect(() => {
+    updatePreview(value.md ?? '');
+  }, [updatePreview, value.md]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {

@@ -51,7 +51,6 @@ export default function listFactory(keystone: Keystone) {
 
 	/**
 	 * List.
-	 *
 	 */
 	class List {
 		// -----------------------------------------------------------------------
@@ -119,7 +118,7 @@ export default function listFactory(keystone: Keystone) {
 		declare ensureTextIndex: (callback: (err?: Error | null) => void) => void;
 
 		/**
-		 * Documentation placeholder.
+		 *
 		 *
 		 * @param key - The list key.
 		 * @param options - Explicit list configuration options.
@@ -654,7 +653,6 @@ export type UnderscoreMethodTree = UnderscoreMethod | UnderscoreMethodNode;
 
 /**
  * KeystoneList.
- *
  */
 export interface KeystoneList<
 	TListOrDocument extends string | KeystoneDocument = ListKey,

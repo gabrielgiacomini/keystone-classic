@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { FormInput } from '../../admin/client-legacy/App/elemental';
+import FormInput from '../../admin/client-legacy/App/elemental/FormInput/index.mjs';
 import { fade } from '../../admin/client-legacy/utils/color.mjs';
 import theme from '../../admin/client-legacy/theme.mjs';
 
@@ -29,18 +28,13 @@ function FileChangeMessage ({ style, color, ...props }) {
 		styles.color = theme.color[color];
 	}
 
-	return (
-		<FormInput
-			noedit
-			style={styles}
-			{...props}
-		/>
-	);
+	return React.createElement(FormInput, {
+		noedit: true,
+		style: styles,
+		...props,
+	});
 };
 
-FileChangeMessage.propTypes = {
-	color: PropTypes.oneOf(['danger', 'default', 'success']),
-};
 FileChangeMessage.defaultProps = {
 	color: 'default',
 };

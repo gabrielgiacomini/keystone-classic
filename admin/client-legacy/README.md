@@ -31,7 +31,7 @@ client
 ├── utils/                           # Some common utilities we use in both Signin and App
 ├── README.md
 ├── constants.js                     # A few shared constants
-└── packages.js                      # A list of our vendor dependencies for browserify to bundle separately
+└── packages.js                      # Historical vendor-bundle placeholder kept for script-tag compatibility
 ```
 
 This means an import like `import SomeSharedComponent from '../../../shared/SomeSharedComponent'` is perfectly fine, but if you find yourself import from a `component` folder like so `import SomeComponent from '../../../component/SomeComponent'` move that component to the `shared/` folder on the same level.

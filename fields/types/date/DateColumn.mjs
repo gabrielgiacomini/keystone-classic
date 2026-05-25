@@ -4,61 +4,26 @@
  * value of a `Date` or `Datetime` field in a list view.
  */
 import React from 'react';
-import createReactClass from 'create-react-class';
-import PropTypes from 'prop-types';
-import moment from 'moment';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
+import { formatDateByFormat } from '../../utils/date.mjs';
 
 /**
  * The `DateColumn` component.
  * @augments React.Component
  */
-const DateColumn = createReactClass({
-	displayName: 'DateColumn',
-	propTypes: {
-		col: PropTypes.object,
-		data: PropTypes.object,
-		linkTo: PropTypes.string,
-	},
-	/**
-	 * Converts a value to a moment object.
-	 * @param {string|Date|number} value The value to convert.
-	 * @returns {moment.Moment} The moment object.
-	 */
-	toMoment (value) {
-		if (this.props.col.field.isUTC) {
-			return moment.utc(value);
-		} else {
-			return moment(value);
-		}
-	},
-	/**
-	 * Gets the value of the field.
-	 * @returns {string} The formatted value.
-	 */
-	getValue () {
-		const value = this.props.data.fields[this.props.col.path];
-		if (!value) return null;
+function DateColumn({ col, data, linkTo }) {
+	const rawValue = data.fields[col.path];
+	const format = col.type === 'datetime' ? 'MMMM Do YYYY, h:mm:ss a' : 'MMMM Do YYYY';
+	const value = rawValue ? formatDateByFormat(rawValue, format, { utc: col.field.isUTC }) : null;
+	const empty = !value && linkTo ? true : false;
 
-		const format = (this.props.col.type === 'datetime') ? 'MMMM Do YYYY, h:mm:ss a' : 'MMMM Do YYYY';
-		return this.toMoment(value).format(format);
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		const value = this.getValue();
-		const empty = !value && this.props.linkTo ? true : false;
-		return (
-			<ItemsTableCell>
-				<ItemsTableValue field={this.props.col.type} to={this.props.linkTo} empty={empty}>
-					{value}
-				</ItemsTableValue>
-			</ItemsTableCell>
-		);
-	},
-});
+	return React.createElement(
+		ItemsTableCell,
+		null,
+		React.createElement(ItemsTableValue, { field: col.type, to: linkTo, empty }, value),
+	);
+}
+
 
 export default DateColumn;

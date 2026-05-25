@@ -11,6 +11,7 @@ import { initExpressSessionCore } from './initExpressSession.mjs';
  * been swapped to the real-store-backed `session()` — the caller can use
  * `keystone.expressSession` with no MemoryStore-backed window.
  *
+ *
  * @example
  * await keystone.initExpressSessionAsync(mongoose);
  * // keystone.expressSession is now backed by the real store.

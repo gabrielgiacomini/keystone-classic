@@ -6,8 +6,6 @@
  * It displays '********' if a password is set, and an empty string otherwise.
  */
 import React from 'react';
-import createReactClass from 'create-react-class';
-import PropTypes from 'prop-types';
 import ItemsTableCell from '../../components/ItemsTableCell.mjs';
 import ItemsTableValue from '../../components/ItemsTableValue.mjs';
 
@@ -15,33 +13,14 @@ import ItemsTableValue from '../../components/ItemsTableValue.mjs';
  * The `PasswordColumn` component.
  * @augments React.Component
  */
-const PasswordColumn = createReactClass({
-	displayName: 'PasswordColumn',
-	propTypes: {
-		col: PropTypes.object,
-		data: PropTypes.object,
-	},
-	/**
-	 * Renders the value of the field.
-	 * @returns {string} The rendered value.
-	 */
-	renderValue () {
-		const value = this.props.data.fields[this.props.col.path];
-		return value ? '********' : '';
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		return (
-			<ItemsTableCell>
-				<ItemsTableValue field={this.props.col.type}>
-					{this.renderValue()}
-				</ItemsTableValue>
-			</ItemsTableCell>
-		);
-	},
-});
+function PasswordColumn({ col, data }) {
+	const value = data.fields[col.path];
+	return React.createElement(
+		ItemsTableCell,
+		null,
+		React.createElement(ItemsTableValue, { field: col.type }, value ? '********' : ''),
+	);
+}
+
 
 export default PasswordColumn;

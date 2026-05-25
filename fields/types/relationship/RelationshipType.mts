@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { FieldType } from '../Type.mjs';
 import type { KeystoneList, FieldOptionsBase, MongooseDocument, FieldSize } from '../Type.mjs';
 import keystone from '../../../index.mjs';
@@ -265,8 +264,8 @@ class RelationshipType<
 			const _old = (arr as unknown[]).map(function (i: unknown) { return String(i); });
 			let _new: unknown = value;
 			if (!Array.isArray(_new)) _new = unknownRelationshipScalarToString(_new).split(',');
-			_new = _.compact(_new as unknown[]);
-			if (!_.isEqual(_old, _new)) item.set(this.path, _new);
+			_new = (_new as unknown[]).filter(Boolean);
+			if (!arraysEqual(_old, _new as unknown[])) item.set(this.path, _new);
 		} else {
 			if (value && value !== item.get(this.path)) {
 				item.set(this.path, value);
@@ -285,7 +284,13 @@ function expandRelatedItemData (this: RelationshipType, item: MongooseItem | nul
 
 function truthy (value: unknown): boolean { return !!value; }
 
-/** Coerce an unknown relationship scalar to a display/update string without relying on `String(object)` for plain objects. */
+function arraysEqual(left: unknown[], right: unknown[]): boolean {
+	return left.length === right.length && left.every((value, index) => value === right[index]);
+}
+
+/**
+ * Coerce an unknown relationship scalar to a display/update string without relying on `String(object)` for plain objects.
+ */
 function unknownRelationshipScalarToString (value: unknown): string {
 	if (value === null || value === undefined || value === '') return '';
 	if (typeof value === 'string') return value;
@@ -307,7 +312,7 @@ definePrototypeGetters(RelationshipType, {
 		return keystone.lists[this.options.ref as string];
 	},
 	hasFilters: function (this: RelationshipType) {
-		return (this.filters && _.keys(this.filters).length) ? true : false;
+		return (this.filters && Object.keys(this.filters).length) ? true : false;
 	},
 });
 

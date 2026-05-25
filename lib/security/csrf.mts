@@ -32,13 +32,17 @@ export function createSecret (): string {
 	return crypto.randomBytes(SECRET_LENGTH).toString('base64');
 }
 
-/** Returns the session's CSRF secret, creating and storing one if absent. */
+/**
+ * Returns the session's CSRF secret, creating and storing one if absent.
+ */
 export function getSecret (req: Request): string {
 	const session = req.session as unknown as Record<string, string>;
 	return session[SECRET_KEY] || (session[SECRET_KEY] = createSecret());
 }
 
-/** Creates a new signed CSRF token tied to the current session secret. */
+/**
+ * Creates a new signed CSRF token tied to the current session secret.
+ */
 export function createToken (req: Request): string {
 	const salt = crypto.randomBytes(SECRET_LENGTH).toString('hex').slice(0, SECRET_LENGTH);
 	return tokenize(salt, getSecret(req));

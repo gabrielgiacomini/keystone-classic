@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import Field from '../Field.mjs';
-import { FormInput } from '../../../admin/client-legacy/App/elemental';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
 
 /**
  * The `UrlField` component.
@@ -33,18 +33,18 @@ export default Field.create({
 	 */
 	renderField () {
 		const { value } = this.props;
-		return (
-			<div>
-				<FormInput
-					autoComplete="off"
-					name={this.getInputName(this.props.path)}
-					onChange={this.valueChanged}
-					ref="focusTarget"
-					type="url"
-					value={value}
-				/>
-				{ this.renderThumb() }
-			</div>
+		return React.createElement(
+			'div',
+			null,
+			React.createElement(FormInput, {
+				autoComplete: 'off',
+				name: this.getInputName(this.props.path),
+				onChange: this.valueChanged,
+				ref: this.getFocusTargetRef(),
+				type: 'url',
+				value,
+			}),
+			this.renderThumb()
 		);
 	},
 	/**
@@ -53,13 +53,11 @@ export default Field.create({
 	 */
 	renderValue () {
 		const { value } = this.props;
-		return (
-			<div>
-				<FormInput noedit onClick={value && this.openValue}>
-					{value}
-				</FormInput>
-				{ this.renderThumb() }
-			</div>
+		return React.createElement(
+			'div',
+			null,
+			React.createElement(FormInput, { noedit: true, onClick: value && this.openValue }, value),
+			this.renderThumb()
 		);
 	},
 	/**
@@ -69,9 +67,7 @@ export default Field.create({
 	renderThumb () {
 		const { thumb, value } = this.props;
 		if (thumb === true) {
-			return (
-				<img src={value}/>
-			);
+			return React.createElement('img', { src: value });
 		}
 		return ('');
 	},

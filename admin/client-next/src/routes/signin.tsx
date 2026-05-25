@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signin } from '../api/session.js';
+import { ApiError } from '../api/fetch.js';
 import { Route as RootRoute } from './__root.js';
 import styles from './signin.module.css';
 
@@ -44,8 +45,11 @@ function SigninPage() {
       const response = await signin(data);
       setSessionUser(response.user);
       await navigate({ to: '/' });
-    } catch {
-      setError('root', { message: 'The email and password you entered are not valid.' });
+    } catch (error) {
+      const message = error instanceof ApiError && error.status === 403
+        ? 'Something went wrong; please refresh your browser and try again.'
+        : 'The email and password you entered are not valid.';
+      setError('root', { message });
     }
   }
 

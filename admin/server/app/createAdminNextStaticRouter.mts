@@ -30,7 +30,7 @@ function escapeForScriptJson(value: unknown): string {
 }
 
 function escapeHtmlAttribute(value: string): string {
-	return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+	return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function nonEmptyString(value: unknown): string | undefined {
@@ -42,8 +42,8 @@ function nonEmptyString(value: unknown): string | undefined {
 /**
  * Derives a human-readable display name for the signed-in user.
  *
- * Mirrors the legacy admin's resolution (see `routes-legacy/index.mts`), which
- * delegates to `UserList.getDocumentName(user)` — that path invokes the configured
+ * Mirrors the historical legacy admin resolution, which delegated to
+ * `UserList.getDocumentName(user)` — that path invokes the configured
  * `nameField.format(user)` (e.g. the Name field's virtual `full`, "Test Admin").
  * Falls back to a plain `user.name` (string or `{first, last}` object), then to
  * email, then to the user `_id`. Returns `undefined` when no user is on the
@@ -104,14 +104,41 @@ function resolveBackUrl(keystone: Keystone): string {
 	return trimmed ?? '/';
 }
 
+function normalizeScriptUrls(value: unknown): string[] {
+	const values = Array.isArray(value) ? value : [value];
+	return values.flatMap((entry) => {
+		const trimmed = nonEmptyString(entry);
+		return trimmed ? [trimmed] : [];
+	});
+}
+
+function resolveCustomFieldScripts(keystone: Keystone): string[] {
+	return normalizeScriptUrls(keystone.get('admin next custom field scripts'));
+}
+
+function buildCustomFieldScriptTags(keystone: Keystone, nonceAttr: string): string {
+	return resolveCustomFieldScripts(keystone)
+		.map((src) => `<script type="module"${nonceAttr} src="${escapeHtmlAttribute(src)}"></script>`)
+		.join('\n');
+}
+
+function injectHeadScripts(html: string, scripts: string): string {
+	const appEntryScriptPattern = /<script\b(?=[^>]*\btype=["']module["'])(?=[^>]*\bsrc=["'][^"']*\/assets\/)[^>]*><\/script>/;
+	if (appEntryScriptPattern.test(html)) {
+		return html.replace(appEntryScriptPattern, `${scripts}\n    $&`);
+	}
+	return html.replace('</head>', `${scripts}\n  </head>`);
+}
+
 function sendIndex(keystone: Keystone, req: Request, res: Response): void {
 	assertPublicNextBuildExists();
 	const html = readFileSync(publicNextIndexPath, 'utf8');
 	const nonce = String(res.locals['cspNonce'] ?? '');
 	const nonceAttr = nonce ? ` nonce="${escapeHtmlAttribute(nonce)}"` : '';
+	const mountedAdminNextPath = nonEmptyString(req.baseUrl) ?? getAdminNextPath(keystone);
 	const payload: Record<string, string> = {
 		adminLegacyPath: getAdminLegacyPath(keystone),
-		adminNextPath: getAdminNextPath(keystone),
+		adminNextPath: mountedAdminNextPath,
 		adminApiPath: getAdminApiPath(keystone),
 		brand: resolveBrand(keystone),
 		version: pkg.version,
@@ -122,7 +149,9 @@ function sendIndex(keystone: Keystone, req: Request, res: Response): void {
 		payload.signedInUser = signedInUser;
 	}
 	const configScript = `<script${nonceAttr}>window.Keystone=${escapeForScriptJson(payload)};</script>`;
-	res.type('html').send(html.replace('</head>', `${configScript}\n  </head>`));
+	const customFieldScripts = buildCustomFieldScriptTags(keystone, nonceAttr);
+	const headScripts = [configScript, customFieldScripts].filter(Boolean).join('\n');
+	res.type('html').send(injectHeadScripts(html, headScripts));
 }
 
 /**

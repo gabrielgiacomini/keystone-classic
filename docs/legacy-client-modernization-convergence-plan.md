@@ -11,7 +11,7 @@ legacy admin client and converging it with the admin-next stack.
 
 The React-version migration is no longer the main problem. The legacy client now
 runs on React 18, but it still carries an older application architecture:
-Browserify bundles, React Router 3, Redux 3, redux-saga, createReactClass,
+Browserify bundles, React Router 3, local Redux-style reducer state, createReactClass,
 Elemental/LESS, old field components, old forked third-party packages, runtime
 Browserify custom-field support, and a global `Keystone` bootstrap contract.
 
@@ -122,10 +122,7 @@ Primary runtime and build traits:
 - Runtime Browserify support for custom field types.
 - EJS templates that inject global `Keystone`.
 - React Router 3.
-- `react-router-redux`.
-- Redux 3.
-- redux-saga.
-- redux-thunk.
+- Local Redux-style reducer state for remaining list/item shell behavior.
 - `xhr` for API requests.
 - `create-react-class`.
 - PropTypes.
@@ -1016,6 +1013,28 @@ Provide:
 - design-system components
 - migration examples
 
+Admin-next also supports a migration loading bridge through
+`keystone.set('admin next custom field scripts', string | string[])`. The URLs
+are emitted as same-origin module scripts before the app bundle, after the
+server-provided `window.Keystone` bootstrap. Those scripts may populate
+`window.Keystone.fieldComponents` with modern component sets or
+`window.Keystone.legacyFieldComponents` with legacy component sets that are
+adapted through `registerLegacyFieldComponents()`.
+
+The companion repository helper
+`npm run admin-next:build-custom-fields -- --entry <file>` builds an
+operator-owned entry file into an ES module suitable for that setting. It
+intentionally keeps custom field ownership in the deployment: the generated
+module must assign the appropriate `window.Keystone` maps, while Keystone owns
+the loading order and registration adapter.
+
+Policy decision: custom field compatibility is supported through the modern
+module-script bridge and the `window.Keystone.legacyFieldComponents` adapter,
+not through the historical `packages.js` vendor bundle. Built-in admin behavior
+does not ship React Router 3, and custom field browser code that previously
+imported `react-router` from `packages.js` must migrate to normal links or the
+modern admin route APIs available inside its module script.
+
 ### Adapter Requirements
 
 If compatibility adapter is chosen, it must support:
@@ -1026,6 +1045,8 @@ If compatibility adapter is chosen, it must support:
 - old column props
 - Elemental compatibility exports
 - enough exposed package names to avoid common custom field breaks
+- no React Router 3 package exposure; navigation must use normal links or the
+  modern admin route APIs
 
 Adapter tests:
 
@@ -1033,7 +1054,8 @@ Adapter tests:
 - a fake legacy custom relationship-like field
 - a fake legacy custom upload field
 - a fake modern custom field
-- Browserify or Vite compatibility behavior, depending on chosen bundle policy
+- admin-next module script loading behavior
+- admin-next custom field bundle production behavior
 
 ## Testing Strategy
 

@@ -4,12 +4,15 @@ import {
 	getAdminApiEnabled,
 	getAdminSurfacePaths,
 	getAdminClientMode,
+	getAdminClientModeDecision,
 	getAdminLegacyApiAliasEnabled,
 	getAdminLegacyApiAliasPath,
+	hasCustomLegacyFieldTypes,
 } from 'keystone/lib/core/adminSurfacePathUtils';
 
-function keystoneWith(options: Record<string, unknown> = {}): import('keystone').Keystone {
+function keystoneWith(options: Record<string, unknown> = {}, fieldTypes?: Record<string, unknown>): import('keystone').Keystone {
 	return {
+		fieldTypes,
 		get(key: string) {
 			return options[key];
 		},
@@ -47,10 +50,11 @@ describe('adminSurfacePathUtils', function () {
 		})))).to.throw("Keystone: 'admin legacy path' and 'admin api path' must be distinct");
 	});
 
-	it('accepts false, legacy, next, and both as admin ui modes', function () {
-		for (const value of [false, 'legacy', 'next', 'both']) {
+	it('accepts false, legacy, next, both, and auto as admin ui modes', function () {
+		for (const value of [false, 'legacy', 'next', 'both'] as const) {
 			expect(getAdminClientMode(keystoneWith({ 'admin ui': value }))).to.equal(value);
 		}
+		expect(getAdminClientMode(keystoneWith({ 'admin ui': 'auto' }))).to.equal('next');
 	});
 
 	it('rejects unknown admin ui and admin api option values', function () {
@@ -66,5 +70,43 @@ describe('adminSurfacePathUtils', function () {
 		expect(getAdminApiEnabled(keystoneWith({ 'admin ui': false }))).to.equal(true);
 		expect(getAdminApiEnabled(keystoneWith({ 'admin ui': false, 'admin api': true }))).to.equal(true);
 		expect(getAdminApiEnabled(keystoneWith({ 'admin api': false }))).to.equal(false);
+	});
+
+	it('detects custom legacy field types for auto admin UI mode', function () {
+		expect(hasCustomLegacyFieldTypes({ text: 'Text', relationship: 'Relationship' })).to.equal(false);
+		expect(hasCustomLegacyFieldTypes({ text: 'Text', customText: 'CustomText' })).to.equal(true);
+
+		expect(getAdminClientModeDecision(keystoneWith({ 'admin ui': 'auto' }, {
+			text: 'Text',
+			number: 'Number',
+		}))).to.deep.include({
+			requested: 'auto',
+			mode: 'next',
+		});
+
+		expect(getAdminClientModeDecision(keystoneWith({ 'admin ui': 'auto' }, {
+			text: 'Text',
+			customText: 'CustomText',
+		}))).to.deep.include({
+			requested: 'auto',
+			mode: 'legacy',
+		});
+	});
+
+	it('lets KEYSTONE_ADMIN_CLIENT override the admin ui option', function () {
+		const previous = process.env.KEYSTONE_ADMIN_CLIENT;
+		try {
+			process.env.KEYSTONE_ADMIN_CLIENT = 'both';
+			expect(getAdminClientMode(keystoneWith({ 'admin ui': 'legacy' }))).to.equal('both');
+
+			process.env.KEYSTONE_ADMIN_CLIENT = 'auto';
+			expect(getAdminClientMode(keystoneWith({ 'admin ui': 'legacy' }, { custom: 'Custom' }))).to.equal('legacy');
+		} finally {
+			if (previous === undefined) {
+				delete process.env.KEYSTONE_ADMIN_CLIENT;
+			} else {
+				process.env.KEYSTONE_ADMIN_CLIENT = previous;
+			}
+		}
 	});
 });

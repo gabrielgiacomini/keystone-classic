@@ -7,6 +7,7 @@ import { number } from './number.mjs';
 import { isValidObjectId } from './objectId.mjs';
 import { optionsMap } from './optionsMap.mjs';
 import { escapeRegExp } from './regexp.mjs';
+import { camelize } from './inflect.mjs';
 import {
 	cropString,
 	downcase,
@@ -17,9 +18,7 @@ import {
 	singular,
 	slug,
 } from './string.mjs';
-import createInflect from 'i';
 
-const inflect = createInflect();
 const DEFAULT_RANDOM_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
 const RADIUS_KM = 6371;
 const RADIUS_MILES = 3959;
@@ -226,7 +225,7 @@ function titlecase(value: unknown): string {
 }
 
 function camelcase(value: string, lowercaseFirstWord?: boolean): string {
-	return inflect.camelize(value, !lowercaseFirstWord);
+	return camelize(value, !lowercaseFirstWord);
 }
 
 function stringify(value: unknown): string {

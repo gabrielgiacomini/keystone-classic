@@ -5,8 +5,8 @@
  */
 import Field from '../Field.mjs';
 import React from 'react';
-import Select from 'react-select';
-import { FormInput } from '../../../admin/client-legacy/App/elemental';
+import Select from '../../../admin/client-legacy/App/shared/Select.mjs';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
 
 /**
  * TODO:
@@ -47,11 +47,7 @@ export default Field.create({
 		const { ops, value } = this.props;
 		const selected = ops.find(opt => opt.value === value);
 
-		return (
-			<FormInput noedit>
-				{selected ? selected.label : null}
-			</FormInput>
-		);
+		return React.createElement(FormInput, { noedit: true }, selected ? selected.label : null);
 	},
 
 	/**
@@ -71,18 +67,21 @@ export default Field.create({
 			? String(val)
 			: val;
 
-		return (
-			<div>
-				{/* This input element fools Safari's autocorrect in certain situations that completely break react-select */}
-				<input type="text" style={{ position: 'absolute', width: 1, height: 1, zIndex: -1, opacity: 0 }} tabIndex="-1"/>
-				<Select
-					simpleValue
-					name={this.getInputName(path)}
-					value={value}
-					options={options}
-					onChange={this.valueChanged}
-				/>
-			</div>
+		return React.createElement(
+			'div',
+			null,
+			React.createElement('input', {
+				type: 'text',
+				style: { position: 'absolute', width: 1, height: 1, zIndex: -1, opacity: 0 },
+				tabIndex: '-1',
+			}),
+			React.createElement(Select, {
+				simpleValue: true,
+				name: this.getInputName(path),
+				value,
+				options,
+				onChange: this.valueChanged,
+			})
 		);
 	},
 

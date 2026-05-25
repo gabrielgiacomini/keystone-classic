@@ -5,7 +5,8 @@
  * used with `Col` components to create a grid layout.
  */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+
+const legacyContextType = () => null;
 
 /**
  * A row component for the explorer.
@@ -38,23 +39,15 @@ class ExplorerRow extends Component {
 			? ' ' + className
 			: '');
 
-		return (
-			<div
-				{...incidentalProps}
-				className={__className__}
-				style={__style__}
-			/>
-		);
+		return React.createElement('div', {
+			...incidentalProps,
+			className: __className__,
+			style: __style__,
+		});
 	}
 };
 ExplorerRow.childContextTypes = {
-	isCollapsed: PropTypes.bool,
-};
-ExplorerRow.propTypes = {
-	className: PropTypes.string,
-	gutter: PropTypes.number,
-	isCollapsed: PropTypes.bool,
-	style: PropTypes.string,
+	isCollapsed: legacyContextType,
 };
 ExplorerRow.defaultProps = {
 	gutter: 10,

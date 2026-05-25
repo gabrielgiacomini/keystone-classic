@@ -54,31 +54,19 @@ export class Page {
 	options: PageOptions;
 	fields: Record<string, ContentField>;
 
-	/**
-	 * Documentation placeholder.
-	 * @param key - Description
-	 * @param options - Description
-	 */
+	
 	constructor (key: string, options: PageOptions = {}) {
 		this.options = Object.assign({}, options);
 		this.key = key;
 		this.fields = {};
 	}
 
-	/**
-	 * Documentation placeholder.
-	 * @returns The return value.
-	 */
+	
 	get name (): string {
 		return (this.get('name') as string | null) || (this.set('name', getUtils().keyToLabel(this.key)) as string);
 	}
 
-	/**
-	 * Documentation placeholder.
-	 * @param key - Description
-	 * @param value - Description
-	 * @returns The return value.
-	 */
+	
 	set (key: string, value: unknown): unknown {
 		if (!key) throw new Error('keystone.content.Page.set() Error: must be provided with a key to set a value.');
 		value = value || null;
@@ -86,22 +74,14 @@ export class Page {
 		return value;
 	}
 
-	/**
-	 * Documentation placeholder.
-	 * @param key - Description
-	 * @returns The return value.
-	 */
+	
 	get (key: string): unknown {
 		if (!key) throw new Error('keystone.content.Page.get() Error: must be provided with a key to get a value.');
 		if (!Object.prototype.hasOwnProperty.call(this.options, key)) return null;
 		return this.options[key];
 	}
 
-	/**
-	 * Documentation placeholder.
-	 * @param fields - Description
-	 * @returns The return value.
-	 */
+	
 	add (fields: Record<string, unknown>): this {
 		if (!getUtils().isObject(fields)) {
 			throw new Error('keystone.content.Page.add() Error: fields must be an object.');
@@ -131,20 +111,13 @@ export class Page {
 		return this;
 	}
 
-	/**
-	 * Documentation placeholder.
-	 * @returns The return value.
-	 */
+	
 	register (): this {
 		(keystone as unknown as { content: { page(key: string, page: Page): void } }).content.page(this.key, this);
 		return this;
 	}
 
-	/**
-	 * Documentation placeholder.
-	 * @param data - Description
-	 * @returns The return value.
-	 */
+	
 	populate (data: unknown): Record<string, unknown> {
 		const source = asRecord(data);
 		const populated: Record<string, unknown> = {};
@@ -158,11 +131,7 @@ export class Page {
 		return populated;
 	}
 
-	/**
-	 * Documentation placeholder.
-	 * @param data - Description
-	 * @returns The return value.
-	 */
+	
 	validate (data: unknown): Record<string, unknown> {
 		const source = asRecord(data);
 		const validated: Record<string, unknown> = {};
@@ -182,11 +151,7 @@ export class Page {
 		return validated;
 	}
 
-	/**
-	 * Documentation placeholder.
-	 * @param data - Description
-	 * @returns The return value.
-	 */
+	
 	clean (data: unknown): Record<string, unknown> {
 		const source = asRecord(data);
 		const cleaned: Record<string, unknown> = {};

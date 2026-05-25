@@ -24,7 +24,6 @@ export type FieldThis<P, S> = {
 	props: Readonly<P>;
 	state: Readonly<S>;
 	setState(updater: Partial<S> | ((prev: Readonly<S>) => Partial<S>)): void;
-	refs: Record<string, React.ReactInstance>;
 	forceUpdate(callback?: () => void): void;
 };
 
@@ -65,14 +64,10 @@ export type WithCollapse<P, S> = FieldThis<P, S & CollapseState> & CollapseMetho
 export interface FieldSpec<P, S> {
 	displayName?: string;
 	statics?: { type: string; [key: string]: unknown };
-	/** propTypes preserved at runtime for React 15 prop validation. */
-	// eslint-disable-next-line @typescript-eslint/no-deprecated -- React 15 field declarations still expose React.Validator.
-	propTypes?: Partial<Record<keyof P, React.Validator<P[keyof P]>>>;
 	getInitialState?(this: FieldThis<P, S>): S;
 	getDefaultProps?(): Partial<P>;
-	componentWillMount?(this: FieldThis<P, S>): void;
 	componentDidMount?(this: FieldThis<P, S>): void;
-	componentWillReceiveProps?(this: FieldThis<P, S>, nextProps: P): void;
+	componentDidUpdate?(this: FieldThis<P, S>, prevProps: P, prevState: S): void;
 	componentWillUnmount?(this: FieldThis<P, S>): void;
 	renderFormInput?(this: FieldThis<P, S>): React.ReactElement | undefined;
 	renderUI?(this: FieldThis<P, S>): React.ReactElement;
@@ -122,7 +117,6 @@ export declare const Base: Record<string, (...args: unknown[]) => unknown>;
  */
 export declare const Mixins: {
 	Collapse: CollapseMethods<unknown, CollapseState> & {
-		componentWillMount(this: FieldThis<unknown, CollapseState>): void;
 		componentDidUpdate(this: FieldThis<unknown, CollapseState>, prevProps: unknown, prevState: CollapseState): void;
 	};
 };

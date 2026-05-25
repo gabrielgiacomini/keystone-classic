@@ -8,16 +8,14 @@
  */
 import DateInput from '../../components/DateInput.mjs';
 import Field from '../Field.mjs';
-import moment from 'moment';
 import React from 'react';
-import {
-	Button,
-	FormField,
-	FormInput,
-	FormNote,
-	InlineGroup as Group,
-	InlineGroupSection as Section,
-} from '../../../admin/client-legacy/App/elemental';
+import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
+import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import FormNote from '../../../admin/client-legacy/App/elemental/FormNote/index.mjs';
+import Group from '../../../admin/client-legacy/App/elemental/InlineGroup/index.mjs';
+import Section from '../../../admin/client-legacy/App/elemental/InlineGroupSection/index.mjs';
+import { formatDateByFormat, parseDatetimeInput, timezoneOffsetForDate, toValidDate } from '../../utils/date.mjs';
 
 /**
  * The `DatetimeField` component.
@@ -46,9 +44,9 @@ export default Field.create({
 	 */
 	getInitialState () {
 		return {
-			dateValue: this.props.value && this.moment(this.props.value).format(this.dateInputFormat),
-			timeValue: this.props.value && this.moment(this.props.value).format(this.timeInputFormat),
-			tzOffsetValue: this.props.value ? this.moment(this.props.value).format(this.tzOffsetInputFormat) : this.moment().format(this.tzOffsetInputFormat),
+			dateValue: this.props.value && this.format(this.props.value, this.dateInputFormat),
+			timeValue: this.props.value && this.format(this.props.value, this.timeInputFormat),
+			tzOffsetValue: this.props.value ? this.format(this.props.value, this.tzOffsetInputFormat) : this.format(new Date(), this.tzOffsetInputFormat),
 		};
 	},
 
@@ -63,22 +61,13 @@ export default Field.create({
 	},
 
 	/**
-	 * Returns a moment object with the correct timezone.
-	 * @returns {moment} The moment object.
-	 */
-	moment () {
-		if (this.props.isUTC) return moment.utc.apply(moment, arguments);
-		else return moment.apply(undefined, arguments);
-	},
-
-	/**
 	 * Checks whether a value is a valid date and time.
 	 * @param {string|Date|number|null} value The value to check.
 	 * @returns {boolean} Whether the value is valid.
 	 */
 	// TODO: Move isValid() so we can share with server-side code
 	isValid (value) {
-		return this.moment(value, this.parseFormats).isValid();
+		return Boolean(toValidDate(value));
 	},
 
 	/**
@@ -90,7 +79,7 @@ export default Field.create({
 	// TODO: Move format() so we can share with server-side code
 	format (value, format) {
 		format = format || this.dateInputFormat + ' ' + this.timeInputFormat;
-		return value ? this.moment(value).format(format) : '';
+		return value ? formatDateByFormat(value, format, { utc: this.props.isUTC }) : '';
 	},
 
 	/**
@@ -100,22 +89,19 @@ export default Field.create({
 	 * @param {string} tzOffsetValue The new timezone offset value.
 	 */
 	handleChange (dateValue, timeValue, tzOffsetValue) {
-		let value = dateValue + ' ' + timeValue;
-		let datetimeFormat = this.dateInputFormat + ' ' + this.timeInputFormat;
+		let nextOffset = tzOffsetValue;
 
 		// if the change included a timezone offset, include that in the calculation (so NOW works correctly during DST changes)
-		if (typeof tzOffsetValue !== 'undefined') {
-			value += ' ' + tzOffsetValue;
-			datetimeFormat += ' ' + this.tzOffsetInputFormat;
+		if (typeof nextOffset === 'undefined') {
+			const parsedLocal = parseDatetimeInput(dateValue, timeValue, undefined, { utc: this.props.isUTC });
+			nextOffset = this.props.isUTC ? '+00:00' : timezoneOffsetForDate(parsedLocal || new Date());
+			this.setState({ tzOffsetValue: nextOffset });
 		}
-		// if not, calculate the timezone offset based on the date (respect different DST values)
-		else {
-			this.setState({ tzOffsetValue: this.moment(value, datetimeFormat).format(this.tzOffsetInputFormat) });
-		}
+		const parsed = parseDatetimeInput(dateValue, timeValue, nextOffset, { utc: this.props.isUTC });
 
 		this.props.onChange({
 			path: this.props.path,
-			value: this.isValid(value) ? this.moment(value, datetimeFormat).toISOString() : null,
+			value: parsed ? parsed.toISOString() : null,
 		});
 	},
 
@@ -142,9 +128,10 @@ export default Field.create({
 	 * Sets the value of the field to the current date and time.
 	 */
 	setNow () {
-		const dateValue = this.moment().format(this.dateInputFormat);
-		const timeValue = this.moment().format(this.timeInputFormat);
-		const tzOffsetValue = this.moment().format(this.tzOffsetInputFormat);
+		const now = new Date();
+		const dateValue = this.format(now, this.dateInputFormat);
+		const timeValue = this.format(now, this.timeInputFormat);
+		const tzOffsetValue = this.format(now, this.tzOffsetInputFormat);
 		this.setState({
 			dateValue: dateValue,
 			timeValue: timeValue,
@@ -159,7 +146,7 @@ export default Field.create({
 	 */
 	renderNote () {
 		if (!this.props.note) return null;
-		return <FormNote note={this.props.note} />;
+		return React.createElement(FormNote, { note: this.props.note });
 	},
 
 	/**
@@ -169,50 +156,62 @@ export default Field.create({
 	renderUI () {
 		let input;
 		if (this.shouldRenderField()) {
-			input = (
-				<div>
-					<Group>
-						<Section grow>
-							<DateInput
-								format={this.dateInputFormat}
-								name={this.getInputName(this.props.paths.date)}
-								onChange={this.dateChanged}
-								ref="dateInput"
-								value={this.state.dateValue}
-							/>
-						</Section>
-						<Section grow>
-							<FormInput
-								autoComplete="off"
-								name={this.getInputName(this.props.paths.time)}
-								onChange={this.timeChanged}
-								placeholder="HH:MM:SS am/pm"
-								value={this.state.timeValue}
-							/>
-						</Section>
-						<Section>
-							<Button onClick={this.setNow}>Now</Button>
-						</Section>
-					</Group>
-					<input
-						name={this.getInputName(this.props.paths.tzOffset)}
-						type="hidden"
-						value={this.state.tzOffsetValue}
-					/>
-				</div>
+			input = React.createElement(
+				'div',
+				null,
+				React.createElement(
+					Group,
+					null,
+					React.createElement(
+						Section,
+						{ grow: true },
+						React.createElement(DateInput, {
+							format: this.dateInputFormat,
+							name: this.getInputName(this.props.paths.date),
+							onChange: this.dateChanged,
+							ref: this.getFocusTargetRef('dateInput'),
+							value: this.state.dateValue,
+						})
+					),
+					React.createElement(
+						Section,
+						{ grow: true },
+						React.createElement(FormInput, {
+							autoComplete: 'off',
+							name: this.getInputName(this.props.paths.time),
+							onChange: this.timeChanged,
+							placeholder: 'HH:MM:SS am/pm',
+							value: this.state.timeValue,
+						})
+					),
+					React.createElement(
+						Section,
+						null,
+						React.createElement(Button, { onClick: this.setNow }, 'Now')
+					)
+				),
+				React.createElement('input', {
+					name: this.getInputName(this.props.paths.tzOffset),
+					type: 'hidden',
+					value: this.state.tzOffsetValue,
+				})
 			);
 		} else {
-			input = (
-				<FormInput noedit>
-					{this.format(this.props.value, this.props.formatString)}
-				</FormInput>
+			input = React.createElement(
+				FormInput,
+				{ noedit: true },
+				this.format(this.props.value, this.props.formatString)
 			);
 		}
-		return (
-			<FormField label={this.props.label} className="field-type-datetime" htmlFor={this.getInputName(this.props.path)}>
-				{input}
-				{this.renderNote()}
-			</FormField>
+		return React.createElement(
+			FormField,
+			{
+				label: this.props.label,
+				className: 'field-type-datetime',
+				htmlFor: this.getInputName(this.props.path),
+			},
+			input,
+			this.renderNote()
 		);
 	},
 });

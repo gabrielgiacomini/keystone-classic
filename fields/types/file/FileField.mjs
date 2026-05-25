@@ -8,13 +8,10 @@
  */
 import Field from '../Field.mjs';
 import React from 'react';
-import PropTypes from 'prop-types';
-import {
-	Button,
-	FormField,
-	FormInput,
-	FormNote,
-} from '../../../admin/client-legacy/App/elemental';
+import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
+import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import FormNote from '../../../admin/client-legacy/App/elemental/FormNote/index.mjs';
 import FileChangeMessage from '../../components/FileChangeMessage.mjs';
 import HiddenFileInput from '../../components/HiddenFileInput.mjs';
 import ImageThumbnail from '../../components/ImageThumbnail.mjs';
@@ -38,23 +35,6 @@ const buildInitialState = (props) => ({
  * @augments Field
  */
 export default Field.create({
-	propTypes: {
-		autoCleanup: PropTypes.bool,
-		collapse: PropTypes.bool,
-		label: PropTypes.string,
-		note: PropTypes.string,
-		path: PropTypes.string.isRequired,
-		thumb: PropTypes.bool,
-		value: PropTypes.shape({
-			filename: PropTypes.string,
-			// TODO: these are present but not used in the UI,
-			//       should we start using them?
-			// filetype: PropTypes.string,
-			// originalname: PropTypes.string,
-			// path: PropTypes.string,
-			// size: PropTypes.number,
-		}),
-	},
 	statics: {
 		type: 'File',
 		getDefaultValue: () => ({}),
@@ -77,10 +57,10 @@ export default Field.create({
 	 * Handles the component receiving new props.
 	 * @param {object} nextProps The new props.
 	 */
-	UNSAFE_componentWillUpdate (nextProps) {
+	componentDidUpdate (prevProps) {
 		// Show the new filename when it's finished uploading
-		if (this.props.value.filename !== nextProps.value.filename) {
-			this.setState(buildInitialState(nextProps));
+		if (prevProps.value.filename !== this.props.value.filename) {
+			this.setState(buildInitialState(this.props));
 		}
 	},
 
@@ -135,7 +115,7 @@ export default Field.create({
 	 * Triggers the file browser.
 	 */
 	triggerFileBrowser () {
-		this.refs.fileInput.clickDomNode();
+		this.fileInput.clickDomNode();
 	},
 	/**
 	 * Handles a change in the file input.
@@ -194,15 +174,17 @@ export default Field.create({
 	 */
 	renderFileNameAndChangeMessage () {
 		const href = this.props.value ? this.props.value.url : undefined;
-		return (
-			<div>
-				{(this.hasFile() && !this.state.removeExisting) ? (
-					<FileChangeMessage component={href ? 'a' : 'span'} href={href} target="_blank">
-						{this.getFilename()}
-					</FileChangeMessage>
-				) : null}
-				{this.renderChangeMessage()}
-			</div>
+		return React.createElement(
+			'div',
+			null,
+			(this.hasFile() && !this.state.removeExisting)
+				? React.createElement(
+						FileChangeMessage,
+						{ component: href ? 'a' : 'span', href, target: '_blank' },
+						this.getFilename()
+				  )
+				: null,
+			this.renderChangeMessage()
 		);
 	},
 	/**
@@ -211,16 +193,14 @@ export default Field.create({
 	 */
 	renderChangeMessage () {
 		if (this.state.userSelectedFile) {
-			return (
-				<FileChangeMessage color="success">
-					Save to Upload
-				</FileChangeMessage>
-			);
+			return React.createElement(FileChangeMessage, { color: 'success' }, 'Save to Upload');
 		} else if (this.state.removeExisting) {
-			return (
-				<FileChangeMessage color="danger">
-					File {this.props.autoCleanup ? 'deleted' : 'removed'} - save to confirm
-				</FileChangeMessage>
+			return React.createElement(
+				FileChangeMessage,
+				{ color: 'danger' },
+				'File ',
+				this.props.autoCleanup ? 'deleted' : 'removed',
+				' - save to confirm'
 			);
 		} else {
 			return null;
@@ -232,11 +212,7 @@ export default Field.create({
 	 */
 	renderClearButton () {
 		if (this.state.removeExisting) {
-			return (
-				<Button variant="link" onClick={this.undoRemove}>
-					Undo Remove
-				</Button>
-			);
+			return React.createElement(Button, { variant: 'link', onClick: this.undoRemove }, 'Undo Remove');
 		} else {
 			let clearText;
 			if (this.state.userSelectedFile) {
@@ -244,11 +220,11 @@ export default Field.create({
 			} else {
 				clearText = (this.props.autoCleanup ? 'Delete File' : 'Remove File');
 			}
-			return (
-				<Button variant="link" color="cancel" onClick={this.handleRemove}>
-					{clearText}
-				</Button>
-			);
+			return React.createElement(Button, {
+				variant: 'link',
+				color: 'cancel',
+				onClick: this.handleRemove,
+			}, clearText);
 		}
 	},
 	/**
@@ -262,13 +238,11 @@ export default Field.create({
 			const value = this.state.userSelectedFile
 				? `upload:${this.state.uploadFieldPath}`
 				: (this.state.action === 'delete' ? 'remove' : '');
-			return (
-				<input
-					name={this.getInputName(this.props.path)}
-					type="hidden"
-					value={value}
-				/>
-			);
+			return React.createElement('input', {
+				name: this.getInputName(this.props.path),
+				type: 'hidden',
+				value,
+			});
 		} else {
 			return null;
 		}
@@ -279,15 +253,15 @@ export default Field.create({
 	 */
 	renderImagePreview () {
 		const imageSource = this.getFileUrl();
-		return (
-			<ImageThumbnail
-				component="a"
-				href={imageSource}
-				target="__blank"
-				style={{ float: 'left', marginRight: '1em', maxWidth: '50%' }}
-			>
-				<img src={imageSource} style={{ 'max-height': 100, 'max-width': '100%' }} />
-			</ImageThumbnail>
+		return React.createElement(
+			ImageThumbnail,
+			{
+				component: 'a',
+				href: imageSource,
+				target: '__blank',
+				style: { float: 'left', marginRight: '1em', maxWidth: '50%' },
+			},
+			React.createElement('img', { src: imageSource, style: { 'max-height': 100, 'max-width': '100%' } })
 		);
 	},
 	/**
@@ -299,45 +273,47 @@ export default Field.create({
 		const isImage = this.isImage();
 		const hasFile = this.hasFile();
 
-		const previews = (
-			<div style={(isImage && thumb) ? { marginBottom: '1em' } : null}>
-				{isImage && thumb && this.renderImagePreview()}
-				{hasFile && this.renderFileNameAndChangeMessage()}
-			</div>
+		const previews = React.createElement(
+			'div',
+			{ style: (isImage && thumb) ? { marginBottom: '1em' } : null },
+			isImage && thumb && this.renderImagePreview(),
+			hasFile && this.renderFileNameAndChangeMessage()
 		);
-		const buttons = (
-			<div style={hasFile ? { marginTop: '1em' } : null}>
-				<Button onClick={this.triggerFileBrowser}>
-					{hasFile ? 'Change' : 'Upload'} File
-				</Button>
-				{hasFile && this.renderClearButton()}
-			</div>
+		const buttons = React.createElement(
+			'div',
+			{ style: hasFile ? { marginTop: '1em' } : null },
+			React.createElement(Button, { onClick: this.triggerFileBrowser }, hasFile ? 'Change File' : 'Upload File'),
+			hasFile && this.renderClearButton()
 		);
-		return (
-			<div data-field-name={path} data-field-type="file">
-				<FormField label={label} htmlFor={path}>
-					{this.shouldRenderField() ? (
-						<div>
-							{previews}
-							{buttons}
-							<HiddenFileInput
-								key={this.state.uploadFieldPath}
-								name={this.state.uploadFieldPath}
-								onChange={this.handleFileChange}
-								ref="fileInput"
-							/>
-							{this.renderActionInput()}
-						</div>
-					) : (
-						<div>
-							{hasFile
+		return React.createElement(
+			'div',
+			{ 'data-field-name': path, 'data-field-type': 'file' },
+			React.createElement(
+				FormField,
+				{ label, htmlFor: path },
+				this.shouldRenderField()
+					? React.createElement(
+							'div',
+							null,
+							previews,
+							buttons,
+							React.createElement(HiddenFileInput, {
+								key: this.state.uploadFieldPath,
+								name: this.state.uploadFieldPath,
+								onChange: this.handleFileChange,
+								ref: (fileInput) => { this.fileInput = fileInput; },
+							}),
+							this.renderActionInput()
+					  )
+					: React.createElement(
+							'div',
+							null,
+							hasFile
 								? this.renderFileNameAndChangeMessage()
-								: <FormInput noedit>no file</FormInput>}
-						</div>
-					)}
-					{!!note && <FormNote html={note} />}
-				</FormField>
-			</div>
+								: React.createElement(FormInput, { noedit: true }, 'no file')
+					  ),
+				!!note && React.createElement(FormNote, { html: note })
+			)
 		);
 	},
 

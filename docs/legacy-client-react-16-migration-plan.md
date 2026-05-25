@@ -143,7 +143,7 @@ Installed versions are from the current lockfile on `migration/react-16`.
 | `prop-types` | `15.8.1` | Already transitive | Add direct dependency and import it wherever `React.PropTypes` or `{ PropTypes } from 'react'` exists. |
 | `react-addons-css-transition-group` | `15.6.2` | Peers `react@^15.4.2` | Replace with `react-transition-group@1.x` drop-in import or vendor a compatibility wrapper. |
 | `elemental` | `0.6.1` | Peers React 0.14/15 only | Remove, replace with local Elemental exports, or vendor/fork with React 16 peer range. Do not leave an invalid peer. |
-| `react-day-picker` | `2.5.0` | Peers React 0.13/0.14/15 only | Upgrade to a React 16-compatible v7 release or vendor/fork. Verify `DayPicker` refs, `showMonth`, modifiers, and styles. |
+| `react-day-picker` | removed | Date fields and filters now use a local DayPicker-compatible component. |
 | `react-domify` | `0.2.6` | Peers React 0.14/15 only | Replace in field explorer or vendor/fork. It is currently used by `fields/explorer/components/FieldSpec.mjs`. |
 | `enzyme` | `2.9.1` | Peers React 0.13/0.14/15 | Upgrade to Enzyme 3 and configure `enzyme-adapter-react-16`. |
 | `react-router` | `3.2.6` | Supports React 0.14/15/16 | Keep for React 16 milestone. |
@@ -152,9 +152,9 @@ Installed versions are from the current lockfile on `migration/react-16`.
 | `react-select` | `1.3.0` | Supports React 0.14/15/16 | Keep for React 16 milestone, test relationship/select fields. |
 | `react-dnd` | `2.6.0` | Peer `react: *` | Keep for React 16 milestone, test drag sorting and related item panels. |
 | `react-dnd-html5-backend` | `2.6.0` | No blocking React peer in current audit | Keep for React 16 milestone. |
-| `react-images` | `0.5.19` | Supports React 15/16 | Keep, test Cloudinary image lightbox. |
+| `react-images` | removed | Cloudinary fields now use a local lightbox component. |
 | `react-color` | `2.19.3` | Peer `react: *` | Keep, test color field. |
-| `react-markdown` | `2.5.1` | Peer `react >=0.13.3` | Keep for field explorer/readme usage. |
+| `react-markdown` | removed | Field explorer/readme usage now uses a local `marked`-backed component. |
 | `react-engine` | `4.5.1` | Supports React 15/16 | Keep, verify server-side view tests still pass. |
 
 ### Direct Dependency Edits
@@ -699,7 +699,7 @@ Tasks:
    Low-risk option:
 
    ```js
-   import Transition from 'react-transition-group/CSSTransitionGroup';
+   import Transition from 'admin/client-legacy/App/shared/CSSTransitionGroup.mjs';
    ```
 
    with `react-transition-group@1.x`.
@@ -1070,7 +1070,7 @@ Implementation deviations from the starting plan:
   the root React install with React 18+ peer dependencies.
 - `react-addons-css-transition-group` is no longer a direct dependency or a
   package-bundle exposure. Repo code imports
-  `react-transition-group/CSSTransitionGroup` directly.
+  the local `CSSTransitionGroup` compatibility component directly.
 - `elemental` is no longer a direct dependency or a package-bundle exposure. Repo
   code imports the local implementation directly, and the Elemental LESS sources
   used by the legacy server and field explorer are vendored under

@@ -5,21 +5,19 @@
  *
  * It uses the CodeMirror library to provide a rich code editing experience.
  */
-import _ from 'lodash';
-import CodeMirror from 'codemirror';
 import Field from '../Field.mjs';
 import React from 'react';
-import { findDOMNode } from 'react-dom';
-import { FormInput } from '../../../admin/client-legacy/App/elemental';
-import classnames from 'classnames';
-
-/**
- * TODO:
- * - Remove dependency on lodash
- */
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import classnames from '../../utils/classnames.mjs';
 
 // See CodeMirror docs for API:
 // http://codemirror.net/doc/manual.html
+const getCodeMirror = () => {
+	if (typeof window === 'undefined' || !window.CodeMirror) {
+		throw new Error('CodeMirror global is required for the legacy Code field');
+	}
+	return window.CodeMirror;
+};
 
 /**
  * The `CodeField` component.
@@ -44,16 +42,17 @@ export default Field.create({
 	 * Initializes the CodeMirror instance.
 	 */
 	componentDidMount () {
-		if (!this.refs.codemirror) {
+		if (!this.codemirrorInput || !this.codemirrorInput.target) {
 			return;
 		}
 
-		const options = _.defaults({}, this.props.editor, {
+		const options = {
 			lineNumbers: true,
 			readOnly: this.shouldRenderField() ? false : true,
-		});
+			...this.props.editor,
+		};
 
-		this.codeMirror = CodeMirror.fromTextArea(findDOMNode(this.refs.codemirror), options);
+		this.codeMirror = getCodeMirror().fromTextArea(this.codemirrorInput.target, options);
 		this.codeMirror.setSize(null, this.props.height);
 		this.codeMirror.on('change', this.codemirrorValueChanged);
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
@@ -70,13 +69,21 @@ export default Field.create({
 		}
 	},
 	/**
-	 * Handles the component receiving new props.
-	 * @param {object} nextProps The new props.
+	 * Handles externally supplied value changes.
+	 * @param {object} prevProps The previous props.
 	 */
-	UNSAFE_componentWillReceiveProps (nextProps) {
-		if (this.codeMirror && this._currentCodemirrorValue !== nextProps.value) {
-			this.codeMirror.setValue(nextProps.value);
+	componentDidUpdate (prevProps) {
+		if (this.props.value === prevProps.value) return;
+		if (this.codeMirror && this._currentCodemirrorValue !== this.props.value) {
+			this.codeMirror.setValue(this.props.value);
 		}
+	},
+	/**
+	 * Stores the textarea component used to initialize CodeMirror.
+	 * @param {object} target The rendered FormInput instance.
+	 */
+	setCodemirrorInput (target) {
+		this.codemirrorInput = target;
 	},
 	/**
 	 * Focuses the CodeMirror instance.
@@ -117,17 +124,17 @@ export default Field.create({
 			'is-focused': this.state.isFocused && this.shouldRenderField(),
 		});
 
-		return (
-			<div className={className}>
-				<FormInput
-					autoComplete="off"
-					multiline
-					name={this.getInputName(this.props.path)}
-					onChange={this.valueChanged}
-					ref="codemirror"
-					value={this.props.value}
-				/>
-			</div>
+		return React.createElement(
+			'div',
+			{ className, 'data-field-code': this.props.path },
+			React.createElement(FormInput, {
+				autoComplete: 'off',
+				multiline: true,
+				name: this.getInputName(this.props.path),
+				onChange: this.valueChanged,
+				ref: this.setCodemirrorInput,
+				value: this.props.value,
+			})
 		);
 	},
 	/**

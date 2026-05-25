@@ -6,10 +6,9 @@
  * It provides a checkbox to toggle the value of the field.
  */
 import React from 'react';
-import PropTypes from 'prop-types';
 import Field from '../Field.mjs';
 import Checkbox from '../../components/Checkbox.mjs';
-import { FormField } from '../../../admin/client-legacy/App/elemental';
+import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
 
 const NOOP = () => {};
 
@@ -21,13 +20,6 @@ export default Field.create({
 	displayName: 'BooleanField',
 	statics: {
 		type: 'Boolean',
-	},
-	propTypes: {
-		indent: PropTypes.bool,
-		label: PropTypes.string,
-		onChange: PropTypes.func.isRequired,
-		path: PropTypes.string.isRequired,
-		value: PropTypes.bool,
 	},
 
 	/**
@@ -48,13 +40,11 @@ export default Field.create({
 	renderFormInput () {
 		if (!this.shouldRenderField()) return;
 
-		return (
-			<input
-				name={this.getInputName(this.props.path)}
-				type="hidden"
-				value={!!this.props.value}
-			/>
-		);
+		return React.createElement('input', {
+			name: this.getInputName(this.props.path),
+			type: 'hidden',
+			value: !!this.props.value,
+		});
 	},
 	/**
 	 * Renders the UI for the field.
@@ -63,23 +53,25 @@ export default Field.create({
 	renderUI () {
 		const { indent, value, label, path } = this.props;
 
-		return (
-			<div data-field-name={path} data-field-type="boolean">
-				<FormField offsetAbsentLabel={indent}>
-					<label style={{ height: '2.3em' }}>
-						{this.renderFormInput()}
-						<Checkbox
-							checked={value}
-							onChange={(this.shouldRenderField() && this.valueChanged) || NOOP}
-							readonly={!this.shouldRenderField()}
-						/>
-						<span style={{ marginLeft: '.75em' }}>
-							{label}
-						</span>
-					</label>
-					{this.renderNote()}
-				</FormField>
-			</div>
+		return React.createElement(
+			'div',
+			{ 'data-field-name': path, 'data-field-type': 'boolean' },
+			React.createElement(
+				FormField,
+				{ offsetAbsentLabel: indent },
+				React.createElement(
+					'label',
+					{ style: { height: '2.3em' } },
+					this.renderFormInput(),
+					React.createElement(Checkbox, {
+						checked: value,
+						onChange: (this.shouldRenderField() && this.valueChanged) || NOOP,
+						readonly: !this.shouldRenderField(),
+					}),
+					React.createElement('span', { style: { marginLeft: '.75em' } }, label)
+				),
+				this.renderNote()
+			)
 		);
 	},
 });

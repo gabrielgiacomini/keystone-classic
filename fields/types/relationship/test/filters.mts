@@ -52,10 +52,7 @@ export const testFilters = function (_List: import('../../test-helpers.mjs').Tes
 			});
 		});
 
-		// Skipped: multi-match relationship filtering needs a Mongoose 7+
-		// $in-with-array semantics fix; tracked separately. See P3 step 23.
-
-		it.skip('should find multiple matches', function (done) {
+		it('should find multiple matches', function (done) {
 			filter({
 				single: {
 					value: [items.jed, items.max],

@@ -8,7 +8,7 @@
  */
 import Field from '../Field.mjs';
 import React from 'react';
-import { FormInput } from '../../../admin/client-legacy/App/elemental';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
 import evalDependsOn from '../../utils/evalDependsOn.mjs';
 
 /**
@@ -110,6 +110,10 @@ export default Field.create({
 	 * @param {object} prevState The previous state.
 	 */
 	componentDidUpdate (prevProps, prevState) {
+		if (this.props.value !== prevProps.value && this.editor && this._currentValue !== this.props.value) {
+			this.editor.setContent(this.props.value);
+		}
+
 		if (prevState.isCollapsed && !this.state.isCollapsed) {
 			this.initWysiwyg();
 		}
@@ -130,16 +134,6 @@ export default Field.create({
 	 */
 	componentDidMount () {
 		this.initWysiwyg();
-	},
-
-	/**
-	 * Handles the component receiving new props.
-	 * @param {object} nextProps The new props.
-	 */
-	UNSAFE_componentWillReceiveProps (nextProps) {
-		if (this.editor && this._currentValue !== nextProps.value) {
-			this.editor.setContent(nextProps.value);
-		}
 	},
 
 	/**
@@ -259,18 +253,18 @@ export default Field.create({
 		const style = {
 			height: this.props.height,
 		};
-		return (
-			<div className={className}>
-				<FormInput
-					id={this.state.id}
-					multiline
-					name={this.getInputName(this.props.path)}
-					onChange={this.valueChanged}
-					className={this.props.wysiwyg ? 'wysiwyg' : 'code'}
-					style={style}
-					value={this.props.value}
-				/>
-			</div>
+		return React.createElement(
+			'div',
+			{ className, 'data-field-html': this.props.path },
+			React.createElement(FormInput, {
+				id: this.state.id,
+				multiline: true,
+				name: this.getInputName(this.props.path),
+				onChange: this.valueChanged,
+				className: this.props.wysiwyg ? 'wysiwyg' : 'code',
+				style,
+				value: this.props.value,
+			})
 		);
 	},
 
@@ -279,11 +273,10 @@ export default Field.create({
 	 * @returns {React.Element} The rendered value.
 	 */
 	renderValue () {
-		return (
-			<FormInput multiline noedit>
-				{this.props.value}
-			</FormInput>
-		);
+		return React.createElement(FormInput, {
+			multiline: true,
+			noedit: true,
+		}, this.props.value);
 	},
 
 });

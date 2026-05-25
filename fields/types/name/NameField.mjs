@@ -7,16 +7,8 @@
  */
 import Field from '../Field.mjs';
 import React from 'react';
-import PropTypes from 'prop-types';
-import {
-	FormInput,
-	Grid,
-} from '../../../admin/client-legacy/App/elemental';
-
-const NAME_SHAPE = {
-	first: PropTypes.string,
-	last: PropTypes.string,
-};
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import Grid from '../../../admin/client-legacy/App/elemental/Grid/index.mjs';
 
 /**
  * The `NameField` component.
@@ -30,12 +22,6 @@ export default Field.create({
 			first: '',
 			last: '',
 		}),
-	},
-	propTypes: {
-		onChange: PropTypes.func.isRequired,
-		path: PropTypes.string.isRequired,
-		paths: PropTypes.shape(NAME_SHAPE).isRequired,
-		value: PropTypes.shape(NAME_SHAPE).isRequired,
 	},
 
 	/**
@@ -77,19 +63,19 @@ export default Field.create({
 		const inputStyle = { width: '100%' };
 		const { value = {} } = this.props;
 
-		return (
-			<Grid.Row small="one-half" gutter={10}>
-				<Grid.Col>
-					<FormInput noedit style={inputStyle}>
-						{value.first}
-					</FormInput>
-				</Grid.Col>
-				<Grid.Col>
-					<FormInput noedit style={inputStyle}>
-						{value.last}
-					</FormInput>
-				</Grid.Col>
-			</Grid.Row>
+		return React.createElement(
+			Grid.Row,
+			{ small: 'one-half', gutter: 10 },
+			React.createElement(
+				Grid.Col,
+				null,
+				React.createElement(FormInput, { noedit: true, style: inputStyle }, value.first)
+			),
+			React.createElement(
+				Grid.Col,
+				null,
+				React.createElement(FormInput, { noedit: true, style: inputStyle }, value.last)
+			)
 		);
 	},
 	/**
@@ -98,28 +84,32 @@ export default Field.create({
 	 */
 	renderField () {
 		const { value = {}, paths, autoFocus } = this.props;
-		return (
-			<Grid.Row small="one-half" gutter={10}>
-				<Grid.Col>
-					<FormInput
-						autoFocus={autoFocus}
-						autoComplete="off"
-						name={this.getInputName(paths.first)}
-						onChange={this.changeFirst}
-						placeholder="First name"
-						value={value.first}
-					/>
-				</Grid.Col>
-				<Grid.Col>
-					<FormInput
-						autoComplete="off"
-						name={this.getInputName(paths.last)}
-						onChange={this.changeLast}
-						placeholder="Last name"
-						value={value.last}
-					/>
-				</Grid.Col>
-			</Grid.Row>
+		return React.createElement(
+			Grid.Row,
+			{ small: 'one-half', gutter: 10 },
+			React.createElement(
+				Grid.Col,
+				null,
+				React.createElement(FormInput, {
+					autoFocus,
+					autoComplete: 'off',
+					name: this.getInputName(paths.first),
+					onChange: this.changeFirst,
+					placeholder: 'First name',
+					value: value.first,
+				})
+			),
+			React.createElement(
+				Grid.Col,
+				null,
+				React.createElement(FormInput, {
+					autoComplete: 'off',
+					name: this.getInputName(paths.last),
+					onChange: this.changeLast,
+					placeholder: 'Last name',
+					value: value.last,
+				})
+			)
 		);
 	},
 });

@@ -6,18 +6,12 @@
  * It provides a search input to find related items, and it supports inverting
  * the filter.
  */
-import _ from 'lodash';
 import React from 'react';
-import createReactClass from 'create-react-class';
-import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
-import xhr from 'xhr';
+import { legacyApiRequest } from '../../../admin/shared/api/legacyRequest.mjs';
 
-import {
-	FormField,
-	FormInput,
-	SegmentedControl,
-} from '../../../admin/client-legacy/App/elemental';
+import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import SegmentedControl from '../../../admin/client-legacy/App/elemental/SegmentedControl/index.mjs';
 
 import PopoutList from '../../../admin/client-legacy/App/shared/Popout/PopoutList.mjs';
 
@@ -45,65 +39,61 @@ function getDefaultValue () {
  * The `RelationshipFilter` component.
  * @augments React.Component
  */
-const RelationshipFilter = createReactClass({
-	propTypes: {
-		field: PropTypes.object,
-		filter: PropTypes.shape({
-			inverted: PropTypes.bool,
-			value: PropTypes.array,
-		}),
-		onHeightChange: PropTypes.func,
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
-	/**
-	 * Gets the initial state of the component.
-	 * @returns {object} The initial state.
-	 */
-	getInitialState () {
-		return {
+class RelationshipFilter extends React.Component {
+
+	static defaultProps = {
+		filter: getDefaultValue(),
+	};
+
+	static getDefaultValue = getDefaultValue;
+
+	constructor(props) {
+		super(props);
+		this.state = {
 			searchIsLoading: false,
 			searchResults: [],
 			searchString: '',
 			selectedItems: [],
 			valueIsLoading: true,
 		};
-	},
-	componentDidMount () {
+	}
+
+	componentDidMount() {
 		this._itemsCache = {};
 		this.loadSearchResults(true);
-	},
+	}
+
 	/**
-	 * Handles the component receiving new props.
-	 * @param {object} nextProps The new props.
+	 * Handles externally supplied filter value changes.
+	 * @param {object} prevProps The previous props.
 	 */
-	UNSAFE_componentWillReceiveProps (nextProps) {
-		if (nextProps.filter.value !== this.props.filter.value) {
-			this.populateValue(nextProps.filter.value);
+	componentDidUpdate(prevProps) {
+		if (this.props.filter.value !== prevProps.filter.value) {
+			this.populateValue(this.props.filter.value);
 		}
-	},
+	}
+
 	/**
 	 * Returns whether the component is loading.
 	 * @returns {boolean} Whether the component is loading.
 	 */
-	isLoading () {
+	isLoading() {
 		return this.state.searchIsLoading || this.state.valueIsLoading;
-	},
+	}
+
+	focusTarget = () => {
+		if (this.focusTargetRef) this.focusTargetRef.focus();
+	};
+
 	/**
 	 * Populates the value of the filter.
 	 * @param {Array} value The value to populate.
 	 */
-	populateValue (value) {
+	populateValue(value) {
 		Promise.all(value.map((id) => {
 				if (this._itemsCache[id]) return Promise.resolve(this._itemsCache[id]);
 				return new Promise((resolve, reject) => {
-					xhr({
+					legacyApiRequest({
 						url: getAdminApiPath() + '/' + this.props.field.refList.path + '/' + id + '?basic',
 						responseType: 'json',
 					}, (err, resp, data) => {
@@ -117,46 +107,49 @@ const RelationshipFilter = createReactClass({
 				valueIsLoading: false,
 				selectedItems: items || [],
 			}, () => {
-				findDOMNode(this.refs.focusTarget).focus();
+				this.focusTarget();
 			});
 		}, (err) => {
 			// TODO: Handle errors better
 			console.error('Error loading items:', err);
 		});
-	},
+	}
+
 	/**
 	 * Caches an item.
 	 * @param {object} item The item to cache.
 	 */
-	cacheItem (item) {
+	cacheItem = (item) => {
 		this._itemsCache[item.id] = item;
-	},
+	};
+
 	/**
 	 * Builds the filters for the query.
 	 * @returns {string} The filter string.
 	 */
-	buildFilters () {
+	buildFilters() {
 		const filters = {};
-		_.forEach(this.props.field.filters, function (value, key) {
+		Object.entries(this.props.field.filters || {}).forEach(function ([key, value]) {
 			if (value[0] === ':') return;
 			filters[key] = value;
-		}, this);
+		});
 
 		const parts = [];
-		_.forEach(filters, function (val, key) {
+		Object.entries(filters).forEach(function ([key, val]) {
 			parts.push('filters[' + key + '][value]=' + encodeURIComponent(val));
 		});
 
 		return parts.join('&');
-	},
+	}
+
 	/**
 	 * Loads the search results.
 	 * @param {boolean} thenPopulateValue Whether to populate the value after loading the results.
 	 */
-	loadSearchResults (thenPopulateValue) {
+	loadSearchResults = (thenPopulateValue) => {
 			const searchString = this.state.searchString;
 			const filters = this.buildFilters();
-			xhr({
+			legacyApiRequest({
 				url: getAdminApiPath() + '/' + this.props.field.refList.path + '?basic&search=' + searchString + '&' + filters,
 				responseType: 'json',
 			}, (err, resp, data) => {
@@ -178,109 +171,134 @@ const RelationshipFilter = createReactClass({
 				searchResults: data.results,
 			}, this.updateHeight);
 		});
-	},
+	};
+
 	/**
 	 * Updates the height of the component.
 	 */
-	updateHeight () {
-		if (this.props.onHeightChange) {
-			this.props.onHeightChange(this.refs.container.offsetHeight);
+	updateHeight = () => {
+		if (this.props.onHeightChange && this.containerRef) {
+			this.props.onHeightChange(this.containerRef.offsetHeight);
 		}
-	},
+	};
+
 	/**
 	 * Toggles the inverted state of the filter.
 	 * @param {boolean} inverted The new inverted state.
 	 */
-	toggleInverted (inverted) {
+	toggleInverted = (inverted) => {
 		this.updateFilter({ inverted });
-	},
+	};
+
 	/**
 	 * Handles a change in the search input.
 	 * @param {object} e The event object.
 	 */
-	updateSearch (e) {
+	updateSearch = (e) => {
 		this.setState({ searchString: e.target.value }, this.loadSearchResults);
-	},
+	};
+
 	/**
 	 * Selects an item.
 	 * @param {object} item The item to select.
 	 */
-	selectItem (item) {
+	selectItem(item) {
 		const value = this.props.filter.value.concat(item.id);
 		this.updateFilter({ value });
-	},
+	}
+
 	/**
 	 * Removes an item from the filter.
 	 * @param {object} item The item to remove.
 	 */
-	removeItem (item) {
+	removeItem(item) {
 		const value = this.props.filter.value.filter(i => { return i !== item.id; });
 		this.updateFilter({ value });
-	},
+	}
+
 	/**
 	 * Updates the filter with a new value.
 	 * @param {object} value The new value.
 	 */
-	updateFilter (value) {
+	updateFilter(value) {
 		this.props.onChange({ ...this.props.filter, ...value });
-	},
+	}
+
 	/**
 	 * Renders a list of items.
 	 * @param {Array} items The items to render.
 	 * @param {boolean} selected Whether the items are selected.
 	 * @returns {React.Element} The rendered items.
 	 */
-	renderItems (items, selected) {
+	renderItems(items, selected) {
 		const itemIconHover = selected ? 'x' : 'check';
 
 		return items.map((item, i) => {
-			return (
-				<PopoutList.Item
-					key={`item-${i}-${item.id}`}
-					icon="dash"
-					iconHover={itemIconHover}
-					label={item.name}
-					onClick={() => {
-						if (selected) this.removeItem(item);
-						else this.selectItem(item);
-					}}
-				/>
-			);
+			return React.createElement(PopoutList.Item, {
+				key: `item-${i}-${item.id}`,
+				icon: 'dash',
+				iconHover: itemIconHover,
+				label: item.name,
+				onClick: () => {
+					if (selected) this.removeItem(item);
+					else this.selectItem(item);
+				},
+			});
 		});
-	},
+	}
+
 	/**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+	render() {
 		const selectedItems = this.state.selectedItems;
 		const searchResults = this.state.searchResults.filter(i => {
 			return this.props.filter.value.indexOf(i.id) === -1;
 		});
 		const placeholder = this.isLoading() ? 'Loading...' : 'Find a ' + this.props.field.label + '...';
-		return (
-			<div ref="container">
-				<FormField>
-					<SegmentedControl equalWidthSegments options={INVERTED_OPTIONS} value={this.props.filter.inverted} onChange={this.toggleInverted} />
-				</FormField>
-				<FormField style={{ borderBottom: '1px dashed rgba(0,0,0,0.1)', paddingBottom: '1em' }}>
-					<FormInput autoFocus ref="focusTarget" value={this.state.searchString} onChange={this.updateSearch} placeholder={placeholder} />
-				</FormField>
-				{selectedItems.length ? (
-					<PopoutList>
-						<PopoutList.Heading>Selected</PopoutList.Heading>
-						{this.renderItems(selectedItems, true)}
-					</PopoutList>
-				) : null}
-				{searchResults.length ? (
-					<PopoutList>
-						<PopoutList.Heading style={selectedItems.length ? { marginTop: '2em' } : null}>Items</PopoutList.Heading>
-						{this.renderItems(searchResults)}
-					</PopoutList>
-				) : null}
-			</div>
+		return React.createElement(
+			'div',
+			{ ref: (container) => { this.containerRef = container; } },
+			React.createElement(
+				FormField,
+				null,
+				React.createElement(SegmentedControl, {
+					equalWidthSegments: true,
+					options: INVERTED_OPTIONS,
+					value: this.props.filter.inverted,
+					onChange: this.toggleInverted,
+				})
+			),
+			React.createElement(
+				FormField,
+				{ style: { borderBottom: '1px dashed rgba(0,0,0,0.1)', paddingBottom: '1em' } },
+				React.createElement(FormInput, {
+					autoFocus: true,
+					ref: (input) => { this.focusTargetRef = input; },
+					value: this.state.searchString,
+					onChange: this.updateSearch,
+					placeholder,
+				})
+			),
+			selectedItems.length ? React.createElement(
+				PopoutList,
+				null,
+				React.createElement(PopoutList.Heading, null, 'Selected'),
+				this.renderItems(selectedItems, true)
+			) : null,
+			searchResults.length ? React.createElement(
+				PopoutList,
+				null,
+				React.createElement(
+					PopoutList.Heading,
+					{ style: selectedItems.length ? { marginTop: '2em' } : null },
+					'Items'
+				),
+				this.renderItems(searchResults)
+			) : null
 		);
-	},
-});
+	}
+}
 
 export default RelationshipFilter;

@@ -8,15 +8,12 @@
  */
 import DateInput from '../../components/DateInput.mjs';
 import Field from '../Field.mjs';
-import moment from 'moment';
 import React from 'react';
-import PropTypes from 'prop-types';
-import {
-	Button,
-	FormInput,
-	InlineGroup as Group,
-	InlineGroupSection as Section,
-} from '../../../admin/client-legacy/App/elemental';
+import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import Group from '../../../admin/client-legacy/App/elemental/InlineGroup/index.mjs';
+import Section from '../../../admin/client-legacy/App/elemental/InlineGroupSection/index.mjs';
+import { formatDateByFormat, parseDateByFormat, toValidDate } from '../../utils/date.mjs';
 
 /*
 TODO: Implement yearRange Prop, or deprecate for max / min values (better)
@@ -33,16 +30,6 @@ export default Field.create({
 	displayName: 'DateField',
 	statics: {
 		type: 'Date',
-	},
-	propTypes: {
-		formatString: PropTypes.string,
-		inputFormat: PropTypes.string,
-		label: PropTypes.string,
-		note: PropTypes.string,
-		onChange: PropTypes.func,
-		path: PropTypes.string,
-		todayButton: PropTypes.bool,
-		value: PropTypes.string,
 	},
 
 	/**
@@ -67,16 +54,12 @@ export default Field.create({
 		});
 	},
 	/**
-	 * Converts a value to a moment object.
+	 * Converts a value to a valid Date object.
 	 * @param {string|Date|number} value The value to convert.
-	 * @returns {moment.Moment} The moment object.
+	 * @returns {Date|null} The date object.
 	 */
-	toMoment (value) {
-		if (this.props.isUTC) {
-			return moment.utc(value);
-		} else {
-			return moment(value);
-		}
+	toDate (value) {
+		return parseDateByFormat(value, this.props.inputFormat) || toValidDate(value);
 	},
 	/**
 	 * Checks whether a value is valid.
@@ -84,7 +67,7 @@ export default Field.create({
 	 * @returns {boolean} Whether the value is valid.
 	 */
 	isValid (value) {
-		return this.toMoment(value, this.inputFormat).isValid();
+		return Boolean(this.toDate(value));
 	},
 	/**
 	 * Formats a value.
@@ -92,14 +75,14 @@ export default Field.create({
 	 * @returns {string} The formatted value.
 	 */
 	format (value) {
-		return value ? this.toMoment(value).format(this.props.formatString) : '';
+		return value ? formatDateByFormat(value, this.props.formatString, { utc: this.props.isUTC }) : '';
 	},
 	/**
 	 * Sets the value of the field to today's date.
 	 */
 	setToday () {
 		this.valueChanged({
-			value: this.toMoment(new Date()).format(this.props.inputFormat),
+			value: formatDateByFormat(new Date(), this.props.inputFormat, { utc: this.props.isUTC }),
 		});
 	},
 	/**
@@ -107,40 +90,37 @@ export default Field.create({
 	 * @returns {React.Element} The rendered value.
 	 */
 	renderValue () {
-		return (
-			<FormInput noedit>
-				{this.format(this.props.value)}
-			</FormInput>
-		);
+		return React.createElement(FormInput, { noedit: true }, this.format(this.props.value));
 	},
 	/**
 	 * Renders the field.
 	 * @returns {React.Element} The rendered field.
 	 */
 	renderField () {
-		const dateAsMoment = this.toMoment(this.props.value);
-		const value = this.props.value && dateAsMoment.isValid()
-			? dateAsMoment.format(this.props.inputFormat)
+		const date = this.toDate(this.props.value);
+		const value = this.props.value && date
+			? formatDateByFormat(date, this.props.inputFormat, { utc: this.props.isUTC })
 			: this.props.value;
 
-		return (
-			<Group>
-				<Section grow>
-					<DateInput
-						format={this.props.inputFormat}
-						name={this.getInputName(this.props.path)}
-						onChange={this.valueChanged}
-						ref="dateInput"
-						value={value}
-					/>
-				</Section>
-				{
-					this.props.todayButton
-					&& <Section>
-						<Button onClick={this.setToday}>Today</Button>
-					</Section>
-				}
-			</Group>
+		return React.createElement(
+			Group,
+			null,
+			React.createElement(
+				Section,
+				{ grow: true },
+				React.createElement(DateInput, {
+					format: this.props.inputFormat,
+					name: this.getInputName(this.props.path),
+					onChange: this.valueChanged,
+					ref: this.getFocusTargetRef(),
+					value,
+				})
+			),
+			this.props.todayButton && React.createElement(
+				Section,
+				null,
+				React.createElement(Button, { onClick: this.setToday }, 'Today')
+			)
 		);
 	},
 

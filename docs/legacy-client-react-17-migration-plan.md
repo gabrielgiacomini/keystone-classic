@@ -100,17 +100,17 @@ Resolved lockfile versions:
 | `react-dom` | `16.14.0` | Peers `react@^16.14.0`. |
 | `create-react-class` | `15.7.0` | Keep while `create-react-class` components remain. |
 | `prop-types` | `15.8.1` | Keep. |
-| `react-transition-group` | `1.2.1` | Peers React 15/16 only. React 17 blocker unless forked, replaced, or upgraded. |
-| `react-day-picker` | `7.4.10` | Supports React 17. Keep and test date fields. |
+| `react-transition-group` | removed | Legacy `CSSTransitionGroup` call sites now use a local compatibility component. |
+| `react-day-picker` | removed | Date fields and filters now use a local DayPicker-compatible component. |
 | `react-router` | `3.2.6` | Peers React 0.14/15/16 only. React 17 blocker unless forked or replaced. |
 | `react-redux` | `5.1.2` | Peers React 0.14/15/16 only. Upgrade or fork. |
 | `react-router-redux` | `4.0.8` | No direct blocking peer in current audit, but coupled to React Router 3 and Redux routing behavior. |
 | `react-select` | `1.3.0` | Peers React 0.14/15/16 only. React 17 blocker unless forked or replaced. |
 | `react-dnd` | `2.6.0` | Peer `react: *`. Keep and test drag sorting. |
 | `react-dnd-html5-backend` | `2.6.0` | No blocking React peer in current audit. |
-| `react-images` | `0.5.19` | Peers React 15/16 only. React 17 blocker unless forked or replaced. |
+| `react-images` | removed | Cloudinary fields now use a local lightbox component. |
 | `react-color` | `2.19.3` | Peer `react: *`. Keep and test color field. |
-| `react-markdown` | `2.5.1` | Peer `react >=0.13.3`. Keep. |
+| `react-markdown` | removed | Field explorer readmes now use a local `marked`-backed component. |
 | `react-engine` | `4.5.1` | Peers React 15/16 only. React 17 blocker for test/e2e server rendering unless forked, removed, or replaced. |
 | `enzyme` | `3.11.0` | Keep. |
 | `enzyme-adapter-react-16` | `1.15.8` | Replace with a React 17 adapter. |
@@ -139,9 +139,9 @@ strategy per package.
 | `react-router@3.2.6` | Fork or package-alias the same runtime with a React 17 peer range. | A React Router 3 to 5 migration is larger than this checkpoint. Keep route semantics stable. |
 | `react-redux@5.1.2` | Prefer upgrade to `react-redux@^7.2.9`; fallback is a peer-range fork of v5. | `connect` remains available in v7. Test `Provider`, route sync, and connected screens. |
 | `react-router-redux@4.0.8` | Keep initially. | Verify `syncHistoryWithStore`, `routerReducer`, `routerMiddleware`, `push`, and `replace`. |
-| `react-transition-group@1.2.1` | Prefer a peer-range fork for React 17; rewrite to v4 only if tests justify the API migration. | Current code imports `react-transition-group/CSSTransitionGroup`, which is not a v4 drop-in. |
+| `react-transition-group@1.2.1` | Replaced with a local compatibility component. | Current code no longer imports `react-transition-group/CSSTransitionGroup`. |
 | `react-select@1.3.0` | Prefer a peer-range fork for React 17; consider a later v5 migration for React 18 readiness. | v5 supports React 18 but has a much larger API/styling migration. |
-| `react-images@0.5.19` | Fork peer range or replace with a small local lightbox. | Used only by Cloudinary image fields. Test keyboard close, backdrop close, and image navigation. |
+| `react-images@0.5.19` | Replaced with a small local lightbox. | Used only by Cloudinary image fields; covered by media upload/lightbox e2e. |
 | `react-engine@4.5.1` | Fork peer range or remove/replace if only test fixtures need it. | Current usage is `test/e2e/server.mjs`. Do not break server rendering tests. |
 | `enzyme-adapter-react-16` | Replace with `@wojtekmaj/enzyme-adapter-react-17`. | This is an unofficial adapter but is the practical Enzyme 3 path for React 17. |
 
@@ -186,13 +186,13 @@ Current branch implementation, recorded 2026-05-23:
 | --- | --- | --- | --- | --- | --- |
 | `react-router` | Local peer-range fork. | `react-router@3.2.6` copied from the resolved npm package into `vendor/react17-peer-forks/react-router`. | `3.2.6-react17.0` | None. Package metadata only; dev-only files are pruned. | Restore dependency to `^3.0.2` and remove the local fork. |
 | `react-redux` | Upgrade to a React 17-compatible release. | Published npm package. | `7.2.9` | Yes, package runtime upgrade. Legacy `Provider` and `connect` imports are preserved. | Revert dependency to `^5.0.6` or replace with a peer-range fork of v5 if regression tests require it. |
-| `react-transition-group` | Local peer-range fork. | `react-transition-group@1.2.1` copied from the resolved npm package into `vendor/react17-peer-forks/react-transition-group`. | `1.2.1-react17.0` | None. Package metadata only; `react-transition-group/CSSTransitionGroup` remains available. | Restore dependency to `^1.2.1` and remove the local fork. |
+| `react-transition-group` | Removed. | `CSSTransitionGroup` usage is covered by `admin/client-legacy/App/shared/CSSTransitionGroup.mjs`. | n/a | Removes the old peer-range fork. | No rollback planned. |
 | `react-select` | Local peer-range fork. | `react-select@1.3.0` copied from the resolved npm package into `vendor/react17-peer-forks/react-select`. | `1.3.0-react17.0` | Metadata only for `react-select`; its `react-input-autosize` helper is also forked for a React 17 peer range. | Restore dependency to `^1.2.4` and remove the local forks. |
 | `react-input-autosize` | Local transitive peer-range fork for `react-select`. | `react-input-autosize@2.2.2` copied from the resolved npm package into `vendor/react17-peer-forks/react-input-autosize`. | `2.2.2-react17.0` | None. Package metadata only. | Restore `react-select` dependency on the published helper. |
-| `react-images` | Local peer-range fork. | `react-images@0.5.19` copied from the resolved npm package into `vendor/react17-peer-forks/react-images`. | `0.5.19-react17.0` | Peer metadata changed. Its bundled portal helper resolves the `react-transition-group@2.9.0` API from a vendored copy under the fork so the root can keep exposing `react-transition-group@1.2.1` for `CSSTransitionGroup` compatibility. Its `react-scrolllock`/`react-prop-toggle` helpers are also forked for React 17 peer ranges. | Restore dependency to `^0.5.6` and remove the local forks. |
-| `react-scrolllock` | Local transitive fork for `react-images`. | `react-scrolllock@2.0.7` copied from the resolved npm package into `vendor/react17-peer-forks/react-scrolllock`. | `2.0.7-react17.0` | Metadata only, plus dependency points at the local `react-prop-toggle` fork. | Restore `react-images` dependency on the published helper. |
-| `react-prop-toggle` | Local transitive peer-range fork for `react-scrolllock`. | `react-prop-toggle@1.0.2` copied from the resolved npm package into `vendor/react17-peer-forks/react-prop-toggle`. | `1.0.2-react17.0` | None. Package metadata only. | Restore `react-scrolllock` dependency on the published helper. |
-| `react-lifecycles-compat` | Explicit runtime helper for vendored `react-transition-group@2.9.0` inside the `react-images` fork. | Published npm package. | `3.0.4` | None. Existing helper package made explicit for Browserify resolution from local forks. | Remove when `react-images` is replaced or restored to the published dependency tree. |
+| `react-images` | Removed. | Cloudinary fields use `fields/components/Lightbox.mjs`. | n/a | Removes the old fork and its portal/scroll-lock helper path. | No rollback planned; keep e2e lightbox coverage. |
+| `react-scrolllock` | Removed. | Was only retained for the old `react-images` fork path. | n/a | No remaining built-in owner. | No rollback planned. |
+| `react-prop-toggle` | Removed. | Was only retained for the old `react-scrolllock` fork path. | n/a | No remaining built-in owner. | No rollback planned. |
+| `react-lifecycles-compat` | Removed. | Was only retained for the old vendored `react-images` transition helper path. | n/a | No remaining built-in owner. | No rollback planned. |
 | `react-engine` | Local peer-range fork. | `react-engine@4.5.1` copied from the resolved npm package into `vendor/react17-peer-forks/react-engine`. | `4.5.1-react17.0` | None. Package metadata only; used by the e2e server fixture surface. | Restore dev dependency to `^4.5.1` and remove the local fork. |
 | `enzyme-adapter-react-16` | Replaced. | Published `@wojtekmaj/enzyme-adapter-react-17`. | `0.8.0` | Test adapter change only. | Restore `enzyme-adapter-react-16` and `test/enzyme.setup.cjs` if rolling back to React 16. |
 

@@ -34,9 +34,9 @@ export class AdminNextPOM {
 	 * Creates a new AdminNextPOM instance.
 	 * @param page - Playwright Page instance.
 	 */
-	constructor (page: Page) {
+	constructor (page: Page, prefix = ADMIN_NEXT_PREFIX) {
 		this.page = page;
-		this.prefix = ADMIN_NEXT_PREFIX;
+		this.prefix = prefix;
 	}
 
 	// ---------------------------------------------------------------------------
@@ -188,6 +188,68 @@ export class AdminNextPOM {
 	}
 
 	/**
+	 * Return visible list column header labels, excluding row-control headers.
+	 * @returns Array of column header text labels.
+	 */
+	async getColumnHeaders (): Promise<string[]> {
+		const headers = this.page.locator('[data-list-column-header][data-field-name]');
+		await headers.first().waitFor({ state: 'attached' });
+		return (await headers.allTextContents())
+			.map((text) => text.trim())
+			.filter(Boolean);
+	}
+
+	/** Open the list Columns dropdown. */
+	async openColumnsDropdown (): Promise<void> {
+		await this.page.locator('[data-list-columns] > button').first().click();
+		await this.page.locator('[data-list-columns] [data-list-column-option]').first().waitFor({
+			state: 'visible',
+		});
+	}
+
+	/**
+	 * Toggle a column option in the adminNext Columns dropdown.
+	 * @param fieldPath - Field path to toggle.
+	 */
+	async toggleColumnOption (fieldPath: string): Promise<void> {
+		await this.page.locator(`[data-list-columns] [data-list-column-option][data-field-name="${fieldPath}"]`).click();
+	}
+
+	/** Open the adminNext Download dropdown. */
+	async openDownloadDropdown (): Promise<void> {
+		await this.page.locator('[data-list-download] > button').first().click();
+		await this.page.locator('[data-list-download] [data-list-download-submit]').waitFor({ state: 'visible' });
+	}
+
+	/** Switch the adminNext Download dropdown export format. */
+	async selectDownloadFormat (format: 'CSV' | 'JSON'): Promise<void> {
+		await this.page.locator('[data-list-download]').getByRole('button', { name: new RegExp(`^${format}$`) }).click();
+	}
+
+	/** Submit the adminNext Download dropdown. */
+	async submitDownload (): Promise<void> {
+		await this.page.locator('[data-list-download] [data-list-download-submit]').click();
+	}
+
+	/**
+	 * Read the list pagination/count summary text.
+	 * @returns Visible pagination summary.
+	 */
+	async getPaginationSummary (): Promise<string> {
+		const summary = this.page.locator('[data-list-pagination-summary]');
+		await summary.waitFor({ state: 'visible' });
+		return (await summary.textContent())?.trim() ?? '';
+	}
+
+	/**
+	 * Select a list page by page number.
+	 * @param pageNumber - Page number to select.
+	 */
+	async selectPage (pageNumber: number): Promise<void> {
+		await this.page.locator(`[data-list-pagination] [data-list-page-button][data-page="${pageNumber}"]`).click();
+	}
+
+	/**
 	 * Fill the search input and wait for the list to reload.
 	 * @param query - Search string.
 	 */
@@ -249,6 +311,27 @@ export class AdminNextPOM {
 		);
 		await this.page.getByRole('button', { name: /^Save$/ }).click();
 		await save;
+	}
+
+	/**
+	 * Delete the current item from the item edit footer and wait for the
+	 * list route to render.
+	 * @returns HTTP status of the delete POST.
+	 */
+	async deleteCurrentItem (): Promise<number> {
+		await this.page.locator('[data-button="delete"]').click();
+		const dialog = this.page.locator('[data-confirm-dialog]');
+		await expect(dialog).toBeVisible();
+		const deletePromise = this.page.waitForResponse(
+			(r) =>
+				r.url().includes(API_PREFIX) &&
+				r.url().includes('/delete') &&
+				r.request().method() === 'POST',
+		);
+		await dialog.locator('[data-confirm-delete]').click();
+		const res = await deletePromise;
+		await this.page.locator('[data-list-table]').waitFor({ state: 'visible' });
+		return res.status();
 	}
 
 	// ---------------------------------------------------------------------------

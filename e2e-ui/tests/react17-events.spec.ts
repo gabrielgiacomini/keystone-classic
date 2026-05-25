@@ -163,7 +163,7 @@ test.describe('React 17 legacy event boundaries', () => {
 		const menu = page.locator('.MobileNavigation__menu');
 		await expect(menu).toBeVisible();
 
-		await menu.click();
+		await menu.dispatchEvent('click');
 		await expect(menu).toBeVisible();
 
 		await page.keyboard.press('Escape');

@@ -10,8 +10,7 @@ import ArrayFieldMixin from '../../mixins/ArrayField.mjs';
 import DateInput from '../../components/DateInput.mjs';
 import Field from '../Field.mjs';
 import React from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
+import { formatDateByFormat, toValidDate } from '../../utils/date.mjs';
 
 const DEFAULT_INPUT_FORMAT = 'YYYY-MM-DD';
 const DEFAULT_FORMAT_STRING = 'Do MMM YYYY';
@@ -28,10 +27,6 @@ export default Field.create({
 	},
 	mixins: [ArrayFieldMixin],
 
-	propTypes: {
-		formatString: PropTypes.string,
-		inputFormat: PropTypes.string,
-	},
 
 	/**
 	 * Gets the default props for the component.
@@ -54,8 +49,8 @@ export default Field.create({
 	 */
 	processInputValue (value) {
 		if (!value) return;
-		const m = moment(value);
-		return m.isValid() ? m.format(this.props.inputFormat) : value;
+		const date = toValidDate(value);
+		return date ? formatDateByFormat(date, this.props.inputFormat, { utc: true }) : value;
 	},
 
 	/**
@@ -65,7 +60,7 @@ export default Field.create({
 	 *   falsy value.
 	 */
 	formatValue (value) {
-		return value ? moment(value).format(this.props.formatString) : '';
+		return value ? formatDateByFormat(value, this.props.formatString, { utc: true }) : '';
 	},
 
 	/**

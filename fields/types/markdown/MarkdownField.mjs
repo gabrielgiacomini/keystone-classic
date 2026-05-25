@@ -8,7 +8,7 @@
  */
 import Field from '../Field.mjs';
 import React from 'react';
-import { FormInput } from '../../../admin/client-legacy/App/elemental';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
 
 /**
  * TODO:
@@ -16,8 +16,14 @@ import { FormInput } from '../../../admin/client-legacy/App/elemental';
  */
 
 // Scope jQuery and the bootstrap-markdown editor so it will mount
-import $ from 'jquery';
 import './lib/bootstrap-markdown.mjs';
+
+const getJQuery = () => {
+	if (typeof window === 'undefined' || !(window.jQuery || window.$)) {
+		throw new Error('jQuery global is required for the legacy Markdown field');
+	}
+	return window.jQuery || window.$;
+};
 
 /**
  * Toggles a heading on the selected text.
@@ -66,7 +72,7 @@ const toggleHeading = function (e, level) {
  */
 const renderMarkdown = function (component) {
 	// dependsOn means that sometimes the component is mounted as a null, so account for that & noop
-	if (!component.refs.markdownTextarea) {
+	if (!component.markdownTextarea) {
 		return;
 	}
 
@@ -123,7 +129,7 @@ const renderMarkdown = function (component) {
 		options.hiddenButtons = options.hiddenButtons.concat(hiddenButtons);
 	}
 
-	$(component.refs.markdownTextarea).markdown(options);
+	getJQuery()(component.markdownTextarea).markdown(options);
 };
 
 /**
@@ -181,6 +187,14 @@ export default Field.create({
 	},
 
 	/**
+	 * Stores the textarea used by the bootstrap-markdown editor.
+	 * @param {HTMLTextAreaElement|null} target The rendered textarea.
+	 */
+	setMarkdownTextarea (target) {
+		this.markdownTextarea = target;
+	},
+
+	/**
 	 * Renders the field.
 	 * @returns {React.Element} The rendered field.
 	 */
@@ -196,15 +210,13 @@ export default Field.create({
 			? this.props.value.md
 			: '';
 
-		return (
-			<textarea
-				className="md-editor__input code"
-				defaultValue={defaultValue}
-				name={this.getInputName(this.props.paths.md)}
-				ref="markdownTextarea"
-				style={styles}
-			/>
-		);
+		return React.createElement('textarea', {
+			className: 'md-editor__input code',
+			defaultValue,
+			name: this.getInputName(this.props.paths.md),
+			ref: this.setMarkdownTextarea,
+			style: styles,
+		});
 	},
 
 	/**
@@ -218,12 +230,10 @@ export default Field.create({
 			? escapeHtmlForRender(this.props.value.md)
 			: '';
 
-		return (
-			<FormInput
-				dangerouslySetInnerHTML={{ __html: innerHtml }}
-				multiline
-				noedit
-			/>
-		);
+		return React.createElement(FormInput, {
+			dangerouslySetInnerHTML: { __html: innerHtml },
+			multiline: true,
+			noedit: true,
+		});
 	},
 });

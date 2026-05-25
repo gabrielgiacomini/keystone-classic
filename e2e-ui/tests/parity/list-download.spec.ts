@@ -18,18 +18,76 @@
  */
 
 import { test, expect } from '../../fixtures/parity.js';
-import { seedPostsAndEditors } from '../../fixtures/seed.js';
+import { seedPostsAndEditors, withMongo } from '../../fixtures/seed.js';
 import { API_BASE } from '../../fixtures/constants.js';
+import type { Page, Route } from '@playwright/test';
+import { Types } from 'mongoose';
 
 test.describe.configure({ mode: 'serial' });
 
 const LIST_KEY = 'Post';
 const LIST_PATH = 'posts';
 const ADMIN_NEXT_PREFIX = '/keystone-next';
+const ADMIN_LEGACY_PREFIX = '/keystone';
+
+async function captureExportUrl(
+	page: Page,
+	action: () => Promise<void>,
+	format: 'csv' | 'json' = 'csv',
+): Promise<string> {
+	let capturedExportUrl: string | null = null;
+	const context = page.context();
+	const matcher = (url: URL) => url.pathname.includes(`/export.${format}`);
+	const handler = async (route: Route) => {
+		capturedExportUrl = route.request().url();
+		await route.abort();
+	};
+	await context.route(matcher, handler);
+	try {
+		await action();
+		await expect.poll(() => capturedExportUrl, { timeout: 5_000 }).not.toBeNull();
+		return capturedExportUrl!;
+	} finally {
+		await context.unroute(matcher, handler);
+	}
+}
+
+async function fetchExport(page: Page, pathAndQuery: string): Promise<{
+	status: number;
+	contentType: string;
+	bodyText: string;
+}> {
+	const res = await page.context().request.get(pathAndQuery, {
+		headers: { Accept: '*/*' },
+	});
+	return {
+		status: res.status(),
+		contentType: res.headers()['content-type'] ?? '',
+		bodyText: await res.text(),
+	};
+}
 
 test.beforeEach(async () => {
 	await seedPostsAndEditors();
 });
+
+async function seedFormulaTitlePost(): Promise<void> {
+	await withMongo(async (db) => {
+		const admin = await db.collection('User').findOne({ isAdmin: true });
+		expect(admin, 'admin user should exist before CSV formula seed').toBeTruthy();
+		await db.collection('Post').insertOne({
+			_id: new Types.ObjectId(),
+			title: '=2-3',
+			slug: 'formula-injection-export',
+			state: 'draft',
+			author: admin!._id,
+			content: 'CSV formula escaping fixture',
+			viewCount: 0,
+			createdAt: new Date('2026-05-24T12:00:00.000Z'),
+			updatedAt: new Date('2026-05-24T12:00:00.000Z'),
+		});
+	});
+}
 
 test.describe('Parity: List download', () => {
 
@@ -191,5 +249,229 @@ test.describe('Parity: List download', () => {
 		expect(capturedSearchUrl).not.toBeNull();
 		const exportUrl = new URL(capturedSearchUrl!);
 		expect(exportUrl.searchParams.get('search')).toBe(searchTerm);
+	});
+
+	test('legacy and adminNext: Download button preserves filtered CSV export state', async ({
+		adminLegacy,
+		adminNext,
+	}) => {
+		const searchTerm = 'Smoke Test Post 01';
+
+		await adminLegacy.page.goto(
+			`${ADMIN_LEGACY_PREFIX}/${LIST_PATH}?search=${encodeURIComponent(searchTerm)}&columns=title,state`,
+		);
+		await adminLegacy.page.locator('[data-screen-id="list"]').waitFor({ state: 'visible' });
+		await adminLegacy.openDownloadDropdown();
+		const legacyUrl = await captureExportUrl(adminLegacy.page, () => adminLegacy.submitDownload());
+
+		await adminNext.page.goto(
+			`${ADMIN_NEXT_PREFIX}/${LIST_KEY}?search=${encodeURIComponent(searchTerm)}&columns=title,state`,
+		);
+		await adminNext.page.locator(`[data-list-table][data-list-key="${LIST_KEY}"]`).waitFor({ state: 'visible' });
+		await adminNext.openDownloadDropdown();
+		const nextUrl = await captureExportUrl(adminNext.page, () => adminNext.submitDownload());
+
+		const legacyExportUrl = new URL(legacyUrl);
+		const nextExportUrl = new URL(nextUrl);
+		expect(legacyExportUrl.pathname).toMatch(/\/keystone-api\/posts\/export\.csv$/);
+		expect(nextExportUrl.pathname).toMatch(/\/keystone-api\/posts\/export\.csv$/);
+		expect(legacyExportUrl.searchParams.get('search')).toBe(searchTerm);
+		expect(nextExportUrl.searchParams.get('search')).toBe(searchTerm);
+		expect(legacyExportUrl.searchParams.get('select')).toBe(nextExportUrl.searchParams.get('select'));
+		expect(legacyExportUrl.searchParams.get('select')).toBe('id,title,state');
+
+		const directPath = `${API_BASE}/${LIST_PATH}/export.csv?search=${encodeURIComponent(searchTerm)}&select=id,title,state&expandRelationshipFields=true`;
+		const legacyExport = await fetchExport(adminLegacy.page, directPath);
+		const nextExport = await fetchExport(adminNext.page, directPath);
+
+		expect(legacyExport.status).toBe(200);
+		expect(nextExport.status).toBe(200);
+		expect(legacyExport.contentType).toBe(nextExport.contentType);
+		expect(legacyExport.bodyText).toBe(nextExport.bodyText);
+		expect(legacyExport.bodyText).toContain('title,state');
+		expect(legacyExport.bodyText).toContain('Smoke Test Post 01');
+		expect(legacyExport.bodyText).not.toContain('Smoke Test Post 02');
+	});
+
+	test('legacy and adminNext: Download button preserves sorted CSV export state', async ({
+		adminLegacy,
+		adminNext,
+	}) => {
+		await adminLegacy.page.goto(`${ADMIN_LEGACY_PREFIX}/${LIST_PATH}?sort=-title&columns=title,state`);
+		await adminLegacy.page.locator('[data-screen-id="list"]').waitFor({ state: 'visible' });
+		await adminLegacy.openDownloadDropdown();
+		const legacyUrl = await captureExportUrl(adminLegacy.page, () => adminLegacy.submitDownload());
+
+		await adminNext.page.goto(`${ADMIN_NEXT_PREFIX}/${LIST_KEY}?sort=-title&columns=title,state`);
+		await adminNext.page.locator(`[data-list-table][data-list-key="${LIST_KEY}"]`).waitFor({ state: 'visible' });
+		await adminNext.openDownloadDropdown();
+		const nextUrl = await captureExportUrl(adminNext.page, () => adminNext.submitDownload());
+
+		const legacyExportUrl = new URL(legacyUrl);
+		const nextExportUrl = new URL(nextUrl);
+		expect(legacyExportUrl.pathname).toMatch(/\/keystone-api\/posts\/export\.csv$/);
+		expect(nextExportUrl.pathname).toMatch(/\/keystone-api\/posts\/export\.csv$/);
+		expect(legacyExportUrl.searchParams.get('sort')).toBe('-title');
+		expect(nextExportUrl.searchParams.get('sort')).toBe('-title');
+		expect(legacyExportUrl.searchParams.get('select')).toBe(nextExportUrl.searchParams.get('select'));
+		expect(legacyExportUrl.searchParams.get('select')).toBe('id,title,state');
+
+		const directPath = `${API_BASE}/${LIST_PATH}/export.csv?sort=-title&select=id,title,state&expandRelationshipFields=true`;
+		const legacyExport = await fetchExport(adminLegacy.page, directPath);
+		const nextExport = await fetchExport(adminNext.page, directPath);
+
+		expect(legacyExport.status).toBe(200);
+		expect(nextExport.status).toBe(200);
+		expect(legacyExport.contentType).toBe(nextExport.contentType);
+		expect(legacyExport.bodyText).toBe(nextExport.bodyText);
+		const rows = legacyExport.bodyText.trim().split(/\r?\n/);
+		expect(rows[0]).toContain('title,state');
+		expect(rows[1]).toContain('Smoke Test Post 25');
+		expect(rows.at(-1)).toContain('Smoke Test Post 01');
+	});
+
+	test('legacy and adminNext: Download button preserves field-filtered selected-column CSV export state', async ({
+		adminLegacy,
+		adminNext,
+	}) => {
+		const legacyFilters = encodeURIComponent(
+			JSON.stringify([{ path: 'state', inverted: false, value: ['published'] }]),
+		);
+		await adminLegacy.page.goto(
+			`${ADMIN_LEGACY_PREFIX}/${LIST_PATH}?filters=${legacyFilters}&columns=title,state`,
+		);
+		await adminLegacy.page.locator('[data-screen-id="list"]').waitFor({ state: 'visible' });
+		await adminLegacy.openDownloadDropdown();
+		const legacyUrl = await captureExportUrl(adminLegacy.page, () => adminLegacy.submitDownload());
+
+		await adminNext.page.goto(`${ADMIN_NEXT_PREFIX}/${LIST_KEY}?f.state=published&columns=title,state`);
+		await adminNext.page.locator(`[data-list-table][data-list-key="${LIST_KEY}"]`).waitFor({ state: 'visible' });
+		await adminNext.openDownloadDropdown();
+		const nextUrl = await captureExportUrl(adminNext.page, () => adminNext.submitDownload());
+
+		const legacyExportUrl = new URL(legacyUrl);
+		const nextExportUrl = new URL(nextUrl);
+		expect(legacyExportUrl.pathname).toMatch(/\/keystone-api\/posts\/export\.csv$/);
+		expect(nextExportUrl.pathname).toMatch(/\/keystone-api\/posts\/export\.csv$/);
+		expect(legacyExportUrl.searchParams.get('select')).toBe(nextExportUrl.searchParams.get('select'));
+		expect(legacyExportUrl.searchParams.get('select')).toBe('id,title,state');
+		expect(legacyExportUrl.searchParams.get('filters')).toContain('published');
+		expect(nextExportUrl.searchParams.get('filters')).toContain('published');
+
+		const legacyDirectPath = `${API_BASE}/${LIST_PATH}/export.csv?filters=${encodeURIComponent(legacyExportUrl.searchParams.get('filters') ?? '')}&select=id,title,state&expandRelationshipFields=true`;
+		const nextDirectPath = `${API_BASE}/${LIST_PATH}/export.csv?filters=${encodeURIComponent(nextExportUrl.searchParams.get('filters') ?? '')}&select=id,title,state&expandRelationshipFields=true`;
+		const legacyExport = await fetchExport(adminLegacy.page, legacyDirectPath);
+		const nextExport = await fetchExport(adminNext.page, nextDirectPath);
+
+		expect(legacyExport.status).toBe(200);
+		expect(nextExport.status).toBe(200);
+		expect(legacyExport.contentType).toBe(nextExport.contentType);
+		expect(legacyExport.bodyText).toBe(nextExport.bodyText);
+		const rows = legacyExport.bodyText.trim().split(/\r?\n/);
+		expect(rows[0]).toContain('title,state');
+		expect(rows.length).toBeGreaterThan(1);
+		expect(rows.slice(1).every((row) => row.includes('published'))).toBe(true);
+		expect(legacyExport.bodyText).not.toContain('Smoke Test Post 01,draft');
+		expect(legacyExport.bodyText).not.toContain('Smoke Test Post 02,archived');
+	});
+
+	test('legacy and adminNext: Download panel custom column selection controls CSV output', async ({
+		adminLegacy,
+		adminNext,
+	}) => {
+		await adminLegacy.page.goto(`${ADMIN_LEGACY_PREFIX}/${LIST_PATH}?columns=title,state`);
+		await adminLegacy.page.locator('[data-screen-id="list"]').waitFor({ state: 'visible' });
+		await adminLegacy.openDownloadDropdown();
+		await adminLegacy.page.locator('.Popout [data-list-download-use-current-columns]').uncheck();
+		await adminLegacy.page.locator('.Popout [data-list-download-toggle-all-columns]').uncheck();
+		await adminLegacy.page.locator('.Popout [data-list-download-column-option][data-field-name="title"]').click();
+		const legacyUrl = await captureExportUrl(adminLegacy.page, () => adminLegacy.submitDownload());
+
+		await adminNext.page.goto(`${ADMIN_NEXT_PREFIX}/${LIST_KEY}?columns=title,state`);
+		await adminNext.page.locator(`[data-list-table][data-list-key="${LIST_KEY}"]`).waitFor({ state: 'visible' });
+		await adminNext.openDownloadDropdown();
+		const adminNextDownload = adminNext.page.locator('[data-list-download]');
+		await adminNextDownload.locator('[data-list-download-use-current-columns]').uncheck();
+		await adminNextDownload.locator('[data-list-download-toggle-all-columns]').uncheck();
+		await adminNextDownload.locator('[data-list-download-column-option][data-field-name="title"]').click();
+		const nextUrl = await captureExportUrl(adminNext.page, () => adminNext.submitDownload());
+
+		const legacyExportUrl = new URL(legacyUrl);
+		const nextExportUrl = new URL(nextUrl);
+		expect(legacyExportUrl.pathname).toMatch(/\/keystone-api\/posts\/export\.csv$/);
+		expect(nextExportUrl.pathname).toMatch(/\/keystone-api\/posts\/export\.csv$/);
+		expect(legacyExportUrl.searchParams.get('select')).toBe('id,state');
+		expect(nextExportUrl.searchParams.get('select')).toBe('id,state');
+
+		const legacyExport = await fetchExport(adminLegacy.page, legacyExportUrl.pathname + legacyExportUrl.search);
+		const nextExport = await fetchExport(adminNext.page, nextExportUrl.pathname + nextExportUrl.search);
+
+		expect(legacyExport.status).toBe(200);
+		expect(nextExport.status).toBe(200);
+		expect(legacyExport.contentType).toBe(nextExport.contentType);
+		expect(legacyExport.bodyText).toBe(nextExport.bodyText);
+		const rows = legacyExport.bodyText.trim().split(/\r?\n/);
+		expect(rows[0]).toBe('id,slug,state');
+		expect(rows[1]).toMatch(/^[0-9a-f]{24},smoke-test-post-\d{2}-(draft|published|archived),(Draft|Published|Archived)$/);
+		expect(rows[1]).not.toContain('Smoke Test Post');
+	});
+
+	test('legacy and adminNext: CSV export escapes spreadsheet formula-like values', async ({
+		adminLegacy,
+		adminNext,
+	}) => {
+		await seedFormulaTitlePost();
+		const searchTerm = '=2-3';
+
+		await adminLegacy.page.goto(
+			`${ADMIN_LEGACY_PREFIX}/${LIST_PATH}?search=${encodeURIComponent(searchTerm)}&columns=title,state`,
+		);
+		await adminLegacy.page.locator('[data-screen-id="list"]').waitFor({ state: 'visible' });
+		await adminLegacy.openDownloadDropdown();
+		const legacyUrl = await captureExportUrl(adminLegacy.page, () => adminLegacy.submitDownload());
+
+		await adminNext.page.goto(
+			`${ADMIN_NEXT_PREFIX}/${LIST_KEY}?search=${encodeURIComponent(searchTerm)}&columns=title,state`,
+		);
+		await adminNext.page.locator(`[data-list-table][data-list-key="${LIST_KEY}"]`).waitFor({ state: 'visible' });
+		await adminNext.openDownloadDropdown();
+		const nextUrl = await captureExportUrl(adminNext.page, () => adminNext.submitDownload());
+
+		const legacyExportUrl = new URL(legacyUrl);
+		const nextExportUrl = new URL(nextUrl);
+		expect(legacyExportUrl.searchParams.get('search')).toBe(searchTerm);
+		expect(nextExportUrl.searchParams.get('search')).toBe(searchTerm);
+		expect(legacyExportUrl.searchParams.get('select')).toBe(nextExportUrl.searchParams.get('select'));
+		expect(legacyExportUrl.searchParams.get('select')).toBe('id,title,state');
+
+		const directPath = `${API_BASE}/${LIST_PATH}/export.csv?search=${encodeURIComponent(searchTerm)}&select=id,title,state&expandRelationshipFields=true`;
+		const legacyExport = await fetchExport(adminLegacy.page, directPath);
+		const nextExport = await fetchExport(adminNext.page, directPath);
+
+		expect(legacyExport.status).toBe(200);
+		expect(nextExport.status).toBe(200);
+		expect(legacyExport.contentType).toBe(nextExport.contentType);
+		expect(legacyExport.bodyText).toBe(nextExport.bodyText);
+		expect(legacyExport.bodyText).toContain('id,slug,title,state');
+		expect(legacyExport.bodyText).toContain('formula-injection-export, =2-3,Draft');
+		expect(legacyExport.bodyText).not.toContain('formula-injection-export,=2-3,Draft');
+	});
+
+	test('legacy and adminNext: Download button switches to JSON export', async ({
+		adminLegacy,
+		adminNext,
+	}) => {
+		await adminLegacy.gotoList(LIST_PATH);
+		await adminLegacy.openDownloadDropdown();
+		await adminLegacy.selectDownloadFormat('JSON');
+		const legacyUrl = await captureExportUrl(adminLegacy.page, () => adminLegacy.submitDownload(), 'json');
+
+		await adminNext.gotoList(LIST_KEY);
+		await adminNext.openDownloadDropdown();
+		await adminNext.selectDownloadFormat('JSON');
+		const nextUrl = await captureExportUrl(adminNext.page, () => adminNext.submitDownload(), 'json');
+
+		expect(new URL(legacyUrl).pathname).toMatch(/\/keystone-api\/posts\/export\.json$/);
+		expect(new URL(nextUrl).pathname).toMatch(/\/keystone-api\/posts\/export\.json$/);
 	});
 });

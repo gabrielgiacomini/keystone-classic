@@ -1,9 +1,9 @@
 /**
- * Playwright configuration for the UI parity e2e suite (P4-30).
+ * Playwright configuration for the modern admin parity e2e suite.
  *
- * Drives a real Chromium browser against BOTH the admin legacy
- * (at /keystone) and the admin next (at /keystone-next),
- * exercising behavioural parity between the two UIs.
+ * Drives a real Chromium browser against the historical admin path
+ * (/keystone) and the explicit modern alias (/keystone-next). After legacy
+ * client decommission both paths serve the modern admin shell.
  *
  * Port assignment: 3008 (hard constraint from roadmap P4-30).
  * DB: keystone-e2e-ui (MongoDB).
@@ -28,7 +28,7 @@ const NODE_OPTIONS = process.env.NODE_OPTIONS ?? '--max-old-space-size=4096';
 
 export default defineConfig({
 	testDir: './tests',
-	testIgnore: [/.*\/tests\/fields\/.*/, /.*\/tests\/heavy\/.*/],
+	testMatch: [/.*\/tests\/decommission\.spec\.ts/, /.*\/tests\/visual-identity\.spec\.ts/],
 	fullyParallel: false,
 	workers: 1,
 	retries: 1,

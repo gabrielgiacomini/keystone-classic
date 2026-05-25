@@ -35,56 +35,12 @@ function objectIdText(value: unknown): string {
 	return value instanceof Types.ObjectId ? value.toString() : String(value ?? '');
 }
 
-function fixtureImageDataUrl(publicId: string, width: number, height: number): string {
-	const label = publicId.split('/').pop() ?? publicId;
-	const svg = [
-		`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
-		'<rect width="100%" height="100%" fill="#e8f1fb"/>',
-		'<rect x="0" y="0" width="100%" height="100%" fill="none" stroke="#2f80ed" stroke-width="12"/>',
-		`<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.max(24, Math.floor(width / 18))}" fill="#1f2937">${label}</text>`,
-		'</svg>',
-	].join('');
-	return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-}
-
-function cloudinaryImage(publicId: string, width = 1200, height = 800): Record<string, unknown> {
-	const fixtureUrl = fixtureImageDataUrl(publicId, width, height);
-	return {
-		public_id: publicId,
-		version: 1,
-		signature: `sig-${publicId}`,
-		format: 'jpg',
-		resource_type: 'image',
-		url: fixtureUrl,
-		width,
-		height,
-		secure_url: fixtureUrl,
-	};
-}
-
 async function mediaFixture(): Promise<MongoDoc> {
 	const doc = await withMongo((db) =>
 		db.collection('MediaAsset').findOne({ fixtureKey: 'media-hero' }),
 	);
 	expect(doc, 'media fixture should exist').toBeTruthy();
 	return doc as MongoDoc;
-}
-
-async function restoreLegacyCloudinaryFixture(id: string): Promise<void> {
-	await withMongo((db) =>
-		db.collection('MediaAsset').updateOne(
-			{ _id: new Types.ObjectId(id) },
-			{
-				$set: {
-					legacyImage: cloudinaryImage('field-complete/legacy-hero', 1600, 900),
-					legacyGallery: [
-						cloudinaryImage('field-complete/gallery-1', 1200, 800),
-						cloudinaryImage('field-complete/gallery-2', 900, 900),
-					],
-				},
-			},
-		),
-	);
 }
 
 async function expectRenderableImages(page: Page, selector: string): Promise<void> {
@@ -152,21 +108,6 @@ async function gotoMediaItem(page: Page, id: string): Promise<void> {
 	await expect(page.locator('form')).toBeVisible();
 }
 
-async function gotoLegacyMediaItem(page: Page, id: string): Promise<void> {
-	const load = page.waitForResponse(
-		(r) =>
-			(
-				r.url().includes(`/keystone-api/MediaAsset/${id}`) ||
-				r.url().includes(`/keystone-api/media-assets/${id}`)
-			) &&
-			r.request().method() === 'GET' &&
-			r.status() === 200,
-	);
-	await page.goto(`/keystone/media-assets/${id}`);
-	await load;
-	await expect(page.locator('[data-screen-id="item"]')).toBeVisible();
-}
-
 async function saveMediaItem(page: Page, id: string): Promise<void> {
 	const save = page.waitForResponse(
 		(r) =>
@@ -186,122 +127,6 @@ function fieldShell(page: Page, fieldName: string, fieldType: string) {
 }
 
 test.describe('field-complete media uploads', () => {
-	test('legacy Cloudinary previews render fixture images', async ({
-		signedInPage,
-	}) => {
-		const media = await mediaFixture();
-		const mediaId = objectIdText(media._id);
-		await restoreLegacyCloudinaryFixture(mediaId);
-
-		await gotoLegacyMediaItem(signedInPage, mediaId);
-
-		await expectRenderableImages(
-			signedInPage,
-			'.field-type-cloudinaryimage img, .field-type-cloudinaryimages img',
-		);
-	});
-
-	test('legacy Cloudinary image upload saves without blanking the item screen', async ({
-		signedInPage,
-	}) => {
-		const media = await mediaFixture();
-		const mediaId = objectIdText(media._id);
-		await restoreLegacyCloudinaryFixture(mediaId);
-
-		await gotoLegacyMediaItem(signedInPage, mediaId);
-		await signedInPage
-			.locator('input[name^="CloudinaryImage-legacyImage-"]')
-			.setInputFiles({
-				name: 'field-complete-legacy-image.png',
-				mimeType: 'image/png',
-				buffer: PNG_BUFFER,
-			});
-		await expect(signedInPage.getByText('Save to Upload')).toBeVisible();
-
-		const save = signedInPage.waitForResponse(
-			(r) =>
-				r.url().includes(`/keystone-api/media-assets/${mediaId}`) &&
-				r.request().method() === 'POST',
-		);
-		await signedInPage.getByRole('button', { name: /^Save$/ }).click();
-		const res = await save;
-		expect(res.status()).toBe(200);
-		await expect(signedInPage.getByText('Your changes have been saved successfully')).toBeVisible();
-		await expect(signedInPage.locator('[data-screen-id="item"]')).toBeVisible();
-		await expectRenderableImages(signedInPage, '.field-type-cloudinaryimage img');
-
-		const stored = await mediaFixture();
-		expect(asRecord(stored.legacyImage).public_id).toBeTruthy();
-	});
-
-	test('legacy file upload keeps the original filename and resolves the public URL', async ({
-		signedInPage,
-	}) => {
-		const media = await mediaFixture();
-		const mediaId = objectIdText(media._id);
-
-		await gotoLegacyMediaItem(signedInPage, mediaId);
-		await signedInPage
-			.locator('[data-field-name="download"][data-field-type="file"] input[type="file"]')
-			.setInputFiles({
-				name: 'field-complete-legacy-download.txt',
-				mimeType: 'text/plain',
-				buffer: Buffer.from('field-complete legacy download'),
-			});
-		await expect(signedInPage.getByText('Save to Upload')).toBeVisible();
-
-		const save = signedInPage.waitForResponse(
-			(r) =>
-				r.url().includes(`/keystone-api/media-assets/${mediaId}`) &&
-				r.request().method() === 'POST',
-		);
-		await signedInPage.getByRole('button', { name: /^Save$/ }).click();
-		const res = await save;
-		expect(res.status()).toBe(200);
-		await expect(signedInPage.getByText('Your changes have been saved successfully')).toBeVisible();
-
-		const downloadField = signedInPage.locator('[data-field-name="download"][data-field-type="file"]');
-		await expect(downloadField.getByRole('link', { name: 'field-complete-legacy-download.txt' })).toBeVisible();
-		const href = await downloadField.getByRole('link', { name: 'field-complete-legacy-download.txt' }).getAttribute('href');
-		expect(href).toBe('/field-complete-files/field-complete-legacy-download.txt');
-		const downloadResponse = await signedInPage.request.head(href ?? '');
-		expect(downloadResponse.status()).toBe(200);
-
-		const stored = await mediaFixture();
-		expect(asRecord(stored.download).filename).toBe('field-complete-legacy-download.txt');
-		expect(asRecord(stored.download).originalname).toBe('field-complete-legacy-download.txt');
-		expect(asRecord(stored.download).url).toBe('/field-complete-files/field-complete-legacy-download.txt');
-	});
-
-	test('legacy Cloudinary image lightbox opens, advances, and closes', async ({
-		signedInPage,
-	}) => {
-		const media = await mediaFixture();
-		const mediaId = objectIdText(media._id);
-		await restoreLegacyCloudinaryFixture(mediaId);
-
-		await gotoLegacyMediaItem(signedInPage, mediaId);
-
-		await signedInPage
-			.locator('.field-type-cloudinaryimage a', { has: signedInPage.locator('img') })
-			.first()
-			.click();
-		const closeButton = signedInPage.getByTitle('Close (Esc)');
-		await expect(closeButton).toBeVisible();
-		await signedInPage.keyboard.press('Escape');
-		await expect(closeButton).toBeHidden();
-
-		await signedInPage
-			.locator('.field-type-cloudinaryimages a', { has: signedInPage.locator('img') })
-			.first()
-			.click();
-		await expect(closeButton).toBeVisible();
-		await signedInPage.getByTitle('Next (Right arrow key)').click();
-		await expect(closeButton).toBeVisible();
-		await closeButton.click();
-		await expect(closeButton).toBeHidden();
-	});
-
 	test('admin next uploads, replaces, and removes file and Cloudinary media hermetically', async ({
 		signedInPage,
 	}) => {

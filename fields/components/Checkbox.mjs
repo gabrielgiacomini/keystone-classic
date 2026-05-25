@@ -1,37 +1,33 @@
 import React from 'react';
-import createReactClass from 'create-react-class';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classnames from '../utils/classnames.mjs';
 import { darken, fade } from '../../admin/client-legacy/utils/color.mjs';
 import E from '../../admin/client-legacy/constants.mjs';
 
-const Checkbox = createReactClass({
-	displayName: 'Checkbox',
-	propTypes: {
-		checked: PropTypes.bool,
-		component: PropTypes.node,
-		onChange: PropTypes.func,
-		readonly: PropTypes.bool,
-	},
-	getDefaultProps () {
-		return {
-			component: 'button',
-		};
-	},
-	getInitialState () {
-		return {
+class Checkbox extends React.Component {
+	static displayName = 'Checkbox';
+
+	static defaultProps = {
+		component: 'button',
+	};
+
+	constructor(props) {
+		super(props);
+		this.state = {
 			active: null,
 			focus: null,
 			hover: null,
 		};
-	},
-	componentDidMount () {
+	}
+
+	componentDidMount() {
 		window.addEventListener('mouseup', this.handleMouseUp, false);
-	},
-	componentWillUnmount () {
+	}
+
+	componentWillUnmount() {
 		window.removeEventListener('mouseup', this.handleMouseUp, false);
-	},
-	getStyles () {
+	}
+
+	getStyles() {
 		const { checked, readonly } = this.props;
 		const { active, focus, hover } = this.state;
 
@@ -89,45 +85,55 @@ const Checkbox = createReactClass({
 			WebkitTransition: 'all 120ms ease-out',
 			transition: 'all 120ms ease-out',
 		};
-	},
-	handleKeyDown (e) {
+	}
+
+	handleKeyDown = (e) => {
 		if (e.keyCode !== 32) return;
 		this.toggleActive(true);
-	},
-	handleKeyUp () {
+	};
+
+	handleKeyUp = () => {
 		this.toggleActive(false);
-	},
-	handleMouseOver () {
+	};
+
+	handleMouseOver = () => {
 		this.toggleHover(true);
-	},
-	handleMouseDown () {
+	};
+
+	handleMouseDown = () => {
 		this.toggleActive(true);
 		this.toggleFocus(true);
-	},
-	handleMouseUp () {
+	};
+
+	handleMouseUp = () => {
 		this.toggleActive(false);
-	},
-	handleMouseOut () {
+	};
+
+	handleMouseOut = () => {
 		this.toggleHover(false);
-	},
-	toggleActive (pseudo) {
+	};
+
+	toggleActive = (pseudo) => {
 		this.setState({ active: pseudo });
-	},
-	toggleHover (pseudo) {
+	};
+
+	toggleHover = (pseudo) => {
 		this.setState({ hover: pseudo });
-	},
-	toggleFocus (pseudo) {
+	};
+
+	toggleFocus = (pseudo) => {
 		this.setState({ focus: pseudo });
-	},
-	handleChange () {
+	};
+
+	handleChange = () => {
 		this.props.onChange(!this.props.checked);
-	},
-	render () {
+	};
+
+	render() {
 		const { checked, readonly } = this.props;
 
 		const { checked: _c, component: _co, onChange: _o, readonly: _r, ...props } = this.props;
 		props.style = this.getStyles();
-		props.ref = 'checkbox';
 		props.className = classnames('octicon', {
 			'octicon-check': checked,
 			'octicon-x': (typeof checked === 'boolean') && !checked && readonly,
@@ -149,7 +155,7 @@ const Checkbox = createReactClass({
 		const node = readonly ? 'span' : this.props.component;
 
 		return React.createElement(node, props);
-	},
-});
+	}
+}
 
 export default Checkbox;

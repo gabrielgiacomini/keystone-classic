@@ -2,14 +2,23 @@ import { FieldType } from '../Type.mjs';
 import type { KeystoneList, FieldOptionsBase, MongooseDocument } from '../Type.mjs';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
 import customParseFormat from 'dayjs/plugin/customParseFormat.js';
 import advancedFormat from 'dayjs/plugin/advancedFormat.js';
+dayjs.extend(utc);
 dayjs.extend(customParseFormat);
 dayjs.extend(advancedFormat);
 import { defer } from '../../../lib/utils/async.mjs';
 import addPresenceToQuery from '../../utils/addPresenceToQuery.mjs';
 import DateType from '../date/DateType.mjs';
 import type { KSAdminUiFilterForDateAndDateTimeFields } from '../date/DateType.mjs';
+
+function parseDateArrayInput(value: unknown, parseFormatString: string): Dayjs {
+	if (typeof value === 'number' || value instanceof Date || dayjs.isDayjs(value)) {
+		return dayjs(value);
+	}
+	return dayjs.utc(value as string, parseFormatString, true);
+}
 
 class DateArrayType extends FieldType<KeystoneFieldOptionsForDateArrayType, Date[]> {
 	/** Human-readable type name used by the Admin UI. */
@@ -117,11 +126,15 @@ class DateArrayType extends FieldType<KeystoneFieldOptionsForDateArrayType, Date
 	override updateItem(item: MongooseDocument, data: Record<string, unknown>, callback: () => void): void {
 		let value = this.getValueFromData(data);
 		if (Array.isArray(value)) {
-			value = (value as unknown[]).filter((date: unknown) => dayjs(date as string | Date).isValid());
+			value = (value as unknown[])
+				.map((date: unknown) => parseDateArrayInput(date, this.parseFormatString))
+				.filter((date) => date.isValid())
+				.map((date) => date.toDate());
 		}
 		value ??= [];
 		if (typeof value === 'string') {
-			if (dayjs(value).isValid()) value = [value];
+			const parsed = parseDateArrayInput(value, this.parseFormatString);
+			if (parsed.isValid()) value = [parsed.toDate()];
 		}
 		if (Array.isArray(value)) item.set(this.path, value);
 		process.nextTick(callback);

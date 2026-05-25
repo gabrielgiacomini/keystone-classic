@@ -39,6 +39,10 @@ export interface ArrayFieldMethods<P, S extends ArrayFieldState> {
 	removeItem(this: FieldThis<P, S>, item: ArrayItem): void;
 	updateItem(this: FieldThis<P, S>, item: ArrayItem, event: { value?: string | number } | React.ChangeEvent<HTMLInputElement>): void;
 	valueChanged(this: FieldThis<P, S>, values: Array<string | number>): void;
+	setItemRef(this: FieldThis<P, S>, key: string, target: { focus?: () => void } | null): void;
+	setButtonRef(this: FieldThis<P, S>, target: { focus?: () => void } | null): void;
+	focusItem(this: FieldThis<P, S>, item: ArrayItem): void;
+	focusButton(this: FieldThis<P, S>): void;
 	renderField(this: FieldThis<P, S>): React.ReactElement;
 	renderItem(this: FieldThis<P, S>, item: ArrayItem, index: number): React.ReactElement;
 	renderValue(this: FieldThis<P, S>): React.ReactElement;
@@ -60,12 +64,12 @@ export type WithArrayField<P, S> = FieldThis<P, S & ArrayFieldState> & ArrayFiel
 
 /**
  * The ArrayField mixin object whose methods are merged into array-type field
- * components. Includes `getInitialState` and `componentWillReceiveProps` which
+ * components. Includes `getInitialState` and `componentDidUpdate` which
  * are lifecycle methods not part of `ArrayFieldMethods` (they are mixin-internal
  * and not intended to be called by consumers directly).
  */
 declare const ArrayField: ArrayFieldMethods<unknown, ArrayFieldState> & {
 	getInitialState(this: FieldThis<unknown, ArrayFieldState>): ArrayFieldState;
-	componentWillReceiveProps(this: FieldThis<unknown, ArrayFieldState>, nextProps: unknown): void;
+	componentDidUpdate(this: FieldThis<unknown, ArrayFieldState>, prevProps: unknown): void;
 };
 export default ArrayField;

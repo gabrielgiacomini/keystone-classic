@@ -9,19 +9,23 @@
 import Field from '../Field.mjs';
 import { listsByKey } from '../../../admin/client-legacy/utils/lists.mjs';
 import React from 'react';
-import Select from 'react-select';
-import xhr from 'xhr';
-import {
-	Button,
-	FormInput,
-	InlineGroup as Group,
-	InlineGroupSection as Section,
-} from '../../../admin/client-legacy/App/elemental';
-import _ from 'lodash';
+import Select from '../../../admin/client-legacy/App/shared/Select.mjs';
+import { legacyApiRequest } from '../../../admin/shared/api/legacyRequest.mjs';
+import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
+import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
 import CreateForm from '../../../admin/client-legacy/App/shared/CreateForm.mjs';
 
 function getAdminApiPath () {
 	return Keystone.adminApiPath || `${Keystone.adminLegacyPath}/api`;
+}
+
+function releaseBodyScrollLock () {
+	if (typeof document === 'undefined') return;
+	document.body.style.paddingRight = '';
+	document.body.style.overflow = '';
+	document.body.style.overflowY = '';
+	window.dispatchEvent(new Event('resize'));
+	window.dispatchEvent(new Event('scroll'));
 }
 
 /**
@@ -74,12 +78,12 @@ export default Field.create({
 		this.__isMounted = false;
 	},
 	/**
-	 * Handles the component receiving new props.
-	 * @param {object} nextProps The new props.
+	 * Handles externally supplied value changes.
+	 * @param {object} prevProps The previous props.
 	 */
-	UNSAFE_componentWillReceiveProps (nextProps) {
-		if (nextProps.value === this.props.value || nextProps.many && compareValues(this.props.value, nextProps.value)) return;
-		this.loadValue(nextProps.value);
+	componentDidUpdate (prevProps) {
+		if (this.props.value === prevProps.value || this.props.many && compareValues(prevProps.value, this.props.value)) return;
+		this.loadValue(this.props.value);
 	},
 	/**
 	 * Determines whether the field should be collapsed.
@@ -99,7 +103,7 @@ export default Field.create({
 	buildFilters () {
 		const filters = {};
 
-		_.forEach(this.props.filters, (value, key) => {
+		Object.entries(this.props.filters || {}).forEach(([key, value]) => {
 			if (typeof value === 'string' && value[0] === ':') {
 				const fieldName = value.slice(1);
 
@@ -117,11 +121,11 @@ export default Field.create({
 			} else {
 				filters[key] = value;
 			}
-		}, this);
+		});
 
 		const parts = [];
 
-		_.forEach(filters, function (val, key) {
+		Object.entries(filters).forEach(function ([key, val]) {
 			parts.push('filters[' + key + '][value]=' + encodeURIComponent(val));
 		});
 
@@ -161,7 +165,7 @@ export default Field.create({
 			value: null,
 		});
 			Promise.all(values.map((value) => new Promise((resolve, reject) => {
-				xhr({
+				legacyApiRequest({
 					url: getAdminApiPath() + '/' + this.props.refList.path + '/' + value + '?basic',
 					responseType: 'json',
 				}, (err, resp, data) => {
@@ -191,7 +195,7 @@ export default Field.create({
 		// NOTE: this seems like the wrong way to add options to the Select
 		this.loadOptionsCallback = callback;
 			const filters = this.buildFilters();
-			xhr({
+			legacyApiRequest({
 				url: getAdminApiPath() + '/' + this.props.refList.path + '?basic&search=' + input + '&' + filters,
 				responseType: 'json',
 			}, (err, resp, data) => {
@@ -230,7 +234,7 @@ export default Field.create({
 	closeCreate () {
 		this.setState({
 			createIsOpen: false,
-		});
+		}, releaseBodyScrollLock);
 	},
 	/**
 	 * Handles the creation of a new item.
@@ -238,21 +242,25 @@ export default Field.create({
 	 */
 	onCreate (item) {
 		this.cacheItem(item);
-		if (Array.isArray(this.state.value)) {
-			// For many relationships, append the new item to the end
-			const values = this.state.value.map((item) => item.id);
-			values.push(item.id);
-			this.valueChanged(values.join(','));
-		} else {
-			this.valueChanged(item.id);
-		}
+		this.setState({
+			createIsOpen: false,
+		}, () => {
+			releaseBodyScrollLock();
+			if (Array.isArray(this.state.value)) {
+				// For many relationships, append the new item to the end
+				const values = this.state.value.map((item) => item.id);
+				values.push(item.id);
+				this.valueChanged(values.join(','));
+			} else {
+				this.valueChanged(item.id);
+			}
 
-		// NOTE: this seems like the wrong way to add options to the Select
-		this.loadOptionsCallback(null, {
-			complete: true,
-			options: Object.keys(this._itemsCache).map((k) => this._itemsCache[k]),
+			// NOTE: this seems like the wrong way to add options to the Select
+			this.loadOptionsCallback(null, {
+				complete: true,
+				options: Object.keys(this._itemsCache).map((k) => this._itemsCache[k]),
+			});
 		});
-		this.closeCreate();
 	},
 	/**
 	 * Renders the select input.
@@ -262,25 +270,27 @@ export default Field.create({
 	renderSelect (noedit) {
 		const inputName = this.getInputName(this.props.path);
 		const emptyValueInput = (this.props.many && (!this.state.value || !this.state.value.length) || (!this.props.many && !this.state.value))
-			? <input type="hidden" name={inputName} value="" /> : null;
-		return (
-			<div>
-				{/* This input ensures that an empty value is submitted when no related items are selected */}
-				{emptyValueInput}
-				{/* This input element fools Safari's autocorrect in certain situations that completely break react-select */}
-				<input type="text" style={{ position: 'absolute', width: 1, height: 1, zIndex: -1, opacity: 0 }} tabIndex="-1"/>
-				<Select.Async
-					multi={this.props.many}
-					disabled={noedit}
-					loadOptions={this.loadOptions}
-					labelKey="name"
-					name={inputName}
-					onChange={this.valueChanged}
-					simpleValue
-					value={this.state.value}
-					valueKey="id"
-				/>
-			</div>
+			? React.createElement('input', { type: 'hidden', name: inputName, value: '' }) : null;
+		return React.createElement(
+			'div',
+			null,
+			emptyValueInput,
+			React.createElement('input', {
+				type: 'text',
+				style: { position: 'absolute', width: 1, height: 1, zIndex: -1, opacity: 0 },
+				tabIndex: '-1',
+			}),
+			React.createElement(Select.Async, {
+				multi: this.props.many,
+				disabled: noedit,
+				loadOptions: this.loadOptions,
+				labelKey: 'name',
+				name: inputName,
+				onChange: this.valueChanged,
+				simpleValue: true,
+				value: this.state.value,
+				valueKey: 'id',
+			})
 		);
 	},
 	/**
@@ -288,20 +298,28 @@ export default Field.create({
 	 * @returns {React.Element} The rendered input group.
 	 */
 	renderInputGroup () {
-		return (
-			<Group block>
-				<Section grow>
-					{this.renderSelect()}
-				</Section>
-				<Section>
-					<Button onClick={this.openCreate}>+</Button>
-				</Section>
-				<CreateForm
-					list={listsByKey[this.props.refList.key]}
-					isOpen={this.state.createIsOpen}
-					onCreate={this.onCreate}
-					onCancel={this.closeCreate} />
-			</Group>
+		return React.createElement(
+			'div',
+			{ style: { alignItems: 'stretch', display: 'flex', gap: '0.75em' } },
+			React.createElement(
+				'div',
+				{ style: { flex: '1 1 0', minWidth: 0 } },
+				this.renderSelect()
+			),
+			React.createElement(
+				'div',
+				{ style: { flex: '0 0 auto' } },
+				React.createElement(Button, {
+					onClick: this.openCreate,
+					'data-field-relationship-create-inline': true,
+				}, '+')
+			),
+			React.createElement(CreateForm, {
+				list: listsByKey[this.props.refList.key],
+				isOpen: this.state.createIsOpen,
+				onCreate: this.onCreate,
+				onCancel: this.closeCreate,
+			})
 		);
 	},
 	/**
@@ -318,7 +336,7 @@ export default Field.create({
 			noedit: true,
 		};
 
-		return many ? this.renderSelect(true) : <FormInput {...props} />;
+		return many ? this.renderSelect(true) : React.createElement(FormInput, props);
 	},
 	/**
 	 * Renders the field.

@@ -6,9 +6,7 @@
  * of the field's readme.
  */
 import React from 'react';
-import createReactClass from 'create-react-class';
-import PropTypes from 'prop-types';
-import Markdown from 'react-markdown';
+import Markdown from './Markdown.mjs';
 
 import Col from './Col.mjs';
 import Row from './Row.mjs';
@@ -18,130 +16,135 @@ import FieldSpec from './FieldSpec.mjs';
  * A component that renders a field type, including its specs and readme.
  * @augments React.Component
  */
-const ExplorerFieldType = createReactClass({
-	propTypes: {
-		FieldComponent: PropTypes.func.isRequired,
-		FilterComponent: PropTypes.func.isRequired,
-		params: PropTypes.object.isRequired,
-		readme: PropTypes.string,
-		spec: PropTypes.oneOfType([
-			PropTypes.object,
-			PropTypes.arrayOf(PropTypes.object),
-		]).isRequired,
-		toggleSidebar: PropTypes.func.isRequired,
-		value: PropTypes.any,
-	},
+class ExplorerFieldType extends React.Component {
+
 	/**
 	 * Gets the initial state of the component.
 	 * @returns {object} The initial state.
 	 */
-	getInitialState () {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			readmeIsVisible: !!this.props.readme,
 			filter: this.props.FilterComponent.getDefaultValue(),
 			value: this.props.value,
 		};
-	},
+	}
+
 	/**
-	 * Handles the component receiving new props.
-	 * @param {object} newProps The new props.
+	 * Resets field/filter state after navigating to a different field type.
+	 * @param {object} prevProps The previous props.
 	 */
-	UNSAFE_componentWillReceiveProps (newProps) {
-		if (this.props.params.type === newProps.params.type) return;
+	componentDidUpdate(prevProps) {
+		if (prevProps.params.type === this.props.params.type) return;
 
 		this.setState({
-			filter: newProps.FilterComponent.getDefaultValue(),
-			readmeIsVisible: newProps.readme
+			filter: this.props.FilterComponent.getDefaultValue(),
+			readmeIsVisible: this.props.readme
 				? this.state.readmeIsVisible
-				: false,
-			value: newProps.value,
+			: false,
+			value: this.props.value,
 		});
-	},
+	}
+
 	/**
 	 * Handles a change in the field's value.
 	 * @param {object} e The event object.
 	 */
-	onFieldChange (e) {
+	onFieldChange = (e) => {
 		const logValue = typeof e.value === 'string' ? `"${e.value}"` : e.value;
 		console.log(`${this.props.params.type} field value changed:`, logValue);
 		this.setState({
 			value: e.value,
 		});
-	},
+	};
+
 	/**
 	 * Handles a change in the filter's value.
 	 * @param {unknown} value The new filter value.
 	 */
-	onFilterChange (value) {
+	onFilterChange = (value) => {
 		console.log(`${this.props.params.type} filter value changed:`, value);
 		this.setState({
 			filter: value,
 		});
-	},
+	};
+
 	/**
 	 * Toggles the visibility of the readme.
 	 */
-	toggleReadme () {
+	toggleReadme = () => {
 		this.setState({ readmeIsVisible: !this.state.readmeIsVisible });
-	},
+	};
+
 	/**
 	 * Renders the component.
 	 * @returns {React.Element} The rendered component.
 	 */
-	render () {
+	render() {
 		const { FieldComponent, FilterComponent, readme, toggleSidebar } = this.props;
 		const { readmeIsVisible } = this.state;
 		const specs = Array.isArray(this.props.spec) ? this.props.spec : [this.props.spec];
 
-		return (
-			<div className="fx-page">
-				<div className="fx-page__header">
-					<div className="fx-page__header__title">
-						<button
-							className="fx-page__header__button fx-page__header__button--sidebar mega-octicon octicon-three-bars"
-							onClick={toggleSidebar}
-							type="button"
-						/>
-						{FieldComponent.type}
-					</div>
-					{!!readme && (
-						<button
-							className="fx-page__header__button fx-page__header__button--readme mega-octicon octicon-file-text"
-							onClick={this.toggleReadme}
-							title={readmeIsVisible ? 'Hide Readme' : 'Show Readme'}
-							type="button"
-						/>
-					)}
-				</div>
-				<div className="fx-page__content">
-					<Row>
-						<Col>
-							<div className="fx-page__content__inner">
-								{specs.map((spec, i) => (
-									<FieldSpec
-										key={spec.path}
-										i={i}
-										FieldComponent={FieldComponent}
-										FilterComponent={FilterComponent}
-										spec={spec}
-										readmeIsVisible={readmeIsVisible}
-									/>
-								))}
-							</div>
-						</Col>
-						{!!readmeIsVisible && (
-							<Col width={380}>
-								<Markdown
-									className="Markdown"
-									source={readme}
-								/>
-							</Col>
-						)}
-					</Row>
-				</div>
-			</div>
+		const specElements = specs.map((spec, i) => React.createElement(FieldSpec, {
+			key: spec.path,
+			i,
+			FieldComponent,
+			FilterComponent,
+			spec,
+			readmeIsVisible,
+		}));
+
+		return React.createElement(
+			'div',
+			{ className: 'fx-page' },
+			React.createElement(
+				'div',
+				{ className: 'fx-page__header' },
+				React.createElement(
+					'div',
+					{ className: 'fx-page__header__title' },
+					React.createElement('button', {
+						className: 'fx-page__header__button fx-page__header__button--sidebar mega-octicon octicon-three-bars',
+						onClick: toggleSidebar,
+						type: 'button',
+					}),
+					FieldComponent.type,
+				),
+				readme ? React.createElement('button', {
+					className: 'fx-page__header__button fx-page__header__button--readme mega-octicon octicon-file-text',
+					onClick: this.toggleReadme,
+					title: readmeIsVisible ? 'Hide Readme' : 'Show Readme',
+					type: 'button',
+				}) : null,
+			),
+			React.createElement(
+				'div',
+				{ className: 'fx-page__content' },
+				React.createElement(
+					Row,
+					null,
+					React.createElement(
+						Col,
+						null,
+						React.createElement(
+							'div',
+							{ className: 'fx-page__content__inner' },
+							specElements,
+						),
+					),
+					readmeIsVisible ? React.createElement(
+						Col,
+						{ width: 380 },
+						React.createElement(Markdown, {
+							className: 'Markdown',
+							source: readme,
+						}),
+					) : null,
+				),
+			),
 		);
-	},
-});
+	}
+}
 
 export default ExplorerFieldType;

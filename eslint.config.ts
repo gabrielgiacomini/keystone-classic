@@ -24,9 +24,6 @@ export default [
 			'docs/**',
 			// Third-party legacy code (bootstrap-markdown). Bundled as-is.
 			'fields/types/**/lib/**',
-			// Third-party React 17 peer-range forks. Runtime code is copied from
-			// published packages and only package metadata is maintained locally.
-			'vendor/react17-peer-forks/**',
 			'**/*.bak',
 			'**/*.bak.ts',
 			'**/*.min.js',
@@ -513,6 +510,29 @@ export default [
 			'jsdoc/require-returns': 'off',
 			'jsdoc/require-param': 'off',
 			'jsdoc/require-description': 'off',
+		},
+	},
+
+	// Modernization internals and converted legacy modules keep structural JSDoc
+	// validation without requiring low-value comments on every helper.
+	{
+		files: [
+			'admin/shared/**/*.{ts,tsx,mts}',
+			'lib/core/adminSurfacePathUtils.mts',
+			'lib/content/**/*.mts',
+			'lib/session.mts',
+			'lib/list.mts',
+			'lib/list/add.mts',
+			'fields/types/cloudinary/CloudinaryType.mts',
+			'fields/types/password/PasswordType.mts',
+		],
+		rules: {
+			'jsdoc/require-jsdoc': 'off',
+			'jsdoc/require-description': 'off',
+			'jsdoc/require-returns': 'off',
+			'jsdoc/require-returns-description': 'off',
+			'jsdoc/require-param': 'off',
+			'jsdoc/require-param-description': 'off',
 		},
 	},
 

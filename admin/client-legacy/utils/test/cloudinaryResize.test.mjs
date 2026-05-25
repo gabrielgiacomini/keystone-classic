@@ -27,8 +27,30 @@ describe('cloudinaryResize()', () => {
 
 		const result = cloudinaryResize('demo/image', { width: 100 });
 
-		assert.equal(typeof result, 'string');
-		assert.match(result, /demo-cloud/);
-		assert.match(result, /demo\/image/);
+		assert.equal(result, 'http://res.cloudinary.com/demo-cloud/image/upload/q_80,w_100/demo/image');
+	});
+
+	it('supports secure URLs, source, version, and legacy transformation keys', () => {
+		global.window = { Keystone: { cloudinary: { cloud_name: 'demo cloud' } } };
+
+		const result = cloudinaryResize('folder/image', {
+			crop: 'fit',
+			dpr: 2,
+			effect: 'grayscale',
+			fetch_format: 'auto',
+			flags: 'progressive',
+			gravity: 'center',
+			height: 90,
+			radius: 4,
+			secure: true,
+			source: 'private',
+			version: 123,
+			width: 120,
+		});
+
+		assert.equal(
+			result,
+			'https://res.cloudinary.com/demo%20cloud/image/private/q_80,c_fit,dpr_2,e_grayscale,f_auto,fl_progressive,g_center,h_90,r_4,w_120/v123/folder/image'
+		);
 	});
 });

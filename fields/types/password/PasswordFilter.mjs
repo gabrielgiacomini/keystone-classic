@@ -7,10 +7,8 @@
  * not.
  */
 import React from 'react';
-import createReactClass from 'create-react-class';
-import PropTypes from 'prop-types';
 
-import { SegmentedControl } from '../../../admin/client-legacy/App/elemental';
+import SegmentedControl from '../../../admin/client-legacy/App/elemental/SegmentedControl/index.mjs';
 
 const EXISTS_OPTIONS = [
 	{ label: 'Is Set', value: true },
@@ -31,43 +29,24 @@ function getDefaultValue () {
  * The `PasswordFilter` component.
  * @augments React.Component
  */
-const PasswordFilter = createReactClass({
-	propTypes: {
-		filter: PropTypes.shape({
-			exists: PropTypes.oneOf(EXISTS_OPTIONS.map(i => i.value)),
-		}),
-	},
-	statics: {
-		getDefaultValue: getDefaultValue,
-	},
-	getDefaultProps () {
-		return {
-			filter: getDefaultValue(),
-		};
-	},
-	/**
-	 * Handles a change in the filter's value.
-	 * @param {boolean} value The new value.
-	 */
-	toggleExists (value) {
-		this.props.onChange({ exists: value });
-	},
-	/**
-	 * Renders the component.
-	 * @returns {React.Element} The rendered component.
-	 */
-	render () {
-		const { filter } = this.props;
+function PasswordFilter({ filter, onChange }) {
+	return React.createElement(
+		'div',
+		{ 'data-list-filter-password': true },
+		React.createElement(SegmentedControl, {
+			equalWidthSegments: true,
+			onChange: (value) => onChange({ exists: value }),
+			options: EXISTS_OPTIONS,
+			value: filter.exists,
+		})
+	);
+}
 
-		return (
-			<SegmentedControl
-				equalWidthSegments
-				onChange={this.toggleExists}
-				options={EXISTS_OPTIONS}
-				value={filter.exists}
-			/>
-		);
-	},
-});
+
+PasswordFilter.defaultProps = {
+	filter: getDefaultValue(),
+};
+
+PasswordFilter.getDefaultValue = getDefaultValue;
 
 export default PasswordFilter;
