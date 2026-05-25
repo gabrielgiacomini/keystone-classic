@@ -92,6 +92,25 @@ async function selectVisibleDay (picker: playwright.Locator, day: string) {
 		.click();
 }
 
+async function expectControlsShareRow (
+	dateInput: playwright.Locator,
+	timeInput: playwright.Locator,
+	nowButton: playwright.Locator,
+) {
+	const [dateBox, timeBox, buttonBox] = await Promise.all([
+		dateInput.boundingBox(),
+		timeInput.boundingBox(),
+		nowButton.boundingBox(),
+	]);
+	expect(dateBox).toBeTruthy();
+	expect(timeBox).toBeTruthy();
+	expect(buttonBox).toBeTruthy();
+	expect(Math.abs(dateBox!.y - timeBox!.y)).toBeLessThanOrEqual(2);
+	expect(Math.abs(dateBox!.y - buttonBox!.y)).toBeLessThanOrEqual(2);
+	expect(timeBox!.x).toBeGreaterThan(dateBox!.x + dateBox!.width);
+	expect(buttonBox!.x).toBeGreaterThan(timeBox!.x + timeBox!.width);
+}
+
 function filtersParam (filters: Array<Record<string, unknown>>): string {
 	return encodeURIComponent(JSON.stringify(filters));
 }
@@ -217,7 +236,10 @@ test.describe('Legacy date picker operations', () => {
 		await expect(dateInput).toBeVisible();
 		await expect(timeInput).toBeVisible();
 
-		await page.locator('label:has-text("Reviewed At")').locator('xpath=..').getByRole('button', { name: 'Now' }).click();
+		const nowButton = page.locator('label:has-text("Reviewed At")').locator('xpath=..').getByRole('button', { name: 'Now' });
+		await expectControlsShareRow(dateInput, timeInput, nowButton);
+
+		await nowButton.click();
 		await expect(dateInput).not.toHaveValue('');
 		await expect(timeInput).not.toHaveValue('');
 

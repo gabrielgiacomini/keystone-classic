@@ -161,7 +161,7 @@ export default Field.create({
 				null,
 				React.createElement(
 					Group,
-					null,
+					{ block: true },
 					React.createElement(
 						Section,
 						{ grow: true },
