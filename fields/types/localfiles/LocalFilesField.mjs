@@ -10,10 +10,10 @@ Some features here, including size formatting and icons, may be ported across.
 import bytes from 'bytes';
 import Field from '../Field.mjs';
 import React from 'react';
-import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
-import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
-import FormNote from '../../../admin/client-legacy/App/elemental/FormNote/index.mjs';
+import Button from '../../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import FormNote from '../../../admin/client-legacy/compat/elemental/FormNote.mjs';
 
 const ICON_EXTS = [
 	'aac', 'ai', 'aiff', 'avi', 'bmp', 'c', 'cpp', 'css', 'dat', 'dmg', 'doc', 'dotx', 'dwg', 'dxf', 'eps', 'exe', 'flv', 'gif', 'h',

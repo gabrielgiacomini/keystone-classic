@@ -8,9 +8,9 @@
  */
 import React from 'react';
 
-import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
-import FormSelect from '../../../admin/client-legacy/App/elemental/FormSelect/index.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import FormSelect from '../../../admin/client-legacy/compat/elemental/FormSelect.mjs';
 
 const MODE_OPTIONS = [
 	{ label: 'Contains', value: 'contains' },

@@ -9,10 +9,10 @@
 import DateInput from '../../components/DateInput.mjs';
 import Field from '../Field.mjs';
 import React from 'react';
-import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
-import Group from '../../../admin/client-legacy/App/elemental/InlineGroup/index.mjs';
-import Section from '../../../admin/client-legacy/App/elemental/InlineGroupSection/index.mjs';
+import Button from '../../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import Group from '../../../admin/client-legacy/compat/elemental/InlineGroup.mjs';
+import Section from '../../../admin/client-legacy/compat/elemental/InlineGroupSection.mjs';
 import { formatDateByFormat, parseDateByFormat, toValidDate } from '../../utils/date.mjs';
 
 /*

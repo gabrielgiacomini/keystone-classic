@@ -1,5 +1,5 @@
 import React from 'react';
-import FormInput from '../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import FormInput from '../../admin/client-legacy/compat/elemental/FormInput.mjs';
 import { fade } from '../../admin/client-legacy/utils/color.mjs';
 import theme from '../../admin/client-legacy/theme.mjs';
 

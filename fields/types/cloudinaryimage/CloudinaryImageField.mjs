@@ -9,10 +9,10 @@
 import React from 'react';
 import Field from '../Field.mjs';
 import cloudinaryResize from '../../../admin/client-legacy/utils/cloudinaryResize.mjs';
-import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
-import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
-import FormNote from '../../../admin/client-legacy/App/elemental/FormNote/index.mjs';
+import Button from '../../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import FormNote from '../../../admin/client-legacy/compat/elemental/FormNote.mjs';
 
 import ImageThumbnail from '../../components/ImageThumbnail.mjs';
 import FileChangeMessage from '../../components/FileChangeMessage.mjs';

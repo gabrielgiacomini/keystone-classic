@@ -5,10 +5,10 @@
  */
 import React from 'react';
 
-import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
-import Grid from '../../../admin/client-legacy/App/elemental/Grid/index.mjs';
-import SegmentedControl from '../../../admin/client-legacy/App/elemental/SegmentedControl/index.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import Grid from '../../../admin/client-legacy/compat/elemental/Grid.mjs';
+import SegmentedControl from '../../../admin/client-legacy/compat/elemental/SegmentedControl.mjs';
 
 const DISTANCE_OPTIONS = [
 	{ label: 'Max distance (km)', value: 'max' },

@@ -354,6 +354,10 @@ await assertNoFile(
 	'dist/admin/client-legacy/App',
 	'package output must not include the legacy App client root',
 );
+await assertFile('dist/admin/client-legacy/compat/elemental/FormInput.mjs');
+await assertFile('dist/admin/client-legacy/compat/shared/Select.mjs');
+await assertFile('dist/admin/client-legacy/utils/lists.mjs');
+await assertFile('dist/admin/client-legacy/utils/glamor.mjs');
 await assertNoFile(
 	'dist/admin/client-legacy/Signin',
 	'package output must not include the legacy Signin client root',
@@ -592,6 +596,12 @@ await assertNoSourcePatternInExtensions(
 	['.mjs', '.mts', '.ts', '.tsx', '.js', '.jsx', '.css'],
 	/admin\/client-legacy\/App|client-legacy\/App|admin\/public-legacy|public-legacy\/styles|\.less(?:['"]|$)|from ['"]less['"]|require\(['"]less['"]\)|less\.render/,
 	'built-in modern admin source must not import legacy App, legacy LESS assets, or direct Less compiler APIs',
+);
+await assertNoSourcePatternInExtensions(
+	['fields'],
+	['.mjs'],
+	/admin\/client-legacy\/App/,
+	'published legacy field compatibility modules must not import the deleted legacy App root',
 );
 await assertNoSourcePatternInExtensions(
 	['admin/client-next', 'admin/shared'],
@@ -1136,6 +1146,13 @@ assert(typeof fieldTypes.default === 'object', 'lib/fieldTypes subpath must impo
 
 const textType = await import(`${pkg.name}/fields/types/text/TextType`);
 assert(typeof textType.default === 'function', 'field type subpath must import from dist');
+const textField = await import(`${pkg.name}/fields/types/text/TextField`);
+assert(typeof textField.default === 'function', 'legacy text field compatibility subpath must import from dist');
+const relationshipField = await import(`${pkg.name}/fields/types/relationship/RelationshipField`);
+assert(
+	typeof relationshipField.default === 'function',
+	'legacy relationship field compatibility subpath must import from dist',
+);
 
 const storageNameFunctions = await import(`${pkg.name}/lib/storage/nameFunctions`);
 assert(

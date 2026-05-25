@@ -5,8 +5,8 @@
  */
 import Field from '../Field.mjs';
 import React from 'react';
-import Select from '../../../admin/client-legacy/App/shared/Select.mjs';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import Select from '../../../admin/client-legacy/compat/shared/Select.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
 
 /**
  * TODO:

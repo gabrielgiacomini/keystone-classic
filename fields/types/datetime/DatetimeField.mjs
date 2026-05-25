@@ -9,12 +9,12 @@
 import DateInput from '../../components/DateInput.mjs';
 import Field from '../Field.mjs';
 import React from 'react';
-import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
-import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
-import FormNote from '../../../admin/client-legacy/App/elemental/FormNote/index.mjs';
-import Group from '../../../admin/client-legacy/App/elemental/InlineGroup/index.mjs';
-import Section from '../../../admin/client-legacy/App/elemental/InlineGroupSection/index.mjs';
+import Button from '../../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import FormNote from '../../../admin/client-legacy/compat/elemental/FormNote.mjs';
+import Group from '../../../admin/client-legacy/compat/elemental/InlineGroup.mjs';
+import Section from '../../../admin/client-legacy/compat/elemental/InlineGroupSection.mjs';
 import { formatDateByFormat, parseDatetimeInput, timezoneOffsetForDate, toValidDate } from '../../utils/date.mjs';
 
 /**

@@ -9,11 +9,11 @@
 import React from 'react';
 import { legacyApiRequest } from '../../../admin/shared/api/legacyRequest.mjs';
 
-import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
-import SegmentedControl from '../../../admin/client-legacy/App/elemental/SegmentedControl/index.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import SegmentedControl from '../../../admin/client-legacy/compat/elemental/SegmentedControl.mjs';
 
-import PopoutList from '../../../admin/client-legacy/App/shared/Popout/PopoutList.mjs';
+import PopoutList from '../../../admin/client-legacy/compat/shared/PopoutList.mjs';
 
 const INVERTED_OPTIONS = [
 	{ label: 'Linked To', value: false },

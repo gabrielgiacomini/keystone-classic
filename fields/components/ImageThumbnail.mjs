@@ -1,6 +1,6 @@
 import { css } from '../../admin/client-legacy/utils/glamor.mjs';
 import React from 'react';
-import Spinner from '../../admin/client-legacy/App/elemental/Spinner/index.mjs';
+import Spinner from '../../admin/client-legacy/compat/elemental/Spinner.mjs';
 import theme from '../../admin/client-legacy/theme.mjs';
 
 // FIXME static octicon classes leaning on Elemental to avoid duplicate

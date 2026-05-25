@@ -74,6 +74,8 @@ await Promise.all([
 	copyIfPresent('admin/server/index.cjs', 'admin/server/index.cjs'),
 	copyIfPresent('package.json', 'package.json'),
 	copyIfPresent('admin/public-next', 'admin/public-next'),
+	copyIfPresent('admin/client-legacy/compat', 'admin/client-legacy/compat'),
+	copyIfPresent('admin/client-legacy/utils', 'admin/client-legacy/utils'),
 	copyIfPresent('fields/types/markdown/less', 'fields/types/markdown/less'),
 ]);
 

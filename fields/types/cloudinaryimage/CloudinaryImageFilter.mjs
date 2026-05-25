@@ -7,7 +7,7 @@
  */
 import React from 'react';
 
-import SegmentedControl from '../../../admin/client-legacy/App/elemental/SegmentedControl/index.mjs';
+import SegmentedControl from '../../../admin/client-legacy/compat/elemental/SegmentedControl.mjs';
 
 const OPTIONS = [
 	{ label: 'Is Set', value: true },

@@ -8,7 +8,7 @@
 import React from 'react';
 import Field from '../Field.mjs';
 import Checkbox from '../../components/Checkbox.mjs';
-import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
 
 const NOOP = () => {};
 

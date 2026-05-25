@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import Field from '../Field.mjs';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
 
 /**
  * The `NumberField` component.

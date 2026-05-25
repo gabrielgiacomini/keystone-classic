@@ -1,7 +1,7 @@
 import DayPicker from './DayPicker.mjs';
 import React from 'react';
-import Popout from '../../admin/client-legacy/App/shared/Popout/index.mjs';
-import FormInput from '../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import Popout from '../../admin/client-legacy/compat/shared/Popout.mjs';
+import FormInput from '../../admin/client-legacy/compat/elemental/FormInput.mjs';
 import { formatDateByFormat, isSameDay, parseDateByFormat, toValidDate } from '../utils/date.mjs';
 
 let lastId = 0;

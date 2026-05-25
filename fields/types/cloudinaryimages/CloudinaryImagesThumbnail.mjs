@@ -4,7 +4,7 @@
  * render a thumbnail for a Cloudinary image.
  */
 import React from 'react';
-import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
+import Button from '../../../admin/client-legacy/compat/elemental/Button.mjs';
 import ImageThumbnail from '../../components/ImageThumbnail.mjs';
 
 /**

@@ -9,11 +9,11 @@
 import Field from '../Field.mjs';
 import { listsByKey } from '../../../admin/client-legacy/utils/lists.mjs';
 import React from 'react';
-import Select from '../../../admin/client-legacy/App/shared/Select.mjs';
+import Select from '../../../admin/client-legacy/compat/shared/Select.mjs';
 import { legacyApiRequest } from '../../../admin/shared/api/legacyRequest.mjs';
-import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
-import CreateForm from '../../../admin/client-legacy/App/shared/CreateForm.mjs';
+import Button from '../../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import CreateForm from '../../../admin/client-legacy/compat/shared/CreateForm.mjs';
 
 function getAdminApiPath () {
 	return Keystone.adminApiPath || `${Keystone.adminLegacyPath}/api`;

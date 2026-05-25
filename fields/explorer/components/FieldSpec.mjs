@@ -5,7 +5,7 @@
  * itself, a Domify component to show the field's value, and a filter component.
  */
 import React from 'react';
-import Form from '../../../admin/client-legacy/App/elemental/Form/index.mjs';
+import Form from '../../../admin/client-legacy/compat/elemental/Form.mjs';
 
 import Col from './Col.mjs';
 import Row from './Row.mjs';

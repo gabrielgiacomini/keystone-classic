@@ -7,8 +7,8 @@
  */
 import Field from '../Field.mjs';
 import React from 'react';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
-import Grid from '../../../admin/client-legacy/App/elemental/Grid/index.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import Grid from '../../../admin/client-legacy/compat/elemental/Grid.mjs';
 
 /**
  * The `NameField` component.

@@ -8,9 +8,9 @@
  */
 import React, { cloneElement } from 'react';
 import Field from '../Field.mjs';
-import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
-import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
-import FormNote from '../../../admin/client-legacy/App/elemental/FormNote/index.mjs';
+import Button from '../../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormNote from '../../../admin/client-legacy/compat/elemental/FormNote.mjs';
 import Lightbox from '../../components/Lightbox.mjs';
 import cloudinaryResize from '../../../admin/client-legacy/utils/cloudinaryResize.mjs';
 import Thumbnail from './CloudinaryImagesThumbnail.mjs';

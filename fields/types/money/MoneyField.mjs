@@ -3,7 +3,7 @@
  * This file defines the `MoneyField` component, which is used to render a
  * money field in the KeystoneJS Admin UI.
  */
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
 import Field from '../Field.mjs';
 import React from 'react';
 

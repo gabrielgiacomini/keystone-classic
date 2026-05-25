@@ -12,10 +12,14 @@
 import classnames from '../utils/classnames.mjs';
 import evalDependsOn from '../utils/evalDependsOn.mjs';
 import React from 'react';
-import FormField from '../../admin/client-legacy/App/elemental/FormField/index.mjs';
-import FormInput from '../../admin/client-legacy/App/elemental/FormInput/index.mjs';
-import FormNote from '../../admin/client-legacy/App/elemental/FormNote/index.mjs';
+import FormField from '../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import FormNote from '../../admin/client-legacy/compat/elemental/FormNote.mjs';
 import CollapsedFieldLabel from '../components/CollapsedFieldLabel.mjs';
+
+function getKeystoneGlobal () {
+	return typeof globalThis !== 'undefined' && globalThis.Keystone ? globalThis.Keystone : {};
+}
 
 /**
  * Checks whether a value is an object.
@@ -59,8 +63,9 @@ export const Base = {
 	 * @returns {object} The default props.
 	 */
 	getDefaultProps () {
+		const keystone = getKeystoneGlobal();
 		return {
-			adminLegacyPath: Keystone.adminLegacyPath,
+			adminLegacyPath: keystone.adminLegacyPath || '/keystone',
 			inputProps: {},
 			labelProps: {},
 			valueProps: {},

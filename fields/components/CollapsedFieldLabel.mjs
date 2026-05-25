@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../../admin/client-legacy/App/elemental/Button/index.mjs';
+import Button from '../../admin/client-legacy/compat/elemental/Button.mjs';
 
 // NOTE marginBottom of 1px stops things jumping around
 // TODO find out why this is necessary

@@ -8,9 +8,9 @@
 import React from 'react';
 import DayPicker from '../../components/DayPicker.mjs';
 import { formatDateByFormat, isSameDay, parseDateByFormat, startOfToday } from '../../utils/date.mjs';
-import FormInput from '../../../admin/client-legacy/App/elemental/FormInput/index.mjs';
-import FormSelect from '../../../admin/client-legacy/App/elemental/FormSelect/index.mjs';
-import Grid from '../../../admin/client-legacy/App/elemental/Grid/index.mjs';
+import FormInput from '../../../admin/client-legacy/compat/elemental/FormInput.mjs';
+import FormSelect from '../../../admin/client-legacy/compat/elemental/FormSelect.mjs';
+import Grid from '../../../admin/client-legacy/compat/elemental/Grid.mjs';
 
 const PRESENCE_OPTIONS = [
 	{ label: 'At least one element', value: 'some' },

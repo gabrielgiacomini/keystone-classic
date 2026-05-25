@@ -1,6 +1,6 @@
 import React from 'react';
-import FormField from '../../admin/client-legacy/App/elemental/FormField/index.mjs';
-import FormLabel from '../../admin/client-legacy/App/elemental/FormLabel/index.mjs';
+import FormField from '../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormLabel from '../../admin/client-legacy/compat/elemental/FormLabel.mjs';
 import theme from '../../admin/client-legacy/theme.mjs';
 
 /**

@@ -7,12 +7,12 @@
  * inverting the filter.
  */
 import React, { Component } from 'react';
-import Button from '../../../admin/client-legacy/App/elemental/Button/index.mjs';
-import FormField from '../../../admin/client-legacy/App/elemental/FormField/index.mjs';
-import FormNote from '../../../admin/client-legacy/App/elemental/FormNote/index.mjs';
-import SegmentedControl from '../../../admin/client-legacy/App/elemental/SegmentedControl/index.mjs';
-import PopoutList from '../../../admin/client-legacy/App/shared/Popout/PopoutList.mjs';
-import Kbd from '../../../admin/client-legacy/App/shared/Kbd.mjs';
+import Button from '../../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormField from '../../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormNote from '../../../admin/client-legacy/compat/elemental/FormNote.mjs';
+import SegmentedControl from '../../../admin/client-legacy/compat/elemental/SegmentedControl.mjs';
+import PopoutList from '../../../admin/client-legacy/compat/shared/PopoutList.mjs';
+import Kbd from '../../../admin/client-legacy/compat/shared/Kbd.mjs';
 import bindFunctions from '../../utils/bindFunctions.mjs';
 
 const INVERTED_OPTIONS = [

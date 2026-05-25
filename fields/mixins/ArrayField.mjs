@@ -9,9 +9,9 @@
  * field types.
  */
 import React from 'react';
-import Button from '../../admin/client-legacy/App/elemental/Button/index.mjs';
-import FormField from '../../admin/client-legacy/App/elemental/FormField/index.mjs';
-import FormInput from '../../admin/client-legacy/App/elemental/FormInput/index.mjs';
+import Button from '../../admin/client-legacy/compat/elemental/Button.mjs';
+import FormField from '../../admin/client-legacy/compat/elemental/FormField.mjs';
+import FormInput from '../../admin/client-legacy/compat/elemental/FormInput.mjs';
 
 let lastId = 0;
 const ENTER_KEYCODE = 13;
