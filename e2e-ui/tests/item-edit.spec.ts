@@ -91,7 +91,22 @@ test.describe('E. Item edit', () => {
 		await expect(page.locator('input[name="featured"][type="hidden"]')).toBeAttached();
 		// PublishedAt: the DateInput renders an `<input>` with placeholder
 		// like "YYYY-MM-DD" or attribute name="publishedAt".
-		await expect(page.locator('input[name="publishedAt"]')).toBeVisible();
+		const publishedAtInput = page.locator('input[name="publishedAt"]');
+		await expect(publishedAtInput).toBeVisible();
+
+		await publishedAtInput.click();
+		await expect(page.locator('.DayPicker')).toBeVisible();
+		const firstWeekDays = page.locator('.DayPicker-Week').first().locator('.DayPicker-Day');
+		await expect(firstWeekDays).toHaveCount(7);
+		const firstWeekBoxes = await firstWeekDays.evaluateAll((days) =>
+			days.map((day) => {
+				const rect = day.getBoundingClientRect();
+				return { left: rect.left, top: rect.top, width: rect.width };
+			}),
+		);
+		expect(firstWeekBoxes[1]?.top).toBe(firstWeekBoxes[0]?.top);
+		expect((firstWeekBoxes[6]?.left ?? 0) - (firstWeekBoxes[0]?.left ?? 0))
+			.toBeGreaterThan((firstWeekBoxes[0]?.width ?? 0) * 4);
 	});
 
 	test('flipping Featured saves and round-trips via the JSON API', async ({
