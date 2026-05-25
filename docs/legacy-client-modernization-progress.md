@@ -1011,6 +1011,8 @@ This file tracks implementation progress for
 | 2026-05-25 | `npm run test:unit -- test/unit/lib/core/headless-boot.mts test/unit/scripts/ci-workflow-verify.test.mts` | Pass | Targeted rerun passed with 1377 passing after isolating Mongo environment variables in the headless boot test and making the CI verifier reject reintroduced legacy bundle-hash jobs. |
 | 2026-05-25 | `npm run lint && npm run package:verify` | Pass | Lint and package verification pass after removing the obsolete legacy bundle-hash CI job and guarding that it stays removed. |
 | 2026-05-25 | GitHub Actions CI run `26382502620` on `modernization/legacy-client-convergence` | Pass | Manual `workflow_dispatch` CI passed on commit `bcfce962`: `prod-audit`, `e2e-ui`, `test (24)`, `admin-parity`, `e2e-api`, `package-verify`, and `lint-typecheck` all completed successfully. This proves the current branch head is green before merge; the external `master` 14-day soak remains separate. |
+| 2026-05-25 | Pull request #3 and GitHub Actions CI run `26382899615` on `master` | Pass | PR #3 merged into protected `master` as merge commit `43657bee42c6f242980ac7ecd694c519e0abbe1c`. The post-merge push CI passed `test (24)`, `lint-typecheck`, `e2e-api`, `e2e-ui`, `package-verify`, `prod-audit`, and required `admin-parity`, establishing the first post-merge green required-check signal for the soak window. |
+| 2026-05-25 | `npm run admin-parity:protect:status && npm run admin-parity:soak` | Fail | Branch protection is valid on `master` and requires `admin-parity`, but the 14-day soak still fails because the window includes 12 historical failed `admin-parity` jobs before merge commit `43657bee`. |
 
 ## Current Route Policy
 

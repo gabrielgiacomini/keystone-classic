@@ -38,6 +38,11 @@ Last checked from this workspace:
   `lint-typecheck` all completed successfully. This proves the current branch
   head is green before merge; the 14-day soak still cannot pass until the fixed
   branch is on `master` and the required check stays green for the full window.
+- Pull request #3 merged into protected `master` on 2026-05-25 as merge commit
+  `43657bee42c6f242980ac7ecd694c519e0abbe1c`. Post-merge push CI run
+  `26382899615` passed `test (24)`, `lint-typecheck`, `e2e-api`, `e2e-ui`,
+  `package-verify`, `prod-audit`, and required `admin-parity`. This is the
+  first post-merge green required-check signal for the new soak window.
 - `npm run admin-parity:protect:status` exited non-zero during the
   2026-05-12T03:13:48Z refresh. Repository
   `gabrielgiacomini/keystone4-ts` is private, branch `main` is not protected,
