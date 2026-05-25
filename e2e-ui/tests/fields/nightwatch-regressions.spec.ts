@@ -157,6 +157,33 @@ test.describe('Nightwatch high-value regression ports', () => {
 		await expect(explicitRow.locator('[data-list-cell][data-field-name="fieldA"][data-field-type="text"]')).toContainText('Fallback column A');
 	});
 
+	test('legacy item view renders no-default-column tracked items', async ({
+		signedInPage,
+	}) => {
+		const doc = await fixtureDoc('NoDefaultColumn', 'no-default-column-alpha');
+		const id = objectIdText(doc._id);
+		const pageErrors: string[] = [];
+		signedInPage.on('pageerror', (error) => {
+			pageErrors.push(error.message);
+		});
+
+		const itemLoad = signedInPage.waitForResponse(
+			(r) =>
+				r.url().includes(`/keystone-api/no-default-columns/${id}`) &&
+				r.request().method() === 'GET' &&
+				r.status() === 200,
+		);
+		await signedInPage.goto(`/keystone/no-default-columns/${id}`);
+		await itemLoad;
+
+		await expect(signedInPage.locator('form.EditForm-container')).toBeVisible();
+		await expect(signedInPage.locator('input[name="fieldA"]')).toHaveValue('Fallback column A');
+		await expect(signedInPage.locator('input[name="fieldB"]')).toHaveValue('Fallback column B');
+		await expect(signedInPage.locator('.FormInput-noedit')).toHaveCount(2);
+		await expect(signedInPage.locator('.FormInput-noedit').first()).toContainText('2026-');
+		expect(pageErrors).toEqual([]);
+	});
+
 	test('Date-backed map.name renders a navigable row link', async ({ signedInPage }) => {
 		const doc = await fixtureDoc('DateFieldMap', 'date-field-map-alpha');
 		const id = objectIdText(doc._id);
