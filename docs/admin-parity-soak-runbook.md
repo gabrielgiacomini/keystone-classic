@@ -43,6 +43,14 @@ Last checked from this workspace:
   `26382899615` passed `test (24)`, `lint-typecheck`, `e2e-api`, `e2e-ui`,
   `package-verify`, `prod-audit`, and required `admin-parity`. This is the
   first post-merge green required-check signal for the new soak window.
+- Later direct pushes to `master` on 2026-05-25 advanced the branch through
+  `49f7bd7d`, `bfa3bad2`, `ee801942`, `6e4835ec`, and `c77f853f` to restore
+  the legacy React 18 admin shell, date picker behavior, no-default-column item
+  routes, horizontal field spacing, and datetime inline controls. GitHub
+  accepted those pushes with required-check bypass notices for `admin-parity`.
+  Treat these as local stabilization evidence only; the protected 14-day soak
+  must restart from a green required `admin-parity` run on the current
+  `master` head.
 - `npm run admin-parity:protect:status` exited non-zero during the
   2026-05-12T03:13:48Z refresh. Repository
   `gabrielgiacomini/keystone4-ts` is private, branch `main` is not protected,

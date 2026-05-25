@@ -1,14 +1,15 @@
 # Legacy Client React 18 Migration Plan
 
-Last updated: 2026-05-24
+Last updated: 2026-05-25
 
-Branch: `migration/react-18`
+Branch: `master`
 
 ## Purpose
 
-This document is the working plan for migrating Keystone Classic's legacy admin
-client from React 17.0.2 to React 18.3.1 while preserving current legacy admin
-behavior.
+This document is the current roadmap for Keystone Classic's legacy admin client
+on React 18.3.1. The package/runtime migration has landed on `master`; the
+remaining work is stabilization, regression coverage, CI parity, and the
+external `admin-parity` soak window.
 
 React 18 is the first target that can remove the root/admin-next peer split.
 The root package can satisfy `@tiptap/react`, `@tanstack/react-query`, and
@@ -18,8 +19,8 @@ root API, automatic batching under `createRoot`, stricter development behavior,
 and server rendering API changes. The migration must be treated as a runtime
 behavior change, not only a package.json edit.
 
-This plan is written so an implementation agent can execute the migration from
-the React 17 branch with minimal ambiguity.
+The earlier React 17-to-React 18 execution notes remain below for context, but
+the source of truth for current work is the status section immediately below.
 
 The migration must keep these surfaces working:
 
@@ -53,6 +54,50 @@ The React 18 milestone is complete when:
 - Existing e2e coverage for auth, home, list, item edit, create, filters,
   relationship fields, upload fields, modal/popout behavior, and parity passes.
 - Browser console has no React 18 migration warnings from our code.
+
+## Current Status
+
+As of 2026-05-25, the repository is on React 18 at the root:
+
+- `react` and `react-dom` are `^18.3.1`.
+- `/keystone` serves the restored legacy React 18 admin shell.
+- `/keystone-next` serves the modern admin shell.
+- The legacy admin source roots are present and intentionally active:
+  `admin/client-legacy/App`, `admin/client-legacy/Signin`,
+  `admin/server/routes-legacy`, and `admin/public-legacy`.
+- The prior "legacy client decommission" route policy is superseded. The active
+  product goal is legacy-admin parity on React 18, not legacy shell removal.
+
+Recent `master` commits restored and hardened the legacy React 18 surface:
+
+- `29bf2ee3` restored legacy admin parity on React 18.
+- `49f7bd7d` fixed legacy date picker layout.
+- `bfa3bad2` fixed date picker interactions, including month navigation, day
+  selection, manual entry, `Now`, DateArray, and date filters.
+- `ee801942` fixed the legacy no-default-column item route.
+- `6e4835ec` restored legacy horizontal field label/control layout.
+- `c77f853f` restored inline datetime controls so the date input, time input,
+  and `Now` button render side by side.
+
+Current local verification evidence:
+
+- `npx playwright test --config=e2e-ui/playwright.config.ts`: 45 passing.
+- `npx playwright test --config=e2e-ui/playwright.fields.config.ts`: 78 passing
+  before `c77f853f`; after `c77f853f`, the field-complete legacy spacing audit
+  passed.
+- `npm run package:verify`: passing after the latest legacy datetime inline
+  control fix.
+- Live probes confirmed the restored no-default-column route, legacy field
+  label/control spacing, and `Reviewed At` datetime controls.
+
+Open gates before calling the React 18 legacy-admin stabilization complete:
+
+- Rerun the full field-complete suite after `c77f853f`.
+- Run the canonical `admin-parity` job on `master` without direct-push bypasses.
+- Restart the 14-day clean `admin-parity` soak window after CI is green on the
+  current `master` head.
+- Keep the direct-push bypasses from `49f7bd7d` through `c77f853f` recorded as
+  non-soak evidence; they do not satisfy the protected required-check window.
 
 ## Non-Goals
 

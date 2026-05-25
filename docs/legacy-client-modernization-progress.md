@@ -5,6 +5,32 @@ Last updated: 2026-05-25
 This file tracks implementation progress for
 `docs/legacy-client-modernization-convergence-plan.md`.
 
+## Current Working State
+
+As of 2026-05-25, `master` is no longer following the decommission-only route
+policy described in the older entries below. The active state is:
+
+- Root React is React 18 (`react` and `react-dom` are `^18.3.1`).
+- `/keystone` serves the restored legacy React 18 admin shell.
+- `/keystone-next` serves the modern admin shell.
+- Legacy browser/server roots are present and active:
+  `admin/client-legacy/App`, `admin/client-legacy/Signin`,
+  `admin/server/routes-legacy`, and `admin/public-legacy`.
+- Recent `master` fixes restored legacy date picker layout/interactions,
+  the no-default-column legacy item route, horizontal field label/control
+  spacing, and inline datetime controls.
+- Local verification after those fixes includes the 45-test dual-admin suite,
+  the 78-test field-complete suite before the final datetime inline-control
+  patch, a post-patch field-complete legacy spacing audit, `package:verify`,
+  and live probes against the running fixture app.
+
+Remaining closeout work:
+
+- Rerun the full field-complete suite after commit `c77f853f`.
+- Re-establish green CI on the current `master` head without direct-push bypasses.
+- Restart the protected `admin-parity` 14-day soak window from a clean green
+  required-check history.
+
 ## Phase Status
 
 | Phase | Status | Evidence | Known gaps |
@@ -21,12 +47,19 @@ This file tracks implementation progress for
 | Phase 9: Legacy API Cleanup and StrictMode Hardening | In progress | Admin-next root uses React 18 StrictMode. Built-in legacy admin and field `.mjs` source under `admin/client-legacy` and `fields` no longer imports or calls `create-react-class`. `fields/components/DateInput.mjs`, field filters, shared/list/item shell components, route containers, and signin now avoid legacy factory components. `UpdateForm`, filter add controls, item create/edit/header/search components, converted shell components, `HiddenFileInput`, `FileField`, `CloudinaryImageField`, and `CloudinaryImagesField` no longer use `findDOMNode`, `this.refs`, or string refs in their audited paths; upload fields also moved reset logic from unsafe pre-update lifecycles to `componentDidUpdate`. Legacy Modal dialog, ScrollLock, and active Filter chip popout no longer use string refs/`this.refs` or unsafe lifecycles. Field-side source no longer imports `create-react-class` after `Field.create` was replaced with an explicit React class factory. The base `Field.create` focus path now stores named callback refs and calls `focus()` directly instead of `findDOMNode`; representative scalar fields now register focus targets through that path, and `DateInput` plus the field explorer type switcher moved prop-sync behavior to `componentDidUpdate`. `ArrayField` now uses callback refs, direct focus calls, and `componentDidUpdate`, with the legacy Button wrapper exposing a direct `focus()` method for existing imperative focus flows. `CodeField` now initializes CodeMirror from the FormInput textarea ref directly and syncs external value changes in `componentDidUpdate`. Relationship field/filter, HTML field, and Location field value/initial-state synchronization now avoid unsafe lifecycles. MarkdownField now uses a callback textarea ref, and the base field factory no longer allows unsafe lifecycle specs. Shared `Portal`, Popout, footer/navigation, alert/flash, home/list/item controls, `RelatedItemsList`, `CreateForm`, `EditForm`, `ListView`, `ItemView`, and `SigninView` now use explicit class/function components. Built-in legacy admin and field `.mjs` source under `admin/client-legacy` and `fields` no longer imports or references `prop-types`; legacy context declarations use local no-op validators until the remaining compatibility layer is removed. `package:verify` enforces the PropTypes ban and the built-in legacy `.mjs` source guard for `findDOMNode`, string refs, `this.refs`, and unsafe lifecycle markers. | Built-in `.mjs` source under `admin/client-legacy` and `fields` is clean for `findDOMNode`, string refs, `this.refs`, `UNSAFE_`, and PropTypes. Broader architecture cleanup remains. |
 | Phase 10: Build System Consolidation | In progress | Admin-next Vite build exists. Legacy code and markdown fields now read page-provided CodeMirror/jQuery globals directly instead of relying on package-level Browserify transforms. The field explorer now builds its explorer bundle with esbuild and a small `FieldTypes` global adapter instead of Browserify/swcify/brfs. The unused root `build.ts` Browserify helper is removed. The obsolete `admin/client-legacy/packages.mjs` manifest is removed, and the legacy browser bundle builder plus generated `admin/public-legacy` bundles are now removed from active build scripts. Custom legacy field runtime compatibility remains isolated in `legacyRuntimeBundler` for configured custom-field compatibility paths. | Final cleanup can remove obsolete historical verifier references to deleted legacy browser-bundle files. |
 | Phase 11: Dependency Retirement | In progress | Direct `react-router`, `react-router-redux`, `redux`, `redux-thunk`, `xhr`, `browserify-shim`, `browserify-middleware`, `browserify`, `@types/browserify`, `swcify`, `glamor`, `react-markdown`, `react-images`, `react-scrolllock`, `react-prop-toggle`, `react-lifecycles-compat`, `react-transition-group`, `react-day-picker`, `react-dnd`, `react-dnd-html5-backend`, `react-select`, `react-input-autosize`, `create-react-class`, `react-redux`, `redux-saga`, `prop-types`, `uglify-js`, `disc`, `brfs`, `watchify`, `@types/watchify`, `react-engine`, `@swc/core`, `superagent`, `keystone-email`, `cloudinary-microurl`, `i`, `chalk`, `greenlock-express`, `@types/greenlock-express`, `classnames`, `react-color`, `numeral`, `@types/numeral`, `keystone-tinymce`, `lodash`, `@types/lodash`, `moment`, `enzyme`, `@cfaester/enzyme-adapter-react-18`, and `cheerio` dependencies are removed and denied by package verification. The vendored React peer-fork tree is removed and denied by package verification. `esbuild` and `terser` are now the dev-only builder/minifier pair for built-in legacy admin bundles. Shared query parsing, legacy query params/list middleware, flash messages, home list mapping, active list reducer, legacy admin string helpers, core session cookie defaults, Express session initialization, content fetch/store defaults, item get drilldown/data response, CSV download serialization, legacy index route metadata preparation, built-in field UI components, built-in field type implementations, and old e2e helpers no longer use lodash. Old e2e timestamp logging, active filter-label date display, dormant item tracking-meta date display, shared legacy date picker/input components, and date/datearray/datetime field UI paths no longer use moment. Legacy component tests are migrated off Enzyme, `test/enzyme.setup.cjs` is removed, and `package:verify` guards `admin/client-legacy`, `fields`, and `test/unit` against Enzyme import reintroduction. | Elemental/LESS and other legacy-owned dependencies remain until their owning behavior is migrated; transitive lodash packages remain only through third-party dependencies in the lockfile. |
-| Phase 12: Legacy Client Decommission | In progress | `docs/admin-next-custom-field-migration.md` documents the supported admin-next custom field module-script bridge, the `window.Keystone.fieldComponents` and `window.Keystone.legacyFieldComponents` registration surfaces, the unsupported `packages.js`/React Router 3/Browserify legacy surfaces, and a migration checklist. `docs/admin-modernization-upgrade-guide.md` documents admin route modes, package compatibility notes, stable migration surfaces, retired legacy package surfaces, and the final decommission checklist. README links to both guides, and `package:verify` guards the guide files and core policy markers. Package output no longer republishes the legacy browser app roots, legacy public assets, or legacy templates into `dist`; `package:verify` guards those package roots as absent while preserving the isolated `admin/client-legacy/compat` and `admin/client-legacy/utils` compatibility slices needed by published legacy field UI modules. Historical dynamic/static admin mounts now delegate to the modern admin shell/assets, the legacy browser bundle builder is removed from build/test scripts, and `admin/client-legacy/App`, `admin/client-legacy/Signin`, `admin/server/routes-legacy`, `admin/server/templates-legacy`, and `admin/public-legacy` are removed from source and `dist`. `admin-decommission:audit` now passes while preserving `fields/types/*Type.mts` server/model field classes and the stable modern browser field root. The canonical UI gate now runs decommission route smoke coverage plus visual identity, while field-complete e2e covers admin-next field behavior. Local final-gate steps now pass through ledger, decommission audit, lint, typecheck, build-dev, build, unit, API e2e, admin-parity, and package verification. | `admin-parity:final` remains blocked by `admin-parity:soak`: `master` is protected and requires `admin-parity`, but the current 14-day window has 12 failed admin-parity jobs and only 1 green day, so the required clean soak window has not elapsed. |
+| Phase 12: Legacy Client Decommission | Superseded | Older entries in this file record a decommission attempt, but the current `master` state intentionally keeps the legacy React 18 shell active. `/keystone` serves the legacy admin, `/keystone-next` serves the modern admin, and `admin/client-legacy/App`, `admin/client-legacy/Signin`, `admin/server/routes-legacy`, and `admin/public-legacy` are present. The recent workstream is legacy-admin parity/stabilization on React 18, including restored date picker behavior, no-default-column item routes, field spacing, and datetime inline controls. | Do not use the old decommission evidence as current route-policy evidence. Final closeout now requires full post-`c77f853f` field-complete verification, green CI on current `master`, and a clean protected `admin-parity` soak window. |
 
 ## Verification Log
 
 | Date | Command | Result | Notes |
 | --- | --- | --- | --- |
+| 2026-05-25 | `npx playwright test --config=e2e-ui/playwright.config.ts e2e-ui/tests/date-picker.spec.ts -g "Datetime field supports picker navigation"` | Pass | 1 passing after rebuilding `dist`. Added an assertion that the legacy `Reviewed At` date input, time input, and `Now` button render on the same row, then verified picker navigation, `Now`, manual time edit, save, and reload. |
+| 2026-05-25 | `npx playwright test --config=e2e-ui/playwright.config.ts` | Pass | 45 passing after restoring legacy `InlineGroup` flex behavior and setting `DatetimeField` to use a block inline group. Covers auth, date picker operations, item create/edit/delete, relationships, React 18 event boundaries, and visual identity. |
+| 2026-05-25 | `npx playwright test --config=e2e-ui/playwright.fields.config.ts e2e-ui/tests/fields/nightwatch-regressions.spec.ts -g "legacy item forms keep horizontal label spacing"` | Pass | Field-complete legacy spacing audit passed after the datetime inline-control fix, proving the legacy label/control columns still hold across seeded fixture item pages. |
+| 2026-05-25 | `npm run package:verify` | Pass | Package verification passed after restoring legacy datetime inline controls. |
+| 2026-05-25 | Live Playwright probe against `http://127.0.0.1:3008/keystone/articles/6a14c8af65d57cc8bd03fea1` | Pass | Confirmed `reviewedAt_date`, `reviewedAt_time`, and `Now` share the same row in the running field-complete fixture app. |
+| 2026-05-25 | `npx playwright test --config=e2e-ui/playwright.fields.config.ts` | Pass | 78 passing after restoring legacy horizontal field classes and before the final datetime inline-control patch. Covers the field-complete create/edit/filter/column/media/relationship/nightwatch-regression suite. Needs one full rerun after `c77f853f`. |
+| 2026-05-25 | `npx playwright test --config=e2e-ui/playwright.config.ts` | Pass | 45 passing after the date picker, no-default-column route, and horizontal field-spacing fixes. |
 | 2026-05-25 | `npm run build-dev && npm run package:verify && node --input-type=module -e "await import('keystone/fields/types/text/TextField'); await import('keystone/fields/types/relationship/RelationshipField'); console.log('legacy field compatibility imports ok')"` | Pass | Fixed published legacy field UI imports after legacy App root removal by moving Elemental/shared imports to `admin/client-legacy/compat`, copying the isolated compatibility slices into `dist`, making `Field.mjs` and `utils/lists.mjs` tolerate package-smoke imports without a browser `Keystone` global, and adding package verification for representative field UI subpaths. |
 | 2026-05-25 | `npm run lint` | Pass | Rerun after legacy field compatibility import repair. |
 | 2026-05-25 | `npm run typecheck` | Pass | Rerun after legacy field compatibility import repair. |
@@ -1019,14 +1052,14 @@ This file tracks implementation progress for
 Supported admin UI values:
 
 - `false`: no admin UI, API can still be enabled explicitly.
-- `legacy`: serve the modern shell from the historical `/keystone` path; the
-  mode name remains as a compatibility alias.
-- `next`: serve the modern shell from both `/keystone` and `/keystone-next`; `/keystone` is the opt-in historical-path cutover.
-- `both`: serve the modern shell from both `/keystone` and `/keystone-next`.
+- `legacy`: serve the React 18 legacy admin shell from the historical
+  `/keystone` path.
+- `next`: serve the modern admin shell from the historical `/keystone` path.
+- `both`: serve the legacy admin shell from `/keystone` and the modern admin
+  shell from `/keystone-next`.
 - `auto`: serve `next` when only built-in field browser code is registered,
-  otherwise resolve through the historical-path compatibility alias; both
-  outcomes serve the modern shell, with custom legacy field compatibility
-  isolated to the documented runtime bridge.
+  otherwise resolve through the historical-path compatibility alias. Re-check
+  the active runtime before treating `auto` as decommission evidence.
 
 `KEYSTONE_ADMIN_CLIENT` overrides the `admin ui` option for deployment-time
 selection. Valid values match the string admin UI modes: `legacy`, `next`,
