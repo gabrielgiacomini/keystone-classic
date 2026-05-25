@@ -26,6 +26,7 @@ function normalizeDateArrayFilterValue(value: string | DateArrayFilterValue): Da
 
 export function Filter({
 	fieldName,
+	meta,
 	value,
 	onChange,
 }: FilterProps<string | DateArrayFilterValue>) {
@@ -52,8 +53,15 @@ export function Filter({
 			</select>
 			<DateFilter
 				fieldName={fieldName}
+				meta={meta}
 				value={filterValue}
-				onChange={(nextValue) => onChange({ ...filterValue, ...nextValue, presence })}
+				onChange={(nextValue) => {
+					if (typeof nextValue === 'object' && nextValue !== null && !Array.isArray(nextValue)) {
+						onChange({ ...filterValue, ...nextValue, presence });
+					} else {
+						onChange({ ...filterValue, value: String(nextValue ?? ''), presence });
+					}
+				}}
 			/>
 		</div>
 	);

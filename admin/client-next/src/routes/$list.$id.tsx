@@ -51,6 +51,10 @@ type FormElement =
   | { type: 'field'; field: AdminFieldMeta }
   | { type: 'heading'; content: string };
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
 function getMetadataFormElements(listMeta: AdminListMeta | undefined): FormElement[] {
   if (listMeta === undefined) return [];
 

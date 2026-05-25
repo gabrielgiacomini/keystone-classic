@@ -998,6 +998,15 @@ This file tracks implementation progress for
 | 2026-05-25 | `npm run admin-parity:protect:status` | Fail | Earlier same-day check found the required-check setup unavailable: GitHub branch-rules lookup returned private-repo 403, `main` was not protected, and no branch protection/ruleset required `admin-parity`. Superseded by the later 2026-05-25 passing status check for public `keystone-classic` on protected `master`. |
 | 2026-05-25 | `npm run admin-parity:soak` | Fail | External soak remains blocked by the same required-check source failure before workflow-history verification can start. |
 | 2026-05-25 | `npm run package:verify` | Pass | Package verification passes after refreshing `docs/admin-parity-soak-runbook.md` with current external blocker evidence. |
+| 2026-05-25 | `gh workflow run ci.yml --ref modernization/legacy-client-convergence` | Fail | Manual branch CI run `26382033849` exposed current repo-owned CI drift: CI used Node 20/22 despite the Mocha config requiring Node 24 strip-types, typecheck/unit/API e2e jobs assumed the admin-next build or `dist` already existed, the legacy bundle job invoked bare `jiti` outside npm PATH, and production audit flagged vulnerable Express/QS ranges. |
+| 2026-05-25 | `npm audit --omit=dev` | Pass | Production audit is clean after refreshing Express/QS to non-vulnerable ranges in `package.json` and `package-lock.json`. |
+| 2026-05-25 | `npm run ci:verify` | Pass | CI workflow verification now covers the fresh-checkout build prerequisites for lint/typecheck and API e2e in addition to the scheduled admin-parity contract. |
+| 2026-05-25 | `npm run lint` | Pass | Full lint passes after CI hardening and admin-next type cleanup. |
+| 2026-05-25 | `npm run admin-next:typecheck` | Pass | Admin-next typecheck passes after aligning structured date, datetime, password, and datearray filter value types plus route helper imports. |
+| 2026-05-25 | `npm run typecheck` | Pass | Standalone typecheck now runs the modern/admin server build first so fresh checkouts have `dist` and admin-next assets before root, e2e-api, and e2e-ui typechecks. |
+| 2026-05-25 | `npm run test:unit` | Pass | Full unit suite passed with 1377 passing after making the unit script build admin-next before server/unit execution. |
+| 2026-05-25 | `npm run test:e2e-api` | Pass | API e2e suite passed with 18 tests after making the API webServer build admin-next before serving the converged admin routes. |
+| 2026-05-25 | `npm run package:verify && npm run admin-decommission:audit && npm run admin-parity:final -- --dry-run` | Pass | Package verification, decommission audit, and final-gate order checks pass after CI hardening; the actual final gate still depends on the external `admin-parity:soak` window. |
 
 ## Current Route Policy
 

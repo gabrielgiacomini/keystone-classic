@@ -19,6 +19,13 @@ Last checked from this workspace:
   external soak: ledger, decommission audit, lint, typecheck, `build-dev`,
   production build, unit, API e2e, canonical admin parity, package verification,
   and `admin-parity:soak`.
+- Manual branch CI run `26382033849` on 2026-05-25 found fresh-checkout CI
+  drift on `modernization/legacy-client-convergence`: Node 20/22 test jobs were
+  incompatible with the Node 24 Mocha strip-types setup, some jobs ran before
+  admin-next assets or `dist` existed, the legacy bundle job invoked bare `jiti`
+  outside npm script PATH, and production audit flagged Express/QS. The branch
+  now contains CI/package hardening for those repo-owned failures; rerun CI on a
+  new commit before treating the branch as ready to merge into `master`.
 - `npm run admin-parity:protect:status` exited non-zero during the
   2026-05-12T03:13:48Z refresh. Repository
   `gabrielgiacomini/keystone4-ts` is private, branch `main` is not protected,

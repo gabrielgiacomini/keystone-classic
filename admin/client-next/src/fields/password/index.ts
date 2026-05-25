@@ -3,9 +3,10 @@ import { registerField } from '../registry.js';
 import { Field } from './Field.js';
 import type { PasswordValue } from './Field.js';
 import { Filter } from './Filter.js';
+import type { PasswordFilterValue } from './Filter.js';
 import { Column } from './Column.js';
 
-const set: FieldComponentSet<PasswordValue, string> = {
+const set: FieldComponentSet<PasswordValue, string | PasswordFilterValue> = {
   Field,
   Filter,
   Column,

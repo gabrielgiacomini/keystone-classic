@@ -36,7 +36,6 @@ import {
 	serializeColumnPaths,
 	validateListSearch,
 } from '../../../shared/state/listRoute.js';
-import type { ListSearch } from '../../../shared/state/listRoute.js';
 import { requireAuth } from './requireAuth.js';
 import styles from './$list.module.css';
 
