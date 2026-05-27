@@ -18,6 +18,9 @@ assertPattern(workflow, /^\s*pull_request:\s*$/m, 'workflow must run on pull_req
 assertPattern(workflow, /^\s*workflow_dispatch:\s*$/m, 'workflow must support workflow_dispatch');
 assertPattern(workflow, /^\s*schedule:\s*$/m, 'workflow must include a scheduled trigger for the admin-parity soak');
 assertPattern(workflow, /^\s*-\s*cron:\s*['"]?\d+\s+\d+\s+\*\s+\*\s+\*['"]?\s*$/m, 'workflow schedule must run daily');
+assertMissingPattern(workflow, /actions\/checkout@v[1-5]\b/, 'workflow must use actions/checkout@v6 or newer for Node 24 action runtime support');
+assertMissingPattern(workflow, /actions\/setup-node@v[1-5]\b/, 'workflow must use actions/setup-node@v6 or newer for Node 24 action runtime support');
+assertMissingPattern(workflow, /actions\/upload-artifact@v[1-5]\b/, 'workflow must use actions/upload-artifact@v6 or newer for Node 24 action runtime support');
 
 assertJobContains('lint-typecheck', 'npm run admin-next:typecheck');
 assertJobContains('lint-typecheck', 'npm run build');
@@ -51,6 +54,7 @@ console.log('- admin-parity runs on the scheduled workflow and covers UI, field-
 console.log('- package-verify runs ci:verify, build:types, package:verify, and npm pack --dry-run');
 console.log('- lint-typecheck builds before typechecking dist-backed tests and runs admin-next:typecheck');
 console.log('- obsolete legacy bundle hash checks are absent from active CI');
+console.log('- first-party JavaScript actions use Node 24-compatible major versions');
 
 function assertJobContains(jobName: string, command: string): void {
 	const job = jobs.get(jobName);
@@ -91,6 +95,12 @@ function assertJobRunsOnSchedule(jobName: string): void {
 
 function assertPattern(text: string, pattern: RegExp, message: string): void {
 	if (!pattern.test(text)) {
+		failures.push(message);
+	}
+}
+
+function assertMissingPattern(text: string, pattern: RegExp, message: string): void {
+	if (pattern.test(text)) {
 		failures.push(message);
 	}
 }

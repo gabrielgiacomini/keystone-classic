@@ -24,6 +24,7 @@ describe('scripts/ci-workflow-verify', function () {
 		expect(result.stdout).to.contain('admin-parity runs on the scheduled workflow');
 		expect(result.stdout).to.contain('visual identity suites');
 		expect(result.stdout).to.contain('package-verify runs ci:verify, build:types, package:verify, and npm pack --dry-run');
+		expect(result.stdout).to.contain('first-party JavaScript actions use Node 24-compatible major versions');
 		expect(result.stderr).to.equal('');
 	});
 
@@ -66,6 +67,22 @@ describe('scripts/ci-workflow-verify', function () {
 
 		expect(result.status).to.equal(1);
 		expect(result.stderr).to.contain('jobs.package-verify must run npm pack --dry-run');
+	});
+
+	it('fails when first-party JavaScript actions target deprecated Node runtimes', function () {
+		const workflowPath = writeWorkflow(`${minimalWorkflow()}
+  deprecated-actions:
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - uses: actions/upload-artifact@v4
+`);
+		const result = runScript('--workflow', workflowPath);
+
+		expect(result.status).to.equal(1);
+		expect(result.stderr).to.contain('workflow must use actions/checkout@v6 or newer');
+		expect(result.stderr).to.contain('workflow must use actions/setup-node@v6 or newer');
+		expect(result.stderr).to.contain('workflow must use actions/upload-artifact@v6 or newer');
 	});
 
 	function runScript(...params: string[]) {
