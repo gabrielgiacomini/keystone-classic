@@ -38,6 +38,8 @@ interface CsrfModule {
  * Passes list metadata, CSRF token, Cloudinary/WYSIWYG config and user info as locals.
  * With `auth: true`, `keystoneAuth` normally runs before this route and populates `req.user`.
  * If `req.user` is missing, the handler throws (same outcome as the previous `req.user.id` access).
+ * @param req - Express request with Keystone context.
+ * @param res - Express response used to send the rendered shell.
  */
 export default function IndexRoute(req: Request, res: Response): void {
 	if (!req.keystone) return;

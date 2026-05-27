@@ -298,7 +298,6 @@
     "test:e2e-ui:fields:cloudinary": "sh -c 'set -a; [ ! -f .env ] || . ./.env; set +a; npm run test:e2e-ui:fields -- --grep \"admin next uploads\"'",
     "test:e2e-ui:fields:ui": "npm run admin-next:build && playwright test --config=e2e-ui/playwright.fields.config.ts --ui",
     "admin-parity": "npm run test:e2e-ui && npm run test:e2e-ui:fields && npm run test:e2e-ui:visual",
-    "admin-decommission:audit": "jiti scripts/admin-decommission-audit.ts",
     "admin-parity:final": "jiti scripts/admin-parity-final-gate.ts",
     "admin-parity:ledger": "jiti scripts/admin-parity-ledger.ts",
     "admin-parity:protect": "jiti scripts/admin-parity-branch-protection.ts --branch master",

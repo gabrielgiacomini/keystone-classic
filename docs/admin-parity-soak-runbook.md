@@ -14,11 +14,11 @@ Last checked from this workspace:
   source is now valid, but the historical 14-day window is not clean: 12
   in-window `admin-parity` jobs did not succeed, only 1 green day was found, and
   green days are missing for 2026-05-12 through 2026-05-25 except 2026-05-22.
-- `npm run admin-parity:final -- --dry-run` on 2026-05-25 confirms the local
+- `npm run admin-parity:final -- --dry-run` on 2026-05-26 confirms the local
   final-gate order now covers the convergence baseline commands before the
-  external soak: ledger, decommission audit, lint, typecheck, `build-dev`,
-  production build, unit, API e2e, canonical admin parity, package verification,
-  and `admin-parity:soak`.
+  external soak: ledger, lint, typecheck, `build-dev`, production build, unit,
+  API e2e, canonical admin parity, package verification, and
+  `admin-parity:soak`.
 - Manual branch CI run `26382033849` on 2026-05-25 found fresh-checkout CI
   drift on `modernization/legacy-client-convergence`: Node 20/22 test jobs were
   incompatible with the Node 24 Mocha strip-types setup, some jobs ran before

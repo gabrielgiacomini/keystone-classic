@@ -43,13 +43,17 @@ checklist.
 
 ## Package Compatibility Notes
 
-The package now publishes only `dist` through `package.json#files`. The removed
-vendored React peer fork tree is not part of the package surface.
+The package now publishes only `dist` through `package.json#files`. The emitted
+package currently includes the restored legacy React 18 admin for `/keystone`
+and the modern admin assets for `/keystone-next`. The removed vendored React
+peer fork tree is not part of the package surface.
 
-Retired direct dependencies are guarded by `npm run package:verify`, including
-React Router 3, Redux, redux-saga, redux-thunk, Browserify-related packages,
-legacy React component helpers, Enzyme, lodash, moment, and legacy UI-only
-packages that no longer own built-in behavior.
+`npm run package:verify` guards the current support policy. It rejects retired
+package surfaces such as React Router 3, the historical `packages.js` manifest,
+Browserify-related build dependencies, Enzyme, and old vendored peer forks.
+Legacy-owned dependencies such as Redux, redux-saga, redux-thunk, `xhr`,
+`glamor`, `prop-types`, `react-select`, `react-transition-group`, `react-dnd`,
+lodash, and moment remain while the legacy admin shell owns `/keystone`.
 
 Stable compatibility surfaces that remain available during migration:
 
@@ -58,18 +62,19 @@ Stable compatibility surfaces that remain available during migration:
 - Shared admin field registry and adapters under `admin/shared/fields/*`.
 - Shared list-route state helpers under `admin/shared/state/*`.
 - The admin-next custom field module-script bridge.
+- The legacy React 18 admin shell for deployments that need the historical
+  admin experience.
 
-Legacy browser/server roots are not final support surfaces. The final
-decommission gate requires these roots to stay out of the package tree:
+The following legacy browser/server roots are intentionally present while the
+legacy admin shell remains the supported `/keystone` experience:
 
 - `admin/client-legacy/App`
 - `admin/client-legacy/Signin`
-- `admin/client-legacy/packages.mjs`
 - `admin/server/templates-legacy`
 - `admin/server/routes-legacy`
 - `admin/public-legacy`
 
-## Decommission Checklist
+## Stabilization Checklist
 
 1. Run admin-next in `both` or `auto` mode and compare workflows.
 2. Migrate custom fields to module scripts using
@@ -89,5 +94,5 @@ decommission gate requires these roots to stay out of the package tree:
    ```
 
 5. Run `npm run admin-parity:final`.
-6. Remove or isolate the legacy roots named above.
-7. Re-run `npm run admin-parity:final` and package verification before release.
+6. Keep the protected `admin-parity` required check green for the documented
+   soak window before release.

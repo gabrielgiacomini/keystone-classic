@@ -120,7 +120,7 @@ normal links or the modern admin route APIs provided by the custom field module.
 See `docs/admin-next-custom-field-migration.md` for the migration checklist and
 support policy.
 See `docs/admin-modernization-upgrade-guide.md` for the admin mode, package
-compatibility, and final decommission checklist.
+compatibility, and stabilization checklist.
 
 ### Database field types
 
@@ -139,7 +139,7 @@ See the [upstream KeystoneJS database documentation](https://v4.keystonejs.com/d
   import keystone from 'keystone';
   ```
 
-- **`admin/client-next` / `admin/public-next`**: The modern admin client source and built static assets. Historical admin paths serve this shell; the legacy browser bundle build has been removed from the package build.
+- **`admin/client-next` / `admin/public-next`**: The modern admin client source and built static assets. The `/keystone-next` path serves this shell while `/keystone` serves the restored legacy React 18 admin shell.
 
   **Usage**:
   ```bash

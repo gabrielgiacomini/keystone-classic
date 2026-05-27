@@ -26,7 +26,6 @@ describe('scripts/admin-parity-final-gate', function () {
 		expect(result.stderr).to.equal('');
 		expect(result.stdout.trim().split('\n')).to.deep.equal([
 			'npm run admin-parity:ledger',
-			'npm run admin-decommission:audit',
 			'npm run lint',
 			'npm run typecheck',
 			'npm run build-dev',
@@ -48,7 +47,6 @@ describe('scripts/admin-parity-final-gate', function () {
 		expect(result.status).to.equal(0);
 		expect(result.stdout).to.contain('Usage: jiti scripts/admin-parity-final-gate.ts');
 		expect(result.stdout).to.contain('admin-parity:ledger step verifies that every parity ledger row is Complete');
-		expect(result.stdout).to.contain('admin-decommission:audit step verifies that legacy browser/server roots');
 		expect(result.stdout).to.contain('e2e parity, visual identity, and soak gates');
 		expect(result.stdout).to.contain('admin-parity:soak step verifies branch protection or an active branch ruleset');
 		expect(result.stdout).to.contain('inspect the required-check source');
@@ -72,7 +70,6 @@ describe('scripts/admin-parity-final-gate', function () {
 		expect(result.status).to.equal(23);
 		expect(calls).to.deep.equal([
 			'run admin-parity:ledger',
-			'run admin-decommission:audit',
 			'run lint',
 			'run typecheck',
 			'run build-dev',
@@ -99,7 +96,6 @@ describe('scripts/admin-parity-final-gate', function () {
 		expect(result.status).to.equal(0);
 		expect(calls).to.deep.equal([
 			'run admin-parity:ledger',
-			'run admin-decommission:audit',
 			'run lint',
 			'run typecheck',
 			'run build-dev',

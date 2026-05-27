@@ -10,7 +10,6 @@ if (args.has('--help')) {
 
 const commands: Array<[string, string[]]> = [
 	['npm', ['run', 'admin-parity:ledger']],
-	['npm', ['run', 'admin-decommission:audit']],
 	['npm', ['run', 'lint']],
 	['npm', ['run', 'typecheck']],
 	['npm', ['run', 'build-dev']],
@@ -54,9 +53,7 @@ function printHelp() {
 
 Run the final P4 admin-parity closeout gates in the required order.
 The admin-parity:ledger step verifies that every parity ledger row is Complete
-or Out of scope before final decommission starts.
-The admin-decommission:audit step verifies that legacy browser/server roots have
-been removed or isolated according to the convergence plan.
+or Out of scope before final stabilization starts.
 The lint/typecheck/build-dev/build/unit/package steps mirror the convergence Definition
 of Done before the e2e parity, visual identity, and soak gates run.
 The final admin-parity:soak step verifies branch protection or an active branch ruleset plus the 14-day green window.

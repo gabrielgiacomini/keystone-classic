@@ -50,7 +50,7 @@ console.log(`CI workflow verified: ${workflowPath}`);
 console.log('- admin-parity runs on the scheduled workflow and covers UI, field-complete, and visual identity suites');
 console.log('- package-verify runs ci:verify, build:types, package:verify, and npm pack --dry-run');
 console.log('- lint-typecheck builds before typechecking dist-backed tests and runs admin-next:typecheck');
-console.log('- obsolete legacy bundle hash checks are absent after legacy client decommission');
+console.log('- obsolete legacy bundle hash checks are absent from active CI');
 
 function assertJobContains(jobName: string, command: string): void {
 	const job = jobs.get(jobName);
@@ -65,7 +65,7 @@ function assertJobContains(jobName: string, command: string): void {
 
 function assertJobMissing(jobName: string): void {
 	if (jobs.has(jobName)) {
-		failures.push(`jobs.${jobName} must stay removed after legacy client decommission`);
+		failures.push(`jobs.${jobName} must stay removed from active CI`);
 	}
 }
 

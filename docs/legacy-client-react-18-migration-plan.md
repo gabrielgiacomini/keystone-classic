@@ -57,7 +57,7 @@ The React 18 milestone is complete when:
 
 ## Current Status
 
-As of 2026-05-25, the repository is on React 18 at the root:
+As of 2026-05-26, the repository is on React 18 at the root:
 
 - `react` and `react-dom` are `^18.3.1`.
 - `/keystone` serves the restored legacy React 18 admin shell.
@@ -83,17 +83,27 @@ Current local verification evidence:
 
 - `npx playwright test --config=e2e-ui/playwright.config.ts`: 45 passing.
 - `npx playwright test --config=e2e-ui/playwright.fields.config.ts`: 78 passing
-  before `c77f853f`; after `c77f853f`, the field-complete legacy spacing audit
-  passed.
-- `npm run package:verify`: passing after the latest legacy datetime inline
-  control fix.
+  after `c77f853f`.
+- `npm run admin-parity`: 45 dual-admin UI tests, 78 field-complete tests, and
+  3 visual identity tests passing.
+- `npm run lint`, `npm run typecheck -- --pretty false`, `npm run build-dev`,
+  `npm run build`, `npm run test:unit`, `npm run test:e2e-api`,
+  `npm run package:verify`, `npm run ci:verify`, and `npm audit --omit=dev`
+  pass locally.
 - Live probes confirmed the restored no-default-column route, legacy field
   label/control spacing, and `Reviewed At` datetime controls.
+- `npm ls react react-dom --depth=3` still fails with invalid React 18 peer
+  ranges from old legacy UI packages.
+- `npm run admin-parity:soak` still fails because the external 14-day window
+  contains 12 failed `admin-parity` jobs and only 3 green days.
 
 Open gates before calling the React 18 legacy-admin stabilization complete:
 
-- Rerun the full field-complete suite after `c77f853f`.
-- Run the canonical `admin-parity` job on `master` without direct-push bypasses.
+- Run the canonical `admin-parity` required check on `master` after the current
+  local changes are committed and pushed, without direct-push bypasses.
+- Resolve or explicitly own the invalid React 18 peer ranges from
+  `react-select@1.3.0`, `react-input-autosize@2.2.2`, and
+  `react-transition-group@1.2.1`.
 - Restart the 14-day clean `admin-parity` soak window after CI is green on the
   current `master` head.
 - Keep the direct-push bypasses from `49f7bd7d` through `c77f853f` recorded as

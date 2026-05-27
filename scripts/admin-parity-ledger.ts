@@ -21,7 +21,7 @@ if (openRows.length > 0) {
 	for (const row of openRows) {
 		console.error(`- ${row.section}: ${row.name} is ${row.status}`);
 	}
-	console.error('Close each row as Complete or Out of scope before running final decommission.');
+	console.error('Close each row as Complete or Out of scope before running final stabilization.');
 	process.exit(1);
 }
 
@@ -101,7 +101,7 @@ function printHelp(): void {
 	console.log(`Usage: jiti scripts/admin-parity-ledger.ts [options]
 
 Verify that the admin modernization parity ledger is ready for final
-decommission. Every workflow and built-in field row must be marked Complete or
+stabilization. Every workflow and built-in field row must be marked Complete or
 Out of scope.
 
 Options:

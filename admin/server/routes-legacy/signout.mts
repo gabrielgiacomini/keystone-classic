@@ -1,6 +1,11 @@
 import type { Request, Response } from 'express';
 import { getAdminLegacyPath } from '../../../lib/core/adminSurfacePathUtils.mjs';
 
+/**
+ * Signs out of the legacy admin and redirects to the configured destination.
+ * @param req - Express request with Keystone context.
+ * @param res - Express response used for the redirect.
+ */
 export default function SignoutRoute(req: Request, res: Response): void {
 	const keystone = req.keystone;
 	if (!keystone) {

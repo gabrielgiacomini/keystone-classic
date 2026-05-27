@@ -164,7 +164,7 @@ describe('admin surface mounting', function () {
 			.expect('content-type', /html/)
 			.expect(function (res) {
 				expect(res.text).to.contain('"adminLegacyPath":"/manage"');
-				expect(res.text).to.contain('"adminApiPath":"/manage-api"');
+				expect(res.text).to.contain('"adminApiPath":"/manage/api"');
 			});
 		await request(app).get('/keystone-api/session').expect(404);
 		await request(app).get('/keystone/api/session').expect(404);
@@ -291,7 +291,7 @@ describe('admin surface mounting', function () {
 			.expect(200)
 			.expect('content-type', /html/)
 			.expect(function (res) {
-				expect(res.text).to.contain('"adminApiPath":"/keystone-api"');
+				expect(res.text).to.contain('"adminApiPath":"/keystone/api"');
 			});
 		await request(app)
 			.get('/keystone-next/')
@@ -350,7 +350,7 @@ describe('admin surface mounting', function () {
 			.expect('content-type', /html/)
 			.expect(function (res) {
 				expect(res.text).to.contain('"adminLegacyPath":"/keystone"');
-				expect(res.text).to.contain('"adminApiPath":"/keystone-api"');
+				expect(res.text).to.contain('"adminApiPath":"/keystone/api"');
 			});
 		await request(app)
 			.get('/keystone/')
@@ -358,7 +358,7 @@ describe('admin surface mounting', function () {
 			.expect('content-type', /html/)
 			.expect(function (res) {
 				expect(res.text).to.contain('"adminLegacyPath":"/keystone"');
-				expect(res.text).to.contain('"adminApiPath":"/keystone-api"');
+				expect(res.text).to.contain('"adminApiPath":"/keystone/api"');
 			});
 		expect(cookieParserHits).to.equal(3);
 		expect(expressSessionHits).to.equal(3);
@@ -398,19 +398,20 @@ describe('admin surface mounting', function () {
 			.expect('content-type', /html/);
 	});
 
-	it('serves modern static assets from the historical legacy static router', async function () {
+	it('serves legacy static assets from the historical legacy static router', async function () {
 		const keystone = createKeystoneMock();
 		const app = express();
 		app.use('/keystone', keystoneSingleton.Admin.Server.createAdminLegacyStaticRouter(keystone));
 
 		await request(app)
-			.get('/keystone/index.html')
+			.get('/keystone/js/admin.js')
 			.expect(200)
-			.expect('content-type', /html/);
+			.expect('content-type', /javascript/);
 
 		await request(app)
-			.get('/keystone/styles/keystone.css')
-			.expect(404);
+			.get('/keystone/styles/keystone.min.css')
+			.expect(200)
+			.expect('content-type', /css/);
 	});
 
 	it('supports a Cloom-owned Express app and HTTP listener without keystone.start()', async function () {
@@ -613,7 +614,7 @@ describe('admin surface mounting', function () {
 		await request(app).get('/keystone/signin').expect(404);
 	});
 
-	it('does not serve prebuilt legacy admin browser bundles after static router decommission', async function () {
+	it('serves legacy admin browser bundles through the runtime bundler', async function () {
 		const originalDev = process.env.KEYSTONE_DEV;
 		const originalPrebuild = process.env.KEYSTONE_PREBUILD_ADMIN;
 		const originalRuntimeBundler = process.env.KEYSTONE_LEGACY_RUNTIME_BUNDLER;
@@ -623,9 +624,9 @@ describe('admin surface mounting', function () {
 		try {
 			const app = createApp(createKeystoneMock(), express);
 
-			await request(app).get('/keystone/js/admin.js').expect(404);
-			await request(app).get('/keystone/js/signin.js').expect(404);
-			await request(app).get('/keystone/js/fields.js').expect(404);
+			await request(app).get('/keystone/js/admin.js').expect(200);
+			await request(app).get('/keystone/js/signin.js').expect(200);
+			await request(app).get('/keystone/js/fields.js').expect(200);
 		} finally {
 			if (originalDev === undefined) delete process.env.KEYSTONE_DEV;
 			else process.env.KEYSTONE_DEV = originalDev;
@@ -636,7 +637,7 @@ describe('admin surface mounting', function () {
 		}
 	});
 
-	it('keeps legacy admin browser bundles unavailable when cache admin bundles is enabled', async function () {
+	it('serves legacy admin browser bundles when cache admin bundles is enabled', async function () {
 		const originalDev = process.env.KEYSTONE_DEV;
 		const originalPrebuild = process.env.KEYSTONE_PREBUILD_ADMIN;
 		const originalRuntimeBundler = process.env.KEYSTONE_LEGACY_RUNTIME_BUNDLER;
@@ -648,9 +649,9 @@ describe('admin surface mounting', function () {
 				'cache admin bundles': true,
 			}), express);
 
-			await request(app).get('/keystone/js/admin.js').expect(404);
-			await request(app).get('/keystone/js/signin.js').expect(404);
-			await request(app).get('/keystone/js/fields.js').expect(404);
+			await request(app).get('/keystone/js/admin.js').expect(200);
+			await request(app).get('/keystone/js/signin.js').expect(200);
+			await request(app).get('/keystone/js/fields.js').expect(200);
 		} finally {
 			if (originalDev === undefined) delete process.env.KEYSTONE_DEV;
 			else process.env.KEYSTONE_DEV = originalDev;

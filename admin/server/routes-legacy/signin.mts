@@ -35,6 +35,8 @@ interface CsrfModule {
 /**
  * Renders the Admin UI sign-in page (signin.html EJS template).
  * Passes CSRF token, brand, logo and current user info as locals.
+ * @param req - Express request with Keystone context.
+ * @param res - Express response used to send the rendered sign-in page.
  */
 export default function SigninRoute(req: Request, res: Response): void {
 	if (!req.keystone) return;

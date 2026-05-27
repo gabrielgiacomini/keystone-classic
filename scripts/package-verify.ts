@@ -326,10 +326,6 @@ assert(
 	'package.json must expose the parity ledger closeout verifier',
 );
 assert(
-	pkg.scripts?.['admin-decommission:audit'] === 'jiti scripts/admin-decommission-audit.ts',
-	'package.json must expose the legacy client decommission audit',
-);
-assert(
 	pkg.scripts?.['test:e2e-ui:visual']?.includes('e2e-ui/tests/visual-identity.spec.ts'),
 	'package.json must expose the admin-next visual identity e2e guard',
 );
@@ -384,7 +380,6 @@ await assertFile('dist/admin/public-legacy/js/lib/jquery/jquery-1.10.2.min.js');
 await assertFile('dist/admin/server/templates-legacy/index.html');
 await assertFile('dist/admin/server/templates-legacy/signin.html');
 await assertFile('dist/fields/types/markdown/less/bootstrap-markdown.less');
-await assertFile('scripts/admin-decommission-audit.ts');
 await assertFile('scripts/admin-parity-final-gate.ts');
 await assertFile('scripts/admin-parity-ledger.ts');
 await assertFile('e2e-ui/tests/visual-identity.spec.ts');
@@ -428,7 +423,7 @@ await assertFileIncludes(
 await assertFileIncludes(
 	'docs/admin-modernization-upgrade-guide.md',
 	'npm run admin-parity:final',
-	'admin modernization upgrade guide must document the final decommission gate',
+	'admin modernization upgrade guide must document the final stabilization gate',
 );
 await assertFileIncludes(
 	'docs/admin-modernization-parity-ledger.md',
@@ -534,11 +529,6 @@ await assertFileIncludes(
 	'docs/admin-modernization-parity-ledger.md',
 	'| custom field compatibility | legacy `FieldTypes` runtime bundle | `admin/shared/fields/legacyAdapters.ts` + modern registry | Complete |',
 	'admin parity ledger must keep custom field compatibility workflow complete',
-);
-await assertFileIncludes(
-	'scripts/admin-decommission-audit.ts',
-	'dist/admin/public-legacy',
-	'legacy client decommission audit must cover emitted package legacy roots',
 );
 await assertFileIncludes(
 	'scripts/admin-parity-final-gate.ts',

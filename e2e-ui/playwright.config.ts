@@ -38,7 +38,7 @@ export default defineConfig({
 		/.*\/tests\/relationships\.spec\.ts/,
 		/.*\/tests\/errors\.spec\.ts/,
 		/.*\/tests\/react17-events\.spec\.ts/,
-		/.*\/tests\/decommission\.spec\.ts/,
+		/.*\/tests\/dual-admin-routing\.spec\.ts/,
 		/.*\/tests\/visual-identity\.spec\.ts/,
 	],
 	fullyParallel: false,
