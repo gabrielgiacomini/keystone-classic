@@ -63,6 +63,24 @@ export function getToken (req: Request, res: Response): string {
 }
 
 /**
+ * Issues a CSRF token for the session as it is now and sets the XSRF-TOKEN
+ * cookie, replacing any token already created for this response. Call it
+ * after `req.session.regenerate()`: the new session has no CSRF secret, so a
+ * token the client holds from before no longer validates.
+ * @param req The request, whose `session` is the regenerated one.
+ * @param res The response the cookie is set on.
+ * @returns The new token.
+ */
+export function refreshToken (req: Request, res: Response): string {
+	// `locals` is always there on an Express response; a bare object passed
+	// to `keystone.session.signinWithUser` may not have it.
+	const target = res as { locals?: Record<string, unknown> };
+	target.locals ??= {};
+	target.locals[LOCAL_VALUE] = undefined;
+	return getToken(req, res);
+}
+
+/**
  * Extracts the CSRF token from the request body, query string, or one of the
  * recognised CSRF/XSRF headers.
  */
@@ -129,5 +147,5 @@ export const middleware = {
 export default {
 	TOKEN_KEY, LOCAL_KEY, LOCAL_VALUE, SECRET_KEY, SECRET_LENGTH,
 	CSRF_HEADER_KEY, XSRF_HEADER_KEY, XSRF_COOKIE_KEY,
-	createSecret, getSecret, createToken, getToken, requestToken, validate, middleware,
+	createSecret, getSecret, createToken, getToken, refreshToken, requestToken, validate, middleware,
 };

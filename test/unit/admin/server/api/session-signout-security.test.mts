@@ -1,10 +1,13 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import signout from 'keystone/admin/server/api/session/signout';
+import * as csrf from 'keystone/lib/security/csrf';
 
 interface MockResponse {
 	apiError: sinon.SinonSpy;
 	clearCookie: sinon.SinonSpy;
+	cookie: sinon.SinonSpy;
+	locals: Record<string, unknown>;
 	status: sinon.SinonStub;
 	json: sinon.SinonSpy;
 }
@@ -14,6 +17,7 @@ interface MockRequest {
 	user: { id: string } | null;
 	session: {
 		regenerate: sinon.SinonStub;
+		_csrf_secret?: string;
 	};
 }
 
@@ -27,6 +31,8 @@ function createResponse(): MockResponse {
 	const res: MockResponse = {
 		apiError: sinon.spy(),
 		clearCookie: sinon.spy(),
+		cookie: sinon.spy(),
+		locals: {},
 		status: sinon.stub(),
 		json: sinon.spy(),
 	};
@@ -123,6 +129,26 @@ describe('admin session signout security', function () {
 		sinon.assert.calledWithExactly(res.json, { success: true });
 	});
 
+	it('issues the XSRF-TOKEN cookie of the regenerated session and keeps the body shape', function () {
+		const keystone = createKeystone();
+		const req = createRequest(keystone);
+		const res = createResponse();
+		// a token created earlier in the request, for the session that is replaced
+		res.locals.csrf_token_value = 'stale-token';
+
+		signout(req as unknown as import('express').Request, res as unknown as import('express').Response);
+
+		sinon.assert.calledOnce(res.cookie);
+		const [name, token, options] = res.cookie.firstCall.args as [string, string, Record<string, unknown>];
+		expect(name).to.equal('XSRF-TOKEN');
+		expect(token).to.be.a('string').and.not.equal('stale-token');
+		expect(options).to.include({ sameSite: 'lax', httpOnly: false });
+		expect(req.session._csrf_secret).to.be.a('string');
+		expect(csrf.validate(req as unknown as import('express').Request, token)).to.equal(true);
+		sinon.assert.callOrder(req.session.regenerate, res.cookie, res.json);
+		sinon.assert.calledWithExactly(res.json, { success: true });
+	});
+
 	it('does not serialize hook error details', function () {
 		const keystone = createKeystone({
 			preError: new Error('private hook failure'),
@@ -149,6 +175,7 @@ describe('admin session signout security', function () {
 		expect(req.user).to.equal(null);
 		sinon.assert.calledWithExactly(res.status, 500);
 		sinon.assert.calledWithExactly(res.json, { error: 'session error' });
+		sinon.assert.notCalled(res.cookie);
 		expect(res.json.firstCall.args[0]).not.to.have.property('detail');
 		sinon.assert.calledOnce(keystone.callHook);
 	});

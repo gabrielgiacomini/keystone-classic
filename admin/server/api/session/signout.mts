@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import type { Keystone } from '../../../../index.mjs';
+import { refreshToken as refreshCsrfToken } from '../../../../lib/security/csrf.mjs';
 
 interface CookieSigninOptions {
 	signed: boolean;
@@ -49,6 +50,9 @@ function signout(req: Request, res: Response): void {
 		req.user = null;
 		req.session.regenerate(function (sessionErr: unknown): void {
 			if (sessionErr) { sendSignoutInternalError(res, 'session error'); return; }
+			// The signed-out session is a new one: issue its CSRF token so the
+			// client can sign in again without fetching GET /session first.
+			refreshCsrfToken(req, res);
 			keystone.callHook(user, 'post:signout', function (postErr: unknown): void {
 				if (postErr) { sendSignoutInternalError(res, 'post:signout error'); return; }
 				res.json({ success: true });

@@ -19,6 +19,17 @@ import { defineConfig } from '@playwright/test';
 
 const PORT = process.env.PORT ?? '3005';
 const BASE_URL = process.env.E2E_BASE_URL ?? `http://127.0.0.1:${PORT}`;
+const MONGO_URI = process.env.MONGO_URI ?? 'mongodb://localhost:27017/keystone-e2e-api';
+
+// A second server that enforces CSRF, for `csrf-token.spec.ts`. The main
+// server runs with DISABLE_CSRF=true, where every token is accepted. It
+// listens on the next port (override with E2E_CSRF_PORT) and uses a database
+// of its own: the main database name with `-csrf` appended. Both servers drop
+// their database on boot.
+const CSRF_PORT = process.env.E2E_CSRF_PORT ?? String(Number(PORT) + 1);
+const CSRF_BASE_URL = process.env.E2E_CSRF_BASE_URL ?? `http://127.0.0.1:${CSRF_PORT}`;
+const CSRF_MONGO_URI = MONGO_URI.replace(/^([^?#]+?)\/?(\?.*)?$/, '$1-csrf$2');
+process.env.E2E_CSRF_BASE_URL = CSRF_BASE_URL;
 
 export default defineConfig({
 	testDir: './tests',
@@ -40,7 +51,9 @@ export default defineConfig({
 		},
 		trace: 'retain-on-failure',
 	},
-	webServer: {
+	// Started in this order, one after the other: the first command builds
+	// `dist/`, the second only boots from it.
+	webServer: [{
 		command: 'npm run dev:e2e-api',
 		// Probe a known-public path. /keystone/signin is served as HTML by
 		// the admin route stack and only requires the server to be up,
@@ -51,12 +64,23 @@ export default defineConfig({
 		stdout: 'pipe',
 		stderr: 'pipe',
 		env: {
-			MONGO_URI:
-				process.env.MONGO_URI ??
-				'mongodb://localhost:27017/keystone-e2e-api',
+			MONGO_URI,
 			PORT,
 			DISABLE_CSRF: 'true',
 			NODE_ENV: 'test',
 		},
-	},
+	}, {
+		command: 'npm run dev:e2e-api:csrf',
+		url: `${CSRF_BASE_URL}/keystone/signin`,
+		reuseExistingServer: !process.env.CI,
+		timeout: 120_000,
+		stdout: 'pipe',
+		stderr: 'pipe',
+		env: {
+			MONGO_URI: CSRF_MONGO_URI,
+			PORT: CSRF_PORT,
+			DISABLE_CSRF: 'false',
+			NODE_ENV: 'test',
+		},
+	}],
 });
