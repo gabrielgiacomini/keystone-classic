@@ -87,7 +87,8 @@ export default function register(this: KeystoneList): KeystoneList {
 		this.model = keystone.mongoose.model(this.key, this.schema);
 	}
 
-	if (this.options.searchUsesTextIndex && !this.declaresTextIndex()) {
+	// Also runs when the schema declares its own text index, to drop a stale generated one.
+	if (this.options.searchUsesTextIndex) {
 		this.ensureTextIndex(function (err?: Error | null) {
 			if (err) {
 				console.error('this.ensureTextIndex() failed for \'' + list.key + '\':\n', err.message, (err as Error & { stack?: string }).stack);

@@ -52,12 +52,18 @@ function declaredTextIndexPaths(list: KeystoneList): string[] {
  * only search fields are secret there is no index to query (and a stale one
  * from before the field was marked secret must not be queried), so callers
  * fall back to the regular-expression search, which skips secret fields.
+ * The same fallback applies when `ensureTextIndex` found a text index in the
+ * database that Keystone did not create and that covers a secret path
+ * (`_unmanagedTextIndexCoversSecret`): MongoDB would answer `$text` from it.
+ * `ensureTextIndex` also sets that flag while it runs and leaves it set when the
+ * run fails at any step (listing, dropping or creating an index).
  *
  * @param list - The list being searched.
  * @returns `true` when `searchUsesTextIndex` is on and `$text` cannot reach a secret field.
  */
 export function canSearchWithTextIndex(list: KeystoneList): boolean {
 	if (!list.options.searchUsesTextIndex) return false;
+	if (list._unmanagedTextIndexCoversSecret) return false;
 	const declared = declaredTextIndexPaths(list);
 	if (declared.length) {
 		const hasSecrets = getSecretFieldPaths(list).length > 0;
