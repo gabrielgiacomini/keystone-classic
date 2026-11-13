@@ -43,6 +43,7 @@ interface AutokeySchema {
 	add(def: Record<string, unknown>): void;
 	pathType(path: string): string;
 	pre(event: 'save', fn: (this: AutokeyDoc, next: (err?: unknown) => void) => void): void;
+	pre(event: string | string[], fn: (this: unknown, next: (err?: unknown) => void) => void): void;
 	post(
 		event: 'save',
 		fn:
@@ -131,6 +132,17 @@ export default function autokey(this: KeystoneList): void {
 	const refusedAtRegistration = secretFromError(autokeyOpts.from.filter((entry) => !reachesRelatedList(entry)));
 	if (refusedAtRegistration) throw refusedAtRegistration;
 	let fromVetted = !autokeyOpts.from.some(reachesRelatedList);
+	/**
+	 * The deferred check: the error for a `from` path that reads a secret
+	 * field through a relationship, until one check has passed.
+	 * @returns The error to fail the write with, or `undefined`.
+	 */
+	const refusedFrom = function (): Error | undefined {
+		if (fromVetted) return undefined;
+		const refused = secretFromError(autokeyOpts.from);
+		if (!refused) fromVetted = true;
+		return refused;
+	};
 
 	const schemaDef: Record<string, unknown> = {};
 	schemaDef[autokeyOpts.path] = { type: String, index: true };
@@ -245,11 +257,8 @@ export default function autokey(this: KeystoneList): void {
 
 	schema.pre('save', function (this: AutokeyDoc, next: (err?: unknown) => void) {
 		const doc = this;
-		if (!fromVetted) {
-			const refused = secretFromError(autokeyOpts.from);
-			if (refused) return next(refused);
-			fromVetted = true;
-		}
+		const refused = refusedFrom();
+		if (refused) return next(refused);
 		let modified = false;
 		let incomplete = false;
 		const values: string[] = [];
@@ -302,6 +311,21 @@ export default function autokey(this: KeystoneList): void {
 				return next();
 		}
 	});
+
+	// The deferred check also runs on the model's other write entry points
+	// that have Mongoose middleware, so a list refused on `save()` is refused
+	// on those as well, whichever is used first. (None of them generates a
+	// key: only `save()` does.) Registered only when a `from` path goes
+	// through a relationship; other lists were vetted in full at registration.
+	// `bulkWrite` and writes through `model.collection` have no middleware in
+	// Mongoose 7 and are not vetted.
+	if (!fromVetted) {
+		const refuse = function (this: unknown, next: (err?: unknown) => void): void {
+			next(refusedFrom());
+		};
+		schema.pre('insertMany', refuse);
+		schema.pre(['updateOne', 'updateMany', 'findOneAndUpdate', 'replaceOne', 'findOneAndReplace'], refuse);
+	}
 
 		schema.post('save', function (this: AutokeyDoc, doc: AutokeyDoc, next: (err?: unknown) => void) {
 			releaseAutokeyLock(doc);
