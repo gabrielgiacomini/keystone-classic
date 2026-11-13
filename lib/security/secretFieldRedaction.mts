@@ -402,31 +402,36 @@ function setPath(target: Record<string, unknown>, path: string, value: unknown):
 /**
  * Removes the secret paths of `list` from a plain value in place, then does
  * the same for every populated relationship against its related list.
+ *
+ * The paths to remove and the relationships to follow are worked out once per
+ * call and reused for every element of an array. Nothing is kept between
+ * calls, so a field added to the list later is seen by the next call.
  * @param list - The list `value` belongs to.
  * @param value - A plain object, or an array of them (anything else is left alone).
  * @param depth - How many populated levels `value` lies below the starting document.
  */
 function redactInPlace(list: SecretAwareList | null | undefined, value: unknown, depth: number): void {
-	if (Array.isArray(value)) {
-		for (const entry of value) redactInPlace(list, entry, depth);
-		return;
-	}
-	if (!isPlainObject(value)) return;
-	const target = value;
-	for (const path of [...getSecretFieldPaths(list), ...getSecretDerivedPaths(list)]) {
-		deletePath(target, path);
-	}
-	// Populated relationships carry whole related documents: redact those against their own list.
-	for (const path of Object.keys(list?.fields ?? {})) {
-		const field = fieldAt(list, path);
-		if (!fieldTypeIs(field, 'relationship')) continue;
-		const related = getPath(target, path);
-		if (!Array.isArray(related) && !isPlainObject(related)) continue;
-		if (depth >= SECRET_REDACTION_MAX_DEPTH) {
-			// Too deep to vouch for: keep the id(s), drop the document(s).
-			setPath(target, path, idOnly(related));
-		} else {
-			redactInPlace(field?.refList, related, depth + 1);
+	const entries = Array.isArray(value) ? value : [value];
+	if (!entries.some(isPlainObject)) return;
+	const secretPaths = [...getSecretFieldPaths(list), ...getSecretDerivedPaths(list)];
+	const relationshipPaths = Object.keys(list?.fields ?? {}).filter((path) => fieldTypeIs(fieldAt(list, path), 'relationship'));
+	for (const target of entries) {
+		if (Array.isArray(target)) {
+			redactInPlace(list, target, depth);
+			continue;
+		}
+		if (!isPlainObject(target)) continue;
+		for (const path of secretPaths) deletePath(target, path);
+		// Populated relationships carry whole related documents: redact those against their own list.
+		for (const path of relationshipPaths) {
+			const related = getPath(target, path);
+			if (!Array.isArray(related) && !isPlainObject(related)) continue;
+			if (depth >= SECRET_REDACTION_MAX_DEPTH) {
+				// Too deep to vouch for: keep the id(s), drop the document(s).
+				setPath(target, path, idOnly(related));
+			} else {
+				redactInPlace(fieldAt(list, path)?.refList, related, depth + 1);
+			}
 		}
 	}
 }

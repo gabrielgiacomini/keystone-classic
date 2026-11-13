@@ -12,6 +12,7 @@ import getCSVData from 'keystone/lib/list/getCSVData';
 import addSearchToQuery from 'keystone/lib/list/addSearchToQuery';
 import getSearchFilters from 'keystone/lib/list/getSearchFilters';
 import RelationshipType from 'keystone/fields/types/relationship/RelationshipType';
+import getMongooseConnection from '../../../helpers/getMongooseConnection.mts';
 import removeModel from '../../../helpers/removeModel.mts';
 
 const BCRYPT_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
@@ -51,6 +52,10 @@ function newList(key: string, options: Record<string, unknown> = {}): RealList {
 
 describe('secret fields: autokey', function () {
 	const keys = ['SecretAutokeyFrom', 'SecretAutokeyPassword', 'SecretAutokeyDerived', 'SecretAutokeyNested', 'SecretAutokeyPlain', 'SecretAutokeyRef', 'SecretAutokeyRefTarget'];
+	// The write entry points below need a connection.
+	before(async function () {
+		(keystone as unknown as { mongoose: unknown }).mongoose = await getMongooseConnection();
+	});
 	after(function () { keys.forEach(removeModel); });
 
 	describe('a `from` path that reads a secret field', function () {
@@ -115,6 +120,46 @@ describe('secret fields: autokey', function () {
 			}
 			expect(message).to.match(/autokey.*SecretAutokeyRef.*owner\.recovery.*secret/s);
 			expect(message).to.not.include(RESET_KEY);
+		});
+
+		it('is refused through a related list on insertMany and on the update entry points too', async function () {
+			const target = newList('SecretAutokeyRefTarget');
+			target.add({ label: { type: String }, recovery: { type: String, secret: true } });
+			target.register();
+			const list = newList('SecretAutokeyRef', { autokey: { path: 'slug', from: 'label owner.recovery' } });
+			list.add({ label: { type: String }, owner: { type: Types.Relationship, ref: 'SecretAutokeyRefTarget' } });
+			list.register();
+			const model = list.model as unknown as Record<string, (...args: unknown[]) => Promise<unknown>>;
+			const attempts: Record<string, () => Promise<unknown>> = {
+				insertMany: () => model['insertMany']!([{ label: 'Doc' }]),
+				updateOne: () => model['updateOne']!({ label: 'Doc' }, { label: 'Other' }),
+				updateMany: () => model['updateMany']!({ label: 'Doc' }, { label: 'Other' }),
+				findOneAndUpdate: () => model['findOneAndUpdate']!({ label: 'Doc' }, { label: 'Other' }),
+				replaceOne: () => model['replaceOne']!({ label: 'Doc' }, { label: 'Other' }),
+				findOneAndReplace: () => model['findOneAndReplace']!({ label: 'Doc' }, { label: 'Other' }),
+			};
+			for (const [name, attempt] of Object.entries(attempts)) {
+				let message = name + ' was not refused';
+				try { await attempt(); } catch (err) { message = (err as Error).message; }
+				expect(message, name).to.match(/autokey.*SecretAutokeyRef.*owner\.recovery.*secret/s);
+			}
+		});
+
+		it('leaves insertMany and updates alone when the related path is not secret', async function () {
+			const target = newList('SecretAutokeyRefTarget');
+			target.add({ label: { type: String }, recovery: { type: String, secret: true } });
+			target.register();
+			const list = newList('SecretAutokeyPlain', { autokey: { path: 'slug', from: 'label owner.label' } });
+			list.add({ label: { type: String }, owner: { type: Types.Relationship, ref: 'SecretAutokeyRefTarget' } });
+			list.register();
+			const model = list.model as unknown as {
+				insertMany(docs: unknown[]): Promise<Array<{ _id: unknown }>>;
+				updateOne(filter: unknown, update: unknown): Promise<{ matchedCount: number }>;
+				deleteMany(filter: unknown): Promise<unknown>;
+			};
+			const [inserted] = await model.insertMany([{ label: 'Allowed' }]);
+			expect((await model.updateOne({ _id: inserted?._id }, { label: 'Allowed again' })).matchedCount).to.equal(1);
+			await model.deleteMany({ _id: inserted?._id });
 		});
 
 		it('isSecretValuePath tells secret sources from ordinary ones', function () {
@@ -309,6 +354,20 @@ describe('secret fields: nested populated relationships', function () {
 		const safe = withoutSecretFields(userList, nested);
 		expectNoSecret(safe);
 		expect(JSON.stringify(safe)).to.include('"peers":["x1","x2",null]');
+	});
+
+	it('reads the list\'s secret paths once for a whole array, however long', function () {
+		let reads = 0;
+		const fields = { ...userList.fields };
+		const counted = { get fields() { reads++; return fields; } };
+		const users = Array.from({ length: 500 }, (_unused, i) => ({ _id: 'c' + i, password: BCRYPT_HASH, recovery: RESET_KEY }));
+		toJSONWithoutSecretFields(counted, users.slice(0, 1));
+		const readsForOne = reads;
+		reads = 0;
+		const safe = toJSONWithoutSecretFields(counted, users) as unknown[];
+		expectNoSecret(safe);
+		expect(safe).to.have.length(500);
+		expect(reads).to.equal(readsForOne);
 	});
 
 	it('terminates on a document that populates itself', function () {
