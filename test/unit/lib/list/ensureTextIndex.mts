@@ -535,6 +535,45 @@ describe('ensureTextIndex against MongoDB', function () {
 		expect((await list.model.find(addSearchToQuery.call(list, 'hello')).exec()).length).to.equal(1);
 	});
 
+	it('searches with regular expressions while a stale generated index could not be dropped', async function () {
+		const secretValue = 'resetkey7f3a9c';
+		const stale = { title: 'text', resetKey: 'text' } as const;
+		const current = indexNameFor({ title: 'text' });
+		const collection = await collectionWithTextIndex({ title: 'text' }, current);
+		const list = bootList(collection, 'title, resetKey');
+		await Promise.all(pendingIndexWork);
+		expect(list._unmanagedTextIndexCoversSecret).to.equal(false);
+
+		// Put back the generated index from before `resetKey` was marked secret, then make its drop fail.
+		await nativeCollection(collection).dropIndex(current);
+		await nativeCollection(collection).createIndex(stale, { name: indexNameFor(stale) });
+		const failure = new Error('drop failed');
+		const dropIndex = sinon.stub(list.model.collection, 'dropIndex').rejects(failure);
+		try {
+			expect(await run(list)).to.equal(failure);
+		} finally {
+			dropIndex.restore();
+		}
+
+		// The stale index is still there and would answer `$text` for the secret value.
+		expect((await textIndexes(collection)).map((index) => index.name)).to.deep.equal([indexNameFor(stale)]);
+		expect(await nativeCollection(collection).countDocuments({ $text: { $search: secretValue } })).to.equal(1);
+		expect(list._unmanagedTextIndexCoversSecret).to.equal(true);
+		expect(canSearchWithTextIndex(list)).to.equal(false);
+		for (const value of [secretValue, 'hello']) {
+			for (const query of [addSearchToQuery.call(list, value), getSearchFilters.call(list, value)]) {
+				expect(inspect(query, { depth: null })).to.not.include('$text').and.to.not.include('resetKey');
+				expect((await list.model.find(query).exec()).length).to.equal(value === 'hello' ? 1 : 0);
+			}
+		}
+
+		// The next run that succeeds rebuilds the index and turns `$text` back on.
+		expect(await run(list)).to.equal(undefined);
+		expect(list._unmanagedTextIndexCoversSecret).to.equal(false);
+		expect((await textIndexes(collection)).map((index) => index.name)).to.deep.equal([current]);
+		expect(addSearchToQuery.call(list, 'hello')).to.deep.equal({ $text: { $search: 'hello' } });
+	});
+
 	it('leaves a hand-made index without secret paths in place without the secret warning', async function () {
 		const collection = await collectionWithTextIndex({ body: 'text' }, 'my_handmade_text');
 
