@@ -1,3 +1,4 @@
+import canCastId from './canCastId.mjs';
 import type { Request, Response, RequestHandler } from 'express';
 import type { KeystoneList } from '../list.mjs';
 
@@ -12,6 +13,10 @@ export default function apiForGet(this: KeystoneList, options: ApiForGetOptions)
 	const List = this;
 	return function (req: Request, res: Response) {
 		const id = req.params[idParam];
+		if (!canCastId(List.model, id)) {
+			res.status(404).json({ err: 'not found', id: id });
+			return;
+		}
 		const query = List.model.findById(id) as {
 			where(q: Record<string, unknown>): void;
 			exec(): Promise<unknown>;

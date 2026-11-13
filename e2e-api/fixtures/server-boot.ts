@@ -149,6 +149,8 @@ keystone.init({
 	'auth': true,
 	'user model': 'User',
 	'cookie secret': 'keystone-e2e-api-secret',
+	// Off by default outside development; on so the `keystone.uid` cookie path is exercised.
+	'cookie signin': true,
 	'admin legacy path': 'keystone',
 	'admin api path': 'keystone-api',
 	'headless': false,

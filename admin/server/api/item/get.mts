@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import type { Keystone } from '../../../../index.mjs';
 import listToArray from '../../../../lib/list/listToArray.mjs';
+import canCastId from '../../../../lib/list/canCastId.mjs';
 import { getAdminLegacyPath } from '../../../../lib/core/adminSurfacePathUtils.mjs';
 
 /**
@@ -41,6 +42,11 @@ export default function itemGet(req: Request, res: Response): void {
 	const list = req.list;
 	if (!list) {
 		res.status(500).json({ error: 'list context missing' });
+		return;
+	}
+	// An id that cannot be cast to the list's `_id` type matches no item.
+	if (!canCastId(list.model, req.params.id)) {
+		res.status(404).json({ err: 'not found', id: req.params.id });
 		return;
 	}
 	const query = list.model.findById(req.params.id);

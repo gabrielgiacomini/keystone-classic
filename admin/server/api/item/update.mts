@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import type { Keystone } from '../../../../index.mjs';
+import canCastId from '../../../../lib/list/canCastId.mjs';
 
 /**
  * Updates a single list item after verifying the CSRF token.
@@ -15,6 +16,11 @@ export default function itemUpdate(req: Request, res: Response): void {
 	}
 	if (!keystone.security.csrf.validate(req)) {
 		res.apiError(403, 'invalid csrf');
+		return;
+	}
+	// An id that cannot be cast to the list's `_id` type matches no item.
+	if (!canCastId(list.model, req.params.id)) {
+		res.status(404).json({ error: 'not found', id: req.params.id });
 		return;
 	}
 	void list.model.findById(req.params.id).exec().then(function (item: unknown): void {

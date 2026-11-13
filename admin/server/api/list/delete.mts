@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import type mongoose from 'mongoose';
 import type { Keystone } from '../../../../index.mjs';
+import canCastId from '../../../../lib/list/canCastId.mjs';
 
 /**
  * Deletes one or more list documents by id after verifying the CSRF token.
@@ -43,11 +44,15 @@ export default function listDelete(req: Request, res: Response): void {
 		}
 	}
 
+	// An id that cannot be cast to the list's `_id` type matches no item: drop it
+	// like any other id that is not found, instead of failing the whole query.
+	const castableIds = (ids as unknown[]).filter(function (id) { return canCastId(list.model, id); });
+
 	let deletedCount = 0;
 	const deletedIds: string[] = [];
 	void (async function () {
 		try {
-			const results = await (list.model.find({ _id: { $in: ids as unknown[] } }).exec() as Promise<Array<mongoose.Document & { id: string; _req_user?: unknown }>>);
+			const results = await (list.model.find({ _id: { $in: castableIds } }).exec() as Promise<Array<mongoose.Document & { id: string; _req_user?: unknown }>>);
 			await Promise.all(results.map(function (item: mongoose.Document & { id: string; _req_user?: unknown }) {
 				item._req_user = req.user;
 				return item.deleteOne().then(function () {
