@@ -61,12 +61,89 @@ describe('ensureTextIndex', function () {
 		expect(await run(createList(collection))).to.equal(error);
 	});
 
+	it('fails closed when the indexes cannot be listed: search stops using `$text`', async function () {
+		const indexes = sinon.stub().rejects(new Error('index list failed'));
+		const createIndex = sinon.stub().resolves('ok');
+		const list = createList({ indexes, createIndex });
+		(list as unknown as { options: Record<string, unknown> }).options = { searchUsesTextIndex: true };
+		expect(list._unmanagedTextIndexCoversSecret).to.equal(undefined);
+
+		expect(await run(list)).to.be.an('error');
+		expect(list._unmanagedTextIndexCoversSecret).to.equal(true);
+		expect(canSearchWithTextIndex(list)).to.equal(false);
+		sinon.assert.notCalled(createIndex);
+
+		// A later run that can list the indexes clears the flag.
+		indexes.resolves([]);
+		expect(await run(list)).to.equal(undefined);
+		expect(list._unmanagedTextIndexCoversSecret).to.equal(false);
+	});
+
 	it('creates the index when the collection does not exist yet', async function () {
 		const createIndex = sinon.stub().resolves('ok');
 		const collection = { indexes: sinon.stub().rejects(Object.assign(new Error('ns does not exist'), { code: 26 })), createIndex };
+		const list = createList(collection);
 
-		expect(await run(createList(collection))).to.equal(undefined);
+		expect(await run(list)).to.equal(undefined);
 		sinon.assert.calledOnce(createIndex);
+		expect(list._unmanagedTextIndexCoversSecret).to.equal(false);
+	});
+
+	for (const outcome of ['success', 'failure'] as const) {
+		it('logs an error the callback throws on ' + outcome + ', once, without calling it again', async function () {
+			const indexes = outcome === 'success'
+				? sinon.stub().resolves([{ name: indexNameFor(textIndex), key: { _fts: 'text', _ftsx: 1 }, weights: { title: 1 } }])
+				: sinon.stub().rejects(new Error('index list failed'));
+			const thrown = new Error('callback blew up');
+			const callback = sinon.stub().throws(thrown);
+			const unhandled = sinon.spy();
+			const consoleError = sinon.stub(console, 'error');
+			process.on('unhandledRejection', unhandled);
+
+			try {
+				ensureTextIndex.call(createList({ indexes }), callback);
+				// Unhandled rejections are reported after the microtask queue drains.
+				for (let i = 0; i < 3; i++) {
+					await new Promise((resolve) => {
+						setImmediate(resolve);
+					});
+				}
+				sinon.assert.calledOnce(callback);
+				sinon.assert.calledOnce(consoleError);
+				expect(String(consoleError.firstCall.args[0])).to.include('callback threw').and.to.include('Post');
+				expect(consoleError.firstCall.args[1]).to.equal(thrown);
+				sinon.assert.notCalled(unhandled);
+			} finally {
+				process.removeListener('unhandledRejection', unhandled);
+				consoleError.restore();
+			}
+		});
+	}
+
+	it('logs the rejection of a promise the callback returns, without an unhandled rejection', async function () {
+		const rejected = new Error('async callback blew up');
+		const callback = sinon.stub().rejects(rejected);
+		const unhandled = sinon.spy();
+		const consoleError = sinon.stub(console, 'error');
+		process.on('unhandledRejection', unhandled);
+
+		try {
+			ensureTextIndex.call(createList({ indexes: sinon.stub().rejects(new Error('index list failed')) }), callback);
+			// Unhandled rejections are reported after the microtask queue drains.
+			for (let i = 0; i < 3; i++) {
+				await new Promise((resolve) => {
+					setImmediate(resolve);
+				});
+			}
+			sinon.assert.calledOnce(callback);
+			sinon.assert.calledOnce(consoleError);
+			expect(String(consoleError.firstCall.args[0])).to.include('callback threw').and.to.include('Post');
+			expect(consoleError.firstCall.args[1]).to.equal(rejected);
+			sinon.assert.notCalled(unhandled);
+		} finally {
+			process.removeListener('unhandledRejection', unhandled);
+			consoleError.restore();
+		}
 	});
 
 	it('calls back without creating an index when the generated text index already exists', async function () {
@@ -113,6 +190,104 @@ describe('ensureTextIndex', function () {
 		sinon.assert.calledOnce(dropIndex);
 		sinon.assert.calledWithExactly(dropIndex, 'keystone_searchFields_textIndex_1');
 		sinon.assert.notCalled(createIndex);
+	});
+
+	describe('fails closed when the rebuild fails part-way', function () {
+		// A generated index from before `resetKey` was marked secret: `$text` would still match the secret.
+		const staleIndex = { name: 'keystone_searchFields_textIndex_1', key: { _fts: 'text', _ftsx: 1 }, weights: { title: 1, resetKey: 1 } };
+
+		function searchableList(collection: Record<string, unknown>, extra: Record<string, unknown> = {}): KeystoneList {
+			const list = createList(collection);
+			Object.assign(list as unknown as Record<string, unknown>, { options: { searchUsesTextIndex: true } }, extra);
+			return list;
+		}
+
+		async function expectClosedThenCleared(list: KeystoneList, error: Error, recover: () => void): Promise<void> {
+			expect(list._unmanagedTextIndexCoversSecret).to.equal(undefined);
+			expect(await run(list)).to.equal(error);
+			expect(list._unmanagedTextIndexCoversSecret).to.equal(true);
+			expect(canSearchWithTextIndex(list)).to.equal(false);
+
+			// A later run that succeeds clears the flag.
+			recover();
+			expect(await run(list)).to.equal(undefined);
+			expect(list._unmanagedTextIndexCoversSecret).to.equal(false);
+		}
+
+		it('when dropping the stale generated index throws', async function () {
+			const error = new Error('drop failed');
+			const dropIndex = sinon.stub().rejects(error);
+			const createIndex = sinon.stub().resolves('ok');
+			const list = searchableList({ indexes: sinon.stub().resolves([staleIndex]), dropIndex, createIndex });
+
+			await expectClosedThenCleared(list, error, () => dropIndex.resolves());
+			sinon.assert.calledTwice(dropIndex);
+			sinon.assert.calledOnce(createIndex);
+		});
+
+		it('when creating the replacement index throws', async function () {
+			const error = new Error('create failed');
+			const indexes = sinon.stub().resolves([staleIndex]);
+			const dropIndex = sinon.stub().resolves();
+			const createIndex = sinon.stub().rejects(error);
+			const list = searchableList({ indexes, dropIndex, createIndex });
+
+			await expectClosedThenCleared(list, error, () => {
+				indexes.resolves([]);
+				createIndex.resolves('ok');
+			});
+			sinon.assert.calledOnce(dropIndex);
+			sinon.assert.calledTwice(createIndex);
+		});
+
+		it('when createIndexes() for a text index declared on the schema throws', async function () {
+			const error = new Error('createIndexes failed');
+			const indexes = sinon.stub().resolves([staleIndex]);
+			const dropIndex = sinon.stub().resolves();
+			const createIndexes = sinon.stub().rejects(error);
+			const collection = { indexes, dropIndex };
+			const list = searchableList(collection, {
+				model: { collection, createIndexes },
+				schema: { get: () => undefined },
+				declaresTextIndex: () => true,
+			});
+
+			await expectClosedThenCleared(list, error, () => {
+				indexes.resolves([{ name: 'declared_text', key: { _fts: 'text', _ftsx: 1 }, weights: { body: 1 } }]);
+			});
+			sinon.assert.calledOnce(dropIndex);
+			sinon.assert.calledOnce(createIndexes);
+		});
+
+		it('when buildSearchTextIndex throws', async function () {
+			const error = new Error('build failed');
+			const indexes = sinon.stub().resolves([staleIndex]);
+			const dropIndex = sinon.stub().resolves();
+			const createIndex = sinon.stub().resolves('ok');
+			const buildSearchTextIndex = sinon.stub().throws(error);
+			const list = searchableList({ indexes, dropIndex, createIndex }, { buildSearchTextIndex });
+
+			await expectClosedThenCleared(list, error, () => buildSearchTextIndex.returns(textIndex));
+			sinon.assert.calledOnce(indexes);
+			sinon.assert.calledOnce(dropIndex);
+			sinon.assert.calledOnce(createIndex);
+		});
+
+		it('while a run is still in progress', async function () {
+			let listed: (indexes: unknown[]) => void = () => undefined;
+			const indexes = sinon.stub().returns(new Promise((resolve) => {
+				listed = resolve;
+			}));
+			const list = searchableList({ indexes, createIndex: sinon.stub().resolves('ok') });
+
+			const finished = run(list);
+			expect(list._unmanagedTextIndexCoversSecret).to.equal(true);
+			expect(canSearchWithTextIndex(list)).to.equal(false);
+
+			listed([]);
+			expect(await finished).to.equal(undefined);
+			expect(list._unmanagedTextIndexCoversSecret).to.equal(false);
+		});
 	});
 
 	it('calls back, without dropping, when a text index Keystone did not create is in the way', async function () {

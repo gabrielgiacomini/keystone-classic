@@ -82,7 +82,13 @@ async function dropIndex(collection: MongoCollection, name: string): Promise<voi
 	}
 }
 
-async function syncTextIndex(list: TextIndexList): Promise<void> {
+/**
+ * Drops, creates or leaves the collection's text index as the list needs.
+ *
+ * @param list - The list whose collection is brought in sync.
+ * @returns Whether a text index Keystone did not create covers a secret path.
+ */
+async function rebuildTextIndex(list: TextIndexList): Promise<boolean> {
 	const collection = list.model.collection as unknown as MongoCollection;
 	// A text index declared on the schema is created by Mongoose; Keystone then generates none.
 	const declared = typeof list.declaresTextIndex === 'function' && list.declaresTextIndex();
@@ -115,9 +121,6 @@ async function syncTextIndex(list: TextIndexList): Promise<void> {
 		await dropIndex(collection, index.name);
 		dropped = true;
 	}
-	// Read by `canSearchWithTextIndex`: `$text` would match against the secret path of that index.
-	list._unmanagedTextIndexCoversSecret = unmanagedCoversSecret;
-
 	if (!wanted || !wantedName) {
 		debug('No generated text index is needed for \'' + list.key + '\'');
 		const autoIndex = (list.schema as unknown as { get(key: string): unknown }).get('autoIndex');
@@ -125,19 +128,30 @@ async function syncTextIndex(list: TextIndexList): Promise<void> {
 			// The stale generated index blocked the declared one (one text index per collection).
 			await (list.model as unknown as { createIndexes(): Promise<unknown> }).createIndexes();
 		}
-		return;
+		return unmanagedCoversSecret;
 	}
-	if (upToDate) return;
+	if (upToDate) return unmanagedCoversSecret;
 	if (foreignIndexName) {
 		console.error(
 			'list.ensureTextIndex() failed to update the existing text index \'' + foreignIndexName + '\' for the \'' + list.key + '\' list.\n'
 			+ 'The existing index wasn\'t automatically created by ensureTextIndex() so will not be replaced.\n'
 			+ 'This may lead to unexpected behaviour when performing text searches on the this list.'
 		);
-		return;
+		return unmanagedCoversSecret;
 	}
 	const result = await collection.createIndex(wanted, { name: wantedName });
 	debug('collection.createIndex() result for \'' + list.key + '\':', result);
+	return unmanagedCoversSecret;
+}
+
+async function syncTextIndex(list: TextIndexList): Promise<void> {
+	// Fail closed: until the whole run has succeeded, what the collection's text index covers is
+	// not known (a stale generated index covering a secret path may still be there), so `$text`
+	// must not be used. Read by `canSearchWithTextIndex`.
+	list._unmanagedTextIndexCoversSecret = true;
+	const unmanagedCoversSecret = await rebuildTextIndex(list);
+	// Only reached when nothing threw: the generated index is in sync.
+	list._unmanagedTextIndexCoversSecret = unmanagedCoversSecret;
 }
 
 /**
@@ -154,11 +168,38 @@ async function syncTextIndex(list: TextIndexList): Promise<void> {
  * on the list, so that searches stop using `$text` (see `canSearchWithTextIndex`);
  * the flag is cleared by a later run that finds no such index.
  *
- * @param callback - Called once the index is in sync, or with the error that stopped it.
+ * Fails closed: the flag is also set while a run is in progress and stays set
+ * when the run fails at any step (building the wanted index definition, listing
+ * the indexes for any reason other than "collection does not exist", dropping a
+ * stale generated index, creating the new one), whether or not the list has
+ * secret fields, because what the collection's text index covers is then
+ * unknown. Search uses regular expressions until a later run succeeds.
+ *
+ * @param callback - Called exactly once: when the index is in sync, or with the
+ * error that stopped it. An error the callback throws synchronously is logged, not
+ * rethrown; so is the rejection of a promise (any thenable) the callback returns,
+ * which is not awaited otherwise. Neither becomes an unhandled rejection.
  */
 export default function ensureTextIndex(this: KeystoneList, callback: EnsureTextIndexCallback = function () {}): void {
+	const key = this.key;
+	const logCallbackError = (callbackErr: unknown): void => {
+		console.error('list.ensureTextIndex() callback threw for the \'' + key + '\' list:', callbackErr);
+	};
+	const done = (err?: Error): void => {
+		try {
+			// Typed `void`, but an async callback returns a promise at run time.
+			const returned = callback(err) as unknown;
+			const then = (returned as { then?: unknown } | null | undefined)?.then;
+			if (typeof then === 'function') {
+				(then as (onFulfilled: undefined, onRejected: (reason: unknown) => void) => unknown).call(returned, undefined, logCallbackError);
+			}
+		} catch (callbackErr) {
+			// Nothing awaits this promise chain, so a throw here would be an unhandled rejection.
+			logCallbackError(callbackErr);
+		}
+	};
 	syncTextIndex(this as TextIndexList).then(
-		() => callback(),
-		(err: unknown) => callback(err instanceof Error ? err : new Error(String(err)))
+		() => done(),
+		(err: unknown) => done(err instanceof Error ? err : new Error(String(err)))
 	);
 }

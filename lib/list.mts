@@ -78,7 +78,8 @@ export default function listFactory(keystone: Keystone) {
 		// Private backing stores for the prototype-level computed getters
 		declare _searchFields: unknown[] | undefined;
 		declare _defaultColumns: unknown[] | undefined;
-		// Set by `ensureTextIndex` while the collection holds a text index Keystone did not create that covers a secret path
+		// Set by `ensureTextIndex` while the collection holds a text index Keystone did not create that covers a secret path,
+		// and while its run is in progress or has failed (fail closed)
 		declare _unmanagedTextIndexCoversSecret: boolean | undefined;
 
 		// -----------------------------------------------------------------------
