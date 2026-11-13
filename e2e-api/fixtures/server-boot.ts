@@ -149,8 +149,8 @@ function defineAppRoutes (app: Application) {
 	type GetHandlerFactory = { apiForGet(options?: { query?: (query: { populate(path: string): unknown }) => unknown }): RequestHandler };
 	const User = keystone.list('User') as unknown as GetHandlerFactory;
 	const Post = keystone.list('Post') as unknown as GetHandlerFactory;
-	app.get('/app-api/users/:id', User.apiForGet());
-	app.get('/app-api/posts/:id', Post.apiForGet({
+	app.get('/app-api/user/:id', User.apiForGet());
+	app.get('/app-api/post/:id', Post.apiForGet({
 		query: (query) => query.populate('author editors'),
 	}));
 }

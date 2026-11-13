@@ -11,6 +11,11 @@ import { resetDb } from '../fixtures/seedDb.js';
 import { createItem, getItem, getList, signin, signout, updateItem } from '../helpers/api.js';
 
 /** bcrypt modular-crypt prefix: `$2a$10$`, `$2b$12$`, ... */
+/** Admin API base for the user list. */
+const USERS = `${API_BASE}/users`;
+/** Application `apiForGet` route for the user list. */
+const APP_USERS = `${APP_GET_BASE}/user`;
+
 const BCRYPT_RE = /\$2[abxy]?\$\d{2}\$/;
 
 // Test fixture credential — never used outside the e2e-api harness.
@@ -60,7 +65,7 @@ test.beforeAll(async ({ request, playwright, baseURL }) => {
 			'password_confirm': SECOND_USER_PASSWORD,
 		});
 		// The create response itself is an endpoint under test.
-		const userRaw = await expectNoHash(userRes, 'POST /users/create');
+		const userRaw = await expectNoHash(userRes, 'POST users/create');
 		secondUserId = (JSON.parse(userRaw) as { id: string }).id;
 
 		const postRes = await createItem(ctx, 'posts', {
@@ -93,37 +98,37 @@ test.describe('Password-type field values never reach the client', () => {
 			await getList(signedInRequest, 'users', { expandRelationshipFields: true }),
 			'GET /users?expandRelationshipFields',
 		);
-		await expectNoHash(await getItem(signedInRequest, 'users', adminId), 'GET /users/:id');
+		await expectNoHash(await getItem(signedInRequest, 'users', adminId), 'GET users/:id');
 		await expectNoHash(
-			await signedInRequest.get(`${API_BASE}/users/${adminId}?fields=password,_doc.password&drilldown=true`),
-			'GET /users/:id?fields=password',
+			await signedInRequest.get(`${USERS}/${adminId}?fields=password,_doc.password&drilldown=true`),
+			'GET users/:id?fields=password',
 		);
 	});
 
 	test('user update responses', async ({ signedInRequest }) => {
 		await expectNoHash(
 			await updateItem(signedInRequest, 'users', secondUserId, { 'name.first': 'Renamed' }),
-			'POST /users/:id',
+			'POST users/:id',
 		);
 		await expectNoHash(
-			await signedInRequest.post(`${API_BASE}/users/update?returnData=true`, {
+			await signedInRequest.post(`${USERS}/update?returnData=true`, {
 				data: { items: [{ id: secondUserId, 'name.last': 'Person' }] },
 			}),
-			'POST /users/update?returnData=true',
+			'POST users/update?returnData=true',
 		);
 	});
 
 	test('user exports', async ({ signedInRequest }) => {
-		await expectNoHash(await signedInRequest.get(`${API_BASE}/users/export.json`), 'GET /users/export.json');
+		await expectNoHash(await signedInRequest.get(`${USERS}/export.json`), 'GET users/export.json');
 		await expectNoHash(
-			await signedInRequest.get(`${API_BASE}/users/export.json?select=password,email`),
-			'GET /users/export.json?select=password',
+			await signedInRequest.get(`${USERS}/export.json?select=password,email`),
+			'GET users/export.json?select=password',
 		);
-		const csv = await expectNoHash(await signedInRequest.get(`${API_BASE}/users/export.csv`), 'GET /users/export.csv');
+		const csv = await expectNoHash(await signedInRequest.get(`${USERS}/export.csv`), 'GET users/export.csv');
 		expect(csv).toContain(TEST_ADMIN_EMAIL);
 		await expectNoHash(
-			await signedInRequest.get(`${API_BASE}/users/export.csv?select=password,email`),
-			'GET /users/export.csv?select=password',
+			await signedInRequest.get(`${USERS}/export.csv?select=password,email`),
+			'GET users/export.csv?select=password',
 		);
 	});
 
@@ -179,7 +184,7 @@ test.describe('Password-type field values never reach the client', () => {
 	});
 
 	test('List.apiForGet application routes', async ({ request }) => {
-		const userRaw = await expectNoHash(await request.get(`${APP_GET_BASE}/users/${adminId}`), 'apiForGet user');
+		const userRaw = await expectNoHash(await request.get(`${APP_USERS}/${adminId}`), 'apiForGet user');
 		const user = (JSON.parse(userRaw) as { data: Record<string, unknown> }).data;
 		expect(user).not.toHaveProperty('password');
 		// Every other stored field is still the raw document's.
@@ -190,7 +195,7 @@ test.describe('Password-type field values never reach the client', () => {
 			isAdmin: true,
 		});
 
-		const postRaw = await expectNoHash(await request.get(`${APP_GET_BASE}/posts/${postId}`), 'apiForGet populated post');
+		const postRaw = await expectNoHash(await request.get(`${APP_GET_BASE}/post/${postId}`), 'apiForGet populated post');
 		const post = (JSON.parse(postRaw) as {
 			data: { _id: string; author: Record<string, unknown>; editors: Array<Record<string, unknown>> };
 		}).data;
@@ -201,7 +206,7 @@ test.describe('Password-type field values never reach the client', () => {
 		expect(post.editors.map((editor) => editor['_id'])).toEqual([adminId, secondUserId]);
 		for (const editor of post.editors) expect(editor).not.toHaveProperty('password');
 
-		const missing = await request.get(`${APP_GET_BASE}/users/000000000000000000000000`);
+		const missing = await request.get(`${APP_USERS}/000000000000000000000000`);
 		expect(missing.status()).toBe(404);
 	});
 
