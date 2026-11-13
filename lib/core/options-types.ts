@@ -346,6 +346,9 @@ export interface AutokeySpec {
 	/**
 	 * One or more source field paths to build the key from.
 	 * Accepts a space-separated string or an array of path strings.
+	 * A path that reads a secret field (a Password field, or a field declared
+	 * with `secret: true`) is refused with an error when the list registers:
+	 * the generated key is stored as plain text, returned by the API and searched.
 	 */
 	from: string | string[];
 	/**

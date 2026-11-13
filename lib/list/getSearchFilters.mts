@@ -4,7 +4,7 @@ import debugLib from 'debug';
 import { isValidObjectId } from '../utils/objectId.mjs';
 import { number } from '../utils/number.mjs';
 import { escapeRegExp } from '../utils/regexp.mjs';
-import { hasSecretOption, isSecretFieldObject } from '../security/secretFieldRedaction.mjs';
+import { hasSecretOption, isSecretFieldObject, isSensitivePath } from '../security/secretFieldRedaction.mjs';
 import { canSearchWithTextIndex } from './buildSearchTextIndex.mjs';
 
 const debug = debugLib('keystone:core:list:getSearchFilters');
@@ -66,7 +66,8 @@ export default function getSearchFilters(this: KeystoneList, search: string, add
 			});
 
 			const autokey = list.autokey as { path: string } | null | undefined;
-			if (autokey) {
+			// An autokey path that is declared secret is not searched.
+			if (autokey && !isSensitivePath(list, autokey.path)) {
 				const akFilter: Record<string, unknown> = {};
 				akFilter[autokey.path] = searchRx;
 				searchFilters.push(akFilter);

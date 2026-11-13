@@ -11,7 +11,8 @@ export default function getData(this: KeystoneList, item: MongooseDoc, fields?: 
 	const name = getClientSafeDocumentName(this, item as Record<string, unknown>);
 	if (name !== undefined) data['name'] = name;
 	const autokey = this.autokey as (undefined | { path: string });
-	if (autokey) {
+	// The key is left out when its path is declared secret (Password-type or `secret: true`).
+	if (autokey && !isSensitivePath(this, autokey.path)) {
 		data[autokey.path] = item.get(autokey.path);
 	}
 	if (this.options.sortable) {

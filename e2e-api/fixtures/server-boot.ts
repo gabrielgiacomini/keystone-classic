@@ -150,6 +150,52 @@ async function seedAdmin () {
 }
 
 /**
+ * Register the lists used by `secret-nested-populate.spec.ts`.
+ *
+ * `Project` -> `Team` -> `User` is a chain of relationships with a secret on
+ * every level (`Team.accessKey`, `User.password`, `User.recoveryCode`). `Team`
+ * populates its `lead` on every find, the way an app's own schema hook would,
+ * so populating a project's team returns a document that is itself populated.
+ *
+ * `Voucher` declares its autokey path as a secret field, so the generated key
+ * must be stored but never returned or searched.
+ */
+function defineSecretNestingLists () {
+	const Types = keystone.Field.Types;
+
+	const Team = createList('Team', { map: { name: 'name' } });
+	Team.add({
+		name: { type: String, initial: true },
+		accessKey: { type: Types.Text, secret: true, initial: true },
+		lead: { type: Types.Relationship, ref: 'User', initial: true },
+	});
+	(Team as unknown as { schema: mongoose.Schema }).schema.pre(/^find/, function (this: mongoose.Query<unknown, unknown>) {
+		void this.populate('lead');
+	});
+	Team.register();
+
+	const Project = createList('Project', { map: { name: 'name' } });
+	Project.add({
+		name: { type: String, initial: true },
+		team: { type: Types.Relationship, ref: 'Team', initial: true },
+		teams: { type: Types.Relationship, ref: 'Team', many: true, initial: true },
+		// `toCSV` picks keys off the populated team: a secret, and a populated relationship.
+		backup: { type: Types.Relationship, ref: 'Team', initial: true, toCSV: 'name, accessKey, lead' },
+	});
+	Project.register();
+
+	const Voucher = createList('Voucher', {
+		map: { name: 'label' },
+		autokey: { path: 'code', from: 'label', unique: true },
+	});
+	Voucher.add({
+		label: { type: String, initial: true },
+		code: { type: Types.Text, secret: true },
+	});
+	Voucher.register();
+}
+
+/**
  * Application routes built with `List.apiForGet`, the opt-in JSON helper an
  * app can mount on any list. Mounted here on the user list and on a list with
  * relationships to it (populated) so the password-exposure spec can assert the
@@ -158,12 +204,16 @@ async function seedAdmin () {
  * @param app The Express app Keystone hands to the `routes` option.
  */
 function defineAppRoutes (app: Application) {
-	type GetHandlerFactory = { apiForGet(options?: { query?: (query: { populate(path: string): unknown }) => unknown }): RequestHandler };
+	type GetHandlerFactory = { apiForGet(options?: { query?: (query: { populate(path: unknown): unknown }) => unknown }): RequestHandler };
 	const User = keystone.list('User') as unknown as GetHandlerFactory;
 	const Post = keystone.list('Post') as unknown as GetHandlerFactory;
 	app.get('/app-api/user/:id', User.apiForGet());
 	app.get('/app-api/post/:id', Post.apiForGet({
 		query: (query) => query.populate('author editors'),
+	}));
+	// Populated on two levels explicitly: the project's teams, and each team's lead.
+	app.get('/app-api/projects/:id', (keystone.list('Project') as unknown as GetHandlerFactory).apiForGet({
+		query: (query) => query.populate(['team', 'teams', 'backup'].map((path) => ({ path, populate: { path: 'lead' } }))),
 	}));
 }
 
@@ -188,6 +238,8 @@ keystone.init({
 });
 
 defineLists();
+
+defineSecretNestingLists();
 
 await new Promise<void>((resolve, reject) => {
 	keystone.start({
