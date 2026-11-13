@@ -271,6 +271,43 @@ export function isSensitivePath(list: SecretAwareList | null | undefined, path: 
 	});
 }
 
+/**
+ * Whether the value read from `path` on an item of `list` is, contains or is
+ * derived from a secret field value (Password-type or `secret: true`).
+ *
+ * Unlike {@link isSensitivePath}, a path that only names a relationship
+ * (`author`) is not refused: its value is the related id. A path that goes on
+ * into the related document (`author.recovery`) is vetted against the related
+ * list, and refused when that list is not known.
+ *
+ * Used to vet paths that Keystone copies into another stored value, such as
+ * the `from` paths of the `autokey` list option.
+ *
+ * @param list - The list the path is resolved against.
+ * @param path - Dotted document path.
+ * @returns `true` when the value must not be copied anywhere a client can read.
+ */
+export function isSecretValuePath(list: SecretAwareList | null | undefined, path: string): boolean {
+	const segments = path.split('.');
+	for (let i = 1; i <= segments.length; i++) {
+		const field = fieldAt(list, segments.slice(0, i).join('.'));
+		if (!field) continue;
+		if (isSecret(field)) return true;
+		if (fieldTypeIs(field, 'relationship')) {
+			const rest = segments.slice(i).filter((segment) => !/^\d+$/.test(segment));
+			// The relationship itself holds ids only.
+			if (!rest.length) return false;
+			// Without a known related list the remainder cannot be vetted, so refuse it.
+			if (!field.refList) return true;
+			return isSecretValuePath(field.refList, rest.join('.'));
+		}
+	}
+	if (getSecretDerivedPaths(list).some((derived) => isAtOrUnder(path, derived) || isAtOrUnder(derived, path))) return true;
+	// A parent of a nested secret field holds the secret inside the nested object.
+	const prefix = path + '.';
+	return Object.keys(list?.fields ?? {}).some((fieldPath) => fieldPath.startsWith(prefix) && isSecret(fieldAt(list, fieldPath)));
+}
+
 function deletePath(target: Record<string, unknown>, path: string): void {
 	const segments = path.split('.');
 	let current: unknown = target;
@@ -284,9 +321,22 @@ function deletePath(target: Record<string, unknown>, path: string): void {
 }
 
 /**
+ * How many levels of populated relationships below a document are redacted.
+ * A related document found deeper than this is not serialized at all: it is
+ * replaced by its id. A hard limit, so a document that (through its
+ * relationships) contains itself cannot recurse without end.
+ */
+export const SECRET_REDACTION_MAX_DEPTH = 8;
+
+/**
  * Converts a document of `list` into a plain object with every secret field
  * (Password-type or `secret: true`) removed. Use it wherever a whole document (rather than `list.getData`)
  * is about to be serialized, e.g. populated relationship values.
+ *
+ * Relationships that are themselves populated are followed into their related
+ * lists, and those in turn, so a secret field is removed at every populated
+ * level, down to {@link SECRET_REDACTION_MAX_DEPTH} levels below `doc`.
+ * A related document deeper than that is replaced by its id.
  *
  * @param list - The list the document belongs to.
  * @param doc - A hydrated Mongoose document or a plain object.
@@ -296,9 +346,7 @@ export function withoutSecretFields(list: SecretAwareList | null | undefined, do
 	const plain = isHydratedDocument(doc)
 		? doc.toObject() as Record<string, unknown>
 		: structuredCloneSafe(doc);
-	for (const path of [...getSecretFieldPaths(list), ...getSecretDerivedPaths(list)]) {
-		deletePath(plain, path);
-	}
+	redactInPlace(list, plain, 0);
 	return plain;
 }
 
@@ -316,13 +364,55 @@ function getPath(target: Record<string, unknown>, path: string): unknown {
 	return current;
 }
 
-function redactInPlace(list: SecretAwareList | null | undefined, value: unknown): void {
+/**
+ * Whether a value is a plain object: what `toObject()` and `JSON.parse`
+ * build, unlike an ObjectId, a Date or a Buffer.
+ * @param value - Value to inspect.
+ * @returns `true` for a plain object (not an array).
+ */
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+	if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+	const proto = Object.getPrototypeOf(value) as unknown;
+	return proto === Object.prototype || proto === null;
+}
+
+/**
+ * What stands in for a related document that lies past the depth limit.
+ * @param value - A related document, an id, or an array of either.
+ * @returns The document's id (`null` when it has none); an id as it is.
+ */
+function idOnly(value: unknown): unknown {
+	if (Array.isArray(value)) return value.map(idOnly);
+	if (!isPlainObject(value)) return value;
+	return value['_id'] ?? value['id'] ?? null;
+}
+
+function setPath(target: Record<string, unknown>, path: string, value: unknown): void {
+	const segments = path.split('.');
+	let current: unknown = target;
+	for (let i = 0; i < segments.length - 1; i++) {
+		if (current === null || typeof current !== 'object') return;
+		current = (current as Record<string, unknown>)[segments[i] ?? ''];
+	}
+	if (current !== null && typeof current === 'object') {
+		(current as Record<string, unknown>)[segments[segments.length - 1] ?? ''] = value;
+	}
+}
+
+/**
+ * Removes the secret paths of `list` from a plain value in place, then does
+ * the same for every populated relationship against its related list.
+ * @param list - The list `value` belongs to.
+ * @param value - A plain object, or an array of them (anything else is left alone).
+ * @param depth - How many populated levels `value` lies below the starting document.
+ */
+function redactInPlace(list: SecretAwareList | null | undefined, value: unknown, depth: number): void {
 	if (Array.isArray(value)) {
-		for (const entry of value) redactInPlace(list, entry);
+		for (const entry of value) redactInPlace(list, entry, depth);
 		return;
 	}
-	if (value === null || typeof value !== 'object') return;
-	const target = value as Record<string, unknown>;
+	if (!isPlainObject(value)) return;
+	const target = value;
 	for (const path of [...getSecretFieldPaths(list), ...getSecretDerivedPaths(list)]) {
 		deletePath(target, path);
 	}
@@ -331,14 +421,22 @@ function redactInPlace(list: SecretAwareList | null | undefined, value: unknown)
 		const field = fieldAt(list, path);
 		if (!fieldTypeIs(field, 'relationship')) continue;
 		const related = getPath(target, path);
-		if (related !== null && typeof related === 'object') redactInPlace(field?.refList, related);
+		if (!Array.isArray(related) && !isPlainObject(related)) continue;
+		if (depth >= SECRET_REDACTION_MAX_DEPTH) {
+			// Too deep to vouch for: keep the id(s), drop the document(s).
+			setPath(target, path, idOnly(related));
+		} else {
+			redactInPlace(field?.refList, related, depth + 1);
+		}
 	}
 }
 
 /**
  * Returns the JSON form of `value` (what `res.json` would send) with every
  * secret field of `list` (Password-type or `secret: true`) removed, following populated relationships
- * into their related lists. Accepts a document, a plain object or an array of
+ * into their related lists at every populated level, down to
+ * {@link SECRET_REDACTION_MAX_DEPTH} levels below `value` (a related document
+ * deeper than that is replaced by its id). Accepts a document, a plain object or an array of
  * either; anything else is returned as it would serialize.
  *
  * Unlike {@link withoutSecretFields} this serializes through `toJSON`, so
@@ -353,6 +451,6 @@ export function toJSONWithoutSecretFields(list: SecretAwareList | null | undefin
 	const json = JSON.stringify(value) as string | undefined;
 	if (json === undefined) return value;
 	const plain = JSON.parse(json) as unknown;
-	redactInPlace(list, plain);
+	redactInPlace(list, plain, 0);
 	return plain;
 }

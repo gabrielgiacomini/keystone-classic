@@ -30,7 +30,7 @@ const MONGO_URI =
  * a collection literally named `Post`. Mirror that here so the right
  * collection actually gets dropped between specs.
  */
-const OWNED_COLLECTIONS = ['Post'];
+const OWNED_COLLECTIONS = ['Post', 'Project', 'Team', 'Voucher'];
 
 /** Name of the user collection seeded at server-boot time. */
 const USER_COLLECTION = 'User';
@@ -73,4 +73,20 @@ async function clearNonAdminData (): Promise<void> {
  */
 export async function resetDb (_request: APIRequestContext): Promise<void> {
 	await clearNonAdminData();
+}
+
+/**
+ * Runs `fn` with the raw MongoDB database of the test server, through a
+ * throwaway mongoose connection. Lets a spec read back what is really stored.
+ * @param fn Callback given the raw database handle.
+ * @returns What `fn` returns.
+ */
+export async function withRawDb<T> (fn: (db: NonNullable<mongoose.Connection['db']>) => Promise<T>): Promise<T> {
+	const conn = await mongoose.createConnection(MONGO_URI).asPromise();
+	try {
+		if (!conn.db) throw new Error('no database handle');
+		return await fn(conn.db);
+	} finally {
+		await conn.close();
+	}
 }

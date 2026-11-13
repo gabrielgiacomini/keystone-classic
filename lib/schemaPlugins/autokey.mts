@@ -1,5 +1,7 @@
 import { slug } from '../utils/string.mjs';
 import type { KeystoneList } from '../list.mjs';
+import { isSecretValuePath } from '../security/secretFieldRedaction.mjs';
+import type { SecretAwareList } from '../security/secretFieldRedaction.mjs';
 
 function isObject(value: unknown): value is Record<string, unknown> {
 	return value !== null && (typeof value === 'object' || typeof value === 'function');
@@ -106,6 +108,29 @@ export default function autokey(this: KeystoneList): void {
 		const parts = i.split(':');
 		return { path: parts[0] ?? '', format: parts[1] };
 	});
+
+	// The key is stored as plain text, returned by the API and searched, so it
+	// must never be built from a secret field (Password-type or `secret: true`).
+	// The message names the path, never a value.
+	const secretFromError = function (entries: AutokeyFromEntry[]): Error | undefined {
+		// JUSTIFIED: the redaction helpers read only `fields`, which a KeystoneList has under a narrower type.
+		const source = list as unknown as SecretAwareList;
+		const secret = entries.find((entry) => isSecretValuePath(source, entry.path));
+		return secret
+			? new Error('Invalid List Option (autokey) for ' + list.key + ' (from path "' + secret.path + '" reads a secret field: a Password field or a field declared with `secret: true` cannot be an autokey source)\n')
+			: undefined;
+	};
+	const reachesRelatedList = function (entry: AutokeyFromEntry): boolean {
+		const segments = entry.path.split('.');
+		return segments.some((_segment, i) => i < segments.length - 1
+			&& (list.fields as unknown as Record<string, { type?: string } | undefined>)[segments.slice(0, i + 1).join('.')]?.type === 'relationship');
+	};
+	// Refused here, when the list registers (its fields are all added by then).
+	// A path that goes on into a related document depends on the related list,
+	// which may register later: those are vetted on the first save instead.
+	const refusedAtRegistration = secretFromError(autokeyOpts.from.filter((entry) => !reachesRelatedList(entry)));
+	if (refusedAtRegistration) throw refusedAtRegistration;
+	let fromVetted = !autokeyOpts.from.some(reachesRelatedList);
 
 	const schemaDef: Record<string, unknown> = {};
 	schemaDef[autokeyOpts.path] = { type: String, index: true };
@@ -220,6 +245,11 @@ export default function autokey(this: KeystoneList): void {
 
 	schema.pre('save', function (this: AutokeyDoc, next: (err?: unknown) => void) {
 		const doc = this;
+		if (!fromVetted) {
+			const refused = secretFromError(autokeyOpts.from);
+			if (refused) return next(refused);
+			fromVetted = true;
+		}
 		let modified = false;
 		let incomplete = false;
 		const values: string[] = [];

@@ -73,7 +73,10 @@ export default function getCSVData(this: KeystoneList, item: unknown, options?: 
 	const data: Record<string, unknown> = { id: String((item as { id?: unknown }).id) };
 	if (this.autokey) {
 		const autokeyPath = (this.autokey as { path: string }).path;
-		data[autokeyPath] = (item as { get(path: string): unknown }).get(autokeyPath);
+		// The key is left out when its path is declared secret (Password-type or `secret: true`).
+		if (!isSensitivePath(this, autokeyPath)) {
+			data[autokeyPath] = (item as { get(path: string): unknown }).get(autokeyPath);
+		}
 	}
 	if (opts.fields) {
 		if (typeof opts.fields === 'string') {
