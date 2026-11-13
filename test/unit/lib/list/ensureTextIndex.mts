@@ -335,6 +335,11 @@ describe('ensureTextIndex against MongoDB', function () {
 	let consoleWarn: sinon.SinonStub;
 	let consoleError: sinon.SinonStub;
 	let counter = 0;
+	// Index work that register() starts in the background; awaited before a collection is dropped.
+	const pendingIndexWork: Promise<unknown>[] = [];
+	// Teardown gives up waiting well before mocha's 30 s hook timeout, so an outage skips cleanup instead of failing the hook.
+	const TEARDOWN_WAIT_MS = 10000;
+	let teardownSkipLogged = false;
 
 	function nativeCollection(name: string): NativeCollection {
 		return connectedMongoose.connection.db.collection(name) as unknown as NativeCollection;
@@ -369,8 +374,23 @@ describe('ensureTextIndex against MongoDB', function () {
 			resetKey: { type: String, secret: true },
 		});
 		prepare?.(list);
+		const booted = list as unknown as KeystoneList;
+		const ensure = booted.ensureTextIndex.bind(booted);
+		booted.ensureTextIndex = function (callback) {
+			pendingIndexWork.push(new Promise<void>((resolve) => {
+				ensure((err) => {
+					try {
+						callback(err);
+					} finally {
+						resolve();
+					}
+				});
+			}));
+		};
 		list.register();
-		return list as unknown as KeystoneList;
+		// Mongoose's own index build for the model (autoIndex).
+		pendingIndexWork.push(booted.model.init().catch(() => undefined));
+		return booted;
 	}
 
 	async function waitFor(check: () => Promise<boolean> | boolean): Promise<void> {
@@ -393,11 +413,32 @@ describe('ensureTextIndex against MongoDB', function () {
 		consoleError = sinon.stub(console, 'error');
 	});
 
+	/** False when `work` has not settled within the teardown budget (MongoDB unreachable or very slow). */
+	async function settlesInTime(work: Promise<unknown>): Promise<boolean> {
+		let timer: NodeJS.Timeout | undefined;
+		const timedOut = new Promise<boolean>((resolve) => {
+			timer = setTimeout(() => resolve(false), TEARDOWN_WAIT_MS);
+		});
+		try {
+			return await Promise.race([work.then(() => true, () => true), timedOut]);
+		} finally {
+			clearTimeout(timer);
+		}
+	}
+
 	afterEach(async function () {
+		const names = collectionNames.splice(0);
+		// Dropping a collection while an index is still being built on it makes that build fail.
+		const cleanedUp = await settlesInTime(Promise.all(pendingIndexWork.splice(0)).then(async () => {
+			for (const name of names) await nativeCollection(name).drop().catch(() => false);
+		}));
 		consoleWarn.restore();
 		consoleError.restore();
 		for (const key of listKeys.splice(0)) removeModel(key);
-		for (const name of collectionNames.splice(0)) await nativeCollection(name).drop().catch(() => false);
+		if (!cleanedUp && !teardownSkipLogged) {
+			teardownSkipLogged = true;
+			console.warn('ensureTextIndex teardown: MongoDB did not answer within ' + TEARDOWN_WAIT_MS + ' ms; skipping the per-test collection cleanup.');
+		}
 	});
 
 	it('replaces a generated index that still covers a secret path', async function () {
