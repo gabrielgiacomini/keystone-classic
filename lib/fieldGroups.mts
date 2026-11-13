@@ -105,7 +105,7 @@ export function flattenFieldGroups<TGroups extends readonly KeystoneFieldGroup<o
 }
 
 /**
- * Cloom-style alias for {@link flattenFieldGroups}.
+ * Consumer-style alias for {@link flattenFieldGroups}.
  *
  * @param fieldGroups - Field groups to flatten.
  * @returns A combined field map suitable for typed field inference.
@@ -145,7 +145,7 @@ export function addFieldGroups<TList extends KeystoneFieldGroupList>(
 }
 
 /**
- * Cloom-style alias for {@link addFieldGroups}.
+ * Consumer-style alias for {@link addFieldGroups}.
  *
  * @param list - Keystone list receiving the grouped fields.
  * @param fieldGroups - Field groups to register.

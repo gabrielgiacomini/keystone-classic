@@ -2,7 +2,7 @@
  * @file Keystone test server for heavy-list parity specs.
  *
  * Boots Keystone with `admin ui: 'both'` and registers three list shapes
- * that mirror the stress dimensions of the real cloom-core CLMUser,
+ * that mirror the stress dimensions of the real consumer-core CLMUser,
  * CLMThread, and EarlyAccessApplication models:
  *
  *  - HeavyUser     — 18 inverse relationship panels (mirrors CLMUser)

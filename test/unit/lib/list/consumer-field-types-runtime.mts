@@ -5,8 +5,8 @@ import mongoose from 'mongoose';
 import getMongooseConnection from '../../../helpers/getMongooseConnection.mts';
 import removeModel from '../../../helpers/removeModel.mts';
 
-const authorKey = 'CloomFieldRuntimeAuthor';
-const contentKey = 'CloomFieldRuntimeContent';
+const authorKey = 'ConsumerFieldRuntimeAuthor';
+const contentKey = 'ConsumerFieldRuntimeContent';
 let connectedMongoose: typeof mongoose;
 let authorList: RuntimeList | null = null;
 let contentList: RuntimeList | null = null;
@@ -64,7 +64,7 @@ function resetKeystone(): void {
 		'cloudinary config': {
 			api_key: 'test-key',
 			api_secret: 'test-secret',
-			cloud_name: 'cloom-test',
+			cloud_name: 'consumer-test',
 		},
 		'cloudinary folders': true,
 		'cloudinary secure': true,
@@ -81,7 +81,7 @@ function registerRuntimeLists(): void {
 	authorList = new List(authorKey, {
 		map: { name: 'name' },
 		schema: {
-			collection: 'cloom_field_runtime_authors',
+			collection: 'consumer_field_runtime_authors',
 			versionKey: false,
 		},
 	});
@@ -93,7 +93,7 @@ function registerRuntimeLists(): void {
 	contentList = new List(contentKey, {
 		map: { name: 'title' },
 		schema: {
-			collection: 'cloom_field_runtime_contents',
+			collection: 'consumer_field_runtime_contents',
 			versionKey: false,
 		},
 	});
@@ -142,7 +142,7 @@ function unregisterRuntimeLists(): void {
 
 function runtimeLists(): { author: RuntimeList; content: RuntimeList } {
 	if (!authorList || !contentList) {
-		throw new Error('Cloom field runtime lists were not registered');
+		throw new Error('Consumer field runtime lists were not registered');
 	}
 	return { author: authorList, content: contentList };
 }
@@ -166,7 +166,7 @@ function updateListItem(item: RuntimeDoc, data: Record<string, unknown>, fields:
 	});
 }
 
-describe('Cloom-used field type runtime aggregate', function () {
+describe('Consumer-used field type runtime aggregate', function () {
 	before(async function () {
 		connectedMongoose = await getMongooseConnection();
 		resetKeystone();
@@ -184,7 +184,7 @@ describe('Cloom-used field type runtime aggregate', function () {
 		resetKeystone();
 	});
 
-	it('registers and persists every Keystone field type used by Cloom models', async function () {
+	it('registers and persists every Keystone field type used by Consumer models', async function () {
 		const { author, content } = runtimeLists();
 		const createdAuthor = await author.model.create({ name: 'Field Runtime Author' });
 		const RuntimeModel = content.model;

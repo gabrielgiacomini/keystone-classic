@@ -69,7 +69,7 @@ describe('initNav', function () {
 		expect(nav.sections[0]?.lists[0]).to.include({ key: 'Post', label: 'Published Posts', path: 'posts' });
 	});
 
-	it('preserves flat Cloom-style nav section and list insertion order', function () {
+	it('preserves flat Consumer-style nav section and list insertion order', function () {
 		const harness: NavHarness = {
 			lists: {
 				LandingRelease: createList('LandingRelease', 'Landing Releases', 'landing-releases'),

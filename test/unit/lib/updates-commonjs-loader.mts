@@ -278,8 +278,8 @@ describe('lib/updates CommonJS loader compatibility', function () {
 	});
 
 	it('tracks updates in the unprefixed app_updates collection', async function () {
-		const prefixedCollectionName = `cloom_${process.pid}_${runCounter}_app_updates`;
-		keystoneOptions().set('model prefix', `cloom_${process.pid}_${runCounter}_`);
+		const prefixedCollectionName = `consumer_${process.pid}_${runCounter}_app_updates`;
+		keystoneOptions().set('model prefix', `consumer_${process.pid}_${runCounter}_`);
 		trackedKeys = [updateKey];
 
 		await new Promise<void>((resolve) => {
@@ -306,7 +306,7 @@ describe('lib/updates CommonJS loader compatibility', function () {
 			`  writeFileSync(${JSON.stringify(markerPath)}, JSON.stringify(module.exports._internal));`,
 			'  done(null);',
 			'};',
-			"module.exports._internal = { source: 'copied-cloom-update-test', stable: true };",
+			"module.exports._internal = { source: 'copied-consumer-update-test', stable: true };",
 			'',
 		].join('\n'));
 
@@ -315,7 +315,7 @@ describe('lib/updates CommonJS loader compatibility', function () {
 		});
 
 		const marker = JSON.parse(await readFile(markerPath, 'utf8')) as { source: string; stable: boolean };
-		expect(marker).to.deep.equal({ source: 'copied-cloom-update-test', stable: true });
+		expect(marker).to.deep.equal({ source: 'copied-consumer-update-test', stable: true });
 	});
 
 	it('invokes update functions with the active Keystone singleton as context', async function () {
@@ -350,7 +350,7 @@ describe('lib/updates CommonJS loader compatibility', function () {
 			await writeFile(path.join(tempRoot, 'updates', `${updateKey}.js`), [
 				"'use strict';",
 				'module.exports = function failingUpdate(done) {',
-				"  done(new Error('copied cloom update failed'));",
+				"  done(new Error('copied consumer update failed'));",
 				'};',
 				'',
 			].join('\n'));
@@ -386,7 +386,7 @@ describe('lib/updates CommonJS loader compatibility', function () {
 			await writeFile(path.join(tempRoot, 'updates', `${updateKey}.js`), [
 				"'use strict';",
 				'module.exports = function throwingUpdate() {',
-				"  throw new Error('copied cloom update threw');",
+				"  throw new Error('copied consumer update threw');",
 				'};',
 				'',
 			].join('\n'));
@@ -421,7 +421,7 @@ describe('lib/updates CommonJS loader compatibility', function () {
 		try {
 			await writeFile(path.join(tempRoot, 'updates', `${updateKey}.mts`), [
 				'export default async function rejectingTypedUpdate(): Promise<void> {',
-				"  throw new Error('copied cloom typed update rejected');",
+				"  throw new Error('copied consumer typed update rejected');",
 				'}',
 				'',
 			].join('\n'));

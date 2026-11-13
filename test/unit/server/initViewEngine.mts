@@ -17,17 +17,17 @@ function createKeystone(values: Record<string, unknown>): Keystone {
 }
 
 describe('initViewEngine', function () {
-	it('honors Cloom-style pug view engine and views options', function () {
+	it('honors Consumer-style pug view engine and views options', function () {
 		const app = express();
 		const keystone = createKeystone({
 			'view engine': 'pug',
-			views: '/tmp/cloom/templates/views',
+			views: '/tmp/consumer/templates/views',
 		});
 
 		initViewEngine(keystone, app);
 
 		expect(app.get('view engine')).to.equal('pug');
-		expect(app.get('views')).to.equal('/tmp/cloom/templates/views');
+		expect(app.get('views')).to.equal('/tmp/consumer/templates/views');
 	});
 
 	it('defaults views to the Express views directory when no path is configured', function () {

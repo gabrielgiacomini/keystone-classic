@@ -73,7 +73,7 @@ describe('List.expandColumns', function () {
 		);
 	});
 
-	it('parses long Cloom-style defaultColumns strings with width tokens', function () {
+	it('parses long Consumer-style defaultColumns strings with width tokens', function () {
 		const list = {
 			namePath: 'state',
 			fields: {

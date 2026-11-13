@@ -613,7 +613,7 @@ export interface KeystoneListConstructor {
  * When `TFields` is a concrete spec map (e.g. `{ email: { type: typeof EmailType } }`),
  * `list.fields.email` resolves to `EmailType` (not `unknown`).
  *
- * Consumers such as `cloom-core` import this type to walk `keystone.lists`
+ * Consumers such as `consumer-core` import this type to walk `keystone.lists`
  * without resorting to `as any`: // JUSTIFIED: occurrence is in a JSDoc comment, not a type annotation
  *
  * ```ts

@@ -67,10 +67,10 @@ function resetKeystone(): void {
 		'cloudinary config': {
 			api_key: 'test-key',
 			api_secret: 'test-secret',
-			cloud_name: 'cloom-test',
+			cloud_name: 'consumer-test',
 		},
 		'cloudinary folders': true,
-		'cloudinary prefix': 'cloom',
+		'cloudinary prefix': 'consumer',
 		'cloudinary secure': true,
 	});
 }
@@ -159,7 +159,7 @@ describe('List CloudinaryImage runtime payload', function () {
 		resetKeystone();
 	});
 
-	it('preserves the Cloom Permalink CloudinaryImage payload shape when saved through list.updateItem', async function () {
+	it('preserves the Consumer Permalink CloudinaryImage payload shape when saved through list.updateItem', async function () {
 		const RuntimeModel = list().model;
 		const item = new RuntimeModel({ title: 'Cloudinary payload smoke' });
 		await item.save();

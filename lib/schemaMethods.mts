@@ -103,7 +103,7 @@ export function addSchemaMethods<
 }
 
 /**
- * Cloom-style alias for {@link addSchemaMethods}.
+ * Consumer-style alias for {@link addSchemaMethods}.
  *
  * @param list - Keystone list whose schema receives method wrappers.
  * @param schemaMethods - Object containing instance-first method functions only.
