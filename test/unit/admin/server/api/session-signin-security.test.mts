@@ -198,7 +198,7 @@ describe('admin session signin security', function () {
 		sinon.assert.notCalled(findOne);
 	});
 
-	it('signs in matching users and returns the authenticated user', async function () {
+	it('signs in matching users and returns the projected authenticated user', async function () {
 		const user = createUser();
 		const findOne = createUserFindOne(user);
 		const keystone = createKeystone({ findOne });
@@ -213,7 +213,8 @@ describe('admin session signin security', function () {
 		expect(query.email.test('admin@example.com')).to.equal(true);
 		sinon.assert.calledWith(user._.password.compare, 'correct-password');
 		sinon.assert.calledWith(keystone.session.signinWithUser, user, req, res);
-		sinon.assert.calledWithExactly(res.json, { success: true, user });
+		// The response carries the safe projection, never the raw user document.
+		sinon.assert.calledWithExactly(res.json, { success: true, user: { id: 'user-1', email: 'admin@example.com' } });
 	});
 
 	it('uses the configured non-default user model for admin sign-in', async function () {
@@ -231,7 +232,8 @@ describe('admin session signin security', function () {
 		sinon.assert.calledOnce(findOne);
 		sinon.assert.notCalled(fallbackUserFindOne);
 		sinon.assert.calledWith(keystone.session.signinWithUser, user, req, res);
-		sinon.assert.calledWithExactly(res.json, { success: true, user });
+		// The response carries the safe projection, never the raw user document.
+		sinon.assert.calledWithExactly(res.json, { success: true, user: { id: 'user-1', email: 'admin@example.com' } });
 	});
 
 	it('rate limits repeated signin posts by request IP', function () {

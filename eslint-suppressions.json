@@ -413,11 +413,6 @@
       "count": 1
     }
   },
-  "lib/list/apiForGet.mts": {
-    "jsdoc/require-jsdoc": {
-      "count": 1
-    }
-  },
   "lib/list/automap.mts": {
     "jsdoc/require-jsdoc": {
       "count": 1

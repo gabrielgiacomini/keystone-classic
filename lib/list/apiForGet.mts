@@ -1,5 +1,6 @@
 import type { Request, Response, RequestHandler } from 'express';
 import type { KeystoneList } from '../list.mjs';
+import { toJSONWithoutPasswordFields } from '../security/passwordFieldRedaction.mjs';
 
 type ApiForGetOptions = {
 	id?: string;
@@ -7,7 +8,16 @@ type ApiForGetOptions = {
 	transform?: (item: unknown, req: Request, res: Response) => unknown;
 };
 
-export default function apiForGet(this: KeystoneList, options: ApiForGetOptions): RequestHandler {
+/**
+ * Returns JSON API middleware for a `GET /:id` endpoint. The response is
+ * `{ data: item }` with Password-type fields removed (from the item and from
+ * any populated relationship), so mounting it on a user list never sends a
+ * password hash.
+ *
+ * @param options - Optional id param name, query modifier and transform.
+ * @returns The express request handler.
+ */
+export default function apiForGet(this: KeystoneList, options: ApiForGetOptions = {}): RequestHandler {
 	const idParam = options.id || 'id';
 	const List = this;
 	return function (req: Request, res: Response) {
@@ -28,7 +38,7 @@ export default function apiForGet(this: KeystoneList, options: ApiForGetOptions)
 				item = options.transform(item, req, res);
 				if (item === false) return;
 			}
-			return res.json({ data: item });
+			return res.json({ data: toJSONWithoutPasswordFields(List, item) });
 		}, function (err: unknown) {
 			return res.status(500).json({ err: 'database error', detail: err });
 		});
