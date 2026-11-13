@@ -1,6 +1,6 @@
 import type { SessionUser } from '../types/express.js';
 import { userCanAccessKeystone } from './canAccessKeystone.mjs';
-import { isPasswordField } from './security/passwordFieldRedaction.mjs';
+import { isSecretField } from './security/secretFieldRedaction.mjs';
 
 /**
  * Client-safe view of the authenticated user.
@@ -53,7 +53,7 @@ function resolveId(user: SessionUser): string {
 
 function resolveName(user: SessionUser, list: SessionUserProjectionList | null | undefined, id: string): string | undefined {
 	const namePath = list?.namePath;
-	if (namePath && isPasswordField(list, namePath)) return undefined;
+	if (namePath && isSecretField(list, namePath)) return undefined;
 
 	// Lists without a name field map `namePath` to `_id`; that is not a display name.
 	if (list && typeof list.getDocumentName === 'function' && namePath && namePath !== '_id' && namePath !== 'id') {
@@ -65,7 +65,7 @@ function resolveName(user: SessionUser, list: SessionUserProjectionList | null |
 		}
 	}
 
-	if (isPasswordField(list, 'name')) return undefined;
+	if (isSecretField(list, 'name')) return undefined;
 	const name = user['name'];
 	if (typeof name === 'string') return safeString(name);
 	if (name !== null && typeof name === 'object' && !Array.isArray(name)) {
@@ -100,7 +100,7 @@ export function projectSessionUser(
 	const name = resolveName(user, list, id);
 	if (name !== undefined) projection.name = name;
 
-	if (!isPasswordField(list, 'email')) {
+	if (!isSecretField(list, 'email')) {
 		const email = safeString(user['email']);
 		if (email !== undefined) projection.email = email;
 	}

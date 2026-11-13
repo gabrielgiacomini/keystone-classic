@@ -101,6 +101,17 @@ export interface FieldOptionsBase {
 	nosort?: boolean;
 	indent?: boolean;
 	hidden?: boolean;
+	/**
+	 * Marks the stored value as a secret (a reset key, an API token, ...) on
+	 * any field type. A secret field is treated like a Password field wherever
+	 * Keystone serializes documents: it is left out of admin API item/list
+	 * responses, CSV/JSON exports, populated relationships, `List.apiForGet`
+	 * and the session projection, cannot be reached through `fields`/`select`
+	 * paths, cannot be filtered, searched or sorted on through the admin API,
+	 * and is hidden in the Admin UI. Application code still reads and writes
+	 * it on the document as usual.
+	 */
+	secret?: boolean;
 	collapse?: boolean;
 	dependsOn?: Record<string, unknown>;
 	autoCleanup?: boolean;
@@ -115,7 +126,7 @@ export interface FieldOptionsBase {
 const DEFAULT_OPTION_KEYS = [
 	'path', 'paths', 'type', 'label', 'note', 'size', 'initial', 'required',
 	'col', 'noedit', 'nocol', 'nosort', 'indent', 'hidden', 'collapse',
-	'dependsOn', 'autoCleanup', 'thumb',
+	'dependsOn', 'autoCleanup', 'thumb', 'secret',
 ];
 
 /** Shape of an underscore method descriptor used in `_underscoreMethods`. */
@@ -169,6 +180,7 @@ abstract class FieldType<
 	declare nosort: boolean;
 	declare collapse: boolean;
 	declare hidden: boolean;
+	declare secret: boolean;
 	declare dependsOn: Record<string, unknown> | false;
 
 	/**
@@ -523,7 +535,9 @@ definePrototypeGetters(FieldType, {
 	nocol: function (this: FieldType) { return this.options.nocol || false; },
 	nosort: function (this: FieldType) { return this.options.nosort || false; },
 	collapse: function (this: FieldType) { return this.options.collapse || false; },
-	hidden: function (this: FieldType) { return this.options.hidden || false; },
+	// A secret field is never rendered by the Admin UI, so it always reports as hidden.
+	hidden: function (this: FieldType) { return this.options.hidden || Boolean(this.options.secret); },
+	secret: function (this: FieldType) { return Boolean(this.options.secret); },
 	dependsOn: function (this: FieldType) { return this.options.dependsOn ?? false; },
 });
 

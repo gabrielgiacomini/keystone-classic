@@ -1,5 +1,6 @@
 import listToArray from './listToArray.mjs';
 import evalDependsOn from '../../fields/utils/evalDependsOn.mjs';
+import { getRedactedDuplicateKeyDetail } from '../security/secretFieldRedaction.mjs';
 
 const MONGO_INDEX_CONSTRAINT_ERROR_REGEXP = /E11000 duplicate key error index\: [^\$]+\$(\w+) dup key\: \{ \: "([^"]+)" \}/;
 
@@ -142,6 +143,7 @@ function addFieldUpdateError(
  * Calls `callback` with a structured error object on validation or database failure.
  */
 export default function updateItem(this: KeystoneList, item: MongooseDoc, data: Record<string, unknown>, options: UpdateItemOptions | ((err?: UpdateItemError) => void), callback: (err?: UpdateItemError) => void): void {
+	const list = this;
 	if (typeof options === 'function') {
 		callback = options;
 		options = {};
@@ -249,6 +251,12 @@ export default function updateItem(this: KeystoneList, item: MongooseDoc, data: 
 			// than re-wrapping as a 'database error'.
 			if ((err as TaggedError).error) {
 				return callback(err as TaggedError);
+			}
+			// A duplicate-key error echoes the conflicting value; for a unique secret
+			// field that is another document's secret, so only the path is reported.
+			const redactedDetail = getRedactedDuplicateKeyDetail(list, err);
+			if (redactedDetail !== undefined) {
+				return callback({ error: 'database error', detail: redactedDetail });
 			}
 			const mongoErr = err as Partial<MongoE11000Error>;
 			if (mongoErr.code === 11000 && typeof mongoErr.errmsg === 'string') {

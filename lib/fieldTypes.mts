@@ -61,6 +61,14 @@ export interface FieldTypesMap {
 	Url: typeof UrlType;
 }
 
+// `Location` and `Relationship` are lazy getters to break a circular-init TDZ:
+// those two field types import `index.mjs` (the keystone instance), which
+// imports this module. When one of them is the first module loaded (for
+// example a test importing `RelationshipType.mjs` directly), this module is
+// evaluated while that class binding is still uninitialized, and a plain
+// `Relationship: RelationshipType` entry throws `Cannot access
+// 'RelationshipType' before initialization`. A getter captures the binding
+// without reading it; the read happens on first access, after evaluation.
 const fields: FieldTypesMap = {
 	Boolean: BooleanType,
 	Cloudinary: CloudinaryType,
@@ -78,14 +86,14 @@ const fields: FieldTypesMap = {
 	Key: KeyType,
 	LocalFile: LocalFileType,
 	LocalFiles: LocalFilesType,
-	Location: LocationType,
+	get Location() { return LocationType; },
 	Markdown: MarkdownType,
 	Money: MoneyType,
 	Name: NameType,
 	Number: NumberType,
 	NumberArray: NumberArrayType,
 	Password: PasswordType,
-	Relationship: RelationshipType,
+	get Relationship() { return RelationshipType; },
 	Select: SelectType,
 	Text: TextType,
 	TextArray: TextArrayType,

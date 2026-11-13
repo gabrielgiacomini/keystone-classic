@@ -11,8 +11,8 @@ function get(req: Request, res: Response): void {
 	if (keystone?.security?.csrf) {
 		keystone.security.csrf.getToken(req, res);
 	}
-	// Signed-out requests keep their existing shape (`null` / omitted).
-	res.json({ user: req.user ? projectSessionUserFor(req.keystone, req.user) : req.user });
+	// Signed-out requests answer `{ user: null }` rather than an empty object.
+	res.json({ user: req.user ? projectSessionUserFor(req.keystone, req.user) ?? null : null });
 }
 
 export default get;

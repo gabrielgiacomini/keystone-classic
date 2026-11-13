@@ -162,4 +162,36 @@ describe('List.apiForGet', function () {
 		expect(sent.status).to.equal(404);
 		expect(sent.body).to.deep.equal({ err: 'not found', id: 'missing' });
 	});
+
+	it('responds 500 with a generic body and keeps the error details in the server log', async function () {
+		const failure = Object.assign(new Error('E11000 duplicate key error dup key: { secret: "' + BCRYPT_HASH + '" }'), {
+			name: 'MongoServerError',
+			code: 11000,
+			keyValue: { secret: BCRYPT_HASH },
+		});
+		const list = {
+			key: 'ApiForGetUnitUser',
+			fields: userFields,
+			model: { findById: () => ({ where() {}, exec: () => Promise.reject(failure) }) },
+		} as unknown as KeystoneList;
+		const logged: unknown[][] = [];
+		const consoleError = console.error;
+		console.error = (...args: unknown[]) => { logged.push(args); };
+		let sent: Sent;
+		try {
+			sent = await run(list, undefined, { id: userId });
+		} finally {
+			console.error = consoleError;
+		}
+
+		expect(sent.status).to.equal(500);
+		expect(sent.body).to.deep.equal({ err: 'database error' });
+		const raw = JSON.stringify(sent.body);
+		for (const fragment of ['detail', 'stack', 'keyValue', 'E11000', 'MongoServerError', '$2']) {
+			expect(raw).to.not.include(fragment);
+		}
+		// The error is still available to the operator.
+		expect(logged).to.have.length(1);
+		expect(logged[0]?.[1]).to.equal(failure);
+	});
 });

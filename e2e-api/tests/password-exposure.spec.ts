@@ -1,12 +1,20 @@
 /**
  * Password-exposure specs — every admin JSON/CSV endpoint that can return
- * (or reach into) a user document must never serialise a Password-type
- * field value (the bcrypt hash).
+ * (or reach into) a user document must never serialise a secret field value:
+ * a Password-type field (the bcrypt hash) or a field declared with
+ * `secret: true` (here `User.recoveryCode`).
  */
 
 import type { APIRequestContext, APIResponse } from '@playwright/test';
+import mongoose from 'mongoose';
 import { test, expect } from '../fixtures/auth.js';
-import { API_BASE, APP_GET_BASE, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD } from '../fixtures/server.js';
+import {
+	API_BASE,
+	APP_GET_BASE,
+	TEST_ADMIN_EMAIL,
+	TEST_ADMIN_PASSWORD,
+	TEST_ADMIN_RECOVERY_CODE,
+} from '../fixtures/server.js';
 import { resetDb } from '../fixtures/seedDb.js';
 import { createItem, getItem, getList, signin, signout, updateItem } from '../helpers/api.js';
 
@@ -22,13 +30,17 @@ const BCRYPT_RE = /\$2[abxy]?\$\d{2}\$/;
 // eslint-disable-next-line sonarjs/no-hardcoded-passwords
 const SECOND_USER_PASSWORD = 'second-user-password-123';
 const SECOND_USER_EMAIL = 'second-user@example.com';
+/** Value written to the second user's `secret: true` field through the admin API. */
+const SECOND_USER_RECOVERY_CODE = 'e2e-second-recovery-code-93b0f5d2';
+const SECRET_VALUES = [TEST_ADMIN_RECOVERY_CODE, SECOND_USER_RECOVERY_CODE];
 
 let adminId = '';
 let secondUserId = '';
 let postId = '';
 
 /**
- * Asserts the response succeeded and that its raw body carries no bcrypt hash.
+ * Asserts the response succeeded and that its raw body carries no bcrypt hash
+ * and no value of a `secret: true` field.
  * @param res Response to inspect.
  * @param label Endpoint label used in failure messages.
  * @returns The raw response body.
@@ -37,6 +49,9 @@ async function expectNoHash (res: APIResponse, label: string): Promise<string> {
 	const raw = await res.text();
 	expect(res.status(), `${label} status (body: ${raw.slice(0, 200)})`).toBe(200);
 	expect(BCRYPT_RE.test(raw), `${label} contains a bcrypt hash`).toBe(false);
+	for (const secret of SECRET_VALUES) {
+		expect(raw.includes(secret), `${label} contains a secret field value`).toBe(false);
+	}
 	return raw;
 }
 
@@ -63,6 +78,8 @@ test.beforeAll(async ({ request, playwright, baseURL }) => {
 			'email': SECOND_USER_EMAIL,
 			'password': SECOND_USER_PASSWORD,
 			'password_confirm': SECOND_USER_PASSWORD,
+			'recoveryCode': SECOND_USER_RECOVERY_CODE,
+			'accessTier': 'gold',
 		});
 		// The create response itself is an endpoint under test.
 		const userRaw = await expectNoHash(userRes, 'POST users/create');
@@ -72,6 +89,7 @@ test.beforeAll(async ({ request, playwright, baseURL }) => {
 			title: 'Password exposure post',
 			author: adminId,
 			editors: [adminId, secondUserId],
+			reviewer: secondUserId,
 		});
 		expect(postRes.ok()).toBe(true);
 		postId = ((await postRes.json()) as { id: string }).id;
@@ -82,7 +100,7 @@ test.beforeAll(async ({ request, playwright, baseURL }) => {
 
 test.describe('Password-type field values never reach the client', () => {
 	test('user list and item endpoints', async ({ signedInRequest }) => {
-		const listRaw = await expectNoHash(await getList(signedInRequest, 'users'), 'GET /users');
+		const listRaw = await expectNoHash(await getList(signedInRequest, 'users'), 'GET users');
 		const list = JSON.parse(listRaw) as { results: Array<{ fields: Record<string, unknown> }> };
 		expect(list.results.length).toBeGreaterThanOrEqual(2);
 		for (const row of list.results) {
@@ -92,11 +110,11 @@ test.describe('Password-type field values never reach the client', () => {
 
 		await expectNoHash(
 			await getList(signedInRequest, 'users', { fields: 'password,password.hash,name,email,_doc,$__' }),
-			'GET /users?fields=password,...',
+			'GET users?fields=password,...',
 		);
 		await expectNoHash(
 			await getList(signedInRequest, 'users', { expandRelationshipFields: true }),
-			'GET /users?expandRelationshipFields',
+			'GET users?expandRelationshipFields',
 		);
 		await expectNoHash(await getItem(signedInRequest, 'users', adminId), 'GET users/:id');
 		await expectNoHash(
@@ -139,6 +157,8 @@ test.describe('Password-type field values never reach the client', () => {
 			{ populate: 'author,editors' },
 			{ expandRelationshipFields: true },
 			{ populate: 'author,editors', expandRelationshipFields: true },
+			{ populate: 'author,editors,reviewer' },
+			{ populate: 'reviewer', fields: 'reviewer,reviewer.recoveryCode,author.recoveryCode,editors.0.recoveryCode,editors.recoveryCode' },
 			{ populate: 'author,editors', fields: 'author,editors,author.password,editors.password,editors.0,editors.0.password' },
 			{ expandRelationshipFields: true, fields: 'author.password,editors.password,editors.0' },
 		];
@@ -181,12 +201,190 @@ test.describe('Password-type field values never reach the client', () => {
 		expect(author).toBeTruthy();
 		expect(author?.['email']).toBe(TEST_ADMIN_EMAIL);
 		expect(author).not.toHaveProperty('password');
+		expect(author).not.toHaveProperty('recoveryCode');
+	});
+
+	test('a `secret: true` field is stored but never returned, selectable, filterable or sortable', async ({ signedInRequest }) => {
+		// The values really are stored: the API omits them, it did not drop them.
+		const conn = await mongoose.createConnection(process.env.MONGO_URI ?? 'mongodb://localhost:27017/keystone-e2e-api').asPromise();
+		try {
+			const stored = await conn.collection('User').find({}).project({ email: 1, recoveryCode: 1 }).toArray();
+			const byEmail = Object.fromEntries(stored.map((user) => [user['email'], user['recoveryCode']]));
+			expect(byEmail[TEST_ADMIN_EMAIL]).toBe(TEST_ADMIN_RECOVERY_CODE);
+			// Written through the admin API create endpoint.
+			expect(byEmail[SECOND_USER_EMAIL]).toBe(SECOND_USER_RECOVERY_CODE);
+		} finally {
+			await conn.close();
+		}
+
+		type Row = { id: string; fields: Record<string, unknown> };
+		const allRaw = await expectNoHash(await getList(signedInRequest, 'users'), 'GET users');
+		const all = JSON.parse(allRaw) as { count: number; results: Row[] };
+		expect(all.count).toBe(2);
+		for (const row of all.results) {
+			expect(row.fields).not.toHaveProperty('recoveryCode');
+			expect(row.fields).toHaveProperty('email');
+		}
+
+		const itemRaw = await expectNoHash(
+			await signedInRequest.get(`${USERS}/${adminId}?fields=email,recoveryCode,recoveryCode.length,_doc.recoveryCode`),
+			'GET users/:id?fields=recoveryCode',
+		);
+		expect(Object.keys((JSON.parse(itemRaw) as Row).fields)).toEqual(['email']);
+
+		const selectedRaw = await expectNoHash(
+			await getList(signedInRequest, 'users', { fields: 'recoveryCode,email' }),
+			'GET users?fields=recoveryCode',
+		);
+		for (const row of (JSON.parse(selectedRaw) as { results: Row[] }).results) {
+			expect(Object.keys(row.fields)).toEqual(['email']);
+		}
+
+		// A filter on the secret field is ignored.
+		for (const filter of [
+			{ mode: 'exactly', value: TEST_ADMIN_RECOVERY_CODE },
+			{ mode: 'beginsWith', value: 'e2e-admin' },
+			{ mode: 'contains', value: 'no-such-value' },
+		]) {
+			const res = await signedInRequest.get(
+				`${USERS}?filters=${encodeURIComponent(JSON.stringify({ recoveryCode: filter }))}`,
+			);
+			const raw = await res.text();
+			expect(res.status(), raw.slice(0, 200)).toBe(200);
+			expect((JSON.parse(raw) as { count: number }).count, `filter ${JSON.stringify(filter)} was applied`).toBe(2);
+		}
+		// A real filter still narrows the result.
+		const narrowed = await signedInRequest.get(
+			`${USERS}?filters=${encodeURIComponent(JSON.stringify({ email: { mode: 'exactly', value: TEST_ADMIN_EMAIL } }))}`,
+		);
+		expect(((await narrowed.json()) as { count: number }).count).toBe(1);
+
+		// Sorting on it is ignored too: both directions return the same order.
+		const order = async (sort: string): Promise<string[]> => {
+			const raw = await expectNoHash(await getList(signedInRequest, 'users', { sort }), `GET users?sort=${sort}`);
+			return (JSON.parse(raw) as { results: Row[] }).results.map((row) => row.id);
+		};
+		expect(await order('recoveryCode')).toEqual(await order('-recoveryCode'));
+
+		for (const format of ['json', 'csv']) {
+			const raw = await expectNoHash(
+				await signedInRequest.get(`${USERS}/export.${format}?select=email,recoveryCode`),
+				`GET users/export.${format}?select=recoveryCode`,
+			);
+			expect(raw).toContain(TEST_ADMIN_EMAIL);
+			expect(raw).not.toContain('recoveryCode');
+		}
+		const fullCsv = await expectNoHash(await signedInRequest.get(`${USERS}/export.csv`), 'GET users/export.csv');
+		expect(fullCsv).not.toContain('recoveryCode');
+
+		// Updating another field neither returns nor clears the stored secret.
+		await expectNoHash(
+			await updateItem(signedInRequest, 'users', secondUserId, { 'name.first': 'Still' }),
+			'POST users/:id',
+		);
+	});
+
+	test('paths derived from a secret field are never returned', async ({ signedInRequest }) => {
+		// The secret Select value is stored; its label would be "Gold".
+		const conn = await mongoose.createConnection(process.env.MONGO_URI ?? 'mongodb://localhost:27017/keystone-e2e-api').asPromise();
+		try {
+			const stored = await conn.collection('User').findOne({ email: SECOND_USER_EMAIL });
+			expect(stored?.['accessTier']).toBe('gold');
+		} finally {
+			await conn.close();
+		}
+
+		const derived = 'accessTier,accessTierLabel,accessTierData,accessTierData.label,accessTierOptions,accessTierOptionsMap,password_hash';
+		type Row = { id: string; fields: Record<string, unknown> };
+		const itemRaw = await expectNoHash(
+			await signedInRequest.get(`${USERS}/${secondUserId}?fields=email,${derived}`),
+			'GET users/:id?fields=accessTierLabel',
+		);
+		expect(Object.keys((JSON.parse(itemRaw) as Row).fields)).toEqual(['email']);
+		expect(itemRaw.toLowerCase()).not.toContain('gold');
+
+		const listRaw = await expectNoHash(
+			await getList(signedInRequest, 'users', { fields: `email,${derived}` }),
+			'GET users?fields=accessTierLabel',
+		);
+		for (const row of (JSON.parse(listRaw) as { results: Row[] }).results) {
+			expect(Object.keys(row.fields)).toEqual(['email']);
+		}
+		expect(listRaw.toLowerCase()).not.toContain('gold');
+
+		for (const format of ['json', 'csv']) {
+			const raw = await expectNoHash(
+				await signedInRequest.get(`${USERS}/export.${format}?select=email,${derived}`),
+				`GET users/export.${format}?select=accessTierLabel`,
+			);
+			expect(raw).toContain(SECOND_USER_EMAIL);
+			expect(raw.toLowerCase()).not.toContain('gold');
+			expect(raw).not.toContain('accessTier');
+		}
+	});
+
+	test('`?search=` does not match on a secret field', async ({ signedInRequest }) => {
+		const count = async (search: string): Promise<number> => {
+			const raw = await expectNoHash(await getList(signedInRequest, 'users', { search }), `GET users?search=${search}`);
+			return (JSON.parse(raw) as { count: number }).count;
+		};
+		// A stored secret value answers exactly like a value stored nowhere.
+		const baseline = await count('no-such-value-anywhere');
+		expect(await count(TEST_ADMIN_RECOVERY_CODE)).toBe(baseline);
+		expect(await count(SECOND_USER_RECOVERY_CODE)).toBe(baseline);
+		expect(await count('e2e-admin')).toBe(baseline);
+		// A real search still matches.
+		expect(await count('Admin')).toBe(1);
+	});
+
+	test('a duplicate-key error on a unique secret field does not echo the value', async ({ signedInRequest }) => {
+		const check = async (res: APIResponse, label: string): Promise<void> => {
+			const raw = await res.text();
+			expect(res.status(), `${label} status (body: ${raw.slice(0, 200)})`).toBe(500);
+			for (const secret of SECRET_VALUES) {
+				expect(raw.includes(secret), `${label} echoed a secret field value`).toBe(false);
+			}
+			expect(JSON.parse(raw)).toEqual({ error: 'database error', detail: 'Duplicate recoveryCode value already exists' });
+		};
+		// Create a third user with the second user's secret value.
+		await check(await createItem(signedInRequest, 'users', {
+			'name.first': 'Third',
+			'name.last': 'User',
+			'email': 'third-user@example.com',
+			'password': SECOND_USER_PASSWORD,
+			'password_confirm': SECOND_USER_PASSWORD,
+			'recoveryCode': SECOND_USER_RECOVERY_CODE,
+		}), 'POST users/create');
+		// Update the second user to the admin's secret value.
+		await check(
+			await updateItem(signedInRequest, 'users', secondUserId, { recoveryCode: TEST_ADMIN_RECOVERY_CODE }),
+			'POST users/:id',
+		);
+		const all = (await (await getList(signedInRequest, 'users')).json()) as { count: number };
+		expect(all.count).toBe(2);
+	});
+
+	test('a relationship `toCSV` key list never exports secret fields of the related user', async ({ signedInRequest }) => {
+		for (const qs of ['populate=reviewer', 'populate=reviewer&select=title,reviewer', '']) {
+			const csv = await expectNoHash(
+				await signedInRequest.get(`${API_BASE}/posts/export.csv?${qs}`),
+				`GET /posts/export.csv?${qs}`,
+			);
+			if (qs) {
+				// The non-secret key of `toCSV: 'email, password, recoveryCode'` is still exported.
+				expect(csv).toContain(SECOND_USER_EMAIL);
+				expect(csv).toContain('reviewerEmail');
+			}
+			expect(csv).not.toContain('reviewerPassword');
+			expect(csv).not.toContain('reviewerRecoveryCode');
+		}
 	});
 
 	test('List.apiForGet application routes', async ({ request }) => {
 		const userRaw = await expectNoHash(await request.get(`${APP_USERS}/${adminId}`), 'apiForGet user');
 		const user = (JSON.parse(userRaw) as { data: Record<string, unknown> }).data;
 		expect(user).not.toHaveProperty('password');
+		expect(user).not.toHaveProperty('recoveryCode');
 		// Every other stored field is still the raw document's.
 		expect(user).toMatchObject({
 			_id: adminId,
@@ -204,7 +402,10 @@ test.describe('Password-type field values never reach the client', () => {
 		expect(post.author).toMatchObject({ _id: adminId, email: TEST_ADMIN_EMAIL });
 		expect(post.author).not.toHaveProperty('password');
 		expect(post.editors.map((editor) => editor['_id'])).toEqual([adminId, secondUserId]);
-		for (const editor of post.editors) expect(editor).not.toHaveProperty('password');
+		for (const editor of post.editors) {
+			expect(editor).not.toHaveProperty('password');
+			expect(editor).not.toHaveProperty('recoveryCode');
+		}
 
 		const missing = await request.get(`${APP_USERS}/000000000000000000000000`);
 		expect(missing.status()).toBe(404);

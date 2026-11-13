@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import type { Keystone } from '../../../../index.mjs';
 import listToArray from '../../../../lib/list/listToArray.mjs';
 import { getAdminLegacyPath } from '../../../../lib/core/adminSurfacePathUtils.mjs';
+import { getClientSafeDocumentName } from '../../../../lib/security/secretFieldRedaction.mjs';
 
 /**
  * Returns a single list item by id.
@@ -97,7 +98,7 @@ export default function itemGet(req: Request, res: Response): void {
 								list: refList.getOptions(),
 								items: results.map(function (i: Record<string, unknown>) {
 									return {
-										label: refList.getDocumentName(i),
+										label: getClientSafeDocumentName(refList, i) ?? String(i.id),
 										href: adminLegacyPath + '/' + refList.path + '/' + String(i.id),
 									};
 								}),
@@ -112,7 +113,7 @@ export default function itemGet(req: Request, res: Response): void {
 						drilldown.items.push({
 							list: refList.getOptions(),
 							items: [{
-								label: refList.getDocumentName(result),
+								label: getClientSafeDocumentName(refList, result) ?? String(r.id),
 								href: adminLegacyPath + '/' + refList.path + '/' + String(r.id),
 							}],
 						});

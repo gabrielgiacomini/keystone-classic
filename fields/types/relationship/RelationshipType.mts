@@ -3,7 +3,7 @@ import type { KeystoneList, FieldOptionsBase, MongooseDocument, FieldSize } from
 import keystone from '../../../index.mjs';
 import definePrototypeGetters from '../../utils/definePrototypeGetters.mjs';
 import { defer } from '../../../lib/utils/async.mjs';
-import { isHydratedDocument, withoutPasswordFields } from '../../../lib/security/passwordFieldRedaction.mjs';
+import { getClientSafeDocumentName, isHydratedDocument, withoutSecretFields } from '../../../lib/security/secretFieldRedaction.mjs';
 import type { Schema } from 'mongoose';
 import type { Filters } from '../FieldSpec.mjs';
 
@@ -125,9 +125,9 @@ class RelationshipType<
 		};
 	}
 
-	getExpandedData(item: MongooseItem): { id: string; name: string }[] | { id: string; name: string } | undefined {
+	getExpandedData(item: MongooseItem): { id: string; name?: string }[] | { id: string; name?: string } | undefined {
 		const value = item.get(this.path);
-		type Expanded = { id: string; name: string }[] | { id: string; name: string } | undefined;
+		type Expanded = { id: string; name?: string }[] | { id: string; name?: string } | undefined;
 		let result: Expanded;
 		if (this.many) {
 			if (!value || !Array.isArray(value)) {
@@ -166,11 +166,12 @@ class RelationshipType<
 	}
 
 	// Returns the related id(s). When the path has been populated, each related
-	// document is returned as a plain object with its Password-type fields
-	// removed, so a populated user never carries its password hash to a client.
+	// document is returned as a plain object with its secret fields (Password-type
+	// or `secret: true`) removed, so a populated user never carries its password
+	// hash or reset key to a client.
 	override getData(item: MongooseItem): string | string[] {
 		const refList = this.refList;
-		const safe = (value: unknown): unknown => isHydratedDocument(value) ? withoutPasswordFields(refList, value) : value;
+		const safe = (value: unknown): unknown => isHydratedDocument(value) ? withoutSecretFields(refList, value) : value;
 		const value = item.get(this.path);
 		// JUSTIFIED: populated values are plain objects at runtime; the declared TValue only models the unpopulated ids.
 		return this.many ? (Array.isArray(value) ? value.map(safe) as string[] : []) : safe(value) as string;
@@ -290,9 +291,11 @@ class RelationshipType<
 	}
 }
 
-function expandRelatedItemData (this: RelationshipType, item: MongooseItem | null | undefined): { id: string; name: string } | undefined {
+function expandRelatedItemData (this: RelationshipType, item: MongooseItem | null | undefined): { id: string; name?: string } | undefined {
 	if (!item || !item.id) return undefined;
-	return { id: item.id, name: this.refList.getDocumentName(item) };
+	// The name is left out when the related list's name field is a secret.
+	const name = getClientSafeDocumentName(this.refList, item);
+	return name === undefined ? { id: item.id } : { id: item.id, name };
 }
 
 function truthy (value: unknown): boolean { return !!value; }

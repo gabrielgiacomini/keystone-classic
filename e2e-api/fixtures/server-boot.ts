@@ -52,6 +52,8 @@ export const TEST_ADMIN_EMAIL = 'admin@example.com';
 // Test fixture credential — never used outside the e2e-api harness.
 // eslint-disable-next-line sonarjs/no-hardcoded-passwords
 export const TEST_ADMIN_PASSWORD = 'admin-password-123';
+/** Seeded admin value of the `secret: true` field. Keep in sync with `./server.ts`. */
+export const TEST_ADMIN_RECOVERY_CODE = 'e2e-admin-recovery-code-4c1d9a7e';
 
 /**
  * Drop the test database before models register, using a throwaway
@@ -81,6 +83,12 @@ function defineLists () {
 		email: { type: Types.Email, initial: true, required: true, index: true },
 		password: { type: Types.Password, initial: true, required: true },
 		isAdmin: { type: Types.Boolean, default: false },
+		// A non-Password secret (think reset key or API token). The neutral name is
+		// deliberate: redaction follows the explicit option, never the field name.
+		// Unique, so a duplicate-key error (which echoes the conflicting value) can be provoked.
+		recoveryCode: { type: Types.Text, secret: true, unique: true, sparse: true },
+		// A secret Select: its `<path>Label` / `<path>Data` virtuals would reveal the choice.
+		accessTier: { type: Types.Select, options: 'gold, silver', secret: true },
 	});
 	User.schema.virtual('canAccessKeystone').get(function () {
 		return this.isAdmin;
@@ -108,6 +116,9 @@ function defineLists () {
 		},
 		author: { type: Types.Relationship, ref: 'User', index: true },
 		editors: { type: Types.Relationship, ref: 'User', many: true },
+		// `toCSV` on a relationship picks keys off the populated related document;
+		// the secret ones must never be exported.
+		reviewer: { type: Types.Relationship, ref: 'User', toCSV: 'email, password, recoveryCode' },
 		content: { type: String },
 		viewCount: { type: Types.Number, default: 0 },
 		featured: { type: Types.Boolean, default: false },
@@ -133,6 +144,7 @@ async function seedAdmin () {
 		email: TEST_ADMIN_EMAIL,
 		password: TEST_ADMIN_PASSWORD,
 		isAdmin: true,
+		recoveryCode: TEST_ADMIN_RECOVERY_CODE,
 	});
 	await admin.save();
 }

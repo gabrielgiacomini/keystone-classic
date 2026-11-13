@@ -256,6 +256,12 @@ const keyOptions: KeystoneFieldOptionsForKeyType = { separator: '-' };
 const colorOptions: KeystoneFieldOptionsForColorType = {};
 const moneyOptions: KeystoneFieldOptionsForMoneyType = { format: '$0,0.00' };
 const emailOptions: KeystoneFieldOptionsForEmailType = { required: true };
+// `secret` is a common field option, typed as a boolean on every field type.
+const secretEmailOptions: KeystoneFieldOptionsForEmailType = { secret: true };
+// @ts-expect-error `secret` must be a boolean.
+const invalidSecretOptions: KeystoneFieldOptionsForEmailType = { secret: 'yes' };
+void secretEmailOptions;
+void invalidSecretOptions;
 const passwordComplexity: PasswordComplexityOptions = {
 	asciiChar: true,
 	digitChar: true,

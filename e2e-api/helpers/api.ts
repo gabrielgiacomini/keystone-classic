@@ -11,7 +11,7 @@ import type { APIRequestContext, APIResponse } from '@playwright/test';
 import { API_BASE } from '../fixtures/server.js';
 
 /**
- * GET the current session. Returns `{ user: undefined }` when signed
+ * GET the current session. Returns `{ user: null }` when signed
  * out, or `{ user: <user> }` when signed in.
  * @param request Playwright request context.
  * @returns The raw session response.

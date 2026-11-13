@@ -1,7 +1,8 @@
 import type { KeystoneList } from '../list.mjs';
 import listToArray from './listToArray.mjs';
 import escapeValueForExcel from '../security/escapeValueForExcel.mjs';
-import { isHydratedDocument, isSensitivePath } from '../security/passwordFieldRedaction.mjs';
+import { hasSecretOption, isHydratedDocument, isSensitivePath } from '../security/secretFieldRedaction.mjs';
+import type { SecretAwareList } from '../security/secretFieldRedaction.mjs';
 
 function pick(source: unknown, keys: string[]): Record<string, unknown> {
 	if (source === null || typeof source === 'undefined') return {};
@@ -18,6 +19,7 @@ interface CsvField {
 	type?: string;
 	many?: boolean;
 	label?: string;
+	refList?: SecretAwareList;
 	options: { toCSV?: string | string[] | ((this: unknown, field: CsvField, options: CsvOptions) => unknown) };
 	format(item: unknown): unknown;
 	getExpandedData?(item: unknown): unknown;
@@ -29,6 +31,11 @@ interface CsvOptions {
 	[key: string]: unknown;
 }
 
+// Whether a value picked for a CSV cell is (or contains) a raw related document.
+function isUnsafeCsvValue(value: unknown): boolean {
+	return (Array.isArray(value) ? value : [value]).some(isHydratedDocument);
+}
+
 function transformFieldValue(field: CsvField, item: unknown, options: CsvOptions): unknown {
 	const transform = typeof field.options.toCSV === 'string'
 		? listToArray(field.options.toCSV)
@@ -38,11 +45,22 @@ function transformFieldValue(field: CsvField, item: unknown, options: CsvOptions
 	}
 	if (Array.isArray(transform)) {
 		const value = (item as Record<string, unknown>)[field.path];
+		// `toCSV` keys are read straight off the stored value. On a relationship that
+		// value is the populated related document, so a key naming one of its secret
+		// fields (`toCSV: 'password'` on a relationship to users) would export the hash.
+		const keys = field.type === 'relationship'
+			? transform.filter((key) => field.refList !== undefined && !isSensitivePath(field.refList, key))
+			: transform;
 		if (transform.length === 1) {
-			return (value as Record<string, unknown>)[transform[0] ?? ''];
-		} else {
-			return pick(value, transform);
+			const picked = pick(value, keys)[transform[0] ?? ''];
+			// `null` leaves the column out instead of exporting the text "undefined".
+			return picked === undefined || isUnsafeCsvValue(picked) ? null : picked;
 		}
+		const picked = pick(value, keys);
+		for (const [key, entry] of Object.entries(picked)) {
+			if (isUnsafeCsvValue(entry)) Reflect.deleteProperty(picked, key);
+		}
+		return picked;
 	}
 	return field.format(item);
 }
@@ -68,13 +86,15 @@ export default function getCSVData(this: KeystoneList, item: unknown, options?: 
 		opts.fields.forEach(function (path: string) {
 			const field = self.fields[path] as CsvField | undefined;
 			if (!field) {
-				// Never resolve caller-supplied paths into Password-type values or raw related documents.
+				// Never resolve caller-supplied paths into secret field values or raw related documents.
 				if (isSensitivePath(self, path)) return;
 				const value = (item as { get(path: string): unknown }).get(path);
 				const values = Array.isArray(value) ? value : [value];
 				if (!values.some(isHydratedDocument)) data[path] = value;
 				return;
 			}
+			// Fields declared with `secret: true` are never exported.
+			if (hasSecretOption(field)) return;
 			if (field.type !== 'relationship' || !opts.expandRelationshipFields) {
 				data[path] = transformFieldValue(field, item, opts); return;
 			}

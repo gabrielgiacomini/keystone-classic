@@ -13,13 +13,12 @@ test.beforeAll(async ({ request }) => {
 });
 
 test.describe('session API', () => {
-	test('GET /api/session returns { user: undefined } when signed out', async ({
+	test('GET /api/session returns { user: null } when signed out', async ({
 		anonRequest,
 	}) => {
 		const res = await getSession(anonRequest);
 		expect(res.status()).toBe(200);
-		const body = (await res.json()) as { user?: unknown };
-		expect(body.user).toBeFalsy();
+		expect(await res.json()).toEqual({ user: null });
 	});
 
 	test('legacy /keystone/api/session alias remains available during migration', async ({

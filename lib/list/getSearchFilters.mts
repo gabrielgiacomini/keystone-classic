@@ -4,6 +4,8 @@ import debugLib from 'debug';
 import { isValidObjectId } from '../utils/objectId.mjs';
 import { number } from '../utils/number.mjs';
 import { escapeRegExp } from '../utils/regexp.mjs';
+import { hasSecretOption, isSecretFieldObject } from '../security/secretFieldRedaction.mjs';
+import { canSearchWithTextIndex } from './buildSearchTextIndex.mjs';
 
 const debug = debugLib('keystone:core:list:getSearchFilters');
 
@@ -30,7 +32,8 @@ export default function getSearchFilters(this: KeystoneList, search: string, add
 	search = (search || '').trim();
 
 	if (search.length) {
-		if (this.options.searchUsesTextIndex) {
+		// `$text` is skipped when the text index could hold a secret field (or none can be built).
+		if (canSearchWithTextIndex(this)) {
 			filters.$text = { $search: search };
 		} else {
 			const searchParts = search.split(' ');
@@ -49,6 +52,8 @@ export default function getSearchFilters(this: KeystoneList, search: string, add
 				path = path.trim();
 				if (path === '__name__') { path = list.mappings.name ?? path; }
 				const field = list.fields[path] as { type?: string; paths?: { first: string; last: string } } | undefined;
+				// Secret fields (Password-type or `secret: true`) are not searched.
+				if (isSecretFieldObject(field)) return;
 				if (field?.type === 'name' && field.paths) {
 					const first: Record<string, unknown> = {}; first[field.paths.first] = splitSearchRx;
 					const last: Record<string, unknown> = {}; last[field.paths.last] = splitSearchRx;
@@ -89,6 +94,7 @@ interface AdminFilter {
 		}
 		Object.values(add).forEach(function (filter: unknown) {
 			const f = filter as AdminFilter;
+			if (hasSecretOption(f.field)) return;
 			let cond;
 			const path = f.key;
 			const value = f.value;

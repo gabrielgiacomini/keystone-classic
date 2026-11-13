@@ -47,7 +47,7 @@ Returns JSON API middleware for a `GET /:id` endpoint, allowing for easy creatio
 - `query`: A function or object to modify the query.
 - `transform`: A function to transform the object before it is sent as JSON.
 
-Password-type fields are removed from the response (including from populated relationships), after `transform` runs.
+Password-type fields and fields declared with `secret: true` are removed from the response (including from populated relationships), after `transform` runs. Redaction follows the registered field paths, so a `transform` that copies a secret value under another key is not detected.
 
 **Usage:**
 ```javascript
