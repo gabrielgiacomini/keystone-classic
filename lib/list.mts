@@ -78,6 +78,8 @@ export default function listFactory(keystone: Keystone) {
 		// Private backing stores for the prototype-level computed getters
 		declare _searchFields: unknown[] | undefined;
 		declare _defaultColumns: unknown[] | undefined;
+		// Set by `ensureTextIndex` while the collection holds a text index Keystone did not create that covers a secret path
+		declare _unmanagedTextIndexCoversSecret: boolean | undefined;
 
 		// -----------------------------------------------------------------------
 		// Method stubs for the prototype-assigned methods (assigned below the class
@@ -779,6 +781,8 @@ export interface KeystoneList<
 	declaresTextIndex(): boolean;
 	/** Ensures a text index exists for this list's search fields. */
 	ensureTextIndex(callback: (err?: Error | null) => void): void;
+	/** True while the collection holds a text index Keystone did not create that covers a secret path; `$text` search is then off. */
+	_unmanagedTextIndexCoversSecret?: boolean;
 	/** Allow any other runtime properties present on the List prototype. */
 	[key: string]: unknown;
 }

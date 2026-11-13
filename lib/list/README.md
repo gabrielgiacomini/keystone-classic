@@ -73,7 +73,7 @@ Checks if a text index is defined in the current list schema.
 This method is used internally by Keystone and is not intended for direct use.
 
 ### `lib/list/ensureTextIndex.js`
-Ensures that a collection has an appropriate text index. This is used to work around unreliable behavior with the Mongo driver's `ensureIndex()` method.
+Ensures that a collection has an appropriate text index. A Keystone-generated text index that no longer matches the list's (non-secret) search fields is dropped and recreated; text indexes Keystone did not create are left alone. If such an index covers a secret or Password path, a warning is logged and `list._unmanagedTextIndexCoversSecret` is set, which makes `canSearchWithTextIndex` (in `buildSearchTextIndex.js`) return `false`: `addSearchToQuery` and `getSearchFilters` then use the regular-expression search over the non-secret search fields instead of `$text`. The flag is cleared by a later run that no longer finds such an index.
 
 **Usage:**
 This method is used internally by Keystone and is not intended for direct use.

@@ -423,11 +423,6 @@
       "count": 1
     }
   },
-  "lib/list/ensureTextIndex.mts": {
-    "jsdoc/require-jsdoc": {
-      "count": 1
-    }
-  },
   "lib/list/expandColumns.mts": {
     "jsdoc/require-param": {
       "count": 1
