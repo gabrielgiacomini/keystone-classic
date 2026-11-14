@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import mongoose from 'mongoose';
 import {
 	getPasswordFieldPaths,
 	isHydratedDocument,
@@ -12,6 +13,7 @@ import getCSVData from 'keystone/lib/list/getCSVData';
 import RelationshipType from 'keystone/fields/types/relationship/RelationshipType';
 
 const BCRYPT_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
+const { Binary, Code, DBRef, Decimal128, ObjectId } = mongoose.mongo;
 
 const userList = {
 	fields: {
@@ -193,6 +195,164 @@ describe('lib/security/passwordFieldRedaction', function () {
 			expect(proto.getData.call(single, idItem)).to.equal('u1');
 			expect(proto.getData.call(many, idItem)).to.deep.equal(['u1', 'u2']);
 			expect(proto.format.call(many, idItem)).to.equal('u1, u2');
+		});
+	});
+	describe('BSON values that carry nested data', function () {
+		const refId = new ObjectId('64b7f0c2a1b2c3d4e5f60718');
+		// Password paths written the way the stored document is structured.
+		const refUserList = {
+			fields: {
+				email: { type: 'email' },
+				'value.fields.hidden': { type: 'password' },
+				'code.scope.inner.fields.hidden': { type: 'password' },
+			} as Record<string, unknown>,
+		};
+		const refPostList = {
+			fields: {
+				title: { type: 'text' },
+				author: { type: 'relationship', refList: refUserList },
+			} as Record<string, unknown>,
+		};
+		const storedUser = () => ({
+			_id: 'u1',
+			email: 'ada@example.com',
+			value: new DBRef('public', refId, undefined, { hidden: BCRYPT_HASH, keep: 1 }),
+			code: new Code('function () {}', { inner: new DBRef('public', refId, undefined, { hidden: BCRYPT_HASH, keep: 2 }) }),
+		});
+		const safeUser = {
+			_id: 'u1',
+			email: 'ada@example.com',
+			value: { $ref: 'public', $id: String(refId), keep: 1 },
+			code: { code: 'function () {}', scope: { inner: { $ref: 'public', $id: String(refId), keep: 2 } } },
+		};
+
+		it('removes a Password path stored in a DBRef\'s extra fields', function () {
+			const user = storedUser();
+			const result = toJSONWithoutPasswordFields(refUserList, { _id: user._id, email: user.email, value: user.value });
+			expect(JSON.stringify(result)).to.not.include('$2');
+			expect(result).to.deep.equal({ _id: 'u1', email: 'ada@example.com', value: safeUser.value });
+			// The DBRef itself is not mutated.
+			expect((user.value.fields as Record<string, unknown>)['hidden']).to.equal(BCRYPT_HASH);
+		});
+
+		it('removes a Password path stored in a DBRef inside a Code scope', function () {
+			const user = storedUser();
+			const result = toJSONWithoutPasswordFields(refUserList, { _id: user._id, code: user.code });
+			expect(JSON.stringify(result)).to.not.include('$2');
+			expect(result).to.deep.equal({ _id: 'u1', code: safeUser.code });
+		});
+
+		it('removes them from a populated relationship', function () {
+			const post = { toJSON: () => ({ _id: 'p1', title: 'Hello', author: storedUser() }) };
+			const result = toJSONWithoutPasswordFields(refPostList, post);
+			expect(JSON.stringify(result)).to.not.include('$2');
+			expect(result).to.deep.equal({ _id: 'p1', title: 'Hello', author: safeUser });
+		});
+
+		it('still removes a Password path written in the flattened JSON form of a DBRef', function () {
+			const list = { fields: { 'value.hidden': { type: 'password' } } as Record<string, unknown> };
+			const result = toJSONWithoutPasswordFields(list, { value: storedUser().value });
+			expect(result).to.deep.equal({ value: safeUser.value });
+		});
+
+		it('serializes everything else exactly as JSON.stringify does', function () {
+			const value = {
+				_id: refId,
+				when: new Date('2024-01-02T03:04:05.006Z'),
+				amount: Decimal128.fromString('12.50'),
+				blob: new Binary(Buffer.from('keystone')),
+				ref: new DBRef('public', refId, 'otherdb', { keep: 1, nested: { deep: [1, 'two'] } }),
+				refNoFields: new DBRef('public', refId),
+				code: new Code('function () { return x; }', { x: 1, inner: new DBRef('public', refId, undefined, { keep: 3 }) }),
+				codeNoScope: new Code('function () {}'),
+				list: [refId, new Date(0), null, undefined, () => 1, Symbol('s')],
+				boxed: [Object(1), Object('s'), Object(true)],
+				skipped: undefined,
+				doc: { toJSON: (key: string) => ({ key, title: 'Hello' }) },
+			};
+			Object.defineProperty(value, '__proto__', { value: { own: 'property' }, enumerable: true });
+			const expected = JSON.stringify(value);
+			// None of the lists' Password paths match, so nothing may change.
+			for (const list of [refUserList, refPostList, userList, undefined]) {
+				expect(JSON.stringify(toJSONWithoutPasswordFields(list, value))).to.equal(expected);
+				expect(JSON.stringify(toJSONWithoutPasswordFields(list, [value, value]))).to.equal(JSON.stringify([value, value]));
+			}
+		});
+	});
+
+	describe('caller-named parents of a Password path', function () {
+		const refId = new ObjectId('64b7f0c2a1b2c3d4e5f60718');
+		const parentList = {
+			fields: {
+				title: { type: 'text', path: 'title', options: {}, format: () => 'Hello', getData: () => 'Hello' },
+				'profile.pin': { type: 'password' },
+				// Written in the flattened JSON form of the DBRef stored there.
+				'ref.hidden': { type: 'password' },
+				'code.scope.inner.hidden': { type: 'password' },
+			} as Record<string, unknown>,
+			options: {},
+			getDocumentName: () => 'Hello',
+		};
+		const stored: Record<string, unknown> = {
+			title: 'Hello',
+			profile: { pin: BCRYPT_HASH, bio: 'hi' },
+			ref: new DBRef('public', refId, undefined, { hidden: BCRYPT_HASH, keep: 1 }),
+			code: new Code('function () {}', { inner: new DBRef('public', refId, undefined, { hidden: BCRYPT_HASH, keep: 2 }) }),
+			other: { plain: 'yes' },
+		};
+		/** Reads a dotted path by property access, as Mongoose does for these values. */
+		const item = {
+			id: 'p1',
+			get(path: string): unknown {
+				let current: unknown = stored;
+				for (const segment of path.split('.')) {
+					if (current === null || typeof current !== 'object') return undefined;
+					current = (current as Record<string, unknown>)[segment];
+				}
+				return current;
+			},
+		};
+		const refused = ['profile', 'ref', 'ref.fields', 'code', 'code.scope', 'code.scope.inner', 'code.scope.inner.fields'];
+		const allowed = ['title', 'profile.bio', 'other', 'other.plain'];
+
+		it('isSensitivePath refuses a parent of a Password path', function () {
+			expect(isSensitivePath(parentList, 'profile')).to.equal(true);
+			expect(isSensitivePath(parentList, 'code.scope')).to.equal(true);
+			expect(isSensitivePath(parentList, 'profile.bio')).to.equal(false);
+			expect(isSensitivePath(parentList, 'prof')).to.equal(false);
+			expect(isSensitivePath(postList, 'author.profile')).to.equal(true);
+		});
+
+		it('isSensitivePath refuses a path through a DBRef or Code scope above a Password path', function () {
+			const read = (path: string) => item.get(path);
+			expect(isSensitivePath(parentList, 'ref.fields', read)).to.equal(true);
+			expect(isSensitivePath(parentList, 'code.scope.inner.fields', read)).to.equal(true);
+			// Without a reader the structure is unknown.
+			expect(isSensitivePath(parentList, 'ref.fields')).to.equal(false);
+			for (const path of allowed) expect(isSensitivePath(parentList, path, read), path).to.equal(false);
+		});
+
+		it('getData', function () {
+			const data = getData.call(parentList as never, item as never, [...refused, ...allowed]);
+			expect(JSON.stringify(data)).to.not.include('$2');
+			const fields = data['fields'] as Record<string, unknown>;
+			expect(fields).to.not.have.any.keys(...refused);
+			expect(fields).to.deep.equal({ title: 'Hello', 'profile.bio': 'hi', other: { plain: 'yes' }, 'other.plain': 'yes' });
+		});
+
+		it('getCSVData', function () {
+			const data = getCSVData.call(parentList as never, item, { fields: [...refused, ...allowed] });
+			expect(JSON.stringify(data)).to.not.include('$2');
+			expect(data).to.not.have.any.keys(...refused);
+			expect(data).to.deep.equal({ id: 'p1', title: 'Hello', 'profile.bio': 'hi', otherPlain: 'yes', 'other.plain': 'yes' });
+		});
+
+		it('getData and getCSVData refuse a value holding a populated document below its top level', function () {
+			const admin = hydrated({ _id: 'u1', email: 'ada@example.com', secret: BCRYPT_HASH });
+			const nestedItem = { id: 'p1', get: (path: string) => (path === 'meta' ? { author: admin } : undefined) };
+			const list = { fields: {}, options: {}, getDocumentName: () => 'Hello' };
+			expect(getData.call(list as never, nestedItem as never, ['meta'])['fields']).to.deep.equal({});
+			expect(getCSVData.call(list as never, nestedItem, { fields: ['meta'] })).to.deep.equal({ id: 'p1' });
 		});
 	});
 });
