@@ -16,6 +16,9 @@ export const ADMIN_API_PATH = 'keystone-api';
 /** Base path under which the admin API router is mounted. */
 export const API_BASE = `/${ADMIN_API_PATH}`;
 
+/** Prefix of the application routes `server-boot.ts` builds with `List.apiForGet`. */
+export const APP_GET_BASE = '/app-api';
+
 /** Email of the admin user seeded by `server-boot.ts`. */
 export const TEST_ADMIN_EMAIL = 'admin@example.com';
 

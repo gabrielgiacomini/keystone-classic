@@ -19,6 +19,7 @@
 
 import keystone from 'keystone';
 import mongoose from 'mongoose';
+import type { Application, RequestHandler } from 'express';
 
 const MONGO_URI = process.env.MONGO_URI ?? 'mongodb://localhost:27017/keystone-e2e-api';
 const PORT = process.env.PORT ?? '3005';
@@ -136,6 +137,24 @@ async function seedAdmin () {
 	await admin.save();
 }
 
+/**
+ * Application routes built with `List.apiForGet`, the opt-in JSON helper an
+ * app can mount on any list. Mounted here on the user list and on a list with
+ * relationships to it (populated) so the password-exposure spec can assert the
+ * helper never serializes a Password-type field. Keep the prefix in sync with
+ * `APP_GET_BASE` in `./server.ts`.
+ * @param app The Express app Keystone hands to the `routes` option.
+ */
+function defineAppRoutes (app: Application) {
+	type GetHandlerFactory = { apiForGet(options?: { query?: (query: { populate(path: string): unknown }) => unknown }): RequestHandler };
+	const User = keystone.list('User') as unknown as GetHandlerFactory;
+	const Post = keystone.list('Post') as unknown as GetHandlerFactory;
+	app.get('/app-api/user/:id', User.apiForGet());
+	app.get('/app-api/post/:id', Post.apiForGet({
+		query: (query) => query.populate('author editors'),
+	}));
+}
+
 await dropDatabase();
 
 keystone.init({
@@ -153,6 +172,7 @@ keystone.init({
 	'admin api path': 'keystone-api',
 	'headless': false,
 	'logger': false,
+	'routes': defineAppRoutes,
 });
 
 defineLists();

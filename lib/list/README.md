@@ -47,6 +47,8 @@ Returns JSON API middleware for a `GET /:id` endpoint, allowing for easy creatio
 - `query`: A function or object to modify the query.
 - `transform`: A function to transform the object before it is sent as JSON.
 
+Password-type fields are removed from the response (including from populated relationships), after `transform` runs.
+
 **Usage:**
 ```javascript
 app.get('/api/my-list/:id', keystone.middleware.api, MyList.apiForGet());

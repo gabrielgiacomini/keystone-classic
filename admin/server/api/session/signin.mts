@@ -3,6 +3,7 @@ import type { SessionUser } from '../../../../types/express.js';
 import type { Keystone } from '../../../../index.mjs';
 import { isEmail } from '../../../../lib/utils/email.mjs';
 import { escapeRegExp } from '../../../../lib/utils/regexp.mjs';
+import { projectSessionUser } from '../../../../lib/sessionUserProjection.mjs';
 import {
 	clearSigninFailures,
 	recordSigninFailure,
@@ -55,7 +56,8 @@ function signin(req: Request, res: Response): void {
 						keystone.session.signinWithUser(user, req, res, function (): void {
 							keystone.callHook(user, 'post:signin', req, function (postErr: unknown): void {
 								if (postErr) { sendSigninInternalError(res, 'post:signin error'); return; }
-								res.json({ success: true, user });
+								// Never serialize the raw user document: it carries the password hash.
+								res.json({ success: true, user: projectSessionUser(user, User) });
 							});
 						});
 					} else if (compareErr) {

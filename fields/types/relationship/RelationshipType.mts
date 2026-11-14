@@ -3,6 +3,7 @@ import type { KeystoneList, FieldOptionsBase, MongooseDocument, FieldSize } from
 import keystone from '../../../index.mjs';
 import definePrototypeGetters from '../../utils/definePrototypeGetters.mjs';
 import { defer } from '../../../lib/utils/async.mjs';
+import { isHydratedDocument, withoutPasswordFields } from '../../../lib/security/passwordFieldRedaction.mjs';
 import type { Schema } from 'mongoose';
 import type { Filters } from '../FieldSpec.mjs';
 
@@ -70,6 +71,7 @@ interface RefListInfo {
 	plural: string;
 	path: string;
 	key: string;
+	fields?: Record<string, unknown>;
 	getDocumentName(item: MongooseItem): string;
 }
 
@@ -163,9 +165,15 @@ class RelationshipType<
 		this.bindUnderscoreMethods();
 	}
 
+	// Returns the related id(s). When the path has been populated, each related
+	// document is returned as a plain object with its Password-type fields
+	// removed, so a populated user never carries its password hash to a client.
 	override getData(item: MongooseItem): string | string[] {
+		const refList = this.refList;
+		const safe = (value: unknown): unknown => isHydratedDocument(value) ? withoutPasswordFields(refList, value) : value;
 		const value = item.get(this.path);
-		return this.many ? (Array.isArray(value) ? (value as string[]) : []) : (value as string);
+		// JUSTIFIED: populated values are plain objects at runtime; the declared TValue only models the unpopulated ids.
+		return this.many ? (Array.isArray(value) ? value.map(safe) as string[] : []) : safe(value) as string;
 	}
 
 	addFilterToQuery(filter: KSAdminUiFilterForRelationshipField | string): Record<string, unknown> {
@@ -200,8 +208,13 @@ class RelationshipType<
 	}
 
 	override format(item: MongooseItem): string {
+		// Populated documents format as their id — never as a stringified document,
+		// which would include every stored field (password hashes included).
+		const toId = (value: unknown): unknown => isHydratedDocument(value) ? (value.id ?? value._id) : value;
 		const value = item.get(this.path);
-		return this.many ? (value as string[]).join(', ') : unknownRelationshipScalarToString(value);
+		return this.many
+			? (value as unknown[]).map((entry) => unknownRelationshipScalarToString(toId(entry))).join(', ')
+			: unknownRelationshipScalarToString(toId(value));
 	}
 
 	override validateInput(data: Record<string, unknown>, callback: (valid: boolean) => void): void {
