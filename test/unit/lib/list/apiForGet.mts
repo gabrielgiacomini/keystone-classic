@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import type { Request, Response } from 'express';
 import type { KeystoneList } from 'keystone';
 import apiForGet from 'keystone/lib/list/apiForGet';
+import getMongooseConnection from '../../../helpers/getMongooseConnection.mts';
 
 const BCRYPT_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
 
@@ -161,5 +162,98 @@ describe('List.apiForGet', function () {
 
 		expect(sent.status).to.equal(404);
 		expect(sent.body).to.deep.equal({ err: 'not found', id: 'missing' });
+	});
+	describe('raw stored BSON values', function () {
+		const { Binary, Code, DBRef, Decimal128, ObjectId } = mongoose.mongo;
+		// Read back from MongoDB as stored, so Mongoose hydrates real DBRef and Code values.
+		const RefUserModel = mongoose.model('ApiForGetUnitRefUser', new mongoose.Schema({
+			email: String,
+			value: { fields: { hidden: String, keep: Number } },
+			code: mongoose.Schema.Types.Mixed,
+		}));
+		const RefPostModel = mongoose.model('ApiForGetUnitRefPost', new mongoose.Schema({
+			title: String,
+			author: { type: mongoose.Schema.Types.ObjectId, ref: 'ApiForGetUnitRefUser' },
+		}));
+		const BsonModel = mongoose.model('ApiForGetUnitBson', new mongoose.Schema({}, { strict: false }));
+		const refUserFields = {
+			email: { type: 'email' },
+			'value.fields.hidden': { type: 'password' },
+			'code.scope.inner.fields.hidden': { type: 'password' },
+		};
+		const refUserList = { fields: refUserFields };
+		const refId = new ObjectId();
+		const refUserId = new ObjectId();
+		const postId = new ObjectId();
+		const bsonId = new ObjectId();
+
+		/** A list backed by the real model, so `query` runs against MongoDB. */
+		function dbList(fields: Record<string, unknown>, model: mongoose.Model<never>) {
+			return { fields, model } as unknown as KeystoneList;
+		}
+
+		before(async function () {
+			await getMongooseConnection();
+			await RefUserModel.collection.insertOne({
+				_id: refUserId,
+				email: 'ada@example.com',
+				value: new DBRef('public', refId, undefined, { hidden: BCRYPT_HASH, keep: 1 }),
+				code: new Code('function () {}', { inner: new DBRef('public', refId, undefined, { hidden: BCRYPT_HASH, keep: 2 }) }),
+			});
+			await RefPostModel.collection.insertOne({ _id: postId, title: 'Hello', author: refUserId });
+			await BsonModel.collection.insertOne({
+				_id: bsonId,
+				ref: new DBRef('public', refId, 'otherdb', { keep: 1, nested: { deep: [1, 'two'] } }),
+				code: new Code('function () { return x; }', { x: 1, inner: new DBRef('public', refId, undefined, { keep: 3 }) }),
+				blob: new Binary(Buffer.from('keystone')),
+				objectId: refId,
+				when: new Date('2024-01-02T03:04:05.006Z'),
+				amount: Decimal128.fromString('12.50'),
+			});
+		});
+
+		after(async function () {
+			await RefUserModel.collection.deleteMany({ _id: refUserId });
+			await RefPostModel.collection.deleteMany({ _id: postId });
+			await BsonModel.collection.deleteMany({ _id: bsonId });
+		});
+
+		const safeValue = () => ({ $ref: 'public', $id: String(refId), keep: 1 });
+		const safeCode = () => ({ code: 'function () {}', scope: { inner: { $ref: 'public', $id: String(refId), keep: 2 } } });
+
+		it('omits a Password path stored in a DBRef\'s extra fields and in a DBRef inside a Code scope', async function () {
+			const sent = await run(dbList(refUserFields, RefUserModel as never), undefined, { id: String(refUserId) });
+
+			expect(sent.status).to.equal(200);
+			expect(JSON.stringify(sent.body)).to.not.include('$2');
+			expect(sent.body).to.deep.equal({
+				data: { _id: String(refUserId), email: 'ada@example.com', value: safeValue(), code: safeCode() },
+			});
+		});
+
+		it('omits them from a relationship populated through the query option', async function () {
+			const refPostFields = { title: { type: 'text' }, author: { type: 'relationship', refList: refUserList } };
+			const sent = await run(dbList(refPostFields, RefPostModel as never), {
+				query: (query) => { (query as { populate(path: string): unknown }).populate('author'); },
+			}, { id: String(postId) });
+
+			expect(JSON.stringify(sent.body)).to.not.include('$2');
+			expect(sent.body).to.deep.equal({
+				data: {
+					_id: String(postId),
+					title: 'Hello',
+					author: { _id: String(refUserId), email: 'ada@example.com', value: safeValue(), code: safeCode() },
+				},
+			});
+		});
+
+		it('sends DBRef, Code, Binary, ObjectId, Date and Decimal128 values exactly as their JSON form', async function () {
+			const doc = await BsonModel.findById(bsonId).exec();
+			const expected = JSON.stringify({ data: doc });
+			for (const fields of [{}, refUserFields, userFields]) {
+				const sent = await run(dbList(fields, BsonModel as never), undefined, { id: String(bsonId) });
+				expect(JSON.stringify(sent.body)).to.equal(expected);
+			}
+		});
 	});
 });

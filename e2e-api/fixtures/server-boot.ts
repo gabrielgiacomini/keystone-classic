@@ -83,6 +83,9 @@ function defineLists () {
 		email: { type: Types.Email, initial: true, required: true, index: true },
 		password: { type: Types.Password, initial: true, required: true },
 		isAdmin: { type: Types.Boolean, default: false },
+		// A nested Password field. `password-nested-values.spec.ts` stores other
+		// shapes under `secret` (a DBRef, arrays) directly through the driver.
+		secret: { pin: { type: Types.Password } },
 	});
 	User.schema.virtual('canAccessKeystone').get(function () {
 		return this.isAdmin;
