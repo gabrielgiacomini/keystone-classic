@@ -355,4 +355,142 @@ describe('lib/security/passwordFieldRedaction', function () {
 			expect(getCSVData.call(list as never, nestedItem, { fields: ['meta'] })).to.deep.equal({ id: 'p1' });
 		});
 	});
+	describe('Password paths under populated relationships, arrays and toJSON results', function () {
+		const refId = new ObjectId('64b7f0c2a1b2c3d4e5f60718');
+		const FAKE = 'FAKE-PIN-VALUE';
+		// Real Mongoose documents hydrated from the stored form, as a populated relationship is.
+		const StoredUserModel = mongoose.model('PasswordRedactionUnitStoredUser', new mongoose.Schema({
+			email: String,
+			secret: { pin: String },
+			code: mongoose.Schema.Types.Mixed,
+		}));
+		const stored = {
+			dbref: () => ({ _id: refId, email: 'ada@example.com', secret: new DBRef('public', refId, undefined, { pin: FAKE, keep: 1 }) }),
+			array: () => ({ _id: refId, email: 'ada@example.com', secret: [{ pin: FAKE, keep: 1 }, { pin: FAKE, keep: 2 }] }),
+			dbrefArray: () => ({ _id: refId, email: 'ada@example.com', secret: [new DBRef('public', refId, undefined, { pin: FAKE, keep: 1 })] }),
+		};
+		const flatList = { fields: { email: { type: 'email' }, 'secret.pin': { type: 'password' } } as Record<string, unknown> };
+		const fieldsList = { fields: { email: { type: 'email' }, 'secret.fields.pin': { type: 'password' } } as Record<string, unknown> };
+		const relationshipProto = RelationshipType.prototype as unknown as { getData(this: unknown, i: unknown): unknown };
+		/** RelationshipType#getData for a post whose `author` and `editors` are populated with `user`. */
+		function populatedGetData(refList: unknown, user: unknown) {
+			const item = { get: (path: string) => (path === 'editors' ? [user] : user) };
+			return [
+				relationshipProto.getData.call({ path: 'author', many: false, refList }, item),
+				relationshipProto.getData.call({ path: 'editors', many: true, refList }, item),
+			];
+		}
+
+		it('RelationshipType#getData removes a Password path in a DBRef\'s fields written in the flattened form', function () {
+			const user = StoredUserModel.hydrate(stored.dbref());
+			const data = populatedGetData(flatList, user);
+			expect(JSON.stringify(data)).to.not.include(FAKE);
+			const safe = { _id: String(refId), email: 'ada@example.com', secret: { $ref: 'public', $id: String(refId), keep: 1 } };
+			expect(JSON.parse(JSON.stringify(data))).to.deep.equal([safe, [safe]]);
+		});
+
+		it('RelationshipType#getData never changes the populated document', function () {
+			for (const [list, make] of [[fieldsList, stored.dbref], [flatList, stored.dbref], [flatList, stored.array], [flatList, stored.dbrefArray]] as const) {
+				const user = StoredUserModel.hydrate(make());
+				const before = JSON.stringify(user);
+				const data = populatedGetData(list, user);
+				expect(JSON.stringify(data)).to.not.include(FAKE);
+				expect(JSON.stringify(user)).to.equal(before);
+				expect(before).to.include(FAKE);
+			}
+		});
+
+		it('RelationshipType#getData removes a Password path under an array, plain or of DBRefs', function () {
+			for (const make of [stored.array, stored.dbrefArray]) {
+				const data = populatedGetData(flatList, StoredUserModel.hydrate(make()));
+				expect(JSON.stringify(data)).to.not.include(FAKE);
+				expect(JSON.stringify(data)).to.include('"keep":1');
+			}
+			const viaFields = populatedGetData(fieldsList, StoredUserModel.hydrate(stored.dbrefArray()));
+			expect(JSON.stringify(viaFields)).to.not.include(FAKE);
+		});
+
+		it('withoutPasswordFields keeps everything else exactly as it serialized before', function () {
+			const user = StoredUserModel.hydrate({
+				...stored.dbref(),
+				code: new Code('function () {}', { inner: new DBRef('public', refId, 'otherdb', { keep: 2 }), list: [1, { two: 2 }] }),
+			});
+			for (const list of [{ fields: {} }, { fields: { other: { type: 'password' } } }]) {
+				expect(JSON.stringify(withoutPasswordFields(list, user))).to.equal(JSON.stringify(user.toObject()));
+			}
+		});
+
+		it('toJSONWithoutPasswordFields removes a Password path under an array, plain or of DBRefs', function () {
+			for (const make of [stored.array, stored.dbrefArray]) {
+				for (const list of [flatList, fieldsList]) {
+					const value = make();
+					const result = toJSONWithoutPasswordFields(list, value);
+					if (list === fieldsList && make === stored.array) continue;
+					expect(JSON.stringify(result)).to.not.include(FAKE);
+					expect(JSON.stringify(result)).to.include('"keep":1');
+					expect(JSON.stringify(value)).to.include(FAKE);
+				}
+			}
+		});
+
+		it('isSensitivePath, getData and getCSVData refuse paths through an array above a Password path', function () {
+			const values: Record<string, unknown> = {
+				pins: [{ pin: FAKE, keep: 1 }],
+				refs: [new DBRef('public', refId, undefined, { pin: FAKE, keep: 1 })],
+				tags: ['a', 'b'],
+			};
+			const item = {
+				id: 'p1',
+				get(path: string): unknown {
+					let current: unknown = values;
+					for (const segment of path.split('.')) {
+						if (current === null || typeof current !== 'object') return undefined;
+						current = (current as Record<string, unknown>)[segment];
+					}
+					return current;
+				},
+			};
+			const list = {
+				fields: { 'pins.pin': { type: 'password' }, 'refs.pin': { type: 'password' } } as Record<string, unknown>,
+				options: {},
+				getDocumentName: () => 'Hello',
+			};
+			const refused = ['pins', 'pins.0', 'pins.0.pin', 'refs.0', 'refs.0.pin', 'refs.0.fields', 'refs.0.fields.pin'];
+			for (const path of refused) expect(isSensitivePath(list, path, (p) => item.get(p)), path).to.equal(true);
+			expect(isSensitivePath(postList, 'editors.0.profile.0.pin')).to.equal(true);
+			expect(isSensitivePath(list, 'tags.0', (p) => item.get(p))).to.equal(false);
+			const data = getData.call(list as never, item as never, [...refused, 'tags.0']);
+			expect(JSON.stringify(data)).to.not.include(FAKE);
+			expect(data['fields']).to.deep.equal({ 'tags.0': 'a' });
+			const csv = getCSVData.call(list as never, item, { fields: [...refused, 'tags.0'] });
+			expect(JSON.stringify(csv)).to.not.include(FAKE);
+			expect(csv).to.deep.equal({ id: 'p1', 'tags.0': 'a' });
+		});
+
+		it('never serializes a toJSON left on a toJSON result', function () {
+			class Profile {
+				email = 'ada@example.com';
+				secret = FAKE;
+				constructor() { this.toJSON = this.toJSON.bind(this); }
+				toJSON(): Record<string, unknown> { return Object.assign({}, this) as Record<string, unknown>; }
+			}
+			expect(JSON.stringify(toJSONWithoutPasswordFields(userList, new Profile()))).to.equal('{"email":"ada@example.com"}');
+			const nested = { toJSON: () => ({ a: 1, toJSON: () => 'second' }) };
+			expect(JSON.stringify(toJSONWithoutPasswordFields(userList, nested))).to.equal(JSON.stringify(nested));
+			expect(JSON.stringify(toJSONWithoutPasswordFields(userList, [nested, { list: [() => 1, Symbol('s'), undefined] }])))
+				.to.equal(JSON.stringify([nested, { list: [() => 1, Symbol('s'), undefined] }]));
+			const boxed = Object.assign(Object(5), { valueOf: () => 7 }) as unknown;
+			const value = { boxed, text: Object('t'), flag: Object(false) };
+			expect(JSON.stringify(toJSONWithoutPasswordFields(userList, value))).to.equal(JSON.stringify(value));
+		});
+
+		it('throws the same circular-structure error as JSON.stringify', function () {
+			const cyclic: Record<string, unknown> = { a: { b: {} } };
+			((cyclic['a'] as Record<string, unknown>)['b'] as Record<string, unknown>)['c'] = cyclic['a'];
+			let expected = '';
+			try { JSON.stringify(cyclic); } catch (error) { expected = (error as Error).message; }
+			expect(expected).to.include('closes the circle');
+			expect(() => toJSONWithoutPasswordFields(userList, cyclic)).to.throw(TypeError, expected);
+		});
+	});
 });

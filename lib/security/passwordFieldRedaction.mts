@@ -6,6 +6,8 @@
  * Password field registered under any path is covered.
  */
 
+import { types } from 'node:util';
+
 /** The parts of a Keystone list these helpers read; duck-typed so stubs work in tests. */
 export interface PasswordAwareList {
 	fields?: Record<string, unknown>;
@@ -153,6 +155,14 @@ export function holdsHydratedDocument(value: unknown): boolean {
 	return false;
 }
 
+function isIndex(segment: string): boolean {
+	return /^\d+$/.test(segment);
+}
+
+function withoutIndexes(segments: readonly string[]): string[] {
+	return segments.filter((segment) => !isIndex(segment));
+}
+
 /**
  * Whether reading an arbitrary dotted path from an item of `list` could return
  * a Password-type field value or a raw related document.
@@ -169,20 +179,24 @@ export function holdsHydratedDocument(value: unknown): boolean {
  * than their structure (a DBRef's `fields` are flattened into it), so the
  * Password value may lie beneath the path even though the path strings differ.
  *
+ * Array indexes are ignored when matching (`secret.0.pin` is `secret.pin`),
+ * because reading a path through an array reaches the same values for every
+ * element: `item.get('secret.pin')` maps over a stored `secret: [{ pin }]`.
+ *
  * @param list - The list the path is resolved against.
  * @param path - Caller-supplied dotted path.
  * @param resolve - Optional reader of a dotted path on the item.
  * @returns `true` when the path must not be resolved for a client.
  */
 export function isSensitivePath(list: PasswordAwareList | null | undefined, path: string, resolve?: (path: string) => unknown): boolean {
-	const segments = path.split('.');
+	const segments = withoutIndexes(path.split('.'));
+	const normalized = segments.join('.');
 	for (let i = 1; i <= segments.length; i++) {
 		const field = fieldAt(list, segments.slice(0, i).join('.'));
 		if (!field) continue;
 		if (fieldTypeIs(field, 'password')) return true;
 		if (fieldTypeIs(field, 'relationship')) {
-			// Skip array indexes (`editors.0.password`) to reach the related document's path.
-			const rest = segments.slice(i).filter((segment) => !/^\d+$/.test(segment));
+			const rest = segments.slice(i);
 			// Nothing left means the path addresses whole related documents.
 			if (!rest.length) return true;
 			// Without a known related list we cannot vet the remainder, so refuse it.
@@ -192,10 +206,10 @@ export function isSensitivePath(list: PasswordAwareList | null | undefined, path
 		}
 	}
 	for (const passwordPath of getPasswordFieldPaths(list)) {
+		const passwordSegments = withoutIndexes(passwordPath.split('.'));
 		// A parent of a Password field path returns the Password value along with its siblings.
-		if (passwordPath.startsWith(path + '.')) return true;
+		if (passwordSegments.join('.').startsWith(normalized + '.')) return true;
 		if (!resolve) continue;
-		const passwordSegments = passwordPath.split('.');
 		let shared = 0;
 		while (shared < segments.length && shared < passwordSegments.length && segments[shared] === passwordSegments[shared]) shared++;
 		if (shared > 0 && holdsNestingBsonValue(resolve(segments.slice(0, shared).join('.')))) return true;
@@ -203,156 +217,57 @@ export function isSensitivePath(list: PasswordAwareList | null | undefined, path
 	return false;
 }
 
-function deletePath(target: Record<string, unknown>, path: string): void {
-	const segments = path.split('.');
-	let current: unknown = target;
-	for (let i = 0; i < segments.length - 1; i++) {
-		if (current === null || typeof current !== 'object') return;
-		current = (current as Record<string, unknown>)[segments[i] ?? ''];
-	}
-	if (current !== null && typeof current === 'object') {
-		Reflect.deleteProperty(current, segments[segments.length - 1] ?? '');
-	}
-}
 
 /**
- * Converts a document of `list` into a plain object with every Password-type
- * field removed. Use it wherever a whole document (rather than `list.getData`)
- * is about to be serialized, e.g. populated relationship values.
- *
- * @param list - The list the document belongs to.
- * @param doc - A hydrated Mongoose document or a plain object.
- * @returns A plain copy without Password-type fields.
+ * Other nodes a node of a tree answers to, so that a Password path matches
+ * whichever form of a DBRef it was written against:
+ * - `named`: a segment that names another node. The JSON node of a DBRef
+ *   answers to `fields` with itself, because `DBRef#toJSON` flattens its
+ *   extra fields into it (`{ $ref, $id, ...fields }`).
+ * - `through`: a node whose keys this node also answers to. A copied DBRef
+ *   answers to the keys of its `fields`, the flattened form of its path.
  */
-export function withoutPasswordFields(list: PasswordAwareList | null | undefined, doc: unknown): Record<string, unknown> {
-	const plain = isHydratedDocument(doc)
-		? doc.toObject() as Record<string, unknown>
-		: structuredCloneSafe(doc);
-	for (const path of getPasswordFieldPaths(list)) {
-		deletePath(plain, path);
-	}
-	return plain;
+interface Alias {
+	named?: Record<string, object>;
+	through?: object;
 }
 
-function structuredCloneSafe(value: unknown): Record<string, unknown> {
-	if (value === null || typeof value !== 'object') return {};
-	return JSON.parse(JSON.stringify(value)) as Record<string, unknown>;
-}
+type Aliases = WeakMap<object, Alias>;
 
 /**
- * Keys a JSON tree node answers to besides its own: the node made from a
- * DBRef also answers to `fields`, because `DBRef#toJSON` flattens its extra
- * fields into the node (`{ $ref, $id, ...fields }`).
- */
-type Aliases = WeakMap<object, Record<string, object>>;
-
-/**
- * Whether `value` is a Number, String, Boolean or BigInt object, which
- * `JSON.stringify` serializes as its primitive.
+ * Every node `segment` names under `target`: its own property and its aliases.
+ * An array stands for each of its elements, as Mongoose reads a path through
+ * an array (`secret.pin` over `secret: [{ pin }]`), unless the segment is an index.
  *
- * @param value - Object to inspect.
- * @returns `true` for a boxed primitive.
- */
-function isBoxedPrimitive(value: object): boolean {
-	// Each `valueOf` throws unless its receiver is that kind of boxed primitive.
-	const unboxers: ReadonlyArray<(boxed: object) => unknown> = [
-		(boxed) => Number.prototype.valueOf.call(boxed as unknown as number),
-		(boxed) => String.prototype.valueOf.call(boxed as unknown as string),
-		(boxed) => Boolean.prototype.valueOf.call(boxed as unknown as boolean),
-		(boxed) => BigInt.prototype.valueOf.call(boxed as unknown as bigint),
-	];
-	for (const unbox of unboxers) {
-		try {
-			unbox(value);
-			return true;
-		} catch {
-			// Not this kind of boxed primitive.
-		}
-	}
-	return false;
-}
-
-/**
- * Builds the tree `JSON.stringify(value)` would serialize: every `toJSON` is
- * called exactly as `JSON.stringify` calls it (same receiver, same key, same
- * order), and objects and arrays are copied with the same keys in the same
- * order. Serializing the tree therefore gives exactly `JSON.stringify(value)`,
- * while the tree can still be edited first. The original value is never
- * mutated: the tree holds fresh objects and arrays only.
- *
- * The node built from a DBRef is recorded in `aliases` so that a path walk can
- * step into the DBRef's `fields` even though they were flattened.
- *
- * @param value - The value to serialize.
- * @param key - The key `JSON.stringify` passes to `toJSON` (`''` at the top).
- * @param ancestors - Objects being copied above this one, to refuse cycles as `JSON.stringify` does.
- * @param aliases - Where DBRef nodes are recorded.
- * @returns The tree, or the value itself when it is not an object.
- */
-function toJSONTree(value: unknown, key: string, ancestors: Set<object>, aliases: Aliases): unknown {
-	let current = value;
-	let fromDBRef = false;
-	if ((typeof current === 'object' && current !== null) || typeof current === 'function' || typeof current === 'bigint') {
-		const toJSON = (current as { toJSON?: unknown }).toJSON;
-		if (typeof toJSON === 'function') {
-			fromDBRef = bsonTypeOf(current) === 'DBRef';
-			current = toJSON.call(current, key) as unknown;
-		}
-	}
-	if (current === null || typeof current !== 'object' || isBoxedPrimitive(current)) return current;
-	if (ancestors.has(current)) throw new TypeError('Converting circular structure to JSON');
-	ancestors.add(current);
-	let node: Record<string, unknown> | unknown[];
-	if (Array.isArray(current)) {
-		const source: readonly unknown[] = current;
-		node = [];
-		for (let index = 0; index < source.length; index++) {
-			node.push(toJSONTree(source[index], String(index), ancestors, aliases));
-		}
-	} else {
-		const source = current as Record<string, unknown>;
-		const copy: Record<string, unknown> = {};
-		for (const property of Object.keys(source)) {
-			Object.defineProperty(copy, property, {
-				value: toJSONTree(source[property], property, ancestors, aliases),
-				enumerable: true,
-				writable: true,
-				configurable: true,
-			});
-		}
-		node = copy;
-	}
-	ancestors.delete(current);
-	if (fromDBRef) aliases.set(node, { fields: node });
-	return node;
-}
-
-/**
- * Every node `segment` names under `target`: its own property and, for a DBRef's node, its alias.
- *
- * @param target - A node of a JSON tree.
+ * @param target - A node of a tree.
  * @param segment - One path segment.
- * @param aliases - DBRef nodes of the tree.
- * @returns The nodes found (none, one, or two).
+ * @param aliases - Aliases of the tree's nodes.
+ * @returns The nodes found.
  */
 function step(target: unknown, segment: string, aliases: Aliases): unknown[] {
 	if (target === null || typeof target !== 'object') return [];
+	if (Array.isArray(target)) {
+		if (isIndex(segment)) return Object.prototype.hasOwnProperty.call(target, segment) ? [target[Number(segment)]] : [];
+		return target.flatMap((entry) => step(entry, segment, aliases));
+	}
 	const found: unknown[] = [];
-	const alias = aliases.get(target)?.[segment];
-	if (alias !== undefined) found.push(alias);
-	if (Object.prototype.hasOwnProperty.call(target, segment)) {
-		const own = (target as Record<string, unknown>)[segment];
+	const alias = aliases.get(target);
+	const named = alias?.named?.[segment];
+	if (named !== undefined) found.push(named);
+	for (const owner of alias?.through ? [target, alias.through] : [target]) {
+		if (!Object.prototype.hasOwnProperty.call(owner, segment)) continue;
+		const own = (owner as Record<string, unknown>)[segment];
 		if (!found.includes(own)) found.push(own);
 	}
 	return found;
 }
 
 /**
- * Every value a dotted path reaches in a JSON tree (more than one only through DBRef aliases).
+ * Every value a dotted path reaches in a tree.
  *
  * @param target - The tree.
  * @param segments - The path's segments (none reaches the tree itself).
- * @param aliases - DBRef nodes of the tree.
+ * @param aliases - Aliases of the tree's nodes.
  * @returns The values found.
  */
 function getPaths(target: unknown, segments: readonly string[], aliases: Aliases): unknown[] {
@@ -363,21 +278,38 @@ function getPaths(target: unknown, segments: readonly string[], aliases: Aliases
 	return current;
 }
 
+function deleteKey(owner: unknown, key: string, aliases: Aliases): void {
+	if (owner === null || typeof owner !== 'object') return;
+	if (Array.isArray(owner) && !isIndex(key)) {
+		for (const entry of owner) deleteKey(entry, key, aliases);
+		return;
+	}
+	Reflect.deleteProperty(owner, key);
+	const through = aliases.get(owner)?.through;
+	if (through) Reflect.deleteProperty(through, key);
+}
+
 /**
- * Removes every value a dotted path reaches in a JSON tree.
+ * Removes every value a dotted path reaches in a tree.
  *
  * @param target - The tree.
  * @param path - Dotted path.
- * @param aliases - DBRef nodes of the tree.
+ * @param aliases - Aliases of the tree's nodes.
  */
 function deletePaths(target: unknown, path: string, aliases: Aliases): void {
 	const segments = path.split('.');
 	const last = segments.pop() ?? '';
-	for (const owner of getPaths(target, segments, aliases)) {
-		if (owner !== null && typeof owner === 'object') Reflect.deleteProperty(owner, last);
-	}
+	for (const owner of getPaths(target, segments, aliases)) deleteKey(owner, last, aliases);
 }
 
+/**
+ * Removes the Password paths of `list` from a tree, following populated
+ * relationships into their related lists. The tree must be a copy: it is edited in place.
+ *
+ * @param list - The list the tree belongs to.
+ * @param value - The tree (a document, or an array of documents).
+ * @param aliases - Aliases of the tree's nodes.
+ */
 function redactInPlace(list: PasswordAwareList | null | undefined, value: unknown, aliases: Aliases): void {
 	if (Array.isArray(value)) {
 		for (const entry of value) redactInPlace(list, entry, aliases);
@@ -398,6 +330,165 @@ function redactInPlace(list: PasswordAwareList | null | undefined, value: unknow
 }
 
 /**
+ * Copies every plain object, array, DBRef and Code of `value`, so that the
+ * copy can be edited without touching the original. A copied DBRef or Code
+ * keeps its prototype, so it serializes exactly as the original; a DBRef's
+ * copy is recorded in `aliases` to answer to the keys of its `fields`. Other
+ * values (ObjectId, Date, Binary, ...) hold no nested data and are shared.
+ *
+ * @param value - Value to copy (for example the result of `toObject()`).
+ * @param aliases - Where DBRef copies are recorded.
+ * @param copies - Copies made so far, so shared and cyclic references stay so.
+ * @returns The copy.
+ */
+function copyStructure(value: unknown, aliases: Aliases, copies = new Map<object, unknown>()): unknown {
+	if (value === null || typeof value !== 'object') return value;
+	const known = copies.get(value);
+	if (known !== undefined) return known;
+	if (Array.isArray(value)) {
+		const source: readonly unknown[] = value;
+		const copy: unknown[] = [];
+		copies.set(value, copy);
+		for (let index = 0; index < source.length; index++) {
+			if (Object.prototype.hasOwnProperty.call(source, index)) copy[index] = copyStructure(source[index], aliases, copies);
+		}
+		copy.length = source.length;
+		return copy;
+	}
+	const tag = bsonTypeOf(value);
+	const prototype = Object.getPrototypeOf(value) as object | null;
+	if (tag !== 'DBRef' && tag !== 'Code' && prototype !== Object.prototype && prototype !== null) return value;
+	const copy = Object.create(prototype) as Record<PropertyKey, unknown>;
+	copies.set(value, copy);
+	for (const property of Reflect.ownKeys(value)) {
+		const descriptor = Object.getOwnPropertyDescriptor(value, property);
+		if (!descriptor) continue;
+		if ('value' in descriptor) {
+			descriptor.value = copyStructure(descriptor.value, aliases, copies);
+			descriptor.writable = true;
+		}
+		descriptor.configurable = true;
+		Object.defineProperty(copy, property, descriptor);
+	}
+	const fields = tag === 'DBRef' ? copy['fields'] : undefined;
+	if (fields !== null && typeof fields === 'object') aliases.set(copy, { through: fields });
+	return copy;
+}
+
+/**
+ * Converts a document of `list` into a plain object with every Password-type
+ * field removed. Use it wherever a whole document (rather than `list.getData`)
+ * is about to be serialized, e.g. populated relationship values.
+ *
+ * A hydrated document is converted with `toObject()` and the result is copied
+ * before anything is removed, so the document itself is never changed. A
+ * Password path reaches into a DBRef's extra `fields` whether it is written
+ * against the stored structure (`ref.fields.pin`) or the flattened JSON form
+ * (`ref.pin`), and through arrays.
+ *
+ * @param list - The list the document belongs to.
+ * @param doc - A hydrated Mongoose document or a plain object.
+ * @returns A plain copy without Password-type fields.
+ */
+export function withoutPasswordFields(list: PasswordAwareList | null | undefined, doc: unknown): Record<string, unknown> {
+	if (isHydratedDocument(doc)) {
+		const aliases: Aliases = new WeakMap();
+		const plain = copyStructure(doc.toObject(), aliases) as Record<string, unknown>;
+		redactInPlace(list, plain, aliases);
+		return plain;
+	}
+	if (doc === null || typeof doc !== 'object') return {};
+	return toJSONWithoutPasswordFields(list, doc) as Record<string, unknown>;
+}
+
+function isRawJSON(value: object): boolean {
+	const check = (JSON as { isRawJSON?: (candidate: unknown) => boolean }).isRawJSON;
+	return typeof check === 'function' && check(value);
+}
+
+/**
+ * Throws the error `JSON.stringify` throws for a cyclic value, with its message.
+ *
+ * @param value - An object that is its own ancestor.
+ */
+function throwCircular(value: object): never {
+	try {
+		JSON.stringify(value);
+	} catch (error) {
+		if (error instanceof TypeError) throw error;
+	}
+	throw new TypeError('Converting circular structure to JSON');
+}
+
+/**
+ * Builds the tree `JSON.stringify(value)` would serialize: every `toJSON` is
+ * called exactly as `JSON.stringify` calls it (same receiver, same key, same
+ * order), boxed primitives become their primitive, and objects and arrays are
+ * copied with the same keys in the same order, leaving out what
+ * `JSON.stringify` leaves out (undefined, functions and symbols in objects;
+ * `null` in their place in arrays). Serializing the tree therefore gives
+ * exactly `JSON.stringify(value)`, while the tree can still be edited first,
+ * and no `toJSON` is left in it to be called a second time. The original
+ * value is never mutated: the tree holds fresh objects and arrays only.
+ *
+ * The node built from a DBRef is recorded in `aliases` so that a path walk can
+ * step into the DBRef's `fields` even though they were flattened.
+ *
+ * @param value - The value to serialize.
+ * @param key - The key `JSON.stringify` passes to `toJSON` (`''` at the top).
+ * @param ancestors - Objects being copied above this one, to refuse cycles as `JSON.stringify` does.
+ * @param aliases - Where DBRef nodes are recorded.
+ * @returns The tree, or the value itself when it is not an object.
+ */
+function toJSONTree(value: unknown, key: string, ancestors: Set<object>, aliases: Aliases): unknown {
+	let current = value;
+	let fromDBRef = false;
+	if ((typeof current === 'object' && current !== null) || typeof current === 'function' || typeof current === 'bigint') {
+		const toJSON = (current as { toJSON?: unknown }).toJSON;
+		if (typeof toJSON === 'function') {
+			fromDBRef = bsonTypeOf(current) === 'DBRef';
+			current = toJSON.call(current, key) as unknown;
+		}
+	}
+	if (current === null || typeof current !== 'object') return current;
+	if (!Array.isArray(current)) {
+		// Converted as `JSON.stringify` converts them.
+		if (types.isNumberObject(current)) return Number(current);
+		if (types.isStringObject(current)) return String(current);
+		if (types.isBooleanObject(current)) return Boolean.prototype.valueOf.call(current);
+		// Left to the final `JSON.stringify`: a BigInt object (it throws there as it would have) and raw JSON text.
+		if (types.isBigIntObject(current) || isRawJSON(current)) return current;
+	}
+	if (ancestors.has(current)) throwCircular(current);
+	ancestors.add(current);
+	let node: Record<string, unknown> | unknown[];
+	if (Array.isArray(current)) {
+		const source: readonly unknown[] = current;
+		node = [];
+		for (let index = 0; index < source.length; index++) {
+			const entry = toJSONTree(source[index], String(index), ancestors, aliases);
+			node.push(entry === undefined || typeof entry === 'function' || typeof entry === 'symbol' ? null : entry);
+		}
+	} else {
+		const source = current as Record<string, unknown>;
+		const copy: Record<string, unknown> = {};
+		for (const property of Object.keys(source)) {
+			const entry = toJSONTree(source[property], property, ancestors, aliases);
+			if (entry === undefined || typeof entry === 'function' || typeof entry === 'symbol') continue;
+			if (property === '__proto__') {
+				Object.defineProperty(copy, property, { value: entry, enumerable: true, writable: true, configurable: true });
+			} else {
+				copy[property] = entry;
+			}
+		}
+		node = copy;
+	}
+	ancestors.delete(current);
+	if (fromDBRef) aliases.set(node, { named: { fields: node } });
+	return node;
+}
+
+/**
  * Returns the JSON form of `value` (what `res.json` would send) with every
  * Password-type field of `list` removed, following populated relationships
  * into their related lists. Accepts a document, a plain object or an array of
@@ -406,8 +497,8 @@ function redactInPlace(list: PasswordAwareList | null | undefined, value: unknow
  * The Password paths are removed before the value is serialized, from the
  * tree `JSON.stringify` would walk, in which BSON values have their own
  * structure: a path steps into a DBRef's extra `fields` (which its JSON form
- * flattens) and through a Code's `scope`. Everything that is not removed
- * serializes exactly as `JSON.stringify(value)` would have.
+ * flattens), through a Code's `scope` and through arrays. Everything that is
+ * not removed serializes exactly as `JSON.stringify(value)` would have.
  *
  * Unlike {@link withoutPasswordFields} this serializes through `toJSON`, so
  * the response keeps the exact shape the document would otherwise have had.
