@@ -12,6 +12,7 @@ import type { Request, Response, NextFunction } from 'express';
 import type { SessionUser } from '../types/express.js';
 import { getAdminLegacyPath } from './core/adminSurfacePathUtils.mjs';
 import { userCanAccessKeystone } from './canAccessKeystone.mjs';
+import canCastId from './list/canCastId.mjs';
 
 // ---------------------------------------------------------------------------
 // Augment express-session's SessionData so req.session.userId is typed.
@@ -175,6 +176,10 @@ const doSignin = function (lookup: SigninLookup, req: Request, res: Response, on
 		const lookupStr = lookup;
 		const userId = (lookupStr.indexOf(':') > 0) ? lookupStr.slice(0, lookupStr.indexOf(':')) : lookupStr;
 		const passwordCheck = (lookupStr.indexOf(':') > 0) ? lookupStr.slice(lookupStr.indexOf(':') + 1) : false;
+		// A user id that cannot be cast to the user list's `_id` type matches no user.
+		if (!canCastId(User.model, userId)) {
+			return onFail(new Error('Incorrect user or password'));
+		}
 		(User.model.findById(userId).exec() as Promise<KeystoneUserDoc | null>).then(function (user: KeystoneUserDoc | null) {
 			if (user && (!passwordCheck || scmp(passwordCheck, hash(String(user.password))))) {
 				postHookedSigninWithUser(user, req, res, onSuccess, onFail);
@@ -237,6 +242,13 @@ export const persist = function (req: Request, res: Response, next: NextFunction
 			next();
 		});
 	} else if (req.session.userId) {
+		// A session user id that cannot be cast to the user list's `_id` type
+		// matches no user: the request is signed out, like for a deleted user.
+		if (!canCastId(User.model, req.session.userId)) {
+			req.user = null;
+			next();
+			return;
+		}
 		(User.model.findById(req.session.userId).exec() as Promise<SessionUser | null>).then(function (user: SessionUser | null) {
 			req.user = user;
 			next();

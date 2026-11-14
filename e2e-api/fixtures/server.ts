@@ -26,3 +26,6 @@ export const TEST_ADMIN_EMAIL = 'admin@example.com';
 // Test fixture credential — never used outside the e2e-api harness.
 // eslint-disable-next-line sonarjs/no-hardcoded-passwords
 export const TEST_ADMIN_PASSWORD = 'admin-password-123';
+
+/** Cookie secret Keystone is configured with in `server-boot.ts`; signs `keystone.uid`. */
+export const COOKIE_SECRET = 'keystone-e2e-api-secret';

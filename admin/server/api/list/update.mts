@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import type { Keystone } from '../../../../index.mjs';
+import canCastId from '../../../../lib/list/canCastId.mjs';
 
 function toUpdateError(err: unknown): Error & Record<string, unknown> {
 	if (err instanceof Error) return err as Error & Record<string, unknown>;
@@ -29,6 +30,10 @@ export default function listUpdate(req: Request, res: Response): void {
 	}
 	const itemsData = (req.body as Record<string, unknown>)['items'] as Record<string, unknown>[];
 	void Promise.all(itemsData.map(function (data: Record<string, unknown>) {
+		// An id that cannot be cast to the list's `_id` type matches no item.
+		if (!canCastId(list.model, data.id)) {
+			return Promise.reject(Object.assign(new Error('not found'), { statusCode: 404, id: data.id }));
+		}
 		return list.model.findById(data.id).exec().then(function (item: unknown) {
 			if (!item) {
 				return Promise.reject(Object.assign(new Error('not found'), { statusCode: 404, id: data.id }));
