@@ -37,7 +37,7 @@ function createHarness(values: Record<string, unknown> = {}): KeystoneSessionHar
 describe('initExpressSession', function () {
 	it('returns synchronously and exposes configured session middleware plus cookie parser', function () {
 		const keystone = createHarness({
-			'session options': { key: 'cloom.sid' },
+			'session options': { key: 'consumer.sid' },
 		});
 
 		const result = initExpressSession.call(keystone as unknown as import('keystone').Keystone, mongoose);
@@ -53,7 +53,7 @@ describe('initExpressSession', function () {
 		expect(result).to.equal(keystone);
 		expect(keystone.expressSession).to.be.a('function');
 		expect(keystone.sessionStorePromise).to.equal(undefined);
-		expect(sessionOptions.key).to.equal('cloom.sid');
+		expect(sessionOptions.key).to.equal('consumer.sid');
 		expect(sessionOptions.secret).to.equal('session-secret');
 		expect(sessionOptions.resave).to.equal(false);
 		expect(sessionOptions.saveUninitialized).to.equal(false);
@@ -66,9 +66,9 @@ describe('initExpressSession', function () {
 		});
 	});
 
-	it('honors a cloom.sid session cookie name end-to-end', async function () {
+	it('honors a consumer.sid session cookie name end-to-end', async function () {
 		const keystone = createHarness({
-			'session options': { key: 'cloom.sid' },
+			'session options': { key: 'consumer.sid' },
 		});
 		initExpressSession.call(keystone as unknown as import('keystone').Keystone, mongoose);
 		const sessionOptions = keystone.values.get('session options') as { cookieParser?: RequestHandler };
@@ -80,7 +80,7 @@ describe('initExpressSession', function () {
 		app.use(sessionOptions.cookieParser);
 		app.use(keystone.expressSession);
 		app.get('/touch', function (req: Request, res) {
-			(req.session as MutableSession).smoke = 'cloom-session-cookie';
+			(req.session as MutableSession).smoke = 'consumer-session-cookie';
 			res.json({ ok: true });
 		});
 
@@ -91,13 +91,13 @@ describe('initExpressSession', function () {
 				const setCookie = res.headers['set-cookie'];
 				const cookies = Array.isArray(setCookie) ? setCookie : setCookie ? [setCookie] : [];
 				expect(cookies).to.not.have.lengthOf(0);
-				expect(cookies.some(cookie => cookie.startsWith('cloom.sid='))).to.equal(true);
+				expect(cookies.some(cookie => cookie.startsWith('consumer.sid='))).to.equal(true);
 				expect(cookies.some(cookie => cookie.startsWith('keystone.sid='))).to.equal(false);
 				expect(cookies.some(cookie => cookie.startsWith('connect.sid='))).to.equal(false);
 			});
 	});
 
-	it('initializes the Cloom-style mongo session store path without blocking middleware setup', async function () {
+	it('initializes the Consumer-style mongo session store path without blocking middleware setup', async function () {
 		const originalExit = process.exit.bind(process);
 		const originalError = console.error;
 		const exitError = new Error('process.exit intercepted');
@@ -111,7 +111,7 @@ describe('initExpressSession', function () {
 		};
 		const sessionStoreOptions = {};
 		const keystone = createHarness({
-			'session options': { key: 'cloom.sid' },
+			'session options': { key: 'consumer.sid' },
 			'session store': 'mongo',
 			'session store options': sessionStoreOptions,
 		});
@@ -125,7 +125,7 @@ describe('initExpressSession', function () {
 
 			expect(keystone.expressSession).to.be.a('function');
 			expect(keystone.sessionStorePromise).to.be.instanceOf(Promise);
-			expect(sessionOptions.key).to.equal('cloom.sid');
+			expect(sessionOptions.key).to.equal('consumer.sid');
 			expect(sessionOptions.cookieParser).to.be.a('function');
 			expect(sessionStoreOptions).to.deep.include({
 				collection: 'app_sessions',

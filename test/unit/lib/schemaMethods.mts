@@ -58,7 +58,7 @@ describe('schemaMethods', function () {
 	});
 
 	describe('addSchemaMethodsToKeystoneList', function () {
-		it('keeps the cloom-style add alias as a thin wrapper', function () {
+		it('keeps the consumer-style add alias as a thin wrapper', function () {
 			const list = createList();
 			const document = { title: 'Launch' } as TestDocument;
 

@@ -27,7 +27,7 @@ export const testFieldType = function (List: import('../../test-helpers.mjs').Te
 	const relatedId = (): string => String(relatedItem.id);
 
 	describe('schema contract', function () {
-		it('preserves single and many ObjectId refs for Cloom-style relationship fields', function () {
+		it('preserves single and many ObjectId refs for Consumer-style relationship fields', function () {
 			const singlePath = List.schema.path('single') as unknown as RelationshipSchemaPath;
 			const manyPath = List.schema.path('many') as unknown as RelationshipSchemaPath;
 

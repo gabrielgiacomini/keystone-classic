@@ -13,7 +13,7 @@ function createKeystone(values: Record<string, unknown>): Keystone {
 }
 
 describe('initViewLocals', function () {
-	it('merges configured locals into Express app locals for Cloom-owned views', function () {
+	it('merges configured locals into Express app locals for Consumer-owned views', function () {
 		const app = express();
 		const utils = {
 			keyToLabel(value: string) {
@@ -23,14 +23,14 @@ describe('initViewLocals', function () {
 		const keystone = createKeystone({
 			env: 'development',
 			locals: {
-				brand: 'Cloom Core',
+				brand: 'Consumer Core',
 				utils,
 			},
 		});
 
 		initViewLocals(keystone, app);
 
-		expect(app.locals.brand).to.equal('Cloom Core');
+		expect(app.locals.brand).to.equal('Consumer Core');
 		expect(app.locals.utils).to.equal(utils);
 		expect(app.locals.pretty).to.equal(true);
 	});
@@ -54,13 +54,13 @@ describe('initViewLocals', function () {
 		const keystone = createKeystone({
 			env: 'production',
 			locals: {
-				brand: 'Cloom Core',
+				brand: 'Consumer Core',
 			},
 		});
 
 		initViewLocals(keystone, app);
 
-		expect(app.locals.brand).to.equal('Cloom Core');
+		expect(app.locals.brand).to.equal('Consumer Core');
 		expect(app.locals.pretty).to.equal(undefined);
 	});
 

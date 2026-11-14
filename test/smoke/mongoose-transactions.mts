@@ -138,7 +138,7 @@ async function expectTransactionAbort(operation: () => Promise<void>): Promise<v
 	} catch (error) {
 		aborted = true;
 		expect(error).to.be.instanceOf(Error);
-		expect((error as Error).message).to.equal('abort Cloom transaction smoke');
+		expect((error as Error).message).to.equal('abort Consumer transaction smoke');
 	}
 	expect(aborted).to.equal(true);
 }
@@ -161,7 +161,7 @@ describe('Mongoose transaction runtime smoke', function () {
 		resetKeystone();
 	});
 
-	it('executes and rolls back Cloom-used session-threaded model writes', async function () {
+	it('executes and rolls back Consumer-used session-threaded model writes', async function () {
 		const { account, audit } = runtimeLists();
 		const db = connectedMongoose.connection.db;
 		const hello = await db.command({ hello: 1 });
@@ -231,7 +231,7 @@ describe('Mongoose transaction runtime smoke', function () {
 
 					await account.model.deleteMany({ name: 'outside transaction' }, { session: rollbackSession }).exec();
 
-					throw new Error('abort Cloom transaction smoke');
+					throw new Error('abort Consumer transaction smoke');
 				});
 			});
 		} finally {

@@ -42,20 +42,20 @@ function createHarness(): InitHarness {
 }
 
 describe('core init compatibility', function () {
-	it('accepts the Cloom Core boot option blob and preserves load-bearing keys', function () {
+	it('accepts the Consumer Core boot option blob and preserves load-bearing keys', function () {
 		const keystone = createHarness();
-		const cloomCoreOptions: Partial<KeystoneGlobalOptions> = {
+		const consumerCoreOptions: Partial<KeystoneGlobalOptions> = {
 			env: 'development',
 			port: 3000,
-			name: 'Cloom Core',
-			brand: 'Cloom Core',
+			name: 'Consumer Core',
+			brand: 'Consumer Core',
 			favicon: 'public/favicon-keystone.ico',
-			views: '/tmp/cloom/templates/views',
+			views: '/tmp/consumer/templates/views',
 			'auto update': true,
 			'view engine': 'pug',
 			mongoose,
-			mongo: 'mongodb://127.0.0.1:27017/cloom?maxPoolSize=20&minPoolSize=1',
-			updates: '/tmp/cloom/updates',
+			mongo: 'mongodb://127.0.0.1:27017/consumer?maxPoolSize=20&minPoolSize=1',
+			updates: '/tmp/consumer/updates',
 			'mongo options': {
 				useNewUrlParser: true,
 				useUnifiedTopology: true,
@@ -68,19 +68,19 @@ describe('core init compatibility', function () {
 			'user model': 'Administrator',
 			headless: false,
 			'cookie secret': 'cookie-secret',
-			'model prefix': 'cloom_',
+			'model prefix': 'consumer_',
 			'file limit': '10MB',
 			compress: false,
 			'session options': {
-				key: 'cloom.sid',
+				key: 'consumer.sid',
 			},
 			'cloudinary config': {
-				cloud_name: 'cloom-cloud',
+				cloud_name: 'consumer-cloud',
 				api_key: 'cloudinary-key',
 				api_secret: 'cloudinary-secret',
 			},
 			'cloudinary secure': true,
-			'cloudinary prefix': 'cloom-prefix',
+			'cloudinary prefix': 'consumer-prefix',
 			'cloudinary folders': true,
 			locals: {
 				env: 'development',
@@ -88,13 +88,13 @@ describe('core init compatibility', function () {
 			},
 		};
 
-		const result = init.call(keystone as unknown as Keystone, cloomCoreOptions);
+		const result = init.call(keystone as unknown as Keystone, consumerCoreOptions);
 
 		expect(result).to.equal(keystone);
 		expect(keystone.get('user model')).to.equal('Administrator');
 		expect(keystone.get('view engine')).to.equal('pug');
-		expect(keystone.get('updates')).to.equal('/tmp/cloom/updates');
-		expect(keystone.get('session options')).to.deep.equal({ key: 'cloom.sid' });
+		expect(keystone.get('updates')).to.equal('/tmp/consumer/updates');
+		expect(keystone.get('session options')).to.deep.equal({ key: 'consumer.sid' });
 		expect(keystone.get('compress')).to.equal(false);
 		expect(keystone.get('auto update')).to.equal(true);
 		expect(keystone.mongoose).to.equal(mongoose);

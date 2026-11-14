@@ -211,15 +211,15 @@ export interface Keystone extends Hookable {
 	utils: KeystoneUtils;
 	/** Flatten grouped Keystone field definitions into a field map. */
 	flattenFieldGroups: typeof flattenFieldGroups;
-	/** Cloom-style alias for `flattenFieldGroups`. */
+	/** Consumer-style alias for `flattenFieldGroups`. */
 	transformFieldGroupsToFields: typeof transformFieldGroupsToFields;
 	/** Add grouped field definitions to a Keystone list. */
 	addFieldGroups: typeof addFieldGroups;
-	/** Cloom-style alias for `addFieldGroups`. */
+	/** Consumer-style alias for `addFieldGroups`. */
 	addFieldGroupsToKeystoneList: typeof addFieldGroupsToKeystoneList;
 	/** Add instance-first methods to a Keystone list schema. */
 	addSchemaMethods: typeof addSchemaMethods;
-	/** Cloom-style alias for `addSchemaMethods`. */
+	/** Consumer-style alias for `addSchemaMethods`. */
 	addSchemaMethodsToKeystoneList: typeof addSchemaMethodsToKeystoneList;
 
 	// ---- runtime-initialised properties ----

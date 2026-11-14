@@ -2,7 +2,7 @@
  * Playwright configuration for the heavy-list parity specs.
  *
  * Boots a separate Keystone instance with three "heavy" list shapes that
- * mirror the stress dimensions of cloom-core's CLMUser (18 inverse relationship
+ * mirror the stress dimensions of consumer-core's CLMUser (18 inverse relationship
  * panels), CLMThread (multi-section form + 3 rel fields), and
  * EarlyAccessApplication (5 sections + self-referential relationship).
  *

@@ -365,7 +365,7 @@ describe('admin surface mounting', function () {
 		expect(persistHits).to.be.at.least(3);
 	});
 
-	it('exposes the named legacy admin router factories used by manual Cloom mounting', async function () {
+	it('exposes the named legacy admin router factories used by manual Consumer mounting', async function () {
 		const keystone = createKeystoneMock({
 			'auth': true,
 			'session': true,
@@ -414,7 +414,7 @@ describe('admin surface mounting', function () {
 			.expect('content-type', /css/);
 	});
 
-	it('supports a Cloom-owned Express app and HTTP listener without keystone.start()', async function () {
+	it('supports a Consumer-owned Express app and HTTP listener without keystone.start()', async function () {
 		let startCalled = false;
 		const keystone = createKeystoneMock({
 			'auth': true,
@@ -423,7 +423,7 @@ describe('admin surface mounting', function () {
 		const internals = keystone as unknown as ManualMountInternals;
 		internals.start = function start() {
 			startCalled = true;
-			throw new Error('keystone.start should not be called by a Cloom-owned listener');
+			throw new Error('keystone.start should not be called by a Consumer-owned listener');
 		};
 
 		const app = express();

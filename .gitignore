@@ -78,7 +78,7 @@ canonical-*/
 !.agents/workflows/.gitkeep
 .intent/*
 !.intent/.gitkeep
-.agents/workflows-cloom-sample-profiles/profile-*.md
+.agents/workflows-*-sample-profiles/profile-*.md
 .claude/commands/*
 !.claude/commands/.gitkeep
 .claude/worktrees/
@@ -122,9 +122,9 @@ canonical-*/
 .researches/*
 !.researches/.gitkeep
 
-# AiProfile debugging session artifacts
-.aiprofile-debugging-tmp/*
-!.aiprofile-debugging-tmp/.gitkeep
+# Debugging session artifacts
+.*-debugging-tmp/*
+!.*-debugging-tmp/.gitkeep
 
 # MCP Configuration (secrets - do not commit)
 .env.mcp
@@ -220,8 +220,8 @@ test-results/
 !.augment/commands/.gitkeep
 .pi/agents/*
 !.pi/agents/.gitkeep
-!.pi/agents/aiprofile-worker-*.md
-!.pi/agents/aiprofile-reviewer-*.md
+!.pi/agents/*-worker-*.md
+!.pi/agents/*-reviewer-*.md
 .claude/agents/*
 !.claude/agents/.gitkeep
 .codex/agents/*

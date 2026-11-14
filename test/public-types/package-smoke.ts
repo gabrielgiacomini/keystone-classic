@@ -410,18 +410,18 @@ const relationshipOptions: KeystoneFieldOptionsForRelationshipType<'User'> = {
 };
 
 const relationshipAlias: RelationshipOptions<'User'> = relationshipOptions;
-const cloomCoreInitOptions = {
+const consumerCoreInitOptions = {
 	env: 'development',
 	port: 3000,
-	name: 'Cloom Core',
-	brand: 'Cloom Core',
+	name: 'Consumer Core',
+	brand: 'Consumer Core',
 	favicon: 'public/favicon-keystone.ico',
-	views: '/tmp/cloom/templates/views',
+	views: '/tmp/consumer/templates/views',
 	'auto update': true,
 	'view engine': 'pug',
 	mongoose,
-	mongo: 'mongodb://127.0.0.1:27017/cloom?maxPoolSize=20&minPoolSize=1',
-	updates: '/tmp/cloom/updates',
+	mongo: 'mongodb://127.0.0.1:27017/consumer?maxPoolSize=20&minPoolSize=1',
+	updates: '/tmp/consumer/updates',
 	'mongo options': {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
@@ -434,17 +434,17 @@ const cloomCoreInitOptions = {
 	'user model': 'Administrator',
 	headless: false,
 	'cookie secret': 'cookie-secret',
-	'model prefix': 'cloom_',
+	'model prefix': 'consumer_',
 	'file limit': '10MB',
 	compress: false,
-	'session options': { key: 'cloom.sid' },
+	'session options': { key: 'consumer.sid' },
 	'cloudinary config': {
-		cloud_name: 'cloom-cloud',
+		cloud_name: 'consumer-cloud',
 		api_key: 'cloudinary-key',
 		api_secret: 'cloudinary-secret',
 	},
 	'cloudinary secure': true,
-	'cloudinary prefix': 'cloom-prefix',
+	'cloudinary prefix': 'consumer-prefix',
 	'cloudinary folders': true,
 	locals: { env: 'development', utils: utilsFromDefault },
 } satisfies KeystoneGlobalOptions;
@@ -852,4 +852,4 @@ void cloudinaryImageValue;
 void cloudinaryImagesValue;
 void postStatus;
 void postDocument;
-void cloomCoreInitOptions;
+void consumerCoreInitOptions;

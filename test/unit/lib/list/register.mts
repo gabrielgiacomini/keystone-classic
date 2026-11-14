@@ -102,23 +102,23 @@ describe('List.register', function () {
 		expect(list.plural).to.equal('Field Samples');
 	});
 
-	it('preserves Cloom-style constructor options and sectioned field groups', function () {
+	it('preserves Consumer-style constructor options and sectioned field groups', function () {
 		const List = ksListFactory();
 		const list = new List(listConfigKey, {
 			autokey: { path: 'autoSlug', from: 'slugInput', unique: true },
 			defaultColumns: 'systemTitle|35%, state|15%, createdAt|25%',
 			defaultSort: '-createdAt',
-			label: 'Cloom Records',
+			label: 'Consumer Records',
 			map: { name: 'systemTitle' },
-			path: 'cloom-records',
+			path: 'consumer-records',
 			perPage: 25,
-			plural: 'Cloom Records',
+			plural: 'Consumer Records',
 			schema: {
-				collection: 'cloom_list_config_registers',
+				collection: 'consumer_list_config_registers',
 				versionKey: false,
 			},
 			searchFields: 'systemTitle, state, notes',
-			singular: 'Cloom Record',
+			singular: 'Consumer Record',
 			sortable: false,
 			track: false,
 		});
@@ -138,12 +138,12 @@ describe('List.register', function () {
 		const options = list.getOptions();
 		const heading = list.uiElements[0];
 
-		expect(list.path).to.equal('cloom-records');
-		expect(list.label).to.equal('Cloom Records');
-		expect(list.singular).to.equal('Cloom Record');
-		expect(list.plural).to.equal('Cloom Records');
+		expect(list.path).to.equal('consumer-records');
+		expect(list.label).to.equal('Consumer Records');
+		expect(list.singular).to.equal('Consumer Record');
+		expect(list.plural).to.equal('Consumer Records');
 		expect(list.mappings.name).to.equal('systemTitle');
-		expect(list.model.collection.name).to.equal('cloom_list_config_registers');
+		expect(list.model.collection.name).to.equal('consumer_list_config_registers');
 		expect(list.schema.path('autoSlug')?.options?.index).to.deep.equal({ unique: true, sparse: true });
 		expect(list.defaultSort).to.equal('-createdAt');
 		expect(list.defaultColumns.map((column) => (column as { path: string; width?: string }).path)).to.deep.equal([
@@ -330,7 +330,7 @@ describe('List.register', function () {
 		}
 	});
 
-	it('defers schema compilation until register so Cloom schema escape hatches are live', async function () {
+	it('defers schema compilation until register so Consumer schema escape hatches are live', async function () {
 		const List = ksListFactory();
 		const list = new List(schemaEscapeKey, {
 			map: { name: 'name' },
@@ -350,15 +350,15 @@ describe('List.register', function () {
 			state: { type: String },
 			status: { type: String },
 		});
-		list.schema.pre('save', function firstCloomPreSaveHook(this: KsDoc, next) {
+		list.schema.pre('save', function firstConsumerPreSaveHook(this: KsDoc, next) {
 			hookOrder.push('first:' + String(this.get('name')));
 			this.set('status', 'first-pass');
 			next();
 		});
-		list.schema.pre('save', function secondCloomPreSaveHook(this: KsDoc, next) {
+		list.schema.pre('save', function secondConsumerPreSaveHook(this: KsDoc, next) {
 			hookOrder.push('second:' + String(this.get('name')));
 			if (this.get('abortSave') === true) {
-				next(new Error('abort from Cloom-style hook'));
+				next(new Error('abort from Consumer-style hook'));
 				return;
 			}
 			if (this.get('mode') === 'persist-error-state') {
@@ -369,10 +369,10 @@ describe('List.register', function () {
 			}
 			next();
 		});
-		list.schema.post('save', function cloomPostSaveHook(this: KsDoc) {
+		list.schema.post('save', function consumerPostSaveHook(this: KsDoc) {
 			postSaveStatuses.push(this.get('status'));
 		});
-		list.schema.virtual('displayTitle').get(function cloomDisplayTitleVirtual(this: KsDoc) {
+		list.schema.virtual('displayTitle').get(function consumerDisplayTitleVirtual(this: KsDoc) {
 			return String(this.get('name')) + ':' + String(this.get('status'));
 		});
 		list.schema.methods['readDisplayTitle'] = function readDisplayTitle(this: KsDoc) {
@@ -418,10 +418,10 @@ describe('List.register', function () {
 
 			try {
 				await new list.model({ abortSave: true, name: 'schema escape smoke abort' }).save();
-				throw new Error('Expected Cloom-style pre-save hook to abort the save');
+				throw new Error('Expected Consumer-style pre-save hook to abort the save');
 			} catch (err: unknown) {
 				expect(err).to.be.instanceOf(Error);
-				expect((err as Error).message).to.equal('abort from Cloom-style hook');
+				expect((err as Error).message).to.equal('abort from Consumer-style hook');
 			}
 
 			const aborted = await list.model.findOne({ name: 'schema escape smoke abort' }).exec();

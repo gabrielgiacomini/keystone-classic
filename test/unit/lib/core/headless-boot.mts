@@ -56,8 +56,8 @@ function createHeadlessHarness(): HeadlessHarness {
 	const values = new Map<string, unknown>(Object.entries({
 		'cookie secret': 'headless-secret',
 		'headless': true,
-		'name': 'Cloom Headless Smoke',
-		'session options': { key: 'cloom.sid' },
+		'name': 'Consumer Headless Smoke',
+		'session options': { key: 'consumer.sid' },
 	}));
 	const connection = createConnectionHarness();
 	const connectCalls: Array<{ options?: Record<string, unknown>; uri: string }> = [];
@@ -94,7 +94,7 @@ function createHeadlessHarness(): HeadlessHarness {
 	return harness;
 }
 
-describe('headless Cloom-style boot sequence', function () {
+describe('headless Consumer-style boot sequence', function () {
 	it('runs initDatabaseConfig -> initExpressSession -> openDatabaseConnection without an Express app', function () {
 		const originalMongoUri = process.env.MONGO_URI;
 		const originalMongodbUri = process.env.MONGODB_URI;
@@ -119,14 +119,14 @@ describe('headless Cloom-style boot sequence', function () {
 			expect(keystone.httpServer).to.equal(undefined);
 
 			expect(keystone.initDatabaseConfig()).to.equal(keystone);
-			expect(keystone.values.get('mongo')).to.equal('mongodb://localhost/cloom-headless-smoke');
+			expect(keystone.values.get('mongo')).to.equal('mongodb://localhost/consumer-headless-smoke');
 
 			expect(keystone.initExpressSession(keystone.mongoose)).to.equal(keystone);
 			const sessionOptions = keystone.values.get('session options') as {
 				cookieParser?: RequestHandler;
 				key?: string;
 			};
-			expect(sessionOptions.key).to.equal('cloom.sid');
+			expect(sessionOptions.key).to.equal('consumer.sid');
 			expect(sessionOptions.cookieParser).to.be.a('function');
 			expect(keystone.expressSession).to.be.a('function');
 
@@ -138,7 +138,7 @@ describe('headless Cloom-style boot sequence', function () {
 			expect(result).to.equal(keystone);
 			expect(callbackCalled).to.equal(false);
 			expect(keystone.connectCalls).to.have.lengthOf(1);
-			expect(keystone.connectCalls[0]?.uri).to.equal('mongodb://localhost/cloom-headless-smoke');
+			expect(keystone.connectCalls[0]?.uri).to.equal('mongodb://localhost/consumer-headless-smoke');
 			expect(keystone.app).to.equal(undefined);
 			expect(keystone.httpServer).to.equal(undefined);
 

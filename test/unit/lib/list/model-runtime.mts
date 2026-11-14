@@ -165,7 +165,7 @@ describe('List registered model runtime API', function () {
 		resetKeystone();
 	});
 
-	it('supports Cloom-used CRUD helpers and query chaining on registered models', async function () {
+	it('supports Consumer-used CRUD helpers and query chaining on registered models', async function () {
 		const { author, post } = runtimeLists();
 		const createdAuthor = await author.model.create({
 			name: 'Runtime API Author',
@@ -272,7 +272,7 @@ describe('List registered model runtime API', function () {
 		expect(populatedAuthor?.get('name')).to.equal('Runtime API Populate Author');
 	});
 
-	it('supports Cloom-used aggregation with $match and $group', async function () {
+	it('supports Consumer-used aggregation with $match and $group', async function () {
 		const { author, post } = runtimeLists();
 		const createdAuthor = await author.model.create({
 			name: 'Runtime API Aggregate Author',
@@ -304,7 +304,7 @@ describe('List registered model runtime API', function () {
 		]);
 	});
 
-	it('exposes real connection and query session surfaces used by Cloom transaction probes', async function () {
+	it('exposes real connection and query session surfaces used by Consumer transaction probes', async function () {
 		const { post } = runtimeLists();
 		const db = connectedMongoose.connection.db;
 

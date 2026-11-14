@@ -50,7 +50,7 @@ describe('fieldGroups', function () {
 			});
 		});
 
-		it('keeps the cloom-style flatten alias as a thin wrapper', function () {
+		it('keeps the consumer-style flatten alias as a thin wrapper', function () {
 			expect(transformFieldGroupsToFields(groups)).to.deep.equal(flattenFieldGroups(groups));
 			expect(constrainedGroups).to.equal(groups);
 			expect(documentConstrainedGroups).to.equal(groups);
@@ -80,7 +80,7 @@ describe('fieldGroups', function () {
 			expect(add.secondCall.args).to.deep.equal([groups[1].fields]);
 		});
 
-		it('keeps the cloom-style add alias as a thin wrapper', function () {
+		it('keeps the consumer-style add alias as a thin wrapper', function () {
 			const add = sinon.stub();
 			const list = { add } as unknown as KeystoneFieldGroupList;
 

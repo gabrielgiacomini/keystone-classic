@@ -212,9 +212,9 @@ export const testFieldType = function (List: TestList) {
 			const previousCloudinaryPrefix = List.keystone.get('cloudinary prefix');
 			try {
 				List.keystone.set('cloudinary folders', true);
-				List.keystone.set('cloudinary prefix', 'cloom');
+				List.keystone.set('cloudinary prefix', 'consumer');
 				const folder = List.fields.singleImage!.getFolder();
-				expect(folder).to.equal(`cloom/${List.path}/singleImage`);
+				expect(folder).to.equal(`consumer/${List.path}/singleImage`);
 			} finally {
 				List.keystone.set('cloudinary folders', previousCloudinaryFolders);
 				List.keystone.set('cloudinary prefix', previousCloudinaryPrefix);
