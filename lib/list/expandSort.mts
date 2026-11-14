@@ -1,5 +1,6 @@
 import listToArray from './listToArray.mjs';
 import type { KeystoneList } from '../list.mjs';
+import { hasSecretOption } from '../security/secretFieldRedaction.mjs';
 
 type SortField = { path: string; getSortString?: (entry: SortEntry) => string; [key: string]: unknown };
 type SortEntry = { field: SortField; invert: boolean; path: string };
@@ -34,7 +35,8 @@ export default function expandSort(this: KeystoneList, input: string): SortResul
 			path = path.slice(1);
 		}
 		const field = fields[path];
-		if (!field) { return undefined; }
+		// Sorting on a `secret: true` field would reveal the order of its values.
+		if (!field || hasSecretOption(field)) { return undefined; }
 		return { field: field, invert: invert, path: field.path };
 	}).filter(truthy);
 	sort.string = sort.paths.map(function (i: SortEntry) {

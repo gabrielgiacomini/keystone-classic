@@ -42,7 +42,7 @@ Returns a single `user` property with either the currently logged in user, or `u
 
 ```js
 {
-	user: undefined
+	user: null
 }
 ```
 

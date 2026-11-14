@@ -1,5 +1,6 @@
 import type { Request, Response, RequestHandler } from 'express';
 import type { KeystoneList } from '../list.mjs';
+import { toJSONWithoutSecretFields } from '../security/secretFieldRedaction.mjs';
 
 type ApiForGetOptions = {
 	id?: string;
@@ -7,7 +8,24 @@ type ApiForGetOptions = {
 	transform?: (item: unknown, req: Request, res: Response) => unknown;
 };
 
-export default function apiForGet(this: KeystoneList, options: ApiForGetOptions): RequestHandler {
+/**
+ * Returns JSON API middleware for a `GET /:id` endpoint. The response is
+ * `{ data: item }` with secret fields (Password-type fields and fields declared
+ * with `secret: true`) removed from the item and from any populated
+ * relationship, so mounting it on a user list never sends a password hash or
+ * a reset key.
+ *
+ * Redaction is keyed on the registered field paths and runs after `transform`.
+ * A `transform` that copies a secret value under a different key is not
+ * detected: do not do that.
+ *
+ * A failed query answers `500 { err: 'database error' }`; the error itself is
+ * logged on the server and never sent to the client.
+ *
+ * @param options - Optional id param name, query modifier and transform.
+ * @returns The express request handler.
+ */
+export default function apiForGet(this: KeystoneList, options: ApiForGetOptions = {}): RequestHandler {
 	const idParam = options.id || 'id';
 	const List = this;
 	return function (req: Request, res: Response) {
@@ -28,9 +46,11 @@ export default function apiForGet(this: KeystoneList, options: ApiForGetOptions)
 				item = options.transform(item, req, res);
 				if (item === false) return;
 			}
-			return res.json({ data: item });
+			return res.json({ data: toJSONWithoutSecretFields(List, item) });
 		}, function (err: unknown) {
-			return res.status(500).json({ err: 'database error', detail: err });
+			// The raw error (driver message, stack, `keyValue`, ...) stays in the server log.
+			console.error('List.apiForGet() database error on \'' + List.key + '\':\n', err);
+			return res.status(500).json({ err: 'database error' });
 		});
 	};
 }

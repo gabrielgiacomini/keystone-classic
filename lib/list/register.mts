@@ -1,3 +1,4 @@
+import { getRedactedDuplicateKeyDetail } from '../security/secretFieldRedaction.mjs';
 import schemaPlugins from '../schemaPlugins.mjs';
 import UpdateHandler from '../updateHandler.mjs';
 import type { UpdateHandlerOptions } from '../updateHandler.mjs';
@@ -111,7 +112,14 @@ export default function register(this: KeystoneList): KeystoneList {
 		else debug('Mongoose model \'index-single-done\' event fired on \'' + list.key + '\' for index:\n', index);
 	});
 	this.model.on('error', function (err: Error | null) {
-		if (err) console.error('Mongoose model \'error\' event fired on \'' + list.key + '\' with error:\n', err.message, (err as Error & { stack?: string }).stack);
+		if (!err) return;
+		// A duplicate-key error on a unique secret field echoes the stored value; keep it out of the log.
+		const redacted = getRedactedDuplicateKeyDetail(list, err);
+		if (redacted !== undefined) {
+			console.error('Mongoose model \'error\' event fired on \'' + list.key + '\' with error:\n', redacted);
+			return;
+		}
+		console.error('Mongoose model \'error\' event fired on \'' + list.key + '\' with error:\n', err.message, (err as Error & { stack?: string }).stack);
 	});
 
 	return this;

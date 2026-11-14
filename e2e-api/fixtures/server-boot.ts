@@ -19,6 +19,7 @@
 
 import keystone from 'keystone';
 import mongoose from 'mongoose';
+import type { Application, RequestHandler } from 'express';
 
 const MONGO_URI = process.env.MONGO_URI ?? 'mongodb://localhost:27017/keystone-e2e-api';
 const PORT = process.env.PORT ?? '3005';
@@ -51,6 +52,8 @@ export const TEST_ADMIN_EMAIL = 'admin@example.com';
 // Test fixture credential — never used outside the e2e-api harness.
 // eslint-disable-next-line sonarjs/no-hardcoded-passwords
 export const TEST_ADMIN_PASSWORD = 'admin-password-123';
+/** Seeded admin value of the `secret: true` field. Keep in sync with `./server.ts`. */
+export const TEST_ADMIN_RECOVERY_CODE = 'e2e-admin-recovery-code-4c1d9a7e';
 
 /**
  * Drop the test database before models register, using a throwaway
@@ -80,6 +83,12 @@ function defineLists () {
 		email: { type: Types.Email, initial: true, required: true, index: true },
 		password: { type: Types.Password, initial: true, required: true },
 		isAdmin: { type: Types.Boolean, default: false },
+		// A non-Password secret (think reset key or API token). The neutral name is
+		// deliberate: redaction follows the explicit option, never the field name.
+		// Unique, so a duplicate-key error (which echoes the conflicting value) can be provoked.
+		recoveryCode: { type: Types.Text, secret: true, unique: true, sparse: true },
+		// A secret Select: its `<path>Label` / `<path>Data` virtuals would reveal the choice.
+		accessTier: { type: Types.Select, options: 'gold, silver', secret: true },
 	});
 	User.schema.virtual('canAccessKeystone').get(function () {
 		return this.isAdmin;
@@ -107,6 +116,9 @@ function defineLists () {
 		},
 		author: { type: Types.Relationship, ref: 'User', index: true },
 		editors: { type: Types.Relationship, ref: 'User', many: true },
+		// `toCSV` on a relationship picks keys off the populated related document;
+		// the secret ones must never be exported.
+		reviewer: { type: Types.Relationship, ref: 'User', toCSV: 'email, password, recoveryCode' },
 		content: { type: String },
 		viewCount: { type: Types.Number, default: 0 },
 		featured: { type: Types.Boolean, default: false },
@@ -132,8 +144,77 @@ async function seedAdmin () {
 		email: TEST_ADMIN_EMAIL,
 		password: TEST_ADMIN_PASSWORD,
 		isAdmin: true,
+		recoveryCode: TEST_ADMIN_RECOVERY_CODE,
 	});
 	await admin.save();
+}
+
+/**
+ * Register the lists used by `secret-nested-populate.spec.ts`.
+ *
+ * `Project` -> `Team` -> `User` is a chain of relationships with a secret on
+ * every level (`Team.accessKey`, `User.password`, `User.recoveryCode`). `Team`
+ * populates its `lead` on every find, the way an app's own schema hook would,
+ * so populating a project's team returns a document that is itself populated.
+ *
+ * `Voucher` declares its autokey path as a secret field, so the generated key
+ * must be stored but never returned or searched.
+ */
+function defineSecretNestingLists () {
+	const Types = keystone.Field.Types;
+
+	const Team = createList('Team', { map: { name: 'name' } });
+	Team.add({
+		name: { type: String, initial: true },
+		accessKey: { type: Types.Text, secret: true, initial: true },
+		lead: { type: Types.Relationship, ref: 'User', initial: true },
+	});
+	(Team as unknown as { schema: mongoose.Schema }).schema.pre(/^find/, function (this: mongoose.Query<unknown, unknown>) {
+		void this.populate('lead');
+	});
+	Team.register();
+
+	const Project = createList('Project', { map: { name: 'name' } });
+	Project.add({
+		name: { type: String, initial: true },
+		team: { type: Types.Relationship, ref: 'Team', initial: true },
+		teams: { type: Types.Relationship, ref: 'Team', many: true, initial: true },
+		// `toCSV` picks keys off the populated team: a secret, and a populated relationship.
+		backup: { type: Types.Relationship, ref: 'Team', initial: true, toCSV: 'name, accessKey, lead' },
+	});
+	Project.register();
+
+	const Voucher = createList('Voucher', {
+		map: { name: 'label' },
+		autokey: { path: 'code', from: 'label', unique: true },
+	});
+	Voucher.add({
+		label: { type: String, initial: true },
+		code: { type: Types.Text, secret: true },
+	});
+	Voucher.register();
+}
+
+/**
+ * Application routes built with `List.apiForGet`, the opt-in JSON helper an
+ * app can mount on any list. Mounted here on the user list and on a list with
+ * relationships to it (populated) so the password-exposure spec can assert the
+ * helper never serializes a Password-type field. Keep the prefix in sync with
+ * `APP_GET_BASE` in `./server.ts`.
+ * @param app The Express app Keystone hands to the `routes` option.
+ */
+function defineAppRoutes (app: Application) {
+	type GetHandlerFactory = { apiForGet(options?: { query?: (query: { populate(path: unknown): unknown }) => unknown }): RequestHandler };
+	const User = keystone.list('User') as unknown as GetHandlerFactory;
+	const Post = keystone.list('Post') as unknown as GetHandlerFactory;
+	app.get('/app-api/user/:id', User.apiForGet());
+	app.get('/app-api/post/:id', Post.apiForGet({
+		query: (query) => query.populate('author editors'),
+	}));
+	// Populated on two levels explicitly: the project's teams, and each team's lead.
+	app.get('/app-api/projects/:id', (keystone.list('Project') as unknown as GetHandlerFactory).apiForGet({
+		query: (query) => query.populate(['team', 'teams', 'backup'].map((path) => ({ path, populate: { path: 'lead' } }))),
+	}));
 }
 
 await dropDatabase();
@@ -153,9 +234,12 @@ keystone.init({
 	'admin api path': 'keystone-api',
 	'headless': false,
 	'logger': false,
+	'routes': defineAppRoutes,
 });
 
 defineLists();
+
+defineSecretNestingLists();
 
 await new Promise<void>((resolve, reject) => {
 	keystone.start({

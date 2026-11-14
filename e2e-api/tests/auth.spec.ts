@@ -13,13 +13,12 @@ test.beforeAll(async ({ request }) => {
 });
 
 test.describe('session API', () => {
-	test('GET /api/session returns { user: undefined } when signed out', async ({
+	test('GET /api/session returns { user: null } when signed out', async ({
 		anonRequest,
 	}) => {
 		const res = await getSession(anonRequest);
 		expect(res.status()).toBe(200);
-		const body = (await res.json()) as { user?: unknown };
-		expect(body.user).toBeFalsy();
+		expect(await res.json()).toEqual({ user: null });
 	});
 
 	test('legacy /keystone/api/session alias remains available during migration', async ({
@@ -47,6 +46,41 @@ test.describe('session API', () => {
 			const session = await getSession(ctx);
 			const sessionBody = (await session.json()) as { user?: { email?: string } };
 			expect(sessionBody.user?.email).toBe(TEST_ADMIN_EMAIL);
+		} finally {
+			await ctx.dispose();
+		}
+	});
+
+	test('session and signin responses expose a safe user projection, never the password hash', async ({
+		playwright,
+		baseURL,
+	}) => {
+		const ctx = await playwright.request.newContext({ baseURL });
+		try {
+			const signinRes = await signin(ctx, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD);
+			expect(signinRes.status()).toBe(200);
+			const sessionRes = await getSession(ctx);
+			expect(sessionRes.status()).toBe(200);
+			const legacyRes = await ctx.get('/keystone/api/session');
+			expect(legacyRes.status()).toBe(200);
+
+			for (const res of [signinRes, sessionRes, legacyRes]) {
+				const raw = await res.text();
+				// No bcrypt hash ("$2a$10$...") anywhere in the payload.
+				expect(raw).not.toContain('$2');
+				const body = JSON.parse(raw) as { user?: Record<string, unknown> };
+				const user = body.user;
+				expect(user).toBeTruthy();
+				expect(user).not.toHaveProperty('password');
+				expect(user).not.toHaveProperty('_id');
+				expect(typeof user?.['id']).toBe('string');
+				expect(user?.['id']).toMatch(/^[0-9a-f]{24}$/);
+				expect(user?.['email']).toBe(TEST_ADMIN_EMAIL);
+				expect(typeof user?.['name']).toBe('string');
+				for (const key of Object.keys(user ?? {})) {
+					expect(['id', 'name', 'email', 'canAccessKeystone']).toContain(key);
+				}
+			}
 		} finally {
 			await ctx.dispose();
 		}

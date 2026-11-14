@@ -2,6 +2,8 @@ import type { KeystoneList } from '../list.mjs';
 import debugLib from 'debug';
 import { isValidObjectId } from '../utils/objectId.mjs';
 import { escapeRegExp } from '../utils/regexp.mjs';
+import { isSecretFieldObject, isSensitivePath } from '../security/secretFieldRedaction.mjs';
+import { canSearchWithTextIndex } from './buildSearchTextIndex.mjs';
 
 const debug = debugLib('keystone:core:list:addSearchToQuery');
 
@@ -27,29 +29,34 @@ export default function addSearchToQuery(this: KeystoneList, searchString: strin
 	const query: Record<string, unknown> = {};
 	let searchFilters: Record<string, unknown>[] = [];
 	if (!searchString) return query;
+	// An autokey path that is declared secret is not searched.
+	const autokey = this.autokey as { path: string } | null | undefined;
+	const autokeyPath = autokey && !isSensitivePath(this, autokey.path) ? autokey.path : undefined;
 
-	if (this.options.searchUsesTextIndex) {
+	// `$text` is skipped when the text index could hold a secret field (or none can be built).
+	if (canSearchWithTextIndex(this)) {
 		debug('Using text search index for value: "' + searchString + '"');
 		searchFilters.push({ $text: { $search: searchString } });
-		if (this.autokey) {
+		if (autokeyPath !== undefined) {
 			const strictAutokeyFilter: Record<string, unknown> = {};
 			const autokeyRegExp = new RegExp('^' + escapeRegExp(searchString));
-			strictAutokeyFilter[(this.autokey as { path: string }).path] = autokeyRegExp;
+			strictAutokeyFilter[autokeyPath] = autokeyRegExp;
 			searchFilters.push(strictAutokeyFilter);
 		}
 	} else {
 		debug('Using regular expression search for value: "' + searchString + '"');
 		const searchRegExp = new RegExp(escapeRegExp(searchString), 'i');
-		searchFilters = (this.searchFields as Array<{ path: string; field?: { type: string; paths: { first: string; last: string } } }>).map(function (i) {
+		// Secret fields (Password-type or `secret: true`) are not searched.
+		searchFilters = (this.searchFields as Array<{ path: string; field?: { type: string; paths: { first: string; last: string } } }>).filter((i) => !isSecretFieldObject(i.field)).map(function (i) {
 			if (i.field?.type === 'name') {
 				return getNameFilter(i.field, searchString);
 			} else {
 				return getStringFilter(i.path, searchRegExp);
 			}
 		});
-		if (this.autokey) {
+		if (autokeyPath !== undefined) {
 			const autokeyFilter: Record<string, unknown> = {};
-			autokeyFilter[(this.autokey as { path: string }).path] = searchRegExp;
+			autokeyFilter[autokeyPath] = searchRegExp;
 			searchFilters.push(autokeyFilter);
 		}
 	}
@@ -65,7 +72,9 @@ export default function addSearchToQuery(this: KeystoneList, searchString: strin
 		const namePath = (this.mappings.name as string | null) ?? null;
 		if (namePath) {
 			const nameField = this.fields[namePath] as { type?: string; paths?: { first: string; last: string } } | undefined;
-			if (nameField?.type === 'name' && nameField.paths) {
+			if (isSecretFieldObject(nameField)) {
+				// Never fall back to searching a secret field.
+			} else if (nameField?.type === 'name' && nameField.paths) {
 				searchFilters.push(getNameFilter(nameField as { paths: { first: string; last: string } }, searchString));
 			} else {
 				const searchRegExp = new RegExp(escapeRegExp(searchString), 'i');

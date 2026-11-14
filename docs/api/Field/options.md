@@ -36,6 +36,40 @@ Is displayed with the field in the admin UI.
 
 The field will always be hidden in the Admin UI if this is set to `true`
 
+<h4 data-primitive-type="Boolean"><code>secret</code></h4>
+
+Marks the stored value as a secret, such as a password reset key or an API token. It works on any field type and is opt-in: Keystone never guesses from the field name.
+
+```javascript
+User.add({
+	resetPasswordKey: { type: String, secret: true },
+	apiToken: { type: Types.Key, secret: true, index: true },
+});
+```
+
+A secret field is treated like a `Password` field wherever Keystone serializes documents to a client:
+
+- It is left out of Admin API item and list responses (including create and update responses) and of CSV and JSON exports, even when named in `fields` or `select`.
+- It is removed from populated relationships (`?populate=`, `expandRelationshipFields`) and from `List.apiForGet()` responses, and is never emitted by the session endpoints.
+- Paths that reach it are refused: `resetPasswordKey.length`, `author.resetPasswordKey`, and the parent of a nested secret field (`keys` when `keys.reset` is secret).
+- A relationship field's `toCSV` key list skips the secret fields of the related list.
+- A populated relationship is redacted on every level: when the related document is itself populated (a nested `populate`, or a schema hook of your own that populates on find), the secret fields of each related list are removed, down to 8 levels of populated documents. A related document deeper than that is replaced by its id.
+- It cannot be an `autokey` source: a list whose `autokey.from` names a secret or `Password` field (or a path derived from one) is refused when it registers, because the generated key is stored as plain text, returned and searched. A `from` path that goes through a relationship into a secret field of the related list is refused at the first write instead, because the related list may register later: `save()`, `insertMany`, `updateOne`, `updateMany`, `findOneAndUpdate`, `replaceOne` and `findOneAndReplace` all fail with the same error. `bulkWrite` and writes through `model.collection` have no Mongoose middleware and are not checked; neither generates a key.
+- If it is the `autokey` path itself, the generated key is stored but left out of Admin API and export output, and is not searched.
+- Admin API `filters`, `search` and `sort` ignore it. With `searchUsesTextIndex` it is left out of the text index Keystone generates, and `$text` is not used at all when the only search fields are secret or when a text index declared on the schema covers a secret path (the search then falls back to regular expressions over the non-secret search fields). A text index created before the field was marked secret is rebuilt at the next start if Keystone generated it; drop an index you created yourself.
+- Paths a field type derives from it are refused and removed as well, for example a Select's `<path>Label`, `<path>Data`, `<path>Options` and `<path>OptionsMap`.
+- A duplicate-key error on a unique secret field reports the path but not the conflicting value (`Duplicate apiToken value already exists`), in Admin API responses and in the model error log.
+- It is hidden in the Admin UI (it reports `hidden: true`), so it has no form input, column or filter.
+
+Application code is unaffected: `item.resetPasswordKey`, `item.get()`, queries and `item.save()` work as usual. The Admin API still accepts a value for the field on create and update; it only never returns one.
+
+Limits to be aware of:
+
+- A `Password` field still reports whether a value is set (`true` or empty); a `secret: true` field is omitted completely.
+- Keystone cannot vet values produced by your own code: a `toCSV` function, a `getCSVData` document method, an `apiForGet` `transform` that copies the value under another key, a virtual, or your own routes and templates.
+- If a secret (or `Password`) field is the list's name field (`map: { name }`), Admin API item data omits `name` and related-item labels fall back to the id.
+- Because the field is hidden, do not make it `required` without a `default` or a generated `value`.
+
 ### Conditional Fields
 
 To improve the usability of the Admin UI, it is possible to hide fields when no value is set, or depending on the value of other fields.

@@ -1,5 +1,6 @@
 import debugLib from 'debug';
 import type { KeystoneList } from '../list.mjs';
+import { hasSecretOption } from '../security/secretFieldRedaction.mjs';
 
 const debug = debugLib('keystone:core:list:addFiltersToQuery');
 
@@ -28,6 +29,8 @@ export default function addFiltersToQuery(this: KeystoneList, filters: Record<st
 	fields.forEach(function (path: string) {
 		const field = self.fields[path] as (undefined | { path: string; addFilterToQuery?: (f: unknown) => MongoQuery });
 		if (!field || !field.addFilterToQuery || !filters[field.path]) return;
+		// Filters on a `secret: true` field are ignored.
+		if (hasSecretOption(field)) return;
 		combineQueries(query, field.addFilterToQuery(filters[field.path]));
 	});
 	debug('Adding filters to query, returned:', query);
