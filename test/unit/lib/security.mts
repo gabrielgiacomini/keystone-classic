@@ -82,6 +82,41 @@ describe('CSRF', function () {
 			sinon.assert.calledOnce(memory.res.cookie);
 		});
 	});
+	describe('refreshToken(req, res)', function () {
+		type Req = Parameters<typeof csrf.refreshToken>[0];
+		type Res = Parameters<typeof csrf.refreshToken>[1];
+
+		it('must replace the token of a regenerated session and set the cookie with getToken\'s options', function () {
+			const req = REQ();
+			const res = RES();
+			const stale = csrf.getToken(req as unknown as Req, res as unknown as Res);
+			const getTokenOptions = res.cookie.getCall(0).args[2] as Record<string, unknown>;
+			// what req.session.regenerate() does: a new session without the CSRF secret
+			req.session = {};
+
+			const fresh = csrf.refreshToken(req as unknown as Req, res as unknown as Res);
+
+			expect(fresh).to.not.equal(stale);
+			expect(res.locals[csrf.LOCAL_VALUE]).to.equal(fresh);
+			expect(req.session[csrf.SECRET_KEY]).to.be.a('string');
+			expect(csrf.validate(req as unknown as Req, fresh)).to.equal(true);
+			expect(csrf.validate(req as unknown as Req, stale)).to.equal(false);
+			sinon.assert.calledTwice(res.cookie);
+			expect(res.cookie.getCall(1).args[0]).to.equal(csrf.XSRF_COOKIE_KEY);
+			expect(res.cookie.getCall(1).args[1]).to.equal(fresh);
+			expect(res.cookie.getCall(1).args[2]).to.eql(getTokenOptions);
+			expect(res.cookie.getCall(1).args[2]).to.include({ sameSite: 'lax', httpOnly: false });
+		});
+
+		it('must work on a response without locals', function () {
+			const req = REQ();
+			const res = { cookie: sinon.stub() };
+			const token = csrf.refreshToken(req as unknown as Req, res as unknown as Res);
+			expect(csrf.validate(req as unknown as Req, token)).to.equal(true);
+			sinon.assert.calledOnce(res.cookie);
+			sinon.assert.calledWith(res.cookie, csrf.XSRF_COOKIE_KEY, token, sinon.match.object);
+		});
+	});
 	describe('requestToken()', function () {
 		it('must find a token in req.body', function () {
 			const req: MockReq = { session: {}, query: {}, headers: [], method: 'POST', body: {} };

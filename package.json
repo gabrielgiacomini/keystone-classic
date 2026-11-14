@@ -304,6 +304,7 @@
     "admin-parity:protect:status": "jiti scripts/admin-parity-branch-protection.ts --branch master --status",
     "admin-parity:soak": "cross-env ADMIN_PARITY_BRANCH=master jiti scripts/check-admin-parity-soak.ts",
     "dev:e2e-api": "npm run admin-next:build && npm run build:server && MONGO_URI=${MONGO_URI:-mongodb://localhost:27017/keystone-e2e-api} PORT=${PORT:-3005} NODE_ENV=test DISABLE_CSRF=true jiti e2e-api/fixtures/server-boot.ts",
+    "dev:e2e-api:csrf": "MONGO_URI=${MONGO_URI:-mongodb://localhost:27017/keystone-e2e-api-csrf} PORT=${PORT:-3006} NODE_ENV=test jiti e2e-api/fixtures/server-boot.ts",
     "dev:full-fixture": "npm run admin-next:build && npm run build:server && MONGO_URI=${MONGO_URI:-mongodb://localhost:27017/keystone-e2e-ui-fields} PORT=${PORT:-3008} NODE_ENV=test KEYSTONE_PREBUILD_ADMIN=true jiti e2e-ui/fixtures/field-complete/server-boot.ts",
     "dev:full-fixture:cloudinary": "sh -c 'set -a; [ ! -f .env ] || . ./.env; set +a; npm run dev:full-fixture'",
     "dev:e2e-ui": "npm run dev:full-fixture",

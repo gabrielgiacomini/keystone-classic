@@ -9,6 +9,7 @@ function scmp (a: string | number, b: string | number): boolean {
 }
 import keystone from '../index.mjs';
 import type { Request, Response, NextFunction } from 'express';
+import { refreshToken as refreshCsrfToken } from './security/csrf.mjs';
 import type { SessionUser } from '../types/express.js';
 import { getAdminLegacyPath } from './core/adminSurfacePathUtils.mjs';
 import { userCanAccessKeystone } from './canAccessKeystone.mjs';
@@ -127,6 +128,9 @@ export function signinWithUser(user: SessionUser, req: Request, res: Response, o
 			}
 			res.cookie('keystone.uid', userToken, cookieOpts);
 		}
+		// The regenerated session has no CSRF secret: hand the client a token
+		// for it, or its next write is refused until it asks for one.
+		refreshCsrfToken(req, res);
 		onSuccess(user);
 	});
 }
@@ -216,6 +220,7 @@ export const signout = function (req: Request, res: Response, next: NextFunction
 			if (sessionErr) {
 				return next(sessionErr);
 			}
+			refreshCsrfToken(req, res);
 			keystone.callHook({}, 'post:signout', function (postErr?: Error) {
 				if (postErr) {
 					console.log("An error occurred in signout 'post' middleware", postErr);

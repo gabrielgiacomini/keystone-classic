@@ -85,8 +85,10 @@ describe('Keystone.session', function () {
 				sinon.assert.calledOnce(req.session.regenerate as unknown as sinon.SinonSpy);
 				expect(req.user).to.equal(user);
 				expect(req.session.userId).to.equal(user['id']);
-				sinon.assert.calledOnce(res.cookie);
+				// keystone.uid, then the CSRF token of the regenerated session
+				sinon.assert.calledTwice(res.cookie);
 				sinon.assert.calledWith(res.cookie, 'keystone.uid');
+				expect(res.cookie.getCall(1).args[0]).to.equal('XSRF-TOKEN');
 				expect(res.cookie.getCall(0).args[2]).to.include({
 					signed: true,
 					httpOnly: true,
@@ -116,7 +118,12 @@ describe('Keystone.session', function () {
 				sinon.assert.calledOnce(req.session.regenerate as unknown as sinon.SinonSpy);
 				expect(req.user).to.equal(user);
 				expect(req.session.userId).to.equal(user['id']);
-				sinon.assert.callCount(res.cookie, 0);
+				// no keystone.uid cookie; only the CSRF token of the regenerated session
+				sinon.assert.calledOnce(res.cookie);
+				expect(res.cookie.getCall(0).args[0]).to.equal('XSRF-TOKEN');
+				expect(res.cookie.getCall(0).args[1]).to.be.a('string').with.length.above(38);
+				expect(res.cookie.getCall(0).args[2]).to.include({ sameSite: 'lax', httpOnly: false });
+				expect((req.session as unknown as Record<string, unknown>)['_csrf_secret']).to.be.a('string');
 				sinon.assert.calledOnce(onSuccess);
 				sinon.assert.calledWithExactly(onSuccess, user);
 			});
@@ -320,6 +327,19 @@ describe('Keystone.session', function () {
 						maxAge: 0,
 					});
 				});
+			});
+		});
+
+		it('should issue the CSRF token of the regenerated session', function (done) {
+			keystone.set('cookie signin', false);
+			ksSession().signout(req as unknown as Record<string, unknown>, res, function () {
+				sinon.assert.calledOnce(req.session.regenerate as unknown as sinon.SinonSpy);
+				sinon.assert.calledOnce(res.cookie);
+				expect(res.cookie.getCall(0).args[0]).to.equal('XSRF-TOKEN');
+				expect(res.cookie.getCall(0).args[1]).to.be.a('string').with.length.above(38);
+				expect(res.cookie.getCall(0).args[2]).to.include({ sameSite: 'lax', httpOnly: false });
+				expect((req.session as unknown as Record<string, unknown>)['_csrf_secret']).to.be.a('string');
+				done();
 			});
 		});
 

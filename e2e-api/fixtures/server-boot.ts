@@ -11,7 +11,9 @@
  *   - PORT        (default: 3005)
  *   - DISABLE_CSRF=true is set by the npm script and consumed by
  *     lib/security/csrf.mjs so the API-only suite can POST without
- *     bootstrapping a browser session.
+ *     bootstrapping a browser session. Playwright also boots a second
+ *     instance without it (`npm run dev:e2e-api:csrf`, next port, own
+ *     database) for `csrf-token.spec.ts`.
  *
  * The server intentionally drops the database on boot. Each spec file
  * additionally re-seeds via the `seedDb` fixture before its tests run.
