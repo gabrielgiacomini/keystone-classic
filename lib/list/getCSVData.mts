@@ -1,7 +1,7 @@
 import type { KeystoneList } from '../list.mjs';
 import listToArray from './listToArray.mjs';
 import escapeValueForExcel from '../security/escapeValueForExcel.mjs';
-import { isHydratedDocument, isSensitivePath } from '../security/passwordFieldRedaction.mjs';
+import { holdsHydratedDocument, isSensitivePath } from '../security/passwordFieldRedaction.mjs';
 
 function pick(source: unknown, keys: string[]): Record<string, unknown> {
 	if (source === null || typeof source === 'undefined') return {};
@@ -69,10 +69,10 @@ export default function getCSVData(this: KeystoneList, item: unknown, options?: 
 			const field = self.fields[path] as CsvField | undefined;
 			if (!field) {
 				// Never resolve caller-supplied paths into Password-type values or raw related documents.
-				if (isSensitivePath(self, path)) return;
-				const value = (item as { get(path: string): unknown }).get(path);
-				const values = Array.isArray(value) ? value : [value];
-				if (!values.some(isHydratedDocument)) data[path] = value;
+				const read = (resolvedPath: string): unknown => (item as { get(path: string): unknown }).get(resolvedPath);
+				if (isSensitivePath(self, path, read)) return;
+				const value = read(path);
+				if (!holdsHydratedDocument(value)) data[path] = value;
 				return;
 			}
 			if (field.type !== 'relationship' || !opts.expandRelationshipFields) {
